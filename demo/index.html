@@ -1,0 +1,190 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+		<link type="text/css" rel="stylesheet" href="css/main.css">
+		<script language="javascript" src="js/jquery-1.6.4.min.js"></script>
+		<script language="javascript" src="js/jquery.corner.js"></script>
+		<script language="javascript">
+			$(document).ready(function(){
+				$("[id$='-container']").corner();
+				$("[class$='-container']").corner();
+				var filterLinkColor =["#E73821","#188ECE","#EF2863","#FFEB08","#63BE10","#C6EF21","#FFC773","#F76984","#A5CF31"];
+				$("span.filter-link").corner().each(function(index){
+					$(this).css("background-color",filterLinkColor[index % 9]);
+				});
+				
+				$("div.feed-detail").click(function(){
+					$("#contentWrapper").animate({"width":0,"opacity":0},"fast","swing",function(){
+						$("#contentWrapper").css("display","none");
+						$("#detailWrapper").css("display","");
+						$("#detailWrapper").animate({"opacity":1,"width":600},"fast","swing");
+					})
+				})
+				
+				$(".detail-back").click(function(){
+					$("#detailWrapper").animate({"width":0,"opacity":0},"fast","swing",function(){
+						$("#detailWrapper").css("display","none");
+						$("#contentWrapper").css("display","");
+						$("#contentWrapper").animate({"opacity":1,"width":600},"fast","swing");
+					})
+				})
+				$(".detail-edit").click(function(){
+				})
+				$("#register_button").click(function(){
+					$("#register_container").css("display","");
+					//$("#register_container").animate({"opacity":1},"fast","swing");
+				})
+				$("#login_button").click(function(){
+					console.info("login button click1");
+					$("#login_container").css("display","");
+					console.info($("#login_container").css("display"));
+					$("#login_container").animate({"opacity":1},"fast","swing",function(){console.info("animate")});
+					console.info("login button click3");
+				})
+			})
+		</script>
+  </head>
+  <body>
+  	<div id="header" >
+  		<div id="logo-holder">
+				<font size=7 color="#ffffff">LOGO</font>
+			</div>
+			<div id="user-holder">
+				<img width=34 height=34 src="img/koala.jpg"/>
+				<a>考拉</a>
+			</div>
+			<div id="userAction-holder">
+					<a id="register_button">注册</a>&nbsp;&nbsp;
+					<a id="login_button">登录</a>
+			</div>
+			<div id="register-container">
+			
+			</div>
+			<div id="login-container">
+				<label>用户名：</label><input type="text" size="12"/><br>
+				<label>密&nbsp;&nbsp;&nbsp;码：</label><input type="password" size="12"/>
+			</div>
+  	</div>
+  	
+  	<div id="search-container">
+  		<input type="text"  value="乔布斯改变世界的10种方式">
+  		<a><img width=55 height=45 src="img/search.jpg"></a>
+  	</div>
+  	
+  	<div id="filter-container">
+  		<div id="filter-all-container" class="filter-container">
+  			全部<hr/>
+  			<span class="filter-link">学习</span>
+  			<span class="filter-link">积累</span>
+  			<span class="filter-link">工作</span>
+  			<span class="filter-link">待验证</span>
+  			<span class="filter-link">写作</span>
+  			<span class="filter-link">收藏</span>
+  			<span class="filter-link">赚钱</span>
+  			<span class="filter-link">出国</span>
+  			<span class="filter-link">证明</span>
+  			<span class="filter-link">减税</span>
+  			<span class="filter-link">北京</span>
+  			<span class="filter-link">阿姆斯特丹</span>
+  			<span class="filter-link">上海</span>
+  			<span class="filter-link">纽约</span>
+  			<span class="filter-link">巴黎</span>
+  		</div>
+  		<div id="filter-reason-container" class="filter-container">
+  			原因<hr/>
+  			<span class="filter-link">学习</span>
+  			<span class="filter-link">积累</span>
+  			<span class="filter-link">工作</span>
+  			<span class="filter-link">待验证</span>
+  		</div>
+  		<div id="filter-purpose-container" class="filter-container">
+  			目的<hr/>
+  			<span class="filter-link">写作</span>
+  			<span class="filter-link">收藏</span>
+  			<span class="filter-link">赚钱</span>
+  			<span class="filter-link">出国</span>
+  			<span class="filter-link">证明</span>
+  			<span class="filter-link">减税</span>
+  		</div>
+  		<div id="filter-city-container" class="filter-container">
+  			城市<hr/>
+  			<span class="filter-link">北京</span>
+  			<span class="filter-link">阿姆斯特丹</span>
+  			<span class="filter-link">上海</span>
+  			<span class="filter-link">纽约</span>
+  			<span class="filter-link">巴黎</span>
+  		</div>
+  	</div>
+  	<div id="page-home">
+  		<div id="contentWrapper">
+	  		<div class="content-container">
+	  			<h4 class="feed-title">诺贝尔经济学奖揭晓：美国两位经济学家获奖</h4>
+	  			<div class="feed-text">
+	  				<p>
+							北京时间10月10日19点(斯德哥尔摩时间10月10日13点)，诺贝尔经济学奖获奖名单揭晓，获奖者是：美国纽约大学经济学家托马斯-萨金特和普林斯顿大学克里斯托弗-西姆斯。他们将共享146万美元的奖金。评审委员会评价称，他们在宏观经济因果关系方面作出了实证性研究。
+							<br>
+							托马斯-萨金特，1943年7月19日出生，1968年获得哈佛大学博士学位，目前，萨金特教授任教于纽约大学，并且是美国科学院院士。
+							</p>
+							<p> 萨金特对现代经济学和金融学进行了深入了解，他的学术专长是动态宏观经济学和计量经济学。在宏观经济学领域的贡献是：与卢卡斯、巴罗和华莱士共同开创了合理预期学派，研究分析了利率的期限结构、经济大萧条等重大经济问题。...</p>
+	  			</div>
+	  			<div class="feed-detail">详细</div>
+	  		</div>
+	  		<div class="content-container">
+	  			<h4 class="feed-title">Android C2DM原理浅析</h4>
+	  			<img src="img/android C2DM.jpg">
+	  			<div class="feed-text">
+	  				<p>
+						<span>一、&nbsp;</span>
+						<span>基本原理</span>
+						</p>
+						<p>
+						<span >Android从2.2版本开始增加了Cloud&nbsp;to&nbsp;Device&nbsp;Messaging（C</span>
+						<span >2DM</span>
+						<span >）框架，在系统中支持了Push功能。C2DM目前还处在实验室阶段</span>
+						<span >，还不能大规模使用,但是小规模测试还是可以的。...</span>
+						<p>
+	  			</div>
+	  			<div class="feed-detail">详细</div>
+	  		</div>
+	  		<div class="feed-more-container">More...</div>
+  		</div>
+  		<div id="detailWrapper">
+  			<div class="detail-container">
+  				<div>
+  					<a  class="detail-back">返回</a>&nbsp;&nbsp;
+  					<a  class="detail-edit">编辑</a>
+  				</div>
+				<h4 class="feed-title">诺贝尔经济学奖揭晓：美国两位经济学家获奖</h4>
+  				<div class="detail-text">
+	  				<p>
+							北京时间10月10日19点(斯德哥尔摩时间10月10日13点)，诺贝尔经济学奖获奖名单揭晓，获奖者是：美国纽约大学经济学家托马斯-萨金特和普林斯顿大学克里斯托弗-西姆斯。他们将共享146万美元的奖金。评审委员会评价称，他们在宏观经济因果关系方面作出了实证性研究。
+							<br>
+							托马斯-萨金特，1943年7月19日出生，1968年获得哈佛大学博士学位，目前，萨金特教授任教于纽约大学，并且是美国科学院院士。
+							</p>
+							<p> 萨金特对现代经济学和金融学进行了深入了解，他的学术专长是动态宏观经济学和计量经济学。在宏观经济学领域的贡献是：与卢卡斯、巴罗和华莱士共同开创了合理预期学派，研究分析了利率的期限结构、经济大萧条等重大经济问题。</p>
+	  			</div>
+	  			<div class="detail-filter-container">
+	  				<div id="reason-filter">
+						<fieldset>
+							<legend>原因</legend>
+							<strong>诺贝尔</strong>&nbsp;&nbsp;<strong>2011</strong>&nbsp;&nbsp;<strong>经济学</strong>
+						</fieldset>
+	  				</div>
+	  				<div id="purpose-filter">
+	  					<fieldset>
+							<legend>目的</legend>
+							<strong>收藏</strong>
+						</fieldset>
+	  				</div>
+	  				<div id="city-filter">
+	  					<fieldset>
+							<legend>城市</legend>
+							<strong>北京</strong>
+						</fieldset>
+	  				</div>
+	  			</div>
+  			</div>
+  		</div>
+  	</div>
+  </body>
+</html>
