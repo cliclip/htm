@@ -4,7 +4,7 @@ GlobalApp = function(_container,_options){
 	this.children = new Array();
 	this.domMapping = null;
 	var GApp = this;
-	this.view = new Backbone.View.extend({
+	var _view = Backbone.View.extend({
 		el:$(_container),
 		initialize:function(){
 			if(GApp.children && GApp.children.length > 0){
@@ -22,24 +22,28 @@ GlobalApp = function(_container,_options){
 		},
 		events:{
 			"click #login_button":"loginCall",
-			"click #register_button":"registerCall",
+			"click #register_button":"registerCall"
 		},
 		loginCall:function(evt){
+			console.info("login start...");
 			loginWidget = new LoginWidget($("#contactArea"));
-			popUpWidget = this.popUp({width:600,height:500});
+			popUpWidget = this.popUp({width:500,height:200});
 			popUpWidget.loadWidget(loginWidget);
 			//popUpWidget.render();
+			console.info("login finished...");
 		},
 		registerCall:function(evt){
+			console.info("register start...");
 			registerWidget = new RegisterWidget($("#contactArea"));
-			popUpWidget = this.popUp({width:600,height:500});
+			popUpWidget = this.popUp({width:500,height:200});
 			popUpWidget.loadWidget(registerWidget);
+			console.info("register finished...");
 		},
 		popUp:function(popUpOption){
 			var _clientWidth = $(_container)[0].clientWidth;
 			var _clientHeight = $(_container)[0].clientHeight;
-			popUpWidget = new PopUPWidget(
-			$("popUp-container"),
+			popUpWidget = new PopUpWidget(
+			$("#popUp-container"),
 			{
 				clientWidth:_clientWidth,
 				clientHeight:_clientHeight,
@@ -49,6 +53,7 @@ GlobalApp = function(_container,_options){
 			return popUpWidget;
 		}
 	})
+	this.view = new _view();
 };
 
 GlobalApp.prototype.initialize = function(){

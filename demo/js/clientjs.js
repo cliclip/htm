@@ -20,21 +20,25 @@ function _Loadscript(src)
 
 function _loadClientScript()
 {
-  _Loadscript("namespace.js") ;
   _Loadscript("jslib/jquery-1.6.4.min.js") ;
-  _Loadscript("plugin/jquery.corner.js") ;
   _Loadscript("jslib/tempo.min.js") ;
-  _Loadscript("jslib/underscore-min.js") ;
-  _Loadscript("jslib/backbone-min.js") ; 
+  //_Loadscript("jslib/underscore-min.js") ;
+  //_Loadscript("jslib/backbone-min.js") ; 
+  _Loadscript("jslib/underscore.js") ;
+  _Loadscript("jslib/backbone.js") ; 
+  _Loadscript("plugin/jquery.corner.js") ;
+  _Loadscript("clientjs/namespace.js") ;
   _Loadscript("clientjs/Constants.js") ;
   _Loadscript("clientjs/GlobalCache.js") ;
   _Loadscript("clientjs/Messages.js") ;
   _Loadscript("clientjs/EventHandler.js") ;
   _Loadscript("clientjs/model/UserInfo.js") ;
   _Loadscript("clientjs/GlobalApp.js") ;
+  _Loadscript("clientjs/widget/PopUpWidget.js") ;
   _Loadscript("clientjs/widget/RegisterWidget.js") ;
   _Loadscript("clientjs/widget/LoginWidget.js") ;
   _Loadscript("clientjs/widget/SearchWidget.js") ;
+  
 }
 _loadClientScript();
  //]]>

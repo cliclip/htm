@@ -2,8 +2,7 @@
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
 		<link type="text/css" rel="stylesheet" href="css/main.css">
-		<script language="javascript" src="js/jquery-1.6.4.min.js"></script>
-		<script language="javascript" src="js/jquery.corner.js"></script>
+		<script language="javascript" src="js/clientjs.js"></script>
 		<script language="javascript">
 			$(document).ready(function(){
 				$("[id$='-container']").corner();
@@ -19,7 +18,7 @@
 						$("#detailWrapper").css("display","");
 						$("#detailWrapper").animate({"opacity":1,"width":600},"fast","swing");
 					})
-				})
+				});
 				
 				$(".detail-back").click(function(){
 					$("#detailWrapper").animate({"width":0,"opacity":0},"fast","swing",function(){
@@ -27,26 +26,17 @@
 						$("#contentWrapper").css("display","");
 						$("#contentWrapper").animate({"opacity":1,"width":600},"fast","swing");
 					})
-				})
+				});
 				$(".detail-edit").click(function(){
-				})
-				$("#register_button").click(function(){
-					$("#register_container").css("display","");
-					//$("#register_container").animate({"opacity":1},"fast","swing");
-				})
-				$("#login_button").click(function(){
-					console.info("login button click1");
-					$("#login_container").css("display","");
-					console.info($("#login_container").css("display"));
-					$("#login_container").animate({"opacity":1},"fast","swing",function(){console.info("animate")});
-					console.info("login button click3");
-				})
+				});
+				var globalApp = new GlobalApp($("body"));
+
 			})
 		</script>
   </head>
   <body>
   	<div id="header" >
-  		<div id="logo-holder">
+			<div id="logo-holder">
 				<font size=7 color="#ffffff">LOGO</font>
 			</div>
 			<div id="user-holder">
@@ -57,12 +47,27 @@
 					<a id="register_button">注册</a>&nbsp;&nbsp;
 					<a id="login_button">登录</a>
 			</div>
-			<div id="register-container">
-			
+			<script type="text/template" id="register_template">
+			<div>
+				<label>用户名：</label><input type="text" id="username_r" size="12"/><br>
+				<label>密&nbsp;&nbsp;&nbsp;码：</label><input type="password" id="password_r" size="12"/><br>
+				<input type="button" value="注册" />
 			</div>
-			<div id="login-container">
-				<label>用户名：</label><input type="text" size="12"/><br>
-				<label>密&nbsp;&nbsp;&nbsp;码：</label><input type="password" size="12"/>
+			</script>
+			<script type="text/template" id="login_template">
+			<div>
+				<label>用户名：</label><input type="text" id="username_l" size="12"/><br>
+				<label>密&nbsp;&nbsp;&nbsp;码：</label><input type="password" id="password_l" size="12"/><br>
+				<input type="button" value="登录" />
+			</div>
+			</script>
+			<div id="popUp-container">
+				<div id="popupContact">  
+					<a id="popupContactClose">X</a>   
+					<div id="contactArea">
+					</div>  
+				</div>  
+				<div id="backgroundPopup"></div>
 			</div>
   	</div>
   	
