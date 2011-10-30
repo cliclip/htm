@@ -11,7 +11,7 @@ RegisterWidget = function(_container,options){
 			this.el.html(template);
 		},
 		events:{
-			"click input[type=button]":"registerAction",
+			"click #registerAction_button":"registerAction",
 			"change input[type=text]" :"userNameValidation",
 			"keyup input[type=password]" : "passwordValidation"
 		},
@@ -20,11 +20,18 @@ RegisterWidget = function(_container,options){
 			var username = $("#username_r").val();
 			var password = $("#password_r").val();
 			var userInfo = new UserInfo(register_url);
-			userInfo.model.set({
-				name:username,
-				pass:password
-			});
-			userInfo.model.postFunc();
+			widget = this;
+			userInfo.registerAction({
+					name:username,
+					pass:password
+				},
+				{viewCallBack:function(status,infoText){
+					widget.el.html(infoText);
+					if(status == 0){
+						GlobalEvent.trigger(client.EVENTS.POPUP_CLOSE);
+					}
+				}
+			});		
 		},
 		userNameValidation:function(evt){
 		

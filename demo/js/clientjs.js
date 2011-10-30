@@ -27,17 +27,34 @@ function _loadClientScript()
   _Loadscript("jslib/underscore.js") ;
   _Loadscript("jslib/backbone.js") ; 
   _Loadscript("plugin/jquery.corner.js") ;
+  
   _Loadscript("clientjs/namespace.js") ;
   _Loadscript("clientjs/Constants.js") ;
-  _Loadscript("clientjs/GlobalCache.js") ;
+  _Loadscript("clientjs/events/GlobalEvent.js") ;
   _Loadscript("clientjs/Messages.js") ;
-  _Loadscript("clientjs/EventHandler.js") ;
+  _Loadscript("clientjs/RequestUtil.js") ;
+  //_Loadscript("clientjs/EventHandler.js") ;
+  
+  
   _Loadscript("clientjs/model/UserInfo.js") ;
+  _Loadscript("clientjs/model/MetaUnit.js") ;
+  _Loadscript("clientjs/model/MetaList.js") ;
+  _Loadscript("clientjs/model/ClipPreview.js") ;
+  _Loadscript("clientjs/model/PreviewList.js") ;
+  _Loadscript("clientjs/model/ClipDetail.js") ;
+  
+  _Loadscript("clientjs/GlobalRouter.js") ;
   _Loadscript("clientjs/GlobalApp.js") ;
+  
   _Loadscript("clientjs/widget/PopUpWidget.js") ;
   _Loadscript("clientjs/widget/RegisterWidget.js") ;
   _Loadscript("clientjs/widget/LoginWidget.js") ;
+  _Loadscript("clientjs/widget/UserUnitWidget.js") ;
   _Loadscript("clientjs/widget/SearchWidget.js") ;
+  _Loadscript("clientjs/widget/UpdatePwdWidget.js") ;
+  _Loadscript("clientjs/widget/SortMetaWidget.js") ;
+  _Loadscript("clientjs/widget/ClipWidget.js") ;
+  _Loadscript("clientjs/widget/ClipDetailWidget.js") ;
   
 }
 _loadClientScript();

@@ -4,7 +4,7 @@
  * 
  */
 //host address
-client.URL.HOST_URL = "http://clickdang.herokuapp.com";
+client.URL.HOST_URL = "";
 
 //application basic url
 client.URL.BASE_URL ="_/";

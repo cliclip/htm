@@ -7,8 +7,14 @@
  */
 var client = client || {};
 
-client.GLOBAL_CACHE = client.GLOBAL_CACHE || {};
-
 client.URL = client.URL || {};
 
 client.SYMBOL = client.SYMBOL || {};
+
+client.EVENTS = client.EVENTS || {};
+
+client.GLOBAL_CACHE = client.GLOBAL_CACHE || {};
+
+client.MESSAGES = client.MESSAGES || {};
+
+

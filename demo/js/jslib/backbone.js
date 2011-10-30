@@ -1077,9 +1077,9 @@
     if (params.type !== 'GET' && !Backbone.emulateJSON) {
       params.processData = false;
     }
-
-	console.info(params);
+	
     // Make the request.
+	params.async = false;
     return $.ajax(params);
   };
 
