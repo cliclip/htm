@@ -3,8 +3,8 @@ var fs = require('fs')
   , path = require('path')
   , http = require('http');
 
-var host = "clickdang.herokuapp.com"
-  , port = 80
+var host = "106.187.43.207" // "clickdang.herokuapp.com"
+  , port = 3000             // 80
   , root = "demo"
   , index = "index.html"
   , mimes = {
