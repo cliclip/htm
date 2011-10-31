@@ -11,43 +11,27 @@ LoginWidget = function(_container,options){
 			this.el.html(template);
 		},
 		events:{
-			"click input[type=button]":"loginAction"
+			"click #loginAction_button":"loginAction"
 		},
 		loginAction:function(evt){
 			var login_url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "login";
 			var username = $("#username_l").val();
 			var password = $("#password_l").val();
 			var userInfo = new UserInfo(login_url);
-			userInfo.model.set({
-				name:username,
-				pass:password
-			});
-			userInfo.model.postFunc();
-			/*
-			result = userInfo.model.save({
-				name:username,
-				pass:password
-			},
-			{
-				success:function(){
-					console.info(data);
+			widget = this;
+			userInfo.loginAction({
+					name:username,
+					pass:password
 				},
-				error:function(data){
-					console.info(data);
+				{viewCallBack:function(status,infoText){
+					widget.el.html(infoText);
+					if(status == 0){
+						//setTimeout(function(){
+							GlobalEvent.trigger(client.EVENTS.POPUP_CLOSE)
+						//},1000);
+					}
 				}
-			});
-			console.info(result[0])
-			console.info(result[1]);
-			console.info(userInfo.model);
-			*/
-			/*
-			result.error(data){
-				console.info(data);
-			};
-			result.success(data){
-				console.info(data);
-			};
-			*/
+			});		
 		}
 	})
 	this.view = new _view();
