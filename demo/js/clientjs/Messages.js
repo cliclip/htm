@@ -1,15 +1,15 @@
-/**
+ï»¿/**
  * Messages
  * This Class match the server response code to the client message text
  */
- client.MESSAGES["login_failure"] = "µÇÂ¼Ê§°Ü";
+ client.MESSAGES["login_failure"] = "ç™»å½•å¤±è´¥";
  
- client.MESSAGES["login_success"] = "µÇÂ¼³É¹¦";
+ client.MESSAGES["login_success"] = "ç™»å½•æˆåŠŸ";
  
- client.MESSAGES["register_success"] = "×¢²á³É¹¦";
+ client.MESSAGES["register_success"] = "æ³¨å†ŒæˆåŠŸ";
  
- client.MESSAGES["user_exists"] = "ÓÃ»§ÒÑ´æÔÚ";
+ client.MESSAGES["user_exists"] = "ç”¨æˆ·å·²å­˜åœ¨";
  
- client.MESSAGES["auth_success"] = "¸ü¸ÄÃÜÂë³É¹¦";
+ client.MESSAGES["auth_success"] = "æ›´æ”¹å¯†ç æˆåŠŸ";
  
- client.MESSAGES["auth_failure"] = "¸ü¸ÄÃÜÂëÊ§°Ü";
+ client.MESSAGES["auth_failure"] = "æ›´æ”¹å¯†ç å¤±è´¥";

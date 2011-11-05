@@ -1,4 +1,4 @@
-/**
+﻿/**
  * GlobalRouter
  * This Class dominates the global path and location 
  */
@@ -7,6 +7,7 @@ GlobalRouter = function(parentApp,options){
 	this.options = options;
 	_router = Backbone.Router.extend({
 		routes:{
+			"/list/all":"restoreAll",
 		
 			"/sort/reason/:param/p:page" : "sortByReason",
 			"/sort/purpose/:param/p:page" : "sortByPurpose",
@@ -24,24 +25,27 @@ GlobalRouter = function(parentApp,options){
 			"/search/device/:device1/:device2" : "queryByDevice",
 			"/search/city/:city1/:city2" : "queryByDevice"
 		},
-		
+		restoreAll:function(){
+			url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
+			this.listByImpl(url,1);
+		},
 		sortByReason:function(param,page){
 			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/reason/"+param+"/p"+page;
-			this.sortByImpl(url,page);
+			this.listByImpl(url,page);
 		},
 		sortByPurpose:function(param,page){
 			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/purpose/"+param+"/p"+page;
-			this.sortByImpl(url,page);
+			this.listByImpl(url,page);
 		},
 		sortByDevice:function(param,page){
 			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/device/"+param+"/p"+page;
-			this.sortByImpl(url,page);
+			this.listByImpl(url,page);
 		},
 		sortByCity:function(param,page){
 			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/city/"+param+"/p"+page;
-			this.sortByImpl(url,page);
+			this.listByImpl(url,page);
 		},
-		sortByImpl:function(_url,page){
+		listByImpl:function(_url,page){
 			var previewClipList = new PreviewList();
 			previewClipList.url = _url;
 			previewClipList.fetch({

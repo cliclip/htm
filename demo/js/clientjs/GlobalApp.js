@@ -1,4 +1,4 @@
-GlobalApp = function(_container,_options){
+﻿GlobalApp = function(_container,_options){
 	this.container = _container;
 	this.options = _options;
 	this.children = new Array();

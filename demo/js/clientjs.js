@@ -1,4 +1,4 @@
-//<![CDATA[ 
+﻿//<![CDATA[ 
 var scriptPath = null ;
 var nodes = document.getElementsByTagName("script") ;
 for(var i=0; i<nodes.length; i++)

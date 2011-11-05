@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Constants
  * This class specifies to keep the static global contants
  * 
