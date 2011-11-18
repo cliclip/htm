@@ -3,8 +3,10 @@ var fs = require('fs')
   , path = require('path')
   , http = require('http');
 
-var host = "106.187.43.207" // "clickdang.herokuapp.com"
-  , port = 3000             // 80
+var host = "clickdang.com" // "clickdang.herokuapp.com"
+  , port = 3000
+  , proxyhost = "www-proxy.hk.oracle.com"
+  , proxyport = 80
   , root = "demo"
   , index = "index.html"
   , mimes = {
@@ -39,7 +41,7 @@ function serve(req, res){
 }
 
 function proxy(req, res){
-  
+
   function pipe(src, des){
     src.on('data', function(data){ des.write(data); });
     src.on('end', function(){ des.end(); });
@@ -49,11 +51,15 @@ function proxy(req, res){
   var method = req.method;
   var headers = {};
   for(var k in req.headers){ headers[k] = req.headers[k]; }
-  headers["host"] = host; // fit herokuapp's virtual host config
+
+  // pass through http proxy
+  // herokuapp need this aswell
+
+  headers["host"] = host+":"+port;
 
   var preq = http.request({
-    host: host,
-    port: port,
+    host: proxyhost,
+    port: proxyport,
     path: path,
     method: method,
     headers: headers
@@ -67,7 +73,7 @@ function proxy(req, res){
 }
 
 var server = module.exports = http.createServer(function(req, res){
-  // console.dir(req);
+  console.dir(req);
   if(/\/\_\/.*/.test(req.url)){
     proxy(req, res);
   } else {
