@@ -5,6 +5,7 @@ var fs = require('fs')
 
 var host = "clickdang.com" // "clickdang.herokuapp.com"
   , port = 3000
+  , use_proxy = true
   , proxyhost = "www-proxy.hk.oracle.com"
   , proxyport = 80
   , root = "demo"
@@ -54,13 +55,12 @@ function proxy(req, res){
 
   // pass through http proxy
   // herokuapp need this aswell
-
-  headers["host"] = host+":"+port;
+  if (use_proxy) headers["host"] = host+":"+port;
 
   var preq = http.request({
-    host: proxyhost,
-    port: proxyport,
-    path: path,
+    host: use_proxy ? proxyhost : host,
+    port: use_proxy ? proxyport : port,
+    path: use_proxy ? "http://"+host+":"+port+path : path,
     method: method,
     headers: headers
   }, function(pres){
