@@ -7,6 +7,8 @@ GlobalRouter = function(parentApp,options){
 	this.options = options;
 	_router = Backbone.Router.extend({
 		routes:{
+			"/home":"goHomePage",
+			
 			"/list/all":"restoreAll",
 		
 			"/sort/reason/:param/p:page" : "sortByReason",
@@ -24,6 +26,9 @@ GlobalRouter = function(parentApp,options){
 			"/search/purpose/:purpose1/:purpose2" : "queryByPurpose",
 			"/search/device/:device1/:device2" : "queryByDevice",
 			"/search/city/:city1/:city2" : "queryByDevice"
+		},
+		goHomePage:function(){
+			location.href = "www.clickdang.com:3000";
 		},
 		restoreAll:function(){
 			url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";

@@ -1,4 +1,4 @@
-LoginWidget = function(_container,options){
+﻿LoginWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
 	var _view = Backbone.View.extend({

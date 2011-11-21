@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ClipPreview
  * Class specified to implement the model bean of preview clip
  */
@@ -7,9 +7,22 @@ ClipPreview = Backbone.Model.extend({
 			id:"",
 			name:"",
 			content:{
-				type:""
+				text:"",//text:String
+				image:"",//image:imgid || url
 			},
+			
+			
+			note:{
+				text:"",//{text:string}
+				sound:""//{sound:sndid}
+			},
+			device:"",
+			city:"",
 			source:{
+				type:""//type : "browser" | "clipboard" | "photolib" | "camera"
+			}
+			/*
+			content:{
 				type:""
 			},
 			preview:{
@@ -18,9 +31,7 @@ ClipPreview = Backbone.Model.extend({
 				note:"",
 				hassoundnot:false
 			},
-			device:"",
-			city:"",
-			time:""
+			*/
 		},
 		validate:function(){
 			

@@ -5,50 +5,70 @@
 		<script language="javascript" src="js/clientjs.js"></script>
 		<script language="javascript">
 			$(document).ready(function(){
-				$("[id$='-container']").corner();
-				$("[class$='-container']").corner();
+				//$("[id$='-container']").corner();
+				//$("[class$='-container']").corner();
 				var globalApp = new GlobalApp($("body"));
 
 			})
 		</script>
   </head>
   <body>
-  	<div id="header" >
-			<div id="logo-holder">
-				<font size=7 color="#ffffff">LOGO</font>
-			</div>
-			<div id="user-holder">
+  	<div id="header">
+		<div class="relative">
+			<a id="logo-holder" href="#/home">
+				<font size=6 color="#ffffff">CLICKDANG</font>
+			</a>
+			<ul id="nav">
+				<li class="left"></li>
+				<li><a id="register_button">注册</a></li>
+				<li><a id="login_button">登录</a></li>
+				<li class="right"></li>
+			</ul>
+			<ul id="rightNavDefault" class="rightNav">
 				
-			</div>
-			<div id="userAction-holder">
-					<a id="register_button">注册</a>&nbsp;&nbsp;
-					<a id="login_button">登录</a>
-			</div>
+			</ul>
 			<script type="text/template" id="register_template">
 			<div>
-				<label>用户名</label><input type="text" id="username_r" size="12"/><br>
-				<label>密&nbsp;&nbsp;&nbsp;码</label><input type="password" id="password_r" size="12"/><br>
+				<label>用户名:</label><input type="text" id="username_r" size="12"/><br>
+				<label>密&nbsp;&nbsp;&nbsp; 码:</label><input type="password" id="password_r" size="12"/><br>
 				<input type="button" value="注册" id="registerAction_button"/>
 			</div>
 			</script>
 			<script type="text/template" id="login_template">
 			<div>
-				<label>用户名</label><input type="text" id="username_l" size="12"/><br>
-				<label>密&nbsp;&nbsp;&nbsp;码</label><input type="password" id="password_l" size="12"/><br>
+				<label>用户名:</label><input type="text" id="username_l" size="12"/><br>
+				<label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_l" size="12"/><br>
 				<input type="button" value="登录" id="loginAction_button" />
 			</div>
 			</script>
 			<script type="text/template" id="userUnit_template">
-				<div>
-					<div></div>
-					<div><a id="userName_button"><%= name %></a></div>
-					<div style="display:none" id="userOption"><a id="updatePwd_button">更改密码</a>&nbsp;&nbsp;<a id="logout_button">注销</a></div>
-				</div>
+				
+				<li id="user-menu">
+					<a class="top" href="#/personal/info">
+						<div class="label">
+							<span class="login">
+								<%= name %>
+							</span>
+						</div>
+						<div class="notifyEmpty" id="notifyControl">
+							<div id="notifyWedge"></div>
+							<span id="notifyCount"></span>
+						</div>
+					</a>
+					<ul class="menu">
+						<li>
+							<a id="updatePwd_button">更改密码</a>
+						</li>
+						<li>
+							<a id="logout_button">注销</a>
+						</li>
+					</ul>
+				</li>
 			</script>
 			<script type="text/template" id="updatePwd_template">
 			<div>
-				<label>原密码</label><input type="password" id="o_password" size="12"/><br>
-				<label>新密码</label><input type="password" id="n_password" size="12"/><br>
+				<label>原密码:</label><input type="password" id="o_password" size="12"/><br>
+				<label>新密码:</label><input type="password" id="n_password" size="12"/><br>
 				<input type="button" value="确认更改密码" id="updatePwdAction_button" />
 			</div>
 			</script>
@@ -60,52 +80,71 @@
 				</div>  
 				<div id="backgroundPopup"></div>
 			</div>
+		</div>
   	</div>
+	
   	<div id="search-container">
-  		<input type="text"  value="" id="keyword">
-  		<a><img width=55 height=45 src="img/search.jpg"></a>
+		<div id="search">
+			<img id="magnify" src="../img/search-icon1.png">
+			<input id="keyword" placeholder="关键字..." type="text" value class>
+		</div>
   	</div>
   	<script type="text/template" id="sort_template">
-			<div class="filter-container">
-				<%= title%>
-				<hr/>
+			<div class="sort-group">
 				<% for(var i=0;i<content.length;i++){%>
-				<a href="<%= url[i] %>"><span class="filter-link"><%= content[i] %></span></a>
+				<a href="<%= url[i] %>"><div class="radioButtonContainer radioButton sortItem"><%= content[i] %></div></a>
 				<% }%>
 			</div>
+			</div>
 	</script>
-  	<div id="filter-container">
-  		
-  		<div id="filter-reason-container" class="filter-container">
-  			原因<hr/>
-  		</div>
-  		<div id="filter-purpose-container" class="filter-container">
-  			目的<hr/>
-  		</div>
-  		<div id="filter-city-container" class="filter-container">
-  			城市<hr/>
-  		</div>
-		<div id="filter-device-container" class="filter-container">
-  			设备<hr/>
-  		</div>
+  	<div id="sort-container" >
+		<div class='sort-group'><div class='radioButtonContainer radioButton sortItem'><a href='#/list/all'>全部</a></div></div>
+		<div id="sort-content"></div>
+  		<div id="upButton" class="upButton lazy"><img style="width:50px;height:50px" src="../img/up-arrow.png"></div>
+		<div id="downButton" class="downButton lazy"><img style="width:50px;height:50px" src="../img/down-arrow.png"></div>
   	</div>
 	<script type="text/template" id="clipPreview_template">
 		<div id="container_<%=id%>" >
-			<div class="content-container">
-				<div class="feed-image">
-				<%if(content.type == "html" && preview.image ) {%>
-					<img src="<%= preview.image %>" style="width:160px;height:160px">
-				<% }else if(content.type == "image"){%>
-					
-				<% } %>
+			<div class="preview-item">
+				<div class="preview-info">
+					<span class="info-text">本条信息</span>
+					<%if(city && city != ""){%>
+					<span class="into-text">在城市</span>
+					<span class="info-city"><a href="#/sort/device/<%= city %>/p1" ><%= city %></a></span>
+					<%}%>
+					<%if(device && device != ""){%>
+					<span class="info-text">使用设备</span>
+					<span class="info-device"><a href="#/sort/device/<%= device%>/p1"><%= device%></a></span>
+					<%}%>
+					<span class="info-text">搜集</span>
+					<a title="详细" class="detailButton controlSprite" href="#/detail/<%= id %>"></a>
 				</div>
-				<div class="feed-text">
-					<%= preview.text %>
+				<div class="content-container">
+					<%if(content.image) {%>
+						<div class="preview-image left">
+							<img src="<%= content.image %>">
+						</div>
+					<% } %>
+					<%if(content.text){%>
+						<p class="preview-text">
+							<%= content.text %>
+						</p>
+					<%}%>
 				</div>
-				
-				<div class="feed-device">设备：<%= device%></div>
-				<div class="feed-city">城市：<%= city %></div>
-				<div class="feed-detail"><a href="#/detail/<%= id %>">详细</a></div>
+				<div class="preview-note notesWrapA">
+					<img class="notewedge" src="../img/notewedge.png">
+					<%if(note.text && note.text != " "){%>
+						<p class="note-text">
+							备注：<%= note.text %>
+						</p>
+					<%}%>
+					<%if(note.sound){%>
+						语音备注：
+						<audio src="<%= note.sndsrc%>" controls="controls" preload="load">
+							您的浏览器不支持 audio 标签。
+						</audio>
+					<%}%>
+				</div>
 			</div>
 		</div>
 	</script>
@@ -116,54 +155,78 @@
 		<script type="text/template" id="detail_template">
 			<div class="detail-container">
   				<div>
-  					<div class="detail-back"><a href="#/detailback/<%= id%>">返回</a></div>
-					<div class="detail-text">
-				<%if(content.type == "text"){%>
-					<%= content.text %>
-				<%}else if(content.type == "html"){%>
-					<%= content.html %>
-				<%}else if(content.type == "image"){%>
-				
-				<%}%>
-	  			</div>
-				<div class="detai-note">
-				<%if(note.text){%>
-					备注：<%=note.text%>
-				<%}%>
-				<%if(note.sound){%>
-					语音备注：
-				<%}%>
-				</div>
-	  			<div class="detail-filter-container">
-	  				<div id="reason-filter">
-						<fieldset>
-							<legend>原因</legend>
-							<% for(var i=0;i<reason.length;i++){ %>
-								<span class=""><strong><%=reason[i]%>&nbsp;&nbsp;</strong></span>
-							<%}%>
-						</fieldset>
-	  				</div>
-	  				<div id="purpose-filter">
-	  					<fieldset>
-							<legend>目的</legend>
-							<% for(var i=0;i<purpose.length;i++){ %>
-								<span class=""><strong><%=purpose[i]%>&nbsp;&nbsp;</strong></span>
-							<%}%>
-						</fieldset>
-	  				</div>
-					<div id="device-filter">
-	  					<fieldset>
-							<legend>设备</legend>
-								<span class=""><strong><%=device?device:""%></strong></span>
-						</fieldset>
-	  				</div>
-	  				<div id="city-filter">
-	  					<fieldset>
-							<legend>城市</legend>
-							<span class=""><strong><%=city?city:""%></strong></span>
-						</fieldset>
-	  				</div>
-	  			</div>
+					<a title="返回" class="detailBackButton controlSprite" href="#/detailback/<%= id%>"></a>
+					<div class="content-container">
+					<%
+						for(var i=0;i<content.length;i++){
+							if(content[i].text){
+								%>
+									<p class="detail-text">
+										<%= content[i].text %>
+									</p>
+								<%
+							}else if(content[i].image){
+								%>
+									<div class="detail-image">
+										<img src="<%= content[i].image %>">
+									</div>
+								<%
+							}
+						}
+					%>
+					</div>
+					<div class="notesWrapA">
+						<img class="notewedge" src="../img/notewedge.png">
+						<div class="detail-note">
+						<%
+							for(var i=0;i<note.length;i++){
+								if(note[i].text&& note.text != " "){
+								%>
+									<p class="note-text">
+										备注：<%= note[i].text %>
+									</p>
+								<%}else if(note[i].sound){%>
+									语音备注：
+									<audio src="<%= note[i].sndsrc%>" controls="controls" preload="load">
+										您的浏览器不支持 audio 标签。
+									</audio>
+								<%}
+							}
+						%>
+						</div>
+						<div class="detail-reason">
+						原因：
+						<%
+							for(var i=0;i<reason.length;i++){
+							%>
+								<span class="reason-text"><a href="#/sort/reason/<%= reason[i] %>/p1" ><%= reason[i] %></a></span>&nbsp;&nbsp;
+							<%}
+						%>
+						</div>
+						<div class="detail-purpose">
+						目的：
+						<%
+							for(var i=0;i<purpose.length;i++){
+							%>
+								<span class="purpose-text"><a href="#/sort/purpose/<%= purpose[i] %>/p1" ><%= purpose[i] %></a></span>&nbsp;&nbsp;
+							<%}
+						%>
+						</div>
+						<div class="detail-device">
+						设备：<span class="device-text"><a href="#/sort/device/<%= device %>/p1" ><%= device%></a></span>
+						</div>
+						<div class="detail-city">
+						城市：<span class="city-text"><a href="#/sort/city/<%= city %>/p1" ><%= city %></a></span>
+						</div>
+						<div class="detail-time">
+						时间：<%= time%>	
+						</div>
+						<div class="detail-ip">
+						
+						</div>
+						
+					</div>
+					
   				</div>
   				
   			</div>

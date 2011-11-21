@@ -1,4 +1,4 @@
-/**
+﻿/**
  * GlobalEvent
  * This Class used to maintain global events
  */

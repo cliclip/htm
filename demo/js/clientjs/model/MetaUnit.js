@@ -1,1 +1,1 @@
-/** * MetaUnit * Class specified to implement the model bean of user info */MetaUnit = Backbone.Model.extend({		defaults:{			content:"",			url:""		},		validate:function(){					},		initialize:function(){					},		parse : function(resp, xhr) {		  return resp;		},});
+﻿/** * MetaUnit * Class specified to implement the model bean of user info */MetaUnit = Backbone.Model.extend({		defaults:{			content:"",			url:""		},		validate:function(){					},		initialize:function(){					},		parse : function(resp, xhr) {		  return resp;		},});

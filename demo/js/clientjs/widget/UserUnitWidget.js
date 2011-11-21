@@ -1,4 +1,4 @@
-UserUnitWidget = function(_container,options){
+﻿UserUnitWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
 	uuWidget = this;

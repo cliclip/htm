@@ -1,12 +1,13 @@
-ClipWidget = function(_container,options){
+﻿ClipWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
 	var _view = Backbone.View.extend({
 		el:$(_container),
 		initialize:function(){
-			this.el.empty();
-			this.iniClipList();
-			this.render();
+			//this.el.empty();
+			//this.iniClipList();
+			//this.render();
+			location.href="#/list/all";
 		},
 		render:function(renderList){
 			var collection;
@@ -16,6 +17,11 @@ ClipWidget = function(_container,options){
 				collection = this.previewList.toJSON();
 			}
 			for(var i=0;i<collection.length;i++){
+				if(collection[i].content.image){
+					if(!isNaN(collection[i].content.image))
+						//collection[i].content.image = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name+"/image/"+collection[i].content.image+"/128";
+						collection[i].content.image = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name+"/image/"+collection[i].content.image;
+				}
 				var template = _.template($("#clipPreview_template").html(),collection[i]);
 				this.el.append(template);
 			}

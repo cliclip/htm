@@ -1,4 +1,4 @@
-/**
+﻿/**
  * UserInfo
  * Class specified to implement the model bean of user info
  */

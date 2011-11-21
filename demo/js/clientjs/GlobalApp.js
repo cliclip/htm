@@ -12,10 +12,10 @@
 				GApp.globalRouter = new GlobalRouter(GApp);
 				Backbone.history.start();
 				if(!GApp.view.userUnitWidget)
-					GApp.view.userUnitWidget = new UserUnitWidget($("#user-holder"));
+					GApp.view.userUnitWidget = new UserUnitWidget($("#rightNavDefault"));
 					GApp.addChild(GApp.view.userUnitWidget);
 				if(!GApp.view.sortMetaWidget)
-					GApp.view.sortMetaWidget = new SortMetaWidget($("#filter-container"));
+					GApp.view.sortMetaWidget = new SortMetaWidget($("#sort-content"));
 					GApp.addChild(GApp.view.sortMetaWidget);
 				if(!GApp.view.clipWidget)
 					GApp.view.clipWidget = new ClipWidget($("#contentWrapper"));
@@ -49,7 +49,8 @@
 		},
 		events:{
 			"click #login_button":"loginCall",
-			"click #register_button":"registerCall"
+			"click #register_button":"registerCall",
+			"mouseover #sort-container":"scrollListener"
 			//"click #updatePwd_button":"updatePwdCall",
 			//"click #logout_button":"logoutCall"
 		},
@@ -86,6 +87,11 @@
 		},
 		addChild:function(child){
 			GApp.addChild(child);
+		},
+		scrollListener:function(evt){
+			//console.info(evt);
+			//$("#upButton").removeClass("display","");
+			//$("#downButton").removeClass("display","");
 		}
 	})
 	this.view = new _view();

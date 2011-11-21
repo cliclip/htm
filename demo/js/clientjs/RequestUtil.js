@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RequestUtil
  * This Class implements the util ajax request method
  */

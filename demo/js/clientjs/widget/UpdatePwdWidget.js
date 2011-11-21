@@ -1,4 +1,4 @@
-UpdatePwdWidget = function(_container,options){
+﻿UpdatePwdWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
 	var _view = Backbone.View.extend({

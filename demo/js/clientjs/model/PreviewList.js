@@ -1,4 +1,4 @@
-PreviewList = Backbone.Collection.extend({
+﻿PreviewList = Backbone.Collection.extend({
 	model:ClipPreview,
 	parse:function(response){
 		if(response[0]==0){

@@ -1,9 +1,34 @@
-/**
+﻿/**
  * ClipDetail
  * Class specified to implement the model bean of detail clip
  */
 ClipDetail = Backbone.Model.extend({
 		defaults:{
+			id:"",
+			name:"",
+			content:[
+				{text:""},//text:String
+				{image:""}//image:imgid || url
+			],
+			note:[
+				{text:""},//text:String
+				{sound:""}//sound:sndid
+			],
+			reason:[],
+			purpose:[],
+			device:"",
+			city:"",
+			source:{
+				type:"",//type : "browser" | "clipboard" | "photolib" | "camera"
+				url:"", 
+				rss:"", 
+				title:"", 
+				keyword:[], 
+				tag:[]
+			},
+			time:"",
+			ip:""
+		/*
 			user:"",
 			content:{
 				type:"",
@@ -17,7 +42,7 @@ ClipDetail = Backbone.Model.extend({
 			},
 			reason:[],
 			purpose:[],
-			/*
+			
 			source:{
 				type:"",
 				url:"",
@@ -26,11 +51,12 @@ ClipDetail = Backbone.Model.extend({
 				keyword:"",
 				tag:""
 			},
-			*/
+			
 			device:"",
 			city:"",
 			time:"",
 			ip:""
+		*/
 		},
 		validate:function(){
 			
