@@ -24,14 +24,16 @@
 					pass:password
 				},
 				{viewCallBack:function(status,infoText){
-					widget.el.html(infoText);
-					if(status == 0){
-						//setTimeout(function(){
-							GlobalEvent.trigger(client.EVENTS.POPUP_CLOSE)
-						//},1000);
+						if(status == 0){
+							widget.el.html(infoText);
+							GlobalEvent.trigger(client.EVENTS.POPUP_CLOSE);
+						}else{
+							widget.el.children().find("span.action-info.name").html(infoText.name ? infoText.name : "");
+							widget.el.children().find("span.action-info.pass").html(infoText.pass ? infoText.pass : "");
+						}
 					}
 				}
-			});		
+			);		
 		}
 	})
 	this.view = new _view();

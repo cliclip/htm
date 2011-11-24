@@ -37,12 +37,14 @@
 						},2000);
 					}else{
 						mcode = response[1];
-						widget.el.html(client.MESSAGES[mcode] || mcode );
+						infoText = client.MESSAGES.getErrorMessage(mcode);
+						widget.el.children().find("span.action-info.oldpass").html(infoText.oldpass);
+						widget.el.children().find("span.action-info.pass").html(infoText.pass);
 					}
 				},
 				erroeCallBack:function(response){
 					var mcode = response;
-					widget.el.html(client.MESSAGES[mcode] || mcode);
+					widget.el.html(client.MESSAGES.getErrorMessage(mcode));
 				}
 			});		
 		}

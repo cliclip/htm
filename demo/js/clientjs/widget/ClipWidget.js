@@ -7,7 +7,7 @@
 			//this.el.empty();
 			//this.iniClipList();
 			//this.render();
-			location.href="#/list/all";
+			location.href="#/clip/all";
 		},
 		render:function(renderList){
 			var collection;

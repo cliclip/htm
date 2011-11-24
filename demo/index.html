@@ -29,16 +29,18 @@
 			</ul>
 			<script type="text/template" id="register_template">
 			<div>
-				<label>用户名:</label><input type="text" id="username_r" size="12"/><br>
-				<label>密&nbsp;&nbsp;&nbsp; 码:</label><input type="password" id="password_r" size="12"/><br>
+				<label>用户名:</label><input type="text" id="username_r" size="12"/><span class="action-info name"></span><br>
+				<label>密&nbsp;&nbsp;&nbsp; 码:</label><input type="password" id="password_r" size="12"/><span class="action-info pass"></span><br>
 				<input type="button" value="注册" id="registerAction_button"/>
+				
 			</div>
 			</script>
 			<script type="text/template" id="login_template">
 			<div>
-				<label>用户名:</label><input type="text" id="username_l" size="12"/><br>
-				<label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_l" size="12"/><br>
+				<label>用户名:</label><input type="text" id="username_l" size="12"/><span class="action-info name"></span><br>
+				<label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_l" size="12"/><span class="action-info pass"></span><br>
 				<input type="button" value="登录" id="loginAction_button" />
+				<span class="action-info"></span>
 			</div>
 			</script>
 			<script type="text/template" id="userUnit_template">
@@ -67,9 +69,10 @@
 			</script>
 			<script type="text/template" id="updatePwd_template">
 			<div>
-				<label>原密码:</label><input type="password" id="o_password" size="12"/><br>
-				<label>新密码:</label><input type="password" id="n_password" size="12"/><br>
+				<label>原密码:</label><input type="password" id="o_password" size="12"/><span class="action-info oldpass"></span><br>
+				<label>新密码:</label><input type="password" id="n_password" size="12"/><span class="action-info pass"></span><br>
 				<input type="button" value="确认更改密码" id="updatePwdAction_button" />
+				<span class="action-info"></span>
 			</div>
 			</script>
 			<div id="popUp-container">
@@ -98,8 +101,8 @@
 			</div>
 	</script>
   	<div id="sort-container" >
-		<div class='sort-group'><div class='radioButtonContainer radioButton sortItem'><a href='#/list/all'>全部</a></div></div>
-		<div id="sort-content"></div>
+		<div class="sort-group"><a href='#/clip/all'><div class='radioButtonContainer radioButton sortItem'>全部</div></a></div>
+		<div class="sort-content"></div>
   		<div id="upButton" class="upButton lazy"><img style="width:50px;height:50px" src="../img/up-arrow.png"></div>
 		<div id="downButton" class="downButton lazy"><img style="width:50px;height:50px" src="../img/down-arrow.png"></div>
   	</div>
@@ -110,11 +113,11 @@
 					<span class="info-text">本条信息</span>
 					<%if(city && city != ""){%>
 					<span class="into-text">在城市</span>
-					<span class="info-city"><a href="#/sort/device/<%= city %>/p1" ><%= city %></a></span>
+					<span class="info-city"><a href="#/clip/device/<%= city %>/p1" ><%= city %></a></span>
 					<%}%>
 					<%if(device && device != ""){%>
 					<span class="info-text">使用设备</span>
-					<span class="info-device"><a href="#/sort/device/<%= device%>/p1"><%= device%></a></span>
+					<span class="info-device"><a href="#/clip/device/<%= device%>/p1"><%= device%></a></span>
 					<%}%>
 					<span class="info-text">搜集</span>
 					<a title="详细" class="detailButton controlSprite" href="#/detail/<%= id %>"></a>
@@ -199,7 +202,7 @@
 						<%
 							for(var i=0;i<reason.length;i++){
 							%>
-								<span class="reason-text"><a href="#/sort/reason/<%= reason[i] %>/p1" ><%= reason[i] %></a></span>&nbsp;&nbsp;
+								<span class="reason-text"><a href="#/clip/reason/<%= reason[i] %>/p1" ><%= reason[i] %></a></span>&nbsp;&nbsp;
 							<%}
 						%>
 						</div>
@@ -208,15 +211,15 @@
 						<%
 							for(var i=0;i<purpose.length;i++){
 							%>
-								<span class="purpose-text"><a href="#/sort/purpose/<%= purpose[i] %>/p1" ><%= purpose[i] %></a></span>&nbsp;&nbsp;
+								<span class="purpose-text"><a href="#/clip/purpose/<%= purpose[i] %>/p1" ><%= purpose[i] %></a></span>&nbsp;&nbsp;
 							<%}
 						%>
 						</div>
 						<div class="detail-device">
-						设备：<span class="device-text"><a href="#/sort/device/<%= device %>/p1" ><%= device%></a></span>
+						设备：<span class="device-text"><a href="#/clip/device/<%= device %>/p1" ><%= device%></a></span>
 						</div>
 						<div class="detail-city">
-						城市：<span class="city-text"><a href="#/sort/city/<%= city %>/p1" ><%= city %></a></span>
+						城市：<span class="city-text"><a href="#/clip/city/<%= city %>/p1" ><%= city %></a></span>
 						</div>
 						<div class="detail-time">
 						时间：<%= time%>	

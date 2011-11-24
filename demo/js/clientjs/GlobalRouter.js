@@ -9,12 +9,12 @@ GlobalRouter = function(parentApp,options){
 		routes:{
 			"/home":"goHomePage",
 			
-			"/list/all":"restoreAll",
+			"/clip/all":"restoreAll",
 		
-			"/sort/reason/:param/p:page" : "sortByReason",
-			"/sort/purpose/:param/p:page" : "sortByPurpose",
-			"/sort/device/:param/p:page" : "sortByDevice",
-			"/sort/city/:param/p:page" : "sortByCity",
+			"/clip/reason/:param/p:page" : "sortByReason",
+			"/clip/purpose/:param/p:page" : "sortByPurpose",
+			"/clip/device/:param/p:page" : "sortByDevice",
+			"/clip/city/:param/p:page" : "sortByCity",
 			
 			"/detail/:id" : "detailById",
 			"/detailback/:id" : "detailBack",
@@ -31,28 +31,38 @@ GlobalRouter = function(parentApp,options){
 			location.href = "www.clickdang.com:3000";
 		},
 		restoreAll:function(){
-			url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
+			//url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
+			url =  "/clip/all";
 			this.listByImpl(url,1);
 		},
 		sortByReason:function(param,page){
-			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/reason/"+param+"/p"+page;
+			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/reason/"+param+"/p"+page;
+			var url = "/clip/reason/"+param+"/p"+page;
+			
 			this.listByImpl(url,page);
 		},
 		sortByPurpose:function(param,page){
-			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/purpose/"+param+"/p"+page;
+			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/purpose/"+param+"/p"+page;
+			var url = "/clip/purpose/"+param+"/p"+page;
+			
 			this.listByImpl(url,page);
 		},
 		sortByDevice:function(param,page){
-			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/device/"+param+"/p"+page;
+			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/device/"+param+"/p"+page;
+			var url = "/clip/device/"+param+"/p"+page;
+			console.info(param);
+			console.info(page);
 			this.listByImpl(url,page);
 		},
 		sortByCity:function(param,page){
-			var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/city/"+param+"/p"+page;
+			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/city/"+param+"/p"+page;
+			var url = "/clip/city/"+param+"/p"+page;
 			this.listByImpl(url,page);
 		},
 		listByImpl:function(_url,page){
+			$(".radioButtonContainer.radioButton.sortItem.active").removeClass("active");
 			var previewClipList = new PreviewList();
-			previewClipList.url = _url;
+			previewClipList.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + _url;
 			previewClipList.fetch({
 				success:function(collection,resp){
 					if(resp[0] == 0){
@@ -60,6 +70,7 @@ GlobalRouter = function(parentApp,options){
 							parentApp.view.clipWidget.addPreviewClipList(collection);
 						else
 							parentApp.view.clipWidget.loadPreviewClipList(collection);
+						$("[href='#"+_url+"']").children("div").addClass("active");
 					}else{
 						//server response exception
 					}

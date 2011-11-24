@@ -15,7 +15,7 @@
 					GApp.view.userUnitWidget = new UserUnitWidget($("#rightNavDefault"));
 					GApp.addChild(GApp.view.userUnitWidget);
 				if(!GApp.view.sortMetaWidget)
-					GApp.view.sortMetaWidget = new SortMetaWidget($("#sort-content"));
+					GApp.view.sortMetaWidget = new SortMetaWidget($("#sort-container"));
 					GApp.addChild(GApp.view.sortMetaWidget);
 				if(!GApp.view.clipWidget)
 					GApp.view.clipWidget = new ClipWidget($("#contentWrapper"));

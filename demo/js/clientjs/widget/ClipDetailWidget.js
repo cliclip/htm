@@ -35,6 +35,15 @@
 
 			});
 			
+			/*
+			this.el.children(".preview-item").slideUp("slow",function(){
+				view.render();
+				view.el.children(".detail-container").height(0);
+				view.el.children(".detail-container").slideDown("slow",function(){
+				
+				});
+			});
+			*/
 		},
 		animateOut:function(){
 			view = this;

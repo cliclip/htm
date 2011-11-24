@@ -27,6 +27,7 @@ function _loadClientScript()
   _Loadscript("jslib/underscore.js") ;
   _Loadscript("jslib/backbone.js") ; 
   _Loadscript("plugin/jquery.corner.js") ;
+  _Loadscript("plugin/jquery.mousewheel.min.js");
   
   _Loadscript("clientjs/namespace.js") ;
   _Loadscript("clientjs/Constants.js") ;

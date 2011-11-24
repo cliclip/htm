@@ -41,14 +41,14 @@ UserInfo = function(_url,options){
 					}else{
 						var mcode = response[1];
 						if(options.viewCallBack){
-							options.viewCallBack(1,client.MESSAGES[mcode] || mcode);
+							options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
 						}
 					}
 				},
 				error:function(model,response){
 					var mcode = response;
 					if(options.viewCallBack){
-						options.viewCallBack(1,client.MESSAGES[mcode] || mcode);
+						options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
 					}
 				}
 			});
@@ -74,14 +74,14 @@ UserInfo = function(_url,options){
 					}else{
 						var mcode = response[1];
 						if(options.viewCallBack){
-							options.viewCallBack(1,client.MESSAGES[mcode]);
+							options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
 						}
 					}
 				},
 				error:function(model,response){
 					var mcode = response;
 					if(options.viewCallBack){
-						options.viewCallBack(1,client.MESSAGES[mcode] || mcode);
+						options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
 					}
 				}
 			});
