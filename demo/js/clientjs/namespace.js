@@ -11,6 +11,10 @@ client.URL = client.URL || {};
 
 client.SYMBOL = client.SYMBOL || {};
 
+client.UNIT = client.UNIT || {};
+
+client.UNIT.TIME_UNIT = client.UNIT.TIME_UNIT || {};
+
 client.EVENTS = client.EVENTS || {};
 
 client.GLOBAL_CACHE = client.GLOBAL_CACHE || {};

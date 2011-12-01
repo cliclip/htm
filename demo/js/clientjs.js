@@ -34,6 +34,7 @@ function _loadClientScript()
   _Loadscript("clientjs/events/GlobalEvent.js") ;
   _Loadscript("clientjs/Messages.js") ;
   _Loadscript("clientjs/RequestUtil.js") ;
+  _Loadscript("clientjs/ToolUtil.js") ;
   //_Loadscript("clientjs/EventHandler.js") ;
   
   

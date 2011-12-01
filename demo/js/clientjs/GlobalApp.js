@@ -11,6 +11,7 @@
 			GlobalEvent.bind(client.EVENTS.USER_REFRESH,function(){
 				GApp.globalRouter = new GlobalRouter(GApp);
 				Backbone.history.start();
+				$("#nav").css("display","none");
 				if(!GApp.view.userUnitWidget)
 					GApp.view.userUnitWidget = new UserUnitWidget($("#rightNavDefault"));
 					GApp.addChild(GApp.view.userUnitWidget);
@@ -27,6 +28,9 @@
 					GApp.view.searchWidget = new SearchWidget($("#search-container"));
 					GApp.addChild(GApp.view.searchWidget);
 				
+			});
+			GlobalEvent.bind(client.EVENTS.USER_LOGOUT,function(){
+				$("#nav").css("display","");
 			});
 		
 		//GlobalEvent = new GlobalEvent();
@@ -49,8 +53,7 @@
 		},
 		events:{
 			"click #login_button":"loginCall",
-			"click #register_button":"registerCall",
-			"mouseover #sort-container":"scrollListener"
+			"click #register_button":"registerCall"
 			//"click #updatePwd_button":"updatePwdCall",
 			//"click #logout_button":"logoutCall"
 		},
@@ -87,11 +90,6 @@
 		},
 		addChild:function(child){
 			GApp.addChild(child);
-		},
-		scrollListener:function(evt){
-			//console.info(evt);
-			//$("#upButton").removeClass("display","");
-			//$("#downButton").removeClass("display","");
 		}
 	})
 	this.view = new _view();
@@ -127,4 +125,9 @@ GlobalApp.prototype.popUp = function(popUpOption,_widget){
 	if(!this.view)
 		return;
 	this.view.popUp(popUpOption,_widget);
+}
+GlobalApp.prototype.lazyLoad = function(url,page){
+	if(!this.globalRouter)
+		return;
+	this.globalRouter.router.listByImpl(url,page);
 }

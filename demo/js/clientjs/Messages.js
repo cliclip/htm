@@ -9,6 +9,8 @@
  
  client.MESSAGES["auth_success"] = "更改密码成功";
  
+ client.MESSAGES["password_diff"] = "密码输入不一致";
+ 
  
  client.MESSAGES["auth"] = client.MESSAGES["auth"] || {};
  

@@ -71,6 +71,7 @@
 			<div>
 				<label>原密码:</label><input type="password" id="o_password" size="12"/><span class="action-info oldpass"></span><br>
 				<label>新密码:</label><input type="password" id="n_password" size="12"/><span class="action-info pass"></span><br>
+				<label>新密码:</label><input type="password" id="re_password" size="12"/><span class="action-info repass"></span><br>
 				<input type="button" value="确认更改密码" id="updatePwdAction_button" />
 				<span class="action-info"></span>
 			</div>
@@ -101,7 +102,7 @@
 			</div>
 	</script>
   	<div id="sort-container" >
-		<div class="sort-group"><a href='#/clip/all'><div class='radioButtonContainer radioButton sortItem'>全部</div></a></div>
+		<div class="sort-group"><a href='#/clip/all/p1'><div class='radioButtonContainer radioButton sortItem'>全部</div></a></div>
 		<div class="sort-content"></div>
   		<div id="upButton" class="upButton lazy"><img style="width:50px;height:50px" src="../img/up-arrow.png"></div>
 		<div id="downButton" class="downButton lazy"><img style="width:50px;height:50px" src="../img/down-arrow.png"></div>
@@ -222,7 +223,7 @@
 						城市：<span class="city-text"><a href="#/clip/city/<%= city %>/p1" ><%= city %></a></span>
 						</div>
 						<div class="detail-time">
-						时间：<%= time%>	
+						时间：<%= pastTime%>	
 						</div>
 						<div class="detail-ip">
 						
