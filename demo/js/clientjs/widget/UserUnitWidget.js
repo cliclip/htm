@@ -34,6 +34,7 @@
 			client.GLOBAL_CACHE["userInfo"] = null;
 			client.GLOBAL_CACHE["token"] = null;
 			document.cookie = "";
+			GlobalEvent.trigger(client.EVENTS.USER_LOGOUT);
 			this.remove();
 		},
 	})

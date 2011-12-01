@@ -1,13 +1,22 @@
 ﻿ClipWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
+	this.currentUrl ="";
+	this.currentPage = 1;
+	var clipWidget = this;
 	var _view = Backbone.View.extend({
 		el:$(_container),
 		initialize:function(){
 			//this.el.empty();
 			//this.iniClipList();
 			//this.render();
-			location.href="#/clip/all";
+			location.href="#/clip/all/p1";
+			 var view = this;
+			$(document).scroll(function(evt){
+				if(view.el[0].scrollHeight > 0 && (view.el[0].scrollHeight - document.body.scrollTop)<500){
+					view.lazyLoad();
+				}
+			})
 		},
 		render:function(renderList){
 			var collection;
@@ -31,7 +40,7 @@
 			this.el.empty();
 		},
 		events:{
-			
+			//"scroll" : "scrollMore"
 		},
 		iniClipList:function(){
 			view = this;
@@ -49,6 +58,12 @@
 					//client request error
 				}
 			});
+		},
+		lazyLoad:function(){
+			console.info(clipWidget.currentUrl);
+			console.info(clipWidget.currentPage);
+			clipWidget.currentPage = parseInt(clipWidget.currentPage) + 1;
+			clipWidget.parentApp.lazyLoad(clipWidget.currentUrl,clipWidget.currentPage);
 		}
 	})
 	this.view = new _view();

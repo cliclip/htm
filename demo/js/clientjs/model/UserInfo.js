@@ -59,7 +59,7 @@ UserInfo = function(_url,options){
 			{
 				success:function(model,response){
 					if(response[0] == 0){
-					/*
+					
 						client.GLOBAL_CACHE["userInfo"] = {
 							name:params.name,
 							pass:params.pass
@@ -67,7 +67,7 @@ UserInfo = function(_url,options){
 						client.GLOBAL_CACHE["token"] = response[1];
 						// refresh the user status 
 						GlobalEvent.trigger(client.EVENTS.USER_REFRESH);
-					*/	
+						
 						if(options.viewCallBack){
 							options.viewCallBack(0,client.MESSAGES["register_success"]);
 						}

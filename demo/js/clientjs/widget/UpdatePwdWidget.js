@@ -17,6 +17,11 @@
 			var updatePwd_url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/passwd";
 			var o_password = $("#o_password").val();
 			var n_password = $("#n_password").val();
+			var re_password = $("#re_password").val();
+			if(n_password != re_password){
+				this.el.children().find("span.action-info.repass").html(client.MESSAGES["password_diff"]);
+				return;
+			}
 			//var userInfo = new UserInfo(updatePwd_url);
 			widget = this;
 			RequestUtil.postFunc({
