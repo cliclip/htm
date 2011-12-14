@@ -1,6 +1,7 @@
 ﻿ClipDetailWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
+	this.widgetType = "ClipDetailWidget";
 	var _view = Backbone.View.extend({
 		el:$(_container),
 		initialize:function(){
@@ -78,6 +79,14 @@
 		}
 	})
 	this.view = new _view();
+}
+ClipDetailWidget.prototype.initialize = function(){
+	this.view.initialize();
+}
+ClipDetailWidget.prototype.terminalize = function(){
+	this.view.el.empty();
+	this.parentApp.removeChild(this);
+	this.parentApp.clipDetailWidget = null;
 }
 ClipDetailWidget.prototype.render = function(options){
 	this.view.render(options);

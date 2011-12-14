@@ -17,6 +17,8 @@ GlobalRouter = function(parentApp,options){
 			//new RegExp('^/clip/device/(^\/[.*?]\/p$)/p([/d]+)$'): "sortByDevice",
 			"/clip/city/:param/p:page" : "sortByCity",
 			
+			"/clip/delete/:id":"deleteClip",
+			
 			"/detail/:id" : "detailById",
 			"/detailback/:id" : "detailBack",
 			
@@ -36,29 +38,28 @@ GlobalRouter = function(parentApp,options){
 		},
 		restoreAll:function(page){
 			//url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
-			url =  "/clip/all";
+			var url =  "/clip/all";
 			this.listByImpl(url,page);
 		},
 		sortByReason:function(param,page){
 			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/reason/"+param+"/p"+page;
-			var url = "/clip/reason/"+param;
-			
+			var url = "/clip/reason/"+encodeURIComponent(param);
+
 			this.listByImpl(url,page);
 		},
 		sortByPurpose:function(param,page){
 			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/purpose/"+param+"/p"+page;
-			var url = "/clip/purpose/"+param;
-			
+			var url = "/clip/purpose/"+encodeURIComponent(param);
 			this.listByImpl(url,page);
 		},
 		sortByDevice:function(param,page){
 			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/device/"+param+"/p"+page;
-			var url = "/clip/device/"+param;
+			var url = "/clip/device/"+encodeURIComponent(param);
 			this.listByImpl(url,page);
 		},
 		sortByCity:function(param,page){
 			//var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/city/"+param+"/p"+page;
-			var url = "/clip/city/"+param;
+			var url = "/clip/city/"+encodeURIComponent(param);
 			this.listByImpl(url,page);
 		},
 		listByImpl:function(_url,page){
@@ -69,13 +70,13 @@ GlobalRouter = function(parentApp,options){
 				success:function(collection,resp){
 					if(resp[0] == 0){
 						if(page != 1)
-							parentApp.view.clipWidget.addPreviewClipList(collection);
+							parentApp.clipWidget.addPreviewClipList(collection);
 						else{
-							parentApp.view.clipWidget.loadPreviewClipList(collection);
-							$("[href='#"+_url+"']").children("div").addClass("active");
+							parentApp.clipWidget.loadPreviewClipList(collection);
+							$("[href^='#"+_url+"']").children("div").addClass("active");
 						}
-						parentApp.view.clipWidget.currentUrl = _url;
-						parentApp.view.clipWidget.currentPage = page;
+						parentApp.clipWidget.currentUrl = _url;
+						parentApp.clipWidget.currentPage = page;
 					}else{
 						//server response exception
 					}
@@ -91,7 +92,7 @@ GlobalRouter = function(parentApp,options){
 			clipDetail.fetch({
 				success:function(model,resp){
 					if(resp[0] == 0){
-						parentApp.view.clipDetailWidget.loadDetail(id,model);
+						parentApp.clipDetailWidget.loadDetail(id,model);
 					}else{
 						//server response exception
 					}
@@ -102,7 +103,25 @@ GlobalRouter = function(parentApp,options){
 			});
 		},	
 		detailBack:function(id){
-			parentApp.view.clipDetailWidget.cancelDetail(id);
+			parentApp.clipDetailWidget.cancelDetail(id);
+		},
+		deleteClip:function(id){
+			RequestUtil.deleteFunc({
+				url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/"+id,
+				//data:params,
+				successCallBack:function(response){
+					if(response[0] == 0){
+						parentApp.clipDetailWidget.cancelDetail(id);
+						$("#container_"+id).remove();
+					}else{
+						
+					}
+					
+				},
+				errorCallBack:function(response){
+					console.info(response);
+				}
+			});
 		},
 		queryByWord:function(keyword){
 			params = {

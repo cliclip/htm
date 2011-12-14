@@ -65,8 +65,8 @@ ClipDetail = Backbone.Model.extend({
 			
 		},
 		generatePastTime:function(model){
-			ftime = new Date(model.time);
-			ttime = new Date();
+			var ftime = new Date(model.time);
+			var ttime = new Date();
 			model.pastTime = ToolUtil.subTimes(ftime,ttime) + "前";
 		},
 		parse : function(resp, xhr) {

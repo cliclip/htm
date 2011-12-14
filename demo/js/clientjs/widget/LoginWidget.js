@@ -1,6 +1,7 @@
 ﻿LoginWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
+	this.widgetType = "LoginWidget";
 	var _view = Backbone.View.extend({
 		el:$(_container),
 		initialize:function(){
@@ -18,7 +19,7 @@
 			var username = $("#username_l").val();
 			var password = $("#password_l").val();
 			var userInfo = new UserInfo(login_url);
-			widget = this;
+			var widget = this;
 			userInfo.loginAction({
 					name:username,
 					pass:password
@@ -37,6 +38,14 @@
 		}
 	})
 	this.view = new _view();
+}
+LoginWidget.prototype.initialize = function(){
+	this.view.initialize();
+}
+LoginWidget.prototype.terminalize = function(){
+	this.view.el.empty();
+	this.parentApp.removeChild(this);
+	this.parentApp.loginWidget = null;
 }
 LoginWidget.prototype.render = function(){
 	this.view.render();

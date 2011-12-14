@@ -101,7 +101,7 @@
 			</div>
 			</div>
 	</script>
-  	<div id="sort-container" >
+  	<div id="sort-container">
 		<div class="sort-group"><a href='#/clip/all/p1'><div class='radioButtonContainer radioButton sortItem'>全部</div></a></div>
 		<div class="sort-content"></div>
   		<div id="upButton" class="upButton lazy"><img style="width:50px;height:50px" src="../img/up-arrow.png"></div>
@@ -159,7 +159,8 @@
 		<script type="text/template" id="detail_template">
 			<div class="detail-container">
   				<div>
-					<a title="返回" class="detailBackButton controlSprite" href="#/detailback/<%= id%>"></a>
+					<a title="返回" class="detailBackButton controlSprite" href="#/detailback/<%= id%>"></a>&nbsp;&nbsp;
+					<a title="删除" href="#/clip/delete/<%= id%>">删除</a>
 					<div class="content-container">
 					<%
 						for(var i=0;i<content.length;i++){

@@ -1,7 +1,8 @@
 ﻿UserUnitWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
-	uuWidget = this;
+	this.widgetType = "UsetUnitWidget";
+	var uuWidget = this;
 	var _view = Backbone.View.extend({
 		el:$(_container),
 		initialize:function(){
@@ -24,9 +25,9 @@
 			$("#userOption").css("display","none");
 		},
 		updatePwd:function(){
-			if(!uuWidget.parentApp.view.updatePwdWidget)
+			if(!uuWidget.parentApp.updatePwdWidget)
 				updatePwdWidget = new UpdatePwdWidget("#contactArea");
-				uuWidget.parentApp.view.updatePwdWidget = updatePwdWidget;
+				uuWidget.parentApp.updatePwdWidget = updatePwdWidget;
 				uuWidget.addChild(updatePwdWidget);
 			uuWidget.parentApp.popUp({width:500,height:200},updatePwdWidget);
 		},
@@ -39,6 +40,16 @@
 		},
 	})
 	this.view = new _view();
+}
+UserUnitWidget.prototype.initialize = function(){
+	if(!this.view)
+		return;
+	this.view.initialize();
+}
+UserUnitWidget.prototype.terminalize = function(){
+	this.view.el.empty();
+	this.parentApp.removeChild(this);
+	this.parentApp.userUnitWidget = null;
 }
 UserUnitWidget.prototype.render = function(){
 	if(!this.view)

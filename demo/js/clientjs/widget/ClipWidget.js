@@ -1,6 +1,7 @@
 ﻿ClipWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
+	this.widgetType = "ClipWidget";
 	this.currentUrl ="";
 	this.currentPage = 1;
 	var clipWidget = this;
@@ -13,9 +14,13 @@
 			location.href="#/clip/all/p1";
 			 var view = this;
 			$(document).scroll(function(evt){
-				if(view.el[0].scrollHeight > 0 && (view.el[0].scrollHeight - document.body.scrollTop)<500){
-					view.lazyLoad();
-				}
+				//window.clearTimeout(lazyLoadTimer);
+				//lazyLoadTimer = window.setTimeout(function(){
+					var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
+					if(view.el[0].scrollHeight > 0 && (view.el[0].scrollHeight - scrollTop)<500){
+						view.lazyLoad();
+					}
+				//},1000);
 			})
 		},
 		render:function(renderList){
@@ -60,13 +65,19 @@
 			});
 		},
 		lazyLoad:function(){
-			console.info(clipWidget.currentUrl);
-			console.info(clipWidget.currentPage);
 			clipWidget.currentPage = parseInt(clipWidget.currentPage) + 1;
 			clipWidget.parentApp.lazyLoad(clipWidget.currentUrl,clipWidget.currentPage);
 		}
 	})
 	this.view = new _view();
+}
+ClipWidget.prototype.initialize = function(){
+	this.view.initialize();
+}
+ClipWidget.prototype.terminalize = function(){
+	this.view.el.empty();
+	this.parentApp.removeChild(this);
+	this.parentApp.clipWidget = null;
 }
 ClipWidget.prototype.render = function(options){
 	this.view.render(options);

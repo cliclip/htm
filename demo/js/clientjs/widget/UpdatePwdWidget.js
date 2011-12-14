@@ -1,6 +1,7 @@
 ﻿UpdatePwdWidget = function(_container,options){
 	this.container = _container;
 	this.options = options;
+	this.widgetType = "UpdatePwdWidget";
 	var _view = Backbone.View.extend({
 		el:$(_container),
 		initialize:function(){
@@ -55,6 +56,14 @@
 		}
 	})
 	this.view = new _view();
+}
+UpdatePwdWidget.prototype.initialize = function(){
+	this.view.initialize();
+}
+UpdatePwdWidget.prototype.terminalize = function(){
+	this.view.el.empty();
+	this.parentApp.removeChild(this);
+	this.parentApp.updatePwdWidget = null;
 }
 UpdatePwdWidget.prototype.render = function(){
 	this.view.render();
