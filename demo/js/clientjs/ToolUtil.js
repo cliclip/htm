@@ -4,7 +4,7 @@
  */
 ToolUtil = {};
 /**
- * This method used to be get the 
+ * This method used to be calculate the rest between times
  */
 ToolUtil.subTimes = function(Ftime,Ttime){
 	var dtime = (Ttime.getTime() - Ftime.getTime())/1000;

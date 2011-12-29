@@ -39,14 +39,16 @@
 				GApp.loginWidget = new LoginWidget($("#contactArea"));
 				GApp.addChild(GApp.loginWidget);
 			}
-			popUpWidget = this.popUp({width:500,height:200},GApp.loginWidget);
+			//var popUpWidget = this.popUp({width:500,height:200},GApp.loginWidget);
+			this.popUp({width:500,height:200},GApp.loginWidget);
 		},
 		registerCall:function(evt){
 			if(!GApp.registerWidget){
 				GApp.registerWidget = new RegisterWidget($("#contactArea"));
 				GApp.addChild(GApp.registerWidget);
 			}
-			popUpWidget = this.popUp({width:500,height:200},GApp.registerWidget);	
+			//var popUpWidget = this.popUp({width:500,height:200},GApp.registerWidget);	
+			this.popUp({width:500,height:200},GApp.registerWidget);	
 		},
 		popUp:function(popUpOption,_widget){
 			var _clientWidth = $(_container)[0].clientWidth;

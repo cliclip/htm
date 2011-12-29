@@ -18,6 +18,7 @@ GlobalRouter = function(parentApp,options){
 			"/clip/city/:param/p:page" : "sortByCity",
 			
 			"/clip/delete/:id":"deleteClip",
+			"/clip/edit/:id":"editClip",
 			
 			"/detail/:id" : "detailById",
 			"/detailback/:id" : "detailBack",
@@ -123,44 +124,47 @@ GlobalRouter = function(parentApp,options){
 				}
 			});
 		},
+		editClip:function(id){
+			//parentApp.client
+		},
 		queryByWord:function(keyword){
-			params = {
+			var params = {
 				word : keyword
 			};
 			this.queryImpl(params);
 		},
 		queryByDate:function(fdate,tdate){
-			params = {
+			var params = {
 				date : [fdate,tdate]
 			};
 			this.queryImpl(params);
 		},
 		queryByTime:function(ftime,ttime){
-			params = {
+			var params = {
 				time : [ftime,ttime]
 			};
 			this.queryImpl(params);
 		},
 		queryByReason:function(reason1,reason2){
-			params = {
+			var params = {
 				reason : [reason1,reason2]
 			};
 			this.queryImpl(params);
 		},
 		queryByPurpose:function(purpose1,purpose2){
-			params = {
+			var params = {
 				purpose : [purpose1,purpose2]
 			};
 			this.queryImpl(params);
 		},
 		queryByDevice:function(device1,device2){
-			params = {
+			var params = {
 				device : [device1,device2]
 			};
 			this.queryImpl(params);
 		},
 		queryByCity:function(city1,city2){
-			params = {
+			var params = {
 				city : [city1,city2]
 			};
 			this.queryImpl(params);

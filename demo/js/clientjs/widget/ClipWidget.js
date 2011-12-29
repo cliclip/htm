@@ -48,7 +48,7 @@
 			//"scroll" : "scrollMore"
 		},
 		iniClipList:function(){
-			view = this;
+			var view = this;
 			this.previewList = new PreviewList();
 			this.previewList.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
 			this.previewList.fetch({

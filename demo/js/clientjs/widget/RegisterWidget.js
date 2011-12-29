@@ -21,7 +21,7 @@
 			var username = $("#username_r").val();
 			var password = $("#password_r").val();
 			var userInfo = new UserInfo(register_url);
-			widget = this;
+			var widget = this;
 			userInfo.registerAction({
 					name:username,
 					pass:password

@@ -24,7 +24,7 @@
 				return;
 			}
 			//var userInfo = new UserInfo(updatePwd_url);
-			widget = this;
+			var widget = this;
 			RequestUtil.postFunc({
 				url:updatePwd_url,
 				data:{
