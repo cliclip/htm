@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<script language="javascript" src="js/clientjs.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				SearchView = Backbone.View.extend({
+					initialize: function(){
+						this.render();
+					},
+					render: function(){
+						//Pass variables in using Underscore.js Template
+						var variables = { search_label: "My Search" };
+						// Compile the template using underscore
+						var template = _.template( $("#search_template").html(),variables);
+						// Load the compiled HTML into the Backbone "el"
+						this.el.html(template);
+						//this.el.html("test");
+					},
+					events: {
+						"click #search_button": "doSearch"  
+					},
+					doSearch: function( event ){
+						var params ={
+							url:"http://clickdang.herokuapp.com/_/login",
+							type:"POST",
+							contentType:" application/json",
+							//dataType:"json",
+							//data:{"name":"TJ","pass":"foobar"},
+							data:JSON.stringify({name:"test",pass:"pass"}),
+							success:function(data){
+								console.info("post method");
+								console.info(data);
+							},
+							error:function(data){
+								console.info("post error");
+								console.info(data);
+							}
+						}
+						console.info(params);
+						$.ajax(params);
+					}
+				});
+					
+				var search_view = new SearchView({ el: $("#search_container") });
+			})
+		 
+	</script>
+	</head>
+<body>
+	<div id="search_container"></div>
+
+	<script type="text/template" id="search_template">
+		<label><%= search_label %></label>
+		<input type="text" id="search_input" />
+		<input type="button" id="search_button" value="Search" />
+	</script>
+	</body>
+</html>

@@ -247,11 +247,11 @@
 						});	
 						}
 					})
-					/*
+					
 					var reasonContainer = $(this).find(".detail-reason");
 					reasonContainer.editFlag = false;
 					reasonContainer.bind("dblclick",function(evt){
-						reasonContainer.editFlag = !noteContainer.editFlag;
+						reasonContainer.editFlag = !reasonContainer.editFlag;
 						if(reasonContainer.editFlag == true){
 							reasonContainer.addClass("contentEdit");
 							var reasonlist = reasonContainer.find(".reason-text");
@@ -260,28 +260,44 @@
 								reason.addClass("reason-edit");
 								reason.attr("contenteditable",true);
 							}
-							
-							
-							var addReasonBtn = $("<span class='addReasonBtn'>+</span>");
+							var addReasonBtn = $("<span class='addReasonBtn'>&nbsp;+&nbsp;</span>");
 							addReasonBtn.bind("click",function(){
-								var span = $("<span class='reason-text reason-edit'></span>");
-								span.width(20);
+								var span = $("<span class='reason-text reason-edit'>新标签</span>");
 								span.attr("contenteditable",true);
 								span.insertBefore($(this));
+								span.focus();
 							});
 							reasonContainer.append(addReasonBtn);
-							
-							if(reasonlist.length>0){
-								for(var i=0;i<reasonlist.length;i++){
-									var editReason = $("<span class='reason-edit'>"+reasonlist[i].innerText+"</span>");
-									reasonContainer.append(editReason);
-								}
-							}*/
-							
 						}else{
-							
+							var result = [];
+							var reasons = reasonContainer.children(".reason-text");
+							for(var i=0;i<reasons.length;i++){
+								var text = reasons[i].innerHTML.replace(/(^\s*)|(\s*$)/g,"");
+								result.push(text);
+							}
+							RequestUtil.postFunc({
+								url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name +"/clip/"+view.id,
+								data:{reason:result},
+								successCallBack:function(response){
+									if(response[0] == 0){
+										reasonContainer.children(".addReasonBtn").remove();
+										reasonContainer.children(".reason-text").removeClass("reason-edit").attr("contenteditable",false);
+										reasonContainer.removeClass("contentEdit");
+									}else{
+										console.info(response);
+									}
+								},
+								errorCallBack:function(response){
+									
+								}
+							});
 						}
 					})
+					reasonContainer.delegate(".reason-text","keyup",function(){
+						if($(this).text() == ""){
+							$(this).remove();
+						}
+					});
 				})
 			});
 			/*
