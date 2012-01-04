@@ -36,6 +36,7 @@ function _loadClientScript()
   _Loadscript("clientjs/RequestUtil.js") ;
   _Loadscript("clientjs/ToolUtil.js") ;
   //_Loadscript("clientjs/EventHandler.js") ;
+  _Loadscript("clientjs/clipper_tag.js");
   
   
   _Loadscript("clientjs/model/UserInfo.js") ;

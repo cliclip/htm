@@ -179,61 +179,66 @@
 		</script>
 		<script type="text/template" id="detail_template">
 			<div class="detail-container">
-  				<div>
-					<a title="返回" class="detailBackButton controlSprite" href="#/detailback/<%= id%>"></a>&nbsp;&nbsp;
-					<a title="删除" href="#/clip/delete/<%= id%>">删除</a>&nbsp;&nbsp;
-					<span id = "insImg" style="display:none">
-						<a title="插入外部图片" href="javascript:void(0)" id="exImg">插入外部图片</a>&nbsp;
-						<a title="插入本地图片" href="javascript:void(0)" id="localImg">插入本地图片</a>
-						<div id="imgUploadDiv"></div>
-					</span>	
-					<!--<a title="编辑" href="#/clip/edit/<%= id%>">编辑</a>-->
-					<div class="content-container">
-					<%
-						for(var i=0;i<content.length;i++){
-							if(content[i].text){
-								%>
-									<p class="detail-text">
-										<%= content[i].text %>
-									</p>
-								<%
-							}else if(content[i].image){
-								%>
-									<!--<div class="detail-image">-->
-										<img class="detail-image" src="<%= content[i].image %>">
-									<!--</div>-->
-								<%
-							}
+				<a title="返回" class="detailBackButton controlSprite" href="#/detailback/<%= id%>" id="detailBack"></a>&nbsp;&nbsp;
+				<a title="删除" href="#/clip/delete/<%= id%>" id="detailDelete">删除</a>&nbsp;&nbsp;
+				<a title="编辑" href="javascript:void(0)" id="detailEdit">编辑</a>&nbsp;&nbsp;
+				<span id = "manipulation" style="display:none">
+					<br>
+					<a title="插入文字" href="javascript:void(0)" id="insText">插入文字</a>&nbsp;&nbsp;
+					<a title="插入外部图片" href="javascript:void(0)" id="exImg">插入外部图片</a>&nbsp;&nbsp;
+					<a title="插入本地图片" href="javascript:void(0)" id="localImg">插入本地图片</a>&nbsp;&nbsp;
+					<a title="保存" href="javascript:void(0)" id="detaiSave">保存</a>&nbsp;&nbsp;
+					<a title="放弃" href="javascript:void(0)" id="detailAbandon">放弃</a>&nbsp;&nbsp;
+					<div id="imgUploadDiv"></div>
+				</span>	
+				
+				<div class="content-container">
+				<%
+					for(var i=0;i<content.length;i++){
+						if(content[i].text){
+							%>
+								<p class="detail-text">
+									<%= content[i].text %>
+								</p>
+							<%
+						}else if(content[i].image){
+							%>
+								<!--<div class="detail-image">-->
+									<img class="detail-image" src="<%= content[i].image %>">
+								<!--</div>-->
+							<%
 						}
-					%>
-					</div>
-					<div class="notesWrapA">
-						<img class="notewedge" src="../img/notewedge.png">
-						<div class="detail-note">
-						<%
-							for(var i=0;i<note.length;i++){
-								if(note[i].text&& note.text != " "){
-								%>
-									备注：
-									<span class="note-text">
-										<%= note[i].text %>
-									</span>
-								<%}else if(note[i].sound){%>
-									语音备注：
-									<audio src="<%= note[i].sndsrc%>" controls="controls" preload="load">
-										您的浏览器不支持 audio 标签。
-									</audio>
-								<%}
-							}
-							if(note.length == 0){
+					}
+				%>
+				</div>
+				<div class="notesWrapA">
+					<img class="notewedge" src="../img/notewedge.png">
+					<div class="detail-note">
+					<%
+						for(var i=0;i<note.length;i++){
+							if(note[i].text&& note.text != " "){
 							%>
 								备注：
-								<span class="note-text"></span>
+								<span class="note-text">
+									<%= note[i].text %>
+								</span>
+							<%}else if(note[i].sound){%>
+								语音备注：
+								<audio src="<%= note[i].sndsrc%>" controls="controls" preload="load">
+									您的浏览器不支持 audio 标签。
+								</audio>
 							<%}
+						}
+						if(note.length == 0){
 						%>
-						</div>
-						<div class="detail-reason">
-						原因：
+							备注：
+							<span class="note-text"></span>
+						<%}
+					%>
+					</div>
+					<div class="detail-reason">
+					原因：
+						<span class="reasonText">
 						<%
 							for(var i=0;i<reason.length;i++){
 							%>
@@ -241,9 +246,11 @@
 								<span class="reason-text"><%= reason[i] %></span>
 							<%}
 						%>
-						</div>
-						<div class="detail-purpose">
-						目的：
+						</span>
+					</div>
+					<div class="detail-purpose">
+					目的：
+						<span class="purposeText">
 						<%
 							for(var i=0;i<purpose.length;i++){
 							%>
@@ -251,25 +258,24 @@
 								<span class="purpose-text"><%= purpose[i] %></span>
 							<%}
 						%>
-						</div>
-						<div class="detail-device">
-						设备：<span class="device-text"><%= device%></span>
-							  <!--<span class="device-text"><a href="#/clip/device/<%= device %>/p1" ><%= device%></a></span>-->
-						</div>
-						<div class="detail-city">
-						城市：<span class="city-text"><%= city %></span>
-							  <!--<span class="city-text"><a href="#/clip/city/<%= city %>/p1" ><%= city %></a></span>-->
-						</div>
-						<div class="detail-time">
-						时间：<%= pastTime%>	
-						</div>
-						<div class="detail-ip">
-						
-						</div>
-						
+						</span>
+					</div>
+					<div class="detail-device">
+					设备：<span class="device-text"><%= device%></span>
+						  <!--<span class="device-text"><a href="#/clip/device/<%= device %>/p1" ><%= device%></a></span>-->
+					</div>
+					<div class="detail-city">
+					城市：<span class="city-text"><%= city %></span>
+						  <!--<span class="city-text"><a href="#/clip/city/<%= city %>/p1" ><%= city %></a></span>-->
+					</div>
+					<div class="detail-time">
+					时间：<%= pastTime%>	
+					</div>
+					<div class="detail-ip">
+					
 					</div>
 					
-  				</div>
+				</div>
   				
   			</div>
 		</script>
