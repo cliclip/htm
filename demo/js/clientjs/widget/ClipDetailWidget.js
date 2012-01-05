@@ -33,8 +33,9 @@
 				view.render();
 				view.el.children(".detail-container").animate({"width":view.el.width(),"opacity":1},"slow","swing",function(){
 					$(document).scrollTop(0);
-					view.detailCache = $(this).html();
-					console.info(view.detailCache);
+					//var detailContainer = $(this);
+					//var detailCache = detailContainer.html();
+					//console.info(detailCache);
 					var contentContainer = $(this).children(".content-container");
 					var notesWrapper= $(this).children(".notesWrapA");
 					var noteContainer = notesWrapper.children(".detail-note");
@@ -191,7 +192,6 @@
 						var _purposes = clipper_tag.get(purposeContainer.children(".tags")[0]);
 						_data.purpose = _purposes;
 						
-						console.info(_data);
 						RequestUtil.postFunc({
 							url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name +"/clip/"+view.id,
 							data:_data,
@@ -207,7 +207,11 @@
 								
 							}
 						});	
-					})
+					});
+					$("#detailAbandon").click(function(){
+						view.el.children(".detail-container").remove();
+						location.href = location.href.substring(0,location.href.length-5);
+					});
 					/*
 					// edit clip detail content
 					var contentContainer = $(this).find(".content-container");

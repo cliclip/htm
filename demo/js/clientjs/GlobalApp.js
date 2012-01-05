@@ -115,6 +115,10 @@
 			this.clipDetailWidget = new ClipDetailWidget();
 			this.addChild(this.clipDetailWidget);
 		}
+		if(!this.clipAddWidget){
+			this.clipAddWidget = new ClipAddWidget();
+			this.addChild(this.clipAddWidget);
+		}
 		if(!this.searchWidget){
 			this.searchWidget = new SearchWidget($("#search-container"));
 			this.addChild(this.searchWidget);
@@ -133,6 +137,9 @@
 		}
 		if(this.clipDetailWidget){
 			this.clipDetailWidget.terminalize();
+		}
+		if(this.clipAddWidget){
+			this.clipAddWidget.terminalize();
 		}
 		if(this.searchWidget){
 			this.searchWidget.terminalize();

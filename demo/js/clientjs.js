@@ -58,6 +58,7 @@ function _loadClientScript()
   _Loadscript("clientjs/widget/SortMetaWidget.js") ;
   _Loadscript("clientjs/widget/ClipWidget.js") ;
   _Loadscript("clientjs/widget/ClipDetailWidget.js") ;
+  _Loadscript("clientjs/widget/ClipAddWidget.js") ;
   
 }
 _loadClientScript();

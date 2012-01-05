@@ -1079,7 +1079,7 @@
     }
 	
     // Make the request.
-	//params.async = false;
+	params.cache = false;
 	//console.info($.ajax(params));
     return $.ajax(params);
   };

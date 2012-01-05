@@ -114,7 +114,10 @@
 			</div>
 	</script>
   	<div id="sort-container">
-		<div class="sort-group"><a href='#/clip/all/p1'><div class='radioButtonContainer radioButton sortItem'>全部</div></a></div>
+		<div class="sort-group">
+			<a href='#/clip/all/p1'><div class='radioButtonContainer radioButton sortItem'>全部</div></a>
+			<a href='#/clip/add'><div class='radioButtonContainer radioButton sortItem'>创建信息</div></a>
+		</div>
 		<div class="sort-content"></div>
   		<div id="upButton" class="upButton lazy"><img style="width:50px;height:50px" src="../img/up-arrow.png"></div>
 		<div id="downButton" class="downButton lazy"><img style="width:50px;height:50px" src="../img/down-arrow.png"></div>
@@ -273,6 +276,41 @@
 					</div>
 					<div class="detail-ip">
 					
+					</div>
+					
+				</div>
+  				
+  			</div>
+		</script>
+		<script type="text/template" id="addClip_template">
+			<div class="addClip-container">
+				<a title="插入文字" href="javascript:void(0)" id="insText">插入文字</a>&nbsp;&nbsp;
+				<a title="插入外部图片" href="javascript:void(0)" id="exImg">插入外部图片</a>&nbsp;&nbsp;
+				<a title="插入本地图片" href="javascript:void(0)" id="localImg">插入本地图片</a>&nbsp;&nbsp;
+				<a title="保存" href="javascript:void(0)" id="detaiSave">保存</a>&nbsp;&nbsp;
+				<a title="放弃" href="javascript:void(0)" id="detailAbandon">放弃</a>&nbsp;&nbsp;
+				<div id="imgUploadDiv"></div>
+				
+				<div class="content-container contentEdit" contenteditable=true>
+					<p class="detail-text">
+						新信息
+					</p>		
+				</div>
+				<div class="notesWrapA">
+					<img class="notewedge" src="../img/notewedge.png">
+					<div class="detail-note contentEdit">
+							备注：
+							<span class="note-text"></span>
+					</div>
+					<div class="detail-reason contentEdit">
+					原因：
+						<span class="reasonText">
+						</span>
+					</div>
+					<div class="detail-purpose contentEdit">
+					目的：
+						<span class="purposeText">
+						</span>
 					</div>
 					
 				</div>

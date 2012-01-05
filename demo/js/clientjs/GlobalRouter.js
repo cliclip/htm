@@ -19,6 +19,7 @@ GlobalRouter = function(parentApp,options){
 			
 			"/clip/delete/:id":"deleteClip",
 			"/clip/edit/:id":"editClip",
+			"/clip/add":"addClip",
 			
 			"/detail/:id" : "detailById",
 			"/detailback/:id" : "detailBack",
@@ -93,6 +94,7 @@ GlobalRouter = function(parentApp,options){
 			clipDetail.fetch({
 				success:function(model,resp){
 					if(resp[0] == 0){
+					console.info(model);
 						parentApp.clipDetailWidget.loadDetail(id,model);
 					}else{
 						//server response exception
@@ -126,6 +128,9 @@ GlobalRouter = function(parentApp,options){
 		},
 		editClip:function(id){
 			//parentApp.client
+		},
+		addClip:function(){
+			parentApp.clipAddWidget.loadDetail();
 		},
 		queryByWord:function(keyword){
 			var params = {
