@@ -1,22 +1,22 @@
 ﻿/**
  * GlobalCache
- * This Class cache the global variables 
+ * This Class cache the global variables
  */
  GlobalCache = function(name,options){
-	this.name = name;
-	this.options = options;
-	this.isLocal = false;
-	if(window.localStorage){
-		this.isLocal = true;
-		var storage = localStorage.getItem(this.name);
-		this.dataCache = (store && JSON.parse(storage)) || {};
-	}else{
-		this.dataCache = {};
-	}
+   this.name = name;
+   this.options = options;
+   this.isLocal = false;
+   if(window.localStorage){
+     this.isLocal = true;
+     var storage = localStorage.getItem(this.name);
+     this.dataCache = (store && JSON.parse(storage)) || {};
+   }else{
+     this.dataCache = {};
+   }
  }
- 
+
  GlobalCache.prototype ={
-	// Save the current state of the **Store** to *localStorage*.
+ // Save the current state of the **Store** to *localStorage*.
   save: function() {
     localStorage.setItem(this.name, JSON.stringify(this.data));
   },
