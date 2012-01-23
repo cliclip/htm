@@ -13,8 +13,9 @@ GlobalRouter = function(parentApp,options){
 
       "/clip/reason/:param/p:page" : "sortByReason",
       "/clip/purpose/:param/p:page" : "sortByPurpose",
-      "/clip/device/:param/p:page" : "sortByDevice",
-      //new RegExp('^/clip/device/(^\/[.*?]\/p$)/p([/d]+)$'): "sortByDevice",
+      "/clip/device/:param(^\/[.*?]\/p$)/p:page" : "sortByDevice",
+      //当device是curl/7.19.7
+      // new RegExp('^/clip/device/(^\/[.*?]\/p$)/p([/d]+)$') : "sortByDevice",
       "/clip/city/:param/p:page" : "sortByCity",
 
       "/clip/delete/:id":"deleteClip",
@@ -33,7 +34,8 @@ GlobalRouter = function(parentApp,options){
       "/search/city/:city1/:city2" : "queryByDevice"
     },
     initialize:function(){
-      //this.route(new RegExp('^/clip/device/(^\/[.*?]\/p$)/p([/d]+)$'),"sortByDevice",this.sortByDevice(param,page));
+      // 如何传参数
+      // this.route(new RegExp('^/clip/device/(^\/[.*?]\/p$)/p([/d]+)$'),"sortByDevice",this.sortByDevice(param,page));
     },
     goHomePage:function(){
       location.href = "www.clickdang.com:3000";
@@ -135,8 +137,7 @@ GlobalRouter = function(parentApp,options){
       //data:params,
       successCallBack:function(response){
 	if(response[0] == 0){
-	  var id = "#email"+i;
-	  $(id).remove();
+	  $("#email"+i).remove();
 	}else{
 	  console.info("delEmail fail");
 	}
@@ -206,7 +207,6 @@ GlobalRouter = function(parentApp,options){
       }
     })
   }
-
   });
   this.router = new _router();
 };

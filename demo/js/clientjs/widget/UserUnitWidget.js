@@ -46,10 +46,10 @@
       document.cookie = "";
       GlobalEvent.trigger(client.EVENTS.USER_LOGOUT);
       this.remove();
-    },
-  })
+    }
+  });
   this.view = new _view();
-}
+};
 UserUnitWidget.prototype.initialize = function(){
   if(!this.view)
     return;
