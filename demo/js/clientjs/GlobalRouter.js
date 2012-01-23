@@ -13,7 +13,7 @@ GlobalRouter = function(parentApp,options){
 
       "/clip/reason/:param/p:page" : "sortByReason",
       "/clip/purpose/:param/p:page" : "sortByPurpose",
-      "/clip/device/:param(^\/[.*?]\/p$)/p:page" : "sortByDevice",
+      "/clip/device/:param/p:page" : "sortByDevice",
       //当device是curl/7.19.7
       // new RegExp('^/clip/device/(^\/[.*?]\/p$)/p([/d]+)$') : "sortByDevice",
       "/clip/city/:param/p:page" : "sortByCity",
