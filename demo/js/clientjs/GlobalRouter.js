@@ -9,6 +9,7 @@ GlobalRouter = function(parentApp,options){
     routes:{
       "/home":"goHomePage",
       "/my/email/:address":"deleteEmail",
+      "/active/:str":"activeEmail",
       "/clip/all/p:page":"restoreAll",
 
       "/clip/reason/:param/p:page" : "sortByReason",
@@ -137,9 +138,25 @@ GlobalRouter = function(parentApp,options){
       //data:params,
       successCallBack:function(response){
 	if(response[0] == 0){
-	  $("#email"+i).remove();
+	  // $("#email"+i).remove();
+	  parentApp.userEmailWidget.loadEmailList();
 	}else{
 	  console.info("delEmail fail");
+	}
+      },
+      errorCallBack:function(response){
+	console.info(response);
+      }
+    });
+  },
+  activeEmail:function(str){
+    RequestUtil.getFunc({
+      url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "active/"+str,
+      successCallBack:function(response){
+	if(response[0] == 0){
+	  parentApp.userEmailWidget.loadEmailList();
+	}else{
+	  console.info("activeEmail fail");
 	}
       },
       errorCallBack:function(response){
@@ -205,7 +222,7 @@ GlobalRouter = function(parentApp,options){
       errorCallBack:function(response){
 	console.info(response);
       }
-    })
+    });
   }
   });
   this.router = new _router();

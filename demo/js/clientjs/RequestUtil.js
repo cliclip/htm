@@ -33,3 +33,18 @@ RequestUtil.deleteFunc = function(options){
   }
   $.ajax(params);
 };
+
+RequestUtil.getFunc = function(options){
+  var params ={
+    url:options.url,
+    type:"GET",
+    data:JSON.stringify(options.data),
+    success:function(response){
+      options.successCallBack(response);
+    },
+    error:function(response){
+      options.errorCallBack(response);
+    }
+  }
+  $.ajax(params);
+};
