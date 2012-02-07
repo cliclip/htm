@@ -16,6 +16,7 @@
       "mouseover":"showOptions",
       "mouseout":"hideOptions",
       "click #updatePwd_button":"updatePwd",
+      "click #emailRule_button":"emailRule",
       "click #listEmail_button":"listEmail",
       "click #logout_button":"logoutAction"
     },
@@ -31,6 +32,13 @@
 	uuWidget.parentApp.updatePwdWidget = updatePwdWidget;
 	uuWidget.addChild(updatePwdWidget);
 	uuWidget.parentApp.popUp({width:500,height:200},updatePwdWidget);
+    },
+    emailRule:function(){
+      if(!uuWidget.parentApp.userEmailRuleWidget){
+	userEmailRuleWidget = new UserEmailRuleWidget();
+	uuWidget.parentApp.userEmailRuleWidget = userEmailRuleWidget;
+      }
+      uuWidget.parentApp.userEmailRuleWidget.loadEmailRule();
     },
     listEmail:function(){
       //首先判断是否已经在调用loadEmailList了
