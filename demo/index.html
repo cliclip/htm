@@ -76,6 +76,9 @@
 	      <a id="listEmail_button">列表email地址</a>
 	    </li>
 	    <li>
+	      <a id="emailRule_button">设置邮件规则</a>
+	    </li>
+	    <li>
 	      <a id="logout_button">注销</a>
 	    </li>
 	  </ul>
@@ -287,29 +290,48 @@
   				
       </div>
     </script>
- 
-  <script type="text/template" id="Listemail_template">
-    <div class="email-listCont">
-      邮件列表:
-      <a title="添加email地址" href="javascript:void(0)" id="addEmail">新增email </a>&nbsp;&nbsp;
-      </br>
-	<%
+
+    <script type="text/template" id="EmailRule_template">
+      <div class="email-rule">
+	<div id="setEmailRuleDiv"></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="setEmailRule_template">
+      <div id="setEmailRule-form">
+	<p class="detail-text">邮件识别</p>
+	<form id="form2" action ="<%= actUrl%>">
+	  <input type="checkbox" name="enable_rule" checked="<%=rule.sign%>">打开邮件识别<br/>
+	 标题必须有：<input type="text" name="rule_title" id="ruleTitle" value="<%=rule.title%>"/><br/>
+	 必须发给：<input type="text" name="rule_to" id="ruleTo" value="<%=rule.to.join(';')%>"/><br/>
+	 必须抄送：<input type="text" name="rule_cc" id="ruleCc" value="<%=rule.cc.join(';')%>"/><br/>
+          <input type="button" value="更新邮件规则" id="confirm"/>
+	</form>
+      </div>
+    </script> 
+
+    <script type="text/template" id="Listemail_template">
+      <div class="email-listCont">
+	邮件列表:
+	<a title="添加email地址" href="javascript:void(0)" id="addEmail">新增email </a>&nbsp;&nbsp;
+      <br/>
+        <%
 	 for(var i=0;i<emails.length;i++){
         %>
 	<div id="email<%=i%>">
-	 <span class="email-text">
-	   <%= emails[i]%>
-	 <a title="删除email地址" href="#/my/email/<%= emails[i]+i%>" id="delEmail" name="<%= emails[i]%>">删除该email地址</a>&nbsp;&nbsp
-	 </span>
+	  <span class="email-text">
+	    <%= emails[i]%>
+	    <a title="删除email地址" href="#/my/email/<%= emails[i]+i%>" id="delEmail" name="<%= emails[i]%>">删除该email地址</a>&nbsp;&nbsp
+	  </span>
 	</div>
          </br>
 	<%
 	  }
 	%>
-      <a href="javascript:void(0)" id="back">返回</a>
-      <div id="addEmailDiv"></div>
-    </div>
-  </script>
+	<a href="javascript:void(0)" id="back">返回</a>
+	<div id="addEmailDiv"></div>
+      </div>
+    </script>
 
   <script type="text/template" id="addEmail_template">
     <div id="addEmail-form">
