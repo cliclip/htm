@@ -61,6 +61,7 @@ UserInfo = function(_url,options){
 	    }
 	  }else{
 	    var mcode = response[1];
+	    console.log(mcode);
 	    if(options.viewCallBack){
 	      options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
 	    }
@@ -73,7 +74,80 @@ UserInfo = function(_url,options){
 	  }
 	}
      });
+    },
+
+    collectAction:function(params,options){
+      this.save(params,{
+        success:function(model,response){
+          if(response[0] == 0){
+            console.log("collect ok");
+            GlobalEvent.trigger(client.EVENTS.USER_REFRESH);
+            if(options.viewCallBack){
+              options.viewCallBack(0,"收藏成功~");
+            }
+          }else{
+            var mcode = response[1];
+            if(options.viewCallBack){
+              options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+            }
+          }
+        },
+        error:function(model,response){
+          var mcode = response;
+          if(options.viewCallBack){
+            options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+          }
+        }
+     });
+    },
+
+    recommentAction:function(params,options){
+      this.save(params,{
+        success:function(model,response){
+          if(response[0]==0){
+            if(options.viewCallBack){
+              options.viewCallBack(0,client.MESSAGES
+              ["recomment_success"]);
+            }
+          }else{
+            var mcode=response[1];
+            if(options.viewCallBack){
+              options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+            }
+          }
+        },
+        error:function(model,response){
+          var mcode=response;
+          if(options.viewCallBack){
+            options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+          }
+        }
+      });
+    },
+
+    namelistAction:function(params,options){
+      this.read(params,{
+        success:function(model,response){
+          if(response[0]==0){
+            if(options.viewCallBack){
+             console.log("find namelist ok");
+            }
+          }else{
+            var mcode=response[1];
+            if(options.viewCallBack){
+              options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+            }
+          }
+        },
+        error:function(model,response){
+          var mcode=response;
+          if(options.viewCallBack){
+            options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+          }
+        }
+      });
     }
+
   });
   this.model = new _model();
 };
@@ -82,4 +156,13 @@ UserInfo.prototype.loginAction = function(params,options){
 };
 UserInfo.prototype.registerAction = function(params,options){
   this.model.registerAction(params,options);
+};
+UserInfo.prototype.collectAction = function(params,options){
+  this.model.collectAction(params,options);
+};
+UserInfo.prototype.namelistAction = function(params,options){
+  this.model.namelistAction(params,options);
+};
+UserInfo.prototype.recommentAction = function(params,options){
+  this.model.recommentAction(params,options);
 };
