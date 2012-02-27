@@ -96,6 +96,7 @@ OrganizeWidget = function(_container,options){
     }
 });
   this.view = new _view();
+
 };
 OrganizeWidget.prototype.initialize = function(){
   this.view.initialize();

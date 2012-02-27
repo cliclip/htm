@@ -31,12 +31,20 @@ function _loadClientScript(){
   _Loadscript("clientjs/Messages.js") ;
   _Loadscript("clientjs/RequestUtil.js") ;
   _Loadscript("clientjs/ToolUtil.js") ;
-  //_Loadscript("clientjs/EventHandler.js") ;
+  _Loadscript("clientjs/EventHandler.js") ;
   _Loadscript("clientjs/clipper_tag.js");
 
 
   _Loadscript("clientjs/model/ClipInfo.js") ;
   _Loadscript("clientjs/model/UserInfo.js") ;
+  _Loadscript("clientjs/model/MetaUnit.js") ;
+  _Loadscript("clientjs/model/MetaList.js") ;
+  _Loadscript("clientjs/model/ClipPreview.js") ;
+  _Loadscript("clientjs/model/PreviewList.js") ;
+  _Loadscript("clientjs/model/EmailList.js") ;
+  _Loadscript("clientjs/model/RuleInfo.js") ;
+  _Loadscript("clientjs/model/ClipDetail.js") ;
+
 
   _Loadscript("clientjs/GlobalRouter.js") ;
   _Loadscript("clientjs/GlobalApp.js") ;
@@ -47,6 +55,15 @@ function _loadClientScript(){
   _Loadscript("clientjs/widget/CommentWidget.js") ;
   _Loadscript("clientjs/widget/DeleteWidget.js") ;
   _Loadscript("clientjs/widget/CollectWidget.js") ;
+  _Loadscript("clientjs/widget/UserUnitWidget.js") ;
+  _Loadscript("clientjs/widget/UserEmailWidget.js") ;
+  _Loadscript("clientjs/widget/UserEmailRuleWidget.js") ;
+  _Loadscript("clientjs/widget/SearchWidget.js") ;
+  _Loadscript("clientjs/widget/UpdatePwdWidget.js") ;
+  _Loadscript("clientjs/widget/SortMetaWidget.js") ;
+  _Loadscript("clientjs/widget/ClipWidget.js") ;
+  _Loadscript("clientjs/widget/ClipDetailWidget.js") ;
+  _Loadscript("clientjs/widget/ClipAddWidget.js") ;
   _Loadscript("clientjs/widget/RecommentWidget.js") ;
   _Loadscript("clientjs/widget/OrganizeWidget.js") ;
 

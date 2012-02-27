@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <script language="javascript" src="js/clientjs.js"></script>
+     <script language="javascript">
+      $(document).ready(function(){
+        //$("[id$='-container']").corner();
+        //$("[class$='-container']").corner();
+        var globalApp = new GlobalApp($("body"));
+      });
+      function callback(result){
+        console.info(result);
+        console.info("index.html : "+actionUrl);
+        if(result[0] == 0){
+         var imgid = result[1];
+         console.info(result[1]);
+         var imgUrl = actionUrl + "/" +result[1];
+         var img = $("<img class='detail-image' src= "+url+">");
+         //uploadTemplate.remove();
+         //contentContainer.append(img);
+        }
+      };
+     
+    </script>
+  </head>
+  <body>
+	<input type="button" value="注册" id="register_button"/>
+	<input type="button" value="登录" id="login_button"/><br>
+	<input type="button" value="转发" id="recomment_button"/>
+	<input type="button" value="注" id="organize_button"/>
+
+<!--register template** -->
+ <script type="text/template" id="register_template">
+	<div>
+	  <label>用户名:</label><input type="text" id="username_r" size="12"/><span class="action-info name"></span><br>
+	  <label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_r" size="12"/><span class="action-info pass"></span><br>
+	  <input type="button" value="注册" id="registerAction_button"/>
+	</div>
+ </script>
+ <!-- login template** -->
+ <script type="text/template" id="login_template">
+   <div>
+     <label>用户名:</label><input type="text" id="username_l" size="12"/><span class="action-info name"></span><br>
+     <label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_l" size="12"/><span class="action-info pass"></span><br>
+     <input type="button" value="登录" id="loginAction_button" />
+     <span class="action-info"></span>
+   </div>
+ </script>
+<!-- recomment template** -->
+ <script type="text/template" id="recomment_template">
+   <div align="center">
+     <label>转</label><br>
+     <div id="user_image">
+       <img id="imgId" hidden="hidden" width="50" height="50" />
+     </div>
+     <div id="inputname">
+       <input type="text" id="name"/>
+       <div id="name_listDiv" ></div>
+     </div>
+     <textarea id="recomment_text" rows="3" cols="40">说点啥吧～</textarea><br>
+     <input type="button" value="确定" id="recomm_button"/>
+     <input type="button" value="取消" id="cancel_button"/>
+   </div>
+ </script>
+<!-- namelist template** -->
+ <script type="text/template" id="namelist_template">
+   <div align="center">
+     <ul id="name_list">
+       <%
+	  for(var i=0;i<list.length;i++){  
+			  var name=(list[i].name);
+			  var uid=(list[i].uid);
+			  var imgurl=(list[i].imgUrl);
+			  %>
+	  <li id="<%=uid%>" title="<%=imgurl%>"><%=name%></li>
+	  <% } %>
+     </ul>
+   </div>
+ </script>
+<!-- organize template** -->
+<script type="text/template" id="organize_template">
+  <div align="center">
+    <label>注</label><br>
+    <input type="button" value="好看" id="1" class="organize"/>
+    <input type="button" value="好听" id="2" class="organize"/>
+    <input type="button" value="好玩" id="3" class="organize"/>
+    <input type="button" value="好吃" id="4" class="organize"/>
+    <input type="button" value="酷" id="5" class="organize"/><br>
+    <textarea id="tag" rows="1" cols="30" /><br>
+    <textarea id="organize_text" rows="3" cols="30" >备注一下吧~</textarea><br>
+    <label for="checkbox" >
+    <input type="checkbox" name="checkbox" id="checkbox" align="right"/>
+    不公开</label><br>
+    <input type="button" value="确定" id="org_button"/>
+    <input type="button" value="取消" id="cancel_button"/>
+  </div>
+</script>
+
+
+
+      <div id="popUp-container">
+	<div id="popupContact">  
+	  <a id="popupContactClose">X</a>   
+	  <div id="contactArea"></div>  
+	</div>  
+	<div id="backgroundPopup"></div>
+      </div>
+  
+  </body>
+</html>
+
+
+

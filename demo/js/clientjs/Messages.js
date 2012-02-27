@@ -11,9 +11,11 @@
 
  client.MESSAGES["password_diff"] = "密码输入不一致";
 
+
  client.MESSAGES["comment_success"] = "评论成功";
 
  client.MESSAGES["recomment_success"] = "转发成功";
+
 
 
  client.MESSAGES["auth"] = client.MESSAGES["auth"] || {};
@@ -23,6 +25,10 @@
  client.MESSAGES["auth"]["not_match"] = "句柄不合法";
 
 
+client.MESSAGES["auth"]["not_login"] = "用户未登录";
+
+
+
  client.MESSAGES["name"] = client.MESSAGES["name"] || {};
 
  client.MESSAGES["name"]["is_null"] = "用户名为空";
@@ -30,6 +36,7 @@
  client.MESSAGES["name"]["invalidate"] = "用户名不符合校验规则（只能是英文、数字和点的组合，长度是5-20）";
 
  client.MESSAGES["name"]["exist"] = "用户名已存在";
+
 
  client.MESSAGES["name"]["not_Exist"] = "用户不存在";
 
@@ -46,6 +53,7 @@
  client.MESSAGES["oldpass"]["is_null"] = "原密码为空";
 
  client.MESSAGES["oldpass"]["not_match"] = "原密码不匹配";
+ client.MESSAGES["recomment_success"]= "转发成功";
 
  client.MESSAGES["clip_not_exist"] = "clip不存在";
 

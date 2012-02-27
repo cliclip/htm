@@ -16,7 +16,7 @@ RecommentWidget=function(_container,options){
       this.uid = "";
     },
     events:{
-      "click #name_list":"getNameAction",
+      "click #name_list":"getUserAction",
       "input #name":"nameListAction",
       "click #name":"nameListAction",
       "click #recomm_button":"recommentAction",
@@ -24,7 +24,16 @@ RecommentWidget=function(_container,options){
       "mouseout #name_list":"MouseOut",
       "focus #text":"clearAction"
     },
-
+    getUserAction:function(evt){
+      uid=evt.target.id;
+      var name=document.getElementById(uid).innerHTML;
+     // var imgurl=document.getElementById(uid).title;
+     // console.log(imgurl);
+     // image.src="../img/search.jpg";
+      $("#name").val(name);
+      $("#imgId").removeAttr("hidden");
+      $("#imgId").attr("src","../img/search.jpg");
+    },
     nameListAction:function(evt){
       var lookup_url=client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL +"lookup/0..5";
       var str = $("#name").val();
@@ -56,17 +65,6 @@ RecommentWidget=function(_container,options){
 
     },
 
-    getNameAction:function(evt){
-      var view = this;
-      this.uid = evt.target.id;
-      var name = document.getElementById(this.uid).innerHTML;
-      var imgurl=document.getElementById(this.uid).title;
-      console.log(imgurl);
-      $("#name").val(name);
-      $("#imgId").attr("src",imgurl);
-      $("#name_listDiv").empty();
-    },
-
     recommentAction:function(evt){
       var clipid="1:1";
       var recomment_url=client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL +"user/"+this.uid+"/recomm";
@@ -96,6 +94,7 @@ RecommentWidget=function(_container,options){
     }
   })
   this.view=new _view();
+
 }
 RecommentWidget.prototype.initialize = function(){
   this.view.initialize();
