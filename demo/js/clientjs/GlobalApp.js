@@ -28,7 +28,9 @@
     },
     events:{
       "click #login_button":"loginCall",
-      "click #register_button":"registerCall"
+      "click #register_button":"registerCall",
+      "click #recomment_button":"recommentCall",
+      "click #organize_button":"organizeCall"
       //"click #updatePwd_button":"updatePwdCall",
       //"click #logout_button":"logoutCall"
     },
@@ -47,6 +49,20 @@
       }
       //var popUpWidget=this.popUp({width:500,height:200},GApp.registerWidget);
       this.popUp({width:500,height:200},GApp.registerWidget);
+    },
+    recommentCall:function(evt){
+      if(!GApp.recommentWidget){
+	GApp.recommentWidget = new RecommentWidget($("#contactArea"));
+	GApp.addChild(GApp.recommentWidget);
+      }
+      this.popUp({width:500,height:200},GApp.recommentWidget);
+    },
+    organizeCall:function(evt){
+      if(!GApp.organizeWidget){
+	GApp.organizeWidget=new OrganizeWidget($("#contactArea"));
+	GApp.addChild(GApp.organizeWidget);
+      }
+      this.popUp({width:500,hight:200},GApp.organizeWidget);
     },
     popUp:function(popUpOption,_widget){
       var _clientWidth = $(_container)[0].clientWidth;
