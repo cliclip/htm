@@ -67,10 +67,30 @@
       GApp.popUpWidget.loadWidget(_widget);
       return GApp.popUpWidget;
     },
+    popUp_detail:function(popUpOption,ClipDetailWidget,CommentWidget){
+      var _clientWidth = $(_container)[0].clientWidth;
+      var _clientHeight = $(_container)[0].clientHeight;
+      if(GApp.popUpWidget){
+	GApp.popUpWidget.setPopUpSize({popupWidth:popUpOption.width,popupHeight:popUpOption.height});
+      }else{
+	GApp.popUpWidget = new PopUpWidget(
+	  $("#popUp-container"),
+	  {
+	    clientWidth:_clientWidth,
+	    clientHeight:_clientHeight,
+	    contentWidth:popUpOption.width,
+	    contentHeight:popUpOption.height
+	});
+	GApp.addChild(GApp.popUpWidget);
+      }
+      GApp.popUpWidget.loadWidget(ClipDetailWidget);
+      GApp.popUpWidget.loadWidget(CommentWidget);
+      return GApp.popUpWidget;
+    },
     addChild:function(child){
       GApp.addChild(child);
     }
-  })
+  });
   this.view = new _view();
   GlobalEvent.bind(client.EVENTS.USER_REFRESH,function(){
 	/*
@@ -105,7 +125,7 @@
     if(!this.userEmailWidget){
       this.userEmailWidget = new UserEmailWidget();
       this.addChild(this.userEmailWidget);
-     }
+    }
 
     if(!this.sortMetaWidget){
       this.sortMetaWidget = new SortMetaWidget($("#sort-container"));
@@ -115,6 +135,16 @@
       this.clipWidget = new ClipWidget($("#contentWrapper"));
       this.addChild(this.clipWidget);
     }
+    if(!this.clipDetailWidget){
+	this.clipDetailWidget = new ClipDetailWidget($("#popup"));
+	this.addChild(this.clipDetailWidgetWidget);
+    }
+    if(!this.commentWidget){
+      this.commentWidget = new CommentWidget($("#popupContact"));
+      this.addChild(this.commentWidget);
+    }
+    // this.popUp_detail({width:800,height:1000},GApp.clipDetailWidget,GApp.commentWidget); 调用移动
+
     if(!this.clipDetailWidget){
       this.clipDetailWidget = new ClipDetailWidget();
       this.addChild(this.clipDetailWidget);
@@ -197,6 +227,12 @@ GlobalApp.prototype.popUp = function(popUpOption,_widget){
   if(!this.view)
     return;
   this.view.popUp(popUpOption,_widget);
+}
+
+GlobalApp.prototype.popUp_detail = function(popUpOption,_widget1,_widget2){
+  if(!this.view)
+    return;
+  this.view.popUp_detail(popUpOption,_widget1,_widget2);
 }
 GlobalApp.prototype.lazyLoad = function(url,page){
   if(!this.globalRouter)

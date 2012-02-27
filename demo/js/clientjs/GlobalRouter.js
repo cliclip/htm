@@ -91,13 +91,33 @@ GlobalRouter = function(parentApp,options){
       });
     },
     detailById:function(id){
+      parentApp.clipDetailWidget = new ClipDetailWidget($("#popup"));
+      parentApp.commentWidget = new CommentWidget($("#editContact"));
+      parentApp.popUp_detail({width:800,height:1000},parentApp.clipDetailWidget,parentApp.commentWidget);
       var clipDetail = new ClipDetail();
-      clipDetail.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "my/clip/"+id;
+      clipDetail.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+id;
       clipDetail.fetch({
 	success:function(model,resp){
 	  if(resp[0] == 0){
-	    console.info(model);
 	    parentApp.clipDetailWidget.loadDetail(id,model);
+	  }else{
+	    //server response exception
+	  }
+	},
+	error:function(collection,resp){
+	  //client request error
+	}
+      });
+      comment = new Comment();
+      comment.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+id+"/comment";
+      comment.fetch({
+	success:function(model,resp){
+	  if(resp[0] == 0){
+	    parentApp.commentWidget.loadComment(model,id);
+	    /*model = model.toJSON();
+	    for(var i=0; i<model.comment.length; i++){
+	      parentApp.commentWidget.loadComment(model.comment[i].id,model.comment[i]);
+	    }*/
 	  }else{
 	    //server response exception
 	  }

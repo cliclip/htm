@@ -43,6 +43,7 @@ function _loadClientScript(){
   _Loadscript("clientjs/model/EmailList.js") ;
   _Loadscript("clientjs/model/RuleInfo.js") ;
   _Loadscript("clientjs/model/ClipDetail.js") ;
+  _Loadscript("clientjs/model/Comment.js") ;
 
   _Loadscript("clientjs/GlobalRouter.js") ;
   _Loadscript("clientjs/GlobalApp.js") ;
@@ -58,6 +59,8 @@ function _loadClientScript(){
   _Loadscript("clientjs/widget/SortMetaWidget.js") ;
   _Loadscript("clientjs/widget/ClipWidget.js") ;
   _Loadscript("clientjs/widget/ClipDetailWidget.js") ;
+   _Loadscript("clientjs/widget/ClipEditWidget.js") ;
+   _Loadscript("clientjs/widget/CommentWidget.js") ;
   _Loadscript("clientjs/widget/ClipAddWidget.js") ;
 
 }
