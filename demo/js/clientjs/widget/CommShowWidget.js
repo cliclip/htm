@@ -105,10 +105,11 @@ CommShowWidget = function (_container,_options){
     addComment:function(evt){
       var _data = {
 	text: $("#comm_text").val(),
-	pid : 6
+	pid : 0
       };
+      var clipid = this.id;
       RequestUtil.postFunc({
-	url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+this.id+"/comment",
+	url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+clipid+"/comment",
 	data:_data,
 	successCallBack:function(response){
 	  if(response[0] == 0){

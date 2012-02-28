@@ -48,7 +48,7 @@ OrganizeWidget = function(_container,options){
 	  if($("#tag").val()==""){
 	    $("#tag").val($("#"+id).val());
 	  }else{
-	    $("#tag").val($("#tag").val()+","+$("#"+id).val());
+	    $("#tag").val(_.union($("#tag").val().split(","),$("#"+id).val()));
 	  }
 	}
       });
@@ -69,7 +69,7 @@ OrganizeWidget = function(_container,options){
     },
 
     organizeAction:function(evt){
-      var id = "1:1";
+      var id = "1:2";
       var organize_url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+id;
       var text = $("#organize_text").val();
       var tag = $("#tag").val().split(",");

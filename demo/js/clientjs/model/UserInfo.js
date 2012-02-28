@@ -22,7 +22,7 @@ UserInfo = function(_url,options){
 	      name:params.name,
 	      pass:params.pass
 	    };
-	    client.GLOBAL_CACHE["token"] = response[1];
+	    client.GLOBAL_CACHE["token"] =response[1];
 	    document.cookie = "token="+client.GLOBAL_CACHE["token"];
 	    // refresh the user status
 	  //  GlobalEvent.trigger(client.EVENTS.USER_REFRESH);
