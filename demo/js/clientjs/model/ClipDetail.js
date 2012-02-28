@@ -1,11 +1,7 @@
-﻿/**
- * ClipDetail
- * Class specified to implement the model bean of detail clip
- */
 ClipDetail = Backbone.Model.extend({
   defaults:{
     id:"",
-    name:"",
+    user:"",
     content:[
       {text:""},//text:String
       {image:""}//image:imgid || url
@@ -26,37 +22,8 @@ ClipDetail = Backbone.Model.extend({
       keyword:[],
       tag:[]
     },
-    time:"",
-    ip:""
-    /*
-     user:"",
-     content:{
-     type:"",
-     text:"",
-     html:"",
-     image:[]
-     },
-     note:{
-     text:"",
-     sound:[]
-     },
-     reason:[],
-     purpose:[],
-
-     source:{
-     type:"",
-     url:"",
-     rss:"",
-     title:"",
-     keyword:"",
-     tag:""
-     },
-
-     device:"",
-     city:"",
-     time:"",
-     ip:""
-     */
+    time:""
+    // ip:""
   },
   validate:function(){},
   initialize:function(){},
@@ -87,14 +54,13 @@ ClipDetail = Backbone.Model.extend({
 	break;
       }
     }
-    //return result;
   },
-  parse : function(resp, xhr) {
+  parse : function(resp, xhr) { //be called in fetch or save.
     if(resp[0] == 0){
       this.generatePastTime(resp[1]);
       return resp[1];
     }else{
-
+      return null;
     }
-  },
+  }
 });

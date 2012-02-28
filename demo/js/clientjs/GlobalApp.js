@@ -107,10 +107,130 @@
       GApp.popUpWidget.loadWidget(_widget);
       return GApp.popUpWidget;
     },
+    popUp_detail:function(popUpOption,ClipDetailWidget,CommShowWidget){
+      var _clientWidth = $(_container)[0].clientWidth;
+      var _clientHeight = $(_container)[0].clientHeight;
+      if(GApp.popUpWidget){
+	GApp.popUpWidget.setPopUpSize({popupWidth:popUpOption.width,popupHeight:popUpOption.height});
+      }else{
+	GApp.popUpWidget = new PopUpWidget(
+	  $("#popUp-container"),
+	  {
+	    clientWidth:_clientWidth,
+	    clientHeight:_clientHeight,
+	    contentWidth:popUpOption.width,
+	    contentHeight:popUpOption.height
+	});
+	GApp.addChild(GApp.popUpWidget);
+      }
+      GApp.popUpWidget.loadWidget(ClipDetailWidget);
+      GApp.popUpWidget.loadWidget(CommShowWidget);
+      return GApp.popUpWidget;
+    },
     addChild:function(child){
       GApp.addChild(child);
     }
-  })
+  });
+  this.view = new _view();
+  GlobalEvent.bind(client.EVENTS.USER_REFRESH,function(){
+	/*
+	 console.info(evtObj);
+	 evtObj.globalRouter = new GlobalRouter(evtObj);
+	 $("#nav").css("display","none");
+	 if(!evtObj.userUnitWidget)
+	 evtObj.userUnitWidget = new UserUnitWidget($("#rightNavDefault"));
+	 evtObj.addChild(evtObj.userUnitWidget);
+	 if(!evtObj.sortMetaWidget)
+	 evtObj.sortMetaWidget = new SortMetaWidget($("#sort-container"));
+	 evtObj.addChild(evtObj.sortMetaWidget);
+	 if(!evtObj.clipWidget)
+	 evtObj.clipWidget = new ClipWidget($("#contentWrapper"));
+	 evtObj.addChild(evtObj.clipWidget);
+	 if(!evtObj.clipDetailWidget)
+	 evtObj.clipDetailWidget = new ClipDetailWidget();
+	 evtObj.addChild(evtObj.clipDetailWidget);
+	 if(!evtObj.searchWidget)
+	 evtObj.searchWidget = new SearchWidget($("#search-container"));
+	 evtObj.addChild(evtObj.searchWidget);
+       */
+    this.globalRouter = new GlobalRouter(this);
+    // Backbone.history.start();
+    $("#nav").css("display","none");
+    $("#sort-container").css("display","");
+    if(!this.userUnitWidget){
+      this.userUnitWidget = new UserUnitWidget($("#rightNavDefault"));
+      this.addChild(this.userUnitWidget);
+    }
+     //该参数**
+    if(!this.userEmailWidget){
+      this.userEmailWidget = new UserEmailWidget();
+      this.addChild(this.userEmailWidget);
+    }
+
+    if(!this.sortMetaWidget){
+      this.sortMetaWidget = new SortMetaWidget($("#sort-container"));
+      this.addChild(this.sortMetaWidget);
+    }
+    if(!this.clipWidget){
+      this.clipWidget = new ClipWidget($("#contentWrapper"));
+      this.addChild(this.clipWidget);
+    }
+    if(!this.clipDetailWidget){
+	this.clipDetailWidget = new ClipDetailWidget($("#detailContact"));
+	this.addChild(this.clipDetailWidgetWidget);
+    }
+    if(!this.commShowWidget){
+      this.commShowWidget = new CommShowWidget($("#popup_Contact"));
+      this.addChild(this.commShowWidget);
+    }
+    if(!this.commentWidget){
+      this.commentWidget = new CommentWidget($("#popupContact"));
+      this.addChild(this.commentWidget);
+    }
+    // this.popUp_detail({width:800,height:1000},GApp.clipDetailWidget,GApp.commentWidget); 调用移动
+
+/*    if(!this.clipDetailWidget){
+      this.clipDetailWidget = new ClipDetailWidget();
+      this.addChild(this.clipDetailWidget);
+    }
+*/
+    if(!this.clipAddWidget){
+      this.clipAddWidget = new ClipAddWidget();
+      this.addChild(this.clipAddWidget);
+    }
+    if(!this.searchWidget){
+      this.searchWidget = new SearchWidget($("#search-container"));
+      this.addChild(this.searchWidget);
+    }
+  },this);
+  GlobalEvent.bind(client.EVENTS.USER_LOGOUT,function(){
+    this.globalRouter = null;
+    $("#nav").css("display","");
+    $("#sort-container").css("display","none");
+    if(this.userUnitWidget){
+      this.userUnitWidget.terminalize();
+    }
+    if(this.userEmailWidget){
+      this.userEmailWidget.terminalize();
+    }
+    if(this.sortMetaWidget){
+      this.sortMetaWidget.terminalize();
+    }
+    if(this.clipDetailWidget){
+      this.clipDetailWidget.terminalize();
+    }
+    if(this.clipAddWidget){
+      this.clipAddWidget.terminalize();
+    }
+    if(this.searchWidget){
+      this.searchWidget.terminalize();
+    }
+    if(this.clipWidget){
+      this.clipWidget.terminalize();
+    }
+    location.href="";
+    //this.terminalize();
+  },this);
   this.view = new _view();
   GlobalEvent.bind(client.EVENTS.USER_REFRESH,function(){
 	/*
@@ -242,11 +362,18 @@ GlobalApp.prototype.popUp = function(popUpOption,_widget){
     return;
   this.view.popUp(popUpOption,_widget);
 }
-GlobalApp.prototype.lazyLoad = function(url, start, end){
+
+GlobalApp.prototype.popUp_detail = function(popUpOption,_widget1,_widget2){
+  if(!this.view)
+    return;
+  this.view.popUp_detail(popUpOption,_widget1,_widget2);
+}
+GlobalApp.prototype.lazyLoad = function(url,page){
   if(!this.globalRouter)
     return;
-  this.globalRouter.router.listByImpl(url, start, end);
+  this.globalRouter.router.listByImpl(url,page);
 }
+
 GlobalApp.prototype.lazyLoadRecom = function(url, start, end){
   if(!this.globalRouter)
     return;

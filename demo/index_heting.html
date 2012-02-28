@@ -1,0 +1,174 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <script language="javascript" src="js/clientjs.js"> </script> 	
+    <script language="javascript">
+      $(document).ready(function(){
+        //$("[id$='-container']").corner();
+        //$("[class$='-container']").corner();
+        var globalApp = new GlobalApp($("body"));
+      });
+      function callback(result){
+        console.info(result);
+        console.info("index.html : "+actionUrl);
+        if(result[0] == 0){
+         var imgid = result[1];
+         console.info(result[1]);
+         var imgUrl = actionUrl + "/" +result[1];
+         var img = $("<img class='detail-image' src= "+url+">");
+         //uploadTemplate.remove();
+         //contentContainer.append(img);
+       }
+      };
+    </script>
+  </head>
+  <body>
+    <div id="popUp-container">
+      <div id="popup">
+	<div id="top"></div>
+	<a href="#/detail/1:11">clip的详细列表</a>
+	<div id="detailContact"></div><!-- 显示clip_detail和comment的块-->
+	<div id="editContact"></div><!-- 显示clip_detail和comment的块-->
+      </div>
+      <div id="backgroundPopup"></div>
+    </div>
+
+    <script type="text/template" id="detail_templatel">
+      <div id="left">收藏路线图
+      <%
+	for(var i =0; i<users.length; i++){
+      %>
+	 <div>
+	   <img src="<%= users[i].avatar%>">
+         </div>
+      <%
+	 if( i == 1){
+      %>
+          收藏路线图
+      <%  
+	 }
+	 if( i < user.length){
+      %>
+	 <div>向上箭头</div>
+      <%
+	 }
+	}
+      %>
+     </div>
+    </script>
+
+  <script type="text/template" id="detail_templater">
+    <div id="right">
+      <input type="button" value="<%= manage[0]%>" class="manage" id="mg1"/>
+      <input type="button" value="<%= manage[1]%>" class="manage" id="mg2"/>
+      <input type="button" value="<%= manage[2]%>" class="manage" id="mg3"/>
+    </div> <!-- clip_detail右边的三个按钮--> 
+  </script>
+
+  <script type="text/template" id="detail_templatec">
+    <div id="popup_Contact">
+      <div id="center_clip">
+	<%
+	   for(var i=0; i<content.length; i++){
+	     if(content[i].text){
+        %>
+	   <p class="detail-text">
+	     <%= content[i].text %>
+	   </p>
+        <%
+	   }else if(content[i].image){
+        %>
+        <img class="detail-image" src="<%= content[i].image %>">
+	<%
+           }
+	 }
+	%>
+      </div>
+      <div id="date"><%= time%></div>
+      <div id="center_comment"></div>
+    </div><br/>
+  </script>
+
+  <script type="text/template" id="addComm_template">
+    <div id="center_editComm">
+      <textarea id="comm_text" rows="3" cols="35">评论文本框</textarea><br/>
+      <input type="button" id="comm1" class="comm" value="好看"/> 
+      <input type="button" id="comm2" class="comm" value="好听"/>
+      <input type="button" id="comm3" class="comm" value="好吃"/>
+      <input type="button" id="comm4" class="comm" value="好玩"/>
+      <input type="button" id="comm5" class="comm" value="酷"/>  
+      <input type="button" id="addComment" value="发表"/>
+    </div>
+  </script>
+
+  <script type="text/template" id="comm_template">
+      <%
+	 if(comment.pid == 0){
+      %>
+      <div id="comment_<%= comment.id%>" class="node" name="<%= comment.id%>"> 
+      <%
+        }else{
+      %>
+      <div id="comment_<%= comment.id%>" class="node" name="<%= comment.pid%>">
+      <%
+        }
+      %>
+      user&nbsp;&nbsp;<%= comment.uid %>&nbsp;&nbsp;content&nbsp;&nbsp;<%= comment.text %><br/>
+      <span><a href="<%= comment.id%>_<%= comment.pid%>">回复</a></span>
+      <span><a href="<%= comment.id%>_<%= comment.pid%>">删除</a></span>
+    </div>
+  </script>
+
+  <script type="text/template" id="imgUpload_template">
+    <div class="imgUploadDiv">
+      <form name="imgForm" method="post" action="<%= actUrl%>" target="post_frame" enctype="multipart/form-data"> 
+	<iframe name='post_frame' id="post_frame" style="display:none;" mce_style="display:none;"></iframe> 
+	<input type="file" id="file" name="image" /> 
+	<input type="submit" value="上传图片" name="submit" /> 
+      </form>
+    </div>
+  </script>
+
+  <script type="text/template" id="editclip_template">
+    <div id="popup_Contact">
+      <div id="imgUploadDiv"></div>
+      <div class="editContent-container" contentEditable="true">
+	<%
+	   for(var i=0;i<content.length;i++){
+             if(content[i].text){
+        %>
+	   <p class="detail-text">
+ 	     <%= content[i].text %>
+	   </p>
+	    <%
+	      }else if(content[i].image){
+	    %>
+	    <!-- 为何设置为可编辑状态删除还是不可用 -->
+	  <img class="detail-image" src="<%= content[i].image %>"/>
+	    <%
+	       }
+	     }
+	    %>
+      </div>
+      <input type="submit" title="保存" id="editClip_Save" value="确定"/>
+      <input type="reset" title="放弃"  id="editClip_Abandon" value="取消"/>
+    </div>
+  </script>
+
+  <script type="text/template" id="editleft_template">
+    <div id="left">
+      <input type="button" id="edit_remark" value="注"/>
+    </div>
+  </script>
+
+  <script type="text/template" id="editright_template">
+    <div id="right">
+      <input type="button" class="edit_img" id="exImg" value="链接图片"/>;
+      <input type="button" class="edit_img" id="localImg" value="上传图片"/>
+      <input type="button" class="edit_img" id="upformat" value="整理格式"/>
+    </div>
+  </script>
+
+  </body>
+</html>
