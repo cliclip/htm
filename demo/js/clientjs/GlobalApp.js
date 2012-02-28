@@ -8,30 +8,21 @@
   var _view = Backbone.View.extend({
     el:$(_container),
     initialize:function(){
-      //GlobalEvent = new GlobalEvent();
-      /*
-       if(GApp.children && GApp.children.length > 0){
-         for(var i=0;i<GApp.children.length;i++){
-           GApp.children.initialize();
-         }
-       }
-      */
     },
     render:function(){
-      /*
-       if(GApp.children && GApp.children.length > 0){
-         for(var i=0;i<GApp.children.length;i++){
-           GApp.children.render();
-         }
-       }
-      */
     },
     events:{
+      "click #register_button":"registerCall",
       "click #login_button":"loginCall",
-      "click #register_button":"registerCall"
       //"click #updatePwd_button":"updatePwdCall",
-      //"click #logout_button":"logoutCall"
+      //"click #logout_button":"logoutCall",
+      "click #comment_button":"commentCall",
+      "click #recomment_button":"recommentCall",
+      "click #collect_button":"collectCall",
+      "click #organize_button":"organizeCall",
+      "click #del_button":"deleteCall"
     },
+
     loginCall:function(evt){
       if(!GApp.loginWidget){
 	GApp.loginWidget = new LoginWidget($("#contactArea"));
@@ -48,6 +39,46 @@
       //var popUpWidget=this.popUp({width:500,height:200},GApp.registerWidget);
       this.popUp({width:500,height:200},GApp.registerWidget);
     },
+    commentCall:function(evt){
+      if(!GApp.commentWidget){
+	GApp.commentWidget = new CommentWidget($("#contactArea"));
+	GApp.addChild(GApp.commentWidget);
+      }
+      this.popUp({width:500,height:200},GApp.commentWidget);
+    },
+
+    deleteCall:function(evt){
+      if(!GApp.deleteWidget){
+	GApp.deleteWidget = new DeleteWidget($("#contactArea"));
+	GApp.addChild(GApp.deleteWidget);
+      }
+      this.popUp({width:200,height:200},GApp.deleteWidget);
+    },
+
+    collectCall:function(evt){
+      if(!GApp.collectWidget){
+        GApp.collectWidget = new CollectWidget($("#contactArea"));
+        GApp.addChild(GApp.collectWidget);
+      }
+      this.popUp({width:300,height:300},GApp.collectWidget);
+    },
+
+    recommentCall:function(evt){
+      if(!GApp.recommentWidget){
+        GApp.recommentWidget = new RecommentWidget($("#contactArea"));
+        GApp.addChild(GApp.recommentWidget);
+      }
+      this.popUp({width:500,height:200},GApp.recommentWidget);
+    },
+
+    organizeCall:function(evt){
+      if(!GApp.organizeWidget){
+        GApp.organizeWidget = new OrganizeWidget($("#contactArea"));
+        GApp.addChild(GApp.organizeWidget);
+      }
+      this.popUp({width:300,height:300},GApp.organizeWidget);
+    },
+
     popUp:function(popUpOption,_widget){
       var _clientWidth = $(_container)[0].clientWidth;
       var _clientHeight = $(_container)[0].clientHeight;
@@ -67,7 +98,7 @@
       GApp.popUpWidget.loadWidget(_widget);
       return GApp.popUpWidget;
     },
-    popUp_detail:function(popUpOption,ClipDetailWidget,CommentWidget){
+    popUp_detail:function(popUpOption,ClipDetailWidget,CommShowWidget){
       var _clientWidth = $(_container)[0].clientWidth;
       var _clientHeight = $(_container)[0].clientHeight;
       if(GApp.popUpWidget){
@@ -84,7 +115,7 @@
 	GApp.addChild(GApp.popUpWidget);
       }
       GApp.popUpWidget.loadWidget(ClipDetailWidget);
-      GApp.popUpWidget.loadWidget(CommentWidget);
+      GApp.popUpWidget.loadWidget(CommShowWidget);
       return GApp.popUpWidget;
     },
     addChild:function(child){
@@ -136,8 +167,12 @@
       this.addChild(this.clipWidget);
     }
     if(!this.clipDetailWidget){
-	this.clipDetailWidget = new ClipDetailWidget($("#popup"));
+	this.clipDetailWidget = new ClipDetailWidget($("#detailContact"));
 	this.addChild(this.clipDetailWidgetWidget);
+    }
+    if(!this.commShowWidget){
+      this.commShowWidget = new CommShowWidget($("#popup_Contact"));
+      this.addChild(this.commShowWidget);
     }
     if(!this.commentWidget){
       this.commentWidget = new CommentWidget($("#popupContact"));
@@ -145,10 +180,11 @@
     }
     // this.popUp_detail({width:800,height:1000},GApp.clipDetailWidget,GApp.commentWidget); 调用移动
 
-    if(!this.clipDetailWidget){
+/*    if(!this.clipDetailWidget){
       this.clipDetailWidget = new ClipDetailWidget();
       this.addChild(this.clipDetailWidget);
     }
+*/
     if(!this.clipAddWidget){
       this.clipAddWidget = new ClipAddWidget();
       this.addChild(this.clipAddWidget);
@@ -186,21 +222,13 @@
     location.href="";
     //this.terminalize();
   },this);
+  this.view = new _view();
 };
 
 GlobalApp.prototype.initialize = function(){
   if(!this.view)
     return;
   this.view.initialize();
-}
-
-GlobalApp.prototype.terminalize = function(){
-  if(this.children)
-    while(this.children.length>0){
-      leng = this.children.length;
-      this.children[leng-1].terminalize();
-    }
-  this.children = new Array();
 }
 
 GlobalApp.prototype.render = function(){

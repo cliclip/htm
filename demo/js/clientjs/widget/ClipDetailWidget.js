@@ -8,6 +8,7 @@ ClipDetailWidget = function (_container,_options){
     events:{
       "click .manage":"Manage" // 对clip的操作管理 评 转 收 || 注 改 删
     },
+
     clip_template: _.template($("#detail_templatec").html()),
     user_template: _.template($("#detail_templatel").html()),
     mana_template: _.template($("#detail_templater").html()),
@@ -25,20 +26,20 @@ ClipDetailWidget = function (_container,_options){
 	}
       }
       var clip_html = this.clip_template(model);
-      this.el.children("#detailContact").append(clip_html);
+      this.el.append(clip_html);
       this.options.model = model;
       this.options.id = this.id;
       // ** right
       if(model.user != 1){ // 确认clip是否为自己的
 	var mana_html = this.mana_template({"manage":["收","转","评"]});
-	this.el.children("#detailContact").append(mana_html);
+	this.el.append(mana_html);
       }else{
 	var mana_html = this.mana_template({"manage":["注","改","删"]});
-	this.el.children("#detailContact").append(mana_html);
+	this.el.append(mana_html);
       }
       // ** left
       var user_html = this.user_template({users:[]});
-      this.el.children("#detailContact").append(user_html);
+      this.el.append(user_html);
     },
     Manage:function(evt){
       var id = evt.target.id;
@@ -82,8 +83,9 @@ ClipDetailWidget = function (_container,_options){
     update:function(){ //修改 [独立]
       // new 一个新的view
       // console.info(this.options.model);
+      console.info("update+++++");
       location.href = location.href + "/edit"; // 再次刷新会回到 超链接界面
-      var clipEditWidget = new ClipEditWidget($("#popup"),this.options);
+      new ClipEditWidget($("#editContact"),this.options);
     },
     delete:function(){ // 删除
 
@@ -96,8 +98,11 @@ ClipDetailWidget.prototype.initialize = function(){
   this.view.initialize();
 };
 ClipDetailWidget.prototype.loadDetail = function(id, model){
-  this.view.el = $("#popup");
+  this.view.el = $("#detailContact");
   this.view.id = id;
   this.view.model = model;
   this.view.render();
 };
+ClipDetailWidget.prototype.terminalize = function(){
+  this.view.el.empty();
+}

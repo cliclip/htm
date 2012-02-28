@@ -91,9 +91,17 @@ GlobalRouter = function(parentApp,options){
       });
     },
     detailById:function(id){
-      parentApp.clipDetailWidget = new ClipDetailWidget($("#popup"));
-      parentApp.commentWidget = new CommentWidget($("#editContact"));
+      /**
+       * 应该放在GlobalApp中,联系起clippreview来显示
+       * */
+      if(!parentApp.clipDetailWidget){
+	parentApp.clipDetailWidget = new ClipDetailWidget($("#detailContact"));
+      }
+      if(!parentApp.commShowWidget){
+	parentApp.commShowWidget = new CommShowWidget($("#popup_Contact"));
+      }
       parentApp.popUp_detail({width:800,height:1000},parentApp.clipDetailWidget,parentApp.commentWidget);
+      /**/
       var clipDetail = new ClipDetail();
       clipDetail.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+id;
       clipDetail.fetch({
@@ -113,7 +121,7 @@ GlobalRouter = function(parentApp,options){
       comment.fetch({
 	success:function(model,resp){
 	  if(resp[0] == 0){
-	    parentApp.commentWidget.loadComment(model,id);
+	    parentApp.commShowWidget.loadComment(model,id);
 	    /*model = model.toJSON();
 	    for(var i=0; i<model.comment.length; i++){
 	      parentApp.commentWidget.loadComment(model.comment[i].id,model.comment[i]);
@@ -137,7 +145,6 @@ GlobalRouter = function(parentApp,options){
 	successCallBack:function(response){
 	  if(response[0] == 0){
 	    parentApp.clipDetailWidget.cancelDetail(id);
-	    console.info($("#container_"+id));
 	    $("#container_"+id).remove();
 	  }else{
 
@@ -188,7 +195,7 @@ GlobalRouter = function(parentApp,options){
     //parentApp.client
   },
   addClip:function(){
-    parentApp.clipAddWidget.loadDetail();
+  //  parentApp.clipAddWidget.loadDetail();
   },
   queryByWord:function(keyword){
     var params = {

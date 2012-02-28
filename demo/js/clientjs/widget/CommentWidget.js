@@ -1,144 +1,104 @@
-CommentWidget = function (_container,_options){
+CommentWidget = function(_container,options){
   this.container = _container;
-  this.options = _options;
+  this.options = options;
   this.widgetType = "CommentWidget";
-  var value = "评论文本框";
-  var commentWidget = this;
-  this._view = Backbone.View.extend({
-    initialize:function(){},
-    template: _.template($("#comment_template").html()),
+  var _view = Backbone.View.extend({
+    tag_list : [],
+    value : "",
+    el:$(_container),
+    initialize:function(){
+      this.render();
+    },
+    render:function(){
+      var template = _.template($("#comment_template").html());
+      var sub_tag_template = _.template($("#sub_tag_template").html());
+      this.el.html(template);
+      $("#subtag_templateDiv").html(sub_tag_template);
+      this.tag_list = [];
+      this.value = $("#comm_text").val();
+    },
     events:{
-      "click": "ChildShow",
-      "mouseover": "MouseOver",
-      "mouseout": "MouseOut"
+      "click .sub_tag":"subtagAction",
+      "click #comment_button":"commentAction",
+      "focus #comm_text":"foucsAction",
+      "blur #comm_text":"blurAction"
     },
-    MouseOver:function(evt){
-      $(this.el).css("background","#f0f");
-      // var id = evt.target.id;
-      // var tag = $("#"+id).children();
-      // tag.css("display","block");
-    },
-    MouseOut:function(evt){
-      $(this.el).css("background","#fff");
-      // var id = evt.target.id;
-      // var tag = $("#"+id).children();
-      // tag.css("display","none");
-    },
-    ChildShow:function(evt){
-      // 层级递进关系如何实现
-      var flag = 1;
-      var id = evt.target.id.split("_")[1];
-      var pid = $("#comment_"+id).attr("name");
-      if(pid != id){ pid = id; flag = 0; }
-      var tags = $("div[name="+pid+"]");
-      if(tags.length > flag){ // 所点击的节点有孩子节点
-	var display = $("#"+tags[flag].id).css("display");
-	this.checkTags(pid, tags, display);
-      }
-    },
-    checkTags:function(pid, tags, display){
-      if(!tags) return;
-      for(var i=0; i<tags.length; i++){
-	var tag = tags[i];
-	if(tag == undefined || !tag){
-	  return;
-	}else{
-	  var tmp_id = tag.id.split("_")[1];
-	  if(tmp_id != pid){                // 排除自己
-	    if(display == "block" ){
-	      $("#comment_"+tmp_id).css("display","none");
-	    }else{
-	      $("#comment_"+tmp_id).css("display","block");
-	    }
-	    // 更改pid为给定id的结点的孩子节点的显示属性。
-	    this.checkTags(pid, $("div[name="+tmp_id+"]"), display);
-	  }
-	}
-      }
-    },
-    showTree:function(comment){
-      if(comment){
-	$(this.el).html(this.template({comment:comment}));
-	this.comm = $(this.el);
-	this.comm.css("margin-left",comment.layer*10+"px");
-      }
-      return this;
-    },
-    render:function(_model){
-      if(_model){
-	model = _model.toJSON();
-      }else{
-	model = this.model;
-      }
-      return this.showTree(model);
-    }
-  });
-  this.add_view = Backbone.View.extend({
-    initialize:function(){},
-    template: _.template($("#addComm_template").html()),
-    events:{
-      "click .comm": "Comment", // 评论的各个选项 点击事件
-      "click #addComment":"addComment",
-      "focus #comm_text": "ClearAction", // 评论输入框 事件
-      "blur #comm_text": "AddAction"
-    },
-    ClearAction:function(evt){
-      if($("#comm_text").val() == value ){
+
+    foucsAction:function(evt){
+      if($("#comm_text").val() == this.value ){
 	$("#comm_text").val("");
       }
     },
-    AddAction:function(evt){
-      if($("#comm_text").val() == ""){
-	$("#comm_text").val(value);
-      }
-    },
-    Comment:function(evt){ // 正确
-      var id = evt.target.id;
-      var val = $("#"+id).val();
-      var val1 = $("#comm_text").val();
-      console.info($("#c"+id));
-      if(val1 == value){
-	$("#comm_text").val(val);
-      }else{
-	$("#comm_text").val(val1+" "+val);
-      }
-    },
-    addComment:function(evt){
-      var _data = {
-	text: $("#comm_text").val(),
-	pid : 6
-      };
-      RequestUtil.postFunc({
-	url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+this.id+"/comment",
-	data:_data,
-	successCallBack:function(response){
-	  if(response[0] == 0){
-	    // 保存成功 回到详情页面
-	    $("#comm_text").val(value);
-	  }else{
-	    console.info("response[0] == "+response[0]);
-	  }
-	},
-	errorCallBack:function(response){
-	  console.info(response);
-	}
-      });
-    },
-    render:function(){
-      this.el.append(this.template());
-    }
-  });
-};
 
+    blurAction:function(evt){
+      if($("#comm_text").val() == ""){
+	$("#comm_text").val(this.value);
+      }
+    },
+
+    subtagAction:function(evt){
+      var id = evt.target.id;
+      var color = document.getElementById(id).style.backgroundColor;
+      if(!color){
+	document.getElementById(id).style.backgroundColor="red";
+	this.tag_list.push($("#"+id).val());
+	console.dir(this.tag_list);
+      }else if(color == "red"){
+	document.getElementById(id).style.backgroundColor="";
+	this.tag_list.pop($("#"+id).val());
+	console.dir(this.tag_list);
+      }
+    },
+
+    commentAction:function(evt){
+      var id = "1:1";
+      var comment_url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+id+"/comment";
+      var text = $("#comm_text").val();
+      console.log(text);
+      var pid = "0";
+      var clipInfo = new ClipInfo(comment_url);
+      var widget = this;
+      clipInfo.commentAction({
+	pid:pid,
+	text:text
+      },
+      {viewCallBack:function(status,infoText){
+	 if(status == 0){
+	   console.log("comment ok");
+	   widget.el.html(infoText);
+	   GlobalEvent.trigger(client.EVENTS.POPUP_CLOSE);
+	 }else{
+	   console.log("comment fail");
+	 }
+       }
+      });
+
+      if($("#collect").attr("checked")){
+	console.log("同时收");
+	var collect_url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+id+"/reclip";
+	var userInfo = new UserInfo(collect_url);
+	userInfo.collectAction({
+	  clip:{}
+	},
+	{ viewCallBack:function(status,infoText){
+	    if(status == 0){
+	      console.log("collect ok");
+	      widget.el.html(infoText);
+	      GlobalEvent.trigger(client.EVENTS.POPUP_CLOSE);
+	    }else{
+	      console.log("collect fail");
+	    }
+	  }
+	 });
+	}
+      }
+});
+  this.view = new _view();
+};
 CommentWidget.prototype.initialize = function(){
   this.view.initialize();
 };
-CommentWidget.prototype.loadComment = function(model,clipid){
- var comment = (model.toJSON()).comment;
- for(var i=0; i<comment.length; i++){
-    var view = new this._view({model:comment[i], id:comment[i].id});
-    $("#popupContact").children("#center_comment").append(view.render().el);
- }
- var view = new this.add_view({el:$("#popupContact"),id:clipid});
- view.render();
+
+CommentWidget.prototype.render = function(){
+  this.view.render();
 };

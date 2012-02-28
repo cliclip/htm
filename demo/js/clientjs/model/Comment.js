@@ -9,7 +9,6 @@ Comment = Backbone.Model.extend({
   validate:function(){},
   initialize:function(){},
   setLayer:function(layer, res, children){
-    console.info(children);
     for(var i=0; i<children.length; i++){
       e = children[i];
       e.layer = layer+1;

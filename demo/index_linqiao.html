@@ -1,0 +1,135 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <script language="javascript" src="js/clientjs.js"></script>
+     <script language="javascript">
+      $(document).ready(function(){
+        //$("[id$='-container']").corner();
+        //$("[class$='-container']").corner();
+        var globalApp = new GlobalApp($("body"));
+      });
+      function callback(result){
+        console.info(result);
+        console.info("index.html : "+actionUrl);
+        if(result[0] == 0){
+         var imgid = result[1];
+         console.info(result[1]);
+         var imgUrl = actionUrl + "/" +result[1];
+         var img = $("<img class='detail-image' src= "+url+">");
+         //uploadTemplate.remove();
+         //contentContainer.append(img);
+        }
+      };
+     
+    </script>
+  </head>
+  <body>
+	<input type="button" value="注册" id="register_button"/>
+	<input type="button" value="登录" id="login_button"/><br>
+	<input type="button" value="转发" id="recomment_button"/>
+	<input type="button" value="注" id="organize_button"/>
+
+<!--register template** -->
+ <script type="text/template" id="register_template">
+	<div>
+	  <label>用户名:</label><input type="text" id="username_r" size="12"/><span class="action-info name"></span><br>
+	  <label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_r" size="12"/><span class="action-info pass"></span><br>
+	  <input type="button" value="注册" id="registerAction_button"/>
+	</div>
+ </script>
+ <!-- login template** -->
+ <script type="text/template" id="login_template">
+   <div>
+     <label>用户名:</label><input type="text" id="username_l" size="12"/><span class="action-info name"></span><br>
+     <label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_l" size="12"/><span class="action-info pass"></span><br>
+     <input type="button" value="登录" id="loginAction_button" />
+     <span class="action-info"></span>
+   </div>
+ </script>
+<!-- recomment template** -->
+ <script type="text/template" id="recomment_template">
+   <div align="center">
+     <label>转</label><br>
+     <div id="user_image">
+       <img id="imgId" hidden="hidden" width="50" height="50" />
+     </div>
+     <div id="inputname">
+       <input type="text" id="name"/>
+       <div id="name_listDiv" ></div>
+     </div>
+     <textarea id="recomment_text" rows="3" cols="40">说点啥吧～</textarea><br>
+     <input type="button" value="确定" id="recomm_button"/>
+     <input type="button" value="取消" id="cancel_button"/>
+   </div>
+ </script>
+<!-- namelist template** -->
+ <script type="text/template" id="namelist_template">
+   <div align="center">
+     <ul id="name_list">
+       <%
+	  for(var i=0;i<list.length;i++){  
+			  var name=(list[i].name);
+			  var uid=(list[i].uid);
+			  var imgurl=(list[i].imgUrl);
+			  %>
+	  <li id="<%=uid%>" title="<%=imgurl%>"><%=name%></li>
+	  <% } %>
+     </ul>
+   </div>
+ </script>
+<!-- organize template** -->
+ <script type="text/template" id="organize_template">
+       <div align="center">
+          <label>注</label><br>
+	  <div id="subtag_templateDiv"></div>
+          <textarea  id="tag" rows="1" cols="30" /><br>
+	  <div id="objtag_templateDiv"></div>
+          <textarea  id="organize_text" rows="3" cols="30" >备注一下吧~</textarea><br>
+	  <label for="checkbox">
+	  <input type="checkbox" name="checkbox" id="checkbox" align="right"/>
+          不公开</label><br>
+          <input type="button" value="确定" id="organize_button"/>
+          <input type="button" value="取消" id="cancel_button"/>
+        </div>
+  </script>
+<!-- tags template -->
+
+    <script type="text/template" id="sub_tag_template">
+      <div  id="sub_tag_Div" align="center">
+	<input type="button" class="sub_tag" id="sub_tag_1" value="好看" />
+	<input type="button" class="sub_tag" id="sub_tag_2" value="好听" />
+	<input type="button" class="sub_tag" id="sub_tag_3" value="好吃" />
+	<input type="button" class="sub_tag" id="sub_tag_4" value="好玩" />
+	<input type="button" class="sub_tag" id="sub_tag_5" value="酷" />
+      </div>
+    </script>
+      </script>
+
+    <script type="text/template" id="obj_tag_template">
+      <div  id="obj_tag_Div" align="center">
+	<input type="button" class="obj_tag" id="obj_tag_1" value="电影"/>
+        <input type="button" class="obj_tag" id="obj_tag_2" value="娱乐"/>
+        <input type="button" class="obj_tag" id="obj_tag_3" value="台湾"/>
+        <input type="button" class="obj_tag" id="obj_tag_4" value="大陆"/>
+        <input type="button" class="obj_tag" id="obj_tag_5" value="欧美"/>
+        <input type="button" class="obj_tag" id="obj_tag_6" value="音乐"/>
+      </div>
+    </script>
+
+
+
+
+      <div id="popUp-container">
+	<div id="popupContact">  
+	  <a id="popupContactClose">X</a>   
+	  <div id="contactArea"></div>  
+	</div>  
+	<div id="backgroundPopup"></div>
+      </div>
+  
+  </body>
+</html>
+
+
+

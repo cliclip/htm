@@ -29,8 +29,8 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
       $("#detailContact").children().css("display","none");
       // 开始放内容 top left right center
       $("#top").html("<div align=\"center\">改</div>"); //在$("#top")加上改
-      this.el.children("#editContact").append(this.left_template({}));
-      this.el.children("#editContact").append(this.right_template({uid:1}));
+      this.el.append(this.left_template());
+      this.el.append(this.right_template());
       if(!_model){
 	model = this.model;
       }else{
@@ -41,7 +41,7 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
 	  model.content[i].image = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "user/"+model.user+"/image/"+model.content[i].image;
 	}
       }
-      this.el.children("#editContact").append(this.clip_template(model));
+      this.el.append(this.clip_template(model));
     },
     extImg:function(evt){
       var url = prompt("url","http://");
@@ -134,9 +134,11 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
 	successCallBack:function(response){
 	  if(response[0] == 0){
 	    // 保存成功 回到详情页面
-	    view.el.children("#editContact").children().remove();
-	    view.el.children("#detailContact").children().remove();
-	    location.href = location.href.substring(0,location.href.length-5);
+	    $("#top").html(""); //在$("#top")加上改
+	    view.el.children().remove();
+	    $("#detailContact").children().remove();
+	    location.href = "#/detail/"+view.id;
+	    // location.href = location.href.substring(0,location.href.length-5);
 	  }else{
 	    console.info("response[0] == "+response[0]);
 	  }
@@ -148,7 +150,7 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
     },
     abandonUpdate:function(evt){
       var view = this;
-      view.el.children("#editContact").children().remove();
+      view.el.children().remove();
       $("#top").html(""); //在$("#top")加上改
       $("#detailContact").children().css("display","block"); // detail
       // 取消更新 [如有上传了图片 先不进行图片删除]
@@ -174,6 +176,6 @@ ClipEditWidget.prototype.loadDetail = function(id,model){
 };
 ClipEditWidget.prototype.cancelDetail = function(id){
   //this.view.el = $("#container_"+id);
-  this.view.el = $("#popup");
+  this.view.el = $("#editContact");
   this.view.animateOut();
 };
