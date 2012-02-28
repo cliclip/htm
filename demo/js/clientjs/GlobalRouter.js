@@ -8,16 +8,16 @@ GlobalRouter = function(parentApp,options){
   _router = Backbone.Router.extend({
     routes:{
       "/home":"goHomePage",
-      "/my/email/:address":"deleteEmail",
+      "user/:uid/email/:address":"deleteEmail",
       "/active/:str":"activeEmail",
-      "/clip/all/p:page":"restoreAll",
+      "user/:uid/recomm/:start..:end":"restoreAllRecommend",
+      "user/:uid/clip/:start..:end":"restoreAll",
 
-      "/clip/reason/:param/p:page" : "sortByReason",
-      "/clip/purpose/:param/p:page" : "sortByPurpose",
-      "/clip/device/:param/p:page" : "sortByDevice",
+      "user/:uid/tag/:param/:start..:end" : "sortByReason",
+      "user/:uid/device/:param/:start..:end" : "sortByDevice",
       //当device是curl/7.19.7
       // new RegExp('^/clip/device/(^\/[.*?]\/p$)/p([/d]+)$') : "sortByDevice",
-      "/clip/city/:param/p:page" : "sortByCity",
+      "user/:uid/city/:param/:start..:end" : "sortByCity",
 
       "/clip/delete/:id":"deleteClip",
       "/clip/edit/:id":"editClip",
@@ -41,46 +41,29 @@ GlobalRouter = function(parentApp,options){
     goHomePage:function(){
       location.href = "www.clickdang.com:3000";
     },
-    restoreAll:function(page){
+    restoreAll:function(uid, s, e){
+//      console.dir({uid:uid, start:s, end:e});
       //url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
-      var url =  "my/clip/all";
-      this.listByImpl(url,page);
+      var url = "user/"+uid + "/clip/";
+      this.listByImpl(url, s, e);
     },
-    sortByReason:function(param,page){
-      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/reason/"+param+"/p"+page;
-      var url = "my/clip/reason/"+encodeURIComponent(param);
-      this.listByImpl(url,page);
-    },
-    sortByPurpose:function(param,page){
-      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/purpose/"+param+"/p"+page;
-      var url = "my/clip/purpose/"+encodeURIComponent(param);
-      this.listByImpl(url,page);
-    },
-    sortByDevice:function(param,page){
-      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/device/"+param+"/p"+page;
-      var url = "my/clip/device/"+encodeURIComponent(param);
-      this.listByImpl(url,page);
-    },
-    sortByCity:function(param,page){
-      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/city/"+param+"/p"+page;
-      var url = "my/clip/city/"+encodeURIComponent(param);
-      this.listByImpl(url,page);
-    },
-    listByImpl:function(_url,page){
-      $(".radioButtonContainer.radioButton.sortItem.active").removeClass("active");
+    listByImpl:function(_url, s, e){
       var previewClipList = new PreviewList();
-      previewClipList.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL  + _url+"/p"+page;
+      previewClipList.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL  + _url + s + ".." + e;
       previewClipList.fetch({
 	success:function(collection,resp){
+
 	  if(resp[0] == 0){
-	    if(page != 1)
+	    if(s != 0){
 	      parentApp.clipWidget.addPreviewClipList(collection);
+	    }
 	    else{
 	      parentApp.clipWidget.loadPreviewClipList(collection);
 	      $("[href^='#"+_url+"']").children("div").addClass("active");
 	    }
 	    parentApp.clipWidget.currentUrl = _url;
-	    parentApp.clipWidget.currentPage = page;
+	    parentApp.clipWidget.currentStart = s;
+	    parentApp.clipWidget.currentEnd = e;
 	  }else{
 	    //server response exception
 	  }
@@ -89,6 +72,56 @@ GlobalRouter = function(parentApp,options){
 	  //client request error
 	}
       });
+    },
+    restoreAllRecommend:function(uid, s, e){
+      //url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
+      var url = "user/"+uid + "/clip/";
+      this.listByImpl_recom(url, s, e);
+    },
+    listByImpl_recom:function(_url, s, e){
+      var previewRecomList = new PreviewList();
+      previewRecomList.url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL  + _url + s + ".." + e;
+      previewRecomList.fetch({
+	success:function(collection,resp){
+	  if(resp[0] == 0){
+	    if(s != 0)
+	      parentApp.recomWidget.addPreviewRecomList(collection);
+	    else{
+	      parentApp.recomWidget.loadPreviewRecomList(collection);
+	      $("[href^='#"+_url+"']").children("div").addClass("active");
+	    }
+	    parentApp.recomWidget.currentUrl = _url;
+	    parentApp.recomWidget.currentStart = s;
+	    parentApp.recomWidget.currentEnd = e;
+	  }else{
+	    //server response exception
+	  }
+	},
+	error:function(collection,resp){
+	  //client request error
+	}
+      });
+    },
+    sortByReason:function(param, uid, s, e){
+      console.info("sortByReason");
+      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/reason/"+param+"/p"+page;
+      var url = "user/" + uid + "/clip/reason/"+encodeURIComponent(param);
+      this.listByImpl(url, s, e);
+    },
+    sortByPurpose:function(param,uid, s, e){
+      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/purpose/"+param+"/p"+page;
+      var url =  "user/" + uid + "/clip/purpose/"+encodeURIComponent(param);
+      this.listByImpl(url, s, e);
+    },
+    sortByDevice:function(param, uid, s, e){
+      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/device/"+param+"/p"+page;
+      var url = "user/" + uid + "/clip/device/"+encodeURIComponent(param);
+      this.listByImpl(url, s, e);
+    },
+    sortByCity:function(param, uid, s, e){
+      //var url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/city/"+param+"/p"+page;
+      var url =  "user/" + uid + "/clip/city/"+encodeURIComponent(param);
+      this.listByImpl(url,page);
     },
     detailById:function(id){
       var clipDetail = new ClipDetail();

@@ -49,7 +49,7 @@ UserEmailWidget = function(_container,options){
 
       $("#addEmail").bind("click",function(evt){
 	$("#addEmailDiv").css("display","");
-	if($("#addEmailDiv")){
+	if($("#addEmailDiv").html() == ""){
 	  var actionUrl = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "my/email";
 	  var addTemplate = _.template($("#addEmail_template").html(),{actUrl:actionUrl});
 	  $("#addEmailDiv").html(addTemplate);
@@ -64,7 +64,7 @@ UserEmailWidget = function(_container,options){
 	    successCallBack:function(response){
 	      if(response[0] == 0){
 		var id = response[1];
-		$("#addEmailDiv").html("<a href=#/active/"+response[1]+">点击此链接进行激活"+response[1]+"</a>");
+		alert(response);
 		location.href = "#/my/list";
 	      }else{
 		// alert(response[0]);

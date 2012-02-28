@@ -8,6 +8,16 @@
   var _view = Backbone.View.extend({
     el:$(_container),
     initialize:function(){
+/*
+      if(!GApp.clipWidget){
+	GApp.clipWidget = new ClipWidget($("#contentWrapper"));
+	GApp.addChild(GApp.clipWidget);
+      }
+*/
+      if(!GApp.recomWidget){
+	GApp.recomWidget = new RecomWidget($("#contentWrapper"));
+	GApp.addChild(GApp.recomWidget);
+      }
       //GlobalEvent = new GlobalEvent();
       /*
        if(GApp.children && GApp.children.length > 0){
@@ -105,8 +115,7 @@
     if(!this.userEmailWidget){
       this.userEmailWidget = new UserEmailWidget();
       this.addChild(this.userEmailWidget);
-     }
-
+    }
     if(!this.sortMetaWidget){
       this.sortMetaWidget = new SortMetaWidget($("#sort-container"));
       this.addChild(this.sortMetaWidget);
@@ -198,8 +207,13 @@ GlobalApp.prototype.popUp = function(popUpOption,_widget){
     return;
   this.view.popUp(popUpOption,_widget);
 }
-GlobalApp.prototype.lazyLoad = function(url,page){
+GlobalApp.prototype.lazyLoad = function(url, start, end){
   if(!this.globalRouter)
     return;
-  this.globalRouter.router.listByImpl(url,page);
+  this.globalRouter.router.listByImpl(url, start, end);
 }
+GlobalApp.prototype.lazyLoadRecom = function(url, start, end){
+  if(!this.globalRouter)
+    return;
+  this.globalRouter.router.listByImpl_recom(url, start, end);
+};

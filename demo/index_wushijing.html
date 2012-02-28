@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <script language="javascript" src="js/clientjs.js"></script>
+    <script language="javascript">
+      $(document).ready(function(){
+        //$("[id$='-container']").corner();
+        //$("[class$='-container']").corner();
+        var globalApp = new GlobalApp($("body"));
+      });
+      function callback(result){
+        console.info(result);
+        console.info("index.html : "+actionUrl);
+        if(result[0] == 0){
+         var imgid = result[1];
+         console.info(result[1]);
+         var imgUrl = actionUrl + "/" +result[1];
+         var img = $("<img class='detail-image' src= "+url+">");
+         //uploadTemplate.remove();
+         //contentContainer.append(img);
+       }
+      };
+    </script>
+  </head>
+  <body>  	
+  <script type="text/template" id="clipPreview_template">
+    <div id="container_<%=id%>" >
+      <div class="preview-item">
+	<div class="preview-info">
+	  <span class="info-text">本条信息</span>
+	  <%if(city && city != ""){%>
+	  <span class="into-text">在城市</span>
+	  <span class="info-city"><a href="#/clip/city/<%=city%>/p1"><%=city%></a></span>
+	  <%}%>
+	  <%if(device && device != ""){%>
+	  <span class="info-text">使用设备</span>
+	  <span class="info-device">
+	    <a href="#/clip/device/<%= device%>/p1"><%= device%></a>
+	  </span>
+	  <%}%>
+          <span class="info-text">搜集</span>
+          <a title="详细" class="detailButton controlSprite" href="#/detail/<%=id %>"></a>
+	</div>
+	<div class="content-container">
+	  <% if(content.image) {%>
+	  <div class="preview-image left">
+	    <img src="<%= content.image %>">
+	  </div>
+	  <% } %>
+	  <% if(content.text){ %>
+	  <p class="preview-text">
+	    <%= content.text %>
+	  </p>
+	  <%}%>
+	</div>
+	<div class="preview-note notesWrapA">
+	  <%if(note.text && note.text != " "){%>
+	  <p class="note-text">
+	    备注：<%= note.text %>
+	  </p>
+	  <%}%>
+	  <%if(false){%>
+	  语音备注：
+	  <audio src="" controls="controls" preload="load">
+	    您的浏览器不支持 audio 标签。
+	  </audio>
+	  <%}%>
+	</div>
+	<div class="count">
+	  转摘(<%= reprint_count %>)回复(<%= reply_count %>)
+	</div>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="friendinfo_template">
+    <div class="friend-info">
+      <a href="#/userhomepage/<%=friendinfo.uid%>" class="userhomepage<%=friendinfo.i%>" id="userhomepage1"><img src="<%=friendinfo.image%>" width="50" height="50"/></a>&nbsp;&nbsp;
+      <a title="<%=friendinfo.i%>" class="userhomepage<%=friendinfo.i%>" href="#/userhomepage/<%=friendinfo.uid%>" id="userhomepage2"><%=friendinfo.name%></a>
+    </div>
+  </script>
+
+  <script type="text/template" id="recommend_template">
+    <div class="recomm-info">
+      <hr/>
+      <hr/>
+      <%=recomm.text%>
+    </div>
+  </script>
+
+  <div id="page-home">
+    <div id="contentWrapper"></div>
+  </div>
+
+  </body>
+</html>
