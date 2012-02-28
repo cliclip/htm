@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <script language="javascript" src="js/clientjs.js"></script>
+    <script language="javascript">
+      $(document).ready(function(){
+        //$("[id$='-container']").corner();
+        //$("[class$='-container']").corner();
+        var globalApp = new GlobalApp($("body"));
+      });
+      function callback(result){
+        console.info(result);
+        console.info("index.html : "+actionUrl);
+        if(result[0] == 0){
+         var imgid = result[1];
+         console.info(result[1]);
+         var imgUrl = actionUrl + "/" +result[1];
+         var img = $("<img class='detail-image' src= "+url+">");
+         //uploadTemplate.remove();
+         //contentContainer.append(img);
+       }
+      };
+    </script>
+  </head>
+  <body>
+    <input type="button" value="收藏" id="collect_button"/>
+    <input type="button" value="登录" id="login_button"/>
+
+<!-- collect template -->
+     <script type="text/template" id="collect_template">
+       <div align="center">
+          <label>收</label><br>
+         <div id="subtag_templateDiv"></div>
+          <textarea  id="tag" rows="1" cols="30" /><br>
+	  <div id="objtag_templateDiv"></div>
+          <textarea  id="collect_text" rows="3" cols="30" >备注一下吧~</textarea><br>
+	  <label for="checkbox">
+	  <input type="checkbox" name="checkbox" id="checkbox" align="right"/>
+          不公开</label><br>
+          <input type="button" value="确定" id="collect_button"/>
+          <input type="button" value="取消" id="cancel_button"/>
+        </div>
+      </script>
+
+<!-- login template -->
+    <script type="text/template" id="login_template">
+       <div align="center">
+	 <lable>登录</label><br>
+         <input type="text" id="username_l" size="30" value="用户名/Email"/><br>
+	 <input type="text" id="password_l" size="30" value="密码"/><br>
+	 忘记密码？<a href = "" >点这里重置</a><br>
+	 <input type="button" value="确定" id="loginAction_button"/>
+          <input type="button" value="取消" id="cancel_button"/>
+	</div>
+      </script>
+
+<!-- tags template -->
+
+    <script type="text/template" id="sub_tag_template">
+      <div  id="sub_tag_Div" align="center">
+	<input type="button" class="sub_tag" id="sub_tag_1" value="好看" />
+	<input type="button" class="sub_tag" id="sub_tag_2" value="好听" />
+	<input type="button" class="sub_tag" id="sub_tag_3" value="好吃" />
+	<input type="button" class="sub_tag" id="sub_tag_4" value="好玩" />
+	<input type="button" class="sub_tag" id="sub_tag_5" value="酷" />
+      </div>
+    </script>
+
+    <script type="text/template" id="obj_tag_template">
+      <div  id="obj_tag_Div" align="center">
+	<input type="button" class="obj_tag" id="obj_tag_1" value="电影"/>
+        <input type="button" class="obj_tag" id="obj_tag_2" value="娱乐"/>
+        <input type="button" class="obj_tag" id="obj_tag_3" value="台湾"/>
+        <input type="button" class="obj_tag" id="obj_tag_4" value="大陆"/>
+        <input type="button" class="obj_tag" id="obj_tag_5" value="欧美"/>
+        <input type="button" class="obj_tag" id="obj_tag_6" value="音乐"/>
+      </div>
+    </script>
+
+      <div id="popUp-container">
+	<div id="popupContact">  
+	  <a id="popupContactClose">X</a>   
+	  <div id="contactArea"></div>  
+	</div>  
+	<div id="backgroundPopup"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
