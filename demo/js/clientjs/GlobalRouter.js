@@ -45,6 +45,10 @@ GlobalRouter = function(parentApp,options){
 //      console.dir({uid:uid, start:s, end:e});
       //url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
       var url = "user/"+uid + "/clip/";
+      if(!parentApp.clipWidget){
+	parentApp.clipWidget = new ClipWidget($("#contentWrapper"));
+	parentApp.addChild(parentApp.clipWidget);
+      }
       this.listByImpl(url, s, e);
     },
     listByImpl:function(_url, s, e){
@@ -76,6 +80,10 @@ GlobalRouter = function(parentApp,options){
     restoreAllRecommend:function(uid, s, e){
       //url = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + client.GLOBAL_CACHE["userInfo"].name + "/clip/all";
       var url = "user/"+uid + "/clip/";
+      if(!parentApp.recomWidget){
+	parentApp.recomWidget = new RecomWidget($("#contentWrapper"));
+	parentApp.addChild(parentApp.recomWidget);
+      }
       this.listByImpl_recom(url, s, e);
     },
     listByImpl_recom:function(_url, s, e){

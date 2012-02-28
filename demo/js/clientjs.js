@@ -40,7 +40,7 @@ function _loadClientScript(){
   _Loadscript("clientjs/model/MetaList.js") ;
   _Loadscript("clientjs/model/ClipPreview.js") ;
   _Loadscript("clientjs/model/PreviewList.js") ;
-//  _Loadscript("clientjs/model/EmailList.js") ;
+  _Loadscript("clientjs/model/EmailList.js") ;
   _Loadscript("clientjs/model/ClipDetail.js") ;
   _Loadscript("clientjs/model/FriendInfo.js") ;
 
