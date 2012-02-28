@@ -94,7 +94,9 @@ UserInfo = function(_url,options){
 	  if(options.viewCallBack){
 	    options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
 	  }
-	},
+	}
+      });
+    },
     collectAction:function(params,options){
       this.save(params,{
         success:function(model,response){
@@ -128,12 +130,10 @@ UserInfo.prototype.loginAction = function(params,options){
 UserInfo.prototype.registerAction = function(params,options){
   this.model.registerAction(params,options);
 };
-
-UserInfo.prototype.recommentAction = function(params,options){
-  this.model.recommentAction(params,options);
-};
 UserInfo.prototype.collectAction = function(params,options){
   this.model.collectAction(params,options);
 };
-
+UserInfo.prototype.recommentAction = function(params,options){
+  this.model.recommentAction(params,options);
+};
 

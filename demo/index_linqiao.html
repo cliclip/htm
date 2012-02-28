@@ -56,7 +56,7 @@
      </div>
      <div id="inputname">
        <input type="text" id="name"/>
-       <div id="name_list" ></div>
+       <div id="name_listDiv" ></div>
      </div>
      <textarea id="recomment_text" rows="3" cols="40">说点啥吧～</textarea><br>
      <input type="button" value="确定" id="recomm_button"/>
@@ -79,23 +79,44 @@
    </div>
  </script>
 <!-- organize template** -->
-<script type="text/template" id="organize_template">
-  <div align="center">
-    <label>注</label><br>
-    <input type="button" value="好看" id="1" class="organize"/>
-    <input type="button" value="好听" id="2" class="organize"/>
-    <input type="button" value="好玩" id="3" class="organize"/>
-    <input type="button" value="好吃" id="4" class="organize"/>
-    <input type="button" value="酷" id="5" class="organize"/><br>
-    <textarea id="tag" rows="1" cols="30" /><br>
-    <textarea id="organize_text" rows="3" cols="30" >备注一下吧~</textarea><br>
-    <label for="checkbox" >
-    <input type="checkbox" name="checkbox" id="checkbox" align="right"/>
-    不公开</label><br>
-    <input type="button" value="确定" id="org_button"/>
-    <input type="button" value="取消" id="cancel_button"/>
-  </div>
-</script>
+ <script type="text/template" id="organize_template">
+       <div align="center">
+          <label>注</label><br>
+	  <div id="subtag_templateDiv"></div>
+          <textarea  id="tag" rows="1" cols="30" /><br>
+	  <div id="objtag_templateDiv"></div>
+          <textarea  id="organize_text" rows="3" cols="30" >备注一下吧~</textarea><br>
+	  <label for="checkbox">
+	  <input type="checkbox" name="checkbox" id="checkbox" align="right"/>
+          不公开</label><br>
+          <input type="button" value="确定" id="organize_button"/>
+          <input type="button" value="取消" id="cancel_button"/>
+        </div>
+  </script>
+<!-- tags template -->
+
+    <script type="text/template" id="sub_tag_template">
+      <div  id="sub_tag_Div" align="center">
+	<input type="button" class="sub_tag" id="sub_tag_1" value="好看" />
+	<input type="button" class="sub_tag" id="sub_tag_2" value="好听" />
+	<input type="button" class="sub_tag" id="sub_tag_3" value="好吃" />
+	<input type="button" class="sub_tag" id="sub_tag_4" value="好玩" />
+	<input type="button" class="sub_tag" id="sub_tag_5" value="酷" />
+      </div>
+    </script>
+      </script>
+
+    <script type="text/template" id="obj_tag_template">
+      <div  id="obj_tag_Div" align="center">
+	<input type="button" class="obj_tag" id="obj_tag_1" value="电影"/>
+        <input type="button" class="obj_tag" id="obj_tag_2" value="娱乐"/>
+        <input type="button" class="obj_tag" id="obj_tag_3" value="台湾"/>
+        <input type="button" class="obj_tag" id="obj_tag_4" value="大陆"/>
+        <input type="button" class="obj_tag" id="obj_tag_5" value="欧美"/>
+        <input type="button" class="obj_tag" id="obj_tag_6" value="音乐"/>
+      </div>
+    </script>
+
 
 
 

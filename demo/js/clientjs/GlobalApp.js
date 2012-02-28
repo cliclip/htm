@@ -39,8 +39,6 @@
       //var popUpWidget=this.popUp({width:500,height:200},GApp.registerWidget);
       this.popUp({width:500,height:200},GApp.registerWidget);
     },
-
-
     commentCall:function(evt){
       if(!GApp.commentWidget){
 	GApp.commentWidget = new CommentWidget($("#contactArea"));
