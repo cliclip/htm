@@ -8,7 +8,7 @@ ClipPreview = Backbone.Model.extend({
     name:"",
     content:{
       text:"",//text:String
-      image:"",//image:imgid || url
+      image:""//image:imgid || url
     },
 
 
@@ -38,5 +38,5 @@ ClipPreview = Backbone.Model.extend({
   parse : function(resp, xhr) {
     console.info(resp);
     return resp;
-  },
+  }
 });
