@@ -43,7 +43,6 @@ UserEmailWidget = function(_container,options){
 	$("#back").bind("click",function(evt){
 	  view.close();
 	});
-
 	$("#addEmail").bind("click",function(evt){
 	  $("#addEmailDiv").css("display","");
 	  if($("#addEmailDiv")){
