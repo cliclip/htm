@@ -33,7 +33,7 @@ OrganizeWidget = function(_container,options){
 	console.dir(this.tag_list);
       }else if(color == "red"){
 	document.getElementById(id).style.backgroundColor="";
-	this.tag_list.pop($("#"+id).val());
+	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	console.dir(this.tag_list);
       }
     },

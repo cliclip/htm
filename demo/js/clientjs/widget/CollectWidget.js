@@ -31,7 +31,7 @@ CollectWidget = function(_container,options){
 	this.tag_list.push($("#"+id).val());
       }else if(color == "red"){
 	document.getElementById(id).style.backgroundColor="";
-	this.tag_list.pop($("#"+id).val());
+	this.tag_list = _.without(this.tag_list,$("#"+id).val());
       }
     },
 

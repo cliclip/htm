@@ -38,14 +38,17 @@ CommentWidget = function(_container,options){
 
     subtagAction:function(evt){
       var id = evt.target.id;
+      console.log(id);
       var color = document.getElementById(id).style.backgroundColor;
       if(!color){
 	document.getElementById(id).style.backgroundColor="red";
+	console.log($("#"+id).val());
 	this.tag_list.push($("#"+id).val());
 	console.dir(this.tag_list);
       }else if(color == "red"){
 	document.getElementById(id).style.backgroundColor="";
-	this.tag_list.pop($("#"+id).val());
+	console.log($("#"+id).val());
+	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	console.dir(this.tag_list);
       }
     },
