@@ -30,7 +30,7 @@ function _loadClientScript(){
   _Loadscript("clientjs/Messages.js") ;
   _Loadscript("clientjs/RequestUtil.js") ;
   _Loadscript("clientjs/ToolUtil.js") ;
-  _Loadscript("clientjs/EventHandler.js") ;
+  _Loadscript("clientjs/EventsHandler.js") ;
   _Loadscript("clientjs/clipper_tag.js");
 
 
@@ -40,7 +40,7 @@ function _loadClientScript(){
   _Loadscript("clientjs/model/MetaList.js") ;
   _Loadscript("clientjs/model/ClipPreview.js") ;
   _Loadscript("clientjs/model/PreviewList.js") ;
-  _Loadscript("clientjs/model/EmailList.js") ;
+//  _Loadscript("clientjs/model/EmailList.js") ;
   _Loadscript("clientjs/model/ClipDetail.js") ;
   _Loadscript("clientjs/model/FriendInfo.js") ;
 
