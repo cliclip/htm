@@ -8,16 +8,6 @@
   var _view = Backbone.View.extend({
     el:$(_container),
     initialize:function(){
-/*
-      if(!GApp.clipWidget){
-	GApp.clipWidget = new ClipWidget($("#contentWrapper"));
-	GApp.addChild(GApp.clipWidget);
-      }
-*/
-      if(!GApp.recomWidget){
-	GApp.recomWidget = new RecomWidget($("#contentWrapper"));
-	GApp.addChild(GApp.recomWidget);
-      }
       //GlobalEvent = new GlobalEvent();
       /*
        if(GApp.children && GApp.children.length > 0){
@@ -26,7 +16,6 @@
          }
        }
       */
-
     },
     render:function(){
     },
@@ -58,6 +47,7 @@
       //var popUpWidget=this.popUp({width:500,height:200},GApp.registerWidget);
       this.popUp({width:500,height:200},GApp.registerWidget);
     },
+
     commentCall:function(evt){
       if(!GApp.commentWidget){
 	GApp.commentWidget = new CommentWidget($("#contactArea"));
@@ -280,10 +270,15 @@
       this.sortMetaWidget = new SortMetaWidget($("#sort-container"));
       this.addChild(this.sortMetaWidget);
     }
+/*    if(!this.recomWidget){
+      this.recomWidget = new RecomWidget($("#contentWrapper"));
+      this.addChild(GApp.recomWidget);
+    }
     if(!this.clipWidget){
       this.clipWidget = new ClipWidget($("#contentWrapper"));
       this.addChild(this.clipWidget);
     }
+*/
     if(!this.clipDetailWidget){
       this.clipDetailWidget = new ClipDetailWidget();
       this.addChild(this.clipDetailWidget);
@@ -325,13 +320,21 @@
     location.href="";
     //this.terminalize();
   },this);
-
 };
 
 GlobalApp.prototype.initialize = function(){
   if(!this.view)
     return;
   this.view.initialize();
+}
+
+GlobalApp.prototype.terminalize = function(){
+  if(this.children)
+    while(this.children.length>0){
+      leng = this.children.length;
+      this.children[leng-1].terminalize();
+    }
+  this.children = new Array();
 }
 
 GlobalApp.prototype.render = function(){

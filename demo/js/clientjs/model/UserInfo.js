@@ -74,6 +74,7 @@ UserInfo = function(_url,options){
 	}
      });
     },
+
     recommentAction:function(params,options){
       this.save(params,{
 	success:function(model,response){
@@ -97,28 +98,36 @@ UserInfo = function(_url,options){
 	}
       });
     },
+
     collectAction:function(params,options){
       this.save(params,{
-        success:function(model,response){
-          if(response[0] == 0){
-            console.log("collect ok");
-            GlobalEvent.trigger(client.EVENTS.USER_REFRESH);
-            if(options.viewCallBack){
-              options.viewCallBack(0,"收藏成功~");
-            }
-          }else{
-            var mcode = response[1];
-            if(options.viewCallBack){
-              options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
-            }
-          }
-        },
-        error:function(model,response){
-          var mcode = response;
-          if(options.viewCallBack){
-            options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
-          }
-        }
+	success:function(model,response){
+	  if(response[0] == 0){
+	    console.log("collect ok");
+	   /* client.GLOBAL_CACHE["userInfo"] = {
+	      name:params.name,
+	      pass:params.pass
+	    };*/
+	    //client.GLOBAL_CACHE["token"] = response[1];
+	    // refresh the user status
+	    //GlobalEvent.trigger(client.EVENTS.USER_REFRESH);
+
+	    if(options.viewCallBack){
+	      options.viewCallBack(0,client.MESSAGES["collect_success"]);
+	    }
+	  }else{
+	    var mcode = response[1];
+	    if(options.viewCallBack){
+	      options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+	    }
+	  }
+	},
+	error:function(model,response){
+	  var mcode = response;
+	  if(options.viewCallBack){
+	    options.viewCallBack(1,client.MESSAGES.getErrorMessage(mcode));
+	  }
+	}
      });
     }
   });
@@ -136,4 +145,3 @@ UserInfo.prototype.collectAction = function(params,options){
 UserInfo.prototype.recommentAction = function(params,options){
   this.model.recommentAction(params,options);
 };
-

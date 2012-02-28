@@ -1,4 +1,5 @@
-﻿var scriptPath = null ;
+﻿//<![CDATA[
+var scriptPath = null ;
 var nodes = document.getElementsByTagName("script") ;
 for(var i=0; i<nodes.length; i++){
   var node = nodes[i] ;
@@ -31,6 +32,7 @@ function _loadClientScript(){
   _Loadscript("clientjs/RequestUtil.js") ;
   _Loadscript("clientjs/ToolUtil.js") ;
   _Loadscript("clientjs/EventsHandler.js") ;
+
   _Loadscript("clientjs/clipper_tag.js");
 
   _Loadscript("clientjs/model/ClipInfo.js") ;
@@ -39,7 +41,7 @@ function _loadClientScript(){
   _Loadscript("clientjs/model/MetaList.js") ;
   _Loadscript("clientjs/model/ClipPreview.js") ;
   _Loadscript("clientjs/model/PreviewList.js") ;
-//  _Loadscript("clientjs/model/EmailList.js") ;
+  _Loadscript("clientjs/model/EmailList.js") ;
   _Loadscript("clientjs/model/ClipDetail.js") ;
   _Loadscript("clientjs/model/Comment.js") ;
   _Loadscript("clientjs/model/FriendInfo.js") ;
@@ -50,7 +52,6 @@ function _loadClientScript(){
   _Loadscript("clientjs/widget/PopUpWidget.js") ;
   _Loadscript("clientjs/widget/RegisterWidget.js") ;
   _Loadscript("clientjs/widget/LoginWidget.js") ;
-
   _Loadscript("clientjs/widget/CommentWidget.js") ;
   _Loadscript("clientjs/widget/CommShowWidget.js") ;
   _Loadscript("clientjs/widget/DeleteWidget.js") ;
@@ -67,7 +68,6 @@ function _loadClientScript(){
   _Loadscript("clientjs/widget/ClipAddWidget.js") ;
   _Loadscript("clientjs/widget/FriendWidget.js") ;
   _Loadscript("clientjs/widget/RecomWidget.js") ;
-
   _Loadscript("clientjs/widget/RecommentWidget.js") ;
   _Loadscript("clientjs/widget/OrganizeWidget.js") ;
 

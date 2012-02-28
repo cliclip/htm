@@ -45,7 +45,7 @@ CollectWidget = function(_container,options){
 	  if($("#tag").val()==""){
 	    $("#tag").val($("#"+id).val());
 	  }else{
-	    $("#tag").val($("#tag").val()+","+$("#"+id).val());
+	    $("#tag").val(_.union($("#tag").val().split(","),$("#"+id).val()));
 	  }
 	}
       });

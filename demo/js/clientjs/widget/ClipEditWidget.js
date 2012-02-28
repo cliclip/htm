@@ -89,6 +89,7 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
       contentText.empty();
 
       var textarea = $(document.createElement("textarea"));
+      // console.info(text);
       textarea.val(text);
       textarea.width(w);
       textarea.height(h);
@@ -96,6 +97,7 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
       textarea.focus();
 
       textarea.blur(function(evt){
+	// console.info(text);
 	var text = textarea.val().replace(/(^\s*)|(\s*$)/g,"");
 	textarea.remove();
 	contentText.text(text);

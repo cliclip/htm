@@ -41,6 +41,7 @@
 LoginWidget.prototype.initialize = function(){
   this.view.initialize();
 }
+
 LoginWidget.prototype.terminalize = function(){
   this.view.el.empty();
   this.parentApp.removeChild(this);
