@@ -1,0 +1,381 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <script language="javascript" src="js/clientjs.js"></script>
+    <script language="javascript">
+      $(document).ready(function(){
+        //$("[id$='-container']").corner();
+        //$("[class$='-container']").corner();
+        var globalApp = new GlobalApp($("body"));
+      });
+      function callback(result){
+        console.info(result);
+        console.info("index.html : "+actionUrl);
+        if(result[0] == 0){
+         var imgid = result[1];
+         console.info(result[1]);
+         var imgUrl = actionUrl + "/" +result[1];
+         var img = $("<img class='detail-image' src= "+url+">");
+         //uploadTemplate.remove();
+         //contentContainer.append(img);
+       }
+      };
+    </script>
+  </head>
+  <body>
+  <div id="header">
+    <div class="relative">
+      <a id="logo-holder" href="#/home">
+	<font size=6 color="#ffffff">CLICKDANG</font>
+      </a>
+      <ul id="nav">
+	<li class="left"></li>
+	<li><a id="register_button">注册</a></li>
+	<li><a id="login_button">登录</a></li>
+	<li class="right"></li>
+      </ul>
+      <ul id="rightNavDefault" class="rightNav"></ul>
+
+<!-- template** -->
+     <script type="text/template" id="register_template">
+	<div>
+	  <label>用户名:</label><input type="text" id="username_r" size="12"/><span class="action-info name"></span><br>
+	  <label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_r" size="12"/><span class="action-info pass"></span><br>
+	  <input type="button" value="注册" id="registerAction_button"/>
+	</div>
+      </script>
+
+      <script type="text/template" id="login_template">
+	<div>
+	  <label>用户名:</label><input type="text" id="username_l" size="12"/><span class="action-info name"></span><br>
+	  <label>密&nbsp;&nbsp;&nbsp;码:</label><input type="password" id="password_l" size="12"/><span class="action-info pass"></span><br>
+	  <input type="button" value="登录" id="loginAction_button" />
+	  <span class="action-info"></span>
+	</div>
+      </script>
+
+      <script type="text/template" id="userUnit_template">
+	<li id="user-menu">
+	  <a class="top" href="#/personal/info">
+	    <div class="label">
+	      <span class="login">
+		<%= name %>
+	      </span>
+	    </div>
+	    <div class="notifyEmpty" id="notifyControl">
+	      <div id="notifyWedge"></div>
+	      <span id="notifyCount"></span>
+	    </div>
+	  </a>
+	  <ul class="menu">
+	    <li>
+	      <a id="updatePwd_button">更改密码</a>
+	    </li>
+	    <li>
+	      <a id="listEmail_button">列表email地址</a>
+	    </li>
+	    <li>
+	      <a id="emailRule_button">设置邮件规则</a>
+	    </li>
+	    <li>
+	      <a id="logout_button">注销</a>
+	    </li>
+	  </ul>
+	</li>
+      </script>
+      
+      <script type="text/template" id="updatePwd_template">
+	<div>
+	  <label>原密码:</label><input type="password" id="o_password" size="12"/><span class="action-info oldpass"></span><br>
+	  <label>新密码:</label><input type="password" id="n_password" size="12"/><span class="action-info pass"></span><br>
+	  <label>新密码:</label><input type="password" id="re_password" size="12"/><span class="action-info repass"></span><br>
+	  <input type="button" value="确认更改密码" id="updatePwdAction_button" />
+	  <span class="action-info"></span>
+	</div>
+      </script>
+
+      <div id="popUp-container">
+	<div id="popupContact">  
+	  <a id="popupContactClose">X</a>   
+	  <div id="contactArea"></div>  
+	</div>  
+	<div id="backgroundPopup"></div>
+      </div>
+    </div>
+
+    <div id="search-container">
+      <div id="search">
+	<img id="magnify" src="../img/search-icon1.png">
+	<input id="keyword" placeholder="关键字..." type="text" value class>
+      </div>
+    </div>
+
+  </div>
+  
+  	
+  <script type="text/template" id="sort_template">
+   <div class="sort-group">
+     <% for(var i=0;i<content.length;i++){%>
+       <a href="<%= url[i] %>"><div class="radioButtonContainer radioButton sortItem"><%= content[i] %></div></a>
+     <% }%>
+   </div>
+   <!-- /div -->
+  </script>
+
+  <div id="sort-container">
+    <div class="sort-group">
+      <a href='#/clip/all/p1'><div class='radioButtonContainer radioButton sortItem'>全部</div></a>
+      <a href='#/clip/add'><div class='radioButtonContainer radioButton sortItem'>创建信息</div></a>
+    </div>
+    <div class="sort-content"></div>
+    <div id="upButton" class="upButton lazy"><img style="width:50px;height:50px" src="../img/up-arrow.png"></div>
+    <div id="downButton" class="downButton lazy"><img style="width:50px;height:50px" src="../img/down-arrow.png"></div>
+  </div>
+
+  <script type="text/template" id="clipPreview_template">
+    <div id="container_<%=id%>" >
+      <div class="preview-item">
+	<div class="preview-info">
+	  <span class="info-text">本条信息</span>
+	  <%if(city && city != ""){%>
+	  <span class="into-text">在城市</span>
+	  <span class="info-city"><a href="#/clip/city/<%= city %>/p1"><%= city %></a></span>
+	  <%}%>
+	  <%if(device && device != ""){%>
+	  <span class="info-text">使用设备</span>
+	  <span class="info-device">
+	    <a href="#/clip/device/<%= device%>/p1"><%= device%></a>
+	  </span>
+	  <%}%>
+	  <span class="info-text">搜集</span>
+	  <a title="详细" class="detailButton controlSprite" href="#/detail/<%= id %>"></a>
+	</div>
+	<div class="content-container">
+	  <%if(content.image) {%>
+	  <div class="preview-image left">
+	    <img src="<%= content.image %>">
+	  </div>
+	  <% } %>
+	  <%if(content.text){%>
+	  <p class="preview-text">
+	    <%= content.text %>
+	  </p>
+	  <%}%>
+	</div>
+	<div class="preview-note notesWrapA">
+	  <img class="notewedge" src="../img/notewedge.png">
+	  <%if(note.text && note.text != " "){%>
+	  <p class="note-text">
+	    备注：<%= note.text %>
+	  </p>
+	  <%}%>
+	  <%if(note.sound){%>
+	  语音备注：
+	<audio src="" controls="controls" preload="load">
+	    您的浏览器不支持 audio 标签。
+	  </audio>
+	  <%}%>
+	</div>
+      </div>
+    </div>
+  </script>
+
+  <div id="page-home">
+    <div id="contentWrapper"></div>
+    <script type="text/template" id="imgUpload_template">
+      <div class="imgUploadDiv">
+	<form name="imgForm" method="post" action="<%= actUrl%>" target="post_frame" enctype="multipart/form-data"> 
+	  <iframe name='post_frame' id="post_frame" style="display:none;" mce_style="display:none;"></iframe> 
+	  <input type="file" id="file" name="image" /> 
+	  <input type="submit" value="上传图片" name="submit" /> 
+	</form>
+      </div>
+    </script>
+
+    <script type="text/template" id="detail_template">
+     <div class="detail-container">
+      <a title="返回" class="detailBackButton controlSprite" href="#/detailback/<%= id%>" id="detailBack"></a>&nbsp;&nbsp;
+      <a title="删除" href="#/clip/delete/<%= id%>" id="detailDelete">删除</a>&nbsp;&nbsp;
+      <a title="编辑" href="javascript:void(0)" id="detailEdit">编辑</a>&nbsp;&nbsp;
+      <span id = "manipulation" style="display:none">
+       <br>
+	<a title="插入文字" href="javascript:void(0)" id="insText">插入文字</a>&nbsp;&nbsp;
+	<a title="插入外部图片" href="javascript:void(0)" id="exImg">插入外部图片</a>&nbsp;&nbsp;
+	<a title="插入本地图片" href="javascript:void(0)" id="localImg">插入本地图片</a>&nbsp;&nbsp;
+	<a title="保存" href="javascript:void(0)" id="detaiSave">保存</a>&nbsp;&nbsp;
+	<a title="放弃" href="javascript:void(0)" id="detailAbandon">放弃</a>&nbsp;&nbsp;
+	<div id="imgUploadDiv"></div>
+      </span>	
+      <div class="content-container">
+       <%
+	  for(var i=0;i<content.length;i++){
+	     if(content[i].text){
+       %>
+	  <p class="detail-text">
+	    <%= content[i].text %>
+	  </p>
+	    <%
+	      }else if(content[i].image){
+	    %>
+	    <!--<div class="detail-image">-->
+	    <img class="detail-image" src="<%= content[i].image %>">
+	    <!--</div>-->
+	    <%
+	       }
+	     }
+	    %>
+      </div>
+      <div class="notesWrapA">
+	<img class="notewedge" src="../img/notewedge.png">
+	<div class="detail-note">
+	  <%
+	     for(var i=0;i<note.length;i++){
+	       if(note[i].text&& note.text != " "){
+	  %>
+	     备注：
+	     <span class="note-text">
+	       <%= note[i].text %>
+	     </span>
+	  <%}else if(note[i].sound){%>
+	     语音备注：
+	  <audio src="<%= note[i].sound%>" controls="controls" preload="load">
+	    您的浏览器不支持 audio 标签。
+	  </audio>
+	  <%}
+	     }
+	     if(note.length == 0){
+	   %>
+	  备注：
+	  <span class="note-text"></span>
+	  <%}%>
+	</div>
+	<div class="detail-reason">
+	  原因：
+	  <span class="reasonText">
+	    <%
+	       for(var i=0;i<reason.length;i++){
+	    %>
+		 <!--<span class="reason-text"><a href="#/clip/reason/<%= reason[i] %>/p1" ><%= reason[i] %></a></span>&nbsp;&nbsp;-->
+		 <span class="reason-text"><%= reason[i] %></span>
+	     <%}
+              %>
+	  </span>
+	</div>
+	<div class="detail-purpose">
+	    目的：
+	    <span class="purposeText">
+	     <%
+		 for(var i=0;i<purpose.length;i++){
+	     %>
+		 <!--<span class="purpose-text"><a href="#/clip/purpose/<%= purpose[i] %>/p1" ><%= purpose[i] %></a></span>&nbsp;&nbsp;-->
+		 <span class="purpose-text"><%= purpose[i] %></span>
+	      <%}
+	      %>
+	    </span>
+	</div>
+	<div class="detail-device">
+	    设备：<span class="device-text"><%= device%></span>
+	    <!--<span class="device-text"><a href="#/clip/device/<%= device %>/p1" ><%= device%></a></span>-->
+	</div>
+	<div class="detail-city">
+	    城市：<span class="city-text"><%= city %></span>
+	    <!--<span class="city-text"><a href="#/clip/city/<%= city %>/p1" ><%= city %></a></span>-->
+	</div>
+	<div class="detail-time">
+	    时间：<%= pastTime%>	
+	</div>
+	<div class="detail-ip"></div>				
+      </div>
+  				
+      </div>
+    </script>
+
+    <script type="text/template" id="EmailRule_template">
+      <div class="email-rule">
+	<div id="setEmailRuleDiv"></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="setEmailRule_template">
+      <div id="setEmailRule-form">
+	<p class="detail-text">邮件识别</p>
+	<form id="form2" action ="<%= actUrl%>">
+	  <input type="checkbox" name="enable_rule" checked="<%=rule.sign%>">打开邮件识别<br/>
+	 标题必须有：<input type="text" name="rule_title" id="ruleTitle" value="<%=rule.title%>"/><br/>
+	 必须发给：<input type="text" name="rule_to" id="ruleTo" value="<%=rule.to.join(';')%>"/><br/>
+	 必须抄送：<input type="text" name="rule_cc" id="ruleCc" value="<%=rule.cc.join(';')%>"/><br/>
+          <input type="button" value="更新邮件规则" id="confirm"/>
+	</form>
+      </div>
+    </script> 
+
+    <script type="text/template" id="Listemail_template">
+      <div class="email-listCont">
+	邮件列表:
+	<a title="添加email地址" href="javascript:void(0)" id="addEmail">新增email </a>&nbsp;&nbsp;
+      <br/>
+        <%
+	 for(var i=0;i<emails.length;i++){
+        %>
+	<div id="email<%=i%>">
+	  <span class="email-text">
+	    <%= emails[i]%>
+	    <a title="删除email地址" href="#/my/email/<%= emails[i]+i%>" id="delEmail" name="<%= emails[i]%>">删除该email地址</a>&nbsp;&nbsp
+	  </span>
+	</div>
+         </br>
+	<%
+	  }
+	%>
+	<a href="javascript:void(0)" id="back">返回</a>
+	<div id="addEmailDiv"></div>
+      </div>
+    </script>
+
+  <script type="text/template" id="addEmail_template">
+    <div id="addEmail-form">
+      <hr>
+      <p class='detail-text'>email add</p>
+      <form id="form1" action ="<%= actUrl%>">
+	<input type="text" name="newEmail" id="newEmail"/><br<br>
+	<input type="button" value="确定" id="affirm"/>
+	<input type="button" value="取消" id="cancel"/>
+      </form>
+    </div>
+  </script> 
+
+  <script type="text/template" id="addClip_template">
+    <div class="addClip-container">
+      <a title="插入文字" href="javascript:void(0)" id="insText">插入文字</a>&nbsp;&nbsp;
+      <a title="插入外部图片" href="javascript:void(0)" id="exImg">插入外部图片</a>&nbsp;&nbsp;
+      <a title="插入本地图片" href="javascript:void(0)" id="localImg">插入本地图片</a>&nbsp;&nbsp;
+      <a title="保存" href="javascript:void(0)" id="detaiSave">保存</a>&nbsp;&nbsp;
+      <a title="放弃" href="javascript:void(0)" id="detailAbandon">放弃</a>&nbsp;&nbsp;
+      <div id="imgUploadDiv"></div>
+      <div class="content-container contentEdit" contenteditable=true>
+	<p class="detail-text">
+	  新信息
+	</p>		
+      </div>
+      <div class="notesWrapA">
+	<img class="notewedge" src="../img/notewedge.png">
+	<div class="detail-note contentEdit">
+	  备注：
+	  <span class="note-text"></span>
+	</div>
+	<div class="detail-reason contentEdit">
+	  原因：
+	  <span class="reasonText"></span>
+	</div>
+	<div class="detail-purpose contentEdit">
+	  目的：
+	  <span class="purposeText"></span>
+	</div>				
+      </div>	
+    </div>
+  </script>
+  </div>
+
+  </body>
+</html>
