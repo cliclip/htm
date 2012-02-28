@@ -8,15 +8,9 @@
   var _view = Backbone.View.extend({
     el:$(_container),
     initialize:function(){
-/*
       if(!GApp.clipWidget){
 	GApp.clipWidget = new ClipWidget($("#contentWrapper"));
 	GApp.addChild(GApp.clipWidget);
-      }
-*/
-      if(!GApp.recomWidget){
-	GApp.recomWidget = new RecomWidget($("#contentWrapper"));
-	GApp.addChild(GApp.recomWidget);
       }
       //GlobalEvent = new GlobalEvent();
       /*
@@ -161,10 +155,15 @@
       this.sortMetaWidget = new SortMetaWidget($("#sort-container"));
       this.addChild(this.sortMetaWidget);
     }
+/*    if(!this.recomWidget){
+      this.recomWidget = new RecomWidget($("#contentWrapper"));
+      this.addChild(GApp.recomWidget);
+    }
     if(!this.clipWidget){
       this.clipWidget = new ClipWidget($("#contentWrapper"));
       this.addChild(this.clipWidget);
     }
+*/
     if(!this.clipDetailWidget){
       this.clipDetailWidget = new ClipDetailWidget();
       this.addChild(this.clipDetailWidget);
