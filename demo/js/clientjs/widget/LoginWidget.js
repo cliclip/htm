@@ -25,30 +25,28 @@
 	pass:password
       },{viewCallBack:function(status,infoText){
 	 if(status == 0){
-	   console.log("login ok");
 	   widget.el.html(infoText);
 	   GlobalEvent.trigger(client.EVENTS.POPUP_CLOSE);
-
 	 }else{
 	   widget.el.children().find("span.action-info.name").html(infoText.name ? infoText.name : "");
 	   widget.el.children().find("span.action-info.pass").html(infoText.pass ? infoText.pass : "");
-	   console.log("login fail");
 	 }
 	 }
 	}
       );
     }
-});
+  })
   this.view = new _view();
-};
+}
 LoginWidget.prototype.initialize = function(){
   this.view.initialize();
-};
+}
+
 LoginWidget.prototype.terminalize = function(){
   this.view.el.empty();
   this.parentApp.removeChild(this);
   this.parentApp.loginWidget = null;
-};
+}
 LoginWidget.prototype.render = function(){
   this.view.render();
-};
+}

@@ -11,13 +11,24 @@
 
  client.MESSAGES["password_diff"] = "密码输入不一致";
 
+
  client.MESSAGES["collect_success"] = "收藏成功";
+
+
+ client.MESSAGES["comment_success"] = "评论成功";
+
+ client.MESSAGES["recomment_success"] = "转发成功";
+
 
  client.MESSAGES["auth"] = client.MESSAGES["auth"] || {};
 
  client.MESSAGES["auth"]["not_exist"] = "用户不存在";
 
  client.MESSAGES["auth"]["not_match"] = "句柄不合法";
+
+
+client.MESSAGES["auth"]["not_login"] = "用户未登录";
+
 
 
  client.MESSAGES["name"] = client.MESSAGES["name"] || {};
@@ -44,10 +55,12 @@
 
  client.MESSAGES["oldpass"]["not_match"] = "原密码不匹配";
 
+ client.MESSAGES["recomment_success"]= "转发成功";
+ client.MESSAGES["clip_not_exist"] = "clip不存在";
 
  //get error message from the info of server response
  client.MESSAGES.getErrorMessage = function(errorCode){
-	for (key in errorCode)
-		errorCode[key] = client.MESSAGES[key][errorCode[key]] +"  ";
-	return errorCode;
+   for (key in errorCode)
+     errorCode[key] = client.MESSAGES[key][errorCode[key]] +"  ";
+     return errorCode;
  }

@@ -168,7 +168,7 @@ GlobalRouter = function(parentApp,options){
     //parentApp.client
   },
   addClip:function(){
-    parentApp.clipAddWidget.loadDetail();
+  //  parentApp.clipAddWidget.loadDetail();
   },
   queryByWord:function(keyword){
     var params = {

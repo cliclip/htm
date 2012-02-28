@@ -8,37 +8,25 @@
   var _view = Backbone.View.extend({
     el:$(_container),
     initialize:function(){
-      //GlobalEvent = new GlobalEvent();
-      /*
-       if(GApp.children && GApp.children.length > 0){
-         for(var i=0;i<GApp.children.length;i++){
-           GApp.children.initialize();
-         }
-       }
-      */
     },
     render:function(){
-      /*
-       if(GApp.children && GApp.children.length > 0){
-         for(var i=0;i<GApp.children.length;i++){
-           GApp.children.render();
-         }
-       }
-      */
     },
     events:{
-      "click #login_button":"loginCall",
       "click #register_button":"registerCall",
-      "click #collect_button":"collectCall",
-      "click #login_button":"loginCall"
+      "click #login_button":"loginCall",
       //"click #updatePwd_button":"updatePwdCall",
-      //"click #logout_button":"logoutCall"
+      //"click #logout_button":"logoutCall",
+      "click #comment_button":"commentCall",
+      "click #recomment_button":"recommentCall",
+      "click #collect_button":"collectCall",
+      "click #organize_button":"organizeCall",
+      "click #del_button":"deleteCall"
     },
+
     loginCall:function(evt){
       if(!GApp.loginWidget){
 	GApp.loginWidget = new LoginWidget($("#contactArea"));
 	GApp.addChild(GApp.loginWidget);
-	console.info(GApp.loginWidget);
       }
       //var popUpWidget = this.popUp({width:500,height:200},GApp.loginWidget);
       this.popUp({width:500,height:200},GApp.loginWidget);
@@ -47,18 +35,51 @@
       if(!GApp.registerWidget){
 	GApp.registerWidget = new RegisterWidget($("#contactArea"));
 	GApp.addChild(GApp.registerWidget);
-	console.info(GApp.registerWidget);
       }
       //var popUpWidget=this.popUp({width:500,height:200},GApp.registerWidget);
       this.popUp({width:500,height:200},GApp.registerWidget);
     },
+
+    commentCall:function(evt){
+      if(!GApp.commentWidget){
+	GApp.commentWidget = new CommentWidget($("#contactArea"));
+	GApp.addChild(GApp.commentWidget);
+      }
+      this.popUp({width:500,height:200},GApp.commentWidget);
+    },
+
+    deleteCall:function(evt){
+      if(!GApp.deleteWidget){
+	GApp.deleteWidget = new DeleteWidget($("#contactArea"));
+	GApp.addChild(GApp.deleteWidget);
+      }
+      this.popUp({width:200,height:200},GApp.deleteWidget);
+    },
+
     collectCall:function(evt){
       if(!GApp.collectWidget){
-	GApp.collectWidget = new CollectWidget($("#contactArea"));
-	GApp.addChild(GApp.collectWidget);
+        GApp.collectWidget = new CollectWidget($("#contactArea"));
+        GApp.addChild(GApp.collectWidget);
       }
-      this.popUp({width:500,height:200},GApp.collectWidget);
+      this.popUp({width:300,height:300},GApp.collectWidget);
     },
+
+    recommentCall:function(evt){
+      if(!GApp.recommentWidget){
+        GApp.recommentWidget = new RecommentWidget($("#contactArea"));
+        GApp.addChild(GApp.recommentWidget);
+      }
+      this.popUp({width:500,height:200},GApp.recommentWidget);
+    },
+
+    organizeCall:function(evt){
+      if(!GApp.organizeWidget){
+        GApp.organizeWidget = new OrganizeWidget($("#contactArea"));
+        GApp.addChild(GApp.organizeWidget);
+      }
+      this.popUp({width:300,height:300},GApp.organizeWidget);
+    },
+
     popUp:function(popUpOption,_widget){
       var _clientWidth = $(_container)[0].clientWidth;
       var _clientHeight = $(_container)[0].clientHeight;
@@ -209,6 +230,7 @@ GlobalApp.prototype.popUp = function(popUpOption,_widget){
     return;
   this.view.popUp(popUpOption,_widget);
 }
+
 GlobalApp.prototype.lazyLoad = function(url,page){
   if(!this.globalRouter)
     return;
