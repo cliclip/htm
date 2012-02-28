@@ -138,7 +138,6 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
 	    view.el.children().remove();
 	    $("#detailContact").children().remove();
 	    location.href = "#/detail/"+view.id;
-	    // location.href = location.href.substring(0,location.href.length-5);
 	  }else{
 	    console.info("response[0] == "+response[0]);
 	  }

@@ -83,7 +83,6 @@ ClipDetailWidget = function (_container,_options){
     update:function(){ //修改 [独立]
       // new 一个新的view
       // console.info(this.options.model);
-      console.info("update+++++");
       location.href = location.href + "/edit"; // 再次刷新会回到 超链接界面
       new ClipEditWidget($("#editContact"),this.options);
     },
