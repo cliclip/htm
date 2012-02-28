@@ -8,10 +8,6 @@
   var _view = Backbone.View.extend({
     el:$(_container),
     initialize:function(){
-      if(!GApp.clipWidget){
-	GApp.clipWidget = new ClipWidget($("#contentWrapper"));
-	GApp.addChild(GApp.clipWidget);
-      }
       //GlobalEvent = new GlobalEvent();
       /*
        if(GApp.children && GApp.children.length > 0){
@@ -20,7 +16,6 @@
          }
        }
       */
-
     },
     render:function(){
     },
