@@ -1,0 +1,43 @@
+!!! 5
+html
+
+  head
+
+    title Ball Pool
+
+    meta(http-equiv='Content-Type',content='text/html; charset=utf-8')
+    meta(http-equiv="X-UA-Compatible",content="chrome=1")
+    meta(name="viewport",content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0")
+
+    //- pack :: script(src="/js/libs.js")
+    script(src="/js/lib/jquery.js")
+    script(src="/js/lib/underscore.js")
+    script(src="/js/lib/backbone.js")
+
+    //- pack :: script(src="/js/bub.js")
+    script(src="/js/lib/protoclass.js")
+    script(src="/js/lib/box2d.js")
+    script(src="/js/bub.js")
+
+    link(href="/css/bub.css",rel="stylesheet")
+
+  body
+
+    #bubbles
+
+    script(type="text/template",id="ball-template")
+      <div style="height:<%=size%>px;width:<%=size%>px;" class="s<%=size%>">
+      <span style="line-height:<%=size%>px;"><a href="#" class="tag<% if(current) { %> iscurrent<% } %><% if(follow) { %> isfollow<% } %>"><%= text %></a></span>
+      </div>
+
+    script(type="text/template",id="ball-shadow-template")
+      <div class="shadow s<%=size+60%>" style="left:-30px;top:-30px;height:<%=size+60%>px; width:<%=size+60%>px; line-height:<%= size * 2 + 90 %>px">
+      <span>
+      <% if (follow) {%>
+      <a href="#" class="unfollow">停</a>
+      <% } else { %>
+      <a href="#" class="follow">追</a>
+      <% } %>
+      <a href="#" class="reclip">转</a>
+      </span>
+      </div>

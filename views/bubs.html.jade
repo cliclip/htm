@@ -1,0 +1,58 @@
+!!! 5
+html
+
+  head
+    title Ball Pool
+    meta(http-equiv='Content-Type',content='text/html; charset=utf-8')
+    meta(http-equiv="X-UA-Compatible",content="chrome=1")
+    meta(name="viewport",content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0")
+
+    //- pack :: script(src="/js/libs.js")
+    script(src="/js/lib/jquery.js")
+    script(src="/js/lib/underscore.js")
+    script(src="/js/lib/backbone.js")
+
+    script(type="text/javascript")
+      $(function(){
+      var bubbles = {};
+      _.extend(bubbles, Backbone.Events);
+      bubbles.on("reset", function(options){
+        var bw = document.getElementById('bubbles').contentDocument.defaultView;
+        if(bw.reset){
+          bw.reset(options);
+        } else { // waiting for bubble iframe load
+          setTimeout(function(){ bubbles.trigger("reset", options); }, 100);
+        }
+      });
+      bubbles.on("open", function(tag){
+        console.log("open %s", tag);
+      });
+      bubbles.on("follow", function(tag){
+        console.log("follow %s", tag);
+      });
+      bubbles.on("unfollow", function(tag){
+        console.log("unfollow %s", tag);
+      });
+      bubbles.on("reclip", function(tag){
+        console.log("reclip %s", tag);
+      });
+      window.bubbles = bubbles;
+      // setTimeout(function(){ bubbles.trigger("reset", {}); }, 100);
+      bubbles.trigger("reset", {
+        tag: "美女",
+        tags: ["好玩", "好听", "好看", "好吃", "不喜欢", "电影", "音乐", "动漫", "美女", "科技", "穿越", "户外", "流行"],
+        followings: ["动漫", "科技"],
+        floats: ["全部", "不喜欢"],
+        bigs: ["好玩", "好听", "好看", "好吃"]
+      });
+      });
+
+    style
+      #bubbles {
+        width: 240px;
+        height: 360px;
+        border: 1px solid #eee;
+      }
+
+  body
+    iframe(id="bubbles",src="bub.html")

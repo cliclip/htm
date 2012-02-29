@@ -1,0 +1,7 @@
+
+//- libs
+!= code("views/js/lib/protoclass.js")
+!= code("views/js/lib/box2d.js")
+
+//- app
+!= code("views/js/bub.js")
