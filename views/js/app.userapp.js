@@ -37,9 +37,7 @@ App.UserApp = (function(App, Backbone, $){
       id: uid
     });
     user.fetch();
-    user.onChange(function(userModel){
-      App.vent.trigger("user:show", userModel);
-    });
+    user.onChange(showUser);
   };
 
   App.vent.bind("user:show", function(userModel){
@@ -48,4 +46,3 @@ App.UserApp = (function(App, Backbone, $){
 
   return UserApp;
 })(App, Backbone, jQuery);
-
