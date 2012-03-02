@@ -57,6 +57,20 @@ App.Collection = Backbone.Collection.extend({
   },
   runOnResetCallbacks: function(){
     this.onResetCallbacks.run(this, this);
+  },
+  sync: function(method, model, options){
+    var success = options.success;
+    var error = options.error;
+    options.success = function(resp, status, xhr){
+      if(resp[0] == 0){
+	console.log("collection.sync success:");console.dir(resp[1]);
+	if(success) success.apply(model, [resp[1], status, xhr]);
+      } else {
+	console.log("collection.sync error:");console.dir(resp[1]);
+	if(error) error.apply(model, [resp[1], status, xhr]);
+      }
+    };
+    Backbone.sync.apply(Backbone, [method, model, options]);
   }
 });
 
