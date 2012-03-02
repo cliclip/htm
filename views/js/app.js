@@ -3,6 +3,7 @@
 App = new Backbone.Marionette.Application();
 
 App.addRegions({
+  mainRegion: "#main",
   mineRegion: "#mine",
   faceRegion: "#face",
   bubbRegion: "#bubb",
@@ -23,6 +24,7 @@ App.Model = Backbone.Model.extend({
     this.on("change", this.runOnChangeCallbacks, this);
   },
   onChange: function(callback){
+    // console.info(callback);
     this.onChangeCallbacks.add(callback);
   },
   runOnChangeCallbacks: function(){
@@ -33,10 +35,10 @@ App.Model = Backbone.Model.extend({
     var error = options.error;
     options.success = function(resp, status, xhr){
       if(resp[0] == 0){
-	// console.log("sync success:");console.dir(resp[1]);
+	// console.info("sync success:");console.info(resp[1]);
 	if(success) success.apply(model, [resp[1], status, xhr]);
       } else {
-	// console.log("sync error:");console.dir(resp[1]);
+	// console.info("sync error:");console.info(resp[1]);
 	if(error) error.apply(model, [resp[1], status, xhr]);
       }
     };

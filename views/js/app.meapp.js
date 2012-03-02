@@ -1,10 +1,12 @@
 // app.meapp.js
-
+var P = "/_2_";
+var token = "1:aaaa";
 App.MeApp = (function(App, Backbone, $){
   var MeApp = {};
 
   var MeModel = App.Model.extend({
-    url : "/test/me.json"
+    // url : "/test/me.json"
+    url : P+"/user/"+token.split(":")[0]
   });
 
   var MeView = App.ItemView.extend({
