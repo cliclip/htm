@@ -5,6 +5,7 @@ App.UserApp = (function(App, Backbone, $){
 
   var UserModel = App.Model.extend({
     url: function(){
+      console.info(this);
       return "/test/user-"+this.id+".json";
     }
   });
@@ -33,6 +34,7 @@ App.UserApp = (function(App, Backbone, $){
   };
 
   UserApp.show = function(uid){
+    console.info("UserApp.show!!!!!!!!!");
     var user = new UserModel({
       id: uid
     });

@@ -10,6 +10,7 @@ App.addRegions({
 });
 
 App.bind("initialize:after", function(){
+  console.info("initialize:after");
   if(Backbone.history){
     Backbone.history.start();
   }
@@ -33,10 +34,10 @@ App.Model = Backbone.Model.extend({
     var error = options.error;
     options.success = function(resp, status, xhr){
       if(resp[0] == 0){
-	// console.log("sync success:");console.dir(resp[1]);
+	console.info("sync success:");console.dir(resp[1]);
 	if(success) success.apply(model, [resp[1], status, xhr]);
       } else {
-	// console.log("sync error:");console.dir(resp[1]);
+	console.log("sync error:");console.dir(resp[1]);
 	if(error) error.apply(model, [resp[1], status, xhr]);
       }
     };
@@ -81,7 +82,7 @@ App.Routing = (function(App, Backbone){
 	}
       }
     }
-    return "/"+route;
+    return route;
   }
   return Routing;
 })(App, Backbone);

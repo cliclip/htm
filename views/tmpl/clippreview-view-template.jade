@@ -1,0 +1,39 @@
+script(type='text/template', id='clippreview-view-template')
+  div#container_<%=id%>
+    div.preview-item
+      div.preview-info
+        span.info-test
+          | 本条信息
+          | <% if (city && city != ""){%>
+        span.info-text
+          | 在城市
+        span.info-city
+          a(href="#/clip/city/<%=city%>/p1")
+            | <%=city%>
+        | <% } %>
+        | <% if (device && device != ""){%>
+        span.info-text
+          | 使用设备
+        span.info-device
+          a(href="#/clip/device/<%=device%>/p1")  
+        | <% } %>
+        span.info-test
+          | 搜集
+        a.detailButton controlSprite(title="详细" href="#/detail/<%=id%>")     
+        div.content-container
+          | <% if(content.image) {%>
+          div.preview-image left
+            img(src="<%=content.image%>")
+          | <% } %>
+          | <% if(content.text){ %>
+          p.preview-text
+            | <%= content.text %>
+          | <% } %>
+          div.preview-note notesWrapA
+            | <% if (note.text && note.text != " "){%>
+            p.note-text
+              | 备注：<%= note.text %>
+            | <% } %>
+          div.count
+            转摘(<%= reprint_count %>)回复(<%= reply_count %>)
+
