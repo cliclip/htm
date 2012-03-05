@@ -6,8 +6,11 @@ App.addRegions({
   mineRegion: "#mine",
   faceRegion: "#face",
   bubbRegion: "#bubb",
-  listRegion: "#list"
+  listRegion: "#list",
+  popRegion: "#pop"
 });
+
+
 
 App.bind("initialize:after", function(){
   if(Backbone.history){
