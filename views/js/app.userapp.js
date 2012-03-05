@@ -21,6 +21,12 @@ App.UserApp = (function(App, Backbone, $){
     template: "#userbubb-view-template"
   });
 
+  var UserListView = App.ItemView.extend({
+    tagName: "div",
+    className: "userlist-view",
+    template: "#userlist-view-template"
+  });
+
   var showUser = function(userModel){
     var userFaceView = new UserFaceView({
       model: userModel
@@ -28,8 +34,14 @@ App.UserApp = (function(App, Backbone, $){
     var userBubbView = new UserBubbView({
       model: userModel
     });
+
+    var userListView = new UserListView({
+      model: userModel
+    });
+
     App.faceRegion.show(userFaceView);
     App.bubbRegion.show(userBubbView);
+    App.listRegion.show(userListView);
   };
 
   UserApp.show = function(uid){
