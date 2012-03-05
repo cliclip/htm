@@ -2,31 +2,11 @@
 var P = '/_2_/';
 App.ClipPreviewApp = (function(App, Backbone, $){
   var ClipPreviewApp = {};
-  var ClipPreviewModel = App.Model.extend({
-    defaults:{
-      id:"",
-      name:"",
-      content:{
-	text:"",//text:String
-	image:""//image:imgid || url
-      },
-      note:{
-	text:"",//{text:string}
-	sound:""//{sound:sndid}
-      },
-      device:"",
-      city:"",
-      source:{
-	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
-      }
-    },
-    validate:function(){},
-    initialize:function(){},
-    parse : function(resp, xhr) {
-    //console.info(resp);
-    return resp;
-    }
-  });
+  var ClipPreviewModel = App.Model.extend({});
+  var start = 0;
+  var end = 9;
+  var id = null;
+  var collection = null;
   PreviewList = App.Collection.extend({
     model : ClipPreviewModel
   });
@@ -37,22 +17,36 @@ App.ClipPreviewApp = (function(App, Backbone, $){
   var PreviewListView = App.CollectionView.extend({
     tagName: "div",
     className: "clippreview-item",
-    itermView: ClipPreviewView
+    itemView: ClipPreviewView,
+    initialize: function(){
+      var view = this;
+      $(document).scroll(function(evt){
+	var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
+	if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
+	  start = start +10;
+	  end = end + 10;
+	  collection.url = P + "user/" + id + "/clip/" + start + ".." + end;
+	  collection.fetch({add: true});
+	}
+      });
+    }
   });
   var showClipPreview = function(previewlist){
-    var clipPreviewView = new ClipPreviewView({
+    console.info(previewlist.toJSON());
+    var previewView = new PreviewListView({
       collection: previewlist
     });
-
-    App.listRegion.show(clipPreviewView);
+    App.listRegion.show(previewView);
   };
 
   ClipPreviewApp.show = function(uid,s,e){
-    var collection = new PreviewList();
-    collection.url = P + "user/" + uid + "/clip/" + s + ".." + e;
+    collection = new PreviewList();
+    start = parseInt(s);
+    end = parseInt(e);
+    id = uid;
+    collection.url = P + "user/" + id + "/clip/" + start + ".." + end;
     collection.fetch();
-    console.info(collection);
-    collection.onChange(function(previewlist){
+    collection.onReset(function(previewlist){
       App.vent.trigger("clippreview:show", previewlist);
     });
   };
@@ -62,4 +56,5 @@ App.ClipPreviewApp = (function(App, Backbone, $){
   });
 
   return ClipPreviewApp;
+
 })(App, Backbone, jQuery);

@@ -1,0 +1,41 @@
+<script type="text/template" id="clippreview-view-template">
+  <div id="container_<%=id%>" >
+    <div class="preview-item">
+      <div class="preview-info">
+	<span class="info-text">本条信息</span>
+	<% if(this.city && city != ""){%>
+	<span class="into-text">在城市</span>
+	<span class="info-city"><a href="#/clip/city/<%=city%>/p1"><%=city%></a></span>
+	<%}%>
+	<% if(device && device != ""){%>
+	<span class="info-text">使用设备</span>
+	<span class="info-device">
+	  <a href="#/clip/device/<%=device%>/p1"><%= device%></a>
+	</span>
+	<%}%>
+        <span class="info-text">搜集</span>
+        <a title="详细" class="detailButton controlSprite" href="#/detail/<%=id %>"></a>
+      </div>
+      <div class="content-container">
+	<% if(content.image) {%>
+	<div class="preview-image left">
+	  <img src="<%= App.util.url(user,content.image) %>">
+	  <%= App.util.url(user,content.image) %>
+	</div>
+	<% } %>
+	<% if(content.text){ %>
+	<p class="preview-text">
+	  <%= content.text %>
+	</p>
+	<%}%>
+      </div>
+      <div class="preview-note notesWrapA">
+	<% if(note.text && note.text != " "){%>
+	<p class="note-text">
+	  备注：<%= note.text %>
+	</p>
+	<%}%>
+      </div>
+    </div>
+  </div>
+</script>

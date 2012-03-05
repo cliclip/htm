@@ -9,7 +9,7 @@ App.Routing.ClipPreviewRouting = (function(App, Backbone){
   });
 
   App.addInitializer(function(){
-    console.info("addInitializer!!!!!!!!!!!");
+    //console.info("addInitializer!!!!!!!!!!!");
     ClipPreviewRouting.router = new ClipPreviewRouting.Router({
       controller: App.ClipPreviewApp
     });

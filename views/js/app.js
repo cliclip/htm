@@ -34,10 +34,10 @@ App.Model = Backbone.Model.extend({
     var error = options.error;
     options.success = function(resp, status, xhr){
       if(resp[0] == 0){
-	console.info("sync success:");console.dir(resp[1]);
+	//console.info("sync success:");console.dir(resp[1]);
 	if(success) success.apply(model, [resp[1], status, xhr]);
       } else {
-	console.log("sync error:");console.dir(resp[1]);
+	//console.log("sync error:");console.dir(resp[1]);
 	if(error) error.apply(model, [resp[1], status, xhr]);
       }
     };
@@ -63,10 +63,12 @@ App.Collection = Backbone.Collection.extend({
     var error = options.error;
     options.success = function(resp, status, xhr){
       if(resp[0] == 0){
-	console.log("collection.sync success:");console.dir(resp[1]);
-	if(success) success.apply(model, [resp[1], status, xhr]);
+	//console.log("collection.sync success:");console.dir(resp[1]);
+	if(success){
+	  success.apply(model, [resp[1], status, xhr]);
+	}
       } else {
-	console.log("collection.sync error:");console.dir(resp[1]);
+	//console.log("collection.sync error:");console.dir(resp[1]);
 	if(error) error.apply(model, [resp[1], status, xhr]);
       }
     };
