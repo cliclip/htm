@@ -1,5 +1,5 @@
 // app.userapp.js
-
+var P = "/_2_";
 App.UserApp = (function(App, Backbone, $){
   var UserApp = {};
 
@@ -8,6 +8,7 @@ App.UserApp = (function(App, Backbone, $){
       return "/test/user-"+this.id+".json";
     }
   });
+ 
 
   var UserFaceView = App.ItemView.extend({
     tagName: "div",

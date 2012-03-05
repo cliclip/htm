@@ -29,7 +29,10 @@ html
     script(src="/js/app.js")
     script(src="/js/app.meapp.js")
     script(src="/js/app.userapp.js")
-    script(src="/js/app.userapp.routing.js")
+   
+
+    script(src="/js/app.recommapp.js")
+    script(src="/js/app.recommapp.routing.js")
 
     //- kick start
     script $(function(){ App.start(); });
@@ -38,6 +41,7 @@ html
 
     #mine
     #face
+    #recomm
     #bubb
     #list
 
@@ -45,4 +49,7 @@ html
     include tmpl/me-view-template
     include tmpl/userface-view-template
     include tmpl/userbubb-view-template
+    include tmpl/recomment-view-template.html
+    include tmpl/namelist-view-template.html
+   
 

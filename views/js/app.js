@@ -1,12 +1,13 @@
 // app.js
 
 App = new Backbone.Marionette.Application();
-
+App.RegionManager= new Backbone.Marionette.RegionManager();
 App.addRegions({
   mineRegion: "#mine",
   faceRegion: "#face",
   bubbRegion: "#bubb",
-  listRegion: "#list"
+  listRegion: "#list",
+  recommRegion: "#recomm"
 });
 
 App.bind("initialize:after", function(){
