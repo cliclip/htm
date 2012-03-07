@@ -37,6 +37,7 @@ App.ClipApp = (function(App, Backbone, $){
       App.RecommApp.open();
     },
     reclip: function(cid){
+
       App.Collect.open();
     },
     update: function(cid){
@@ -196,8 +197,8 @@ App.ClipApp = (function(App, Backbone, $){
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){
-      // var self = document.cookie.split("=")[1].split(":")[0];
-      var self = "2";
+      var self = document.cookie.split("=")[1].split(":")[0];
+      // var self = "2";
       var user = detailModel.get("user");
       if(user == self){
 	detailModel.set("manage",["注","改","删"]);
