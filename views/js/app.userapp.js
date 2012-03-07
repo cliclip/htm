@@ -53,6 +53,7 @@ App.UserApp = (function(App, Backbone, $){
   };
 
   UserApp.show = function(uid){
+    console.info("UserApp.show!!!!!!!!!");
     var user = new UserModel({
       id: uid
     });

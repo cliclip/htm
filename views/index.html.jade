@@ -13,7 +13,7 @@ html
     link(rel="apple-touch-icon",href="images/apple-touch-icon.png")
     link(rel="apple-touch-icon",sizes="72x72",href="images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
-
+    link(rel="stylesheet",href="css/preview.css")
     //- pack :: link(rel="stylesheet",href="/css/app.css")
     link(rel="stylesheet", href="css/app.clipapp.css")
     //-link(rel="stylesheet",href="/tmpl/me-view-template.css")
@@ -35,6 +35,10 @@ html
     script(src="/js/app.meapp.js")
     script(src="/js/app.userapp.js")
     script(src="/js/app.userapp.routing.js")
+    //- clip_preview 
+    script(src="/js/app.clippreviewapp.js")
+    script(src="/js/app.clippreviewapp.routing.js")
+    script(src="/js/app.util.js")
     //- clip_detail
     script(src="/js/app.clipapp.js")
     script(src="/js/app.commentapp.js")
@@ -69,3 +73,4 @@ html
     include tmpl/recommend-view-template.html
     include tmpl/namelist-view-template.html
     include tmpl/organize-view-template.html
+    include tmpl/clippreview-view-template.html

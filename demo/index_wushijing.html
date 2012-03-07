@@ -29,11 +29,11 @@
       <div class="preview-item">
 	<div class="preview-info">
 	  <span class="info-text">本条信息</span>
-	  <%if(city && city != ""){%>
+	  <% if(city && city != ""){%>
 	  <span class="into-text">在城市</span>
 	  <span class="info-city"><a href="#/clip/city/<%=city%>/p1"><%=city%></a></span>
 	  <%}%>
-	  <%if(device && device != ""){%>
+	  <% if(device && device != ""){%>
 	  <span class="info-text">使用设备</span>
 	  <span class="info-device">
 	    <a href="#/clip/device/<%= device%>/p1"><%= device%></a>
