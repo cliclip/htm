@@ -10,8 +10,6 @@ App.addRegions({
   popRegion: "#pop"
 });
 
-
-
 App.bind("initialize:after", function(){
   console.info("initialize:after");
   if(Backbone.history){
@@ -27,6 +25,7 @@ App.Model = Backbone.Model.extend({
     this.on("change", this.runOnChangeCallbacks, this);
   },
   onChange: function(callback){
+    // console.info(callback);
     this.onChangeCallbacks.add(callback);
   },
   runOnChangeCallbacks: function(){
@@ -80,7 +79,7 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView;
-
+App.RegionManager= Backbone.Marionette.RegionManager;
 App.CollectionView = Backbone.Marionette.CollectionView;
 
 App.Routing = (function(App, Backbone){

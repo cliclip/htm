@@ -51,11 +51,10 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     },
 
-    // Internal method to render and display a view. Not meant 
+    // Internal method to render and display a view. Not meant
     // to be called from any external code.
     open: function(view){
       var that = this;
-
       $.when(view.render()).then(function () {
         that.$el.html(view.el);
         view.onShow && view.onShow();
@@ -79,7 +78,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // Item View
   // ---------
-  
+
   // A single item view implementation that contains code for rendering
   // with underscore.js templates, serializing the view's model or collection,
   // and calling several methods on extended views, such as `onRender`.
@@ -93,7 +92,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.initialEvents();
     },
 
-    // Configured the initial events that the item view 
+    // Configured the initial events that the item view
     // binds to. Override this method to prevent the initial
     // events, or to add your own initial events.
     initialEvents: function(){
@@ -105,14 +104,14 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Serialize the model or collection for the view. If a model is
     // found, `.toJSON()` is called. If a collection is found, `.toJSON()`
     // is also called, but is used to populate an `items` array in the
-    // resulting data. If both are found, defaults to the model. 
-    // You can override the `serializeData` method in your own view 
+    // resulting data. If both are found, defaults to the model.
+    // You can override the `serializeData` method in your own view
     // definition, to provide custom serialization for your view's data.
     serializeData: function(){
       var data;
-      if (this.collection) { 
+      if (this.collection) {
         data = {};
-        data.items = this.collection.toJSON(); 
+        data.items = this.collection.toJSON();
       }
       if (this.model) { data = this.model.toJSON(); }
       return data;
@@ -158,12 +157,12 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     // Retrieve the template from the call's context. The
     // `template` attribute can either be a function that
-    // returns a jQuery object, or a jQuery selector string 
-    // directly. The string value must be a valid jQuery 
-    // selector.  
+    // returns a jQuery object, or a jQuery selector string
+    // directly. The string value must be a valid jQuery
+    // selector.
     getTemplate: function(callback){
       var template = this.template;
-  
+
       if (_.isFunction(template)){
         var templateData = template.call(this);
         callback.call(this, templateData);
@@ -202,7 +201,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.initialEvents();
     },
 
-    // Configured the initial events that the collection view 
+    // Configured the initial events that the collection view
     // binds to. Override this method to prevent the initial
     // events, or to add your own initial events.
     initialEvents: function(){
@@ -218,7 +217,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.render();
     },
 
-    // Loop through all of the items and render 
+    // Loop through all of the items and render
     // each of them with the specified `itemView`.
     render: function(){
       this.renderModel();
@@ -295,7 +294,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
       this.children[view.model.cid] = view;
     },
-    
+
     // Handle cleanup and other closing needs for
     // the collection of views.
     close: function(){
@@ -321,11 +320,11 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // BindTo: Event Binding
   // ---------------------
-  
+
   // BindTo facilitates the binding and unbinding of events
   // from objects that extend `Backbone.Events`. It makes
   // unbinding events, even with anonymous callback functions,
-  // easy. 
+  // easy.
   //
   // Thanks to Johnny Oshika for this code.
   // http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view/7607853#7607853
@@ -338,11 +337,11 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       if (!this.bindings) this.bindings = [];
 
-      this.bindings.push({ 
-        obj: obj, 
-        eventName: eventName, 
-        callback: callback, 
-        context: context 
+      this.bindings.push({
+        obj: obj,
+        eventName: eventName,
+        callback: callback,
+        context: context
       });
     },
 
@@ -366,14 +365,14 @@ Backbone.Marionette = (function(Backbone, _, $){
   //
   // Configure an AppRouter with `appRoutes`.
   //
-  // App routers can only take one `controller` object. 
+  // App routers can only take one `controller` object.
   // It is reocmmended that you divide your controller
   // objects in to smaller peices of related functionality
   // and have multiple routers / controllers, instead of
   // just one giant router and controller.
   //
   // You can also add standard routes to an AppRouter.
-  
+
   Marionette.AppRouter = Backbone.Router.extend({
 
     constructor: function(options){
@@ -407,7 +406,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       }
     }
   });
-  
+
   // Callbacks
   // ---------
 
@@ -420,9 +419,9 @@ Backbone.Marionette = (function(Backbone, _, $){
   };
 
   _.extend(Marionette.Callbacks.prototype, {
-    
+
     // Add a callback to be executed. Callbacks added here are
-    // guaranteed to execute, even if they are added after the 
+    // guaranteed to execute, even if they are added after the
     // `run` method is called.
     add: function(callback){
       this.promise.done(function(context, options){
@@ -430,8 +429,8 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
     },
 
-    // Run all registered callbacks with the context specified. 
-    // Additional callbacks can be added after this has been run 
+    // Run all registered callbacks with the context specified.
+    // Additional callbacks can be added after this has been run
     // and they will still be executed.
     run: function(context, options){
       this.deferred.resolve(context, options);
@@ -448,7 +447,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   };
 
   _.extend(Marionette.EventAggregator.prototype, Backbone.Events, Marionette.BindTo, {
-    // Assumes the event aggregator itself is the 
+    // Assumes the event aggregator itself is the
     // object being bound to.
     bindTo: function(eventName, callback, context){
       Marionette.BindTo.bindTo.call(this, this, eventName, callback, context);
@@ -486,7 +485,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       this.trigger("start", options);
     },
 
-    // Add region managers to your app. 
+    // Add region managers to your app.
     // Accepts a hash of named strings or RegionManager objects
     // addRegions({something: "#someRegion"})
     // addRegions{{something: RegionManager.extend({el: "#someRegion"}) });
@@ -496,7 +495,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       for(var region in regions){
         if (regions.hasOwnProperty(region)){
           regionValue = regions[region];
-    
+
           if (typeof regionValue === "string"){
             regionObj = new Marionette.RegionManager({
               el: regionValue
@@ -513,7 +512,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // Template Manager
   // ----------------
-  
+
   // Manage templates stored in `<script>` blocks,
   // caching them for faster access.
   Marionette.TemplateManager = {
@@ -544,7 +543,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // are specified, clears all templates:
     // `clear()`
     //
-    // If arguments are specified, clears each of the 
+    // If arguments are specified, clears each of the
     // specified templates from the cache:
     // `clear("#t1", "#t2", "...")`
     clear: function(){
@@ -564,7 +563,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
   // For slicing `arguments` in functions
   var slice = Array.prototype.slice;
-  
+
   // Copy the `extend` function used by Backbone's classes
   var extend = Backbone.View.extend;
   Marionette.RegionManager.extend = extend;

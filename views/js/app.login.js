@@ -22,7 +22,7 @@ App.Login = (function(App, Backbone, $){
       var that = this;
       e.preventDefault();
       this.model.save({name: "", pass: ""},{
-  	url: "/test/login.success.json",
+	url: "/test/login.success.json",
 	type: "GET", // TEST
   	success: function(model, res){
   	  var token = res.token;
@@ -69,7 +69,7 @@ App.Login = (function(App, Backbone, $){
   });
 
   // TEST
-  //App.bind("initialize:after", function(){ Login.open(); });
+  // App.bind("initialize:after", function(){ Login.open(); });
 
   return Login;
 })(App, Backbone, jQuery);
