@@ -61,6 +61,7 @@ App.Login = (function(App, Backbone, $){
   App.vent.bind("login-view:success", function(token){
     // document.cookie.token = token;
     Login.close();
+
   });
 
   App.vent.bind("login-view:error", function(model, error){
