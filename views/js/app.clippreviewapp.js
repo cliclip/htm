@@ -1,5 +1,5 @@
 // app.clippreviewapp.js
-var P = '/_2_/';
+//var P = '/_2_/';
 App.ClipPreviewApp = (function(App, Backbone, $){
   var ClipPreviewApp = {};
   var start = 0;
@@ -64,7 +64,7 @@ App.ClipPreviewApp = (function(App, Backbone, $){
 	if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
 	  start = start +10;
 	  end = end + 10;
-	  collection.url = P + "user/" + id + "/clip/" + start + ".." + end;
+	  collection.url = P + "/user/" + id + "/clip/" + start + ".." + end;
 	  collection.fetch({add: true});
 	}
       });
@@ -72,7 +72,7 @@ App.ClipPreviewApp = (function(App, Backbone, $){
   });
 
   var showClipPreview = function(previewlist){
-    console.info(previewlist.toJSON());
+    //console.info(previewlist.toJSON());
     var previewView = new PreviewListView({
       collection : previewlist
     });
@@ -86,7 +86,7 @@ App.ClipPreviewApp = (function(App, Backbone, $){
     id = uid;
     //collection.url = "/test/recommend.json";
     //collection.url = "/test/clip.json";
-    collection.url = P + "user/" + id + "/clip/" + start + ".." + end;
+    collection.url = P + "/user/" + id + "/clip/" + start + ".." + end;
     collection.fetch();
     collection.onReset(function(previewlist){
       App.vent.trigger("clippreview:show", previewlist);

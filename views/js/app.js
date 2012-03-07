@@ -11,7 +11,6 @@ App.addRegions({
 });
 
 App.bind("initialize:after", function(){
-  console.info("initialize:after");
   if(Backbone.history){
     Backbone.history.start();
   }
