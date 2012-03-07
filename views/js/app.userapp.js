@@ -6,7 +6,8 @@ App.UserApp = (function(App, Backbone, $){
   // this.id 为用来装载model的user.id [从cookie中获得]
   var UserModel = App.Model.extend({
     url: function(){
-      return P+"/user/"+this.id;
+     // return P+"/user/"+this.id;
+     return "/test/user-"+this.id+".json";
     }
   });
 
@@ -23,6 +24,26 @@ App.UserApp = (function(App, Backbone, $){
     template: "#userbubb-view-template"
   });
 
+  var UserListView = App.ItemView.extend({
+    tagName: "div",
+    className: "userlist-view",
+    template: "#userlist-view-template",
+    events : {
+      "click #comment_button" : "commentPopUp",
+      "click #collect_button" : "collectPopUp",
+      "click #delete_button" : "deletePopUp"
+    },
+    commentPopUp : function(e){
+      App.Comment.open();
+    },
+    collectPopUp : function(e){
+      App.Collect.open();
+    },
+    deletePopUp : function(e){
+      App.Delete.open();
+    }
+  });
+/*
   var LoginModel = App.Model.extend({
     url: P+"/login"
   });
@@ -35,6 +56,7 @@ App.UserApp = (function(App, Backbone, $){
       error:function(user, response){}
     });
   };
+*/
 
   var showUser = function(userModel){
     var userFaceView = new UserFaceView({
@@ -43,8 +65,14 @@ App.UserApp = (function(App, Backbone, $){
     var userBubbView = new UserBubbView({
       model: userModel
     });
+
+    var userListView = new UserListView({
+      model: userModel
+    });
+
     App.faceRegion.show(userFaceView);
     App.bubbRegion.show(userBubbView);
+    App.listRegion.show(userListView);
   };
 
   UserApp.login = function(){
@@ -53,7 +81,6 @@ App.UserApp = (function(App, Backbone, $){
   };
 
   UserApp.show = function(uid){
-    console.info("UserApp.show!!!!!!!!!");
     var user = new UserModel({
       id: uid
     });

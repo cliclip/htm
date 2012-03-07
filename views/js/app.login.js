@@ -1,5 +1,5 @@
 // app.login.js
-
+var P = "/_2_";
 App.Login = (function(App, Backbone, $){
   var Login = {};
 
@@ -20,19 +20,21 @@ App.Login = (function(App, Backbone, $){
     },
     submit : function(e){
       var that = this;
+      var name = $("#name").val();
+      var pass = $("#pass").val();
       e.preventDefault();
-      this.model.save({name: "", pass: ""},{
-	url: "/test/login.success.json",
-	type: "GET", // TEST
+      this.model.save({name: name, pass: pass},{
+  	url: P+"/login",
+	type: "POST",
   	success: function(model, res){
-  	  var token = res.token;
-  	  console.log("success model = %j, response = %j", model, res);
+   	  var token = res;
+  	  //console.log("success model = %j, response = %j", model, res);
   	  App.vent.trigger("login-view:success", token);
   	},
   	error:function(model, res){
   	  // that.model.set("error", res);
   	  // that.model.change();
-  	  console.log("error model = %j, response = %j", model, res);
+  	  //console.log("error model = %j, response = %j", model, res);
   	  App.vent.trigger("login-view:error", model, res);
   	}
       });
@@ -56,8 +58,8 @@ App.Login = (function(App, Backbone, $){
   };
 
   App.vent.bind("login-view:success", function(token){
-    // document.cookie.token = token;
-    Login.close();
+        document.cookie = "token="+token;
+        Login.close();
   });
 
   App.vent.bind("login-view:error", function(model, error){
@@ -69,7 +71,7 @@ App.Login = (function(App, Backbone, $){
   });
 
   // TEST
-  // App.bind("initialize:after", function(){ Login.open(); });
+   App.bind("initialize:after", function(){ Login.open(); });
 
   return Login;
 })(App, Backbone, jQuery);
