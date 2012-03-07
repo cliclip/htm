@@ -16,13 +16,13 @@
   -webkit-box-shadow:2px 2px 5px #06C;
   box-shadow:2px 2px 5px #06C;
 }
-.preview-image.left, .detail-image.left{
+.preview-image.left{
   float:left;
   margin-right:10px;
   margin-bottom:10px;
   max-width:99%;
 }
-.preview-image.right, .detail-image.right{
+.preview-image.right{
   float:right;
   margin-left:10px;
   margin-bottom:10px;
@@ -40,7 +40,7 @@
   -webkit-box-shadow:2px 2px 5px #06C;
   box-shadow:2px 2px 5px #06C;
 }
-.preview-text, .detail-text{
+.preview-text{
   max-width:90%;
   margin-bottom:15px;
   font-size:1.7em;
@@ -61,7 +61,7 @@
   text-decoration:none;
   color:blue;
 }
-.preview-note, .recommend-text{
+.preview-note{
   font-size:1.5em;
   font-family:"幼圆";
 }
@@ -77,7 +77,7 @@
 .detailButton:hover{
   background-position:-120px 0px;
 }
-.notesWrapA, .recommendWrapA{
+.notesWrapA{
   background: #D6EAEE;
   border: 1px solid #D6EAEE;
   padding: 4px 2px 2px 2px;
