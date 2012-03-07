@@ -15,15 +15,19 @@ App.Login = (function(App, Backbone, $){
   	className : "login-view",
   	template : "#login-view-template",
   	events : {
+	 // "click #loginAction_button":"loginAction",
   	  "click input[type=submit]" : "submit",
   	  "click input[type=reset]" : "cancel"
+	  //"click #cancel_button":"cancel"
   	},
   	submit : function(e){
   	  var that = this;
+	  var username = $("#username_l").val();
+	  var password = $("#password_l").val();
   	  e.preventDefault();
-  	  this.model.save({name: "", pass: ""},{
-  	  	  url: "/test/login.success.json",
-          type: "GET", // TEST
+  	  this.model.save({name:username,pass:password},{
+	          url: "/_2_/login",
+                  type: "POST",
   	  	  success: function(model, res){
   	  		var token = res.token;
   	  	  	console.log("success model = %j, response = %j", model, res);
@@ -69,7 +73,7 @@ App.Login = (function(App, Backbone, $){
   });
 
   // TEST
-  App.bind("initialize:after", function(){ Login.open(); });
+  //App.bind("initialize:after", function(){ Login.open(); });
 
   return Login;
 })(App, Backbone, jQuery);
