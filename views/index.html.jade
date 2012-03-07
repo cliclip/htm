@@ -15,6 +15,7 @@ html
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
 
     //- pack :: link(rel="stylesheet",href="/css/app.css")
+    link(rel="stylesheet", href="css/app.clipapp.css")
     //-link(rel="stylesheet",href="/tmpl/me-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userface-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userbubb-view-template.css")
@@ -26,13 +27,17 @@ html
 
     //- pack :: script(src="/js/app.js")
     script(src="/js/lib/backbone.marionette.js")
-    script(src="/js/RequestUtil.js")
     script(src="/js/app.js")
+    script(src="/js/app.login.js")
+    script(src="/js/app.register.js")
+    script(src="/js/app.util.js")
+    script(src="/js/Constants.js")
     script(src="/js/app.meapp.js")
     script(src="/js/app.userapp.js")
     script(src="/js/app.userapp.routing.js")
     //- clip_detail
     script(src="/js/app.clipapp.js")
+    script(src="/js/app.commentapp.js")
     script(src="/js/app.clipapp.routing.js")
     //- kick start
     script $(function(){ App.start(); });
@@ -46,10 +51,14 @@ html
     #main
 
     //- templates
-    include tmpl/me-view-template
-    include tmpl/userface-view-template
-    include tmpl/userbubb-view-template
-    include tmpl/register-view-template
-    include tmpl/detail-view-template
-    include tmpl/comment-view-template
-    include tmpl/addcomm-view-template
+    include tmpl/main.html
+    include tmpl/login-view-template.html
+    include tmpl/me-view-template.html
+    include tmpl/userface-view-template.html
+    include tmpl/userbubb-view-template.html
+    include tmpl/register-view-template.html
+    include tmpl/detail-view-template.html
+    include tmpl/editDetail-view-template.html
+    include tmpl/localImg-view-template.html
+    include tmpl/showcomment-view-template.html
+    include tmpl/addcomm-view-template.html

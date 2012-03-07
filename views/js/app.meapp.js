@@ -18,7 +18,7 @@ App.MeApp = (function(App, Backbone, $){
   MeApp.show = function(){
     MeApp.me.onChange(function(meModel){
       var meView = new MeView({
-	model: meModel
+        model: meModel
       });
       App.mineRegion.show(meView);
     });
