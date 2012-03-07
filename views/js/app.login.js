@@ -1,5 +1,5 @@
 // app.login.js
-
+var P = "/_2_";
 App.Login = (function(App, Backbone, $){
   var Login = {};
 
@@ -24,7 +24,7 @@ App.Login = (function(App, Backbone, $){
 	  var pass = $("#pass").val();
   	  e.preventDefault();
   	  this.model.save({name: name, pass: pass},{
-  	  	  url: "/_2_/login",
+  	  	  url: P+"/login",
 		  type: "POST",
   	  	  success: function(model, res){
    		        var token = res;

@@ -1,3 +1,4 @@
+var P = "/_2_";
 App.Collect = (function(App, Backbone, $){
   var Collect = {};
   var tag_list = [];
@@ -69,25 +70,31 @@ App.Collect = (function(App, Backbone, $){
 	  var that = this;
 	  var id = "1:1";
 	  var text = $("#collect_text").val();
-	  var tag = $("#tag").val().split(",");
-	  var clip = {note: [{text:text}],tag:tag};
+	  var tag = $("#obj_tag").val().split(",");
+	  var params = {clip:{note: [{text:text}],tag:tag}};
 	  e.preventDefault();
-	  this.model.save({clip:clip},{
-	    url: "/_2_/clip/"+id+"/reclip",
-	    type: "POST",
-	    success: function(model, res){
-  	      App.vent.trigger("login-view:success");
-  	    },
-  	    error:function(model, res){
-  	      App.vent.trigger("login-view:error", model, res);
-  	    }
-  	  });
+	  App.vent.trigger("collect",id,params);
+
   	},
   	cancel : function(e){
   	  e.preventDefault();
   	  App.vent.trigger("collect-view:cancel");
   	}
   });
+
+  var collectSave = function(id,params){
+    var collect = new CollectModel();
+    collect.save(params,{
+      url: P+"/clip/"+id+"/reclip",
+      type: "POST",
+      success: function(model, res){
+  	App.vent.trigger("collect-view:success");
+      },
+      error:function(model, res){
+  	App.vent.trigger("collect-view:error", model, res);
+      }
+    });
+  };
 
   Collect.open = function(model, error){
   	var collectModel = new CollectModel();
@@ -102,8 +109,11 @@ App.Collect = (function(App, Backbone, $){
   	App.popRegion.close();
   };
 
-  App.vent.bind("collect-view:success", function(token){
-  	// document.cookie.token = token;
+  App.vent.bind("collect", function(id,params){
+    collectSave(id,params);
+  });
+
+  App.vent.bind("collect-view:success", function(){
   	Collect.close();
   });
 
@@ -116,7 +126,7 @@ App.Collect = (function(App, Backbone, $){
   });
 
   // TEST
-  App.bind("initialize:after", function(){ Collect.open(); });
+  //App.bind("initialize:after", function(){ Collect.open(); });
 
   return Collect;
 })(App, Backbone, jQuery);

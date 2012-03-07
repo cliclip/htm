@@ -27,10 +27,14 @@ App.UserApp = (function(App, Backbone, $){
     template: "#userlist-view-template",
     events : {
       "click #comment_button" : "comment",
+      "click #collect_button" : "collect",
       "click #delete_button" : "delete"
     },
     comment : function(e){
       App.Comment.open();
+    },
+    collect : function(e){
+      App.Collect.open();
     },
     delete : function(e){
       App.Delete.open();

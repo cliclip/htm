@@ -1,6 +1,6 @@
 
 // app.comment.js
-
+var P = "/_2_";
 App.Comment = (function(App, Backbone, $){
   var Comment = {};
   var tag_list = [];
@@ -40,7 +40,7 @@ App.Comment = (function(App, Backbone, $){
 	  App.vent.trigger("comment", id, params);
 	  if($("#collect").attr("checked")){
 	    console.log("同时收");
-	     App.vent.trigger("collect", params1);
+	    App.vent.trigger("collect", id,params1);
 	  }
   	},
   	cancel : function(e){
@@ -100,7 +100,7 @@ App.Comment = (function(App, Backbone, $){
   var commentAction = function(id, params){
     var comm = new CommentModel();
     comm.save(params,{
-      url: "/_2_/clip/"+this.id+"/comment",
+      url: P+"/clip/"+id+"/comment",
       type: "POST",
       success: function(model, res){
   	//console.log("success model = %j, response = %j", model, res);
