@@ -17,8 +17,14 @@ App.Login = (function(App, Backbone, $){
     events : {
       // "click #loginAction_button":"loginAction",
       "click input[type=submit]" : "submit",
-      "click input[type=reset]" : "cancel"
+      "click input[type=reset]" : "cancel",
+      "focus input[type=text]": "clearText"
       //"click #cancel_button":"cancel"
+    },
+    clearText:function(evt){
+      if($("#name").val().trim() == "用户名/Email"){
+	$("#name").val("");
+      }
     },
     submit : function(e){
       var that = this;
