@@ -1,14 +1,15 @@
 // app.js
 
 App = new Backbone.Marionette.Application();
-App.RegionManager= new Backbone.Marionette.RegionManager();
 App.addRegions({
   mineRegion: "#mine",
   faceRegion: "#face",
   bubbRegion: "#bubb",
   listRegion: "#list",
-  recommRegion: "#recomm"
+  popRegion: "#pop"
 });
+
+
 
 App.bind("initialize:after", function(){
   if(Backbone.history){
@@ -34,10 +35,10 @@ App.Model = Backbone.Model.extend({
     var error = options.error;
     options.success = function(resp, status, xhr){
       if(resp[0] == 0){
-	// console.log("sync success:");console.dir(resp[1]);
+	// console.log("model.sync success:");console.dir(resp[1]);
 	if(success) success.apply(model, [resp[1], status, xhr]);
       } else {
-	// console.log("sync error:");console.dir(resp[1]);
+	// console.log("model.sync error:");console.dir(resp[1]);
 	if(error) error.apply(model, [resp[1], status, xhr]);
       }
     };
@@ -57,11 +58,25 @@ App.Collection = Backbone.Collection.extend({
   },
   runOnResetCallbacks: function(){
     this.onResetCallbacks.run(this, this);
+  },
+  sync: function(method, model, options){
+    var success = options.success;
+    var error = options.error;
+    options.success = function(resp, status, xhr){
+      if(resp[0] == 0){
+	console.log("collection.sync success:");console.dir(resp[1]);
+	if(success) success.apply(model, [resp[1], status, xhr]);
+      } else {
+	console.log("collection.sync error:");console.dir(resp[1]);
+	if(error) error.apply(model, [resp[1], status, xhr]);
+      }
+    };
+    Backbone.sync.apply(Backbone, [method, model, options]);
   }
 });
 
 App.ItemView = Backbone.Marionette.ItemView;
-
+App.RegionManager= Backbone.Marionette.RegionManager;
 App.CollectionView = Backbone.Marionette.CollectionView;
 
 App.Routing = (function(App, Backbone){
@@ -82,7 +97,7 @@ App.Routing = (function(App, Backbone){
 	}
       }
     }
-    return "/"+route;
+    return route;
   }
   return Routing;
 })(App, Backbone);
