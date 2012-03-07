@@ -6,8 +6,8 @@ App.UserApp = (function(App, Backbone, $){
   // this.id 为用来装载model的user.id [从cookie中获得]
   var UserModel = App.Model.extend({
     url: function(){
-     // return P+"/user/"+this.id;
-     return "/test/user-"+this.id+".json";
+     return P+"/user/"+this.id;
+     // return "/test/user-"+this.id+".json";
     }
   });
 
@@ -23,6 +23,7 @@ App.UserApp = (function(App, Backbone, $){
     template: "#userbubb-view-template"
   });
 
+/*
   var UserListView = App.ItemView.extend({
     tagName: "div",
     className: "userlist-view",

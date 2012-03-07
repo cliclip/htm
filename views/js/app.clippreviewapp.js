@@ -97,6 +97,10 @@ App.ClipPreviewApp = (function(App, Backbone, $){
     showClipPreview(previewlist);
   });
 
+  App.vent.bind("clip_preview:show", function(uid, start, end){
+    ClipPreviewApp.show(uid, start, end);
+  });
+
   return ClipPreviewApp;
 
 })(App, Backbone, jQuery);
