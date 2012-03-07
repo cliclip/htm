@@ -11,7 +11,6 @@ App.UserApp = (function(App, Backbone, $){
     }
   });
 
-
   var UserFaceView = App.ItemView.extend({
     tagName: "div",
     className: "userface-view",

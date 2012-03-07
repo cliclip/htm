@@ -15,8 +15,10 @@ App.Login = (function(App, Backbone, $){
     className : "login-view",
     template : "#login-view-template",
     events : {
+      // "click #loginAction_button":"loginAction",
       "click input[type=submit]" : "submit",
       "click input[type=reset]" : "cancel"
+      //"click #cancel_button":"cancel"
     },
     submit : function(e){
       var that = this;
@@ -44,7 +46,6 @@ App.Login = (function(App, Backbone, $){
       App.vent.trigger("login-view:cancel");
     }
   });
-
   Login.open = function(model, error){
     var loginModel = new LoginModel();
     if (model) loginModel.set(model.toJSON());
