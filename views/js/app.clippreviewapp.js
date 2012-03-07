@@ -2,18 +2,57 @@
 var P = '/_2_/';
 App.ClipPreviewApp = (function(App, Backbone, $){
   var ClipPreviewApp = {};
-  var ClipPreviewModel = App.Model.extend({});
   var start = 0;
   var end = 9;
   var id = null;
   var collection = null;
-  PreviewList = App.Collection.extend({
+
+  var ClipPreviewModel = App.Model.extend({
+    defaults:{
+      recommend:"",
+      id:"",
+      user:"",
+      content:{
+	text:"",//text:String
+	image:""//image:imgid || url
+      },
+      note:{
+	text:"",//{text:string}
+	sound:""//{sound:sndid}
+      },
+      device:"",
+      city:"",
+      source:{
+	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
+      },
+      reprint_count:"",
+      reply_count:"",
+      author:""
+    }
+  });
+  var PreviewList = App.Collection.extend({
     model : ClipPreviewModel
   });
   var ClipPreviewView = App.ItemView.extend({
     tagName: "div",
     template: "#clippreview-view-template"
+/*    timer:"",
+    events:{
+      "mouseover .recommend":"showMessage",
+      "mouseover .author":"showMessage",
+      "mouseout .recommend":"closeMessage",
+      "mouseout .author":"closeMessage"
+    },
+    showMessage:function(evt){
+      this.timer = window.setTimeout('console.info("显示用户信息")',2000);
+      //console.info(this.model.toJSON());
+    },
+    closeMessage:function(){
+    	clearTimeout(this.timer);
+    }
+*/
   });
+
   var PreviewListView = App.CollectionView.extend({
     tagName: "div",
     className: "clippreview-item",
@@ -31,10 +70,11 @@ App.ClipPreviewApp = (function(App, Backbone, $){
       });
     }
   });
+
   var showClipPreview = function(previewlist){
     console.info(previewlist.toJSON());
     var previewView = new PreviewListView({
-      collection: previewlist
+      collection : previewlist
     });
     App.listRegion.show(previewView);
   };
@@ -44,6 +84,8 @@ App.ClipPreviewApp = (function(App, Backbone, $){
     start = parseInt(s);
     end = parseInt(e);
     id = uid;
+    //collection.url = "/test/recommend.json";
+    //collection.url = "/test/clip.json";
     collection.url = P + "user/" + id + "/clip/" + start + ".." + end;
     collection.fetch();
     collection.onReset(function(previewlist){

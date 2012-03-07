@@ -13,7 +13,7 @@ html
     link(rel="apple-touch-icon",href="images/apple-touch-icon.png")
     link(rel="apple-touch-icon",sizes="72x72",href="images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
-
+    link(rel="stylesheet",href="css/preview.css")
     //- pack :: link(rel="stylesheet",href="/css/app.css")
     //-link(rel="stylesheet",href="/tmpl/me-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userface-view-template.css")
@@ -33,6 +33,7 @@ html
     script(src="/js/app.userapp.routing.js")
     script(src="/js/app.clippreviewapp.js")
     script(src="/js/app.clippreviewapp.routing.js")
+    script(src="/js/app.userinfoapp.js")
     script(src="/js/app.util.js")
     //- kick start
     script $(function(){ App.start(); });
@@ -46,3 +47,4 @@ html
     include tmpl/userface-view-template
     include tmpl/userbubb-view-template.html
     include tmpl/clippreview-view-template.html
+    include tmpl/userinfo-view-template.html

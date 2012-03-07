@@ -1,11 +1,20 @@
 <script type="text/template" id="clippreview-view-template">
-  <div id="container_<%=id%>" >
+  <div id="container_<%=user%>_<%=id%>" >
     <div class="preview-item">
+      <div class="recommend-info recommendWrapA">
+	<% if(recommend){%>
+	<span class="recomend-text"><%=recommend.text%></span>
+	<a href="#/recommendhomepage/<%=recommend.uid%>" class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>"><img src="<%=recommend.image%>" width="50" height="50"/></a>&nbsp;&nbsp;
+	<a class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>" href="#/recommendhomepage/<%=recommend.uid%>"><%=recommend.name%></a>
+	<%}%>
+      </div>
       <div class="preview-info">
 	<span class="info-text">本条信息</span>
-	<% if(this.city && city != ""){%>
+	<% if(city && city != ""){%>
 	<span class="into-text">在城市</span>
-	<span class="info-city"><a href="#/clip/city/<%=city%>/p1"><%=city%></a></span>
+	<span class="info-city">
+	  <a href="#/clip/city/<%=city%>/p1"><%=city%></a>
+	</span>
 	<%}%>
 	<% if(device && device != ""){%>
 	<span class="info-text">使用设备</span>
@@ -20,20 +29,29 @@
 	<% if(content.image) {%>
 	<div class="preview-image left">
 	  <img src="<%= App.util.url(user,content.image) %>">
-	  <%= App.util.url(user,content.image) %>
 	</div>
 	<% } %>
 	<% if(content.text){ %>
-	<p class="preview-text">
-	  <%= content.text %>
-	</p>
+	<p class="preview-text"><%= content.text %></p>
 	<%}%>
       </div>
       <div class="preview-note notesWrapA">
 	<% if(note.text && note.text != " "){%>
-	<p class="note-text">
-	  备注：<%= note.text %>
-	</p>
+	<p class="note-text">备注：<%= note.text %></p>
+	<%}%>
+      </div>
+      <div>
+	<% if(reply_count){%>
+	<span class="info-text">回复(<%=reply_count%>)</span>
+	<%}%>
+	<% if(reprint_count){%>
+	<span class="info-text">转摘(<%=reprint_count%>)</span>
+	<%}%>
+      </div>
+      <div class="user-info">
+	<% if(author){%>
+	<a href="#/authorhomepage/<%=author.uid%>" class="author",id="author_<%=user%>_<%=id%>"><img src="<%=author.image%>" width="50" height="50"/></a>	      &nbsp;&nbsp;&nbsp;&nbsp;
+	<a class="author", id="author_<%=user%>_<%=id%>" href="#/authorhomepage/<%=author.uid%>"><%=author.name%></a>
 	<%}%>
       </div>
     </div>
