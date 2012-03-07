@@ -9,7 +9,7 @@ App.Delete = (function(App, Backbone, $){
   	className : "delete-view",
   	template : "#delete-view-template",
   	events : {
-  	  "click #delete_button" : "delete",
+  	  "click #deleteok_button" : "delete",
   	  "click #cancel_button" : "cancel"
   	},
 

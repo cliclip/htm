@@ -17,7 +17,7 @@ App.Collect = (function(App, Backbone, $){
 	  "focus #obj_tag":"objtagOpen",
   	  "focus #collect_text":"foucsAction",
 	  "blur #collect_text":"blurAction",
-	  "click #collect_button" : "collectAction",
+	  "click #collectok_button" : "collectAction",
 	  "click #cancel_button" : "cancel",
 	  "click .main_tag":"maintagAction"
   	},

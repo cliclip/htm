@@ -14,7 +14,7 @@ App.Comment = (function(App, Backbone, $){
 	  "focus #comm_text":"foucsAction",
 	  "blur #comm_text":"blurAction",
 	  "click .main_tag":"maintagAction",
-  	  "click #comment_button" : "comment",
+  	  "click #commentok_button" : "comment",
   	  "click #cancel_button" : "cancel"
   	},
 
