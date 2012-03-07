@@ -1,6 +1,4 @@
 // app.userapp.js
-
-// 登录 注册 列出相关用户
 var P = "/_2_";
 App.UserApp = (function(App, Backbone, $){
   var UserApp = {};
@@ -11,6 +9,7 @@ App.UserApp = (function(App, Backbone, $){
       return P+"/user/"+this.id;
     }
   });
+
 
   var UserFaceView = App.ItemView.extend({
     tagName: "div",
