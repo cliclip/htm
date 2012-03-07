@@ -30,13 +30,13 @@ App.Login = (function(App, Backbone, $){
 	type: "POST",
   	success: function(model, res){
    	  var token = res;
-  	  //console.log("success model = %j, response = %j", model, res);
+  	  // console.log("success model = %j, response = %j", model, res);
   	  App.vent.trigger("login-view:success", token);
   	},
   	error:function(model, res){
   	  // that.model.set("error", res);
   	  // that.model.change();
-  	  //console.log("error model = %j, response = %j", model, res);
+  	  // console.log("error model = %j, response = %j", model, res);
   	  App.vent.trigger("login-view:error", model, res);
   	}
       });
@@ -60,6 +60,9 @@ App.Login = (function(App, Backbone, $){
 
   App.vent.bind("login-view:success", function(token){
     document.cookie = "token="+token;
+    var uid = token.split(":")[0];
+    // 用户登录成功触发，显示clip的preview事件
+    App.vent.trigger("clip_preview:show", uid, 0, 5);
     Login.close();
   });
 
@@ -72,7 +75,9 @@ App.Login = (function(App, Backbone, $){
   });
 
   // TEST
-   App.bind("initialize:after", function(){ Login.open(); });
+  App.bind("initialize:after", function(){
+    Login.open();
+  });
 
   return Login;
 })(App, Backbone, jQuery);

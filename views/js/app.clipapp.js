@@ -19,35 +19,36 @@ App.ClipApp = (function(App, Backbone, $){
     Operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).val();
+      var user = this.model.get("user");
+      var cid = user+":"+this.model.id;
       switch(opt){
-	case '评': this.comment(); break;
-	case '转': this.recomment(); break;
-	case '收': this.reclip(); break;
-	case '注': this.remake(); break;
-	case '改': this.update(); break;
-	case '删': this.remove(); break;
+	case '评': this.comment(cid); break;
+	case '转': this.recomment(cid); break;
+	case '收': this.reclip(cid); break;
+	case '注': this.remark(cid); break;
+	case '改': this.update(cid); break;
+	case '删': this.remove(cid); break;
       }
     },
-    comment : function(){
-
+    comment : function(cid){
+      App.comment.open();
     },
-    recomment: function(){
-
+    recomment: function(cid){
+      App.RecommApp.open();
     },
-    reclip: function(){
-
+    reclip: function(cid){
+      App.Collect.open();
     },
-    remark: function(){
-
-    },
-    update: function(){
+    update: function(cid){
       var detailEditView = new DetailEditView({model: this.model});
       App.listRegion.show(detailEditView);
-      // App.vent.trigger("clip:closeComment");
-      // console.info(this.model.id);
     },
-    remove: function(){
-      // 出现删除确认
+    remark: function(cid){
+      App.OrganizeApp.open();
+    },
+    remove: function(cid){
+      console.info("this.model.id"+this.model.id);
+      App.Delete.open();
     }
   });
 
@@ -67,6 +68,7 @@ App.ClipApp = (function(App, Backbone, $){
       "click #exImg":"extImg",
       "click #localImg":"localImg",
       "click #upformat":"upFormat",
+      "click #edit_remark":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click #editClip_Abandon":"abandonUpdate",
       "click .editContent-container p":"editText"
@@ -107,6 +109,9 @@ App.ClipApp = (function(App, Backbone, $){
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
       // 为.editContent-container下的p标签添加click事件
       console.info("调整页面格式");
+    },
+    remarkClip:function(){
+      App.OrganizeApp.open();
     },
     editText:function(evt){
       var contentText = $(evt.target);
@@ -191,7 +196,8 @@ App.ClipApp = (function(App, Backbone, $){
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){
-      var self = document.cookie.split("=")[1].split(":")[0];
+      // var self = document.cookie.split("=")[1].split(":")[0];
+      var self = "2";
       var user = detailModel.get("user");
       if(user == self){
 	detailModel.set("manage",["注","改","删"]);
