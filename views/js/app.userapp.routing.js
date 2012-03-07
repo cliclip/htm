@@ -1,5 +1,4 @@
 // app.userapp.routing.js
-
 App.Routing.UserRouting = (function(App, Backbone){
   var UserRouting = {};
 
@@ -14,9 +13,11 @@ App.Routing.UserRouting = (function(App, Backbone){
   App.vent.bind("user:register", function(){
     App.Routing.showRoute("register");
   });
+
   App.vent.bind("user:login",function(){
     App.Routing.showRoute("login");
   });
+
   App.vent.bind("user:show", function(userModel){
     App.Routing.showRoute("user", userModel.id);
   });

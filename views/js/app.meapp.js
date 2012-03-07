@@ -12,7 +12,17 @@ App.MeApp = (function(App, Backbone, $){
   var MeView = App.ItemView.extend({
     tagName: "div",
     className: "me-view",
-    template: "#me-view-template"
+    template: "#me-view-template",
+    events:{
+      "click #recomment_button" :"recommentAction",
+      "click #organize_button"  :"organizeAction"
+    },
+    recommentAction:function(){
+      App.RecommApp.open();
+    },
+    organizeAction:function(){
+      App.OrganizeApp.open();
+    }
   });
 
   MeApp.show = function(){

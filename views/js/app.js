@@ -1,7 +1,6 @@
 // app.js
 
 App = new Backbone.Marionette.Application();
-
 App.addRegions({
   mineRegion: "#mine",
   faceRegion: "#face",

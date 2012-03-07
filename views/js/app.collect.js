@@ -1,3 +1,4 @@
+var P = "/_2_";
 App.Collect = (function(App, Backbone, $){
   var Collect = {};
   var tag_list = [];
@@ -13,15 +14,15 @@ App.Collect = (function(App, Backbone, $){
   	className : "collect-view",
   	template : "#collect-view-template",
   	events : {
-	  "click #tag":"objtagAction",
+	  "focus #obj_tag":"objtagOpen",
   	  "focus #collect_text":"foucsAction",
 	  "blur #collect_text":"blurAction",
-	  "click #collect_button" : "collectAction",
+	  "click #collectok_button" : "collectAction",
 	  "click #cancel_button" : "cancel",
 	  "click .main_tag":"maintagAction"
   	},
 
-/*	maintagAction:function(evt){
+	maintagAction:function(evt){
 	  var id = evt.target.id;
 	  var color = document.getElementById(id).style.backgroundColor;
 	  if(!color){
@@ -40,32 +41,14 @@ App.Collect = (function(App, Backbone, $){
 	    //console.dir(tag_list);
 	  }
 	},
-*/
-	maintagAction:function(evt){
-	  var id = evt.target.id;
-	  var color = document.getElementById(id).style.backgroundColor;
-	    if(!color){
-	      document.getElementById(id).style.backgroundColor="red";
-	      tag_list.push($("#"+id).val());
-	    }else if(color == "red"){
-	      document.getElementById(id).style.backgroundColor="";
-	      tag_list.pop($("#"+id).val());
-	    }
-	},
 
-	objtagAction:function(evt){
-	  $("#objtag_templateDiv").html(_.template($("#obj_tag_template").html()));
-	  $("#obj_tag_Div").bind("click",function(evt1){
-	    var id = evt1.target.id;
-	    if(id == "obj_tag_Div"){
-	      $("#objtag_templateDiv").empty();
-	    }else{
-	      if($("#tag").val()==""){
-		$("#tag").val($("#"+id).val());
-	      }else{
-		$("#tag").val($("#tag").val()+","+$("#"+id).val());
-	      }
-	    }
+	objtagOpen:function(evt){
+	  if($("#obj_tag").val() == "add a tag"){
+	    $("#obj_tag").val("");
+	  }
+	  $('#obj_tag').tagsInput({
+	    //width: 'auto',
+	    autocomplete_url:'test/fake_json_endpoint.html'
 	  });
 	},
 
@@ -87,25 +70,31 @@ App.Collect = (function(App, Backbone, $){
 	  var that = this;
 	  var id = "1:1";
 	  var text = $("#collect_text").val();
-	  var tag = $("#tag").val().split(",");
-	  var clip = {note: [{text:text}],tag:tag};
+	  var tag = $("#obj_tag").val().split(",");
+	  var params = {clip:{note: [{text:text}],tag:tag}};
 	  e.preventDefault();
-	  this.model.save({clip:clip},{
-	    url: "/_2_/clip/"+id+"/reclip",
-	    type: "POST",
-	    success: function(model, res){
-  	      App.vent.trigger("login-view:success");
-  	    },
-  	    error:function(model, res){
-  	      App.vent.trigger("login-view:error", model, res);
-  	    }
-  	  });
+	  App.vent.trigger("collect",id,params);
+
   	},
   	cancel : function(e){
   	  e.preventDefault();
   	  App.vent.trigger("collect-view:cancel");
   	}
   });
+
+  var collectSave = function(id,params){
+    var collect = new CollectModel();
+    collect.save(params,{
+      url: P+"/clip/"+id+"/reclip",
+      type: "POST",
+      success: function(model, res){
+  	App.vent.trigger("collect-view:success");
+      },
+      error:function(model, res){
+  	App.vent.trigger("collect-view:error", model, res);
+      }
+    });
+  };
 
   Collect.open = function(model, error){
   	var collectModel = new CollectModel();
@@ -120,8 +109,11 @@ App.Collect = (function(App, Backbone, $){
   	App.popRegion.close();
   };
 
-  App.vent.bind("collect-view:success", function(token){
-  	// document.cookie.token = token;
+  App.vent.bind("collect", function(id,params){
+    collectSave(id,params);
+  });
+
+  App.vent.bind("collect-view:success", function(){
   	Collect.close();
   });
 

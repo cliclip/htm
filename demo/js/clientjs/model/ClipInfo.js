@@ -13,7 +13,6 @@ ClipInfo = function(_url,options){
       this.save(params,{
 	success:function(model,response){
 	  if(response[0] == 0){
-	    GlobalEvent.trigger(client.EVENTS.USER_REFRESH);
 	    if(options.viewCallBack){
 	      options.viewCallBack(0,client.MESSAGES["comment_success"]);
 	    }
@@ -38,7 +37,6 @@ ClipInfo = function(_url,options){
        this.destroy({
 	success:function(model,response){
 	  if(response[0] == 0){
-	    GlobalEvent.trigger(client.EVENTS.USER_REFRESH);
 	    if(options.viewCallBack){
 	      options.viewCallBack(0,client.MESSAGES["comment_success"]);
 	    }
