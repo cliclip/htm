@@ -1,0 +1,16 @@
+<!-- comment template -->
+<script type="text/template" id="comment-view-template">
+  <div align="center"  style="position:relative;left:500px;top:50px;width:300px;height:200px;background:yellow;z-index:400;display:block; ">
+    <label>评</label><br>
+    <textarea  id="comm_text" rows="3" cols="30" >说点什么吧~</textarea><br>
+    <div id="maintag_templateDiv"></div>
+    <input type="checkbox" name="collect" id="collect"/>
+    <label for="collect">同时收</label><br>
+    <input type="button" value="确定" id="comment_button"/>
+    <input type="button" value="取消" id="cancel_button"/><br>
+    <span class="error"><%= typeof error != "undefined" && error.auth ? error.auth : "" %></span>
+  </div>
+</script>
+
+    
+    

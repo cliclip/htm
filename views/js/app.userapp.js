@@ -24,7 +24,17 @@ App.UserApp = (function(App, Backbone, $){
   var UserListView = App.ItemView.extend({
     tagName: "div",
     className: "userlist-view",
-    template: "#userlist-view-template"
+    template: "#userlist-view-template",
+    events : {
+      "click #comment_button" : "comment",
+      "click #delete_button" : "delete"
+    },
+    comment : function(e){
+      App.Comment.open();
+    },
+    delete : function(e){
+      App.Delete.open();
+    }
   });
 
   var showUser = function(userModel){

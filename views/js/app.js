@@ -77,7 +77,7 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView;
-
+App.RegionManager= Backbone.Marionette.RegionManager;
 App.CollectionView = Backbone.Marionette.CollectionView;
 
 App.Routing = (function(App, Backbone){
