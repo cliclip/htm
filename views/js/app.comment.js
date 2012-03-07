@@ -13,6 +13,7 @@ App.Comment = (function(App, Backbone, $){
   	events : {
 	  "focus #comm_text":"foucsAction",
 	  "blur #comm_text":"blurAction",
+	  "click .main_tag":"maintagAction",
   	  "click #comment_button" : "comment",
   	  "click #cancel_button" : "cancel"
   	},
@@ -29,6 +30,26 @@ App.Comment = (function(App, Backbone, $){
 	  }
 	},
 
+	maintagAction:function(evt){
+	  var id = evt.target.id;
+	  var color = document.getElementById(id).style.backgroundColor;
+	  if(!color){
+	    document.getElementById(id).style.backgroundColor="red";
+	    tag_list.push($("#"+id).val());
+	    console.dir(tag_list);
+	    if($("#comm_text").val() == "" || $("#comm_text").val() == "说点什么吧~"){
+	      $("#comm_text").val($("#"+id).val());
+	    }else{
+	      $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
+	    }
+	  }else if(color == "red"){
+	    document.getElementById(id).style.backgroundColor="";
+	    tag_list = _.without(tag_list,$("#"+id).val());
+	    $("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
+	    console.dir(tag_list);
+	  }
+	},
+
   	comment : function(e){
 	  var that = this;
 	  var id = "1:1";
@@ -36,6 +57,7 @@ App.Comment = (function(App, Backbone, $){
 	  var pid = "0";
   	  e.preventDefault();
 	  var params = {text: text, pid: pid};
+	  console.dir(that.tag_list);
 	  var params1 = {clip:{tag:tag_list,note:[{text:text}]}};
 	  App.vent.trigger("comment", id, params);
 	  if($("#collect").attr("checked")){
@@ -49,52 +71,17 @@ App.Comment = (function(App, Backbone, $){
   	}
   });
 
-  var MaintagView = App.ItemView.extend({
-    tagName : "Div",
-    className : "maintag-view",
-    template:"#maintag-view-template",
-    events : {
-      "click .main_tag":"maintagAction"
-    },
-    maintagAction:function(evt){
-      var id = evt.target.id;
-      var color = document.getElementById(id).style.backgroundColor;
-      if(!color){
-	document.getElementById(id).style.backgroundColor="red";
-	tag_list.push($("#"+id).val());
-	if($("#comm_text").val() == "" || $("#comm_text").val() == "说点什么吧~")
-	{
-	  $("#comm_text").val($("#"+id).val());
-	  //console.dir(tag_list);
-	}else{
-	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
-	}
-      }else if(color == "red"){
-	document.getElementById(id).style.backgroundColor="";
-	tag_list = _.without(tag_list,$("#"+id).val());
-	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
-	//console.dir(tag_list);
-      }
-    }
-  });
-
   Comment.open = function(model, error){
   	var commentModel = new CommentModel();
   	if (model) commentModel.set(model.toJSON());
   	if (error) commentModel.set("error", error);
   	commentView = new CommentView({model : commentModel});
-	miantagView = new MaintagView();
-	Comment.maintagRegion = new App.RegionManager({
-	  el:"#maintag_templateDiv"
-	});
 	App.popRegion.show(commentView);
-	Comment.maintagRegion.show(miantagView);
 	tag_list = [];
   };
 
   Comment.close = function(){
-        Comment.maintagRegion.close();
-  	App.popRegion.close();
+   	App.popRegion.close();
   };
 
   var commentAction = function(id, params){
