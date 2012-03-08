@@ -1,6 +1,6 @@
 // app.login.js
 var P = "/_2_";
-App.Login = (function(App, Backbone, $){
+App.UserApp.Login = (function(App, Backbone, $){
   var Login = {};
 
   var LoginModel = App.Model.extend({
@@ -46,6 +46,7 @@ App.Login = (function(App, Backbone, $){
       App.vent.trigger("login-view:cancel");
     }
   });
+
   Login.open = function(model, error){
     var loginModel = new LoginModel();
     if (model) loginModel.set(model.toJSON());
@@ -72,11 +73,6 @@ App.Login = (function(App, Backbone, $){
 
   App.vent.bind("login-view:cancel", function(){
     Login.close();
-  });
-
-  // TEST
-  App.bind("initialize:after", function(){
-    Login.open();
   });
 
   return Login;

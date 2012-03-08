@@ -23,7 +23,7 @@ App.ClipApp = (function(App, Backbone, $){
       var cid = user+":"+this.model.id;
       switch(opt){
 	case '评': this.comment(cid); break;
-	case '转': this.recomment(cid); break;
+	case '转': this.recommend(cid); break;
 	case '收': this.reclip(cid); break;
 	case '注': this.remark(cid); break;
 	case '改': this.update(cid); break;
@@ -31,14 +31,13 @@ App.ClipApp = (function(App, Backbone, $){
       }
     },
     comment : function(cid){
-      App.comment.open();
+      ClipApp.Comment.open(cid);
     },
-    recomment: function(cid){
-      App.RecommApp.open();
+    recommend: function(cid){
+      ClipApp.Recommend.open(cid);
     },
     reclip: function(cid){
-
-      App.Collect.open();
+      ClipApp.Reclip.open(cid);
     },
     update: function(cid){
       var detailEditView = new DetailEditView({model: this.model});
@@ -192,13 +191,18 @@ App.ClipApp = (function(App, Backbone, $){
     App.listRegion.show(detailView);
   };
 
+  ClipApp.showPreview = function(uid, start, end){
+    ClipApp.Preview.show(uid, start, end);
+  };
+
   ClipApp.showDetail = function(cid){
+    // 直接调用ClipApp.Detail.show()就可以
     document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){
-      var self = document.cookie.split("=")[1].split(":")[0];
-      // var self = "2";
+      // var self = document.cookie.split("=")[1].split(":")[0];
+      var self = "2";
       var user = detailModel.get("user");
       if(user == self){
 	detailModel.set("manage",["注","改","删"]);

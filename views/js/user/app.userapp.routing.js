@@ -4,9 +4,10 @@ App.Routing.UserRouting = (function(App, Backbone){
 
   UserRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      "user/:uid": "show",
+      "": "register",
       "register": "register",
-      "login": "login"
+      "login": "login",
+      "user/:uid": "show"
     }
   });
 

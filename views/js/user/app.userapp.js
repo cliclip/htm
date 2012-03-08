@@ -23,41 +23,6 @@ App.UserApp = (function(App, Backbone, $){
     template: "#userbubb-view-template"
   });
 
-/*
-  var UserListView = App.ItemView.extend({
-    tagName: "div",
-    className: "userlist-view",
-    template: "#userlist-view-template",
-    events : {
-      "click #comment_button" : "commentPopUp",
-      "click #collect_button" : "collectPopUp",
-      "click #delete_button" : "deletePopUp"
-    },
-    commentPopUp : function(e){
-      App.Comment.open();
-    },
-    collectPopUp : function(e){
-      App.Collect.open();
-    },
-    deletePopUp : function(e){
-      App.Delete.open();
-    }
-  });
-/*
-  var LoginModel = App.Model.extend({
-    url: P+"/login"
-  });
-  var login = function(data){
-    var loginModel = new LoginModel();
-    loginModel.save(data,{
-      success:function(user, response){
-	var token = response;
-      },
-      error:function(user, response){}
-    });
-  };
-*/
-
   var showUser = function(userModel){
     var userFaceView = new UserFaceView({
       model: userModel
@@ -66,18 +31,16 @@ App.UserApp = (function(App, Backbone, $){
       model: userModel
     });
 
-    var userListView = new UserListView({
-      model: userModel
-    });
-
     App.faceRegion.show(userFaceView);
     App.bubbRegion.show(userBubbView);
-    App.listRegion.show(userListView);
   };
 
   UserApp.login = function(){
-    var userRegisterView = new UserRegisterView();
-    App.popRegion.show(userRegisterView);
+    UserApp.Login.open();
+  };
+
+  UserApp.register = function(){
+    UserApp.Register.open();
   };
 
   UserApp.show = function(uid){
@@ -85,17 +48,16 @@ App.UserApp = (function(App, Backbone, $){
       id: uid
     });
     user.fetch();
-    /*
     user.onChange(function(userModel){
       App.vent.trigger("user:show", userModel);
     });
-   */
-    user.onChange(showUser);
+    // user.onChange(showUser);
   };
 
   App.vent.bind("user:show", function(userModel){
     showUser(userModel);
   });
+
   App.vent.bind("user:login",function(data){
     login(data);
   });
