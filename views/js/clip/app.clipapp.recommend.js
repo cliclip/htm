@@ -10,7 +10,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     url   : P+"/lookup/0..5"
   });
 
-
   var RecommModel = App.Model.extend({
  /*   validate:function(model){
       if(model.uid == undefined){

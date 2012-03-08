@@ -5,35 +5,35 @@ App.Delete = (function(App, Backbone, $){
   var DeleteModel = App.Model.extend({});
 
   var DeleteView = App.ItemView.extend({
-  	tagName : "div",
-  	className : "delete-view",
-  	template : "#delete-view-template",
-  	events : {
-  	  "click #deleteok_button" : "delete",
-  	  "click #cancel_button" : "cancel"
-  	},
-
-  	delete : function(e){
-	  e.preventDefault();
-	  var url = "/_2_/clip/1:1";
-	  App.vent.trigger("delete", url, this.model.cid);
-  	},
-  	cancel : function(e){
-  	  e.preventDefault();
-  	  App.vent.trigger("delete-view:cancel");
-  	}
+    tagName : "div",
+    className : "delete-view",
+    template : "#delete-view-template",
+    events : {
+      "click #deleteok_button" : "delete",
+      "click #cancel_button" : "cancel"
+    },
+    delete : function(e){
+      e.preventDefault();
+      var url = this.options.url;
+      App.vent.trigger("delete", url, this.model.cid);
+    },
+    cancel : function(e){
+      e.preventDefault();
+      App.vent.trigger("delete-view:cancel");
+    }
   });
 
-  Delete.open = function(model, error){
-  	var deleteModel = new DeleteModel();
-  	if (model) deleteModel.set(model.toJSON());
-  	if (error) deleteModel.set("error", error);
-  	deleteView = new DeleteView({model : deleteModel});
-	App.popRegion.show(deleteView);
+  Delete.open = function(model,url, error){
+    console.info("delete open!!!!!!!!!");
+    var deleteModel = new DeleteModel();
+    if (model) deleteModel.set(model.toJSON());
+    if (error) deleteModel.set("error", error);
+    deleteView = new DeleteView({model : deleteModel,url:url});
+    App.popRegion.show(deleteView);
   };
 
   Delete.close = function(){
-  	App.popRegion.close();
+    App.popRegion.close();
   };
 
   var deleteAction = function(url,cid){
@@ -54,11 +54,13 @@ App.Delete = (function(App, Backbone, $){
   });
 
   App.vent.bind("delete-view:success", function(){
-  	Delete.close();
+    console.info("!!!!!!!!!!!");
+    Delete.close();
   });
 
   App.vent.bind("delete-view:error", function(model, error){
-  	Delete.open(model, error);
+    console.info("delete-view:error");
+    Delete.open(model,null, error);
   });
 
   App.vent.bind("delete-view:cancel", function(){

@@ -19,6 +19,7 @@ App.OrganizeApp=(function(App,Backbone,$){
     },
     maintagAction:function(evt){
       var id = evt.target.id;
+      var tag_list = [];
       var color = document.getElementById(id).style.backgroundColor;
       if(!color){
 	document.getElementById(id).style.backgroundColor="red";
@@ -61,12 +62,11 @@ App.OrganizeApp=(function(App,Backbone,$){
     },
 
     organizeAction:function(e){
-      var id = "1:1";
-      var _data={note:[{text: $("#organize_text").val()}],tag:$("#tag").val().split(",")};
+      var _data={note:[{text: $("#organize_text").val()}],tag:$("#obj_tag").val().split(",")};
       e.preventDefault();
-      document.cookie ="token=1:ad44a7c2bc290c60b767cb56718b46ac";
+      //document.cookie ="token=1:ad44a7c2bc290c60b767cb56718b46ac";
       this.model.save(_data,{
-	url:P+"/clip/"+id,
+	url:P+"/clip/"+this.options.clipid,
 	type:"PUT",
 	success:function(model,res){
 	  App.vent.trigger("organize-view:success");
@@ -86,12 +86,13 @@ App.OrganizeApp=(function(App,Backbone,$){
   });
 
 
-  OrganizeApp.open = function(){
+  OrganizeApp.open = function(cid){
     var organizeModel = new OrganizeModel();
     OrganizeApp.objtagRegion= new App.RegionManager({
       el:"#objtag_templateDiv"
     });
-    var organizeView = new OrganizeView({model:organizeModel});
+    var organizeView = new OrganizeView({model:organizeModel,clipid:cid});
+    console.info(organizeView);
     App.popRegion.show(organizeView);
   };
   OrganizeApp.close=function(){

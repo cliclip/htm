@@ -41,14 +41,16 @@ App.ClipApp = (function(App, Backbone, $){
     },
     update: function(cid){
       var detailEditView = new DetailEditView({model: this.model});
+      console.info(detailEditView);
       App.listRegion.show(detailEditView);
+      App.Delete.close();
     },
     remark: function(cid){
-      App.OrganizeApp.open();
+      App.OrganizeApp.open(cid);
     },
     remove: function(cid){
-      console.info("this.model.id"+this.model.id);
-      App.Delete.open();
+      //console.info("this.model.id"+this.model.id);
+      App.Delete.open(null, P + "/clip/" + cid, null);
     }
   });
 
@@ -82,7 +84,8 @@ App.ClipApp = (function(App, Backbone, $){
       $(".editContent-container").append(img);
     },
     localImg:function(){
-      var url =	P+"/user/1/image";
+      var user = this.model.get("user");
+      var url =	P+"/user/" + user + "/image";
       var imgModel = new ImgModel();
       imgModel.set("actUrl",url);
       var localImgView = new LocalImgView({
@@ -97,7 +100,7 @@ App.ClipApp = (function(App, Backbone, $){
 	  if(returnObj[0] == 0){
 	    var imgids = returnObj[1];
 	    for(var i=0;i<imgids.length;i++){
-	      var url = P+"/user/1/image/" +imgids[i];
+	      var url = P+"/user/"+ user+"/image/" +imgids[i];
 	      var img = $("<img class='detail-image' src= "+url+">");
 	      $(".editContent-container").append(img);
 	    }
@@ -111,7 +114,9 @@ App.ClipApp = (function(App, Backbone, $){
       console.info("调整页面格式");
     },
     remarkClip:function(){
-      App.OrganizeApp.open();
+      var user = this.model.get("user");
+      var cid = user+":"+this.model.id;
+      App.OrganizeApp.open(cid);
     },
     editText:function(evt){
       var contentText = $(evt.target);
@@ -197,7 +202,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.showDetail = function(cid){
     // 直接调用ClipApp.Detail.show()就可以
-    document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+    //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){

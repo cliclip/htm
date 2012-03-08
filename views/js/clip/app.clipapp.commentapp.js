@@ -94,42 +94,42 @@ App.CommentApp = (function(App, Backbone, $){
     events:{
       "click .comm": "Comment", // 评论的各个选项 点击事件
       "click .addComment":"add_Comment",
-      "focus #comm_text": "ClearAction", // 评论输入框 事件
-      "blur #comm_text": "AddAction"
+      "focus #blowcomm_text": "ClearAction", // 评论输入框 事件
+      "blur #blowcomm_text": "AddAction"
     },
     ClearAction:function(evt){
-      if($("#comm_text").val().trim() == this.value){
-	$("#comm_text").val("");
+      if($("#blowcomm_text").val().trim() == this.value){
+	$("#blowcomm_text").val("");
       }
     },
     AddAction:function(evt){
-      if($("#comm_text").val() == ""){
-	$("#comm_text").val(this.value);
+      if($("#blowcomm_text").val() == ""){
+	$("#blowcomm_text").val(this.value);
       }
     },
     Comment:function(evt){ // 正确
       var id = evt.target.id;
       var val = $("#"+id).val();
-      var val1 = $("#comm_text").val();
+      var val1 = $("#blowcomm_text").val();
       if(val1 == this.value){
-	$("#comm_text").val(val);
+	$("#blowcomm_text").val(val);
       }else{
-	$("#comm_text").val(val1+" "+val);
+	$("#blowcomm_text").val(val1+" "+val);
       }
     },
     // 该方法响应的有可能即是对clip的直接评论，又是对comment的回复
     add_Comment:function(evt){
       // 之后从登录后设置的cookie中得到
-      document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+      //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var cid = this.model.id;
-      this.model.save({text: $("#comm_text").val(),pid : pid},
+      this.model.save({text: $("#blowcomm_text").val(),pid : pid},
       {
 	url: P+"/clip/"+cid+"/comment",
 	type: "POST",
 	success:function(comment,response){
-	  getComment(cid);
-	  $("#comm_text").val("评论文本框");
+	  CommentApp.getComment(cid);
+	  $("#blowcomm_text").val("评论文本框");
 	},
 	error:function(comment,response){
 	  console.log(response);
@@ -185,7 +185,7 @@ App.CommentApp = (function(App, Backbone, $){
       url: P+"/clip/"+cid+"/comment/"+id,
       success:function(model, res){
 	// 删除评论成功，重新加载comment
-	getComment(cid);
+	CommentApp.getComment(cid);
       },
       error:function(model, res){
 	// console.log(res);
