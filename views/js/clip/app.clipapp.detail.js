@@ -1,9 +1,7 @@
-// app.ClipApp.js
-var P = "/_2_";
-App.ClipApp = (function(App, Backbone, $){
-  var ClipApp = {};
+App.ClipApp.Detail = (function(App, Backbone, $){
+  var Detail = {};
 
-  var DetailModel = App.Model.extend({
+    var DetailModel = App.Model.extend({
     url: function(){
       return P+"/clip/"+this.id;
     }
@@ -31,10 +29,12 @@ App.ClipApp = (function(App, Backbone, $){
       }
     },
     comment : function(cid){
-      ClipApp.Comment.open(cid);
+      App.vent.trigger("comment", cid);
+      // ClipApp.Comment.open(cid);
     },
     recommend: function(cid){
-      ClipApp.Recommend.open(cid);
+      App.vent.trigger("recommend", cid);
+      // ClipApp.Recommend.open(cid);
     },
     reclip: function(cid){
       ClipApp.Reclip.open(cid);
@@ -54,7 +54,6 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  // 因为上传图片的form进行渲染是需要actUrl作为参数
   var ImgModel = App.Model.extend({});
   var LocalImgView = App.ItemView.extend({
     tagName: "form",
@@ -146,7 +145,6 @@ App.ClipApp = (function(App, Backbone, $){
     },
     saveUpdate: function(){
       var _data = new Object();
-      var that = this;
       _data.content = [];
       $(".editContent-container").children().each(function(){
 	var _text = $(this).text() ? $(this).text().replace(/(^\s*)|(\s*$)/g,"") : "";
@@ -157,8 +155,7 @@ App.ClipApp = (function(App, Backbone, $){
 	if(_text){ // && text.replace(/(^\s*)|(\s*$)/g,"") != ""){
 	  _data.content.push({text:_text});//.replace(/(^\s*)|(\s*$)/g,"") );
 	}else if(src){ //如果有图片
-	  var user = that.model.get("user");
-	  var prefix = P + "user/"+ user +"/image/";
+	  var prefix = P + "user/1/image/";
 	  if(src.indexOf(prefix) != -1){
 	    id = src.split(prefix);
 	    src = id[1];
@@ -198,12 +195,7 @@ App.ClipApp = (function(App, Backbone, $){
     App.listRegion.show(detailView);
   };
 
-  ClipApp.showPreview = function(uid, start, end){
-    ClipApp.Preview.show(uid, start, end);
-  };
-
-  ClipApp.showDetail = function(cid){
-    // 直接调用ClipApp.Detail.show()就可以
+  Detail.show = function(cid){
     //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
@@ -223,18 +215,5 @@ App.ClipApp = (function(App, Backbone, $){
       App.vent.trigger("clip:addComment", cid);
     });
   };
-
-  ClipApp.showError = function(cid){
-    // 提示用户在对cid对应的clip进行操作的过程中出现错误
-  };
-
-  App.vent.bind("clip:showDetail", function(cid){
-    ClipApp.showDetail(cid);
-  });
-
-  App.vent.bind("clip:error", function(cid){
-    ClipApp.showError(cid);
-  });
-
-  return ClipApp;
+  return Detail;
 })(App, Backbone, jQuery);

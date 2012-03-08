@@ -1,13 +1,13 @@
 // app.clippreviewapp.js
 //var P = '/_2_/';
-App.ClipPreviewApp = (function(App, Backbone, $){
-  var ClipPreviewApp = {};
+App.ClipApp.Preview = (function(App, Backbone, $){
+  var Preview = {};
   var start = 0;
   var end = 9;
   var id = null;
   var collection = null;
 
-  var ClipPreviewModel = App.Model.extend({
+  var PreviewModel = App.Model.extend({
     defaults:{
       recommend:"",
       id:"",
@@ -31,9 +31,9 @@ App.ClipPreviewApp = (function(App, Backbone, $){
     }
   });
   var PreviewList = App.Collection.extend({
-    model : ClipPreviewModel
+    model : PreviewModel
   });
-  var ClipPreviewView = App.ItemView.extend({
+  var PreviewView = App.ItemView.extend({
     tagName: "div",
     template: "#clippreview-view-template"
 /*    timer:"",
@@ -56,13 +56,13 @@ App.ClipPreviewApp = (function(App, Backbone, $){
   var PreviewListView = App.CollectionView.extend({
     tagName: "div",
     className: "clippreview-item",
-    itemView: ClipPreviewView,
+    itemView: PreviewView,
     initialize: function(){
       App.vent.trigger("clippreview:scroll", this);
     }
   });
 
-  var showClipPreview = function(previewlist){
+  var showPreview = function(previewlist){
     //console.info(previewlist.toJSON());
     var previewView = new PreviewListView({
       collection : previewlist
@@ -70,7 +70,7 @@ App.ClipPreviewApp = (function(App, Backbone, $){
     App.listRegion.show(previewView);
   };
 
-  ClipPreviewApp.show = function(uid,s,e){
+  Preview.show = function(uid,s,e){
     collection = new PreviewList();
     start = parseInt(s);
     end = parseInt(e);
@@ -85,12 +85,13 @@ App.ClipPreviewApp = (function(App, Backbone, $){
   };
 
   App.vent.bind("clippreview:show", function(previewlist){
-    showClipPreview(previewlist);
+    showPreview(previewlist);
   });
 
   App.vent.bind("clip_preview:show", function(uid, start, end){
-    ClipPreviewApp.show(uid, start, end);
+    Preview.show(uid, start, end);
   });
+
 
   App.vent.bind("clippreview:scroll", function(view){
     $(document).scroll(function(evt){
@@ -103,7 +104,6 @@ App.ClipPreviewApp = (function(App, Backbone, $){
       }
     });
   });
-
-  return ClipPreviewApp;
+  return Preview;
 
 })(App, Backbone, jQuery);

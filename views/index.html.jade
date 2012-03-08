@@ -35,25 +35,27 @@ html
     script(src="/js/app.js")
     // script(src="/js/Constants.js") 
 
+    //- userapp
+    script(src="/js/user/app.userapp.js")
+    script(src="/js/user/app.userapp.routing.js")
     script(src="/js/app.util.js")
     script(src="/js/user/app.userapp.login.js")
     script(src="/js/user/app.userapp.register.js")
     script(src="/js/user/app.userapp.me.js")
-    script(src="/js/user/app.userapp.js")
-    script(src="/js/user/app.userapp.routing.js")
+
+    //- clipapp
+    script(src="/js/clip/app.clipapp.js")
+    //- clip_preview 
+    script(src="/js/clip/app.clipapp.preview.js")
+    script(src="/js/clip/app.clipapp.detail.js")
+    script(src="/js/clip/app.clipapp.commentapp.js")
+    script(src="/js/clip/app.clipapp.routing.js")
 
     script(src="/js/clip/app.clipapp.comment.js")
     script(src="/js/clip/app.clipapp.recommend.js")
     script(src="/js/clip/app.clipapp.reclip.js")
     script(src="/js/clip/app.clipapp.remove.js")
     script(src="/js/clip/app.clipapp.remark.js")
-
-    //- clip_preview 
-    script(src="/js/clip/app.clipapp.preview.js")
-    //- clip_detail
-    script(src="/js/clip/app.clipapp.js")
-    script(src="/js/clip/app.clipapp.commentapp.js")
-    script(src="/js/clip/app.clipapp.routing.js")
 
     //- kick start
     script $(function(){ App.start(); });
@@ -64,17 +66,15 @@ html
     #face
     #bubb
     #list
-    #main
+    #pop
 
     //- templates
-    include tmpl/main.html
     include tmpl/login-view-template.html
-    // include tmpl/userlist-view-template
-    
     include tmpl/me-view-template.html
     include tmpl/userface-view-template.html
     include tmpl/userbubb-view-template.html
     include tmpl/register-view-template.html
+
     include tmpl/detail-view-template.html
     include tmpl/editDetail-view-template.html
     include tmpl/localImg-view-template.html
@@ -83,7 +83,7 @@ html
 
     include tmpl/comment-view-template.html
     include tmpl/delete-view-template
-    include tmpl/collect-view-template.html
+    include tmpl/reclip-view-template.html
     include tmpl/recommend-view-template.html
     include tmpl/organize-view-template.html
 
