@@ -5,7 +5,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
   ClipRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      "clip/:cid": "showDetail"
+      "clip/:cid": "showDetail",
+      "user/:uid/clip/:start..:end": "show"
     }
   });
 

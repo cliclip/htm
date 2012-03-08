@@ -41,14 +41,16 @@ App.ClipApp = (function(App, Backbone, $){
     },
     update: function(cid){
       var detailEditView = new DetailEditView({model: this.model});
+      console.info(detailEditView);
       App.listRegion.show(detailEditView);
+      App.Delete.close();
     },
     remark: function(cid){
       App.OrganizeApp.open(cid);
     },
     remove: function(cid){
       console.info("this.model.id"+this.model.id);
-      App.Delete.open();
+      App.Delete.open(null, P + "/clip/" + cid, null);
     }
   });
 
@@ -111,7 +113,9 @@ App.ClipApp = (function(App, Backbone, $){
       console.info("调整页面格式");
     },
     remarkClip:function(){
-      App.OrganizeApp.open();
+      var user = this.model.get("user");
+      var cid = user+":"+this.model.id;
+      App.OrganizeApp.open(cid);
     },
     editText:function(evt){
       var contentText = $(evt.target);
@@ -192,12 +196,12 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.showDetail = function(cid){
-    document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+    //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){
       var self = document.cookie.split("=")[1].split(":")[0];
-      //var self = "2";
+      // var self = "2";
       var user = detailModel.get("user");
       if(user == self){
 	detailModel.set("manage",["注","改","删"]);

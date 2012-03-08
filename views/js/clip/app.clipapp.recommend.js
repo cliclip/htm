@@ -98,7 +98,7 @@ App.RecommApp = (function(App,Backbone,$){
   });
   var showNameList=function(params){
     var collection = new NameList({});
-    document.cookie = "token=2:080912641ed0b4c793d0d3b8cda2c6b6";
+    //document.cookie = "token=2:080912641ed0b4c793d0d3b8cda2c6b6";
     collection.fetch({data:params});
     collection.onReset(function(list){
       var namelistView = new NameListCollectionView({

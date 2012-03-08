@@ -64,9 +64,7 @@ App.OrganizeApp=(function(App,Backbone,$){
     organizeAction:function(e){
       var _data={note:[{text: $("#organize_text").val()}],tag:$("#obj_tag").val().split(",")};
       e.preventDefault();
-      document.cookie ="token=1:ad44a7c2bc290c60b767cb56718b46ac";
-      console.info("!!!!!!!!!!!");
-      console.info(this);
+      //document.cookie ="token=1:ad44a7c2bc290c60b767cb56718b46ac";
       this.model.save(_data,{
 	url:P+"/clip/"+this.options.clipid,
 	type:"PUT",
