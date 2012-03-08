@@ -49,7 +49,7 @@ App.ClipApp = (function(App, Backbone, $){
       App.OrganizeApp.open(cid);
     },
     remove: function(cid){
-      console.info("this.model.id"+this.model.id);
+      //console.info("this.model.id"+this.model.id);
       App.Delete.open(null, P + "/clip/" + cid, null);
     }
   });
@@ -84,7 +84,8 @@ App.ClipApp = (function(App, Backbone, $){
       $(".editContent-container").append(img);
     },
     localImg:function(){
-      var url =	P+"/user/1/image";
+      var user = this.model.get("user");
+      var url =	P+"/user/" + user + "/image";
       var imgModel = new ImgModel();
       imgModel.set("actUrl",url);
       var localImgView = new LocalImgView({
@@ -99,7 +100,7 @@ App.ClipApp = (function(App, Backbone, $){
 	  if(returnObj[0] == 0){
 	    var imgids = returnObj[1];
 	    for(var i=0;i<imgids.length;i++){
-	      var url = P+"/user/1/image/" +imgids[i];
+	      var url = P+"/user/"+ user+"/image/" +imgids[i];
 	      var img = $("<img class='detail-image' src= "+url+">");
 	      $(".editContent-container").append(img);
 	    }

@@ -36,7 +36,7 @@ App.Login = (function(App, Backbone, $){
 	type: "POST",
   	success: function(model, res){
    	  var token = res;
-  	  console.log("success model = %j, response = %j", model, res);
+  	  //console.log("success model = %j, response = %j", model, res);
   	  App.vent.trigger("login-view:success", token);
   	},
   	error:function(model, res){
@@ -66,10 +66,9 @@ App.Login = (function(App, Backbone, $){
 
   App.vent.bind("login-view:success", function(token){
     document.cookie = "token="+token;
-    console.info(token);
     var uid = token.split(":")[0];
     // 用户登录成功触发，显示clip的preview事件
-    App.vent.trigger("clip_preview:show", uid, 0, 5);
+    App.vent.trigger("clip_preview:show", uid, 0, 9);
     Login.close();
   });
 

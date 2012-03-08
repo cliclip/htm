@@ -58,16 +58,7 @@ App.ClipPreviewApp = (function(App, Backbone, $){
     className: "clippreview-item",
     itemView: ClipPreviewView,
     initialize: function(){
-      var view = this;
-      $(document).scroll(function(evt){
-	var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
-	if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
-	  start = start +10;
-	  end = end + 10;
-	  collection.url = P + "/user/" + id + "/clip/" + start + ".." + end;
-	  collection.fetch({add: true});
-	}
-      });
+      App.vent.trigger("clippreview:scroll", this);
     }
   });
 
@@ -99,6 +90,18 @@ App.ClipPreviewApp = (function(App, Backbone, $){
 
   App.vent.bind("clip_preview:show", function(uid, start, end){
     ClipPreviewApp.show(uid, start, end);
+  });
+
+  App.vent.bind("clippreview:scroll", function(view){
+    $(document).scroll(function(evt){
+      var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
+      if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
+	start = start +10;
+	end = end + 10;
+	collection.url = P + "/user/" + id + "/clip/" + start + ".." + end;
+	collection.fetch({add: true});
+      }
+    });
   });
 
   return ClipPreviewApp;
