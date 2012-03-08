@@ -146,6 +146,7 @@ App.ClipApp = (function(App, Backbone, $){
     },
     saveUpdate: function(){
       var _data = new Object();
+      var that = this;
       _data.content = [];
       $(".editContent-container").children().each(function(){
 	var _text = $(this).text() ? $(this).text().replace(/(^\s*)|(\s*$)/g,"") : "";
@@ -156,7 +157,8 @@ App.ClipApp = (function(App, Backbone, $){
 	if(_text){ // && text.replace(/(^\s*)|(\s*$)/g,"") != ""){
 	  _data.content.push({text:_text});//.replace(/(^\s*)|(\s*$)/g,"") );
 	}else if(src){ //如果有图片
-	  var prefix = P + "user/1/image/";
+	  var user = that.model.get("user");
+	  var prefix = P + "user/"+ user +"/image/";
 	  if(src.indexOf(prefix) != -1){
 	    id = src.split(prefix);
 	    src = id[1];
