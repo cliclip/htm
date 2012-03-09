@@ -64,7 +64,7 @@ App.Delete = (function(App, Backbone, $){
   });
 
   App.vent.bind("delete-view:cancel", function(){
-  	Delete.close();
+    Delete.close();
   });
 
   // TEST

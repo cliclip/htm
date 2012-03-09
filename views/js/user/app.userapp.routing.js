@@ -6,8 +6,8 @@ App.Routing.UserRouting = (function(App, Backbone){
     appRoutes: {
       "": "register",
       "register": "register",
-      "login": "login",
-      "user/:uid": "show"
+      "login": "login"
+      //"user/:uid": "show"
     }
   });
 

@@ -1,15 +1,14 @@
 // app.clippreviewapp.js
-//var P = '/_2_/';
 App.ClipApp.Preview = (function(App, Backbone, $){
   var Preview = {};
   var start = 0;
   var end = 9;
-  var id = null;
+//  var id = null;
   var collection = null;
-
+  var url = "";
   var PreviewModel = App.Model.extend({
     defaults:{
-      recommend:"",
+      recommend:"",//列表推荐的clip时有此属性
       id:"",
       user:"",
       content:{
@@ -25,9 +24,9 @@ App.ClipApp.Preview = (function(App, Backbone, $){
       source:{
 	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
       },
-      reprint_count:"",
-      reply_count:"",
-      author:""
+      reprint_count:"",//此clip被转摘的次数
+      reply_count:"",//此clip被回复的次数
+      author:""//此clip的作者，列表推荐和列表follow动态时有此属性
     }
   });
   var PreviewList = App.Collection.extend({
@@ -36,7 +35,7 @@ App.ClipApp.Preview = (function(App, Backbone, $){
   var PreviewView = App.ItemView.extend({
     tagName: "div",
     template: "#clippreview-view-template"
-/*    timer:"",
+/*  timer:"",
     events:{
       "mouseover .recommend":"showMessage",
       "mouseover .author":"showMessage",
@@ -58,48 +57,43 @@ App.ClipApp.Preview = (function(App, Backbone, $){
     className: "clippreview-item",
     itemView: PreviewView,
     initialize: function(){
-      App.vent.trigger("clippreview:scroll", this);
+      App.vent.trigger("clip:preview:scroll", this);
     }
   });
 
   var showPreview = function(previewlist){
     //console.info(previewlist.toJSON());
-    var previewView = new PreviewListView({
+    var preview_view = new PreviewListView({
       collection : previewlist
     });
-    App.listRegion.show(previewView);
+    App.listRegion.show(preview_view);
   };
-
-  Preview.show = function(uid,s,e){
+  //程序入口(显示clip的列表)
+  Preview.show = function(_url,s,e){
     collection = new PreviewList();
-    start = parseInt(s);
-    end = parseInt(e);
-    id = uid;
+    start = s ? parseInt(s) : start;
+    end = e ? parseInt(e) : end;
+    url = _url;
     //collection.url = "/test/recommend.json";
     //collection.url = "/test/clip.json";
-    collection.url = P + "/user/" + id + "/clip/" + start + ".." + end;
+    collection.url = url + start + ".." + end;
     collection.fetch();
     collection.onReset(function(previewlist){
-      App.vent.trigger("clippreview:show", previewlist);
+      showPreview(previewlist);
     });
   };
 
-  App.vent.bind("clippreview:show", function(previewlist){
-    showPreview(previewlist);
+  App.vent.bind("clip_preview:show", function(url, start, end){
+    Preview.show(url, start, end);
   });
 
-  App.vent.bind("clip_preview:show", function(uid, start, end){
-    Preview.show(uid, start, end);
-  });
-
-
-  App.vent.bind("clippreview:scroll", function(view){
+  App.vent.bind("clip:preview:scroll", function(view){
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
       if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
 	start = start +10;
 	end = end + 10;
-	collection.url = P + "/user/" + id + "/clip/" + start + ".." + end;
+	collection.url = url + start + ".." + end;
 	collection.fetch({add: true});
       }
     });

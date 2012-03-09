@@ -69,7 +69,10 @@ App.UserApp.Login = (function(App, Backbone, $){
     document.cookie = "token="+token;
     var uid = token.split(":")[0];
     // 用户登录成功触发，显示clip的preview事件
-    App.vent.trigger("clip_preview:show", uid, 0, 9);
+    var url = P + "/user/" + uid + "/clip/";
+    App.vent.trigger("clip_preview:show", url, "0","9");
+    //修改地址栏的hash
+    App.vent.trigger("clip:preview:show");
     Login.close();
   });
 

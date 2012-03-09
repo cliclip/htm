@@ -41,9 +41,9 @@ App.ClipApp = (function(App, Backbone, $){
     },
     update: function(cid){
       var detailEditView = new DetailEditView({model: this.model});
-      console.info(detailEditView);
+      //console.info(detailEditView);
       App.listRegion.show(detailEditView);
-      App.Delete.close();
+      App.vent.trigger("delete-view:cancel");
     },
     remark: function(cid){
       App.OrganizeApp.open(cid);
@@ -198,8 +198,26 @@ App.ClipApp = (function(App, Backbone, $){
     App.listRegion.show(detailView);
   };
 
-  ClipApp.showPreview = function(uid, start, end){
-    ClipApp.Preview.show(uid, start, end);
+  ClipApp.showPreview = function(uid){
+    if(uid){
+      var url = P + "/user/" + uid + "/clip/";
+      ClipApp.Preview.show(url);
+    }else{
+      console.info(document.cookie);
+      var _id = document.cookie.split("=")[1].split(":")[0];
+      var url = P + "/user/" + _id  + "/clip/";
+      ClipApp.Preview.show(url);
+    }
+  };
+
+  ClipApp.show_userTagClip = function(uid, tagName){
+    var url = P + "/user/" + uid + "/clip/tag/" + tagName + "/";
+    ClipApp.Preview.show(url);
+  };
+  ClipApp.show_myTagClip = function(tagName){
+    var _id = document.cookie.split("=")[1].split(":")[0];
+    var url = P + "/user/" + _id  + "/clip/tag/" + tagName + "/";
+    ClipApp.Preview.show(url);
   };
 
   ClipApp.showDetail = function(cid){
@@ -208,7 +226,7 @@ App.ClipApp = (function(App, Backbone, $){
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){
-      // var self = document.cookie.split("=")[1].split(":")[0];
+      //var self = document.cookie.split("=")[1].split(":")[0];
       var self = "2";
       var user = detailModel.get("user");
       if(user == self){
