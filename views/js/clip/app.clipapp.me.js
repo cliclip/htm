@@ -2,8 +2,8 @@
 
 App.ClipApp.Me = (function(App, Backbone, $){
 
-  var P = "/_2_";
-  var token = "1:aaaa";
+  var P = App.ClipApp.Url.base;
+  var token = document.cookie;
   var Me = {};
 
   Me.Model = App.Model.extend({
@@ -37,10 +37,15 @@ App.ClipApp.Me = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.login:success", function(){
-    MeApp.show();
+    Me.show();
   });
-  App.vent.bind("app.clipapp:logout:success", function(){
-    MeApp.show();
+
+  App.vent.bind("app.clipapp.logout:success", function(){
+    Me.show();
+  });
+
+  App.vent.bind("app.clipapp.register:success", function(){
+    Me.show();
   });
 
   App.addInitializer(function(){

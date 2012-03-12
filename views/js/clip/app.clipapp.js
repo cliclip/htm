@@ -3,10 +3,10 @@
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
 
-  function getMyId(){
+  function getMyUid(){
     return ClipApp.Me.me.get("uid");
   }
-
+/*
   ClipApp.siteShow = function(tag){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteTags(tag);
@@ -64,7 +64,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserRecommend(uid, tag);
   };
-
+ */
   App.vent.bind("app.clipapp:login", function(){
     var uid = getMyUid();
     ClipApp.Login.show(uid);
@@ -86,29 +86,34 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:comment", function(clipid){
-    var uid = getMyId();
+    var uid = getMyUid();
     ClipApp.Comment.show(clipid, uid);
   });
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid){
-    var uid = getMyId();
+    var uid = getMyUid();
     ClipApp.ClipDetail.show(clipid, uid);
   });
 
   App.vent.bind("app.clipapp:clipmemo", function(clipid){
-    var uid = getMyId();
+    var uid = getMyUid();
     ClipApp.ClipMemo.show(clipid, uid);
   });
 
   App.vent.bind("app.clipapp:clipedit", function(clipid){
-    var uid = getMyId();
+    var uid = getMyUid();
     ClipApp.ClipEdit.show(clipid, uid);
   });
 
   App.vent.bind("app.clipapp:clipdelete", function(clipid){
-    var uid = getMyId();
+    var uid = getMyUid();
     ClipApp.ClipDelete.show(clipid, uid);
   });
+
+  App.bind("initialize:after", function(){
+    App.vent.trigger("app.clipapp:clipdetail", "1:23");
+  });
+
 
   return ClipApp;
 })(App, Backbone, jQuery);
