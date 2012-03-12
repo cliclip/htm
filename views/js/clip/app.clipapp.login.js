@@ -48,10 +48,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
   });
 
   Login.open = function(model, error){
-    var loginModel = new LoginModel();
+    var loginModel = new Login.Model();
     if (model) loginModel.set(model.toJSON());
     if (error) loginModel.set("error", error);
-    loginView = new LoginView({model : loginModel});
+    loginView = new Login.View({model : loginModel});
     App.popRegion.show(loginView);
   };
 

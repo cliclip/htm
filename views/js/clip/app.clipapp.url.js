@@ -1,5 +1,5 @@
 App.ClipApp.Url = (function(){
-	var Url = {};
-	Url.base = "/_2_";
+  var Url = {};
+  Url.base = "/_2_";
 
 })();
