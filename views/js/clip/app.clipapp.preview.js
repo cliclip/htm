@@ -1,11 +1,7 @@
 // app.clippreviewapp.js
 App.ClipApp.Preview = (function(App, Backbone, $){
   var Preview = {};
-  var start = 0;
-  var end = 9;
-//  var id = null;
   var collection = null;
-  var url = "";
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -61,26 +57,22 @@ App.ClipApp.Preview = (function(App, Backbone, $){
     }
   });
 
-  var showPreview = function(previewlist){
-    //console.info(previewlist.toJSON());
-    var preview_view = new ClipPreviewListView({
-      collection : previewlist
-    });
-    App.listRegion.show(preview_view);
-  };
-  //程序入口(显示clip的列表)
-  Preview.show = function(_url){
+  Preview.show = function(){
     collection = new PreviewList();
-    //start = s ? parseInt(s) : start;
-    //end = e ? parseInt(e) : end;
-    url = _url;
     //collection.url = "/test/recommend.json";
     //collection.url = "/test/clip.json";
-    collection.url = url + start + ".." + end;
+    collection.url = App.clipApp.Url.url + App.clipApp.Url.start+".." + App.clipApp.Url.end;
     collection.fetch();
     collection.onReset(function(previewlist){
-      showPreview(previewlist);
+      App.vent.trigger("app.clipapp.cliplist:show",previewlist);
     });
+  };
+
+  Preview.getUserClips = function(uid,tag){
+    var _url = "/user/"  + uid + "/clip/" ;
+    if(tag){ _url += "tag/"+tag+"/"; }
+    App.clipApp.Url.url = _url;
+    Preview.show();
   };
 
   App.vent.bind("clip_preview:show", function(url, start, end){
@@ -91,9 +83,9 @@ App.ClipApp.Preview = (function(App, Backbone, $){
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
       if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
-	start = start +10;
-	end = end + 10;
-	collection.url = url + start + ".." + end;
+	App.clipApp.Url.start +=10;
+	App.clipApp.Url.end +=10;
+	collection.url = App.clipApp.Url.url + App.clipApp.Url.start + ".." + App.clipApp.Url.end;
 	collection.fetch({add: true});
       }
     });
