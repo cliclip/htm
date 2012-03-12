@@ -1,21 +1,35 @@
 // app.clipapp.me.js
 
 App.ClipApp.Me = (function(App, Backbone, $){
-  var MeApp = {};
 
-  var MeModel = App.Model.extend({
-    url : "/test/me.json"
+  var P = "/_2_";
+  var token = "1:aaaa";
+  var Me = {};
+
+  Me.Model = App.Model.extend({
+    // url : "/test/me.json"
+    url : P+"/user/"+token.split(":")[0]
   });
 
-  var MeView = App.ItemView.extend({
+  Me.View = App.ItemView.extend({
     tagName: "div",
     className: "me-view",
-    template: "#me-view-template"
+    template: "#me-view-template",
+    events:{
+      "click #recomment_button" :"recommentAction",
+      "click #organize_button"  :"organizeAction"
+    },
+    recommentAction:function(){
+      App.RecommApp.open();
+    },
+    organizeAction:function(){
+      App.OrganizeApp.open();
+    }
   });
 
-  MeApp.show = function(){
-    MeApp.me.onChange(function(meModel){
-      var meView = new MeView({
+  Me.show = function(){
+    Me.me.onChange(function(meModel){
+      var meView = new Me.View({
         model: meModel
       });
       App.mineRegion.show(meView);
@@ -30,14 +44,13 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   App.addInitializer(function(){
-    MeApp.me = new MeModel();
-    MeApp.me.fetch();
+    Me.me = new Me.Model();
+    Me.me.fetch();
   });
 
   App.bind("initialize:after", function(){
-    MeApp.show();
+    Me.show();
   });
 
-  return MeApp;
+  return Me;
 })(App, Backbone, jQuery);
-

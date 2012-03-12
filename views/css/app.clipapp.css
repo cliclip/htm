@@ -1,0 +1,92 @@
+#popup_Contact{ 
+  float: center;
+  text-align: center;
+  margin-left: 100;
+  _position: fixed;  
+  position: absolute; /* hack for internet explorer 6*/  
+  _height: 384px;  
+  width: 750px;  
+  background: #FFF;  
+  border: 3px solid #cecece;  
+  _border: 3px solid #ff0000;  
+  padding: 12px;  
+  font-size: 18px;
+  overflow: hide;
+  color: #666666;
+  z-index: 13;  
+}
+
+.showcomment-view{
+  margin-left: 50px;
+  text-align: left;
+}
+
+.children{
+  margin-left: 10px;
+}
+
+#popup{
+  display:block;  
+  margin-left: 140px;
+  margin-top: 0px;
+  _position:fixed;  
+  position:relative; /* hack for internet explorer 6*/  
+  _height:1200px;  
+  _width:960px;  
+  background:#000;
+  border:1px solid #cecece;  
+  z-index:12; 
+}
+
+#top{
+ height: 50px;
+ width: 100%;
+ line-height: 50px;
+ font-size: 20px;
+ color: #fff;
+}
+
+#left{
+  text-align: center;
+  font-size: 16px;
+  color: #FFF;
+  left: 0;
+  align: center;
+  width: 60px;
+  float: left
+}
+
+#edit_remark{
+ width: 40px;
+ height: 40px;
+ padding: 10px;
+}
+
+
+#right{
+  text-align: center;
+  align: center;
+  margin-right: 20px;
+  width: 50px;
+  float: right
+}
+
+
+.edit_img{
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+}
+
+.operate{
+  height: 40px;
+  width: 40px;
+  padding: 10px;
+}
+
+div#comm_addComm_showDiv{
+  z-index: 15
+}
+div#addComm_showDiv{
+  z-index: 12
+}

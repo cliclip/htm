@@ -29,7 +29,7 @@ FriendWidget = function(_container,options){
       view.render(friendinfo);
       //为头像和用户名绑定事件
       $(".userhomepage"+friendinfo.i).bind("mousemove",function(){
-	alert("显示用户信息");
+	//alert("显示用户信息");
       });
     }
   });

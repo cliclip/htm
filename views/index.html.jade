@@ -15,32 +15,80 @@ html
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
 
     //- pack :: link(rel="stylesheet",href="/css/app.css")
+    link(rel="stylesheet",href="css/preview.css")
+    link(rel="stylesheet",href="css/app.clipapp.css")
     //-link(rel="stylesheet",href="/tmpl/me-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userface-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userbubb-view-template.css")
-
+    link(rel="stylesheet",href="tmpl/jquery.tagsinput.css")
+    link(rel="stylesheet",href="tmpl/jquery-ui.css")
+    
     //- pack :: script(src="/js/libs.js")
     script(src="/js/lib/jquery.js")
     script(src="/js/lib/underscore.js")
     script(src="/js/lib/backbone.js")
+    script(src="js/lib/jquery.tagsinput.js")
+    script(src="js/lib/jquery-ui.min.js")
 
     //- pack :: script(src="/js/app.js")
     script(src="/js/lib/backbone.marionette.js")
     script(src="/js/app.js")
+    script(src="/js/app.util.js")
     script(src="/js/app.login.js")
+    script(src="/js/app.register.js")
+    script(src="/js/app.util.js")
+    script(src="/js/Constants.js") //未使用
     script(src="/js/app.meapp.js")
     script(src="/js/app.userapp.js")
     script(src="/js/app.userapp.routing.js")
+
+    script(src="/js/app.comment.js")
+    script(src="/js/app.recommapp.js")
+    script(src="/js/app.collect.js")
+    script(src="/js/app.delete.js")
+    script(src="/js/app.organizeapp.js")
+
+    //- clip_preview 
+    script(src="/js/app.clippreviewapp.js")
+    script(src="/js/app.clippreviewapp.routing.js")
+
+    //- clip_detail
+    script(src="/js/app.clipapp.js")
+    script(src="/js/app.commentapp.js")
+    script(src="/js/app.clipapp.routing.js")
 
     //- kick start
     script $(function(){ App.start(); });
     
   body
 
+    #mine
+    #face
+    #bubb
+    #list
+    #main
+
     //- templates
     include tmpl/main.html
     include tmpl/login-view-template.html
-    include tmpl/me-view-template
-    include tmpl/userface-view-template
-    include tmpl/userbubb-view-template
+    // include tmpl/userlist-view-template
+    
+    include tmpl/me-view-template.html
+    include tmpl/userface-view-template.html
+    include tmpl/userbubb-view-template.html
+    include tmpl/register-view-template.html
+    include tmpl/detail-view-template.html
+    include tmpl/editDetail-view-template.html
+    include tmpl/localImg-view-template.html
+    include tmpl/showcomment-view-template.html
+    include tmpl/addcomm-view-template.html
 
+    include tmpl/comment-view-template.html
+    include tmpl/delete-view-template
+    include tmpl/collect-view-template.html
+    include tmpl/recommend-view-template.html
+    include tmpl/organize-view-template.html
+
+    include tmpl/namelist-view-template.html
+    include tmpl/clippreview-view-template.html
+    include tmpl/objtag-view-template.html

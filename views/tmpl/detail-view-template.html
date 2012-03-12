@@ -1,0 +1,53 @@
+<script id="detail-view-template" type="text/template">
+  <div id="popup">
+  <div id="popup_Contact">
+    <div id="top"></div>
+    <div id="right">
+      <input type="button" value="<%= manage[0]%>" class="operate"/>
+      <input type="button" value="<%= manage[1]%>" class="operate"/>
+      <input type="button" value="<%= manage[2]%>" class="operate"/>
+    </div> <!-- clip_detail右边的三个按钮--> 
+    <div id="left">收藏路线图
+      <%
+         for(var i =0; i<users.length; i++){
+      %>
+      <div>
+	<img src="<%= users[i].avatar%>">
+      </div>
+      <%
+	 if( i == 1){
+      %>
+         收藏路线图
+      <%  
+	 }
+	 if( i < user.length){
+      %>
+	 <div>向上箭头</div>
+      <%
+	 }
+      }
+    %>
+    </div>
+
+    <div id="center_clip">
+      <% 
+	for(var i=0; i<content.length; i++){
+	  if(content[i].text){
+      %>
+      <p class="detail-text"><%= content[i].text %></p>
+      <% 
+	 }else if(content[i].image){ 
+      %>
+      <img src="<%=App.util.url(user,content[i].image)%>"/>
+      <% } 
+       } 
+      %>
+    </div>
+    <%= time.match(/\d{4}-\d{2}-\d{2}/)%>
+    <div id="date"><%= App.util.generatePastTime(time)%></div>
+    <br>
+    <div id="comment_showDiv"></div>
+    <div id="addComm_showDiv"></div>
+  </div>
+  </div>
+</script>
