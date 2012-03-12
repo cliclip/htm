@@ -54,6 +54,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
     App.popRegion.show(loginView);
   };
 
+/*
+  Login.show = function(uid){
+    var loginModel = new LoginModel({id: uid});
+
+  };
+*/
   Login.close = function(){
     App.popRegion.close();
   };
@@ -75,7 +81,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   });
 
   // TEST
-  App.bind("initialize:after", function(){ Login.open(); });
+  // App.bind("initialize:after", function(){ Login.open(); });
 
   return Login;
 })(App, Backbone, jQuery);

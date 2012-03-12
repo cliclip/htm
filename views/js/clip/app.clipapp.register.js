@@ -23,15 +23,15 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	pass : $("#password_r").val()
       };
       this.model.save(data,{
-	url : ClipApp.Url.base+"/register",
+	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(user,response){
 	  // 转到用户登录页面
-	  App.vent.trigger("register:success",response);
+	  App.vent.trigger("app.clipapp.register:success",response);
 	},
 	error:function(user,error){
 	  // 提示登录出错
-	  App.vent.trigger("register:error",this.model, error);
+	  App.vent.trigger("app.clipapp.register:error",this.model, error);
 	}
       });
     },
@@ -49,24 +49,23 @@ App.ClipApp.Register = (function(App, Backbone, $){
     var registerModel = new RegisterModel();
     if (model) registerModel.set(model.toJSON());
     if (error) registerModel.set("error", error);
-    var userRegisterView = new UserRegisterView({model: registerModel});
-    App.popRegion.show(userRegisterView);
+    var registerView = new RegisterView({model: registerModel});
+    App.popRegion.show(registerView);
   };
 
-  App.vent.bind("register:success", function(res){
+  App.vent.bind("app.clipapp.register:success", function(res){
+    document.cookie = "token="+res[0];
+    // App.vent.trigger("clip_preview:show", uid, 0, 5);
     Register.close();
-    // 注册成功则设置token为登录状态
-    // document.cookie = "token="+res.token;
-    App.vent.trigger("login:success", res.token);
   });
 
-  App.vent.bind("register:error",function(model, error){
+  App.vent.bind("app.clipapp.register:error",function(model, error){
     Register.close();
     Register.open(model, error);
   });
 
   // Test
-  App.bind("initialize:after", function(){Register.open();});
+  // App.bind("initialize:after", function(){Register.open();});
 
   return Register;
 })(App, Backbone, jQuery);
