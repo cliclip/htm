@@ -8,11 +8,9 @@ App.Routing.ClipRouting = (function(App, Backbone){
 /*
       "clip/:cid": "showDetail",
       "user/:uid": "showPreview",
-
       "tag/:tagName":"show_tagClip",
       "user/:uid/:tagName":"show_userTagClip",
       "search":"show_searchClip",
-
       "my":"showPreview",
       "my/:tagName":"show_myTagClip",
       "my/interest":"show_myFollow",

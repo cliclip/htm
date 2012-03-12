@@ -6,7 +6,7 @@ App.ClipApp.Preview = (function(App, Backbone, $){
 //  var id = null;
   var collection = null;
   var url = "";
-  var PreviewModel = App.Model.extend({
+  var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
       id:"",
@@ -29,10 +29,10 @@ App.ClipApp.Preview = (function(App, Backbone, $){
       author:""//此clip的作者，列表推荐和列表follow动态时有此属性
     }
   });
-  var PreviewList = App.Collection.extend({
-    model : PreviewModel
+  var CLipPreviewList = App.Collection.extend({
+    model : ClipPreviewModel
   });
-  var PreviewView = App.ItemView.extend({
+  var ClipPreviewView = App.ItemView.extend({
     tagName: "div",
     template: "#clippreview-view-template"
 /*  timer:"",
@@ -52,10 +52,10 @@ App.ClipApp.Preview = (function(App, Backbone, $){
 */
   });
 
-  var PreviewListView = App.CollectionView.extend({
+  var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "clippreview-item",
-    itemView: PreviewView,
+    itemView: ClipPreviewView,
     initialize: function(){
       App.vent.trigger("clip:preview:scroll", this);
     }
@@ -63,7 +63,7 @@ App.ClipApp.Preview = (function(App, Backbone, $){
 
   var showPreview = function(previewlist){
     //console.info(previewlist.toJSON());
-    var preview_view = new PreviewListView({
+    var preview_view = new ClipPreviewListView({
       collection : previewlist
     });
     App.listRegion.show(preview_view);
@@ -82,7 +82,7 @@ App.ClipApp.Preview = (function(App, Backbone, $){
       showPreview(previewlist);
     });
   };
-			 
+
   App.vent.bind("clip_preview:show", function(url, start, end){
     Preview.show(url, start, end);
   });
