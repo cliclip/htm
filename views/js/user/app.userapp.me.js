@@ -45,11 +45,11 @@ App.MeApp = (function(App, Backbone, $){
     MeApp.me = new MeModel();
     MeApp.me.fetch();
   });
-
+/*
   App.bind("initialize:after", function(){
     MeApp.show();
   });
-
+*/
   return MeApp;
 })(App, Backbone, jQuery);
 

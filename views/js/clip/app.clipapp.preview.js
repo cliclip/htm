@@ -82,7 +82,7 @@ App.ClipApp.Preview = (function(App, Backbone, $){
       showPreview(previewlist);
     });
   };
-
+			 
   App.vent.bind("clip_preview:show", function(url, start, end){
     Preview.show(url, start, end);
   });

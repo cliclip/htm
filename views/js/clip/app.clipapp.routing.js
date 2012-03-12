@@ -5,6 +5,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
   ClipRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
+/*
       "clip/:cid": "showDetail",
       "user/:uid": "showPreview",
 
@@ -16,9 +17,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/:tagName":"show_myTagClip",
       "my/interest":"show_myFollow",
       "my/recommend":"show_myRecommend"
-/*
+*/
       // site
-
       "":"siteShow",
       "home":"siteShow",
       "tag/:tag":"siteShow",
@@ -44,7 +44,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/interest":"myInterest",
       "my/interest/tag/:tag":"myInterest"
       // "my/setup":"mySetup"
-*/
+
     }
   });
 

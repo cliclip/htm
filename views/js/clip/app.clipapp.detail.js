@@ -1,7 +1,7 @@
 App.ClipApp.Detail = (function(App, Backbone, $){
   var Detail = {};
 
-    var DetailModel = App.Model.extend({
+  var DetailModel = App.Model.extend({
     url: function(){
       return P+"/clip/"+this.id;
     }
@@ -215,5 +215,6 @@ App.ClipApp.Detail = (function(App, Backbone, $){
       App.vent.trigger("clip:addComment", cid);
     });
   };
+
   return Detail;
 })(App, Backbone, jQuery);

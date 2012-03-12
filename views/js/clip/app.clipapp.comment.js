@@ -94,8 +94,10 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       url: P+"/clip/"+id+"/comment",
       type: "POST",
       success: function(model, res){
-  	//console.log("success model = %j, response = %j", model, res);
-  	App.vent.trigger("comment-view:success");
+	// console.log("success model = %j, response = %j", model, res);
+	// App.vent.trigger("comment-view:success");
+	Comment.close();
+	App.vent.trigger("clip:showDetail", id);
       },
       error:function(model, res){
   	// that.model.set("error", res);
@@ -110,9 +112,11 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     commentAction(id, params);
   });
 
+  /*
   App.vent.bind("comment-view:success", function(){
     Comment.close();
   });
+   */
 
   App.vent.bind("comment-view:error", function(model, error){
     Comment.open(model, error);
