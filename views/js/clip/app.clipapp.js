@@ -7,6 +7,7 @@ App.ClipApp = (function(App, Backbone, $){
     return ClipApp.Me.me.get("uid");
   }
 
+
   ClipApp.siteShow = function(tag){
     // ClipApp.Face.showUser();
     // ClipApp.Bubb.showSiteTags(tag);

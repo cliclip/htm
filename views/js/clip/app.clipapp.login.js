@@ -2,17 +2,16 @@
 
 App.ClipApp.Login = (function(App, Backbone, $){
 
-  var P = "/_2_";
   var Login = {};
 
-  Login.Model = App.Model.extend({
+  var LoginModel = App.Model.extend({
     url: "/_/login",
     defaults: {
       name : "", pass : ""
     }
   });
 
-  Login.View = App.ItemView.extend({
+  var LoginView = App.ItemView.extend({
     tagName : "div",
     className : "login-view",
     template : "#login-view-template",
@@ -26,7 +25,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       var pass = $("#pass").val();
       e.preventDefault();
       this.model.save({name: name, pass: pass},{
-  	url: P+"/login",
+  	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
    	  var token = res;

@@ -1,12 +1,12 @@
-App.UserApp.Register = (function(App, Backbone, $){
-
-  var P = "/_2_";
+App.ClipApp.Register = (function(App, Backbone, $){
   var Register = {};
+
   var RegisterModel = App.Model.extend({
-    url: P+"/register"
+    url: App.ClipApp.Url.base+"/register"
   });
+
   // 会在不同的区域进行显示
-  var UserRegisterView = App.ItemView.extend({
+  var RegisterView = App.ItemView.extend({
     tagName: "div",
     className: "register-view",
     template: "#register-view-template",
@@ -23,7 +23,7 @@ App.UserApp.Register = (function(App, Backbone, $){
 	pass : $("#password_r").val()
       };
       this.model.save(data,{
-	url : P+"/register",
+	url : ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(user,response){
 	  // 转到用户登录页面
@@ -66,7 +66,7 @@ App.UserApp.Register = (function(App, Backbone, $){
   });
 
   // Test
-  // App.bind("initialize:after", function(){Register.open();});
+  App.bind("initialize:after", function(){Register.open();});
 
   return Register;
 })(App, Backbone, jQuery);

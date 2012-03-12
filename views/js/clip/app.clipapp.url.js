@@ -5,4 +5,5 @@ App.ClipApp.Url = (function(){
   Url.end = 9;
   Url.url = "";
 
+  return Url;
 })();
