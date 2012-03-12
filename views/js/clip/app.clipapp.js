@@ -2,7 +2,7 @@
 
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
-
+/*
   ClipApp.siteShow = function(tag){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteTags(tag);
@@ -60,6 +60,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserRecommend(uid, tag);
   };
-
+*/
+  
   return ClipApp;
 })(App, Backbone, jQuery);
