@@ -1,5 +1,3 @@
-var P = "/_2_";
-
 App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var tag_list = [];

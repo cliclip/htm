@@ -5,19 +5,34 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
   ClipRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      "clip/:cid": "showDetail",
-      "user/:uid/clip/:start..:end": "showPreview"
+
+      // site
+      "":"siteShow",
+      "home":"siteShow",
+      "tag/:tag":"siteShow",
+      "query/:word":"siteQuery",
+
+      // "register": "register",
+      // "login": "login",
+
+      // user
+
+      "user/:uid": "userShow",
+      "user/:uid/tag/:tag":"userShow",
+      "user/:uid/following":"userFollowing",
+      "user/:uid/follower":"userFollower",
+
+      // my
+
+      "my":"myShow",
+      "my/tag/:tag":"myShow",
+      "my/query/:word":"myQuery",
+      "my/recommend":"myRecommend",
+      "my/recommend/tag/:tag":"myRecommend",
+      "my/interest":"myInterest",
+      "my/interest/tag/:tag":"myInterest"
+      // "my/setup":"mySetup"
     }
-  });
-
-  // 路由mark
-  App.vent.bind("clip:showDetail", function(cid){
-    App.Routing.showRoute("clip", cid);
-  });
-
-  App.vent.bind("clip:showPreview", function(previewList){
-    var url = previewList.get("url");
-    App.Routing.showRoute("", url);
   });
 
   App.addInitializer(function(){

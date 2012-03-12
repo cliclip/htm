@@ -1,22 +1,12 @@
 // app.userapp.routing.js
+
 App.Routing.UserRouting = (function(App, Backbone){
   var UserRouting = {};
 
   UserRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-      "": "register",
-      "register": "register",
-      "login": "login",
       "user/:uid": "show"
     }
-  });
-
-  App.vent.bind("user:register", function(){
-    App.Routing.showRoute("register");
-  });
-
-  App.vent.bind("user:login",function(){
-    App.Routing.showRoute("login");
   });
 
   App.vent.bind("user:show", function(userModel){
