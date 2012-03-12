@@ -73,7 +73,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     remarkClip:function(){
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
-      App.OrganizeApp.open(cid);
+      App.vent.trigger("app.clipapp:clipmemo", cid);
+      // App.OrganizeApp.open(cid);
     },
     editText:function(evt){
       var contentText = $(evt.target);
@@ -149,7 +150,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     editModel.fetch();
     editModel.onChange(function(editModel){
       var editView = new EditView({model: editModel});
-      App.popRegion.show(editView);
+      App.viewRegion.show(editView);
     });
   };
 

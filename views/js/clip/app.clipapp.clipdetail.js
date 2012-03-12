@@ -42,7 +42,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var detailView = new DetailView({
       model: detailModel
     });
-    App.popRegion.show(detailView);
+    App.viewRegion.show(detailView);
   };
 
   ClipDetail.show = function(cid){
