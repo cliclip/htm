@@ -83,7 +83,6 @@ App.ClipApp.Preview = (function(App, Backbone, $){
       App.vent.trigger("clippreview:show", previewlist);
     });
   };
-
   App.vent.bind("clippreview:show", function(previewlist){
     showPreview(previewlist);
   });
