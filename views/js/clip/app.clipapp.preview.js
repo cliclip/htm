@@ -69,10 +69,10 @@ App.ClipApp.Preview = (function(App, Backbone, $){
     App.listRegion.show(preview_view);
   };
   //程序入口(显示clip的列表)
-  Preview.show = function(_url,s,e){
+  Preview.show = function(_url){
     collection = new PreviewList();
-    start = s ? parseInt(s) : start;
-    end = e ? parseInt(e) : end;
+    //start = s ? parseInt(s) : start;
+    //end = e ? parseInt(e) : end;
     url = _url;
     //collection.url = "/test/recommend.json";
     //collection.url = "/test/clip.json";

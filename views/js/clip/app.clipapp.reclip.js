@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var P = "/_2_";
 
 App.ClipApp.Reclip = (function(App, Backbone, $){
@@ -126,5 +127,11 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
    // TEST
    //App.bind("initialize:after", function(){ Reclip.open(); });
    */
+=======
+// app.clipapp.reclip.js
+
+App.ClipApp.Reclip = (function(App, Backbone, $){
+  var Reclip = {};
+>>>>>>> team/master
   return Reclip;
 })(App, Backbone, jQuery);

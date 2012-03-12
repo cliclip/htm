@@ -16,6 +16,35 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/:tagName":"show_myTagClip",
       "my/interest":"show_myFollow",
       "my/recommend":"show_myRecommend"
+/*
+      // site
+
+      "":"siteShow",
+      "home":"siteShow",
+      "tag/:tag":"siteShow",
+      "query/:word":"siteQuery",
+
+      // "register": "register",
+      // "login": "login",
+
+      // user
+
+      "user/:uid": "userShow",
+      "user/:uid/tag/:tag":"userShow",
+      "user/:uid/following":"userFollowing",
+      "user/:uid/follower":"userFollower",
+
+      // my
+
+      "my":"myShow",
+      "my/tag/:tag":"myShow",
+      "my/query/:word":"myQuery",
+      "my/recommend":"myRecommend",
+      "my/recommend/tag/:tag":"myRecommend",
+      "my/interest":"myInterest",
+      "my/interest/tag/:tag":"myInterest"
+      // "my/setup":"mySetup"
+*/
     }
   });
 
