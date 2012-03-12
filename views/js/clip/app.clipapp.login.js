@@ -1,6 +1,6 @@
-// app.login.js
+// app.clipapp.login.js
 
-App.Login = (function(App, Backbone, $){
+App.ClipApp.Login = (function(App, Backbone, $){
   var Login = {};
 
   var LoginModel = App.Model.extend({
@@ -27,19 +27,19 @@ App.Login = (function(App, Backbone, $){
   	  	  success: function(model, res){
   	  		var token = res.token;
   	  	  	console.log("success model = %j, response = %j", model, res);
-  	  		App.vent.trigger("login-view:success", token);
+  	  		App.vent.trigger("app.clipapp.login:success", token);
   	  	  },
   	  	  error:function(model, res){
   	  		// that.model.set("error", res);
   	  		// that.model.change();
   	  	  	console.log("error model = %j, response = %j", model, res);
-  	  		App.vent.trigger("login-view:error", model, res);
+  	  		App.vent.trigger("app.clipapp.login:error", model, res);
   	  	  }
   	  });
   	},
   	cancel : function(e){
   	  e.preventDefault();
-  	  App.vent.trigger("login-view:cancel");
+  	  App.vent.trigger("app.clipapp.login:cancel");
   	}
   });
 
@@ -55,16 +55,16 @@ App.Login = (function(App, Backbone, $){
   	App.popRegion.close();
   };
 
-  App.vent.bind("login-view:success", function(token){
+  App.vent.bind("app.clipapp.login:success", function(token){
   	// document.cookie.token = token;
   	Login.close();
   });
 
-  App.vent.bind("login-view:error", function(model, error){
+  App.vent.bind("app.clipapp.login:error", function(model, error){
   	Login.open(model, error);
   });
 
-  App.vent.bind("login-view:cancel", function(){
+  App.vent.bind("app.clipapp.login:cancel", function(){
   	Login.close();
   });
 

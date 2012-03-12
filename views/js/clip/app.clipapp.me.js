@@ -1,6 +1,6 @@
-// app.meapp.js
+// app.clipapp.me.js
 
-App.MeApp = (function(App, Backbone, $){
+App.ClipApp.Me = (function(App, Backbone, $){
   var MeApp = {};
 
   var MeModel = App.Model.extend({
@@ -22,10 +22,10 @@ App.MeApp = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("me:login", function(){
+  App.vent.bind("app.clipapp.login:success", function(){
     MeApp.show();
   });
-  App.vent.bind("me:logout", function(){
+  App.vent.bind("app.clipapp:logout:success", function(){
     MeApp.show();
   });
 

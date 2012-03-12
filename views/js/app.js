@@ -2,22 +2,6 @@
 
 App = new Backbone.Marionette.Application();
 
-App.addRegions({
-  mineRegion: "#mine",
-  faceRegion: "#face",
-  bubbRegion: "#bubb",
-  listRegion: "#list",
-  popRegion: "#pop"
-});
-
-
-
-App.bind("initialize:after", function(){
-  if(Backbone.history){
-    Backbone.history.start();
-  }
-});
-
 App.Model = Backbone.Model.extend({
   constructor:function(){
     var args = Array.prototype.slice.call(arguments);
@@ -103,3 +87,17 @@ App.Routing = (function(App, Backbone){
   return Routing;
 })(App, Backbone);
 
+App.addRegions({
+  mineRegion: "#mine",
+  faceRegion: "#face",
+  bubbRegion: "#bubb",
+  listRegion: "#list",
+  viewRegion: "#view",
+  popRegion: "#pop"
+});
+
+App.bind("initialize:after", function(){
+  if(Backbone.history){
+    Backbone.history.start();
+  }
+});
