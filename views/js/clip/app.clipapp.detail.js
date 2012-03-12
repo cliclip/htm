@@ -1,7 +1,5 @@
-// app.ClipApp.js
-var P = "/_2_";
-App.ClipApp = (function(App, Backbone, $){
-  var ClipApp = {};
+App.ClipApp.Detail = (function(App, Backbone, $){
+  var Detail = {};
 
   var DetailModel = App.Model.extend({
     url: function(){
@@ -23,7 +21,7 @@ App.ClipApp = (function(App, Backbone, $){
       var cid = user+":"+this.model.id;
       switch(opt){
 	case '评': this.comment(cid); break;
-	case '转': this.recomment(cid); break;
+	case '转': this.recommend(cid); break;
 	case '收': this.reclip(cid); break;
 	case '注': this.remark(cid); break;
 	case '改': this.update(cid); break;
@@ -31,28 +29,31 @@ App.ClipApp = (function(App, Backbone, $){
       }
     },
     comment : function(cid){
-      App.comment.open();
+      App.vent.trigger("comment", cid);
+      // ClipApp.Comment.open(cid);
     },
-    recomment: function(cid){
-      App.RecommApp.open();
+    recommend: function(cid){
+      App.vent.trigger("recommend", cid);
+      // ClipApp.Recommend.open(cid);
     },
     reclip: function(cid){
-      App.Collect.open();
+      ClipApp.Reclip.open(cid);
     },
     update: function(cid){
       var detailEditView = new DetailEditView({model: this.model});
+      console.info(detailEditView);
       App.listRegion.show(detailEditView);
+      App.Delete.close();
     },
     remark: function(cid){
-      App.OrganizeApp.open();
+      App.OrganizeApp.open(cid);
     },
     remove: function(cid){
-      console.info("this.model.id"+this.model.id);
-      App.Delete.open();
+      //console.info("this.model.id"+this.model.id);
+      App.Delete.open(null, P + "/clip/" + cid, null);
     }
   });
 
-  // 因为上传图片的form进行渲染是需要actUrl作为参数
   var ImgModel = App.Model.extend({});
   var LocalImgView = App.ItemView.extend({
     tagName: "form",
@@ -82,7 +83,8 @@ App.ClipApp = (function(App, Backbone, $){
       $(".editContent-container").append(img);
     },
     localImg:function(){
-      var url =	P+"/user/1/image";
+      var user = this.model.get("user");
+      var url =	P+"/user/" + user + "/image";
       var imgModel = new ImgModel();
       imgModel.set("actUrl",url);
       var localImgView = new LocalImgView({
@@ -97,7 +99,7 @@ App.ClipApp = (function(App, Backbone, $){
 	  if(returnObj[0] == 0){
 	    var imgids = returnObj[1];
 	    for(var i=0;i<imgids.length;i++){
-	      var url = P+"/user/1/image/" +imgids[i];
+	      var url = P+"/user/"+ user+"/image/" +imgids[i];
 	      var img = $("<img class='detail-image' src= "+url+">");
 	      $(".editContent-container").append(img);
 	    }
@@ -111,7 +113,9 @@ App.ClipApp = (function(App, Backbone, $){
       console.info("调整页面格式");
     },
     remarkClip:function(){
-      App.OrganizeApp.open();
+      var user = this.model.get("user");
+      var cid = user+":"+this.model.id;
+      App.OrganizeApp.open(cid);
     },
     editText:function(evt){
       var contentText = $(evt.target);
@@ -191,8 +195,8 @@ App.ClipApp = (function(App, Backbone, $){
     App.listRegion.show(detailView);
   };
 
-  ClipApp.showDetail = function(cid){
-    document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+  Detail.show = function(cid){
+    //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){
@@ -212,17 +216,5 @@ App.ClipApp = (function(App, Backbone, $){
     });
   };
 
-  ClipApp.showError = function(cid){
-    // 提示用户在对cid对应的clip进行操作的过程中出现错误
-  };
-
-  App.vent.bind("clip:showDetail", function(cid){
-    ClipApp.showDetail(cid);
-  });
-
-  App.vent.bind("clip:error", function(cid){
-    ClipApp.showError(cid);
-  });
-
-  return ClipApp;
+  return Detail;
 })(App, Backbone, jQuery);

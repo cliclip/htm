@@ -7,7 +7,6 @@ App.Routing.ClipRouting = (function(App, Backbone){
     appRoutes: {
 
       // site
-
       "":"siteShow",
       "home":"siteShow",
       "tag/:tag":"siteShow",

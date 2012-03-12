@@ -2,7 +2,7 @@
 
 var P = "/_2_";
 
-App.Comment = (function(App, Backbone, $){
+App.ClipApp.Comment = (function(App, Backbone, $){
   var Comment = {};
   var tag_list = [];
   var CommentModel = App.Model.extend({});
@@ -52,13 +52,12 @@ App.Comment = (function(App, Backbone, $){
     },
 
     comment : function(e){
-      var that = this;
-      var id = "1:1";
-      var text = $("#comm_text").val();
-      var pid = "0";
       e.preventDefault();
-      var params = {text: text, pid: pid};
-      console.dir(that.tag_list);
+      var that = this;
+      var id = that.model.id;
+      var text = $("#comm_text").val();
+      var params = {text: text, pid: 0};
+      // console.dir(that.tag_list);
       var params1 = {clip:{tag:tag_list,note:[{text:text}]}};
       App.vent.trigger("comment", id, params);
       if($("#collect").attr("checked")){
@@ -72,11 +71,15 @@ App.Comment = (function(App, Backbone, $){
     }
   });
 
-  Comment.open = function(model, error){
-    var commentModel = new CommentModel();
-    if (model) commentModel.set(model.toJSON());
-    if (error) commentModel.set("error", error);
-    commentView = new CommentView({model : commentModel});
+  Comment.open = function(cid, model, error){
+    if(cid){
+      var commentModel = new CommentModel({id: cid});
+    }else{
+      var commentModel = new CommentModel();
+      if (model) commentModel.set(model.toJSON());
+      if (error) commentModel.set("error", error);
+    }
+    var commentView = new CommentView({model : commentModel});
     App.popRegion.show(commentView);
     tag_list = [];
   };
@@ -91,8 +94,10 @@ App.Comment = (function(App, Backbone, $){
       url: P+"/clip/"+id+"/comment",
       type: "POST",
       success: function(model, res){
-  	//console.log("success model = %j, response = %j", model, res);
-  	App.vent.trigger("comment-view:success");
+	// console.log("success model = %j, response = %j", model, res);
+	// App.vent.trigger("comment-view:success");
+	Comment.close();
+	App.vent.trigger("clip:showDetail", id);
       },
       error:function(model, res){
   	// that.model.set("error", res);
@@ -107,9 +112,11 @@ App.Comment = (function(App, Backbone, $){
     commentAction(id, params);
   });
 
+  /*
   App.vent.bind("comment-view:success", function(){
     Comment.close();
   });
+   */
 
   App.vent.bind("comment-view:error", function(model, error){
     Comment.open(model, error);

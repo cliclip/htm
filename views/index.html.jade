@@ -33,29 +33,29 @@ html
     //- pack :: script(src="/js/app.js")
     script(src="/js/lib/backbone.marionette.js")
     script(src="/js/app.js")
-    script(src="/js/app.util.js")
-    script(src="/js/app.login.js")
-    script(src="/js/app.register.js")
-    script(src="/js/app.util.js")
-    script(src="/js/Constants.js") //未使用
-    script(src="/js/app.meapp.js")
-    script(src="/js/app.userapp.js")
-    script(src="/js/app.userapp.routing.js")
+    // script(src="/js/Constants.js") 
 
-    script(src="/js/app.comment.js")
-    script(src="/js/app.recommapp.js")
-    script(src="/js/app.collect.js")
-    script(src="/js/app.delete.js")
-    script(src="/js/app.organizeapp.js")
+    //- userapp
+    script(src="/js/user/app.userapp.js")
+    script(src="/js/user/app.userapp.routing.js")
+    script(src="/js/app.util.js")
+    script(src="/js/user/app.userapp.login.js")
+    script(src="/js/user/app.userapp.register.js")
+    script(src="/js/user/app.userapp.me.js")
 
+    //- clipapp
+    script(src="/js/clip/app.clipapp.js")
     //- clip_preview 
-    script(src="/js/app.clippreviewapp.js")
-    script(src="/js/app.clippreviewapp.routing.js")
+    script(src="/js/clip/app.clipapp.preview.js")
+    script(src="/js/clip/app.clipapp.detail.js")
+    script(src="/js/clip/app.clipapp.commentapp.js")
+    script(src="/js/clip/app.clipapp.routing.js")
 
-    //- clip_detail
-    script(src="/js/app.clipapp.js")
-    script(src="/js/app.commentapp.js")
-    script(src="/js/app.clipapp.routing.js")
+    script(src="/js/clip/app.clipapp.comment.js")
+    script(src="/js/clip/app.clipapp.recommend.js")
+    script(src="/js/clip/app.clipapp.reclip.js")
+    script(src="/js/clip/app.clipapp.remove.js")
+    script(src="/js/clip/app.clipapp.remark.js")
 
     //- kick start
     script $(function(){ App.start(); });
@@ -66,17 +66,15 @@ html
     #face
     #bubb
     #list
-    #main
+    #pop
 
     //- templates
-    include tmpl/main.html
     include tmpl/login-view-template.html
-    // include tmpl/userlist-view-template
-    
     include tmpl/me-view-template.html
     include tmpl/userface-view-template.html
     include tmpl/userbubb-view-template.html
     include tmpl/register-view-template.html
+
     include tmpl/detail-view-template.html
     include tmpl/editDetail-view-template.html
     include tmpl/localImg-view-template.html
@@ -85,10 +83,13 @@ html
 
     include tmpl/comment-view-template.html
     include tmpl/delete-view-template
-    include tmpl/collect-view-template.html
+    include tmpl/reclip-view-template.html
     include tmpl/recommend-view-template.html
     include tmpl/organize-view-template.html
 
     include tmpl/namelist-view-template.html
     include tmpl/clippreview-view-template.html
     include tmpl/objtag-view-template.html
+
+
+    include tmpl/test-view-template.html

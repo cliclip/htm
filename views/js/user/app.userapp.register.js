@@ -1,4 +1,4 @@
-App.Register = (function(App, Backbone, $){
+App.UserApp.Register = (function(App, Backbone, $){
 
   var P = "/_2_";
   var Register = {};

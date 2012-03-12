@@ -1,14 +1,14 @@
 //app.Recommapp.js
 var P="/_2_";
-App.RecommApp = (function(App,Backbone,$){
-  var RecommApp = {};
+App.ClipApp.Recommend = (function(App,Backbone,$){
+  var Recommend = {};
 
+  // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
     model : NameListModel,
     url   : P+"/lookup/0..5"
   });
-
 
   var RecommModel = App.Model.extend({
  /*   validate:function(model){
@@ -41,7 +41,8 @@ App.RecommApp = (function(App,Backbone,$){
     nameListAction:function(evt){
       var str = this.$("#name").val();
       var params = {q:str};
-      App.vent.trigger("user:lookup:show",params);
+      showNameList(params);
+      // App.vent.trigger("user:lookup:show",params);
     },
     MouseOver:function(evt){
 
@@ -50,24 +51,23 @@ App.RecommApp = (function(App,Backbone,$){
 
     },
     recommendAction:function(e){
+      e.preventDefault();
       var _data = {
 	text:$("#recommend_text").val(),
 	clipid :"1:1"
       };
       uid=this.model.get("uid");
-      console.info(uid);
       if(uid){
-	e.preventDefault();
 	var that = this;
-	console.info("coming");
 	this.model.save(_data,{
 	  url:P+"/user/"+uid+"/recomm",
 	  type:"POST",
 	  success:function(model,res){
-	    App.vent.trigger("recommend-view:success");
+	    Recommend.close();
+	    // App.vent.trigger("recommend-view:success");
 	  },
 	  error:function(model,res){
-	    App.vent.trigger("recommend-view:error",model,res);
+	    App.vent.trigger("recommend-view:error", model, res);
 	  }
 	});
       }else{
@@ -82,65 +82,77 @@ App.RecommApp = (function(App,Backbone,$){
     },
     cancelAction:function(e){
       e.preventDefault();
-      App.vent.trigger("recommend-view:cancel");
+      Recommend.close();
     }
   });
-
 
   var NameListItemView = App.ItemView.extend({
     tagName:"div",
     className:"action-info user",
     template:"#namelist-view-template"
   });
+
   var NameListCollectionView=App.CollectionView.extend({
     tagName:"div",
     itemView:NameListItemView
   });
+
   var showNameList=function(params){
     var collection = new NameList({});
-    document.cookie = "token=2:080912641ed0b4c793d0d3b8cda2c6b6";
+    // document.cookie = "token=2:080912641ed0b4c793d0d3b8cda2c6b6";
     collection.fetch({data:params});
     collection.onReset(function(list){
       var namelistView = new NameListCollectionView({
 	collection:list
       });
-      RecommApp.nameListRegion.show(namelistView);
+      Recommend.nameListRegion.show(namelistView);
     });
   };
 
-
-  RecommApp.open = function(model,error){
-    var recommModel = new RecommModel();
-    RecommApp.nameListRegion = new App.RegionManager({
+  Recommend.open = function(cid, model,error){
+    if(cid){
+      var recommModel = new RecommModel({id: cid});
+    } else {
+      var recommModel = new RecommModel();
+      if (model) recommModel.set(model.toJSON());
+      // can't use pre-model ,case it will post pre-model with old uid
+      if (error) recommModel.set({"error":error});
+    }
+    Recommend.nameListRegion = new App.RegionManager({
       el:"#name_listDiv"
     });
-   // if (model) recommModel.set(model.toJSON());can't use pre-model ,case it will post pre-model with old uid
-    if (error) recommModel.set({"error":error});
-    var recommView=new RecommView({model:recommModel});
+    // App.popRegion.show(reclipView);
+    recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
   };
-  RecommApp.close = function(){
-    RecommApp.nameListRegion.close();
+
+  // 在别地儿是否有用到
+  Recommend.close = function(){
+    Recommend.nameListRegion.close();
     App.popRegion.close();
   };
 
-
+  /*
   App.vent.bind("user:lookup:show",function(params){
     showNameList(params);
   });
+
   App.vent.bind("recommend-view:cancel",function(){
-    RecommApp.close();
+    Recommend.close();
   });
   App.vent.bind("recommend-view:success",function(){
-    RecommApp.close();
+    Recommend.close();
   });
+  */
+  // 可能要对error信息进行不同的处理
   App.vent.bind("recommend-view:error",function(model,err){
-    RecommApp.open(model,err);
+    Recommend.open(null, model, err);
   });
   // TEST
- // App.bind("initialize:after", function(){ RecommApp.open(); });
+ // App.bind("initialize:after", function(){ Recommend.open(); });
 
-  return RecommApp;
+  return Recommend;
+
 })(App,Backbone,jQuery);
 
 /*
