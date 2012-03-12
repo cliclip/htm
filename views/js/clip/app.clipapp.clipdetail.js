@@ -46,7 +46,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.show = function(cid){
-    document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+    document.cookie = "token=2:551ccf95e69955875a77121236e59c7c";
     var clip = new DetailModel({id: cid});
     clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
     clip.onChange(function(detailModel){

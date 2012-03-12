@@ -111,7 +111,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.bind("initialize:after", function(){
-    App.vent.trigger("app.clipapp:clipdetail", "1:23");
+    App.vent.trigger("app.clipapp:clipdetail", "2:1");
   });
 
 
