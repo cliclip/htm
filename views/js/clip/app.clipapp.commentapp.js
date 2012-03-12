@@ -158,6 +158,7 @@ App.CommentApp = (function(App, Backbone, $){
 
   // 获取comment内容，需要对得到的数据进行显示
   CommentApp.getComment = function(cid){
+    console.info(cid);
     var comment = new CommentModel({id: cid});
     comment.fetch();
     comment.onChange(showComment);
@@ -177,6 +178,7 @@ App.CommentApp = (function(App, Backbone, $){
       el: "#comm_addComm_showDiv"
     });
     CommentApp.comm_addCommRegion.show(addCommView);
+    console.info($("#comm_addComm_showDiv"));
   };
 
   CommentApp.comm_delComment = function(id, cid){
