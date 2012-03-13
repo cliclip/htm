@@ -82,24 +82,27 @@ App.ClipApp = (function(App, Backbone, $){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
+    }else{
+      ClipApp.Reclip.show(clipid);
     }
-    ClipApp.Reclip.show(clipid);
   });
 
   App.vent.bind("app.clipapp:recommend", function(clipid){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
+    }else{
+      ClipApp.Recommend.show(clipid);
     }
-    ClipApp.Recommend.show(clipid);
   });
 
   App.vent.bind("app.clipapp:comment", function(clipid){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
+    }else{
+      ClipApp.Comment.show(clipid);
     }
-    ClipApp.Comment.show(clipid);
   });
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid){
@@ -126,7 +129,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   setTimeout(function(){
-    App.vent.trigger("app.clipapp:clipdetail", "1:2");
+    App.vent.trigger("app.clipapp:clipdetail", "1:1");
   }, 500);
 
   return ClipApp;

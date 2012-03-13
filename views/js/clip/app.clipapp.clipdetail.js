@@ -24,7 +24,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '收':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
 	case '转':
-	  App.vent.trigger("app.clipapp:recommed", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case '评':
 	  App.vent.trigger("app.clipapp:comment", cid);break;
 	case '注':
@@ -127,14 +127,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.show = function(cid, uid){
-    document.cookie = "token=2:551ccf95e69955875a77121236e59c7c";
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
-      var self = document.cookie.split("=")[1].split(":")[0];
-      // var self = "2";
       var user = detailModel.get("user");
-      if(user == self){ // 应该是 user == self
+      if(user == uid){ // 应该是 user == self
 	detailModel.set("manage",["注","改","删"]);
       }else{
 	detailModel.set("manage",["收","转","评"]);
