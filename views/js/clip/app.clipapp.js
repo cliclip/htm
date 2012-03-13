@@ -4,7 +4,7 @@ App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
 
   function getMyUid(){
-    return ClipApp.Me.me.get("uid");
+    return ClipApp.Me.getUid();
   }
 
 /*
@@ -112,10 +112,9 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDelete.show(clipid, uid);
   });
 
-/*  App.bind("initialize:after", function(){
-    App.vent.trigger("app.clipapp:clipdetail", "1:23");
+  App.bind("initialize:after", function(){
+    App.vent.trigger("app.clipapp:clipdetail", "1:25");
   });
-*/
 
   return ClipApp;
 })(App, Backbone, jQuery);

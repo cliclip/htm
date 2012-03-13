@@ -7,8 +7,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   var Me = {};
 
   Me.Model = App.Model.extend({
-    // url : "/test/me.json"
-    url : P+"/user/"+token.split(":")[0]
+    url : P+"/user/2"
   });
 
   Me.View = App.ItemView.extend({
@@ -24,6 +23,10 @@ App.ClipApp.Me = (function(App, Backbone, $){
       });
       App.mineRegion.show(meView);
     });
+  };
+
+  Me.getUid = function(){
+    return Me.me.id;
   };
 
   App.vent.bind("app.clipapp.login:success", function(){
