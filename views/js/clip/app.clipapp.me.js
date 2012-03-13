@@ -8,7 +8,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   Me.Model = App.Model.extend({
     // url : "/test/me.json"
-    url : P+"/user/"+token.split(":")[0]
+    url : P+"/user/"+token.split("=")[1].split(":")[0]
   });
 
   Me.View = App.ItemView.extend({
@@ -37,7 +37,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.register:success", function(){
     Me.show();
   });
-/*
+
   App.addInitializer(function(){
     Me.me = new Me.Model();
     Me.me.fetch();
@@ -46,6 +46,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.bind("initialize:after", function(){
     Me.show();
   });
-*/
+
   return Me;
 })(App, Backbone, jQuery);

@@ -17,13 +17,13 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/recommend":"show_myRecommend"
 */
       // site
-      "":"siteShow",
+//      "":"siteShow",
       "home":"siteShow",
       "tag/:tag":"siteShow",
       "query/:word":"siteQuery",
 
-      // "register": "register",
-      // "login": "login",
+      "register": "register",
+      "login": "login",
 
       // user
 
@@ -67,7 +67,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
   });
 */
   //登陆后自动显示clip列表需要更新hash
-  App.vent.bind("my:clip:preview:show",function(){
+  App.vent.bind("app.clipapp.routing:mycliplist:show",function(){
     App.Routing.showRoute("my");
   });
 /*
