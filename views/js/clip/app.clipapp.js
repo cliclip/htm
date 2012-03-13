@@ -108,8 +108,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:clipdelete", function(clipid){
-    var uid = getMyUid();
-    ClipApp.ClipDelete.show(clipid, uid);
+    ClipApp.ClipDelete.show(clipid);
   });
 
   App.bind("initialize:after", function(){

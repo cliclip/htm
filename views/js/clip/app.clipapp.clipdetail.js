@@ -42,6 +42,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       return P+"/clip/"+this.id+"/comment";
     }
   });
+			    
   var CommentView = App.ItemView.extend({
     tagName: "div",
     className: "showcomment-view",

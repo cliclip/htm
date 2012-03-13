@@ -16,6 +16,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/interest":"show_myFollow",
       "my/recommend":"show_myRecommend"
 */
+
       // site
       "":"siteShow",
       "home":"siteShow",
@@ -42,7 +43,6 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/interest":"myInterest",
       "my/interest/tag/:tag":"myInterest"
       // "my/setup":"mySetup"
-
     }
   });
 
