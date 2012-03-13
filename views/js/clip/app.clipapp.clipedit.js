@@ -1,58 +1,6 @@
-App.ClipApp.Detail = (function(App, Backbone, $){
-  var Detail = {};
-
-  var DetailModel = App.Model.extend({
-    url: function(){
-      return P+"/clip/"+this.id;
-    }
-  });
-
-  var DetailView = App.ItemView.extend({
-    tagName: "div",
-    className: "Detail-view",
-    template: "#detail-view-template",
-    events: {
-      "click .operate" : "Operate"
-    },
-    Operate: function(e){
-      e.preventDefault();
-      var opt = $(e.currentTarget).val();
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
-      switch(opt){
-	case '评': this.comment(cid); break;
-	case '转': this.recommend(cid); break;
-	case '收': this.reclip(cid); break;
-	case '注': this.remark(cid); break;
-	case '改': this.update(cid); break;
-	case '删': this.remove(cid); break;
-      }
-    },
-    comment : function(cid){
-      App.vent.trigger("comment", cid);
-      // ClipApp.Comment.open(cid);
-    },
-    recommend: function(cid){
-      App.vent.trigger("recommend", cid);
-      // ClipApp.Recommend.open(cid);
-    },
-    reclip: function(cid){
-      ClipApp.Reclip.open(cid);
-    },
-    update: function(cid){
-      var detailEditView = new DetailEditView({model: this.model});
-      console.info(detailEditView);
-      App.listRegion.show(detailEditView);
-      App.Delete.close();
-    },
-    remark: function(cid){
-      App.OrganizeApp.open(cid);
-    },
-    remove: function(cid){
-      //console.info("this.model.id"+this.model.id);
-      App.Delete.open(null, P + "/clip/" + cid, null);
-    }
-  });
+App.ClipApp.ClipEdit = (function(App, Backbone, $){
+  var ClipEdit = {};
+  var P = App.ClipApp.Url.base;
 
   var ImgModel = App.Model.extend({});
   var LocalImgView = App.ItemView.extend({
@@ -61,7 +9,13 @@ App.ClipApp.Detail = (function(App, Backbone, $){
     template: "#localImg-view-template"
   });
 
-  var DetailEditView = App.ItemView.extend({
+  var EditModel = App.Model.extend({
+    url : function(){
+      return P+"/clip/"+this.id;
+    }
+  });
+
+  var EditView = App.ItemView.extend({
     tagName: "div",
     className: "editDetail-view",
     template: "#editDetail-view-template",
@@ -90,22 +44,27 @@ App.ClipApp.Detail = (function(App, Backbone, $){
       var localImgView = new LocalImgView({
 	model: imgModel
       });
-      ClipApp.LocalImgRegion = new App.RegionManager({el: "#imgUploadDiv"});
-      ClipApp.LocalImgRegion.show(localImgView);
-      $("#post_frame").load(function(){ // 加载图片
-	var returnVal = this.contentDocument.documentElement.textContent;
-	if(returnVal != null && returnVal != ""){
-	  var returnObj = eval(returnVal);
-	  if(returnObj[0] == 0){
-	    var imgids = returnObj[1];
-	    for(var i=0;i<imgids.length;i++){
-	      var url = P+"/user/"+ user+"/image/" +imgids[i];
-	      var img = $("<img class='detail-image' src= "+url+">");
-	      $(".editContent-container").append(img);
+      ClipEdit.LocalImgRegion = new App.RegionManager({el: "#imgUploadDiv"});
+      if($("#imgUploadDiv").html() == ""){
+	ClipEdit.LocalImgRegion.show(localImgView);
+	$("#post_frame").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1];
+	      for(var i=0;i<imgids.length;i++){
+		var url = P+"/user/"+ user+"/image/" +imgids[i];
+		var img = $("<img class='detail-image' src= "+url+">");
+		$(".editContent-container").append(img);
+	      }
 	    }
 	  }
-	}
-      });
+	});
+      }else{
+	$("#imgUploadDiv").empty();
+	// ClipEdit.LocalImgRegion.close();
+      }
     },
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
@@ -115,7 +74,8 @@ App.ClipApp.Detail = (function(App, Backbone, $){
     remarkClip:function(){
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
-      App.OrganizeApp.open(cid);
+      App.vent.trigger("app.clipapp:clipmemo", cid);
+      // App.OrganizeApp.open(cid);
     },
     editText:function(evt){
       var contentText = $(evt.target);
@@ -170,11 +130,11 @@ App.ClipApp.Detail = (function(App, Backbone, $){
 	type: 'PUT',
 	success:function(response){
 	  // location.href="#/clip/"+cid;
-	  App.vent.trigger("clip:showDetail", cid);
+	  App.vent.trigger("app.clipapp:clipdetail", cid);
 	},
 	error:function(response){
 	  // 出现错误，触发统一事件
-	  App.vent.trigger("clip:error", cid);
+	  App.vent.trigger("app.clipapp.clipedit:error", cid);
 	}
       });
     },
@@ -182,39 +142,23 @@ App.ClipApp.Detail = (function(App, Backbone, $){
       // 直接返回详情页面
       var user = this.model.get("user");
       var cid =	user+":"+this.model.id;
-      App.vent.trigger("clip:showDetail", cid);
+      App.vent.trigger("app.clipapp:clipdetail", cid);
     }
   });
 
-
-  // 显示clip的detail内容 [clipDetiail 以及 Comment]
-  var showDetail = function(detailModel){
-    var detailView = new DetailView({
-      model: detailModel
-    });
-    App.listRegion.show(detailView);
-  };
-
-  Detail.show = function(cid){
-    //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
-    var clip = new DetailModel({id: cid});
-    clip.fetch(); // 获得clip详情 detail需要进行url地址的bookmark
-    clip.onChange(function(detailModel){
-      // var self = document.cookie.split("=")[1].split(":")[0];
-      var self = "2";
-      var user = detailModel.get("user");
-      if(user == self){
-	detailModel.set("manage",["注","改","删"]);
-      }else{
-	detailModel.set("manage",["收","转","评"]);
-      }
-      detailModel.set("users",[]);
-      showDetail(detailModel);
-      // commentList和addComment对话框 的显示都要依靠clipdetail
-      App.vent.trigger("clip:getComment", cid);
-      App.vent.trigger("clip:addComment", cid);
+  ClipEdit.show = function(clipid, uid){
+    var editModel = new EditModel({id: clipid});
+    editModel.fetch();
+    editModel.onChange(function(editModel){
+      var editView = new EditView({model: editModel});
+      App.viewRegion.show(editView);
     });
   };
 
-  return Detail;
+  App.vent.trigger("app.clipapp.clipedit.error", function(){
+    // 可以弹出错误对话框，提示错误信息
+  });
+
+  return ClipEdit;
+
 })(App, Backbone, jQuery);
