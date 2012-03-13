@@ -13,6 +13,7 @@
     <input type="button" value="确定" id="commentok_button"/>
     <input type="button" value="取消" id="cancel_button"/><br>
     <span class="error"><%= typeof error != "undefined" && error.auth ? error.auth : "" %></span>
+    <span class="error"><%= typeof error != "undefined" && error ? error : "" %></span>
   </div>
 </script>
 

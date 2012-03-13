@@ -10,8 +10,9 @@
     <textarea  id="reclip_text" rows="3" cols="40" >备注一下吧~</textarea><br>
     <input type="checkbox" name="checkbox" id="checkbox" align="right"/>
     <label for="checkbox">不公开</label><br>
-    <input type="button" value="取消" id="cancel_button"/>
     <input type="button" value="确定" id="submit_button"/>
+    <input type="button" value="取消" id="cancel_button"/><br>
+    <span class="error"><%= typeof error != "undefined" && error ? error : "" %></span>   
     <!-- textarea  id="tag" rows="1" cols="40" /><br -->
   </div>
 </script>
