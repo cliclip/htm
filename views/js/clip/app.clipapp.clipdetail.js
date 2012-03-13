@@ -28,11 +28,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '评':
 	  App.vent.trigger("app.clipapp:comment", cid);break;
 	case '注':
-	  App.vent.trigger("app.clipapp:remark", cid);break;
+	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case '改':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case '删':
-	  App.vent.trigger("app.clipapp:remove", cid);break;
+	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     }
   });
