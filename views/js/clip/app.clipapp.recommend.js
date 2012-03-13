@@ -136,7 +136,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     Recommend.show(null, model, err);
   });
   // TEST
-  App.bind("initialize:after", function(){ Recommend.show("1:1"); });
+ // App.bind("initialize:after", function(){ Recommend.show("1:1"); });
 
   return Recommend;
 

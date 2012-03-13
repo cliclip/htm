@@ -127,7 +127,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.show = function(cid, uid){
-    document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+    document.cookie = "token=2:551ccf95e69955875a77121236e59c7c";
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){

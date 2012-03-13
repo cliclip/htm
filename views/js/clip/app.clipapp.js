@@ -83,7 +83,7 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }
-    ClipApp.Reclip.show(clipid, uid);
+    ClipApp.Reclip.show(clipid);
   });
 
   App.vent.bind("app.clipapp:recommend", function(clipid){
@@ -91,7 +91,7 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }
-    ClipApp.Recommend.show(clipid, uid);
+    ClipApp.Recommend.show(clipid);
   });
 
   App.vent.bind("app.clipapp:comment", function(clipid){
@@ -99,7 +99,7 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }
-    ClipApp.Comment.show(clipid, uid);
+    ClipApp.Comment.show(clipid);
   });
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid){
@@ -126,7 +126,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   setTimeout(function(){
-    App.vent.trigger("app.clipapp:clipdetail", "1:25");
+    App.vent.trigger("app.clipapp:clipdetail", "1:2");
   }, 500);
 
   return ClipApp;
