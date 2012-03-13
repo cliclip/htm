@@ -42,7 +42,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       return P+"/clip/"+this.id+"/comment";
     }
   });
-			    
+
   var CommentView = App.ItemView.extend({
     tagName: "div",
     className: "showcomment-view",
@@ -72,6 +72,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.id;
       var id = e.target.id;
       // 首先在被点击的评论下添加 评论框的div
+      if($("#reply_Comm_showDiv")){
+	$("#reply_Comm_showDiv").remove();
+      }
       $("#"+id).append('<div id="reply_Comm_showDiv"></div>');
       App.vent.trigger("app.clipapp.clipdetail:show_reply", id, cid);
     },
@@ -225,9 +228,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var replyCommModel = new CommentModel({id : cid});
     replyCommModel.set("pid",id);
     var replyCommView = new ReplyCommView({model: replyCommModel});
-    if(ClipDetail.replyCommRegion){
-      ClipDetail.replyCommRegion.close();
-    }
     ClipDetail.replyCommRegion = new App.RegionManager({
       el: "#reply_Comm_showDiv"
     });
