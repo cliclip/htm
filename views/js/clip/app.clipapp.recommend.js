@@ -10,13 +10,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     url   : P+"/lookup/0..5"
   });
 
-  var RecommModel = App.Model.extend({
- /*   validate:function(model){
-      if(model.uid == undefined){
-	return {"error":"please select a user!"};
-      }
-    }*/
-  });
+  var RecommModel = App.Model.extend({});
   var RecommView = App.ItemView.extend({
     tagName:"div",
     className:"recommend view",
@@ -41,8 +35,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     nameListAction:function(evt){
       var str = this.$("#name").val();
       var params = {q:str};
-      showNameList(params);
-      // App.vent.trigger("user:lookup:show",params);
+      App.vent.trigger("app.clipapp.recommend:lookup",params);
     },
     MouseOver:function(evt){
 
@@ -52,26 +45,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     recommendAction:function(e){
       e.preventDefault();
-      var _data = {
+      var params = {
 	text:$("#recommend_text").val(),
-	clipid :"1:1"
+	clipid :this.model.id
       };
-      uid=this.model.get("uid");
-      if(uid){
-	var that = this;
-	this.model.save(_data,{
-	  url:P+"/user/"+uid+"/recomm",
-	  type:"POST",
-	  success:function(model,res){
-	    Recommend.close();
-	    // App.vent.trigger("recommend-view:success");
-	  },
-	  error:function(model,res){
-	    App.vent.trigger("recommend-view:error", model, res);
-	  }
-	});
+      if(this.model.get("uid")){
+	App.vent.trigger("app.clipapp.recommend:submit",this.model,params);
       }else{
-	App.vent.trigger("recommend-view:error",this.model,{"user":"请添加用户"});
+	App.vent.trigger("app.clipapp.recommend:error",this.model,{"user":"请添加用户"});
       }
     },
     clearAction:function(evt){
@@ -96,10 +77,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     tagName:"div",
     itemView:NameListItemView
   });
-
   var showNameList=function(params){
     var collection = new NameList({});
-    // document.cookie = "token=2:080912641ed0b4c793d0d3b8cda2c6b6";
+    //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     collection.fetch({data:params});
     collection.onReset(function(list){
       var namelistView = new NameListCollectionView({
@@ -108,20 +88,26 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       Recommend.nameListRegion.show(namelistView);
     });
   };
+  var recommendSave=function(model,params){
+    model.save(params,{
+      url:P+"/user/"+model.get("uid")+"/recomm",
+      type:"POST",
+      success:function(model,res){
+	Recommend.close();
+      },
+      error:function(model,res){
+	App.vent.trigger("app.clipapp.recommend:error", model, res);
+      }
+    });
+  };
 
-  Recommend.open = function(cid, model,error){
-    if(cid){
-      var recommModel = new RecommModel({id: cid});
-    } else {
-      var recommModel = new RecommModel();
-      if (model) recommModel.set(model.toJSON());
-      // can't use pre-model ,case it will post pre-model with old uid
-      if (error) recommModel.set({"error":error});
-    }
+  Recommend.show = function(cid, model,error){
+    var recommModel = new RecommModel({id: cid});
+    if (model) recommModel.set(model.toJSON());
+    if (error) recommModel.set({"error":error});
     Recommend.nameListRegion = new App.RegionManager({
       el:"#name_listDiv"
     });
-    // App.popRegion.show(reclipView);
     recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
   };
@@ -132,31 +118,27 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     App.popRegion.close();
   };
 
-  /*
-  App.vent.bind("user:lookup:show",function(params){
+
+  App.vent.bind("app.clipapp.recommend:lookup",function(params){
     showNameList(params);
   });
 
+  App.vent.bind("app.clipapp.recommend:submit",function(model,params){
+    recommendSave(model,params);
+  });
   App.vent.bind("recommend-view:cancel",function(){
     Recommend.close();
   });
-  App.vent.bind("recommend-view:success",function(){
-    Recommend.close();
-  });
-  */
+
+
   // 可能要对error信息进行不同的处理
-  App.vent.bind("recommend-view:error",function(model,err){
-    Recommend.open(null, model, err);
+  App.vent.bind("app.clipapp.recommend:error",function(model,err){
+    Recommend.show(null, model, err);
   });
   // TEST
- // App.bind("initialize:after", function(){ Recommend.open(); });
+ // App.bind("initialize:after", function(){ Recommend.show("1:1"); });
 
   return Recommend;
 
 })(App,Backbone,jQuery);
 
-/*
-
-recommModel.set({"error":error},{error:function(model,error){console.info(error);}});
-      console.info(recommModel.has("error"));
-      console.info(JSON.stringify(recommModel));*/
