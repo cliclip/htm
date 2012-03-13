@@ -40,12 +40,12 @@ App.MeApp = (function(App, Backbone, $){
   App.vent.bind("me:logout", function(){
     MeApp.show();
   });
-
+/*
   App.addInitializer(function(){
     MeApp.me = new MeModel();
     MeApp.me.fetch();
   });
-/*
+
   App.bind("initialize:after", function(){
     MeApp.show();
   });

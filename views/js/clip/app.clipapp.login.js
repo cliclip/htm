@@ -75,7 +75,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   });
 
   // TEST
-  App.bind("initialize:after", function(){ Login.open(); });
+  //App.bind("initialize:after", function(){ Login.open(); });
 
   return Login;
 })(App, Backbone, jQuery);

@@ -42,7 +42,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:logout:success", function(){
     MeApp.show();
   });
-
+/*
   App.addInitializer(function(){
     Me.me = new Me.Model();
     Me.me.fetch();
@@ -51,6 +51,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.bind("initialize:after", function(){
     Me.show();
   });
-
+*/
   return Me;
 })(App, Backbone, jQuery);

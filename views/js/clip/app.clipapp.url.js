@@ -3,7 +3,8 @@ App.ClipApp.Url = (function(){
   Url.base = "/_2_";
   Url.start = 0;
   Url.end = 9;
-  Url.url = "";
+  Url.page = 10;
+  Url.url = Url.base;
 
   return Url;
 })();
