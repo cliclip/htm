@@ -16,8 +16,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     className : "login-view",
     template : "#login-view-template",
     events : {
+      "focus #name"              :"clearAction",
       "click input[type=submit]" : "submit",
-      "click input[type=reset]" : "cancel"
+      "click input[type=reset]"  : "cancel"
     },
     submit : function(e){
       var that = this;
@@ -43,6 +44,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.login:cancel");
+    },
+    clearAction:function(evt){
+      var value="用户名/Email";
+      if($("#name").val() == value){
+	$("#name").val("");
+      }
     }
   });
 
@@ -81,7 +88,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   });
 
   // TEST
-  // App.bind("initialize:after", function(){ Login.open(); });
+   App.bind("initialize:after", function(){ Login.open(); });
 
   return Login;
 })(App, Backbone, jQuery);
