@@ -112,9 +112,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDelete.show(clipid, uid);
   });
 
-  App.bind("initialize:after", function(){
+/*  App.bind("initialize:after", function(){
     App.vent.trigger("app.clipapp:clipdetail", "1:23");
   });
+*/
 
   return ClipApp;
 })(App, Backbone, jQuery);
