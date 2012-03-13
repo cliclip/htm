@@ -5,7 +5,17 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
   ClipRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-
+/*
+      "clip/:cid": "showDetail",
+      "user/:uid": "showPreview",
+      "tag/:tagName":"show_tagClip",
+      "user/:uid/:tagName":"show_userTagClip",
+      "search":"show_searchClip",
+      "my":"showPreview",
+      "my/:tagName":"show_myTagClip",
+      "my/interest":"show_myFollow",
+      "my/recommend":"show_myRecommend"
+*/
       // site
       "":"siteShow",
       "home":"siteShow",
@@ -32,9 +42,47 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/interest":"myInterest",
       "my/interest/tag/:tag":"myInterest"
       // "my/setup":"mySetup"
+
     }
   });
 
+  App.vent.bind("clip:preview:show",function(uid){
+    if(uid){
+      App.Routing.showRoute("user", uid);
+    }else{
+      App.Routing.showRoute("my");
+    }
+  });
+/*
+  App.vent.bind("tag:show",function(tag){
+    App.Routing.showRoute("tag", tag);
+  });
+
+  App.vent.bind("user:tag:show",function(uid,tag){
+      App.Routing.showRoute("user", uid, tag);
+  });
+  //输入内容搜索，返回显示结果需要更新hash
+  App.vent.bind("search:show",function(){
+      App.Routing.showRoute("search");
+  });
+*/
+  //登陆后自动显示clip列表需要更新hash
+  App.vent.bind("my:clip:preview:show",function(){
+    App.Routing.showRoute("my");
+  });
+/*
+  App.vent.bind("my:tag:show",function(tag){
+    App.Routing.showRoute("my", tag);
+  });
+
+  App.vent.bind("interest:show",function(){
+      App.Routing.showRoute("my");
+  });
+
+  App.vent.bind("recommend:show",function(start,end){
+    App.Routing.showRoute("my", start + ".." + end);
+  });
+*/
   App.addInitializer(function(){
     ClipRouting.router = new ClipRouting.Router({
       controller: App.ClipApp

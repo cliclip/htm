@@ -65,6 +65,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
   });
 
   // Test
+
   // App.bind("initialize:after", function(){Register.open();});
 
   return Register;
