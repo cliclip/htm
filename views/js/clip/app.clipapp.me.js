@@ -6,7 +6,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   var Me = {};
 
   var Model = App.Model.extend({
-    url: P+"/user/1"
+    url: P+"/my/info"
   });
 
   var View = App.ItemView.extend({
@@ -27,7 +27,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   Me.show = function(){
     Me.me.onChange(function(meModel){
-      // console.info("onChange :: "+Me.me.get("id"));
+      //console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
         model: meModel
       });
@@ -47,7 +47,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.show();
   });
 
-  App.bind("initialize:before", function(){
+  App.addInitializer(function(){
     Me.me = new Model();
     Me.me.fetch();
   });
