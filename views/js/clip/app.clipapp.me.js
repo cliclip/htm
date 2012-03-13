@@ -14,17 +14,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   Me.View = App.ItemView.extend({
     tagName: "div",
     className: "me-view",
-    template: "#me-view-template",
-    events:{
-      "click #recomment_button" :"recommentAction",
-      "click #organize_button"  :"organizeAction"
-    },
-    recommentAction:function(){
-      App.RecommApp.open();
-    },
-    organizeAction:function(){
-      App.OrganizeApp.open();
-    }
+    template: "#me-view-template"
   });
 
   Me.show = function(){
