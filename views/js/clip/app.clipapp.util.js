@@ -1,5 +1,10 @@
 App.util = (function(){
   var util = {};
+
+  util.getMyUid = function(){
+    return document.cookie.split("=")[1].split(":")[0];
+  };
+
   util.url = function(uid,imageid){
     var pattern = /^[a-z0-9]{32}/;
     if(imageid&& pattern.test(imageid))

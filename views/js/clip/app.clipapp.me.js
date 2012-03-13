@@ -14,17 +14,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   Me.View = App.ItemView.extend({
     tagName: "div",
     className: "me-view",
-    template: "#me-view-template",
-    events:{
-      "click #recomment_button" :"recommentAction",
-      "click #organize_button"  :"organizeAction"
-    },
-    recommentAction:function(){
-      App.RecommApp.open();
-    },
-    organizeAction:function(){
-      App.OrganizeApp.open();
-    }
+    template: "#me-view-template"
   });
 
   Me.show = function(){
@@ -47,7 +37,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.register:success", function(){
     Me.show();
   });
-
+/*
   App.addInitializer(function(){
     Me.me = new Me.Model();
     Me.me.fetch();
@@ -56,6 +46,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.bind("initialize:after", function(){
     Me.show();
   });
-
+*/
   return Me;
 })(App, Backbone, jQuery);

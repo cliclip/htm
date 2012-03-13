@@ -1,4 +1,15 @@
 <script type='text/template' id='userface-view-template'>
+  <div id="face">
+    <img src="<%=imgUrl%>" width="200" hight="300">
+    <div class="username">
+      <%= name %>
+    </div>
+    <div>
+      我追谁 <%=following%><br>
+      谁追我 <%=follower%>
+    </div>
+  </div>
+
   <span>
     face of <%= name %>
   </span>

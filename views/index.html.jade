@@ -38,7 +38,6 @@ html
     //- userapp
     //- script(src="/js/user/app.userapp.js")
     //- script(src="/js/user/app.userapp.routing.js")
-    //- script(src="/js/app.util.js")
     //- script(src="/js/user/app.userapp.register.js")
     //- script(src="/js/user/app.userapp.me.js")
 
@@ -55,6 +54,8 @@ html
     script(src="/js/clip/app.clipapp.preview.js")
     script(src="/js/clip/app.clipapp.clipdetail.js")
     script(src="/js/clip/app.clipapp.clipedit.js")
+    //- clip_preview 
+    script(src="/js/clip/app.clipapp.cliplist.js")
     script(src="/js/clip/app.clipapp.commentapp.js")
     script(src="/js/clip/app.clipapp.routing.js")
 
@@ -64,6 +65,7 @@ html
     script(src="/js/clip/app.clipapp.clipdelete.js")
     script(src="/js/clip/app.clipapp.memo.js")
 
+    script(src="/js/clip/app.clipapp.face.js")
     //- kick start
     script $(function(){ App.start(); });
     
@@ -98,6 +100,3 @@ html
     include tmpl/namelist-view-template.html
     include tmpl/clippreview-view-template.html
     include tmpl/objtag-view-template.html
-
-
-

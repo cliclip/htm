@@ -62,7 +62,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  }
 	});
       }else{
-	ClipEdit.LocalImgRegion.close();
+	$("#imgUploadDiv").empty();
+	// ClipEdit.LocalImgRegion.close();
       }
     },
     upFormat:function(){ // 进行正文抽取
