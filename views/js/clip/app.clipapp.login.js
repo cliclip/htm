@@ -53,7 +53,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
   });
 
-  Login.open = function(model, error){
+  Login.show = function(model, error){
     var loginModel = new LoginModel();
     if (model) loginModel.set(model.toJSON());
     if (error) loginModel.set("error", error);
@@ -61,12 +61,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     App.popRegion.show(loginView);
   };
 
-/*
-  Login.show = function(uid){
-    var loginModel = new LoginModel({id: uid});
-
-  };
-*/
   Login.close = function(){
     App.popRegion.close();
   };
@@ -86,8 +80,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.login:cancel", function(){
     Login.close();
   });
-
-  // TEST
 
   // App.bind("initialize:after", function(){ Login.open(); });
 

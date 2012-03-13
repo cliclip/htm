@@ -3,23 +3,32 @@
 App.ClipApp.Me = (function(App, Backbone, $){
 
   var P = App.ClipApp.Url.base;
-  var token = document.cookie;
   var Me = {};
 
-  Me.Model = App.Model.extend({
-    // url : "/test/me.json"
-    url : P+"/user/"+token.split(":")[0]
+  var Model = App.Model.extend({
+    url: P+"/user/1"
   });
 
-  Me.View = App.ItemView.extend({
+  var View = App.ItemView.extend({
     tagName: "div",
     className: "me-view",
-    template: "#me-view-template"
+    template: "#me-view-template",
+    events:{
+      "click #login_button": "loginAction",
+      "click #register_button": "registerAction"
+    },
+    loginAction: function(){
+
+    },
+    registerAction: function(){
+
+    }
   });
 
   Me.show = function(){
     Me.me.onChange(function(meModel){
-      var meView = new Me.View({
+      // console.info("onChange :: "+Me.me.get("id"));
+      var meView = new View({
         model: meModel
       });
       App.mineRegion.show(meView);
@@ -38,8 +47,8 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.show();
   });
 
-  App.addInitializer(function(){
-    Me.me = new Me.Model();
+  App.bind("initialize:before", function(){
+    Me.me = new Model();
     Me.me.fetch();
   });
 

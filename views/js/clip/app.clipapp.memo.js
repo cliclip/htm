@@ -1,11 +1,10 @@
-//app.Organizeapp.js
-var P="/_2_";
-App.OrganizeApp=(function(App,Backbone,$){
-  var OrganizeApp={};
+//app.clipapp.memo.js
+App.ClipApp.ClipMemo=(function(App,Backbone,$){
+  var ClipMemo={};
+      var tag_list = [];
 
-
-  var OrganizeModel=App.Model.extend({});
-  var OrganizeView=App.ItemView.extend({
+  var ClipMemoModel=App.Model.extend({});
+  var ClipMemoView=App.ItemView.extend({
     tagName:"div",
     className:"organize-view",
     template:"#organize-view-template",
@@ -14,19 +13,18 @@ App.OrganizeApp=(function(App,Backbone,$){
       "focus #obj_tag"         :"objtagOpen",
       "focus #organize_text"   :"focusAction",
       "blur #organize_text"    :"blurAction",
-      "click #organize_button" :"organizeAction",
+      "click #organize_button" :"clipmemoAction",
       "click #cancel_button"   :"cancleAction"
     },
     maintagAction:function(evt){
       var id = evt.target.id;
-      var tag_list = [];
       var color = document.getElementById(id).style.backgroundColor;
       if(!color){
 	document.getElementById(id).style.backgroundColor="red";
 	tag_list.push($("#"+id).val());
+	console.dir(tag_list);
 	if($("#organize_text").val() == "" || $("#organize_text").val() == "备注一下吧~"){
 	  $("#organize_text").val($("#"+id).val());
-	  //console.dir(tag_list);
 	}else{
 	  $("#organize_text").val(_.union($("#organize_text").val().split(","),$("#"+id).val()));
 	}
@@ -34,7 +32,7 @@ App.OrganizeApp=(function(App,Backbone,$){
 	document.getElementById(id).style.backgroundColor="";
 	tag_list = _.without(tag_list,$("#"+id).val());
 	$("#organize_text").val(_.without($("#organize_text").val().split(","),$("#"+id).val()));
-	//console.dir(tag_list);
+	console.dir(tag_list);
       }
     },
     objtagOpen:function(evt){
@@ -61,7 +59,7 @@ App.OrganizeApp=(function(App,Backbone,$){
       }
     },
 
-    organizeAction:function(e){
+    clipmemoAction:function(e){
       var _data={note:[{text: $("#organize_text").val()}],tag:$("#obj_tag").val().split(",")};
       e.preventDefault();
       //document.cookie ="token=1:ad44a7c2bc290c60b767cb56718b46ac";
@@ -69,47 +67,42 @@ App.OrganizeApp=(function(App,Backbone,$){
 	url:P+"/clip/"+this.options.clipid,
 	type:"PUT",
 	success:function(model,res){
-	  App.vent.trigger("organize-view:success");
+	  App.vent.trigger("app.clipapp.memo:success");
 	},
 	error:function(model,res){
-	  App.vent.trigger("organize-view:error",model,res);
+	  App.vent.trigger("app.clipapp.memo:error",model,res);
 	}
       });
-      if($("#checkbox").attr("checked")){
+      if($("#memo_private").attr("checked")){
 	console.log("不公开~");
       }
     },
     cancleAction:function(e){
       e.preventDefault();
-      App.vent.trigger("organize-view:cancel");
+      App.vent.trigger("app.clipapp.memo:cancel");
     }
   });
 
 
-  OrganizeApp.open = function(cid){
-    var organizeModel = new OrganizeModel();
-    OrganizeApp.objtagRegion= new App.RegionManager({
-      el:"#objtag_templateDiv"
-    });
-    var organizeView = new OrganizeView({model:organizeModel,clipid:cid});
-    console.info(organizeView);
-    App.popRegion.show(organizeView);
+  ClipMemo.show = function(cid){
+    var clipmemoModel = new ClipMemoModel();
+    var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
+    App.popRegion.show(clipmemoView);
   };
-  OrganizeApp.close=function(){
+  ClipMemo.close=function(){
     App.popRegion.close();
   };
 
-  App.vent.bind("organize-view:cancel",function(){
-    OrganizeApp.close();
+  App.vent.bind("app.clipapp.memo:cancel",function(){
+    ClipMemo.close();
   });
-  App.vent.bind("organize-view:success",function(){
-    OrganizeApp.close();
+  App.vent.bind("app.clipapp.memo:success",function(){
+    ClipMemo.close();
   });
-  App.vent.bind("organzie-view:error",function(model,error){
+  App.vent.bind("app.clipapp.memo:error",function(model,error){
     console.info(error);
-   // RecommApp.open(model,err);
   });
     //TEST
-// App.bind("initialize:after", function(){ OrganizeApp.open(); });
-  return OrganizeApp;
+// App.bind("initialize:after", function(){ ClipMemo.show(); });
+  return ClipMemo;
 })(App,Backbone,jQuery);
