@@ -24,7 +24,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '收':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
 	case '转':
-	  App.vent.trigger("app.clipapp:recommed", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case '评':
 	  App.vent.trigger("app.clipapp:comment", cid);break;
 	case '注':
