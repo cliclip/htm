@@ -72,9 +72,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.id;
       var id = e.target.id;
       // 首先在被点击的评论下添加 评论框的div
-      if($("#reply_Comm_showDiv")){
+      if($("#reply_Comm_showDiv"))
 	$("#reply_Comm_showDiv").remove();
-      }
       $("#"+id).append('<div id="reply_Comm_showDiv"></div>');
       App.vent.trigger("app.clipapp.clipdetail:show_reply", id, cid);
     },
@@ -171,14 +170,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click #ok_button" : "comment"
     },
     foucsAction:function(evt){
-      if($("#comm_text").val() == "说点什么吧~" ){
+      if($("#comm_text").val() == "评论文本框~" ){
 	$("#comm_text").val("");
       }
     },
 
     blurAction:function(evt){
       if($("#comm_text").val() == ""){
-	$("#comm_text").val("说点什么吧~");
+	$("#comm_text").val("评论文本框~");
       }
     },
 
@@ -188,7 +187,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       if(!color){
 	document.getElementById(id).style.backgroundColor="red";
 	this.tag_list.push($("#"+id).val());
-	if($("#comm_text").val() == "" || $("#comm_text").val() == "说点什么吧~"){
+	if($("#comm_text").val() == "" || $("#comm_text").val() == "评论文本框~"){
 	  $("#comm_text").val($("#"+id).val());
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
@@ -211,7 +210,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	type: "POST",
 	success:function(comment,response){
 	  ClipDetail.showComment(id);
-	  $("#comm_text").val("评论文本框");
+	  $("#comm_text").val("评论文本框~");
 	},
 	error:function(comment,response){}
       });
@@ -254,12 +253,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     ClipDetail.replyCommRegion.close();
   };
 
-/*
-  // App.vent.bind方便调用 app.clipapp.js 触发
-  App.vent.bind("app.clipapp.clipdetail:showComment", function(cid){
-    ClipDetail.showComment(cid);
-  });
-*/
   App.vent.bind("app.clipapp.clipdetail:show_reply", function(pid, cid){
     ClipDetail.show_reply(pid, cid);
   });
@@ -268,7 +261,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     ClipDetail.delComment(id, cid);
   });
 
-  App.vent.bind("app.clipapp:closeComment", function(){
+  // 应该绑定在那里
+  App.vent.bind("app.clipapp.clipdetail:close", function(){
     ClipDetail.close();
   });
 
