@@ -75,6 +75,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       if($("#reply_Comm_showDiv"))
 	$("#reply_Comm_showDiv").remove();
       $("#"+id).append('<div id="reply_Comm_showDiv"></div>');
+      App.vent.trigger("app.clipapp.clipdetail:hide_addComm");
       App.vent.trigger("app.clipapp.clipdetail:show_reply", id, cid);
     },
     del_comment : function(e){
@@ -143,6 +144,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       showDetail(detailModel);
       // App.vent.trigger("app.clipapp.clipdetail:showComment", cid);
       ClipDetail.showComment(cid);
+      ClipDetail.showAddComm(cid);
     });
   };
 
@@ -158,6 +160,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       ClipDetail.commentRegion.show(commentView);
     });
   };
+
+
   var ReplyCommView = App.ItemView.extend({
     tagName : "div",
     className : "replycomment-view",
@@ -167,7 +171,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "focus #comm_text":"foucsAction",
       "blur #comm_text":"blurAction",
       "click .main_tag":"maintagAction",
-      "click #ok_button" : "comment"
+      "click #ok_button":"comment",
+      "click #cancel_button":"cancel"
     },
     foucsAction:function(evt){
       if($("#comm_text").val() == "评论文本框~" ){
@@ -219,8 +224,21 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	// console.log("同时收");
 	App.vent.trigger("collect", id,params1);
       }
+    },
+    cancel : function(){
+      $("#comm_text").val("评论文本框~");
+      App.vent.trigger("app.clipapp.clipdetail:cancel_addComm", this.model.id);
     }
   });
+
+  ClipDetail.showAddComm = function(cid){
+    var addCommModel = new CommentModel({id: cid});
+    var addCommView = new ReplyCommView({model: addCommModel});
+    ClipDetail.addCommRegion = new App.RegionManager({
+      el:"#addComm_showDiv"
+    });
+    ClipDetail.addCommRegion.show(addCommView);
+  };
 
   // 对评论进行回复，应该要有取消按钮在，评论的对应位置显示评论输入框
   ClipDetail.show_reply = function(id, cid){
@@ -257,6 +275,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     ClipDetail.show_reply(pid, cid);
   });
 
+  App.vent.bind("app.clipapp.clipdetail:cancel_addComm", function(cid){
+    if(ClipDetail.replyCommRegion){
+      ClipDetail.replyCommRegion.close();
+      ClipDetail.showAddComm(cid);
+    }
+  });
+
+  App.vent.bind("app.clipapp.clipdetail:hide_addComm", function(){
+    ClipDetail.addCommRegion.close();
+  });
   App.vent.bind("app.clipapp.clipdetail:delComment", function(id, cid){
     ClipDetail.delComment(id, cid);
   });

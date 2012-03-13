@@ -1,12 +1,11 @@
 // app.clipapp.me.js
-
 App.ClipApp.Me = (function(App, Backbone, $){
 
   var P = App.ClipApp.Url.base;
   var Me = {};
 
   var Model = App.Model.extend({
-    url: P+"/user/1"
+    url: P+"/my/info"
   });
 
   var View = App.ItemView.extend({
@@ -27,7 +26,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   Me.show = function(){
     Me.me.onChange(function(meModel){
-      // console.info("onChange :: "+Me.me.get("id"));
+      console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
         model: meModel
       });
