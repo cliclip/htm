@@ -124,5 +124,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
    // TEST
    //App.bind("initialize:after", function(){ Reclip.open(); });
    */
+
   return Reclip;
 })(App, Backbone, jQuery);
