@@ -1,16 +1,12 @@
 <script type='text/template' id='userface-view-template'>
   <div id="userface">
-    <img src="<%=imgUrl%>" width="200" hight="300">
+    <a href=""><img src="<%=imgUrl%>" width="200" hight="300">
     <div class="username">
-      <%= name %>
-    </div>
+      <%=name %>
+    </div></a>
     <div>
-      我追谁 <%=following%><br>
-      谁追我 <%=follower%>
+      <a href="#user/<%=id%>/following">我追谁 <%=following%></a><br>
+      <a href="#user/<%=id%>/follower">谁追我 <%=follower%></a>
     </div>
   </div>
-
-  <span>
-    face of <%= name %>
-  </span>
 </script>
