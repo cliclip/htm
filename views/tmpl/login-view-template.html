@@ -1,6 +1,6 @@
 <script type="text/template" id="login-view-template">
 <form>
-<div align="center" style="position:relative;left:500px;top:50px;width:300px;height:200px;background:yellow;z-index:400;display:block; ">
+<div align="center" style="position:relative;left:500px;top:50px;width:300px;height:200px;background:yellow;z-index:400;display:block; "><br/>
   <lable>登录</label><br>
   <input type="text" name="<%= name %>" value="<%= name %>" id="name" size="30"/>
   <span class="error"><%= typeof error != "undefined" && error.name ? error.name : "" %></span>
@@ -8,9 +8,10 @@
   <input type="password" name="<%= pass %>" value="" id="pass" size="30"/>
   <span class="error"><%= typeof error != "undefined" && error.pass ? error.pass : "" %></span>
   <br/>
-  忘记密码？<a href = "" >点这里重置</a><br>
+  忘记密码？<a href = "" >点这里重置</a><br/></br>
   <input type="submit" value="登陆"/>
-  <input type="reset" value="取消"/>
+  <input type="reset" value="取消"/><br/><br/>
+  <a href = "" >注册新账号</a><br/>
 </div>
 </form>
 </script>
