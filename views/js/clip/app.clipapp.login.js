@@ -7,7 +7,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   var LoginModel = App.Model.extend({
     url: "/_/login",
     defaults: {
-      name : "", pass : ""
+      name : "用户名/Email", pass : ""
     }
   });
 
@@ -16,8 +16,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     className : "login-view",
     template : "#login-view-template",
     events : {
+      "focus #name"              :"clearAction",
       "click input[type=submit]" : "submit",
-      "click input[type=reset]" : "cancel"
+      "click input[type=reset]"  : "cancel"
     },
     submit : function(e){
       var that = this;
@@ -43,30 +44,31 @@ App.ClipApp.Login = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.login:cancel");
+    },
+    clearAction:function(evt){
+      var value="用户名/Email";
+      if($("#name").val() == value){
+	$("#name").val("");
+      }
     }
   });
 
-  Login.open = function(model, error){
+  Login.show = function(model, error){
     var loginModel = new LoginModel();
     if (model) loginModel.set(model.toJSON());
     if (error) loginModel.set("error", error);
-    loginView = new LoginView({model : loginModel});
+    var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
   };
 
-/*
-  Login.show = function(uid){
-    var loginModel = new LoginModel({id: uid});
-
-  };
-*/
   Login.close = function(){
     App.popRegion.close();
   };
 
   App.vent.bind("app.clipapp.login:success", function(token){
     document.cookie = "token="+token;
-    // var uid = token.split(":")[0];
+    var uid = token.split(":")[0];
+    App.ClipApp.Me.me.fetch();
     // 用户登录成功触发，显示clip的preview事件
     App.vent.trigger("app.clipapp:mycliplist");
     App.vent.trigger("app.clipapp.routing:mycliplist:show");
@@ -74,7 +76,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.login:error", function(model, error){
-    Login.open(model, error);
+    Login.show(model, error);
   });
 
   App.vent.bind("app.clipapp.login:cancel", function(){

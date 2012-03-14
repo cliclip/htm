@@ -68,62 +68,53 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     submit:function(e){
       e.preventDefault();
       var that = this;
-      var id = this.model.id;
-      // console.info(this.model.url);
       var text = $("#reclip_text").val();
       var tag = $("#obj_tag").val().split(",");
       var params = {clip:{note: [{text:text}],tag:tag}};
-      reclipSave(id, params);
+      App.vent.trigger("app.clipapp.reclip:submit", that.model, params);
     },
     cancel : function(e){
       e.preventDefault();
-      Reclip.close();
+      App.vent.trigger("app.clipapp.reclip:cancel");
     }
   });
-  var reclipSave = function(id,params){
-    var reclip = new ReclipModel();
-    reclip.save(params,{
-      url: P+"/clip/"+id+"/reclip",
+
+  var reclipSave = function(reclipmodel,params){
+    reclipmodel.save(params,{
+      url: P+"/clip/"+reclipmodel.id+"/reclip",
       type: "POST",
       success: function(model, res){
-	Reclip.close();
-	// App.vent.trigger("reclip-view:success");
+	 Reclip.close();
       },
       error:function(model, res){
-	Reclip.open(model, error);
-	// App.vent.trigger("reclip-view:error", model, res);
+	 Reclip.show(model.id, model, res);
       }
     });
   };
 
-  // 有第一个参数 对clip进行收 否则运行错误提示错误信息
-  Reclip.open = function(cid, model, error){
-    if(cid){
-      var reclipModel = new ReclipModel({id: cid});
-    } else {
-      var reclipModel = new ReclipModel({id: cid});
-      if (model) reclipModel.set(model.toJSON());
-      if (error) reclipModel.set("error", error);
-    }
+
+
+
+  Reclip.show = function(cid, model, error){
+    var reclipModel = new ReclipModel({id: cid});
+    if (model) reclipModel.set(model.toJSON());
+    if (error) reclipModel.set("error", error);
     reclipView = new ReclipView({model : reclipModel});
     App.popRegion.show(reclipView);
-    tag_list = [];
   };
 
   Reclip.close = function(){
     App.popRegion.close();
   };
+  App.vent.bind("app.clipapp.reclip:submit", function(model ,params){
+    reclipSave(model, params);
+  });
+  App.vent.bind("app.clipapp.reclip:cancel",function(){
+    Reclip.close();
+  });
 
-  /*
-   App.vent.bind("reclip-view:success", function(){
-     Reclip.close();
-   });
-   App.vent.bind("reclip-view:error", function(model, error){
-     Reclip.open(model, error);
-   });
-   // TEST
-   //App.bind("initialize:after", function(){ Reclip.open(); });
-   */
 
+    // TEST
+   // App.bind("initialize:after", function(){ Reclip.show("1:1"); });
   return Reclip;
 })(App, Backbone, jQuery);

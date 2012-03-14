@@ -4,9 +4,9 @@ App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
 
   function getMyUid(){
-    console.info(ClipApp.Me.me);
+    // console.log("getMyUid");
     return ClipApp.Me.me.get("id");
-  }
+  };
 
   ClipApp.siteShow = function(tag){
     // ClipApp.Face.showUser();
@@ -69,7 +69,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:login", function(){
     var uid = getMyUid();
-    ClipApp.Login.show(uid);
+    ClipApp.Login.open(uid);
   });
 
   App.vent.bind("app.clipapp:logout", function(){
@@ -79,17 +79,29 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:reclip", function(clipid){
     var uid = getMyUid();
-    ClipApp.Reclip.show(clipid, uid);
+    if(!uid){
+      ClipApp.Login.show();
+    }else{
+      ClipApp.Reclip.show(clipid);
+    }
   });
 
   App.vent.bind("app.clipapp:recommend", function(clipid){
     var uid = getMyUid();
-    ClipApp.Recommend.show(clipid, uid);
+    if(!uid){
+      ClipApp.Login.show();
+    }else{
+      ClipApp.Recommend.show(clipid);
+    }
   });
 
   App.vent.bind("app.clipapp:comment", function(clipid){
     var uid = getMyUid();
-    ClipApp.Comment.show(clipid, uid);
+    if(!uid){
+      ClipApp.Login.show();
+    }else{
+      ClipApp.Comment.show(clipid);
+    }
   });
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid){
@@ -99,6 +111,9 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:clipmemo", function(clipid){
     var uid = getMyUid();
+    if(!uid){
+      ClipApp.Login.show();
+    }
     ClipApp.ClipMemo.show(clipid, uid);
   });
 
@@ -115,10 +130,10 @@ App.ClipApp = (function(App, Backbone, $){
     var uid = getMyUid();
     ClipApp.ClipDelete.show(clipid, uid);
   });
-/*
-  App.bind("initialize:after", function(){
-    App.vent.trigger("app.clipapp:clipdetail", "1:23");
-  });
-*/
+
+  setTimeout(function(){
+    App.vent.trigger("app.clipapp:clipdetail", "1:1");
+  }, 500);
+
   return ClipApp;
 })(App, Backbone, jQuery);

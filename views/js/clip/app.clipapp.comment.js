@@ -54,80 +54,58 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     comment : function(e){
       e.preventDefault();
       var that = this;
-      var id = that.model.id;
       var text = $("#comm_text").val();
       var params = {text: text, pid: 0};
       // console.dir(that.tag_list);
       var params1 = {clip:{tag:tag_list,note:[{text:text}]}};
-      App.vent.trigger("comment", id, params);
+      App.vent.trigger("app.clipapp.comment:submit", that.model, params);
       if($("#collect").attr("checked")){
 	console.log("同时收");
-	App.vent.trigger("collect", id,params1);
+	App.vent.trigger("collect", that.model,params1);
       }
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("comment-view:cancel");
+      App.vent.trigger("app.clipapp.comment:cancel");
     }
   });
 
-  Comment.open = function(cid, model, error){
-    if(cid){
-      var commentModel = new CommentModel({id: cid});
-    }else{
-      var commentModel = new CommentModel();
-      if (model) commentModel.set(model.toJSON());
-      if (error) commentModel.set("error", error);
-    }
-    var commentView = new CommentView({model : commentModel});
-    App.popRegion.show(commentView);
-    tag_list = [];
-  };
-
-  Comment.close = function(){
-    App.popRegion.close();
-  };
-
-  var commentAction = function(id, params){
-    var comm = new CommentModel();
-    comm.save(params,{
-      url: P+"/clip/"+id+"/comment",
+  var commentAction = function(commentModel, params){
+    commentModel.save(params,{
+      url: P+"/clip/"+commentModel.id+"/comment",
       type: "POST",
       success: function(model, res){
-	// console.log("success model = %j, response = %j", model, res);
-	// App.vent.trigger("comment-view:success");
 	Comment.close();
-	App.vent.trigger("clip:showDetail", id);
+	// App.vent.trigger("clip:showDetail", id);
       },
       error:function(model, res){
-  	// that.model.set("error", res);
-  	// that.model.change();
-  	//console.log("error model = %j, response = %j", model, res);
-  	App.vent.trigger("comment-view:error", model, res);
+	Comment.show(model.id,model, res);
       }
     });
   };
 
-  App.vent.bind("comment", function(id ,params){
-    commentAction(id, params);
-  });
+  Comment.show = function(cid, model, error){
+    var commentModel = new CommentModel({id: cid});
+    if (model) commentModel.set(model.toJSON());
+    if (error) commentModel.set("error", error);
+    var commentView = new CommentView({model : commentModel});
+    App.popRegion.show(commentView);
+    tag_list = [];
+  };
+  Comment.close = function(){
+    App.popRegion.close();
+  };
 
-  /*
-  App.vent.bind("comment-view:success", function(){
+  App.vent.bind("app.clipapp.comment:submit", function(model,params){
+    commentAction(model, params);
+  });
+  App.vent.bind("app.clipapp.comment:cancel", function(){
     Comment.close();
   });
-   */
 
-  App.vent.bind("comment-view:error", function(model, error){
-    Comment.open(model, error);
-  });
-
-  App.vent.bind("comment-view:cancel", function(){
-    Comment.close();
-  });
 
   // TEST
-  //App.bind("initialize:after", function(){ Comment.open(); });
+ // App.bind("initialize:after", function(){ Comment.show("1:1"); });
 
   return Comment;
 })(App, Backbone, jQuery);
