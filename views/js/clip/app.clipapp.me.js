@@ -19,7 +19,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:login");
     },
     registerAction: function(){
-      location.href = "#register";
+      Backbone.history.navigate("#register");
+      //location.href = "#register";
+      location.reload() ;
       // App.vent.trigger("app.clipapp:register");
     }
   });
