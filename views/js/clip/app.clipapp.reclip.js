@@ -25,6 +25,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     maintagAction:function(evt){
       var id = evt.target.id;
       var color = document.getElementById(id).style.backgroundColor;
+      console.log(color);
       if(!color){
 	document.getElementById(id).style.backgroundColor="red";
 	tag_list.push($("#"+id).val());

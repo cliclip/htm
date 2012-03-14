@@ -1,13 +1,22 @@
 #mine{
- float: left;
+ float: top;
+ margin-left:20px;
 }
 #face{
-
+  top:30px; 
+  float:left;
+  position: absolute;
+  margin-left:20px;
+  margin-right:20px;
+  width:200px;
+  z-index:9;
 }
 #bubb{
 
 }
 #list{
+ width:1000px;
+ margin-left:250px;
  position: absolute;
  z-index:9;
 }
