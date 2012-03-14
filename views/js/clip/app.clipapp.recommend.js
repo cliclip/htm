@@ -79,7 +79,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   });
   var showNameList=function(params){
     var collection = new NameList({});
-    //document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     collection.fetch({data:params});
     collection.onReset(function(list){
       var namelistView = new NameListCollectionView({

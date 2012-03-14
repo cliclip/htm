@@ -24,9 +24,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '收':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
 	case '转':
-	  App.vent.trigger("app.clipapp:recommed", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case '评':
-	  App.vent.trigger("app.clipapp:comment", cid);break;
+	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case '注':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case '改':
@@ -128,14 +128,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.show = function(cid, uid){
-    document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
-      var self = document.cookie.split("=")[1].split(":")[0];
-      // var self = "2";
       var user = detailModel.get("user");
-      if(user == self){ // 应该是 user == self
+      if(user == uid){ // 应该是 user == self
 	detailModel.set("manage",["注","改","删"]);
       }else{
 	detailModel.set("manage",["收","转","评"]);
@@ -231,13 +228,15 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   });
 
-  ClipDetail.showAddComm = function(cid){
+  ClipDetail.showAddComm = function(cid, focus){
     var addCommModel = new CommentModel({id: cid});
     var addCommView = new ReplyCommView({model: addCommModel});
     ClipDetail.addCommRegion = new App.RegionManager({
       el:"#addComm_showDiv"
     });
     ClipDetail.addCommRegion.show(addCommView);
+    if(focus)
+      $("#comm_text").focus();
   };
 
   // 对评论进行回复，应该要有取消按钮在，评论的对应位置显示评论输入框
@@ -259,9 +258,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	// 删除评论成功，重新加载comment
 	ClipDetail.showComment(cid);
       },
-      error:function(model, res){
-
-      }
+      error:function(model, res){}
     });
   };
 
@@ -280,6 +277,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       ClipDetail.replyCommRegion.close();
       ClipDetail.showAddComm(cid);
     }
+  });
+
+  App.vent.bind("app.clipapp.clipdetail:comment", function(cid){
+    // 当点击clipdetail的评时
+    if(ClipDetail.replyCommRegion)
+      ClipDetail.replyCommRegion.close();
+    ClipDetail.showAddComm(cid, true);
   });
 
   App.vent.bind("app.clipapp.clipdetail:hide_addComm", function(){

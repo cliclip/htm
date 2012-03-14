@@ -45,7 +45,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  Register.open = function(model, error){
+  Register.show = function(model, error){
     var registerModel = new RegisterModel();
     if (model) registerModel.set(model.toJSON());
     if (error) registerModel.set("error", error);

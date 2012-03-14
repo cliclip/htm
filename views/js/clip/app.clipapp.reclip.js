@@ -75,7 +75,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clip.reclip:cancel");
+      App.vent.trigger("app.clipapp.reclip:cancel");
     }
   });
 

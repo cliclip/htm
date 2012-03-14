@@ -7,7 +7,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   var LoginModel = App.Model.extend({
     url: "/_/login",
     defaults: {
-      name : "", pass : ""
+      name : "用户名/Email", pass : ""
     }
   });
 
@@ -57,7 +57,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var loginModel = new LoginModel();
     if (model) loginModel.set(model.toJSON());
     if (error) loginModel.set("error", error);
-    loginView = new LoginView({model : loginModel});
+    var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
   };
 
@@ -69,20 +69,19 @@ App.ClipApp.Login = (function(App, Backbone, $){
     document.cookie = "token="+token;
     var uid = token.split(":")[0];
     // 用户登录成功触发，显示clip的preview事件
-    App.vent.trigger("clip_preview:show", uid, 0, 5);
+   //   App.vent.trigger("clip_preview:show", uid, 0, 5);
     Login.close();
   });
 
   App.vent.bind("app.clipapp.login:error", function(model, error){
-    Login.open(model, error);
+    Login.show(model, error);
   });
 
   App.vent.bind("app.clipapp.login:cancel", function(){
     Login.close();
   });
 
-  // TEST
-  // App.bind("initialize:after", function(){ Login.open(); });
+   //App.bind("initialize:after", function(){ Login.show(); });
 
   return Login;
 })(App, Backbone, jQuery);

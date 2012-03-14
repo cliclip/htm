@@ -52,7 +52,7 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
       $(".editContent-container").append(img);
     },
     localImg:function(){
-      document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+      // document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
       if($("#imgUploadDiv").html() == ""){
 	var actionUrl = client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL +"user/1/image"; // 上传图片
 	$("#imgUploadDiv").html(this.uploadTemplate({actUrl:actionUrl}));
@@ -129,7 +129,7 @@ ClipEditWidget = function(_container,_options){ // el同样是popup
 	  _data.content.push({image:src});
 	}
       });
-      document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
+      // document.cookie = "token=1:ad44a7c2bc290c60b767cb56718b46ac";
       RequestUtil.putFunc({
 	url:client.URL.HOST_URL + client.SYMBOL.SLASH + client.URL.BASE_URL + "clip/"+clipid,
 	data:_data,
