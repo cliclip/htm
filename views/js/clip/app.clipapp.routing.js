@@ -5,26 +5,14 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
   ClipRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
-/*
-      "clip/:cid": "showDetail",
-      "user/:uid": "showPreview",
-      "tag/:tagName":"show_tagClip",
-      "user/:uid/:tagName":"show_userTagClip",
-      "search":"show_searchClip",
-      "my":"showPreview",
-      "my/:tagName":"show_myTagClip",
-      "my/interest":"show_myFollow",
-      "my/recommend":"show_myRecommend"
-*/
-
       // site
-      "":"siteShow",
+//      "":"siteShow",
       "home":"siteShow",
       "tag/:tag":"siteShow",
       "query/:word":"siteQuery",
 
-      // "register": "register",
-      // "login": "login",
+      "register": "register",
+      "login": "login",
 
       // user
 
@@ -67,7 +55,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
   });
 
   //登陆后自动显示clip列表需要更新hash
-  App.vent.bind("my:clip:preview:show",function(){
+  App.vent.bind("app.clipapp.routing:mycliplist:show",function(){
     App.Routing.showRoute("my");
   });
 

@@ -3,6 +3,9 @@
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var collection = null;
+  var start = 0;
+  var end = 9;
+  var url = "";
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -26,9 +29,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       author:""//此clip的作者，列表推荐和列表follow动态时有此属性
     }
   });
+
   var ClipPreviewList = App.Collection.extend({
     model : ClipPreviewModel
   });
+
   var ClipPreviewView = App.ItemView.extend({
     tagName: "div",
     template: "#clippreview-view-template"
@@ -47,9 +52,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
       if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
-	App.ClipApp.Url.start +=App.ClipApp.Url.page;
-	App.ClipApp.Url.end +=App.ClipApp.Url.page;
-	collection.url = App.ClipApp.Url.url + App.ClipApp.Url.start + ".." + App.ClipApp.Url.end;
+	start +=App.ClipApp.Url.page;
+	end +=App.ClipApp.Url.page;
+	collection.url = url + start + ".." + end;
 	collection.fetch({add: true});
       }
     });
@@ -61,10 +66,26 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
+  function getSiteClips(tag){
+    //var _url =  ;
+    if(tag){
+      //_url +=;
+    }
+    //url = "test/clip.json";
+    getClips();
+  };
+
   ClipList.showSiteQuery = function(word, tag){
     getSiteQuery(word, tag, function(clips){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
     });
+  };
+
+  function getSiteQuery(word, tag){
+    var _url = "/query/" ;
+    url = App.ClipApp.Url.base + _url;
+    var data = {text:word};
+    getClips(data);
   };
 
   ClipList.showUserClips = function(uid, tag){
@@ -76,10 +97,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   function getUserClips(uid,tag){
     var _url = "/user/"  + uid + "/clip/" ;
     if(tag){ _url += "tag/"+tag+"/"; }
-    App.ClipApp.Url.url += _url;
+    url = App.ClipApp.Url.base + _url;
     getClips();
+
   };
 
+/*
   ClipList.showUserQuery = function(uid, word, tag){
     getUserQuery(uid, word, tag, function(clips){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
@@ -97,17 +120,27 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
     });
   };
+*/
   App.vent.bind("app.clipapp.cliplist:show", function(clips){
     var clipListView = new ClipListView({collection: clips});
     App.listRegion.show(clipListView);
   });
 
-  getClips = function(){
+  App.vent.bind("app.clipapp.cliplist:query",function(word){
+    ClipList.showSiteQuery(word);
+  });
+
+  getClips = function(data){
     collection = new ClipPreviewList();
     //collection.url = "/test/recommend.json";
     //collection.url = "/test/clip.json";
-    collection.url = App.ClipApp.Url.url + App.ClipApp.Url.start+".." + App.ClipApp.Url.end;
-    collection.fetch();
+    collection.url = url + start+".." + end;
+    if(data){
+      console.info(collection);
+      collection.fetch({data:data,type:"POST",contentType:"application/json; charset=utf-8"});
+    }else{
+      collection.fetch();
+    }
     collection.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist);
     });

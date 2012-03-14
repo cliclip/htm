@@ -1,7 +1,7 @@
 //app.clipapp.memo.js
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
   var ClipMemo={};
-      var tag_list = [];
+  var tag_list = [];
 
   var ClipMemoModel=App.Model.extend({});
   var ClipMemoView=App.ItemView.extend({

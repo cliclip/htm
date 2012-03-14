@@ -36,10 +36,9 @@ html
     // script(src="/js/Constants.js") 
 
     //- userapp
-    //- script(src="/js/user/app.userapp.js")
-    //- script(src="/js/user/app.userapp.routing.js")
+    script(src="/js/user/app.userapp.js")
+    script(src="/js/user/app.userapp.routing.js")
     //- script(src="/js/user/app.userapp.register.js")
-    //- script(src="/js/user/app.userapp.me.js")
 
     //- clipapp
     script(src="/js/clip/app.clipapp.js")
@@ -50,7 +49,7 @@ html
     script(src="/js/clip/app.clipapp.register.js")
     script(src="/js/clip/app.clipapp.login.js")
     script(src="/js/clip/app.clipapp.me.js")    
-    //- clip_preview 
+    //- clip_detail
     script(src="/js/clip/app.clipapp.clipdetail.js")
     script(src="/js/clip/app.clipapp.clipedit.js")
     //- clip_preview 
@@ -62,6 +61,7 @@ html
     script(src="/js/clip/app.clipapp.reclip.js")
     script(src="/js/clip/app.clipapp.clipdelete.js")
     script(src="/js/clip/app.clipapp.memo.js")
+    script(src="/js/clip/app.clipapp.query.js")
 
     script(src="/js/clip/app.clipapp.face.js")
     //- kick start
@@ -75,6 +75,7 @@ html
     #list
     #view
     #pop
+    #query
 
     //- templates
     include tmpl/login-view-template.html
@@ -98,3 +99,5 @@ html
     include tmpl/namelist-view-template.html
     include tmpl/clippreview-view-template.html
     include tmpl/objtag-view-template.html
+    include tmpl/queryclip-view-template.html
+

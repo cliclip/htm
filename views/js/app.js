@@ -97,7 +97,8 @@ App.addRegions({
   bubbRegion: "#bubb",
   listRegion: "#list",
   viewRegion: "#view",
-  popRegion: "#pop"
+  popRegion: "#pop",
+  queryRegion:"#query"
 });
 
 App.bind("initialize:after", function(){

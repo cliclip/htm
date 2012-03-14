@@ -1,10 +1,8 @@
 // app.clipapp.me.js
-
 App.ClipApp.Me = (function(App, Backbone, $){
 
   var P = App.ClipApp.Url.base;
   var Me = {};
-
   var Model = App.Model.extend({
     url: P+"/my/info"
   });
@@ -18,24 +16,29 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "click #register_button": "registerAction"
     },
     loginAction: function(){
-
+      App.vent.trigger("app.clipapp:login");
     },
     registerAction: function(){
-
+      App.vent.trigger("app.clipapp:register");
     }
   });
 
   Me.show = function(){
+    if(!Me.me.get("id")){
+      var meView = new View();
+      App.mineRegion.show(meView);
+    }
     Me.me.onChange(function(meModel){
       //console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
-        model: meModel
+	model: meModel
       });
       App.mineRegion.show(meView);
     });
   };
 
   App.vent.bind("app.clipapp.login:success", function(){
+    Me.me.fetch();
     Me.show();
   });
 
