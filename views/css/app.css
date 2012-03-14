@@ -1,0 +1,21 @@
+#mine{
+ float: left;
+}
+#face{
+
+}
+#bubb{
+
+}
+#list{
+ position: absolute;
+ z-index:9;
+}
+#view{
+ position: absolute;
+ z-index:10;
+}
+#pop{
+ position: absolute;
+ z-index:11;
+}

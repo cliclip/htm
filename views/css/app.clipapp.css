@@ -16,6 +16,16 @@
   z-index: 13;  
 }
 
+#popup_ContactClose{ 
+  font-size:22px;  
+  line-height:14px;  
+  right:6px;  
+  top:4px;  
+  position:absolute;  
+  color:#6fa5fd;  
+  font-weight:700;  
+  display:block; 
+}
 .showcomment-view{
   margin-left: 50px;
   text-align: left;

@@ -13,7 +13,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "Detail-view",
     template: "#detail-view-template",
     events: {
-      "click .operate" : "Operate"
+      "click .operate" : "Operate",
+      "click #popup_ContactClose" : "Close"
     },
     Operate: function(e){
       e.preventDefault();
@@ -34,6 +35,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '删':
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
+    },
+    Close: function(){
+      App.vent.trigger("app.clipapp.clipdetail:close");
     }
   });
 
@@ -167,7 +171,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     events : {
       "focus #comm_text":"foucsAction",
       "blur #comm_text":"blurAction",
-      "click .main_tag":"maintagAction",
+      "click .comm":"maintagAction",
       "click #ok_button":"comment",
       "click #cancel_button":"cancel"
     },
@@ -185,9 +189,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
     maintagAction:function(evt){
       var id = evt.target.id;
-      var color = document.getElementById(id).style.backgroundColor;
-      if(!color){
-	document.getElementById(id).style.backgroundColor="red";
+      var color = $("#"+id).css("backgroundColor");
+      if(color != "red"){
+	$("#"+id).css("backgroundColor","red");
+	// document.getElementById(id).style.backgroundColor="red";
 	this.tag_list.push($("#"+id).val());
 	if($("#comm_text").val() == "" || $("#comm_text").val() == "评论文本框~"){
 	  $("#comm_text").val($("#"+id).val());
@@ -195,7 +200,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
 	}
       }else if(color == "red"){
-	document.getElementById(id).style.backgroundColor="";
+	$("#"+id).css("backgroundColor","");
 	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
       }
@@ -223,7 +228,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }
     },
     cancel : function(){
+      // 需要将选中状态进行重置，同时将this.tag_list重置
       $("#comm_text").val("评论文本框~");
+      this.tag_list.forEach(function(e){
+	var id = $("input[value="+e+"]").attr("id");
+	$("#"+id).css("backgroundColor","");
+      });
+      this.tag_list = [];
       App.vent.trigger("app.clipapp.clipdetail:cancel_addComm", this.model.id);
     }
   });
@@ -263,9 +274,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.close = function(){
-    ClipDetail.commentRegion.close();
-    ClipDetail.addCommRegion.close();
-    ClipDetail.replyCommRegion.close();
+    if(ClipDetail.commentRegion){
+      ClipDetail.commentRegion.close();
+    }
+    if(ClipDetail.replyCommRegion){
+      ClipDetail.replyCommRegion.close();
+    }else{
+      ClipDetail.addCommRegion.close();
+    }
+    App.popRegion.close();
+    App.viewRegion.close();
   };
 
   App.vent.bind("app.clipapp.clipdetail:show_reply", function(pid, cid){

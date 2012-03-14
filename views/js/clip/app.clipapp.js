@@ -4,18 +4,18 @@ App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
 
   function getMyUid(){
-    // console.log("getMyUid");
+    // console.log("getMyUid  :: "+ClipApp.Me.me.get("id"));
     return ClipApp.Me.me.get("id");
   };
 
   ClipApp.siteShow = function(tag){
-    // ClipApp.Face.showUser();
+    ClipApp.Face.showUser();
     // ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
   };
 
   ClipApp.siteQuery = function(word, tag){
-    // ClipApp.Face.showUser();
+    ClipApp.Face.showUser();
     // ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
   };
@@ -25,20 +25,20 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.userShow = function(uid, tag){
-    //ClipApp.Face.showUser(uid);
+    ClipApp.Face.showUser(uid);
     //ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
   };
 
   ClipApp.userFollowing = function(uid){
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserTags(uid, tag);
+    // ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowingList.showUserFollowing(uid); // TODO
   };
 
   ClipApp.userFollower = function(uid){
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserTags(uid, tag);
+    // ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowerList.showUserFollower(uid); // TODO
   };
 
@@ -53,21 +53,21 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myQuery = function(word, tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserBubs(uid, tag);
+    // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
   };
 
   ClipApp.myInterest = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserBubs(uid, tag);
+    // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserInterest(uid, tag);
   };
 
   ClipApp.myRecommend = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserBubs(uid, tag);
+    // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserRecommend(uid, tag);
   };
 
