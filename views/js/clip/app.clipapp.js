@@ -69,7 +69,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:login", function(){
     var uid = getMyUid();
-    ClipApp.Login.open(uid);
+    ClipApp.Login.show(uid);
   });
 
   App.vent.bind("app.clipapp:logout", function(){
@@ -131,9 +131,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDelete.show(clipid, uid);
   });
 
+/*
   setTimeout(function(){
     App.vent.trigger("app.clipapp:clipdetail", "1:1");
   }, 500);
-
+*/
   return ClipApp;
 })(App, Backbone, jQuery);
