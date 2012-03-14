@@ -56,7 +56,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.register:success", function(res){
     document.cookie = "token="+res[0];
-    // App.vent.trigger("clip_preview:show", uid, 0, 5);
+    Backbone.history.navigate("my");
+    location.reload();
     Register.close();
   });
 
@@ -66,7 +67,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
   });
 
   // Test
-
   // App.bind("initialize:after", function(){Register.open();});
 
   return Register;

@@ -171,7 +171,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     events : {
       "focus #comm_text":"foucsAction",
       "blur #comm_text":"blurAction",
-      "click .main_tag":"maintagAction",
+      "click .comm":"maintagAction",
       "click #ok_button":"comment",
       "click #cancel_button":"cancel"
     },
@@ -189,9 +189,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
     maintagAction:function(evt){
       var id = evt.target.id;
-      var color = document.getElementById(id).style.backgroundColor;
-      if(!color){
-	document.getElementById(id).style.backgroundColor="red";
+      var color = $("#"+id).css("backgroundColor");
+      if(color != "red"){
+	$("#"+id).css("backgroundColor","red");
+	// document.getElementById(id).style.backgroundColor="red";
 	this.tag_list.push($("#"+id).val());
 	if($("#comm_text").val() == "" || $("#comm_text").val() == "评论文本框~"){
 	  $("#comm_text").val($("#"+id).val());
@@ -199,7 +200,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
 	}
       }else if(color == "red"){
-	document.getElementById(id).style.backgroundColor="";
+	$("#"+id).css("backgroundColor","");
 	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
       }
@@ -227,7 +228,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }
     },
     cancel : function(){
+      // 需要将选中状态进行重置，同时将this.tag_list重置
       $("#comm_text").val("评论文本框~");
+      this.tag_list.forEach(function(e){
+	var id = $("input[value="+e+"]").attr("id");
+	$("#"+id).css("backgroundColor","");
+      });
+      this.tag_list = [];
       App.vent.trigger("app.clipapp.clipdetail:cancel_addComm", this.model.id);
     }
   });
