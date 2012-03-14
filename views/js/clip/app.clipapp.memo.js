@@ -19,16 +19,15 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     maintagAction:function(evt){
       var id = evt.target.id;
       var color = $("#"+id).css("backgroundColor");
-      if(color != "red"){
+      if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
 	tag_list.push($("#"+id).val());
-	console.dir(tag_list);
 	if($("#organize_text").val() == "" || $("#organize_text").val() == "备注一下吧~"){
 	  $("#organize_text").val($("#"+id).val());
 	}else{
 	  $("#organize_text").val(_.union($("#organize_text").val().split(","),$("#"+id).val()));
 	}
-      }else if(color == "red"){
+      }else if(color == "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","");
 	tag_list = _.without(tag_list,$("#"+id).val());
 	$("#organize_text").val(_.without($("#organize_text").val().split(","),$("#"+id).val()));

@@ -67,6 +67,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.login:success", function(token){
     document.cookie = "token="+token;
+    // 用户登录成功 页面跳转
     Backbone.history.navigate("my");
     location.reload();
     Login.close();

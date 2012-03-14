@@ -25,7 +25,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     maintagAction:function(evt){
       var id = evt.target.id;
       var color = $("#"+id).css("backgroundColor");
-      if(color != "red"){
+      if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
 	tag_list.push($("#"+id).val());
 	if($("#collect_text").val() == "" || $("#collect_text").val() == "备注一下吧~"){
@@ -34,7 +34,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	}else{
 	  $("#collect_text").val(_.union($("#collect_text").val().split(","),$("#"+id).val()));
 	}
-      }else if(color == "red"){
+      }else if(color == "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","");
 	tag_list = _.without(tag_list,$("#"+id).val());
 	$("#collect_text").val(_.without($("#collect_text").val().split(","),$("#"+id).val()));

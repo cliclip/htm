@@ -37,6 +37,9 @@ App.Routing.ClipRouting = (function(App, Backbone){
     }else{
       App.Routing.showRoute("my");
     }
+/*
+  App.vent.bind("app.clipapp.routing:usercliplist:show",function(uid){
+    App.Routing.showRoute("user", uid);
   });
 
   App.vent.bind("tag:show",function(tag){
@@ -46,16 +49,21 @@ App.Routing.ClipRouting = (function(App, Backbone){
   App.vent.bind("user:tag:show",function(uid,tag){
       App.Routing.showRoute("user", uid, tag);
   });
+*/
   //输入内容搜索，返回显示结果需要更新hash
-  App.vent.bind("search:show",function(){
-      App.Routing.showRoute("search");
+  App.vent.bind("app.clipapp.routing:query:show",function(word){
+    App.Routing.showRoute("query",word);
+  });
+
+  App.vent.bind("app.clipapp.routing:myquery:show",function(word){
+    App.Routing.showRoute("my","query",word);
   });
 
   //登陆后自动显示clip列表需要更新hash
   App.vent.bind("app.clipapp.routing:mycliplist:show",function(){
     App.Routing.showRoute("my");
   });
-
+/*
   App.vent.bind("my:tag:show",function(tag){
     App.Routing.showRoute("my", tag);
   });
@@ -67,7 +75,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
   App.vent.bind("recommend:show",function(start,end){
     App.Routing.showRoute("my", start + ".." + end);
   });
-  */
+*/
+
   App.addInitializer(function(){
     ClipRouting.router = new ClipRouting.Router({
       controller: App.ClipApp
