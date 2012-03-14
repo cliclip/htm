@@ -159,10 +159,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
 
-  var ReplyCommView = App.ItemView.extend({
+  var AddCommView = App.ItemView.extend({
     tagName : "div",
-    className : "replycomment-view",
-    template : "#replycomm-view-template",
+    className : "addcomment-view",
+    template : "#addcomm-view-template",
     tag_list : [],
     events : {
       "focus #comm_text":"foucsAction",
@@ -230,7 +230,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   ClipDetail.showAddComm = function(cid, focus){
     var addCommModel = new CommentModel({id: cid});
-    var addCommView = new ReplyCommView({model: addCommModel});
+    var addCommView = new AddCommView({model: addCommModel});
     ClipDetail.addCommRegion = new App.RegionManager({
       el:"#addComm_showDiv"
     });
@@ -243,7 +243,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   ClipDetail.show_reply = function(id, cid){
     var replyCommModel = new CommentModel({id : cid});
     replyCommModel.set("pid",id);
-    var replyCommView = new ReplyCommView({model: replyCommModel});
+    var replyCommView = new AddCommView({model: replyCommModel});
     ClipDetail.replyCommRegion = new App.RegionManager({
       el: "#reply_Comm_showDiv"
     });
