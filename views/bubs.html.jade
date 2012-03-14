@@ -38,12 +38,17 @@ html
       });
       window.bubbles = bubbles;
       // setTimeout(function(){ bubbles.trigger("reset", {}); }, 100);
+      var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
+      var sink = ["讨厌"];
+      var follows = ["动漫", "科技"];
+      var tags = ["电影", "音乐", "美女", "穿越", "户外", "流行"];
+      tags = _.union(bubs, sink, tags, follows);
       bubbles.trigger("reset", {
-        tag: "美女",
-        tags: ["好玩", "好听", "好看", "好吃", "不喜欢", "电影", "音乐", "动漫", "美女", "科技", "穿越", "户外", "流行"],
-        followings: ["动漫", "科技"],
-        floats: ["全部", "不喜欢"],
-        bigs: ["好玩", "好听", "好看", "好吃"]
+        // default: "美女",
+        tags: tags,
+        follows: follows,
+        bubs: _.intersection(bubs, tags),
+        sink: _.intersection(sink, tags)
       });
       });
 

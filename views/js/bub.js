@@ -1,5 +1,236 @@
 $(function() {
 
+    // user interactive
+
+    var ui = (function(){
+
+      // MOUSE
+
+      var createMode = false;
+      var destroyMode = false;
+
+      var isMouseDown = false;
+      var draging = false;
+      var mouse = { x: 0, y: 0 };
+      var isMouseMove = false;
+      var timeOfLastTouch = 0;
+
+      function mouseDown() {
+	isMouseDown = true;
+	return false;
+      }
+      function mouseUp() {
+	isMouseDown = false;
+	return false;
+      }
+      function mouseMove(event) {
+	event = event || window.event;
+	mouse.x = event.clientX;
+	mouse.y = event.clientY;
+	isMouseMove = true;
+      }
+      function dbClick() {
+	game.random();
+	// game.info();
+      }
+      function touchStart(event) {
+	if (event.touches.length == 1) {
+	  event.preventDefault();
+	  // Faking double click for touch devices
+	  var now = new Date().getTime();
+	  if (now - timeOfLastTouch < 250) {
+	    game.reset();
+	    return;
+	  }
+	  timeOfLastTouch = now;
+	  mouse.x = event.touches[0].pageX;
+	  mouse.y = event.touches[0].pageY;
+	  isMouseDown = true;
+	}
+      }
+      function touchMove(event) {
+	if (event.touches.length == 1) {
+	  event.preventDefault();
+	  mouse.x = event.touches[0].pageX;
+	  mouse.y = event.touches[0].pageY;
+	  isMouseMove = true;
+	}
+      }
+      function touchEnd(event) {
+	if (event.touches.length == 0) {
+	  event.preventDefault();
+	  isMouseDown = false;
+	}
+      }
+      function orientation(event) {
+	if (event.beta) {
+	  game.roll(beta, gamma);
+	}
+      }
+
+      // BROWSER WINDOW
+
+      var stage = [window.screenX, window.screenY, window.innerWidth, window.innerHeight];
+
+      return {
+	init: function(){
+	  document.onmousedown = mouseDown;
+	  document.onmouseup = mouseUp;
+	  document.onmousemove = mouseMove;
+	  document.ondblclick = dbClick;
+	  document.addEventListener('touchstart', touchStart, false);
+	  document.addEventListener('touchmove', touchMove, false);
+	  document.addEventListener('touchend', touchEnd, false);
+	  window.addEventListener('deviceorientation', orientation, false);
+	},
+	chkMouse: function() {
+	  // mouse press
+	  if (createMode) {
+	    game.add(mouse.x, mouse.y );
+	  } else if (isMouseDown && !draging) {
+	    draging = game.dragable(mouse.x, mouse.y);
+	    if(draging){
+	      game.grap(mouse.x, mouse.y);
+	    } else {
+	      createMode = true;
+	    }
+	  }
+	  // mouse release
+	  if (!isMouseDown) {
+	    createMode = false;
+	    destroyMode = false;
+	      if (draging) {
+		game.drop(mouse.x, mouse.y);
+		draging = false;
+	      }
+	  }
+	  // mouse move
+	  if (draging) {
+	    // mouse drag move
+	    game.drag(mouse.x, mouse.y);
+	  } else {
+	    // mouse non-drag move :: mouse-over
+	    if (isMouseMove){
+	      game.hover(mouse.x, mouse.y);
+	      isMouseMove = false;
+	    }
+	  }
+	},
+	chkStage: function() {
+	  try{
+  	    if (stage[0] != window.screenX || stage[1] != window.screenY) {
+	      var deltaX = (window.screenX - stage[0]) << 6; // * 64
+	      var deltaY = (window.screenY - stage[1]) << 6; // * 64
+	      stage[0] = window.screenX;
+	      stage[1] = window.screenY;
+	      game.shake(deltaX, deltaY);
+	    }
+	    if (stage[2] != window.innerWidth || stage[3] != window.innerHeight) {
+	      stage[2] = window.innerWidth;
+	      stage[3] = window.innerHeight;
+	      game.resize(stage[2], stage[3]);
+	    }
+	  } catch(e){}
+	}
+      };
+    })();
+
+    // model - view
+
+    var BallModel = Backbone.Model.extend({
+      defaults: function(){
+	return {
+	  "text":    "oops",
+	  "current": false,
+	  "size":    48,
+	  "sink":   false,
+	  "body":    null,
+	  "hover":   false,
+	  "follow":  false
+	};
+      }
+    });
+
+    function fire(event, value){
+      var bubbles = window.top.bubbles;
+      if(bubbles) bubbles.trigger(event, value);
+    }
+
+    var BallView = Backbone.View.extend({
+      className: "ball",
+      template: _.template($("#ball-template").html()),
+      shadow_tmpl: _.template($("#ball-shadow-template").html()),
+      events: {
+	"click a.tag": 	    "open",
+	"click a.follow":   "follow",
+	"click a.unfollow": "unfollow",
+	"click a.reclip":   "reclip"
+      },
+      initialize: function(){
+	this.model.bind('change', this.update, this);
+	this.model.bind('destroy', this.remove, this);
+      },
+      render: function(){
+	$(this.el).html(this.template(this.model.toJSON()));
+	this.update();
+	return this;
+      },
+      update: function(){
+	var x = this.model.get("body").m_position0.x;
+	var y = this.model.get("body").m_position0.y;
+	var size = this.model.get("size");
+	this.$el.css({
+	  left: (x - (size >> 1)) >> 0 ,
+	  top: (y - (size >> 1)) >> 0
+	});
+	if(this.model.hasChanged("current")){
+	  if(this.model.get("current")){
+	    this.$("span a.tag").addClass("iscurrent");
+	  } else {
+	    this.$("span a.tag").removeClass("iscurrent");
+	  }
+	}
+	if(this.model.hasChanged("follow")){
+	  if(this.model.get("follow")){
+	    this.$("span a.tag").addClass("isfollow");
+	  } else {
+	    this.$("span a.tag").removeClass("isfollow");
+	  }
+	  this.$(".shadow").remove();
+	  if (this.model.get("hover")){
+	    this.$el.prepend(this.shadow_tmpl(this.model.toJSON()));
+	  }
+	}
+	if(this.model.hasChanged("hover")){
+	  if (this.model.get("hover")){
+	    this.$el.prepend(this.shadow_tmpl(this.model.toJSON()));
+	  } else {
+	    this.$(".shadow").remove();
+	  }
+	}
+	return this;
+      },
+      remove: function(){
+	this.$el.remove();
+      },
+      open: function(){
+	// this.model.set("current", true);
+	game.open(this.$("a.tag").text());
+	fire("open", this.$("a.tag").text());
+      },
+      follow: function(){
+	this.model.set("follow", true);
+	fire("follow", this.$("a.tag").text());
+      },
+      unfollow: function(){
+	this.model.set("follow", false);
+	fire("unfollow", this.$("a.tag").text());
+      },
+      reclip: function(){
+	fire("reclip", this.$("a.tag").text());
+      }
+    });
+
     // physical system
 
     var game = (function(){
@@ -129,7 +360,7 @@ $(function() {
 	  var body = ball.get("body");
 	  var fx = 0;
 	  fx = (fx * 350 + delta.x) * body.m_mass;
-	  var fy = ball.get("float") ? 0.1 : -0.1;
+	  var fy = ball.get("sink") ? 0.1 : -0.1;
 	  fy = (fy * 350 + delta.y) * body.m_mass;
 	  body.ApplyForce(new b2Vec2(fx, fy), body.m_position0);
 	});
@@ -147,50 +378,6 @@ $(function() {
 	  world = new b2World(worldAABB, new b2Vec2(0, 0), true);
 	  setWalls(window.innerWidth, window.innerHeight, wall_thickness);
 	  setInterval(loop, 1000 / 40);
-	},
-	reset : function(options){
-	  /*
-	   reset({tag: "girls",
-	   tags: ["fun", "cool", "ugly", "music", "movie", "tv", "girls"],
-	   followings: ["fun"],
-	   floats: ["all", "ugly"],
-	   bigs: ["fun", "cool", "ugly"]});
-	   */
-	  var all = "全部";
-	  if ( -1 == options.tags.indexOf(all) ){
-	    options.tags.push(all);
-	  }
-	  if ( -1 == options.tags.indexOf(options.tag) ){
-	    options.tags.push(options.tag);
-	  }
-	  options.tag = options.tag || all;
-	  _(balls).each(function(ball){
-	    var body = ball.get("body");
-	    world.DestroyBody(body);
-	    ball.destroy();
-	    ball = null;
-	  });
-	  balls = [];
-	  _(options.tags).each(function(e){
-	    var size = (-1 == options.bigs.indexOf(e)) ? 48 : 64;
-	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
-	    var ball = new BallModel({
-	      "text": 	e,
-	      "size": 	size,
-	      "body": 	body,
-	      "current": 	( e == options.tag ),
-	      "float": 	( -1 != options.floats.indexOf(e) ),
-	      "follow": 	( -1 != options.followings.indexOf(e) ),
-	      "hover": 	false
-	    });
-	    var view = new BallView({ model : ball });
-	    $("#bubbles").append(view.render().el);
-	    balls.push(ball);
-	  });
-	  // color theme
-	  // theme = themes[Math.random() * themes.length >> 0];
-	  // document.body.style['backgroundColor'] = theme[0];
-	  // info();
 	},
 	random : function(){
 	  _(balls).each(function(ball){
@@ -285,219 +472,52 @@ $(function() {
 	    enter(mouseOver);
 	  }
 	},
+	/*
+	reset({
+	    tags: ["fun", "cool", "ugly", "music", "movie", "tv", "girls"],
+	    bubs: ["fun", "cool", "ugly"],
+	    sink: ["ugly"],
+	    follows: ["fun"],
+	    default: "girls"
+	});
+	*/
+	reset : function(options){
+	  _(balls).each(function(ball){
+	    var body = ball.get("body");
+	    world.DestroyBody(body);
+	    ball.destroy();
+	    ball = null;
+	  });
+	  balls = [];
+	  _.chain(options).values().flatten().uniq().each(function(e){
+	    var size = (options.bubs && options.bubs.indexOf(e)!=-1) ? 64 : 48;
+	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
+	    var ball = new BallModel({
+	      "text": e,
+	      "size": size,
+	      "body": body,
+	      "current": ( options.default && options.default == e ),
+	      "sink": ( options.sink && options.sink.indexOf(e) !=  -1 ),
+	      "follow": ( options.follows && options.follows.indexOf(e)!=-1 ),
+	      "hover": false
+	    });
+	    var view = new BallView({ model : ball });
+	    $("#bubbles").append(view.render().el);
+	    balls.push(ball);
+	  });
+	  // color theme
+	  // theme = themes[Math.random() * themes.length >> 0];
+	  // document.body.style['backgroundColor'] = theme[0];
+	  // info();
+	},
+	open : function(tag){
+	  _(balls).each(function(ball){
+	    ball.set("current", ball.get("text") == tag);
+	  });
+	},
 	info : info
       };
     })();
-
-    // user interactive
-
-    var ui = (function(){
-
-      // MOUSE
-
-      var createMode = false;
-      var destroyMode = false;
-
-      var isMouseDown = false;
-      var draging = false;
-      var mouse = { x: 0, y: 0 };
-      var isMouseMove = false;
-      var timeOfLastTouch = 0;
-
-      function mouseDown() {
-	isMouseDown = true;
-	return false;
-      }
-      function mouseUp() {
-	isMouseDown = false;
-	return false;
-      }
-      function mouseMove(event) {
-	event = event || window.event;
-	mouse.x = event.clientX;
-	mouse.y = event.clientY;
-	isMouseMove = true;
-      }
-      function dbClick() {
-	game.random();
-	// game.info();
-      }
-      function touchStart(event) {
-	if (event.touches.length == 1) {
-	  event.preventDefault();
-	  // Faking double click for touch devices
-	  var now = new Date().getTime();
-	  if (now - timeOfLastTouch < 250) {
-	    game.reset();
-	    return;
-	  }
-	  timeOfLastTouch = now;
-	  mouse.x = event.touches[0].pageX;
-	  mouse.y = event.touches[0].pageY;
-	  isMouseDown = true;
-	}
-      }
-      function touchMove(event) {
-	if (event.touches.length == 1) {
-	  event.preventDefault();
-	  mouse.x = event.touches[0].pageX;
-	  mouse.y = event.touches[0].pageY;
-	  isMouseMove = true;
-	}
-      }
-      function touchEnd(event) {
-	if (event.touches.length == 0) {
-	  event.preventDefault();
-	  isMouseDown = false;
-	}
-      }
-      function orientation(event) {
-	if (event.beta) {
-	  game.roll(beta, gamma);
-	}
-      }
-
-      // BROWSER WINDOW
-
-      var stage = [window.screenX, window.screenY, window.innerWidth, window.innerHeight];
-
-      return {
-	init: function(){
-	  document.onmousedown = mouseDown;
-	  document.onmouseup = mouseUp;
-	  document.onmousemove = mouseMove;
-	  document.ondblclick = dbClick;
-	  document.addEventListener('touchstart', touchStart, false);
-	  document.addEventListener('touchmove', touchMove, false);
-	  document.addEventListener('touchend', touchEnd, false);
-	  window.addEventListener('deviceorientation', orientation, false);
-	},
-	chkMouse: function() {
-	  // mouse press
-	  if (createMode) {
-	    game.add(mouse.x, mouse.y );
-	  } else if (isMouseDown && !draging) {
-	    draging = game.dragable(mouse.x, mouse.y);
-	    if(draging){
-	      game.grap(mouse.x, mouse.y);
-	    } else {
-	      createMode = true;
-	    }
-	  }
-	  // mouse release
-	  if (!isMouseDown) {
-	    createMode = false;
-	    destroyMode = false;
-	      if (draging) {
-		game.drop(mouse.x, mouse.y);
-		draging = false;
-	      }
-	  }
-	  // mouse move
-	  if (draging) {
-	    // mouse drag move
-	    game.drag(mouse.x, mouse.y);
-	  } else {
-	    // mouse non-drag move :: mouse-over
-	    if (isMouseMove){
-	      game.hover(mouse.x, mouse.y);
-	      isMouseMove = false;
-	    }
-	  }
-	},
-	chkStage: function() {
-	  if (window.screenX != stage[0] || window.screenY != stage[1]) {
-	    var deltaX = (window.screenX - stage[0]) * 50;
-	    var deltaY = (window.screenY - stage[1]) * 50;
-	    stage[0] = window.screenX;
-	    stage[1] = window.screenY;
-	    game.shake(deltaX, deltaY);
-	  }
-	  if (stage[2] != window.innerWidth || stage[3] != window.innerHeight) {
-	    stage[2] = window.innerWidth;
-	    stage[3] = window.innerHeight;
-	    game.resize(stage[2], stage[3]);
-	  }
-	}
-      };
-    })();
-
-    // model - view
-
-    var BallModel = Backbone.Model.extend({
-      defaults: function(){
-	return {
-	  "text":    "oops",
-	  "current": false,
-	  "size":    48,
-	  "float":   false,
-	  "body":    null,
-	  "hover":   false,
-	  "follow":  false
-	};
-      }
-    });
-
-    var BallView = Backbone.View.extend({
-      className: "ball",
-      template: _.template($("#ball-template").html()),
-      shadow_tmpl: _.template($("#ball-shadow-template").html()),
-      events: {
-	"click a.tag": 	    "open",
-	"click a.follow":   "follow",
-	"click a.unfollow": "unfollow",
-	"click a.reclip":   "reclip"
-      },
-      initialize: function(){
-	this.model.bind('change', this.update, this);
-	this.model.bind('destroy', this.remove, this);
-      },
-      render: function(){
-	$(this.el).html(this.template(this.model.toJSON()));
-	var size = this.model.get("size");
-	$(this.el).css({
-	  left: - size,
-	  top: - size
-	});
-	return this;
-      },
-      update: function(){
-	var x = this.model.get("body").m_position0.x;
-	var y = this.model.get("body").m_position0.y;
-	var size = this.model.get("size");
-	$(this.el).css({
-	  left: (x - (size >> 1)) >> 0 ,
-	  top: (y - (size >> 1)) >> 0
-	});
-	if(this.model.hasChanged("hover")){
-	  var hover = this.model.get("hover");
-	  if (hover){
-	    $(this.el).prepend(this.shadow_tmpl(this.model.toJSON()));
-	  } else {
-	    $(".shadow", this.el).remove();
-	  }
-	}
-      },
-      remove: function(){
-	$(this.el).remove();
-      },
-      open: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("open", this.$("a.tag").text());
-      },
-      follow: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("follow", this.$("a.tag").text());
-      },
-      unfollow: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("unfollow", this.$("a.tag").text());
-      },
-      reclip: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("reclip", this.$("a.tag").text());
-      }
-    });
 
     // exports
     window.reset = function(options){
