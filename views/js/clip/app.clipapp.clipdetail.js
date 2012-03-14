@@ -13,7 +13,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "Detail-view",
     template: "#detail-view-template",
     events: {
-      "click .operate" : "Operate"
+      "click .operate" : "Operate",
+      "click #popup_ContactClose" : "Close"
     },
     Operate: function(e){
       e.preventDefault();
@@ -34,6 +35,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '删':
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
+    },
+    Close: function(){
+      App.vent.trigger("app.clipapp.clipdetail:close");
     }
   });
 
@@ -263,9 +267,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.close = function(){
-    ClipDetail.commentRegion.close();
-    ClipDetail.addCommRegion.close();
-    ClipDetail.replyCommRegion.close();
+    if(ClipDetail.commentRegion){
+      ClipDetail.commentRegion.close();
+    }
+    if(ClipDetail.replyCommRegion){
+      ClipDetail.replyCommRegion.close();
+    }else{
+      ClipDetail.addCommRegion.close();
+    }
+    App.popRegion.close();
+    App.viewRegion.close();
   };
 
   App.vent.bind("app.clipapp.clipdetail:show_reply", function(pid, cid){
