@@ -43,6 +43,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   Register.close = function(){
     App.popRegion.close();
+    window.location.href='javascript:history.go(-1);';
   };
 
   Register.show = function(model, error){
