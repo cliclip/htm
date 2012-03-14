@@ -67,10 +67,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.login:success", function(token){
     document.cookie = "token="+token;
-    var uid = token.split(":")[0];
-    // 用户登录成功触发，显示clip的preview事件
-    App.vent.trigger("app.clipapp:mycliplist");
-    App.vent.trigger("app.clipapp.routing:mycliplist:show");
+    // 用户登录成功 页面跳转
+    Backbone.history.navigate("my");
+    location.reload();
     Login.close();
   });
 

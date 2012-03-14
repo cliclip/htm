@@ -20,12 +20,11 @@ App.ClipApp.Query = (function(App,Backbone,$){
     });
     App.queryRegion.show(queryView);
   };
-/*
+
   App.bind("initialize:after", function(){
-    console.info("!!!!!!!!!!!!");
+    console.info("query");
     Query.show();
   });
-*/
 
   return Query;
 

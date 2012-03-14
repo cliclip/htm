@@ -4,8 +4,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var collection = null;
   var start = 0;
-  var end = 9;
+  var end = App.ClipApp.Url.page-1;
   var url = "";
+  var data = "";
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -55,7 +56,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	start +=App.ClipApp.Url.page;
 	end +=App.ClipApp.Url.page;
 	collection.url = url + start + ".." + end;
-	collection.fetch({add: true});
+	if(data){
+	  collection.fetch({add: true,type:"POST",data:data});
+	}else{
+	  collection.fetch({add: true});
+	}
       }
     });
   });
@@ -84,7 +89,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   function getSiteQuery(word, tag){
     var _url = "/query/" ;
     url = App.ClipApp.Url.base + _url;
-    var data = {text:word};
+    data = { text:word };
+    if(tag){data.tag = tag; }
     getClips(data);
   };
 
@@ -99,15 +105,20 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag){ _url += "tag/"+tag+"/"; }
     url = App.ClipApp.Url.base + _url;
     getClips();
-
   };
 
-/*
   ClipList.showUserQuery = function(uid, word, tag){
     getUserQuery(uid, word, tag, function(clips){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
     });
   };
+  function getUserQuery(uid, word, tag){
+    var _url = "/user/" + uid + "/query";
+    url = App.ClipApp.Url.base + _url;
+    data = { text:word };
+    if(tag){data.tag = tag; }
+    getClips();
+  }
 
   ClipList.showUserInterest = function(uid, tag){
     getUserInterest(uid, tag, function(clips){
@@ -120,7 +131,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
     });
   };
-*/
+
   App.vent.bind("app.clipapp.cliplist:show", function(clips){
     var clipListView = new ClipListView({collection: clips});
     App.listRegion.show(clipListView);
@@ -128,16 +139,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:query",function(word){
     ClipList.showSiteQuery(word);
+    App.vent.trigger("app.clipapp.routing:query:show",word);
   });
 
   getClips = function(data){
     collection = new ClipPreviewList();
     //collection.url = "/test/recommend.json";
     //collection.url = "/test/clip.json";
+    start = 0;
+    end = App.ClipApp.Url.page-1;
     collection.url = url + start+".." + end;
     if(data){
-      console.info(collection);
-      collection.fetch({data:data,type:"POST",contentType:"application/json; charset=utf-8"});
+      type = "POST";
+      collection.fetch({data:data,type:"POST"});
     }else{
       collection.fetch();
     }

@@ -21,7 +21,7 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.userShow = function(uid, tag){
-    //ClipApp.Face.showUser(uid);
+    ClipApp.Face.showUser(uid);
     //ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
   };
