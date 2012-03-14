@@ -1,12 +1,16 @@
-<script id="addcomm-view-template" type="text/template">
-  <div>
-    <textarea id="blowcomm_text" rows="3" cols="35">评论文本框</textarea>
-    <br/>
-    <input id="comm1" type="button" value="好看" class="comm">
-    <input id="comm2" type="button" value="好听" class="comm">
-    <input id="comm3" type="button" value="好吃" class="comm">
-    <input id="comm4" type="button" value="好玩" class="comm">
-    <input id="comm5" type="button" value="酷" class="comm">
-    <input id="<%= id%>" class="addComment" type="button" value="发表">
+<!-- comment template -->
+<script type="text/template" id="addcomm-view-template">
+    <textarea  id="comm_text" rows="3" cols="30" >评论文本框~</textarea><br>
+    <input type="button" class="main_tag" id="main_tag_1" value="好看" />
+    <input type="button" class="main_tag" id="main_tag_2" value="好听" />
+    <input type="button" class="main_tag" id="main_tag_3" value="好吃" />
+    <input type="button" class="main_tag" id="main_tag_4" value="好玩" />
+    <input type="button" class="main_tag" id="main_tag_5" value="酷" /><br>
+    <input type="checkbox" name="collect" id="reply"/>
+    <label for="reply">同时收</label>
+    <input type="button" value="发表" id="ok_button"/>
+    <input type="button" value="取消" id="cancel_button"/>
   </div>
 </script>
+    
+    

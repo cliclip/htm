@@ -20,6 +20,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.showSiteQuery(word, tag);
   };
 
+  ClipApp.register = function(){
+    ClipApp.Register.show();
+  };
+
   ClipApp.userShow = function(uid, tag){
     //ClipApp.Face.showUser(uid);
     //ClipApp.Bubb.showUserTags(uid, tag);
