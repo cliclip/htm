@@ -28,13 +28,13 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.userFollowing = function(uid){
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserTags(uid, tag);
+   // ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowingList.showUserFollowing(uid); // TODO
   };
 
   ClipApp.userFollower = function(uid){
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserTags(uid, tag);
+   // ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowerList.showUserFollower(uid); // TODO
   };
 

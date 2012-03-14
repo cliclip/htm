@@ -64,6 +64,9 @@ html
     script(src="/js/clip/app.clipapp.query.js")
 
     script(src="/js/clip/app.clipapp.face.js")
+    script(src="/js/clip/app.clipapp.followinglist.js")
+    script(src="/js/clip/app.clipapp.followerlist.js")
+
     //- kick start
     script $(function(){ App.start(); });
     
@@ -100,4 +103,7 @@ html
     include tmpl/clippreview-view-template.html
     include tmpl/objtag-view-template.html
     include tmpl/queryclip-view-template.html
+
+    include tmpl/following-view-template.html
+    include tmpl/follower-view-template.html
 
