@@ -16,6 +16,7 @@ html
 
     //- pack :: link(rel="stylesheet",href="/css/app.css")
     link(rel="stylesheet",href="css/preview.css")
+    link(rel="stylesheet",href="css/app.css")
     link(rel="stylesheet",href="css/app.clipapp.css")
     //-link(rel="stylesheet",href="/tmpl/me-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userface-view-template.css")
@@ -64,6 +65,9 @@ html
     script(src="/js/clip/app.clipapp.query.js")
 
     script(src="/js/clip/app.clipapp.face.js")
+    script(src="/js/clip/app.clipapp.followinglist.js")
+    script(src="/js/clip/app.clipapp.followerlist.js")
+
     //- kick start
     script $(function(){ App.start(); });
     
@@ -88,9 +92,8 @@ html
     include tmpl/editDetail-view-template.html
     include tmpl/localImg-view-template.html
     include tmpl/showcomment-view-template.html
-    include tmpl/replycomm-view-template.html
+    include tmpl/addcomm-view-template.html
 
-    include tmpl/comment-view-template.html
     include tmpl/delete-view-template
     include tmpl/reclip-view-template.html
     include tmpl/recommend-view-template.html
@@ -100,4 +103,7 @@ html
     include tmpl/clippreview-view-template.html
     include tmpl/objtag-view-template.html
     include tmpl/queryclip-view-template.html
+
+    include tmpl/following-view-template.html
+    include tmpl/follower-view-template.html
 

@@ -37,12 +37,20 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipPreviewView = App.ItemView.extend({
     tagName: "div",
-    template: "#clippreview-view-template"
+    template: "#clippreview-view-template",
+    events: {
+      "click #detail" : "show_detail"
+    },
+    show_detail: function(){
+      var user = this.model.get("user");
+      var cid = user+":"+this.model.id;
+      App.vent.trigger("app.clipapp:clipdetail",cid);
+    }
   });
 
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
-    className: "clippreview-item",
+    className: "preview-item",
     itemView: ClipPreviewView,
     initialize: function(){
       App.vent.trigger("clip:preview:scroll", this);

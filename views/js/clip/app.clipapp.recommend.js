@@ -1,8 +1,8 @@
 //app.Recommapp.js
-var P="/_2_";
+
 App.ClipApp.Recommend = (function(App,Backbone,$){
   var Recommend = {};
-
+  var P="/_2_";
   // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({

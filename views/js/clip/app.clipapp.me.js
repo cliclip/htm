@@ -19,7 +19,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:login");
     },
     registerAction: function(){
-      App.vent.trigger("app.clipapp:register");
+      App.vent.trigger("app.clipapp.me:register");
     }
   });
 
@@ -42,12 +42,14 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.show();
   });
 
-  App.vent.bind("app.clipapp.logout:success", function(){
+  App.vent.bind("app.clipapp.register:success", function(){
+    Me.me.fetch();
     Me.show();
   });
 
-  App.vent.bind("app.clipapp.register:success", function(){
-    Me.show();
+  App.vent.bind("app.clipapp.me:register", function(){
+    Backbone.history.navigate("register");
+    location.reload();
   });
 
   App.addInitializer(function(){

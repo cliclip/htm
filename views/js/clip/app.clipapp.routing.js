@@ -12,7 +12,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "query/:word":"siteQuery",
 
       "register": "register",
-      "login": "login",
+      // "login": "login",
 
       // user
 

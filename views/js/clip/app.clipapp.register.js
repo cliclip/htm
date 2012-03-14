@@ -43,6 +43,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   Register.close = function(){
     App.popRegion.close();
+    window.location.href='javascript:history.go(-1);';
   };
 
   Register.show = function(model, error){
@@ -55,7 +56,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.register:success", function(res){
     document.cookie = "token="+res[0];
-    // App.vent.trigger("clip_preview:show", uid, 0, 5);
+    Backbone.history.navigate("my");
+    location.reload();
     Register.close();
   });
 
@@ -65,7 +67,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
   });
 
   // Test
-
   // App.bind("initialize:after", function(){Register.open();});
 
   return Register;
