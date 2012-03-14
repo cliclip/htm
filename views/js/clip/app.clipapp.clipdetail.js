@@ -217,7 +217,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	type: "POST",
 	success:function(comment,response){
 	  ClipDetail.showComment(id);
-	  $("#comm_text").val("评论文本框~");
+	  ClipDetail.showAddComm(id);
 	},
 	error:function(comment,response){}
       });
