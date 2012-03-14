@@ -41,7 +41,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myShow = function(tag){
     var uid =1;// getMyUid();
     console.info(uid);
-    //ClipApp.Face.showUser(uid);
+    ClipApp.Face.showUser(uid);
     //ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
   };
@@ -131,10 +131,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDelete.show(clipid, uid);
   });
 
-/*
+
   setTimeout(function(){
-    App.vent.trigger("app.clipapp:clipdetail", "1:1");
+    App.vent.trigger("app.clipapp:clipdetail", "1:2");
   }, 500);
-*/
+
   return ClipApp;
 })(App, Backbone, jQuery);
