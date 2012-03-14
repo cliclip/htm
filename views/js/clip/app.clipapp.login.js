@@ -71,6 +71,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     // 用户登录成功触发，显示clip的preview事件
     App.vent.trigger("app.clipapp:mycliplist");
     App.vent.trigger("app.clipapp.routing:mycliplist:show");
+    App.ClipApp.Face.showUser(uid);
     Login.close();
   });
 
