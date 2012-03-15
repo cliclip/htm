@@ -28,16 +28,16 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
 	tag_list.push($("#"+id).val());
-	if($("#collect_text").val() == "" || $("#collect_text").val() == "备注一下吧~"){
-	  $("#collect_text").val($("#"+id).val());
+	if($("#reclip_text").val() == "" || $("#reclip_text").val() == "备注一下吧~"){
+	  $("#reclip_text").val($("#"+id).val());
 	  //console.dir(tag_list);
 	}else{
-	  $("#collect_text").val(_.union($("#collect_text").val().split(","),$("#"+id).val()));
+	  $("#reclip_text").val(_.union($("#reclip_text").val().split(","),$("#"+id).val()));
 	}
       }else if(color == "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","");
 	tag_list = _.without(tag_list,$("#"+id).val());
-	$("#collect_text").val(_.without($("#collect_text").val().split(","),$("#"+id).val()));
+	$("#reclip_text").val(_.without($("#reclip_text").val().split(","),$("#"+id).val()));
 	//console.dir(tag_list);
       }
     },
