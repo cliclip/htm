@@ -18,19 +18,17 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
     maintagAction:function(evt){
       var id = evt.target.id;
-      var color = document.getElementById(id).style.backgroundColor;
-      console.log(color);
-      if(!color){
-	document.getElementById(id).style.backgroundColor="red";
+      var color = $("#"+id).css("backgroundColor");
+      if(color != "rgb(255, 0, 0)"){
+	$("#"+id).css("backgroundColor","red");
 	tag_list.push($("#"+id).val());
-	console.dir(tag_list);
 	if($("#organize_text").val() == "" || $("#organize_text").val() == "备注一下吧~"){
 	  $("#organize_text").val($("#"+id).val());
 	}else{
 	  $("#organize_text").val(_.union($("#organize_text").val().split(","),$("#"+id).val()));
 	}
-      }else if(color == "red"){
-	document.getElementById(id).style.backgroundColor="";
+      }else if(color == "rgb(255, 0, 0)"){
+	$("#"+id).css("backgroundColor","");
 	tag_list = _.without(tag_list,$("#"+id).val());
 	$("#organize_text").val(_.without($("#organize_text").val().split(","),$("#"+id).val()));
 	console.dir(tag_list);
