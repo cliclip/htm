@@ -5,7 +5,13 @@ App.ClipApp = (function(App, Backbone, $){
 
   function getMyUid(){
     // console.log("getMyUid  :: "+ClipApp.Me.me.get("id"));
-    return ClipApp.Me.me.get("id");
+    // console.dir(ClipApp.Me.me.cid);
+    // return ClipApp.Me.me.get("id");
+    var id = null;
+    if(document.cookie){
+      id =  document.cookie.split("=")[1].split(":")[0];
+    }
+    return id;
   };
 
   ClipApp.siteShow = function(tag){
@@ -43,8 +49,8 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.myShow = function(tag){
-    var uid =1;// getMyUid();
-    console.info(uid);
+    var uid = getMyUid();
+    //console.info(uid);
     ClipApp.Face.showUser(uid);
     //ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);

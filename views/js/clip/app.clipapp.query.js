@@ -22,7 +22,6 @@ App.ClipApp.Query = (function(App,Backbone,$){
   };
 
   App.bind("initialize:after", function(){
-    console.info("query");
     Query.show();
   });
 

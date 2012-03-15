@@ -74,7 +74,7 @@ App.Routing = (function(App, Backbone){
     Backbone.history.navigate(route, false);
   };
   function getRoutePath(routeParts){
-    console.info(routeParts);
+    //console.info(routeParts);
     var base = routeParts[0];
     var length = routeParts.length;
     var route = base;

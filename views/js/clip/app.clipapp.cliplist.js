@@ -120,8 +120,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
     });
   };
+
   function getUserQuery(uid, word, tag){
-    var _url = "/user/" + uid + "/query";
+    var _url = "/user/" + uid + "/query/";
     url = App.ClipApp.Url.base + _url;
     data = { text:word };
     if(tag){data.tag = tag; }
@@ -146,8 +147,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.cliplist:query",function(word){
-    ClipList.showSiteQuery(word);
-    App.vent.trigger("app.clipapp.routing:query:show",word);
+    if(document.cookie){
+      ClipList.showUserQuery(word);
+      App.vent.trigger("app.clipapp.routing:myquery:show",word);
+    }else{
+      ClipList.showSiteQuery(word);
+      App.vent.trigger("app.clipapp.routing:query:show",word);
+    }
   });
 
   getClips = function(data){
@@ -159,7 +165,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection.url = url + start+".." + end;
     if(data){
       type = "POST";
-      collection.fetch({data:data,type:"POST"});
+      collection.fetch({
+	data:JSON.stringify(data),
+	type:"POST",
+	contentType:"application/json; charset=utf-8"
+      });
     }else{
       collection.fetch();
     }
