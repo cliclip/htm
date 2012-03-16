@@ -165,7 +165,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function mkUrl(tag){
     var url = "tag/"+tag;
-    return (_uid ? "user/"+_uid : "") + url;
+    return (_uid ? "user/"+_uid+"/" : "") + url;
   }
 
   function changeTags(tags1, tags2){
