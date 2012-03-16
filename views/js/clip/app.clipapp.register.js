@@ -13,7 +13,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
     events:{
       // 该事件绑定之后不管用
       "click #submit": "submit",
-      "click #reset": "reset"
+      "click #reset": "reset",
+      "click #login": "login"
     },
     submit: function(e){
       e.preventDefault();
@@ -38,6 +39,9 @@ App.ClipApp.Register = (function(App, Backbone, $){
     reset : function(e){
       e.preventDefault();
       Register.close();
+    },
+    login : function(){
+      App.vent.trigger("app.clipapp:login");
     }
   });
 

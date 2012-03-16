@@ -190,7 +190,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     maintagAction:function(evt){
       var id = evt.target.id;
       var color = $("#"+id).css("backgroundColor");
-      if(color != "red"){
+      if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
 	// document.getElementById(id).style.backgroundColor="red";
 	this.tag_list.push($("#"+id).val());
@@ -199,7 +199,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
 	}
-      }else if(color == "red"){
+      }else if(color == "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","");
 	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
@@ -217,7 +217,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	type: "POST",
 	success:function(comment,response){
 	  ClipDetail.showComment(id);
-	  $("#comm_text").val("评论文本框~");
+	  ClipDetail.showAddComm(id);
 	},
 	error:function(comment,response){}
       });
