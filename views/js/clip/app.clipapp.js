@@ -5,7 +5,6 @@ App.ClipApp = (function(App, Backbone, $){
 
   function getMyUid(){
     // console.log("getMyUid  :: "+ClipApp.Me.me.get("id"));
-    // console.dir(ClipApp.Me.me.cid);
     // return ClipApp.Me.me.get("id");
     var id = null;
     if(document.cookie){
@@ -17,7 +16,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.siteShow = function(tag){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteTags(tag);
-    // ClipApp.ClipList.showSiteClips(tag);
+    ClipApp.ClipList.showSiteClips(tag);
   };
 
   ClipApp.siteQuery = function(word, tag){
