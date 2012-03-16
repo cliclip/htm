@@ -2,11 +2,8 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var collection = null;
   var start = 0;
   var end = App.ClipApp.Url.page-1;
-  var url = "";
-  var data = "";
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -32,7 +29,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   var ClipPreviewList = App.Collection.extend({
-    model : ClipPreviewModel
+    model : ClipPreviewModel,
+    parse : function(resp){
+      // 如果拿到多用户的clip，id会重复
+      for( var i=0; i<resp.length; i++){
+	resp[i].id = resp[i].user+":"+resp[i].id;
+      }
+      return resp;
+    }
   });
 
   var ClipPreviewView = App.ItemView.extend({
@@ -42,79 +46,71 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "click #detail" : "show_detail"
     },
     show_detail: function(){
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
-      App.vent.trigger("app.clipapp:clipdetail",cid);
+      App.vent.trigger("app.clipapp:clipdetail",this.model.id);
     }
   });
 
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-item",
-    itemView: ClipPreviewView,
-    initialize: function(){
-      App.vent.trigger("clip:preview:scroll", this);
-    }
+    itemView: ClipPreviewView
   });
 
-  App.vent.bind("clip:preview:scroll", function(view){
+  App.vent.bind("clip:preview:scroll", function(view, options){
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
       if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
-	start +=App.ClipApp.Url.page;
-	end +=App.ClipApp.Url.page;
-	collection.url = url + start + ".." + end;
-	if(data){
-	  collection.fetch({add: true,type:"POST",data:data});
-	}else{
-	  collection.fetch({add: true});
-	}
+	start += App.ClipApp.Url.page;
+	end += App.ClipApp.Url.page;
+	options.url = options.clips.url + "/" +start + ".." + end;
+	options.add = true;
+	options.clips.fetch(options);
       }
     });
   });
 
-  ClipList.showSiteClips = function(tag){
-    getSiteClips(tag, function(clips){
-      App.vent.trigger("app.clipapp.cliplist:show", clips);
-    });
-  };
-
-  function getSiteClips(tag){
-    //var _url =  ;
-    if(tag){
-      //_url +=;
+  var getClips = function(options){
+    options.clips = new ClipPreviewList();
+    options.clips.url = options.url;
+    start = 0;
+    end = App.ClipApp.Url.page - 1;
+    options.url += "/" + start+".."+end;
+    if(options.data){
+      options.data = JSON.stringify(options.data),
+      options.contentType = "application/json; charset=utf-8";
     }
-    //url = "test/clip.json";
-    getClips();
-  };
-
-  ClipList.showSiteQuery = function(word, tag){
-    getSiteQuery(word, tag, function(clips){
-      App.vent.trigger("app.clipapp.cliplist:show", clips);
+    options.clips.fetch(options);
+    options.clips.onReset(function(previewlist){
+      App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
 
-  function getSiteQuery(word, tag){
-    var _url = "/query/" ;
-    url = App.ClipApp.Url.base + _url;
-    data = { text:word };
-    if(tag){data.tag = tag; }
-    getClips(data);
+  ClipList.showSiteClips = function(tag){
+    var url =  App.ClipApp.Url.base+"/query";
+    var data = {};
+    if(tag) data.tag = tag;
+    getClips({url: url, type: 'POST', data: data});
+  };
+
+  // 该接口可以和showSiteClips合为一个 [url路径不同]
+  ClipList.showSiteQuery = function(word, tag){
+    var url = App.ClipApp.Url.base+"/query" ;
+    var data = {};
+    if(word){ data.word = word; url += "/" + word;  };
+    if(tag) data.tag = tag;
+    console.info("showSiteQuery");
+    getClips({url: url, type: "POST", data: data});
   };
 
   ClipList.showUserClips = function(uid, tag){
-    getUserClips(uid, tag, function(clips){
-      App.vent.trigger("app.clipapp.cliplist:show", clips);
-    });
+    var	url = App.ClipApp.Url.base + "/user/"+uid+"/clip";
+    if(tag){
+      url += "tag/"+tag;
+    }
+    getClips({url:url, type:"GET"});
   };
 
-  function getUserClips(uid,tag){
-    var _url = "/user/"  + uid + "/clip/" ;
-    if(tag){ _url += "tag/"+tag+"/"; }
-    url = App.ClipApp.Url.base + _url;
-    getClips();
-  };
-
+  // 还未修改完成
   ClipList.showUserQuery = function(uid, word, tag){
     getUserQuery(uid, word, tag, function(clips){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
@@ -141,9 +137,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp.cliplist:show", function(clips){
+  App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
     App.listRegion.show(clipListView);
+    App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 
   App.vent.bind("app.clipapp.cliplist:query",function(word){
@@ -156,6 +153,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   });
 
+/*
   getClips = function(data){
     collection = new ClipPreviewList();
     //collection.url = "/test/recommend.json";
@@ -177,6 +175,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist);
     });
   };
-
+ */
   return ClipList;
 })(App, Backbone, jQuery);

@@ -6,7 +6,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
   ClipRouting.Router = Backbone.Marionette.AppRouter.extend({
     appRoutes: {
       // site
-      // "":"siteShow",
+      "":"siteShow",
       "home":"siteShow",
       "tag/:tag":"siteShow",
       "query/:word":"siteQuery",

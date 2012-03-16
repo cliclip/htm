@@ -13,7 +13,8 @@ App.ClipApp.Me = (function(App, Backbone, $){
     template: "#me-view-template",
     events:{
       "click #login_button": "loginAction",
-      "click #register_button": "registerAction"
+      "click #register_button": "registerAction",
+      "click #logout": "logoutAction"
     },
     loginAction: function(){
       App.vent.trigger("app.clipapp:login");
@@ -23,6 +24,10 @@ App.ClipApp.Me = (function(App, Backbone, $){
       location.reload() ;
       App.vent.trigger("app.clipapp.me:register");
 
+    },
+    logoutAction: function(){
+      
+      App.vent.trigger("app.clipapp:logout");
     }
   });
 

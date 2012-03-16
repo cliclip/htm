@@ -1,294 +1,5 @@
 $(function() {
 
-    // physical system
-
-    var game = (function(){
-
-      var worldAABB, world, iterations = 1, timeStep = 1 / 20;
-      // var gravity = { x: 0, y: -0.01 };
-      var gravity = { x: 0, y: 0 };
-      var delta = { x :0, y : 0 };
-
-      var wall_thickness = 200;
-      var wallsSetted = false;
-
-      var walls = [];
-      var balls = [];
-
-      var mouseJoint = null;
-      var mouseOver = null;
-
-      function Circle(radius, x, y, sx, sy) {
-	var circle = new b2CircleDef();
-	circle.radius = radius;
-	circle.density = 0.5; // 密度
-	circle.friction = 0.01; // 摩擦系数
-	circle.restitution = 0.2; // 弹力
-	var b2body = new b2BodyDef();
-	b2body.AddShape(circle);
-	// b2body.userData = { element: element };
-	b2body.position.Set(x, y);
-	b2body.linearVelocity.Set(sx, sy);
-	return b2body;
-      }
-
-      function Box(x, y, width, height, fixed) {
-	if (typeof(fixed) == 'undefined') {
-	  fixed = true;
-	}
-	var boxSd = new b2BoxDef();
-	if (!fixed) {
-	  boxSd.density = 1.0;
-	}
-	boxSd.extents.Set(width, height);
-	var boxBd = new b2BodyDef();
-	boxBd.AddShape(boxSd);
-	boxBd.position.Set(x, y);
-	return boxBd;
-      }
-
-      function ran(width, height){
-	return {
-	  x : Math.random() * width,
-	  y : (Math.random() * - height) >> 1,
-	  sx : (Math.random() * 2 - 1) * width,
-	  sy : (Math.random() * 2 - 1) * height
-	};
-      }
-
-      function setBall(size, width, height){
-	var r = ran(width, height);
-	var body = world.CreateBody(Circle((size >> 1), r.x, r.y, r.sx, r.sy));
-	return body;
-      }
-
-      function setWalls(width, height, ws) {
-	if (wallsSetted) {
-	  world.DestroyBody(walls[0]);
-	  world.DestroyBody(walls[1]);
-	  world.DestroyBody(walls[2]);
-	  world.DestroyBody(walls[3]);
-	  walls[0] = null;
-	  walls[1] = null;
-	  walls[2] = null;
-	  walls[3] = null;
-	}
-	walls[0] = world.CreateBody(Box(width >> 1, 0 - ws, width, ws));
-	walls[1] = world.CreateBody(Box(width >> 1, height + ws, width, ws));
-	walls[2] = world.CreateBody(Box(0 - ws, height >> 1, ws, height));
-	walls[3] = world.CreateBody(Box(width + ws, height >> 1, ws, height));
-	wallsSetted = true;
-      }
-
-      function getBodyAt(x, y) {
-	// Make a small box.
-	var mousePVec = new b2Vec2();
-	mousePVec.Set(x, y);
-	var aabb = new b2AABB();
-	aabb.minVertex.Set(x - 1, y - 1);
-	aabb.maxVertex.Set(x + 1, y + 1);
-	// Query the world for overlapping shapes.
-	var k_maxCount = 10;
-	var shapes = new Array();
-	var count = world.Query(aabb, shapes, k_maxCount);
-	var body = null;
-	for (var i = 0; i < count; ++i) {
-	  if (shapes[i].m_body.IsStatic() == false) {
-	    if (shapes[i].TestPoint(mousePVec)) {
-	      body = shapes[i].m_body;
-	      break;
-	    }
-	  }
-	}
-	return body;
-      }
-
-      function info(){
-	_(balls).each(function(ball){
-	  var text = ball.get("text");
-	  var body = ball.get("body");
-	  var x = body.m_position0.x;
-	  var y = body.m_position0.y;
-	  console.log("ball %s: %s,%s",text,x,y);
-	});
-      }
-
-      function loop(){
-	ui.chkStage();
-	ui.chkMouse();
-	// delta 衰减
-	delta = {
-	  x : delta.x >> 1,
-	  y : delta.y >> 1
-	};
-	// gravity
-	// world.m_gravity.x = gravity.x * 350 + delta.x;
-	// world.m_gravity.y = gravity.y * 350 + delta.y;
-	// old
-	_(balls).each(function(ball){
-	  var body = ball.get("body");
-	  var fx = 0;
-	  fx = (fx * 350 + delta.x) * body.m_mass;
-	  var fy = ball.get("float") ? 0.1 : -0.1;
-	  fy = (fy * 350 + delta.y) * body.m_mass;
-	  body.ApplyForce(new b2Vec2(fx, fy), body.m_position0);
-	});
-	// next
-	world.Step(timeStep, iterations);
-	_(balls).each(function(ball){ ball.trigger("change");});
-      }
-
-      return {
-	init : function(){
-	  ui.init();
-	  worldAABB = new b2AABB();
-	  worldAABB.minVertex.Set( - wall_thickness, - wall_thickness);
-	  worldAABB.maxVertex.Set(window.innerWidth + wall_thickness, window.innerHeight + wall_thickness);
-	  world = new b2World(worldAABB, new b2Vec2(0, 0), true);
-	  setWalls(window.innerWidth, window.innerHeight, wall_thickness);
-	  setInterval(loop, 1000 / 40);
-	},
-	reset : function(options){
-	  /*
-	   reset({tag: "girls",
-	   tags: ["fun", "cool", "ugly", "music", "movie", "tv", "girls"],
-	   followings: ["fun"],
-	   floats: ["all", "ugly"],
-	   bigs: ["fun", "cool", "ugly"]});
-	   */
-	  var all = "全部";
-	  if ( -1 == options.tags.indexOf(all) ){
-	    options.tags.push(all);
-	  }
-	  if ( -1 == options.tags.indexOf(options.tag) ){
-	    options.tags.push(options.tag);
-	  }
-	  options.tag = options.tag || all;
-	  _(balls).each(function(ball){
-	    var body = ball.get("body");
-	    world.DestroyBody(body);
-	    ball.destroy();
-	    ball = null;
-	  });
-	  balls = [];
-	  _(options.tags).each(function(e){
-	    var size = (-1 == options.bigs.indexOf(e)) ? 48 : 64;
-	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
-	    var ball = new BallModel({
-	      "text": 	e,
-	      "size": 	size,
-	      "body": 	body,
-	      "current": 	( e == options.tag ),
-	      "float": 	( -1 != options.floats.indexOf(e) ),
-	      "follow": 	( -1 != options.followings.indexOf(e) ),
-	      "hover": 	false
-	    });
-	    var view = new BallView({ model : ball });
-	    $("#bubbles").append(view.render().el);
-	    balls.push(ball);
-	  });
-	  // color theme
-	  // theme = themes[Math.random() * themes.length >> 0];
-	  // document.body.style['backgroundColor'] = theme[0];
-	  // info();
-	},
-	random : function(){
-	  _(balls).each(function(ball){
-	    var body = ball.get("body");
-	    var r = ran(window.innerWidth, wall_thickness);
-	    body.m_position.x = r.x;
-	    body.m_position.y = r.y;
-	    body.m_linearVelocity.x = r.sx;
-	    body.m_linearVelocity.y = r.sy;
-	    body.WakeUp();
-	  });
-	},
-	shake : function(deltaX, deltaY){
-	  delta.x = deltaX;
-	  delta.y = deltaY;
-	  _(balls).each(function(ball){ ball.get("body").WakeUp(); });
-	},
-	resize : function(width, height){
-	  // console.log("resize(%s,%s)", width, height);
-	  setWalls(width, height, wall_thickness);
-	},
-	roll : function(beta, gamma){
-	  /*
-	  gravity.x = Math.sin(gamma * Math.PI / 180);
-	  gravity.y = Math.sin((Math.PI / 4) + beta * Math.PI / 180);
-	   */
-	},
-	add : function(x, y){
-	},
-	dragable : function(x, y){
-	  return null != getBodyAt(x, y);
-	},
-	grap : function(x, y){
-	  // console.log("grap");
-	  var body = getBodyAt(x, y);
-	  var md = new b2MouseJointDef();
-	  md.body1 = world.m_groundBody;
-	  md.body2 = body;
-	  md.target.Set(x, y);
-	  md.maxForce = 300 * body.m_mass;
-	  md.timeStep = timeStep;
-	  mouseJoint = world.CreateJoint(md);
-	  body.WakeUp();
-	},
-	drag : function(x, y){
-	  // console.log("drag");
-	  if (mouseJoint){
-	    var p2 = new b2Vec2(x, y);
-	    mouseJoint.SetTarget(p2);
-	  }
-	},
-	drop : function(x, y){
-	  // console.log("drop");
-	  if (mouseJoint){
-	    world.DestroyJoint(mouseJoint);
-	    mouseJoint = null;
-	  }
-	},
-	hover : function(x, y){
-	  function findBall(body){
-	    for(var i=0; i<balls.length; i++){
-	      var ball = balls[i];
-	      if (body == ball.get("body")) return ball;
-	    }
-	    return null;
-	  }
-	  function leave(body){
-	    // console.log("leave %j", body.m_shapeList.m_radius);
-	    body.WakeUp();
-	    body.m_shapeList.m_radius -= 30;
-	    findBall(body).set("hover", false);
-	  }
-	  function enter(body){
-	    // console.log("enter %j", body.m_shapeList.m_radius);
-	    body.WakeUp();
-	    body.m_shapeList.m_radius += 30;
-	    findBall(body).set("hover", true);
-	  }
-	  // console.log("move");
-	  var body = getBodyAt(x, y);
-	  if(body == null){
-	    if (mouseOver != null){
-	      leave(mouseOver);
-	      mouseOver = null;
-	    }
-	  } else if (body == mouseOver) {
-	    // stay on same object
-	    // noop
-	  } else {
-	    if (mouseOver != null){ leave(mouseOver); }
-	    mouseOver = body;
-	    enter(mouseOver);
-	  }
-	},
-	info : info
-      };
-    })();
-
     // user interactive
 
     var ui = (function(){
@@ -406,18 +117,20 @@ $(function() {
 	  }
 	},
 	chkStage: function() {
-	  if (window.screenX != stage[0] || window.screenY != stage[1]) {
-	    var deltaX = (window.screenX - stage[0]) * 50;
-	    var deltaY = (window.screenY - stage[1]) * 50;
-	    stage[0] = window.screenX;
-	    stage[1] = window.screenY;
-	    game.shake(deltaX, deltaY);
-	  }
-	  if (stage[2] != window.innerWidth || stage[3] != window.innerHeight) {
-	    stage[2] = window.innerWidth;
-	    stage[3] = window.innerHeight;
-	    game.resize(stage[2], stage[3]);
-	  }
+	  try{
+  	    if (stage[0] != window.screenX || stage[1] != window.screenY) {
+	      var deltaX = (window.screenX - stage[0]) << 6; // * 64
+	      var deltaY = (window.screenY - stage[1]) << 6; // * 64
+	      stage[0] = window.screenX;
+	      stage[1] = window.screenY;
+	      game.shake(deltaX, deltaY);
+	    }
+	    if (stage[2] != window.innerWidth || stage[3] != window.innerHeight) {
+	      stage[2] = window.innerWidth;
+	      stage[3] = window.innerHeight;
+	      game.resize(stage[2], stage[3]);
+	    }
+	  } catch(e){}
 	}
       };
     })();
@@ -430,13 +143,18 @@ $(function() {
 	  "text":    "oops",
 	  "current": false,
 	  "size":    48,
-	  "float":   false,
+	  "sink":   false,
 	  "body":    null,
 	  "hover":   false,
 	  "follow":  false
 	};
       }
     });
+
+    function fire(event, value){
+      var App = window.top.App;
+      if(App) App.vent.trigger('app.clipapp.bubb:'+event, value);
+    }
 
     var BallView = Backbone.View.extend({
       className: "ball",
@@ -454,54 +172,362 @@ $(function() {
       },
       render: function(){
 	$(this.el).html(this.template(this.model.toJSON()));
-	var size = this.model.get("size");
-	$(this.el).css({
-	  left: - size,
-	  top: - size
-	});
+	this.update();
 	return this;
       },
       update: function(){
 	var x = this.model.get("body").m_position0.x;
 	var y = this.model.get("body").m_position0.y;
 	var size = this.model.get("size");
-	$(this.el).css({
+	this.$el.css({
 	  left: (x - (size >> 1)) >> 0 ,
 	  top: (y - (size >> 1)) >> 0
 	});
-	if(this.model.hasChanged("hover")){
-	  var hover = this.model.get("hover");
-	  if (hover){
-	    $(this.el).prepend(this.shadow_tmpl(this.model.toJSON()));
+	if(this.model.hasChanged("current")){
+	  if(this.model.get("current")){
+	    this.$("span a.tag").addClass("iscurrent");
 	  } else {
-	    $(".shadow", this.el).remove();
+	    this.$("span a.tag").removeClass("iscurrent");
 	  }
 	}
+	if(this.model.hasChanged("follow")){
+	  if(this.model.get("follow")){
+	    this.$("span a.tag").addClass("isfollow");
+	  } else {
+	    this.$("span a.tag").removeClass("isfollow");
+	  }
+	  this.$(".shadow").remove();
+	  if (this.model.get("hover")){
+	    this.$el.prepend(this.shadow_tmpl(this.model.toJSON()));
+	  }
+	}
+	if(this.model.hasChanged("hover")){
+	  if (this.model.get("hover")){
+	    this.$el.prepend(this.shadow_tmpl(this.model.toJSON()));
+	  } else {
+	    this.$(".shadow").remove();
+	  }
+	}
+	return this;
       },
       remove: function(){
-	$(this.el).remove();
+	this.$el.remove();
       },
       open: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("open", this.$("a.tag").text());
+	// this.model.set("current", true);
+	game.open(this.$("a.tag").text());
+	fire("open", this.$("a.tag").text());
       },
       follow: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("follow", this.$("a.tag").text());
+	this.model.set("follow", true);
+	fire("follow", this.$("a.tag").text());
       },
       unfollow: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("unfollow", this.$("a.tag").text());
+	this.model.set("follow", false);
+	fire("unfollow", this.$("a.tag").text());
       },
       reclip: function(){
-	var bubbles = window.top.bubbles;
-	if(bubbles) bubbles.trigger("reclip", this.$("a.tag").text());
+	fire("reclip", this.$("a.tag").text());
       }
     });
 
+    // physical system
+
+    var game = (function(){
+
+      var worldAABB, world, iterations = 1, timeStep = 1 / 20;
+      // var gravity = { x: 0, y: -0.01 };
+      var gravity = { x: 0, y: 0 };
+      var delta = { x :0, y : 0 };
+
+      var wall_thickness = 200;
+      var wallsSetted = false;
+
+      var walls = [];
+      var balls = [];
+
+      var mouseJoint = null;
+      var mouseOver = null;
+
+      function Circle(radius, x, y, sx, sy) {
+	var circle = new b2CircleDef();
+	circle.radius = radius;
+	circle.density = 0.5; // 密度
+	circle.friction = 0.01; // 摩擦系数
+	circle.restitution = 0.2; // 弹力
+	var b2body = new b2BodyDef();
+	b2body.AddShape(circle);
+	// b2body.userData = { element: element };
+	b2body.position.Set(x, y);
+	b2body.linearVelocity.Set(sx, sy);
+	return b2body;
+      }
+
+      function Box(x, y, width, height, fixed) {
+	if (typeof(fixed) == 'undefined') {
+	  fixed = true;
+	}
+	var boxSd = new b2BoxDef();
+	if (!fixed) {
+	  boxSd.density = 1.0;
+	}
+	boxSd.extents.Set(width, height);
+	var boxBd = new b2BodyDef();
+	boxBd.AddShape(boxSd);
+	boxBd.position.Set(x, y);
+	return boxBd;
+      }
+
+      function ran(width, height){
+	return {
+	  x : Math.random() * width,
+	  y : (Math.random() * - height) >> 1,
+	  sx : (Math.random() * 2 - 1) * width,
+	  sy : (Math.random() * 2 - 1) * height
+	};
+      }
+
+      function setBall(size, width, height){
+	var r = ran(width, height);
+	var body = world.CreateBody(Circle((size >> 1), r.x, r.y, r.sx, r.sy));
+	return body;
+      }
+
+      function setWalls(width, height, ws) {
+	if (wallsSetted) {
+	  world.DestroyBody(walls[0]);
+	  world.DestroyBody(walls[1]);
+	  world.DestroyBody(walls[2]);
+	  world.DestroyBody(walls[3]);
+	  walls[0] = null;
+	  walls[1] = null;
+	  walls[2] = null;
+	  walls[3] = null;
+	}
+	walls[0] = world.CreateBody(Box(width >> 1, 0 - ws, width, ws));
+	walls[1] = world.CreateBody(Box(width >> 1, height + ws, width, ws));
+	walls[2] = world.CreateBody(Box(0 - ws, height >> 1, ws, height));
+	walls[3] = world.CreateBody(Box(width + ws, height >> 1, ws, height));
+	wallsSetted = true;
+      }
+
+      function getBodyAt(x, y) {
+	// Make a small box.
+	var mousePVec = new b2Vec2();
+	mousePVec.Set(x, y);
+	var aabb = new b2AABB();
+	aabb.minVertex.Set(x - 1, y - 1);
+	aabb.maxVertex.Set(x + 1, y + 1);
+	// Query the world for overlapping shapes.
+	var k_maxCount = 10;
+	var shapes = new Array();
+	var count = world.Query(aabb, shapes, k_maxCount);
+	var body = null;
+	for (var i = 0; i < count; ++i) {
+	  if (shapes[i].m_body.IsStatic() == false) {
+	    if (shapes[i].TestPoint(mousePVec)) {
+	      body = shapes[i].m_body;
+	      break;
+	    }
+	  }
+	}
+	return body;
+      }
+
+      function info(){
+	_(balls).each(function(ball){
+	  var text = ball.get("text");
+	  var body = ball.get("body");
+	  var x = body.m_position0.x;
+	  var y = body.m_position0.y;
+	  console.log("ball %s: %s,%s",text,x,y);
+	});
+      }
+
+      function findBall(body){
+	for(var i=0; i<balls.length; i++){
+	  var ball = balls[i];
+	  if (body == ball.get("body")) return ball;
+	}
+	return null;
+      }
+
+      function loop(){
+	ui.chkStage();
+	ui.chkMouse();
+	// delta 衰减
+	delta = {
+	  x : delta.x >> 1,
+	  y : delta.y >> 1
+	};
+	// gravity
+	// world.m_gravity.x = gravity.x * 350 + delta.x;
+	// world.m_gravity.y = gravity.y * 350 + delta.y;
+	// old
+	_(balls).each(function(ball){
+	  var body = ball.get("body");
+	  var fx = 0;
+	  fx = (fx * 350 + delta.x) * body.m_mass;
+	  var fy = ball.get("sink") ? 0.1 : -0.1;
+	  fy = (fy * 350 + delta.y) * body.m_mass;
+	  body.ApplyForce(new b2Vec2(fx, fy), body.m_position0);
+	});
+	// next
+	world.Step(timeStep, iterations);
+	_(balls).each(function(ball){ ball.trigger("change");});
+      }
+
+      return {
+	init : function(){
+	  ui.init();
+	  worldAABB = new b2AABB();
+	  worldAABB.minVertex.Set( - wall_thickness, - wall_thickness);
+	  worldAABB.maxVertex.Set(window.innerWidth + wall_thickness, window.innerHeight + wall_thickness);
+	  world = new b2World(worldAABB, new b2Vec2(0, 0), true);
+	  setWalls(window.innerWidth, window.innerHeight, wall_thickness);
+	  setInterval(loop, 1000 / 40);
+	},
+	random : function(){
+	  _(balls).each(function(ball){
+	    var body = ball.get("body");
+	    var r = ran(window.innerWidth, wall_thickness);
+	    body.m_position.x = r.x;
+	    body.m_position.y = r.y;
+	    body.m_linearVelocity.x = r.sx;
+	    body.m_linearVelocity.y = r.sy;
+	    body.WakeUp();
+	  });
+	},
+	shake : function(deltaX, deltaY){
+	  delta.x = deltaX;
+	  delta.y = deltaY;
+	  _(balls).each(function(ball){ ball.get("body").WakeUp(); });
+	},
+	resize : function(width, height){
+	  // console.log("resize(%s,%s)", width, height);
+	  setWalls(width, height, wall_thickness);
+	},
+	roll : function(beta, gamma){
+	  /*
+	  gravity.x = Math.sin(gamma * Math.PI / 180);
+	  gravity.y = Math.sin((Math.PI / 4) + beta * Math.PI / 180);
+	   */
+	},
+	add : function(x, y){
+	},
+	dragable : function(x, y){
+	  return null != getBodyAt(x, y);
+	},
+	grap : function(x, y){
+	  // console.log("grap");
+	  var body = getBodyAt(x, y);
+	  var md = new b2MouseJointDef();
+	  md.body1 = world.m_groundBody;
+	  md.body2 = body;
+	  md.target.Set(x, y);
+	  md.maxForce = 300 * body.m_mass;
+	  md.timeStep = timeStep;
+	  mouseJoint = world.CreateJoint(md);
+	  body.WakeUp();
+	},
+	drag : function(x, y){
+	  // console.log("drag");
+	  if (mouseJoint){
+	    var p2 = new b2Vec2(x, y);
+	    mouseJoint.SetTarget(p2);
+	  }
+	},
+	drop : function(x, y){
+	  // console.log("drop");
+	  if (mouseJoint){
+	    world.DestroyJoint(mouseJoint);
+	    mouseJoint = null;
+	  }
+	},
+	hover : function(x, y){
+	  function leave(body){
+	    // console.log("leave %j", body.m_shapeList.m_radius);
+	    body.WakeUp();
+	    body.m_shapeList.m_radius -= 30;
+	    findBall(body).set("hover", false);
+	  }
+	  function enter(body){
+	    // console.log("enter %j", body.m_shapeList.m_radius);
+	    body.WakeUp();
+	    body.m_shapeList.m_radius += 30;
+	    findBall(body).set("hover", true);
+	  }
+	  // console.log("move");
+	  var body = getBodyAt(x, y);
+	  if(body == null){
+	    if (mouseOver != null){
+	      leave(mouseOver);
+	      mouseOver = null;
+	    }
+	  } else if (body == mouseOver) {
+	    // stay on same object
+	    // noop
+	  } else {
+	    if (mouseOver != null){ leave(mouseOver); }
+	    mouseOver = body;
+	    enter(mouseOver);
+	  }
+	},
+	/*
+	reset({
+	    tags: ["fun", "cool", "ugly", "music", "movie", "tv", "girls"],
+	    bubs: ["fun", "cool", "ugly"],
+	    sink: ["ugly"],
+	    follows: ["fun"],
+	    default: "girls"
+	});
+	*/
+	reset : function(options){
+	  _(balls).each(function(ball){
+	    var body = ball.get("body");
+	    world.DestroyBody(body);
+	    ball.destroy();
+	    ball = null;
+	  });
+	  balls = [];
+	  mouseOver = null;
+	  mouseJoint = null;
+	  _.chain(options).values().flatten().uniq().each(function(e){
+	    var size = (options.bubs && options.bubs.indexOf(e)!=-1) ? 64 : 48;
+	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
+	    var ball = new BallModel({
+	      "text": e,
+	      "size": size,
+	      "body": body,
+	      "current": ( options.default && options.default == e ),
+	      "sink": ( options.sink && options.sink.indexOf(e) !=  -1 ),
+	      "follow": ( options.follows && options.follows.indexOf(e)!=-1 ),
+	      "hover": false
+	    });
+	    var view = new BallView({ model : ball });
+	    $("#bubbles").append(view.render().el);
+	    balls.push(ball);
+	  });
+	  // color theme
+	  // theme = themes[Math.random() * themes.length >> 0];
+	  // document.body.style['backgroundColor'] = theme[0];
+	  // info();
+	},
+	open : function(tag){
+	  _(balls).each(function(ball){
+	    ball.set("current", ball.get("text") == tag);
+	  });
+	},
+	info : info
+      };
+    })();
+
     // exports
-    window.reset = function(options){
+    window.resetTags = function(options){
       game.reset(options);
+    };
+    window.openTag = function(tag){
+      game.open(tag);
     };
 
     game.init();
