@@ -10,8 +10,8 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.siteShow = function(tag){
     ClipApp.Face.showUser();
-    // ClipApp.Bubb.showSiteTags(tag);
-    ClipApp.ClipList.showSiteClips(tag);
+    ClipApp.Bubb.showSiteTags(tag);
+    // ClipApp.ClipList.showSiteClips(tag);
   };
 
   ClipApp.siteQuery = function(word, tag){

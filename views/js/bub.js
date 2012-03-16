@@ -152,8 +152,8 @@ $(function() {
     });
 
     function fire(event, value){
-      var bubbles = window.top.bubbles;
-      if(bubbles) bubbles.trigger(event, value);
+      var App = window.top.App;
+      if(App) App.vent.trigger('app.clipapp.bubb:'+event, value);
     }
 
     var BallView = Backbone.View.extend({
@@ -344,6 +344,14 @@ $(function() {
 	});
       }
 
+      function findBall(body){
+	for(var i=0; i<balls.length; i++){
+	  var ball = balls[i];
+	  if (body == ball.get("body")) return ball;
+	}
+	return null;
+      }
+
       function loop(){
 	ui.chkStage();
 	ui.chkMouse();
@@ -437,13 +445,6 @@ $(function() {
 	  }
 	},
 	hover : function(x, y){
-	  function findBall(body){
-	    for(var i=0; i<balls.length; i++){
-	      var ball = balls[i];
-	      if (body == ball.get("body")) return ball;
-	    }
-	    return null;
-	  }
 	  function leave(body){
 	    // console.log("leave %j", body.m_shapeList.m_radius);
 	    body.WakeUp();
@@ -489,6 +490,8 @@ $(function() {
 	    ball = null;
 	  });
 	  balls = [];
+	  mouseOver = null;
+	  mouseJoint = null;
 	  _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs && options.bubs.indexOf(e)!=-1) ? 64 : 48;
 	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
@@ -520,8 +523,11 @@ $(function() {
     })();
 
     // exports
-    window.reset = function(options){
+    window.resetTags = function(options){
       game.reset(options);
+    };
+    window.openTag = function(tag){
+      game.open(tag);
     };
 
     game.init();
