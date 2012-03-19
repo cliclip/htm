@@ -3,10 +3,19 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // model && view
 
+  var BubbModel = App.Model.extend({
+    parse: function(resp){
+      return resp;
+    }
+  });
+
   var BubbView = App.ItemView.extend({
     id : "bubbles",
     tagName : "iframe",
     className : "bubb-view",
+    events: {
+
+    },
     render : function(){
       this.$el.attr("src", "bub.html");
       return this;
@@ -75,10 +84,26 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:follow", function(tag){
     console.log("follow %s", tag);
+    var bubbModel = new BubbModel({id: _uid});
+    var url = "/_2_/user/"+_uid+"/follow/"+tag;
+    bubbModel.fetch({
+      type:'POST',
+      url: url,
+      data: JSON.stringify({tag: tag}),
+      contentType:"application/json; charset=utf-8"
+    });
+
   });
 
   App.vent.bind("app.clipapp.bubb:unfollow", function(tag){
     console.log("unfollow %s", tag);
+    var bubbModel = new BubbModel({id: _uid});
+    var url = "/_2_/user/"+_uid+"/follow/"+tag;
+    console.info(bubbModel.id+"   "+url);
+    bubbModel.destroy({
+      url: url
+    });
+    
   });
 
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
@@ -111,13 +136,18 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   }
 
+  // 取 uid 的 tag
   function getUserTags(uid, callback){
     // API getUserTags
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
-    var follows = ["动漫", "科技"];
-    var tags = ["电影", "音乐", "美女", "穿越", "户外", "流行"];
-    callback(tags, follows);
+    var bubbModel = new BubbModel({id: uid});
+    var url = "/_2_/user/"+uid+"/tag/0..19";
+    bubbModel.fetch({url: url});
+    bubbModel.onChange(function(bubbs){
+      var bubb = bubbs.toJSON();
+      callback(bubb.sort, bubb.follow);
+    });
   }
 
   function getUserBubs(uid, callback){
@@ -165,7 +195,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function mkUrl(tag){
     var url = "tag/"+tag;
-    return (_uid ? "user/"+_uid : "") + url;
+    return (_uid ? "user/"+_uid + "/" : "") + url;
   }
 
   function changeTags(tags1, tags2){

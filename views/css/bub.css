@@ -5,42 +5,42 @@ font-family: arial, Helvetica, sans-serif;
 margin: 0px;
 padding: 0px;
 }
-	.ball {
+.ball {
 position: absolute;
 cursor: default;
 }
-	.ball a {
+.ball a {
 color: #999;
 text-decoration: none;
 }
-	.ball a.iscurrent {
+.ball a.iscurrent {
 color: #000;
 font-size: 120%;
 font-weight: bold;
 }
-	.ball a.isfollow {
+.ball a.isfollow {
 text-decoration:underline;	
 }
-	.ball a:visited {
+.ball a:visited {
 }
-	.ball a:hover {
+.ball a:hover {
 color: black;
 font-weight: bold;
 }
-	.ball div {
+.ball div {
 position: absolute;
 text-align: center;
 font-size: 75%;
 }
-	.ball .s48 {
+.ball .s48 {
 background: url("../img/bubble-48.png");
 }
-	.ball .s64 {
+.ball .s64 {
 background: url("../img/bubble-64.png");
 }
-	.ball .shadow.s108 {
+.ball .shadow.s108 {
 background: url("../img/bubble-108.png");
 }
-	.ball .shadow.s124 {
+.ball .shadow.s124 {
 background: url("../img/bubble-124.png");
 }
