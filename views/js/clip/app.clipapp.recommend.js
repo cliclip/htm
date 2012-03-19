@@ -2,7 +2,7 @@
 
 App.ClipApp.Recommend = (function(App,Backbone,$){
   var Recommend = {};
-  var P="/_2_";
+  var P = App.ClipApp.Url.base;
   // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
@@ -29,6 +29,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var uid=evt.target.id;
       var name=document.getElementById(uid).innerHTML;
       this.$("#name").val(name);
+      $("#imgId").attr("src",document.getElementById(uid).title);
       this.model.set({uid:uid});
       this.$("#name_listDiv").empty();
     },
