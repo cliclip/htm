@@ -1,7 +1,13 @@
 <script type="text/template" id="follower-view-template">
   <div style="margin-left:50px;">
-    <br><br>
-    <span><%=tag%></span>
-    <span><%=uid%></span><br><br>
+    <br>
+    <br>
+    <span><a href=""><%=tag%></a>:</span>
+   <%
+    for(var i=0; i<user.length; i++){
+   %><a href="#user/<%=user[i].id%>">
+    <span><img width="30" heigth="30" src="../img/a.jpg"></span>
+    <span><%=user[i].name%></span></a>
+<%}%>
   </div>
 </script>

@@ -1,6 +1,9 @@
 #mine{
  float: top;
+ float: left;
+ position: absolute;
  margin-left:20px;
+ z-index:9;
 }
 #query{
 

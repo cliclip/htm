@@ -1,16 +1,15 @@
 <script type="text/template" id="recommend-view-template">
    <div align="center" style="position:relative;left:500px;top:50px;width:400px;height:300px;background:yellow;z-index:400;display:block;">
      <label>转</label><br>
-     <div id="user_image">
-       <img id="imgId" hidden="hidden" width="50" height="50" />
+     <div id="user_image"><img id="imgId" width="30" height="35"></img>
      </div>
-     <div id="inputname">
+     <span id="inputname">
        <input type="text" id="name"/>
        <span><%= typeof error != "undefined" && error.user ? error.user : "" %></span>
        <br>
        <div id="name_listDiv" >
        </div>
-     </div>
+     </span>
      <textarea id="recommend_text" rows="3" cols="40">说点啥吧～</textarea><br>
      <input type="button" value="确定" id="recomm_button"/>
      <input type="button" value="取消" id="cancel_button"/>
