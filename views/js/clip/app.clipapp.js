@@ -21,7 +21,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.siteQuery = function(word, tag){
     ClipApp.Face.showUser();
-    // ClipApp.Bubb.showSiteBubs(tag);
+    ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
   };
 
@@ -31,7 +31,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.userShow = function(uid, tag){
     ClipApp.Face.showUser(uid);
-    //ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
   };
 
@@ -51,7 +51,7 @@ App.ClipApp = (function(App, Backbone, $){
     var uid = getMyUid();
     //console.info(uid);
     ClipApp.Face.showUser(uid);
-    //ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
   };
 
@@ -77,8 +77,9 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:login", function(){
-    var uid = getMyUid();
-    ClipApp.Login.show(uid);
+    // var uid = getMyUid();
+    // ClipApp.Login.show(uid);
+    ClipApp.Login.show();
   });
 
   App.vent.bind("app.clipapp:logout", function(){

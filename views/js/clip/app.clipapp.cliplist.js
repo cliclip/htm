@@ -98,14 +98,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var data = {};
     if(word){ data.word = word; url += "/" + word;  };
     if(tag) data.tag = tag;
-    console.info("showSiteQuery");
     getClips({url: url, type: "POST", data: data});
   };
 
   ClipList.showUserClips = function(uid, tag){
     var	url = App.ClipApp.Url.base + "/user/"+uid+"/clip";
     if(tag){
-      url += "tag/"+tag;
+      url += "/tag/"+tag;
     }
     getClips({url:url, type:"GET"});
   };

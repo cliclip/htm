@@ -3,7 +3,7 @@
  margin-left:20px;
 }
 #query{
-
+ float: left;
 }
 #face{
   top:30px; 
@@ -15,11 +15,13 @@
   z-index:9;
 }
 #bubb{
-
+  width: 300px;
+  float: left;
 }
+
 #list{
- width:1000px;
- margin-left:250px;
+ width:600px;
+ margin-left:300px;
  position: absolute;
  z-index:9;
 }
