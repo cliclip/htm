@@ -2,12 +2,12 @@
   <div style="margin-left:50px;">
     <br>
     <br>
-    <span><a href=""><%=tag%></a>:</span>
+    <span><a href="#tag/<%=tag%>"><%=tag%></a>:</span>
    <%
     for(var i=0; i<user.length; i++){
-   %><a href="#user/<%=user[i].id%>">
-    <span><img width="30" heigth="30" src="../img/a.jpg"></span>
-    <span><%=user[i].name%></span></a>
+   %>
+    <span><a href="#user/<%=user[i].id%>"><%=user[i].name%></span>
+    <span><img width="30" heigth="30" src=<%=user[i].img%>></span>
 <%}%>
   </div>
 </script>
