@@ -20,13 +20,11 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:login");
     },
     registerAction: function(){
-      Backbone.history.navigate("#register");
-      location.reload() ;
       App.vent.trigger("app.clipapp.me:register");
 
     },
     logoutAction: function(){
-      
+
       App.vent.trigger("app.clipapp:logout");
     }
   });
