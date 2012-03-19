@@ -1,7 +1,7 @@
 App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var tag_list = [];
-
+  var P = App.ClipApp.Url.base;
   var ReclipModel = App.Model.extend({
     url: "/_/reclip",
     defaults: {

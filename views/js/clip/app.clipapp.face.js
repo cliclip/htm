@@ -2,10 +2,11 @@
 
 App.ClipApp.Face = (function(App, Backbone, $){
   var Face = {};
+  var P = App.ClipApp.Url.base;
   var UserModel = App.Model.extend({
     url : "/test/user-1.json"
   /* url: function(){
-      return "_2_/user/"+this.id;
+      return P+"/user/"+this.id;
     }*/
 });
   var FaceView = App.ItemView.extend({
