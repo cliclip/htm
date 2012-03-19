@@ -6,7 +6,7 @@
  z-index:9;
 }
 #query{
-
+ float: left;
 }
 #face{
   top:60px; 
@@ -26,9 +26,10 @@
  position: absolute;
  z-index:9;
 }
+
 #list{
  top:60px;
- width:1000px;
+ width:600px;
  margin-left:300px;
  position: absolute;
  z-index:9;

@@ -77,7 +77,8 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:login", function(){
-    var uid = getMyUid();
+    // var uid = getMyUid();
+    // ClipApp.Login.show(uid);
     ClipApp.Login.show();
   });
 
