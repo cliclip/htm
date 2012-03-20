@@ -4,7 +4,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
   var Face = {};
   var P = App.ClipApp.Url.base;
   var UserModel = App.Model.extend({
-    //url : "/test/user-1.json"
     url: function(){
       return P+"/user/"+this.id+"/info";
     }
@@ -20,6 +19,11 @@ App.ClipApp.Face = (function(App, Backbone, $){
     });
     user.fetch();
     user.onChange(function(userModel){
+      if(!userModel.get("face")){
+	userModel.set("face", "");
+      }
+      userModel.set("following", 10);
+      userModel.set("follower", 10);
       callback(userModel);
     });
   };

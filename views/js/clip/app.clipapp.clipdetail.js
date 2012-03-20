@@ -136,19 +136,19 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     App.viewRegion.show(detailView);
   };
 
-  ClipDetail.show = function(cid, uid){
+  // uid为当前登录用户
+  ClipDetail.show = function(uid, cid){
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
       var user = detailModel.get("user");
-      if(user == uid){ // 应该是 user == self
+      if(user == uid){
 	detailModel.set("manage",["注","改","删"]);
       }else{
 	detailModel.set("manage",["收","转","评"]);
       }
       detailModel.set("users",[]);
       showDetail(detailModel);
-      // App.vent.trigger("app.clipapp.clipdetail:showComment", cid);
       ClipDetail.showComment(cid);
       ClipDetail.showAddComm(cid);
     });
@@ -246,6 +246,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   ClipDetail.showAddComm = function(cid, focus){
     var addCommModel = new CommentModel({id: cid});
+    var self = (cid.split(":")[0] == App.ClipApp.Me.me.get("id"));
+    addCommModel.set("self",self);
     var addCommView = new AddCommView({model: addCommModel});
     ClipDetail.addCommRegion = new App.RegionManager({
       el:"#addComm_showDiv"
@@ -304,9 +306,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.clipdetail:comment", function(cid){
     // 当点击clipdetail的评时
-    if(ClipDetail.replyCommRegion)
-      ClipDetail.replyCommRegion.close();
-    ClipDetail.showAddComm(cid, true);
+    if(App.ClipApp.Me.me.get("id")){
+      if(ClipDetail.replyCommRegion)
+	ClipDetail.replyCommRegion.close();
+      ClipDetail.showAddComm(cid, true);
+    }else{
+      App.vent.trigger("app.clipapp:login");
+    }
   });
 
   App.vent.bind("app.clipapp.clipdetail:hide_addComm", function(){

@@ -50,7 +50,6 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.myShow = function(tag){
     var uid = getMyUid();
-    //console.info(uid);
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
@@ -117,7 +116,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid){
     var uid = getMyUid();
-    ClipApp.ClipDetail.show(clipid, uid);
+    ClipApp.ClipDetail.show(uid, clipid);
   });
 
   App.vent.bind("app.clipapp:clipmemo", function(clipid,tags,note){
@@ -131,6 +130,14 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:clipedit", function(clipid){
     var uid = getMyUid();
     ClipApp.ClipEdit.show(clipid, uid);
+  });
+
+  App.vent.bind("app.clipapp:clipadd", function(){
+    var uid = getMyUid(); // 当前登录用户
+    if(!uid){
+      ClipApp.Login.show();
+    }
+    ClipApp.ClipAdd.show(uid);
   });
 
   App.vent.bind("app.clipapp:mycliplist", function(){
