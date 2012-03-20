@@ -149,17 +149,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 
-  App.vent.bind("app.clipapp.cliplist:query",function(word){
-    // 如此便限定了，当用户登录之后只可以查询自己的
-    if(document.cookie.token){
-      Backbone.history.navigate("my/query/"+word,true);
-      // App.vent.trigger("app.clipapp.routing:myquery:show",word);
-    }else{
-      Backbone.history.navigate("query/"+word,true);
-      // App.vent.trigger("app.clipapp.routing:query:show",word);
-    }
-  });
-
 /*
   getClips = function(data){
     collection = new ClipPreviewList();

@@ -27,6 +27,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   // private
   var _uid  = null;
   var last = null;
+  var old_self = null;
   var self = true;
 
   // exports
@@ -34,6 +35,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   Bubb.showSiteTags = function(tag){
     _uid = null;
     self = false;
+    console.log("showSiteTags::"+tag);
     getSiteTags(function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
     });
@@ -50,9 +52,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   Bubb.showUserTags = function(uid, tag){
     _uid = uid;
     self = false;
+    var token = document.cookie.split("=")[1];
     getUserTags(uid, function(tags, follows){
-      if(App.ClipApp.Me.me.get("id") == uid)
+      if(token && token.split(":")[0] == uid){
 	self = true;
+      }
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
     });
   };
@@ -60,8 +64,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
     slef = false;
+    var token = document.cookie.split("=")[1];
     getUserBubs(uid, function(tags, follows){
-      if(App.ClipApp.Me.me.get("id") == uid)
+      if(token && token.split(":")[0] == uid)
 	self = true;
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
     });
@@ -74,16 +79,17 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       var bubbView = new BubbView();
       App.bubbRegion.show(bubbView);
     }
-    if (changeTags(last, tags)) {
+    if (changeTags(last, tags, old_self, self)) {
       resetTags(tags);
     } else if (changeDefault(last, tags)) {
       openTag(tags.default);
     }
+    old_self = self;
     last = tags;
   });
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
-    console.log("open %s", tag);
+    // console.log("open %s", tag);
     App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
   });
 
@@ -99,18 +105,17 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.bubb:unfollow", function(tag){
-    console.log("unfollow %s", tag);
+    // console.log("unfollow %s", tag);
     var bubbModel = new BubbModel({id: _uid});
     var url = "/_2_/user/"+_uid+"/follow/"+tag;
-    console.info(bubbModel.id+"   "+url);
+    // console.info(bubbModel.id+"   "+url);
     bubbModel.destroy({
       url: url
     });
-
   });
 
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
-    console.log("reclip %s", tag);
+    // console.log("reclip %s", tag);
   });
 
   // init
@@ -160,7 +165,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function getUserBubs(uid, callback){
-    getUserTags(function(tags, follows){
+    getUserTags(uid, function(tags, follows){
       var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
@@ -207,8 +212,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     return (_uid ? "user/"+_uid + "/" : "") + url;
   }
 
-  function changeTags(tags1, tags2){
-    if(tags1 && tags1.tags && tags2 && tags2.tags){
+  function changeTags(tags1, tags2, old_self, self){
+    if(old_self != self){
+      return true;
+    }else if(tags1 && tags1.tags && tags2 && tags2.tags){
       return _.difference(tags1.tags, tags2.tags).length != 0;
     } else {
       return true;
