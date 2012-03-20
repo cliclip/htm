@@ -103,7 +103,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.destroy({
       url: url
     });
-    
+
   });
 
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
@@ -129,7 +129,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function getSiteBubs(callback){
-    gitSiteTags(function(tags, follows){
+    getSiteTags(function(tags, follows){
       var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
