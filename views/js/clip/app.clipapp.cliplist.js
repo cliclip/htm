@@ -79,7 +79,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
-    console.info(options);
+    // console.info(options);
     options.clips.fetch(options);
     options.clips.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
@@ -119,7 +119,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   function getUserQuery(uid, word, tag){
     var _url = "/user/" + uid + "/query/";
     url = App.ClipApp.Url.base + _url;
-    data = { text:word };
+    data = { text:word , user:uid};
     if(tag){data.tag = tag; }
     getClips();
   }

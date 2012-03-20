@@ -5,11 +5,15 @@ App.ClipApp.Query = (function(App,Backbone,$){
     tagName: "div",
     template: "#queryclip-view-template",
     events:{
-     "click #query_button" : "query"
+      "click #query_button" : "query",
+      "click #addClip": "addClip"
     },
     query : function(){
       var word = this.$("#input_keyword").val();
       App.vent.trigger("app.clipapp.cliplist:query",word);
+    },
+    addClip: function(){
+      App.vent.trigger("app.clipapp:clipadd");
     }
   });
 
