@@ -22,7 +22,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
   };
 
   App.bind("initialize:after", function(){
-    Query.show();
+    //Query.show();
   });
 
   return Query;
