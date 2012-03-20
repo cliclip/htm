@@ -22,11 +22,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
     });
     user.fetch();
     user.onChange(function(userModel){
-      if(!userModel.get("face")){
-	userModel.set("face", "");
-      }
-      userModel.set("following", 10);
-      userModel.set("follower", 10);
       callback(userModel);
     });
   };
