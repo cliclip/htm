@@ -21,6 +21,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var opt = $(e.currentTarget).val();
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
+      var tags = this.model.get("tag");
+      var text = "";
+      var ns = _(this.model.get("note")).select(function(e){return e.text; })
+	   .map(function(e){ return e.text; });
+	   _(ns).each(function(n){ text +=n+" "; });
       switch(opt){
 	case '收':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
@@ -29,7 +34,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '评':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case '注':
-	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
+	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,text);break;
 	case '改':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case '删':

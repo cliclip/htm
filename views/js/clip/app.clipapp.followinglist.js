@@ -22,8 +22,8 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
 
   FollowingList.showUserFollowing=function(uid){
     collection=new FollowingList();
-   // collection.url=App.ClipApp.Url.base+"/user/"+uid+"/following/"+start+".."+end;
-    collection.url="/test/following.json";
+    collection.url=App.ClipApp.Url.base+"/user/"+uid+"/following/"+start+".."+end;
+    //collection.url="/test/following.json";
     collection.fetch();
     collection.onReset(function(followinglist){
       var followinglistView=new FollowingListView({

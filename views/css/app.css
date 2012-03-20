@@ -1,25 +1,36 @@
 #mine{
  float: top;
+ float: left;
+ position: absolute;
  margin-left:20px;
+ z-index:9;
 }
 #query{
-
+ float: left;
 }
 #face{
-  top:30px; 
+  top:60px; 
   float:left;
   position: absolute;
   margin-left:20px;
   margin-right:20px;
-  width:200px;
+  width:250px;
   z-index:9;
 }
 #bubb{
-
+ top:350px;
+ float:left;
+ width:250px;
+ margin-left:20px;
+ margin-right:20px;
+ position: absolute;
+ z-index:9;
 }
+
 #list{
- width:1000px;
- margin-left:250px;
+ top:60px;
+ width:600px;
+ margin-left:300px;
  position: absolute;
  z-index:9;
 }
