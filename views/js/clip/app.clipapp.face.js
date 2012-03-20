@@ -6,6 +6,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
   var UserModel = App.Model.extend({
     url: function(){
       return P+"/user/"+this.id+"/info";
+    },
+    defaults:{
+      face:"../img/a.jpg"
     }
   });
   var FaceView = App.ItemView.extend({
