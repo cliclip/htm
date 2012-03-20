@@ -35,15 +35,15 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.showUserClips(uid, tag);
   };
 
-  ClipApp.userFollowing = function(uid){
+  ClipApp.userFollowing = function(uid, tag){
     ClipApp.Face.showUser(uid);
-    // ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowingList.showUserFollowing(uid); // TODO
   };
 
-  ClipApp.userFollower = function(uid){
+  ClipApp.userFollower = function(uid, tag){
     ClipApp.Face.showUser(uid);
-    // ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowerList.showUserFollower(uid); // TODO
   };
 
@@ -58,21 +58,21 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myQuery = function(word, tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    // ClipApp.Bubb.showUserBubs(uid, tag);
+    ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
   };
 
   ClipApp.myInterest = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    // ClipApp.Bubb.showUserBubs(uid, tag);
+    ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserInterest(uid, tag);
   };
 
   ClipApp.myRecommend = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    // ClipApp.Bubb.showUserBubs(uid, tag);
+    ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserRecommend(uid, tag);
   };
 

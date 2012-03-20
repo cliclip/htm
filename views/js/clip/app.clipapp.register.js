@@ -60,14 +60,13 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.register:success", function(res){
     document.cookie = "token="+res[0];
+    App.popRegion.close();
     Backbone.history.navigate("my");
     location.reload();
-    Register.close();
   });
 
   App.vent.bind("app.clipapp.register:error",function(model, error){
-    Register.close();
-    Register.open(model, error);
+    Register.show(model, error);
   });
 
   // Test

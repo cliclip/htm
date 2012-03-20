@@ -83,7 +83,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
 
-  ClipMemo.show = function(cid){
+  ClipMemo.show = function(cid,tag){
     var clipmemoModel = new ClipMemoModel();
     var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
     App.popRegion.show(clipmemoView);
