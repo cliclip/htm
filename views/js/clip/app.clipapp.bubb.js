@@ -13,9 +13,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     id : "bubbles",
     tagName : "iframe",
     className : "bubb-view",
-    events: {
-
-    },
     render : function(){
       this.$el.attr("src", "bub.html");
       return this;
@@ -28,7 +25,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var sink = ["讨厌"];
 
   // private
-
+  var self = true;
   var _uid = null;
   var last = null;
 
@@ -36,6 +33,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showSiteTags = function(tag){
     _uid = null;
+    self = false;
     getSiteTags(function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
@@ -43,6 +41,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showSiteBubs = function(tag){
     _uid = null;
+    self = false;
     getSiteBubs(function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
@@ -50,6 +49,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserTags = function(uid, tag){
     _uid = uid;
+    if(document.cookie.token && document.cookie.token.split(":")[0] == uid){
+      self = true;
+    }
     getUserTags(uid, function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
@@ -57,6 +59,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
+    if(document.cookie.token && document.cookie.token.split(":")[0] == uid){
+      self = true;
+    }
     getUserBubs(uid, function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
@@ -92,7 +97,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       data: JSON.stringify({tag: tag}),
       contentType:"application/json; charset=utf-8"
     });
-
   });
 
   App.vent.bind("app.clipapp.bubb:unfollow", function(tag){
@@ -103,7 +107,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.destroy({
       url: url
     });
-    
+
   });
 
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
@@ -129,7 +133,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function getSiteBubs(callback){
-    gitSiteTags(function(tags, follows){
+    getSiteTags(function(tags, follows){
       var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
@@ -146,7 +150,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
-      callback(bubb.sort, bubb.follow);
+      callback(bubb.tag, bubb.follow);
     });
   }
 
@@ -159,7 +163,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // delegates
-
   function resetTags(tags){
     var bw = document.getElementById('bubbles').contentDocument.defaultView;
     if(bw.resetTags){
