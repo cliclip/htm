@@ -13,9 +13,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     id : "bubbles",
     tagName : "iframe",
     className : "bubb-view",
-    events: {
-
-    },
     render : function(){
       this.$el.attr("src", "bub.html");
       return this;
@@ -92,7 +89,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       data: JSON.stringify({tag: tag}),
       contentType:"application/json; charset=utf-8"
     });
-
   });
 
   App.vent.bind("app.clipapp.bubb:unfollow", function(tag){
@@ -103,7 +99,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.destroy({
       url: url
     });
-    
+
   });
 
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
@@ -146,7 +142,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
-      callback(bubb.sort, bubb.follow);
+      callback(bubb.tag, bubb.follow);
     });
   }
 
@@ -159,7 +155,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // delegates
-
   function resetTags(tags){
     var bw = document.getElementById('bubbles').contentDocument.defaultView;
     if(bw.resetTags){
