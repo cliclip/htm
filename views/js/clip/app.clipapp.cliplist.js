@@ -88,9 +88,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   ClipList.showSiteClips = function(tag){
     var url =  App.ClipApp.Url.base+"/user/1/clip";
-    var data = {};
-    if(tag) data.tag = tag;
-    getClips({url: url, type: 'POST', data: data});
+    if(tag) url += '/tag/'+tag;
+    getClips({url: url, type: 'GET'});
   };
 
   // 该接口可以和showSiteClips合为一个 [url路径不同]

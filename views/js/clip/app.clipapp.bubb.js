@@ -25,7 +25,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var sink = ["讨厌"];
 
   // private
-
+  var self = true;
   var _uid = null;
   var last = null;
 
@@ -33,6 +33,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showSiteTags = function(tag){
     _uid = null;
+    self = false;
     getSiteTags(function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
@@ -40,6 +41,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showSiteBubs = function(tag){
     _uid = null;
+    self = false;
     getSiteBubs(function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
@@ -47,6 +49,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserTags = function(uid, tag){
     _uid = uid;
+    if(document.cookie.token && document.cookie.token.split(":")[0] == uid){
+      self = true;
+    }
     getUserTags(uid, function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
@@ -54,6 +59,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
+    if(document.cookie.token && document.cookie.token.split(":")[0] == uid){
+      self = true;
+    }
     getUserBubs(uid, function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag));
     });
