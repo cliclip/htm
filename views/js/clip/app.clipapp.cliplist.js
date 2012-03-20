@@ -88,7 +88,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   ClipList.showSiteClips = function(tag){
     var url =  App.ClipApp.Url.base+"/user/1/clip";
-    if(tag) url += '/tag/'+tag;
+    if(tag) url += "/tag"+tag;
     getClips({url: url, type: 'GET'});
   };
 
