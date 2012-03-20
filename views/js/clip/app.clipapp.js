@@ -23,6 +23,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
+    console.dir({word:word,tag:tag});
   };
 
   ClipApp.register = function(){
