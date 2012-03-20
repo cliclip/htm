@@ -23,7 +23,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
-    console.dir({word:word,tag:tag});
   };
 
   ClipApp.register = function(){
@@ -149,6 +148,17 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDelete.show(clipid, uid);
   });
 
+  App.vent.bind("app.clipapp:query", function(word, tag){
+    var userid = ClipApp.Face.getUserId();
+    var uid = getMyUid();
+    if(uid == userid){
+      App.vent.trigger("app.clipapp.routing:myquery:show", word);
+      ClipApp.myQuery(word, tag);
+    }else{
+      App.vent.trigger("app.clipapp.routing:query:show", word);
+      ClipApp.siteQuery(word, tag);
+    }
+  });
 
   setTimeout(function(){
 //    App.vent.trigger("app.clipapp:clipdetail", "1:2");

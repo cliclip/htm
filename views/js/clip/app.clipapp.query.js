@@ -10,7 +10,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
     },
     query : function(){
       var word = this.$("#input_keyword").val();
-      App.vent.trigger("app.clipapp.cliplist:query",word);
+      App.vent.trigger("app.clipapp.query:query",word);
     },
     addClip: function(){
       App.vent.trigger("app.clipapp:clipadd");
@@ -27,6 +27,20 @@ App.ClipApp.Query = (function(App,Backbone,$){
 
   App.bind("initialize:after", function(){
     Query.show();
+  });
+
+
+  App.vent.bind("app.clipapp.query:query",function(word){
+    // 如此便限定了，当用户登录之后只可以查询自己的
+    App.vent.trigger("app.clipapp:query", word, null);
+    /*
+    if(document.cookie){
+      App.vent.trigger("app.clipapp:myQuery", word, null);
+      App.vent.trigger("app.clipapp.routing:myquery:show",word);
+    }else{
+      App.vent.trigger("app.clipapp:siteQuery", word, null);
+      App.vent.trigger("app.clipapp.routing:query:show",word);
+    }*/
   });
 
   return Query;
