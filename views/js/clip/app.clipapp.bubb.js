@@ -25,8 +25,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var sink = ["讨厌"];
 
   // private
-
-  var _uid = null;
+  var _uid  = null;
   var last = null;
   var self = true;
 
@@ -89,7 +88,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.bubb:follow", function(tag){
-    console.log("follow %s", tag);
     var bubbModel = new BubbModel({id: _uid});
     var url = "/_2_/user/"+_uid+"/follow/"+tag;
     bubbModel.fetch({

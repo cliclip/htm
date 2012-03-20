@@ -4,6 +4,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var start = 0;
   var end = App.ClipApp.Url.page-1;
+  var precliplength=0,flag=true;;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -59,12 +60,21 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   App.vent.bind("clip:preview:scroll", function(view, options){
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
-      if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
+      if(view.$el[0].scrollHeight > 0 &&$(window).height()+scrollTop-view.$el[0].scrollHeight>=100 ){
+      // if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
 	start += App.ClipApp.Url.page;
 	end += App.ClipApp.Url.page;
 	options.url = options.clips.url + "/" +start + ".." + end;
 	options.add = true;
-	options.clips.fetch(options);
+	if(options.clips.length-precliplength<end-start){
+	    flag=false;
+	}
+	if(flag){
+	  options.clips.fetch(options);
+	  precliplength=options.clips.length;
+	}else{
+	  console.info("没有更多可显示");
+	}
       }
     });
   });
@@ -88,17 +98,17 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   ClipList.showSiteClips = function(tag){
     var url =  App.ClipApp.Url.base+"/user/1/clip";
-    if(tag) url += "/tag"+tag;
+    if(tag){
+      url += "/tag/"+tag;
+    }
     getClips({url: url, type: 'GET'});
   };
 
-  // 该接口可以和showSiteClips合为一个 [url路径不同]
   ClipList.showSiteQuery = function(word, tag){
-    var url = App.ClipApp.Url.base+"/query" ;
-    var data = {};
-    if(word){ data.word = word;  };
-    if(tag) data.tag = tag;
-    getClips({url: url, type: "POST", data: data});
+    // var url = App.ClipApp.Url.base+"/user/1";
+    getUserQuery(1,word,tag,function(clips){
+      App.vent.trigger("app.clipapp.cliplist:show", clips);
+    });
   };
 
   ClipList.showUserClips = function(uid, tag){
@@ -109,7 +119,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     getClips({url:url, type:"GET"});
   };
 
-  // 还未修改完成
   ClipList.showUserQuery = function(uid, word, tag){
     getUserQuery(uid, word, tag, function(clips){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
@@ -117,11 +126,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   function getUserQuery(uid, word, tag){
-    var _url = "/user/" + uid + "/query/";
+    var _url = "/user/" + uid + "/query";
     url = App.ClipApp.Url.base + _url;
-    data = { text:word , user:uid};
+    var data = { text:word , user:uid};
     if(tag){data.tag = tag; }
-    getClips();
+    getClips({url:url,type:"POST",data:data});
   }
 
   ClipList.showUserInterest = function(uid, tag){
@@ -143,12 +152,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.cliplist:query",function(word){
-    if(document.cookie){
-      ClipList.showUserQuery(word);
-      App.vent.trigger("app.clipapp.routing:myquery:show",word);
+    // 如此便限定了，当用户登录之后只可以查询自己的
+    if(document.cookie.token){
+      Backbone.history.navigate("my/query/"+word,true);
+      // App.vent.trigger("app.clipapp.routing:myquery:show",word);
     }else{
-      ClipList.showSiteQuery(word);
-      App.vent.trigger("app.clipapp.routing:query:show",word);
+      Backbone.history.navigate("query/"+word,true);
+      // App.vent.trigger("app.clipapp.routing:query:show",word);
     }
   });
 
