@@ -79,6 +79,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
+    console.info(options);
     options.clips.fetch(options);
     options.clips.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
@@ -86,19 +87,17 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showSiteClips = function(tag){
-    var url =  App.ClipApp.Url.base+"/query";
-    var data = {};
-    if(tag) data.tag = tag;
-    getClips({url: url, type: 'POST', data: data});
+    var url =  App.ClipApp.Url.base+"/user/1/clip";
+    if(tag){
+      url += "/tag/"+tag;
+    }
+    getClips({url: url, type: 'GET'});
   };
 
-  // 该接口可以和showSiteClips合为一个 [url路径不同]
   ClipList.showSiteQuery = function(word, tag){
-    var url = App.ClipApp.Url.base+"/query" ;
-    var data = {};
-    if(word){ data.word = word; url += "/" + word;  };
-    if(tag) data.tag = tag;
-    getClips({url: url, type: "POST", data: data});
+    getUserQuery(1,word,tag,function(clips){
+      App.vent.trigger("app.clipapp.cliplist:show", clips);
+    });
   };
 
   ClipList.showUserClips = function(uid, tag){
@@ -109,7 +108,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     getClips({url:url, type:"GET"});
   };
 
-  // 还未修改完成
   ClipList.showUserQuery = function(uid, word, tag){
     getUserQuery(uid, word, tag, function(clips){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
@@ -117,11 +115,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   function getUserQuery(uid, word, tag){
-    var _url = "/user/" + uid + "/query/";
+    var _url = "/user/" + uid + "/query";
     url = App.ClipApp.Url.base + _url;
+    console.info(url);
     data = { text:word };
     if(tag){data.tag = tag; }
-    getClips();
+    getClips({url:url,type:"POST",data:data});
   }
 
   ClipList.showUserInterest = function(uid, tag){
@@ -144,10 +143,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:query",function(word){
     if(document.cookie){
-      ClipList.showUserQuery(word);
+      ClipList.showUserQuery(1, word, null);
       App.vent.trigger("app.clipapp.routing:myquery:show",word);
     }else{
-      ClipList.showSiteQuery(word);
+      ClipList.showSiteQuery(word, null);
       App.vent.trigger("app.clipapp.routing:query:show",word);
     }
   });
