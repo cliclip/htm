@@ -4,6 +4,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var start = 0;
   var end = App.ClipApp.Url.page-1;
+  var precliplength=0,flag=true;;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -59,12 +60,21 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   App.vent.bind("clip:preview:scroll", function(view, options){
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
-      if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
+      if(view.$el[0].scrollHeight > 0 &&$(window).height()+scrollTop-view.$el[0].scrollHeight>=100 ){
+      // if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
 	start += App.ClipApp.Url.page;
 	end += App.ClipApp.Url.page;
 	options.url = options.clips.url + "/" +start + ".." + end;
 	options.add = true;
-	options.clips.fetch(options);
+	if(options.clips.length-precliplength<end-start){
+	    flag=false;
+	}
+	if(flag){
+	  options.clips.fetch(options);
+	  precliplength=options.clips.length;
+	}else{
+	  console.info("没有更多可显示");
+	}
       }
     });
   });
