@@ -227,10 +227,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	},
 	error:function(comment,response){}
       });
-      if($("#collect").attr("checked")){
+      if($("#reclip").attr("checked")){
 	var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
 	// console.log("同时收");
-	App.vent.trigger("collect", id,params1);
+	App.vent.trigger("app.clipapp.reclip:submit",this.model,params1);
       }
     },
     cancel : function(){

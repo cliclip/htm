@@ -59,9 +59,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       // console.dir(that.tag_list);
       var params1 = {clip:{tag:tag_list,note:[{text:text}]}};
       App.vent.trigger("app.clipapp.comment:submit", that.model, params);
-      if($("#collect").attr("checked")){
-	console.log("同时收");
-	App.vent.trigger("collect", that.model,params1);
+      if($("#reclip").attr("checked")){
+	//console.log("同时收");
+	App.vent.trigger("app.clipapp.reclip:submit", that.model,params1);
       }
     },
     cancel : function(e){
