@@ -39,6 +39,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
 
     clipmemoAction:function(e){
+      var _data = {};
       var main_tag = [];
       for(var i=1;i<6;i++){
 	if($("#main_tag_"+i).css("backgroundColor") == "rgb(255, 0, 0)"){
@@ -48,9 +49,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var obj_tag = $("#obj_tag").val().split(",");
       var tag_list = _.union(main_tag,obj_tag);
       //console.log(tag_list);
-      var _data={note:[{text: $("#organize_text").val()}],tag:tag_list};
+      if($("#memo_private").attr("checked")){
+	_data={note:[{text: $("#organize_text").val()}],tag:tag_list,"public":"false"};
+      }else{
+	_data={note:[{text: $("#organize_text").val()}],tag:tag_list,"public":"true"};
+      }
       e.preventDefault();
-      //document.cookie ="token=1:ad44a7c2bc290c60b767cb56718b46ac";
       this.model.save(_data,{
 	url:P+"/clip/"+this.options.clipid,
 	type:"PUT",
@@ -61,9 +65,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	  App.vent.trigger("app.clipapp.memo:error",model,res);
 	}
       });
-      if($("#memo_private").attr("checked")){
-	console.log("不公开~");
-      }
     },
     cancleAction:function(e){
       e.preventDefault();
@@ -72,13 +73,16 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
 
-  ClipMemo.show = function(cid,tags,note){
+  ClipMemo.show = function(cid,tags,note,pub){
     var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "酷" ;});
     var tag_obj = _.without(tags,tag_main);
     var clipmemoModel = new ClipMemoModel();
     clipmemoModel.set({main_tag:tag_main,obj_tag:tag_obj,note:note});
     var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
     App.popRegion.show(clipmemoView);
+    if(pub == "false"){
+      document.getElementById("memo_private").checked=true;
+    }
     $('#obj_tag').tagsInput({
       //width: 'auto',
       autocomplete_url:'test/fake_json_endpoint.html'
