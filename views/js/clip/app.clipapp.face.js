@@ -2,6 +2,8 @@
 
 App.ClipApp.Face = (function(App, Backbone, $){
   var Face = {};
+  var user_id = null;
+
   var P = App.ClipApp.Url.base;
   var UserModel = App.Model.extend({
     defaults:{
@@ -18,13 +20,14 @@ App.ClipApp.Face = (function(App, Backbone, $){
     className: "userface-view",
     template: "#userface-view-template"
   });
-    var getUser=function(uid,callback){
+  var getUser=function(uid,callback){
+    user_id = uid;
     var user=new UserModel();
     user.fetch({url:P+"/user/"+ uid + "/info"});
     console.info(user);
-    //user.onChange(function(user){
+    user.onChange(function(user){
       callback(user);
-    //});
+    });
   };
 
   Face.showUser = function(uid){
@@ -36,6 +39,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
     }else{
       App.faceRegion.close();
     }
+  };
+
+  Face.getUserId = function(){
+    return user_id;
   };
 
   App.vent.bind("app.clipapp.face:show", function(user){

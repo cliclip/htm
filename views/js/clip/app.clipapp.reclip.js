@@ -92,9 +92,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     });
   };
 
-
-
-
   Reclip.show = function(cid, model, error){
     var reclipModel = new ReclipModel({id: cid});
     if (model) reclipModel.set(model.toJSON());

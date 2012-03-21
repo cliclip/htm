@@ -23,7 +23,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
-    console.dir({word:word,tag:tag});
   };
 
   ClipApp.register = function(){
@@ -50,7 +49,6 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.myShow = function(tag){
     var uid = getMyUid();
-    console.info(uid);
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
@@ -117,20 +115,28 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid){
     var uid = getMyUid();
-    ClipApp.ClipDetail.show(clipid, uid);
+    ClipApp.ClipDetail.show(uid, clipid);
   });
 
-  App.vent.bind("app.clipapp:clipmemo", function(clipid){
+  App.vent.bind("app.clipapp:clipmemo", function(clipid,tags,note){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }
-    ClipApp.ClipMemo.show(clipid, uid);
+      ClipApp.ClipMemo.show(clipid, tags, note);
   });
 
   App.vent.bind("app.clipapp:clipedit", function(clipid){
     var uid = getMyUid();
     ClipApp.ClipEdit.show(clipid, uid);
+  });
+
+  App.vent.bind("app.clipapp:clipadd", function(){
+    var uid = getMyUid(); // 当前登录用户
+    if(!uid){
+      ClipApp.Login.show();
+    }
+    ClipApp.ClipAdd.show(uid);
   });
 
   App.vent.bind("app.clipapp:mycliplist", function(){
@@ -142,6 +148,17 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDelete.show(clipid, uid);
   });
 
+  App.vent.bind("app.clipapp:query", function(word, tag){
+    var userid = ClipApp.Face.getUserId();
+    var uid = getMyUid();
+    if(uid == userid){
+      App.vent.trigger("app.clipapp.routing:myquery:show", word);
+      ClipApp.myQuery(word, tag);
+    }else{
+      App.vent.trigger("app.clipapp.routing:query:show", word);
+      ClipApp.siteQuery(word, tag);
+    }
+  });
 
   setTimeout(function(){
 //    App.vent.trigger("app.clipapp:clipdetail", "1:2");
