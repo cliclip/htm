@@ -19,6 +19,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   });
 
+  var reclipModel = App.Model.extend({});
+
   // constants
 
   var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
@@ -35,7 +37,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   Bubb.showSiteTags = function(tag){
     _uid = null;
     self = false;
-    console.log("showSiteTags::"+tag);
     getSiteTags(function(tags, follows){
       App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
     });
@@ -115,6 +116,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
+
     // console.log("reclip %s", tag);
   });
 
@@ -216,6 +218,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     if(old_self != self){
       return true;
     }else if(tags1 && tags1.tags && tags2 && tags2.tags){
+      if(tags1.tags.length != tags2.tags.length)
+	return true;
       return _.difference(tags1.tags, tags2.tags).length != 0;
     } else {
       return true;

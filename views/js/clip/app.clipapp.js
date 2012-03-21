@@ -122,8 +122,9 @@ App.ClipApp = (function(App, Backbone, $){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
+    }else{
+      ClipApp.ClipMemo.show(clipid, tags, note);
     }
-      ClipApp.ClipMemo.show(clipid, tags, note, pub);
   });
 
   App.vent.bind("app.clipapp:clipedit", function(clipid){
