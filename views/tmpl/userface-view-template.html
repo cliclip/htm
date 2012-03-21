@@ -1,7 +1,8 @@
 <script type='text/template' id='userface-view-template'>
   <div id="userface">
-    <a href="#user/<%=id%>"><img src="../img/a.jpg" width="200" hight="300">
+    <a href="#user/<%=id%>">
     <div class="username">
+      <img id="face-image" src="<%=App.util.face_url(id,face)%>"/>
       <%=name %>
     </div></a>
     <div>

@@ -1,0 +1,16 @@
+<script type="text/template" id="editUser-view-template">
+  <div id="editUser">
+    <div id="userFace">
+      <img id="face-image" src="<%=App.util.face_url(id,face)%>"/>
+      </br>
+      <%=name%>
+      <input type="button" id="resetUsername" value="修改用户名"/>
+    </div>
+    <div id="faceUploadDiv"></div>
+    <div id="setface">
+      <input type="button" class="edit_img" id="localImg" value="上传本地头像"/>
+      <input type="button" class="edit_img" id="extImg" value="粘贴网络头像地址"/>
+      <input type="button" class="edit_img" id="confirmImg" value="确认"/>
+    </div>
+  </div>
+</script>

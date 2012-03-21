@@ -8,7 +8,16 @@ App.util = (function(){
   util.url = function(uid,imageid){
     var pattern = /^[a-z0-9]{32}/;
     if(imageid&& pattern.test(imageid))
-      return P + "/user/" + uid+ "/image/" + imageid ;
+      return P + "/user/" + uid+ "/image/" + imageid;
+    else return imageid;
+  };
+
+  util.face_url = function(uid,imageid){
+    var pattern = /^[a-z0-9]{32}/;
+    if(imageid == ""){
+      return "img/f.jpg";
+    }else if(imageid&& pattern.test(imageid))
+      return P + "/user/" + uid+ "/image/" + imageid +"/128" ;
     else return imageid;
   };
 

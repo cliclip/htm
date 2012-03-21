@@ -62,7 +62,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
       if(view.$el[0].scrollHeight > 0 &&$(window).height()+scrollTop-view.$el[0].scrollHeight>=100 ){
-      // if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
+     // if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
 	start += App.ClipApp.Url.page;
 	end += App.ClipApp.Url.page;
 	options.url = options.clips.url + "/" +start + ".." + end;
