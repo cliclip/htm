@@ -35,15 +35,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       // contentContainer.append(img);
       $(".addClip-container").append(img);
     },
-    addText: function(){
+    addText: function(evt){
       var newText = $("<p class='detail-text'>新内容</p>");
       $(".addClip-container").append(newText);
-      $("#text").focus();
     },
     localImg:function(){
       var user = this.model.get("id");
       var url =	P+"/user/" + user + "/image";
-      console.log(url);
       var imgModel = new ImgModel();
       imgModel.set("actUrl",url);
       var localImgView = new LocalImgView({
@@ -54,7 +52,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	ClipAdd.LocalImgRegion.show(localImgView);
 	$("#post_frame").load(function(){ // 加载图片
 	  var returnVal = this.contentDocument.documentElement.textContent;
-	  console.log(returnVal);
+	  console.log("returnVal:: %j", returnVal);
 	  if(returnVal != null && returnVal != ""){
 	    var returnObj = eval(returnVal);
 	    if(returnObj[0] == 0){
@@ -63,14 +61,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 		var url = P+"/user/"+ user+"/image/" +imgids[i];
 		var img = $("<img class='detail-image' src= "+url+">");
 		$(".addClip-container").append(img);
-
 	      }
 	    }
 	  }
 	});
       }else{
 	$("#imgUploadDiv").empty();
-	// ClipEdit.LocalImgRegion.close();
       }
     },
     editText:function(evt){
@@ -82,18 +78,24 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       contentText.empty();
 
       var textarea = $(document.createElement("textarea"));
-      // console.info(text);
-      textarea.val(text);
+      if(text == "新内容"){
+	textarea.val("");
+      }else{
+	textarea.val(text);
+      }
       textarea.width(w);
       textarea.height(h);
       contentText.append(textarea);
       textarea.focus();
 
       textarea.blur(function(evt){
-	// console.info(text);
 	var text = textarea.val().replace(/(^\s*)|(\s*$)/g,"");
 	textarea.remove();
-	contentText.text(text);
+	if(!text){
+	  contentText.text("新内容");
+	}else{
+	  contentText.text(text);
+	}
       }).click(function(evt){
 	evt.stopPropagation();
 	evt.preventDefault();
@@ -110,7 +112,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	}
 	if(_text){ // && text.replace(/(^\s*)|(\s*$)/g,"") != ""){
 	  _data.content.push({text:_text});//.replace(/(^\s*)|(\s*$)/g,"") );
-	}else if(src){ //如果有图片
+	}else if(src){ //如果有图片,取得id赋值给content.image
 	  var prefix = P + "/user/"+user+"/image/";
 	  if(src.indexOf(prefix) != -1){
 	    id = src.split(prefix);
@@ -119,7 +121,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  _data.content.push({image:src});
 	}
       });
-      console.log(_data);
       this.model.save(_data,{
 	url: P+"/clip",
 	type: 'POST',

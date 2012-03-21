@@ -31,9 +31,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipPreviewList = App.Collection.extend({
     model : ClipPreviewModel,
+    // 如果拿到多用户的clip，id会重复
+    // [目前不会出现同时请求多个用户的clip这种情况]
     parse : function(resp){
-      // 如果拿到多用户的clip，id会重复
-      for( var i=0; i<resp.length; i++){
+      for( var i=0; resp && i<resp.length; i++){
 	resp[i].id = resp[i].user+":"+resp[i].id;
       }
       return resp;
@@ -96,51 +97,44 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   ClipList.showSiteClips = function(tag){
     var url =  App.ClipApp.Url.base+"/user/1/clip";
-    if(tag){
-      url += "/tag/"+tag;
-    }
+    if(tag) url += "/tag/"+tag;
     getClips({url: url, type: 'GET'});
-  };
-
-  ClipList.showSiteQuery = function(word, tag){
-    // var url = App.ClipApp.Url.base+"/user/1";
-    getUserQuery(1,word,tag,function(clips){
-      App.vent.trigger("app.clipapp.cliplist:show", clips);
-    });
   };
 
   ClipList.showUserClips = function(uid, tag){
     var	url = App.ClipApp.Url.base + "/user/"+uid+"/clip";
-    if(tag){
-      url += "/tag/"+tag;
-    }
+    if(tag) url += "/tag/"+tag;
     getClips({url:url, type:"GET"});
   };
 
+  ClipList.showSiteQuery = function(word, tag){
+    getUserQuery(1,word,tag);
+  };
+
   ClipList.showUserQuery = function(uid, word, tag){
-    getUserQuery(uid, word, tag, function(clips){
-      App.vent.trigger("app.clipapp.cliplist:show", clips);
-    });
+    getUserQuery(uid, word, tag);
   };
 
   function getUserQuery(uid, word, tag){
-    var _url = "/user/" + uid + "/query";
-    url = App.ClipApp.Url.base + _url;
+    var url = "/user/" + uid + "/query";
+    url = App.ClipApp.Url.base + url;
     var data = { text:word , user:uid};
-    if(tag){data.tag = tag; }
+    if(tag) data.tag = tag;
     getClips({url:url,type:"POST",data:data});
   }
 
   ClipList.showUserInterest = function(uid, tag){
-    getUserInterest(uid, tag, function(clips){
-      App.vent.trigger("app.clipapp.cliplist:show", clips);
-    });
+    var url = "/user/" + uid + "/interest";
+    if(tag) url += "/tag/" + tag;
+    url = App.ClipApp.Url.base + url;
+    getClips({url: url, type: "GET"});
   };
 
   ClipList.showUserRecommend = function(uid, tag){
-    getUserRecommend(uid, tag, function(clips){
-      App.vent.trigger("app.clipapp.cliplist:show", clips);
-    });
+    var url = "/user/"+uid+"/recomm";
+    if(tag) url += "/tag/"+tag;
+    url = App.ClipApp.Url.base + url;
+    getClips({url: url, type:"GET"});
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
@@ -149,28 +143,5 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 
-/*
-  getClips = function(data){
-    collection = new ClipPreviewList();
-    //collection.url = "/test/recommend.json";
-    //collection.url = "/test/clip.json";
-    start = 0;
-    end = App.ClipApp.Url.page-1;
-    collection.url = url + start+".." + end;
-    if(data){
-      type = "POST";
-      collection.fetch({
-	data:JSON.stringify(data),
-	type:"POST",
-	contentType:"application/json; charset=utf-8"
-      });
-    }else{
-      collection.fetch();
-    }
-    collection.onReset(function(previewlist){
-      App.vent.trigger("app.clipapp.cliplist:show",previewlist);
-    });
-  };
- */
   return ClipList;
 })(App, Backbone, jQuery);
