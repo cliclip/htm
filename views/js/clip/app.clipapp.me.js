@@ -14,18 +14,20 @@ App.ClipApp.Me = (function(App, Backbone, $){
     events:{
       "click #login_button": "loginAction",
       "click #register_button": "registerAction",
-      "click #logout": "logoutAction"
+      "click #logout": "logoutAction",
+      "click #mysetup": "mysetupAction"
     },
     loginAction: function(){
       App.vent.trigger("app.clipapp:login");
     },
     registerAction: function(){
       App.vent.trigger("app.clipapp.me:register");
-
     },
     logoutAction: function(){
-
       App.vent.trigger("app.clipapp:logout");
+    },
+    mysetupAction: function(){
+      App.vent.trigger("app.clipapp.useredit:show");
     }
   });
 
