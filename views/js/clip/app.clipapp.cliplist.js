@@ -72,8 +72,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	if(flag){
 	  options.clips.fetch(options);
 	  precliplength=options.clips.length;
-	}else{
-	  console.info("没有更多可显示");
 	}
       }
     });

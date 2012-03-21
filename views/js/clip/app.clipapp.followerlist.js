@@ -7,6 +7,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       tag:""
     }
   });
+  var TopModel=App.Model.extend({uid:2});
   var FollowerList=App.Collection.extend({
     model:FollowerModel
   });
@@ -14,16 +15,21 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     tagName:"div",
     template:"#follower-view-template"
   });
+  var TopView=App.ItemView.extend({
+    template:"follower-user-view-template"
+  });
   var FollowerListView=App.CollectionView.extend({
     tagName:"div",
     className:"follower-item",
-    itemView:FollowerView
+    itemView:FollowerView,
+    modelView:TopView
   });
 
   FollowerList.showUserFollower=function(uid){
     collection=new FollowerList();
-    collection.url=App.ClipApp.Url.base+"/user/"+uid+"/follow/"+start+".."+end;
-    //collection.url="/test/follower.json";
+    top=new TopModel();
+   // collection.url=App.ClipApp.Url.base+"/user/"+uid+"/follow/"+start+".."+end;
+    collection.url="/test/follower.json";
     collection.fetch();
     collection.onReset(function(followerlist){
       var followerlistView=new FollowerListView({

@@ -3,10 +3,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var tag_list = [];
   var P = App.ClipApp.Url.base;
   var ReclipModel = App.Model.extend({
-    url: "/_/reclip",
-    defaults: {
-      tag:"",name:""
-    }
+    url: "/_/reclip"
   });
 
   var ReclipView = App.ItemView.extend({
