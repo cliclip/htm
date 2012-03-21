@@ -1,12 +1,13 @@
 <script type="text/template" id="following-view-template">
    <div style="margin-left:50px;">
      <br><br>
-     <span><img width="30" height="30" src=<%=img%>></span>
-     <span><a href="#user/<%=id%>"><%=name%></a>:</span>
+     <span><a href="#user/<%=id%>"><img width="30" height="30" src="<%=face%>"></span>
+     <span><%=name%></a>:</span>
      <%
 	for(var i=0; i<tag.length; i++){
      %>    
 	<a href="#user/<%=id%>/tag/<%=tag[i]%>"><span><%=tag[i]%></span></a>
 	<%}%>
+	<a href=""><span style="float:right"> >追ta </span></a>
    </div>
 </script>

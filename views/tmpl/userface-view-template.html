@@ -1,12 +1,13 @@
 <script type='text/template' id='userface-view-template'>
   <div id="userface">
-    <a href="#my"><img src="<%=imgUrl%>" width="200" hight="300">
+    <a href="#user/<%=id%>">
     <div class="username">
+      <img id="face-image" src="<%=App.util.face_url(id,face)%>"/>
       <%=name %>
     </div></a>
     <div>
-      <a href="#user/<%=id%>/following">我追谁 <%=following%></a><br>
-      <a href="#user/<%=id%>/follower">谁追我 <%=follower%></a>
+      <a href="#user/<%=id%>/following">转摘(<%=following%>)</a>
+      <a href="#user/<%=id%>/follower">粉丝(<%=follower%>)</a>
     </div>
   </div>
 </script>

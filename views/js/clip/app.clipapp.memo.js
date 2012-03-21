@@ -19,14 +19,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var color = $("#"+id).css("backgroundColor");
       if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
-	if($("#organize_text").val() == "" || $("#organize_text").val() == "备注一下吧~"){
-	  $("#organize_text").val($("#"+id).val());
-	}else{
-	  $("#organize_text").val(_.union($("#organize_text").val().split(","),$("#"+id).val()));
-	}
       }else if(color == "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","");
-	$("#organize_text").val(_.without($("#organize_text").val().split(","),$("#"+id).val()));
       }
     },
 

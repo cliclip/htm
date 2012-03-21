@@ -4,7 +4,8 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   var FollowerModel=App.Model.extend({
   defaults:{
       user:[],
-      tag:""
+      tag:"",
+      face:"../img/a.jpg"
     }
   });
   var TopModel=App.Model.extend({uid:2});
@@ -32,6 +33,9 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     collection.url="/test/follower.json";
     collection.fetch();
     collection.onReset(function(followerlist){
+      followerlist.each(function(follower){
+	follower.set({id:uid});
+      });
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });

@@ -87,7 +87,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
-    console.info(options);
+    // console.info(options);
     options.clips.fetch(options);
     options.clips.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
@@ -103,6 +103,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showSiteQuery = function(word, tag){
+    // var url = App.ClipApp.Url.base+"/user/1";
     getUserQuery(1,word,tag,function(clips){
       App.vent.trigger("app.clipapp.cliplist:show", clips);
     });
@@ -125,8 +126,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   function getUserQuery(uid, word, tag){
     var _url = "/user/" + uid + "/query";
     url = App.ClipApp.Url.base + _url;
-    console.info(url);
-    data = { text:word };
+    var data = { text:word , user:uid};
     if(tag){data.tag = tag; }
     getClips({url:url,type:"POST",data:data});
   }
@@ -147,16 +147,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var clipListView = new ClipListView({collection: clips});
     App.listRegion.show(clipListView);
     App.vent.trigger("clip:preview:scroll", clipListView, options);
-  });
-
-  App.vent.bind("app.clipapp.cliplist:query",function(word){
-    if(document.cookie){
-      ClipList.showUserQuery(1, word, null);
-      App.vent.trigger("app.clipapp.routing:myquery:show",word);
-    }else{
-      ClipList.showSiteQuery(word, null);
-      App.vent.trigger("app.clipapp.routing:query:show",word);
-    }
   });
 
 /*

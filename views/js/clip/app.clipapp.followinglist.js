@@ -4,7 +4,8 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   var FollowingModel=App.Model.extend({
   defaults:{
       user:"",
-      tag:[]
+      tag:[],
+      face:"../img/a.jpg"
     }
   });
   var FollowingList=App.Collection.extend({
