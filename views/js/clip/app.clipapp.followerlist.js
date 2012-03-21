@@ -31,7 +31,6 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });
-			 console.info(followerlistView);
       App.listRegion.show(followerlistView);
     });
   };
