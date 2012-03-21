@@ -24,7 +24,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     user_id = uid;
     var user=new UserModel();
     user.fetch({url:P+"/user/"+ uid + "/info"});
-    console.info(user);
+    //console.info(user);
     user.onChange(function(user){
       callback(user);
     });

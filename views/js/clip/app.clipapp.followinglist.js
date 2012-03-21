@@ -2,11 +2,9 @@
 App.ClipApp.FollowingList=(function(App, Backbone, $){
   var start=0,end=3;
   var FollowingModel=App.Model.extend({
-  defaults:{
-      user:"",
-      tag:[],
-      face:"../img/a.jpg"
-    }
+      defaults:{
+	user:[]
+      }
   });
   var FollowingList=App.Collection.extend({
     model:FollowingModel
@@ -30,6 +28,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
+	console.info(followinglistView);
       App.listRegion.show(followinglistView);
     });
   };
