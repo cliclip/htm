@@ -81,7 +81,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
     App.popRegion.show(clipmemoView);
     if(pub == "false"){
-      document.getElementById("memo_private").checked=true;
+      $("#memo_private").attr("checked","true");
     }
     $('#obj_tag').tagsInput({
       //width: 'auto',

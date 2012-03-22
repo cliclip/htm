@@ -28,7 +28,6 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
-	console.info(followinglistView);
       App.listRegion.show(followinglistView);
     });
   };

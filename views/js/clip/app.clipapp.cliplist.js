@@ -23,8 +23,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       source:{
 	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
       },
-      reprint_count:"",//此clip被转摘的次数
-      reply_count:"",//此clip被回复的次数
+      reprint_count:0,//此clip被转摘的次数
+      reply_count:0,//此clip被回复的次数
       author:""//此clip的作者，列表推荐和列表follow动态时有此属性
     }
   });
@@ -45,10 +45,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     tagName: "div",
     template: "#clippreview-view-template",
     events: {
-      "click #detail" : "show_detail"
+      "click #detail" : "show_detail",
+      "click #comment": "commentAction",
+      "click #reclip" : "reclipAction"
     },
     show_detail: function(){
       App.vent.trigger("app.clipapp:clipdetail",this.model.id);
+    },
+    commentAction: function(){
+      App.vent.trigger("app.clipapp:comment",this.model.id);
+    },
+    reclipAction: function(){
+      App.vent.trigger("app.clipapp:reclip",this.model.id);
     }
   });
 
@@ -91,6 +99,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     // console.info(options);
     options.clips.fetch(options);
     options.clips.onReset(function(previewlist){
+			    console.info(previewlist);
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };

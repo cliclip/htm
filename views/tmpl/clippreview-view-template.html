@@ -39,14 +39,10 @@
 	<% if(note.text){%>
 	<p class="note-text">备注：<%= note.text %></p>
 	<%}%>
-      </div>
+      </div><br>
       <div>
-	<% if(reply_count){%>
-	<span class="info-text">回复(<%=reply_count%>)</span>
-	<%}%>
-	<% if(reprint_count){%>
-	<span class="info-text">转摘(<%=reprint_count%>)</span>
-	<%}%>
+	<span class="info-text" id="comment" style="float:right">回复(<%=reply_count%>)</span>
+	<span class="info-text" id="reclip" style="float:right">转摘(<%=reprint_count%>)</span>
       </div>
       <div class="user-info">
 	<% if(author){%>
