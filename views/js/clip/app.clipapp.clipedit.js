@@ -42,6 +42,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       console.log(url);
       var imgModel = new ImgModel();
       imgModel.set("actUrl",url);
+      console.info(imgModel);
       var localImgView = new LocalImgView({
 	model: imgModel
       });
@@ -50,7 +51,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	ClipEdit.LocalImgRegion.show(localImgView);
 	$("#post_frame").load(function(){ // 加载图片
 	  var returnVal = this.contentDocument.documentElement.textContent;
-				console.log(returnVal);
 	  if(returnVal != null && returnVal != ""){
 	    var returnObj = eval(returnVal);
 	    if(returnObj[0] == 0){
