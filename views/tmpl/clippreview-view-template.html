@@ -29,11 +29,11 @@
 	<% if(content.image) {%>
 	<div class="preview-image left">
 	  <img src="<%= App.util.url(user,content.image) %>">
-	</div>
 	<% } %>
 	<% if(content.text){ %>
 	<p class="preview-text"><%= content.text %></p>
 	<%}%>
+	</div>
       </div>
       <div class="preview-note notesWrapA">
 	<% if(note.text){%>

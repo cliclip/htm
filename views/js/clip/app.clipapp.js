@@ -123,7 +123,7 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.ClipMemo.show(clipid, tags, note);
+      ClipApp.ClipMemo.show(clipid, tags, note, pub);
     }
   });
 
@@ -136,8 +136,9 @@ App.ClipApp = (function(App, Backbone, $){
     var uid = getMyUid(); // 当前登录用户
     if(!uid){
       ClipApp.Login.show();
+    }else{
+      ClipApp.ClipAdd.show(uid);
     }
-    ClipApp.ClipAdd.show(uid);
   });
 
   App.vent.bind("app.clipapp:mycliplist", function(){
@@ -146,7 +147,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:clipdelete", function(clipid){
     var uid = getMyUid();
-    ClipApp.ClipDelete.show(clipid, uid);
+    ClipApp.ClipDelete.show(clipid);
   });
 
   App.vent.bind("app.clipapp:query", function(word, tag){

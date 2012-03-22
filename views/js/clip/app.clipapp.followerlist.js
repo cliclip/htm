@@ -1,6 +1,6 @@
 //app.clipapp.followerlist.js
 App.ClipApp.FollowerList=(function(App, Backbone, $){
-  var start=0,end=3;
+  var start=0,end=10;
   var FollowerModel=App.Model.extend({
   defaults:{
       user:{},
