@@ -105,7 +105,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showSiteClips = function(tag){
-    var url =  App.ClipApp.Url.base+"/user/1/clip";
+    var url =  App.ClipApp.Url.base+"/user/2/clip";
     if(tag) url += "/tag/"+tag;
     getClips({url: url, type: 'GET'});
   };
@@ -117,7 +117,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showSiteQuery = function(word, tag){
-    getUserQuery(1,word,tag);
+    getUserQuery(2,word,tag);
   };
 
   ClipList.showUserQuery = function(uid, word, tag){

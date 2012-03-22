@@ -46,8 +46,7 @@
       </div>
       <div class="user-info">
 	<% if(author){%>
-	<a href="#/authorhomepage/<%=author.uid%>" class="author",id="author_<%=user%>_<%=id%>"><img src="<%=author.image%>" width="50" height="50"/></a>	      &nbsp;&nbsp;&nbsp;&nbsp;
-	<a class="author", id="author_<%=user%>_<%=id%>" href="#/authorhomepage/<%=author.uid%>"><%=author.name%></a>
+	<a href="#/authorhomepage/<%=author.id%>" class="author",id="author_<%=user%>_<%=id%>"><img src="<%=App.util.face_url(author.id,author.face)%>" width="50" height="50"/></a>&nbsp;<a class="author", id="author_<%=user%>_<%=id%>" href="#/authorhomepage/<%=author.id%>"><%=author.name%></a>
 	<%}%>
       </div>
     </div>
