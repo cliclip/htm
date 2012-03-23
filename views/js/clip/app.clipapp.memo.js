@@ -1,7 +1,6 @@
 //app.clipapp.memo.js
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
   var ClipMemo={};
-
   var ClipMemoModel=App.Model.extend({});
   var ClipMemoView=App.ItemView.extend({
     tagName:"div",
@@ -39,6 +38,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
 
     clipmemoAction:function(e){
+      e.preventDefault();
       var _data = {};
       var main_tag = [];
       for(var i=1;i<6;i++){
@@ -48,23 +48,19 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       };
       var obj_tag = $("#obj_tag").val().split(",");
       var tag_list = _.union(main_tag,obj_tag);
-      //console.log(tag_list);
+      tag_list = _.compact(tag_list); // 去除掉数组中的空值
       if($("#memo_private").attr("checked")){
 	_data={note:[{text: $("#organize_text").val()}],tag:tag_list,"public":"false"};
       }else{
 	_data={note:[{text: $("#organize_text").val()}],tag:tag_list,"public":"true"};
       }
-      e.preventDefault();
-      this.model.save(_data,{
-	url:P+"/clip/"+this.options.clipid,
-	type:"PUT",
-	success:function(model,res){
-	  App.vent.trigger("app.clipapp.memo:success");
-	},
-	error:function(model,res){
-	  App.vent.trigger("app.clipapp.memo:error",model,res);
-	}
-      });
+      // 为了保证对称性，将this.model传给外部事件
+      if(this.model.get("model") == "update"){
+	App.vent.trigger("app.clipapp.memo:rememo", this, _data);
+      }else if(this.model.get("model") == "add"){
+	// 触发新建clip中的注的事件
+	App.vent.trigger("app.clipapp.clipadd:memo", _data);
+      }
     },
     cancleAction:function(e){
       e.preventDefault();
@@ -74,14 +70,26 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
 
   ClipMemo.show = function(cid,tags,note,pub){
-    var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "酷" ;});
-    var tag_obj = _.without(tags,tag_main);
-    var clipmemoModel = new ClipMemoModel();
-    clipmemoModel.set({main_tag:tag_main,obj_tag:tag_obj,note:note});
-    var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
-    App.popRegion.show(clipmemoView);
-    if(pub == "false"){
-      $("#memo_private").attr("checked","true");
+    var text = "";
+    var ns = _(note).select(function(e){return e.text; })
+      .map(function(e){ return e.text; });
+      _(ns).each(function(n){ text += n+" "; });
+    // text.slice(0, text.lenth);
+    if(cid){
+      var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "酷" ;});
+      var tag_obj = _.without(tags,tag_main);
+      var clipmemoModel = new ClipMemoModel();
+      clipmemoModel.set({main_tag:tag_main,obj_tag:tag_obj,note:text,model:"update"});
+      var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
+      App.popRegion.show(clipmemoView);
+      if(pub == "false"){
+	document.getElementById("memo_private").checked=true;
+      }
+    }else{
+      var clipmemoModel = new ClipMemoModel();
+      clipmemoModel.set({main_tag:[],obj_tag:[],note:[],model:"add"});
+      var clipmemoView = new ClipMemoView({model: clipmemoModel});
+      App.popRegion.show(clipmemoView);
     }
     $('#obj_tag').tagsInput({
       //width: 'auto',
@@ -92,15 +100,36 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     App.popRegion.close();
   };
 
+  // 触发更新clip中的注的事件
+  App.vent.bind("app.clipapp.memo:rememo", function(view, data){
+    view.model.save(data,{
+      url:P+"/clip/"+view.options.clipid,
+      type:"PUT",
+      success:function(model,res){
+	App.vent.trigger("app.clipapp.memo:success");
+      },
+      error:function(model,res){
+	App.vent.trigger("app.clipapp.memo:error",model,res);
+      }
+    });
+  });
+
+  App.vent.bind("app.clipapp.clipadd:memo", function(){
+    App.vent.trigger("app.clipapp.memo:success");
+  });
+
   App.vent.bind("app.clipapp.memo:cancel",function(){
     ClipMemo.close();
   });
+
   App.vent.bind("app.clipapp.memo:success",function(){
     ClipMemo.close();
   });
+
   App.vent.bind("app.clipapp.memo:error",function(model,error){
     console.info(error);
   });
+
     //TEST
 // App.bind("initialize:after", function(){ ClipMemo.show(); });
   return ClipMemo;

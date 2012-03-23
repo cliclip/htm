@@ -7,9 +7,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var precliplength=0,flag=true;;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
-      recommend:"",//列表推荐的clip时有此属性
-      id:"",
-      user:"",
+      recommened:{},//列表推荐的clip时有此属性
       content:{
 	text:"",//text:String
 	image:""//image:imgid || url
@@ -18,24 +16,47 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	text:"",//{text:string}
 	sound:""//{sound:sndid}
       },
+      tag:[],
+      parent:"",
       device:"",
       city:"",
       source:{
 	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
       },
+      id:"",
+      user:"",
       reprint_count:0,//此clip被转摘的次数
       reply_count:0,//此clip被回复的次数
-      author:""//此clip的作者，列表推荐和列表follow动态时有此属性
+      author:{}//此clip的作者，列表推荐和列表follow动态时有此属性
     }
   });
 
+  // 对my interest 和 my recommened的数据进行转换
+  // [同时避免不同用户之间的clipid相同的冲突]
+  // 不同用户转载给我相同的数据
   var ClipPreviewList = App.Collection.extend({
     model : ClipPreviewModel,
-    // 如果拿到多用户的clip，id会重复
-    // [目前不会出现同时请求多个用户的clip这种情况]
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
-	resp[i].id = resp[i].user+":"+resp[i].id;
+	// 使得resp中的每一项内容都是对象
+	if(!resp[i].clip){
+	  var clip = resp[i];
+	  if(clip.parent){
+	    clip.imguid = clip.parent.split(":")[0];
+	  }else{
+	    clip.imguid = clip.user;
+	  }
+	  resp[i] = {clip: clip};
+	  resp[i].id = clip.user+":"+clip.id;
+	}else{
+	  resp[i].clip.imguid = resp[i].clip.user;
+	  resp[i].id = resp[i].clip.user+":"+resp[i].clip.id;
+	}
+	if(resp[i].clip.user != App.ClipApp.Me.me.get("id")){
+	  resp[i].manage = ["收","转","评"];
+	}else{
+	  resp[i].manage = ["注","改","删"];
+	}
       }
       return resp;
     }
@@ -47,7 +68,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     events: {
       "click #detail" : "show_detail",
       "click #comment": "commentAction",
-      "click #reclip" : "reclipAction"
+      "click #reclip" : "reclipAction",
+      "click .operate" : "operate",
+      "mouseover .preview-info": "mouseover", // mouseover子类也响应
+      "mouseout .preview-info": "mouseout" // mouseout 只自己响应
     },
     show_detail: function(){
       App.vent.trigger("app.clipapp:clipdetail",this.model.id);
@@ -57,12 +81,67 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     },
     reclipAction: function(){
       App.vent.trigger("app.clipapp:reclip",this.model.id);
+    },
+    // mouseover与mouseout的某些区域还是不能正常显示
+    mouseover: function(e){
+      e.preventDefault();
+      if(checkHover(e,e.target)){
+	$(e.currentTarget).children("#opt").css("display","block");
+      }
+    },
+    mouseout: function(e){
+      e.preventDefault();
+      if(checkHover(e,e.target)){
+	$(e.currentTarget).children("#opt").css("display","none");
+      }
+    },
+    operate: function(e){
+      e.preventDefault();
+      var opt = $(e.currentTarget).val();
+      var clip = this.model.get("clip");
+      var cid = this.model.id;
+      var pub = clip["public"];
+      var tags = clip.tag;
+      var note = [clip.note];
+      switch(opt){
+	case '收':
+	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	case '转':
+	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	case '评':
+	  App.vent.trigger("app.clipapp:comment", cid);break;
+	case '注':
+	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	case '改':
+	  App.vent.trigger("app.clipapp:clipedit", cid);break;
+	case '删':
+	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+      }
     }
   });
 
+  var contains = function(parentNode,childNode){
+    if(parentNode.contains){
+      return parentNode != childNode && parentNode.contains(childNode);
+    }else{
+      return  !!(parentNode.compareDocumentPosition(childNode) & 16);
+    }
+  };
+
+  var checkHover = function(e,target){
+    if(getEvent(e).type=="mouseover")
+      return !contains(target,getEvent(e).relatedTarget||getEvent(e).fromElement) && !((getEvent(e).relatedTarget||getEvent(e).fromElement)===target);
+    else
+      return !contains(target,getEvent(e).relatedTarget||getEvent(e).toElement) && !((getEvent(e).relatedTarget||getEvent(e).toElement)===target);
+  };
+
+  var getEvent = function(e){
+    return e||window.event;
+  };
+
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
-    className: "preview-item",
+    className: "preview-view",
     itemView: ClipPreviewView
   });
 
