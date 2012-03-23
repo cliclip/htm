@@ -8,8 +8,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommened:{},//列表推荐的clip时有此属性
-      id:"",
-      user:"",
       content:{
 	text:"",//text:String
 	image:""//image:imgid || url
@@ -18,12 +16,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	text:"",//{text:string}
 	sound:""//{sound:sndid}
       },
+      tag:[],
       parent:"",
       device:"",
       city:"",
       source:{
 	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
       },
+      id:"",
+      user:"",
       reprint_count:0,//此clip被转摘的次数
       reply_count:0,//此clip被回复的次数
       author:{}//此clip的作者，列表推荐和列表follow动态时有此属性
@@ -97,10 +98,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).val();
+      var clip = this.model.get("clip");
       var cid = this.model.id;
-      var pub = this.model.get("public");
-      var tags = this.model.get("tag");
-      var note = this.model.get("note");
+      var pub = clip["public"];
+      var tags = clip.tag;
+      var note = [clip.note];
       switch(opt){
 	case '收':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;

@@ -75,7 +75,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       .map(function(e){ return e.text; });
       _(ns).each(function(n){ text += n+" "; });
     // text.slice(0, text.lenth);
-
     if(cid){
       var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "酷" ;});
       var tag_obj = _.without(tags,tag_main);

@@ -3,13 +3,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var _data = {};
 
-  var ImgModel = App.Model.extend({});
-  var LocalImgView = App.ItemView.extend({
-    tagName: "form",
-    className: "localImg-view",
-    template: "#localImg-view-template"
-  });
-
   var ClipModel = App.Model.extend({
     url: function(){
       return P+"/clip";
@@ -22,7 +15,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     template: "#addClip-view-template",
     events: {
       "click #exImg":"extImg",
-      "click #localImg":"localImg",
+      "change #formUpload": "image_change",
       "click #save":"save",
       "click #abandon":"abandon",
       "click #insText": "addText",
@@ -40,39 +33,27 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       // contentContainer.append(img);
       $(".addClip-container").append(img);
     },
+    image_change:function(e){
+      var uid = this.model.get("id");
+      $("#img_form").submit();
+      $("#post_frame").load(function(){ // 加载图片
+	var returnVal = this.contentDocument.documentElement.textContent;
+	if(returnVal != null && returnVal != ""){
+	  var returnObj = eval(returnVal);
+	  if(returnObj[0] == 0){
+	    var imgids = returnObj[1];
+	    for(var i=0;i<imgids.length;i++){
+	      var url = P+"/user/"+ uid+"/image/" +imgids[i];
+	      var img = $("<img class='detail-image' src= "+url+">");
+	      $(".addClip-container").append(img);
+	    }
+	  }
+	}
+      });
+    },
     addText: function(evt){
       var newText = $("<p class='detail-text'>新内容</p>");
       $(".addClip-container").append(newText);
-    },
-    localImg:function(){
-      var user = this.model.get("id");
-      var url =	P+"/user/" + user + "/image";
-      var imgModel = new ImgModel();
-      imgModel.set("actUrl",url);
-      var localImgView = new LocalImgView({
-	model: imgModel
-      });
-      ClipAdd.LocalImgRegion = new App.RegionManager({el: "#imgUploadDiv"});
-      if($("#imgUploadDiv").html() == ""){
-	ClipAdd.LocalImgRegion.show(localImgView);
-	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  console.log("returnVal:: %j", returnVal);
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var imgids = returnObj[1];
-	      for(var i=0;i<imgids.length;i++){
-		var url = P+"/user/"+ user+"/image/" +imgids[i];
-		var img = $("<img class='detail-image' src= "+url+">");
-		$(".addClip-container").append(img);
-	      }
-	    }
-	  }
-	});
-      }else{
-	$("#imgUploadDiv").empty();
-      }
     },
     editText:function(evt){
       var contentText = $(evt.target);
@@ -156,7 +137,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   });
 
   ClipAdd.show = function(uid){
-    var clipModel = new ClipModel({id: uid});
+    var clipModel = new ClipModel({id: uid, actUrl:P+"/user/"+ uid+"/image"});
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
   };

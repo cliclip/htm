@@ -34,7 +34,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
     if(uid){
       getUser(uid, function(user){
 	//console.info(user);
-	App.vent.trigger("app.clipapp.face:show", user);
+	var faceView = new FaceView({model: user});
+	App.faceRegion.show(faceView);
       });
     }else{
       App.faceRegion.close();
@@ -45,9 +46,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
     return user_id;
   };
 
-  App.vent.bind("app.clipapp.face:show", function(user){
-    var faceView = new FaceView({model: user});
-    App.faceRegion.show(faceView);
+  App.vent.bind("app.clipapp.face:show", function(uid){
+    Face.showUser(uid);
   });
 
   return Face;
