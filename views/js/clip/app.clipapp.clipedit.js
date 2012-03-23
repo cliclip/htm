@@ -39,7 +39,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     localImg:function(){
       var user = this.model.get("user");
       var url =	P+"/user/" + user + "/image";
-      console.log(url);
       var imgModel = new ImgModel();
       imgModel.set("actUrl",url);
       var localImgView = new LocalImgView({
@@ -50,7 +49,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	ClipEdit.LocalImgRegion.show(localImgView);
 	$("#post_frame").load(function(){ // 加载图片
 	  var returnVal = this.contentDocument.documentElement.textContent;
-				console.log(returnVal);
+	  // console.log(returnVal);
 	  if(returnVal != null && returnVal != ""){
 	    var returnObj = eval(returnVal);
 	    if(returnObj[0] == 0){
@@ -76,7 +75,10 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     remarkClip:function(){
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
-      App.vent.trigger("app.clipapp:clipmemo", cid);
+      var tag = this.model.get("tag");
+      var note = this.model.get("note");
+      var pub = this.model.get("public");
+      App.vent.trigger("app.clipapp:clipmemo", cid, tag, note, pub);
       // App.OrganizeApp.open(cid);
     },
     editText:function(evt){
@@ -106,8 +108,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       });
     },
     saveUpdate: function(){
-      var _data = new Object();
-      _data.content = [];
+      var _data = {content :[]};
       $(".editContent-container").children().each(function(){
 	var _text = $(this).text() ? $(this).text().replace(/(^\s*)|(\s*$)/g,"") : "";
 	var src = this.src;

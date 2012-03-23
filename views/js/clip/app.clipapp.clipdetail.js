@@ -23,10 +23,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = user+":"+this.model.id;
       var pub = this.model.get("public");
       var tags = this.model.get("tag");
-      var text = "";
-      var ns = _(this.model.get("note")).select(function(e){return e.text; })
-	   .map(function(e){ return e.text; });
-	   _(ns).each(function(n){ text +=n+" "; });
+      var note = this.model.get("note");
       switch(opt){
 	case '收':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
@@ -35,7 +32,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '评':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case '注':
-	App.vent.trigger("app.clipapp:clipmemo", cid,tags,text,pub);break;
+	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
 	case '改':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case '删':
@@ -139,6 +136,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   // uid为当前登录用户
   ClipDetail.show = function(uid, cid){
+    // 此处的cid并不等于detailModel.id
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){

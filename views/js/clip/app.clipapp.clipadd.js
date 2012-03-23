@@ -1,6 +1,7 @@
 App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
+  var _data = {};
 
   var ImgModel = App.Model.extend({});
   var LocalImgView = App.ItemView.extend({
@@ -25,7 +26,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click #save":"save",
       "click #abandon":"abandon",
       "click #insText": "addText",
-      "click .detail-text":"editText"
+      "click .detail-text":"editText",
+      "click #remark": "remark_newClip"
+    },
+    initialize: function(){
+      _data = {};
     },
     extImg:function(evt){
       var url = prompt("url","http://");
@@ -102,7 +107,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       });
     },
     save: function(){
-      var _data = {content : []};
+      _data.content = [];
       var user = this.model.get("id");
       $(".addClip-container").children().each(function(){
 	var _text = $(this).text() ? $(this).text().replace(/(^\s*)|(\s*$)/g,"") : "";
@@ -131,7 +136,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	    if(i != "content" && i!= "id")
 	      cid += i;
 	  }
-	  App.vent.trigger("app.clipapp:clipdetail", cid);
+	  App.viewRegion.close();
+	  // 如何只刷新一个region的内容
+	  location.reload();
 	},
 	error:function(response){
 	  // 出现错误，触发统一事件
@@ -142,6 +149,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     abandon: function(){
       // 直接返回详情页面
       App.vent.trigger("app.clipapp.clipadd:cancel");
+    },
+    remark_newClip: function(){
+      App.vent.trigger("app.clipapp:clipmemo");
     }
   });
 
@@ -157,6 +167,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.clipadd:error", function(){
     console.info("addClip error");
+  });
+
+  App.vent.bind("app.clipapp.clipadd:memo", function(data){
+    for(var i in data){
+      _data[i] = data[i];
+    }
   });
 
   return ClipAdd;
