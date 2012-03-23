@@ -220,25 +220,29 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }
     },
     comment : function(e){
-      e.preventDefault();
-      var id = this.model.id;
-      var pid = this.model.get("pid") ? this.model.get("pid") : 0;
-      var text = $("#comm_text").val();
-      var params = {text: text, pid: pid};
-      this.model.save({text: text,pid : pid},
-      {
-	url: P+"/clip/"+id+"/comment",
-	type: "POST",
-	success:function(comment,response){
-	  ClipDetail.showComment(id);
-	  ClipDetail.showAddComm(id);
-	},
-	error:function(comment,response){}
-      });
-      if($("#reclip").attr("checked")){
-	var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
-	// console.log("同时收");
-	App.vent.trigger("app.clipapp.reclip:submit",this.model,params1);
+      if(!App.ClipApp.getMyUid()){
+	App.vent.trigger("app.clipapp:login");
+      }else{
+	e.preventDefault();
+	var id = this.model.id;
+	var pid = this.model.get("pid") ? this.model.get("pid") : 0;
+	var text = $("#comm_text").val();
+	var params = {text: text, pid: pid};
+	this.model.save({text: text,pid : pid},
+	{
+	  url: P+"/clip/"+id+"/comment",
+	  type: "POST",
+	  success:function(comment,response){
+	    ClipDetail.showComment(id);
+	    ClipDetail.showAddComm(id);
+	  },
+	  error:function(comment,response){}
+	});
+	if($("#reclip").attr("checked")){
+	  var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
+	  // console.log("同时收");
+	  App.vent.trigger("app.clipapp.reclip:submit",this.model,params1);
+	}
       }
     },
     cancel : function(){
