@@ -1,9 +1,11 @@
 <script id="showcomment-view-template" type="text/template">
   <div class="comm_link" id="<%= id %>">user:<%= uid %> content:<%= text %>
     <br>
-    <div>
-      <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a> 
+    <div id="reply_<%=id%>" style="display:none;">
+      <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
+<% if(auth && (uid == auth || auth == clip_owner )){%>
       <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
+<% } %>
     </div>
   </div>
 </script>

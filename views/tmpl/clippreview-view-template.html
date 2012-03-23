@@ -4,8 +4,8 @@
       <div class="recommend-info recommendWrapA">
 	<% if(recommend){%>
 	<span class="recomend-text"><%=recommend.text%></span>
-	<a href="#/recommendhomepage/<%=recommend.uid%>" class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>"><img src="<%=recommend.image%>" width="50" height="50"/></a>&nbsp;&nbsp;
-	<a class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>" href="#/recommendhomepage/<%=recommend.uid%>"><%=recommend.name%></a>
+	<a href="/#recommendhomepage/<%=recommend.uid%>" class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>"><img src="<%=recommend.image%>" width="50" height="50"/></a>&nbsp;&nbsp;
+	<a class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>" href="/#recommendhomepage/<%=recommend.uid%>"><%=recommend.name%></a>
 	<%}%>
       </div>
       <div class="preview-info">
@@ -13,13 +13,13 @@
 	<% if(city){%>
 	<span class="into-text">在城市</span>
 	<span class="info-city">
-	  <a href="#/clip/city/<%=city%>/p1"><%=city%></a>
+	  <a href="/#clip/city/<%=city%>/p1"><%=city%></a>
 	</span>
 	<%}%>
 	<% if(device){%>
 	<span class="info-text">使用设备</span>
 	<span class="info-device">
-	  <a href="#/clip/device/<%=device%>/p1"><%= device%></a>
+	  <a href="/#clip/device/<%=device%>/p1"><%= device%></a>
 	</span>
 	<%}%>
         <span class="info-text">搜集</span>
@@ -46,7 +46,7 @@
       </div>
       <div class="user-info">
 	<% if(author){%>
-	<a href="#/authorhomepage/<%=author.id%>" class="author",id="author_<%=user%>_<%=id%>"><img src="<%=App.util.face_url(author.id,author.face)%>" width="50" height="50"/></a>&nbsp;<a class="author", id="author_<%=user%>_<%=id%>" href="#/authorhomepage/<%=author.id%>"><%=author.name%></a>
+	<a href="/#user/<%=author.id%>" class="author"><img src="<%=App.util.face_url(author.id,author.face)%>" width="50" height="50" />&nbsp;<span class="author"><%=author.name%></span></a>
 	<%}%>
       </div>
     </div>

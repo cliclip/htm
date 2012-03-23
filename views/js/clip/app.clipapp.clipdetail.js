@@ -71,10 +71,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     discoloration : function(e){
       e.preventDefault();
+      var id = e.currentTarget.id;
+      $("#reply_"+id).css("display","block");
       $(e.currentTarget).css("background","#f0f");
     },
     resume : function(e){
       e.preventDefault();
+      var id = e.currentTarget.id;
+      $("#reply_"+id).css("display","none");
       $(e.currentTarget).css("background","#fff");
     },
     reply_comment : function(e){
@@ -99,6 +103,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var model = (_model) ? _model.toJSON() :  this.model.toJSON();
       // 将拿到的model对象变为数组
       var res = [];
+      var clip_owner = model.id.split(":")[0];
+      var auth = App.ClipApp.getMyUid();
       for(var i in model){
 	if(i != "id" )
 	  res.push(model[i]);
@@ -110,6 +116,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  if(!e) {
 	    return html;
 	  } else {
+	    e.auth = auth;
+	    e.clip_owner = clip_owner;
 	    var str = that.renderTemplate(template, e);
 	    if (e.children && e.children.length > 0) {
 	      str += "<div class='children'>";

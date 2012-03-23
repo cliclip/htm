@@ -99,7 +99,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     // console.info(options);
     options.clips.fetch(options);
     options.clips.onReset(function(previewlist){
-			    console.info(previewlist);
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
