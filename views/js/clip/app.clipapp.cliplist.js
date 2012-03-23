@@ -51,6 +51,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].clip.imguid = resp[i].clip.user;
 	  resp[i].id = resp[i].clip.user+":"+resp[i].clip.id;
 	}
+	if(resp[i].clip.user != App.ClipApp.Me.me.get("id")){
+	  resp[i].manage = ["收","转","评"];
+	}else{
+	  resp[i].manage = ["注","改","删"];
+	}
       }
       return resp;
     }
@@ -62,7 +67,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     events: {
       "click #detail" : "show_detail",
       "click #comment": "commentAction",
-      "click #reclip" : "reclipAction"
+      "click #reclip" : "reclipAction",
+      "click .operate" : "operate",
+      "mouseover .preview-info": "mouseover", // mouseover子类也响应
+      "mouseout .preview-info": "mouseout" // mouseout 只自己响应
     },
     show_detail: function(){
       App.vent.trigger("app.clipapp:clipdetail",this.model.id);
@@ -72,12 +80,66 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     },
     reclipAction: function(){
       App.vent.trigger("app.clipapp:reclip",this.model.id);
+    },
+    // mouseover与mouseout的某些区域还是不能正常显示
+    mouseover: function(e){
+      e.preventDefault();
+      if(checkHover(e,e.target)){
+	$(e.currentTarget).children("#opt").css("display","block");
+      }
+    },
+    mouseout: function(e){
+      e.preventDefault();
+      if(checkHover(e,e.target)){
+	$(e.currentTarget).children("#opt").css("display","none");
+      }
+    },
+    operate: function(e){
+      e.preventDefault();
+      var opt = $(e.currentTarget).val();
+      var cid = this.model.id;
+      var pub = this.model.get("public");
+      var tags = this.model.get("tag");
+      var note = this.model.get("note");
+      switch(opt){
+	case '收':
+	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	case '转':
+	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	case '评':
+	  App.vent.trigger("app.clipapp:comment", cid);break;
+	case '注':
+	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	case '改':
+	  App.vent.trigger("app.clipapp:clipedit", cid);break;
+	case '删':
+	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+      }
     }
   });
 
+  var contains = function(parentNode,childNode){
+    if(parentNode.contains){
+      return parentNode != childNode && parentNode.contains(childNode);
+    }else{
+      return  !!(parentNode.compareDocumentPosition(childNode) & 16);
+    }
+  };
+
+  var checkHover = function(e,target){
+    if(getEvent(e).type=="mouseover")
+      return !contains(target,getEvent(e).relatedTarget||getEvent(e).fromElement) && !((getEvent(e).relatedTarget||getEvent(e).fromElement)===target);
+    else
+      return !contains(target,getEvent(e).relatedTarget||getEvent(e).toElement) && !((getEvent(e).relatedTarget||getEvent(e).toElement)===target);
+  };
+
+  var getEvent = function(e){
+    return e||window.event;
+  };
+
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
-    className: "preview-item",
+    className: "preview-view",
     itemView: ClipPreviewView
   });
 

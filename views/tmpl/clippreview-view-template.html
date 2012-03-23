@@ -9,6 +9,13 @@
 	<%}%>
       </div>
       <div class="preview-info">
+	
+	<div id="opt" style="display:none">
+	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[0]%>" class="operate"/>
+	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[1]%>" class="operate"/>
+	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[2]%>" class="operate"/>
+	</div>
+
 	<span class="info-text">本条信息</span>
 	<% if(clip.city){%>
 	<span class="into-text">在城市</span>
@@ -24,21 +31,21 @@
 	<%}%>
         <span class="info-text">搜集</span>
         <a title="详细" class="detailButton controlSprite" id="detail">详细</a>
-      </div>
-      <div class="content-container">
-	<% if(clip.content && clip.content.image) {%>
-	<div class="preview-image left">
-	  <img src="<%= App.util.url(clip.imguid,clip.content.image) %>">
-	<% } %>
-	<% if(clip.content && clip.content.text){ %>
-	<p class="preview-text"><%= clip.content.text %></p>
-	<%}%>
+	<div class="content-container">
+	  <% if(clip.content && clip.content.image) {%>
+	  <div class="preview-image left">
+	    <img src="<%= App.util.url(clip.imguid,clip.content.image) %>">
+	  </div>
+	  <% } %>
+	  <% if(clip.content && clip.content.text){ %>
+	  <p class="preview-text"><%= clip.content.text %></p>
+	  <%}%>
 	</div>
-      </div>
-      <div class="preview-note notesWrapA">
-	<% if(clip.note && clip.note.text){%>
-	<p class="note-text">备注：<%= clip.note.text %></p>
-	<%}%>
+	<div class="preview-note notesWrapA">
+	  <% if(clip.note && clip.note.text){%>
+	  <p class="note-text">备注：<%= clip.note.text %></p>
+	  <%}%>
+	</div>
       </div><br>
       <div>
 	<span class="info-text" id="comment" style="float:right">回复(<%=reply_count%>)</span>
