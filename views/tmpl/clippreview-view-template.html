@@ -45,7 +45,7 @@
 	<span class="info-text" id="reclip" style="float:right">转摘(<%=reprint_count%>)</span>
       </div>
       <div class="user-info">
-	<% if(author){%>
+	<% if(!App.ClipApp.getMyUid() && author){%>
 	<a href="/#user/<%=author.id%>" class="author"><img src="<%=App.util.face_url(author.id,author.face)%>" width="50" height="50" />&nbsp;<span class="author"><%=author.name%></span></a>
 	<%}%>
       </div>
