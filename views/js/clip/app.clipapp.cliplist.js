@@ -4,7 +4,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var start = 0;
   var end = App.ClipApp.Url.page-1;
-  var precliplength=0,flag=true;;
+  var precliplength=0,flag=true;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommened:{},//列表推荐的clip时有此属性
@@ -155,7 +155,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	options.url = options.clips.url + "/" +start + ".." + end;
 	options.add = true;
 	if(options.clips.length-precliplength<end-start){
-	    flag=false;
+	  flag=false;
 	}
 	if(flag){
 	  options.clips.fetch(options);
@@ -182,24 +182,35 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
+  // site == user0
   ClipList.showSiteClips = function(tag){
-    var url =  App.ClipApp.Url.base+"/user/2/clip";
-    if(tag) url += "/tag/"+tag;
-    getClips({url: url, type: 'GET'});
+    if(!tag){
+      var url =  App.ClipApp.Url.base+"/user/2/clip";
+      getClips({url: url, type: 'GET'});
+    }else{
+      var url = App.ClipApp.Url.base+"/user/2/query";
+      var data = {user: 2, tag: [tag]};
+      getClips({url: url, type: "POST", data:data});
+    }
   };
 
   ClipList.showUserClips = function(uid, tag){
-    var	url = App.ClipApp.Url.base + "/user/"+uid+"/clip";
-    if(tag) url += "/tag/"+tag;
-    getClips({url:url, type:"GET"});
+    if(!tag){
+      var url = App.ClipApp.Url.base + "/user/"+uid+"/clip";
+      getClips({url:url, type:"GET"});
+    }else{
+      var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
+      var data = {user: uid, tag: [tag]};
+      getClips({url: url, type:"POST", data: data});
+    }
   };
 
   ClipList.showSiteQuery = function(word, tag){
-    getUserQuery(2,word,tag);
+    getUserQuery(2,word,[tag]);
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
-    getUserQuery(uid, word, tag);
+    getUserQuery(uid, word, [tag]);
   };
 
   function getUserQuery(uid, word, tag){
