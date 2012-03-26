@@ -17,7 +17,7 @@ App.util = (function(){
     if(imageid == ""){
       return "img/f.jpg";
     }else if(imageid&& pattern.test(imageid))
-      return P + "/user/" + uid+ "/image/" + imageid +"/128" ;
+      return P + "/user/" + uid+ "/image/" + imageid ;
     else return imageid;
   };
 

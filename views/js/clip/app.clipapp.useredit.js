@@ -2,6 +2,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
   var ImgModel = App.Model.extend({});
+  var originalFace;
   var LocalImgView = App.ItemView.extend({
     tagName: "form",
     className: "localImg-view",
@@ -25,32 +26,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "editUser",
     template: "#editUser-view-template",
     events: {
-      //"click #localImg":"localImg",
-      "click #confirm":"confirmAction",
       "click #popup_ContactClose":"editClose"
-    },
-    localImg:function(){
-      console.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      UserEdit.LocalImgRegion = new App.RegionManager({el: "#faceUploadDiv"});
-      if($("#faceUploadDiv").html() == ""){
-	var user = this.model.get("id");
-	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  console.info(returnVal);
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var editmodel = new EditModel({id:1});
-	      UserEdit.saveFace(editmodel,{face:returnObj[1][0]});
-	    }
-	  }
-	});
-      }
-    },
-    confirmAction:function(){
-      var uid = this.model.get("id");
-      App.vent.trigger("app.clipapp.face:show",uid);
-      UserEdit.close();
     },
     editClose:function(){
       var uid = this.model.get("id");
@@ -59,20 +35,37 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.image_change = function(that){
-    // console.info("@@@@@@@@@!!!!!!!!!!!!!");
-    that.form.submit();
-  },
+  UserEdit.image_change = function(){
+    var sender = document.getElementById("formUpload");
+    if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+      alert('图片格式无效！');
+      return false;
+    }else{
+      return true;
+    }
+  };
 
   UserEdit.saveFace = function(editModel,params){
     editModel.save(params,{
       url: P+"/user/"+ editModel.id+"/face",
       type: "POST",
       success:function(model,res){
-	console.info("success!!!!!!!!!!");
+	//console.info("success!!!!!!!!!!");
       },
       error:function(model,res){
-	console.info("error!!!!!!!!!!");
+	//console.info("error!!!!!!!!!!");
+      }
+    });
+  },
+
+  UserEdit.removeFace = function(editModel,face_id){
+    editModel.destroy({
+      url: P+"/user/"+ editModel.id+"/face/" +face_id,
+      success:function(){
+	//console.info("delete success!!!!!!!!!!");
+      },
+      error:function(){
+	//console.info("delete error!!!!!!!!!!");
       }
     });
   },
@@ -81,6 +74,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var editModel = new EditModel();
     editModel.fetch({
       success:function(){
+	//console.info("originalFace:" + editModel.get("face"));
+	originalFace = editModel.get("face");
 	var user = editModel.get("id");
 	var url = P+"/user/" + user + "/image";
 	editModel.set("actUrl",url);
@@ -99,8 +94,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 		var img = $("<img class='face-image' src= "+url+" height='240' width='240'>");
 		$("#userFace").empty();
 		$("#userFace").append(img);
-		var editmodel = new EditModel({id:user});
-		UserEdit.saveFace(editmodel,{face:returnObj[1][0]});
+		var currentFace = returnObj[1][0];
+		if(currentFace){
+		  var editmodel = new EditModel({id:user});
+		  if(originalFace){
+		    UserEdit.removeFace(editmodel,originalFace);
+		  }
+		  UserEdit.saveFace(editmodel,{face:currentFace});
+		}
 	      }
 	    }
 	  });
@@ -117,6 +118,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.useredit:show",function(){
     UserEdit.show();
   });
+
   App.bind("initialize:after", function(){
     // UserEdit.show();
   });
