@@ -1,12 +1,10 @@
 //app.clipapp.followinglist.js
 App.ClipApp.FollowingList=(function(App, Backbone, $){
-  var start=0,end=3;
+  var start=0,end=10;
   var FollowingModel=App.Model.extend({
-  defaults:{
-      user:"",
-      tag:[],
-      face:"../img/a.jpg"
-    }
+      defaults:{
+	user:[]
+      }
   });
   var FollowingList=App.Collection.extend({
     model:FollowingModel

@@ -19,13 +19,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "click #name_list"     :  "getUserAction",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
-      "click #recomm_button" :  "recommendAction",
       "mouseover #name_list" :  "MouseOver",
       "mouseout #name_list"  :  "MouseOut",
       "focus #recommend_text":  "clearAction",
+      "click #recomm_button" :  "recommendAction",
       "click #cancel_button" : "cancelAction"
     },
     getUserAction:function(evt){
+      // 这里是必须要触发才会取得uid
       var uid=evt.target.id;
       var name=document.getElementById(uid).innerHTML;
       this.$("#name").val(name);

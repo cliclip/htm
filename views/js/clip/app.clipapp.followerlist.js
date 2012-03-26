@@ -1,11 +1,10 @@
 //app.clipapp.followerlist.js
 App.ClipApp.FollowerList=(function(App, Backbone, $){
-  var start=0,end=3;
+  var start=0,end=10;
   var FollowerModel=App.Model.extend({
   defaults:{
-      user:[],
-      tag:"",
-      face:"../img/a.jpg"
+      user:{},
+      tag:""
     }
   });
   var FollowerList=App.Collection.extend({
@@ -24,7 +23,6 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   FollowerList.showUserFollower=function(uid){
     collection=new FollowerList();
     collection.url=App.ClipApp.Url.base+"/user/"+uid+"/follow/"+start+".."+end;
-    //collection.url="/test/follower.json";
     collection.fetch();
     collection.onReset(function(followerlist){
       followerlist.each(function(follower){
