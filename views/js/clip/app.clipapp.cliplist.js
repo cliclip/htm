@@ -184,42 +184,35 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   // site == user0
   ClipList.showSiteClips = function(tag){
-    if(!tag){
-      var url =  App.ClipApp.Url.base+"/user/2/clip";
-      getClips({url: url, type: 'GET'});
-    }else{
-      var url = App.ClipApp.Url.base+"/user/2/query";
-      var data = {user: 2, tag: [tag]};
-      getClips({url: url, type: "POST", data:data});
-    }
+    var url = App.ClipApp.Url.base+"/user/2/query";
+    var data = {user: 2, "public": ture};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type: "POST", data:data});
   };
 
   ClipList.showUserClips = function(uid, tag){
-    if(!tag){
-      var url = App.ClipApp.Url.base + "/user/"+uid+"/clip";
-      getClips({url:url, type:"GET"});
-    }else{
-      var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
-      var data = {user: uid, tag: [tag]};
-      getClips({url: url, type:"POST", data: data});
-    }
+    var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
+    var data = {user: uid};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type:"POST", data: data});
   };
 
+  // 这两个Query对结果是没有要求的，按照关键字相关度
   ClipList.showSiteQuery = function(word, tag){
-    getUserQuery(2,word,[tag]);
+    var url = "/query";
+    url = App.ClipApp.Url.base + url;
+    var data = {text: word};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type: "POST", data: data});
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
-    getUserQuery(uid, word, [tag]);
-  };
-
-  function getUserQuery(uid, word, tag){
-    var url = "/user/" + uid + "/query";
+    var url = "/user/"+uid+"/query";
     url = App.ClipApp.Url.base + url;
-    var data = { text:word , user:uid};
-    if(tag) data.tag = tag;
-    getClips({url:url,type:"POST",data:data});
-  }
+    var data = {text: word, user: uid};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type:"POST", data:data});
+  };
 
   ClipList.showUserInterest = function(uid, tag){
     var url = "/user/" + uid + "/interest";
