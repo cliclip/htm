@@ -1,6 +1,7 @@
 //app.clipapp.followinglist.js
 App.ClipApp.FollowingList=(function(App, Backbone, $){
-  var start=0,end=10;
+  var start = 0;
+  var end = App.ClipApp.Url.page-1;
   var FollowingModel=App.Model.extend({
       defaults:{
 	user:[]
@@ -20,15 +21,17 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   });
 
   FollowingList.showUserFollowing=function(uid){
+    var options = {url:App.ClipApp.Url.base+"/user/"+uid+"/following"};
     collection=new FollowingList();
+    options.collection = collection;
     collection.url=App.ClipApp.Url.base+"/user/"+uid+"/following/"+start+".."+end;
-    //collection.url="/test/following.json";
     collection.fetch();
     collection.onReset(function(followinglist){
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
       App.listRegion.show(followinglistView);
+      App.vent.trigger("app.clipapp.followerlist:scroll",followinglistView,options);
     });
   };
   FollowingList.close=function(){
