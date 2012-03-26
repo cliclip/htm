@@ -1,6 +1,6 @@
 App.ClipApp.Bubb = (function(App, Backbone, $){
   var Bubb = {};
-
+  var P = App.ClipApp.Url.base;
   // model && view
 
   var BubbModel = App.Model.extend({
@@ -18,8 +18,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       return this;
     }
   });
-
-  var reclipModel = App.Model.extend({});
 
   // constants
 
@@ -91,12 +89,13 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     // console.log("open %s", tag);
+    // 可以是在当前路由上加上某个值
     App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
   });
 
   App.vent.bind("app.clipapp.bubb:follow", function(tag){
     var bubbModel = new BubbModel({id: _uid});
-    var url = "/_2_/user/"+_uid+"/follow/"+tag;
+    var url = P+"/user/"+_uid+"/follow/"+tag;
     bubbModel.fetch({
       type:'POST',
       url: url,
@@ -108,16 +107,16 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:unfollow", function(tag){
     // console.log("unfollow %s", tag);
     var bubbModel = new BubbModel({id: _uid});
-    var url = "/_2_/user/"+_uid+"/follow/"+tag;
+    var url = P+"/user/"+_uid+"/follow/"+tag;
     // console.info(bubbModel.id+"   "+url);
     bubbModel.destroy({
       url: url
     });
   });
 
+  // 有_uid作为全局变量，进行url地址匹配
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
-
-    // console.log("reclip %s", tag);
+    App.vent.trigger("app.clipapp:reclip", null, _uid, tag);
   });
 
   // init
@@ -136,7 +135,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // var follows = ["动漫", "科技"];
     // var tags = ["电影", "音乐", "美女", "穿越", "户外", "流行"];
     var bubbModel = new BubbModel({id: "1"});
-    var url = "/_2_/user/"+bubbModel.id+"/tag/0..19";
+    var url = P+"/user/"+bubbModel.id+"/tag/0..19";
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
@@ -158,7 +157,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
-    var url = "/_2_/user/"+uid+"/tag/0..19";
+    var url = P+"/user/"+uid+"/tag/0..19";
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
@@ -210,8 +209,12 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function mkUrl(tag){
-    var url = "tag/"+tag;
-    return (_uid ? "user/"+_uid + "/" : "") + url;
+    var url = Backbone.history.fragment;
+    var i = url.indexOf("/tag");
+    if(i > 0){
+      url = url.substr(0, i);
+    }
+    return url += "/tag/"+tag;
   }
 
   function changeTags(tags1, tags2, old_self, self){

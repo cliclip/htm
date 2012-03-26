@@ -86,12 +86,13 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show(uid);
   });
 
-  App.vent.bind("app.clipapp:reclip", function(clipid){
+  // clipid有值 ==> 对单独clip的reclip 否则是对 user's tag下的clip的reclip
+  App.vent.bind("app.clipapp:reclip", function(clipid, user, tag){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.Reclip.show(clipid);
+      ClipApp.Reclip.show(clipid, user, tag);
     }
   });
 
@@ -118,7 +119,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.show(uid, clipid);
   });
 
-  App.vent.bind("app.clipapp:clipmemo", function(clipid,tags,note,pub){
+  App.vent.bind("app.clipapp:clipmemo", function(clipid,tags,note,pub,model){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();

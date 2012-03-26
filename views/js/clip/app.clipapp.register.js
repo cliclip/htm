@@ -59,7 +59,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.register:success", function(res){
-    document.cookie = "token="+res[0];
+    document.cookie = "token="+res;
     App.popRegion.close();
     Backbone.history.navigate("my");
     location.reload();

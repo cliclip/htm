@@ -1,44 +1,51 @@
 <script type="text/template" id="clippreview-view-template">
   <div id="container_<%=user%>_<%=id%>" >
     <div class="preview-item">
-      <div class="recommend-info recommendWrapA">
-	<% if(recommend){%>
-	<span class="recomend-text"><%=recommend.text%></span>
-	<a href="/#recommendhomepage/<%=recommend.uid%>" class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>"><img src="<%=recommend.image%>" width="50" height="50"/></a>&nbsp;&nbsp;
-	<a class="recommend",id="recommend_<%=recommend.uid%>_<%=id%>" href="/#recommendhomepage/<%=recommend.uid%>"><%=recommend.name%></a>
+      <div class="recommened-info recommendWrapA">
+	<% if(recommened){%>
+	<span class="recomened-text"><%=recommened.text%></span>
+	<a href="#/recommenedhomepage/<%=recommened.uid%>" class="recommened",id="recommened_<%=recommened.uid%>_<%=id%>"><img src="<%=recommened.image%>" width="50" height="50"/></a>&nbsp;&nbsp;
+	<a class="recommened",id="recommened_<%=recommened.uid%>_<%=id%>" href="#/recommenedhomepage/<%=recommened.uid%>"><%=recommened.name%></a>
 	<%}%>
       </div>
       <div class="preview-info">
+	
+	<div id="opt" style="display:none">
+	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[0]%>" class="operate"/>
+	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[1]%>" class="operate"/>
+	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[2]%>" class="operate"/>
+	</div>
+
 	<span class="info-text">本条信息</span>
-	<% if(city){%>
+	<% if(clip.city){%>
 	<span class="into-text">在城市</span>
 	<span class="info-city">
-	  <a href="/#clip/city/<%=city%>/p1"><%=city%></a>
+	  <a href="/#clip/city/<%=city%>/p1"><%=clip.city%></a>
 	</span>
 	<%}%>
-	<% if(device){%>
+	<% if(clip.device){%>
 	<span class="info-text">使用设备</span>
 	<span class="info-device">
-	  <a href="/#clip/device/<%=device%>/p1"><%= device%></a>
+	  <a href="/#clip/device/<%=device%>/p1"><%= clip.device%></a>
 	</span>
 	<%}%>
         <span class="info-text">搜集</span>
         <a title="详细" class="detailButton controlSprite" id="detail">详细</a>
-      </div>
-      <div class="content-container">
-	<% if(content.image) {%>
-	<div class="preview-image left">
-	  <img src="<%= App.util.url(user,content.image) %>">
-	<% } %>
-	<% if(content.text){ %>
-	<p class="preview-text"><%= content.text %></p>
-	<%}%>
+	<div class="content-container">
+	  <% if(clip.content && clip.content.image) {%>
+	  <div class="preview-image left">
+	    <img src="<%= App.util.url(clip.imguid,clip.content.image) %>">
+	  </div>
+	  <% } %>
+	  <% if(clip.content && clip.content.text){ %>
+	  <p class="preview-text"><%= clip.content.text %></p>
+	  <%}%>
 	</div>
-      </div>
-      <div class="preview-note notesWrapA">
-	<% if(note.text){%>
-	<p class="note-text">备注：<%= note.text %></p>
-	<%}%>
+	<div class="preview-note notesWrapA">
+	  <% if(clip.note && clip.note.text){%>
+	  <p class="note-text">备注：<%= clip.note.text %></p>
+	  <%}%>
+	</div>
       </div><br>
       <div>
 	<span class="info-text" id="comment" style="float:right">回复(<%=reply_count%>)</span>
