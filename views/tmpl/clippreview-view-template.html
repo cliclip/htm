@@ -1,5 +1,6 @@
 <script type="text/template" id="clippreview-view-template">
-  <div id="container_<%=user%>_<%=id%>" >
+<% console.log(user);  %>
+  <div id="container_<%=clip.user%>_<%=clip.id%>" >
     <div class="preview-item">
       <div class="recommened-info recommendWrapA">
 	<% if(recommened){%>
@@ -11,9 +12,9 @@
       <div class="preview-info">
 	
 	<div id="opt" style="display:none">
-	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[0]%>" class="operate"/>
-	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[1]%>" class="operate"/>
-	  <input type="button" id="<%=user%>:<%=id%>" value="<%= manage[2]%>" class="operate"/>
+	  <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[0]%>" class="operate"/>
+	  <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[1]%>" class="operate"/>
+	  <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[2]%>" class="operate"/>
 	</div>
 
 	<span class="info-text">本条信息</span>
@@ -48,12 +49,12 @@
 	</div>
       </div><br>
       <div>
-	<span class="info-text" id="comment" style="float:right">回复(<%=reply_count%>)</span>
-	<span class="info-text" id="reclip" style="float:right">转摘(<%=reprint_count%>)</span>
+	<span class="info-text" id="comment" style="float:right">回复(<%=clip.reply_count?clip.reply_count:0%>)</span>
+	<span class="info-text" id="reclip" style="float:right">转摘(<%=clip.reprint_count?clip.reprint_count:0%>)</span>
       </div>
       <div class="user-info">
-	<% if(!App.ClipApp.getMyUid() && author){%>
-	<a href="/#user/<%=author.id%>" class="author"><img src="<%=App.util.face_url(author.id,author.face)%>" width="50" height="50" />&nbsp;<span class="author"><%=author.name%></span></a>
+	<% if(!App.ClipApp.getMyUid() && clip.author){ %>
+	<a href="/#user/<%=clip.author.id%>" class="author"><img src="<%=App.util.face_url(clip.author.id,clip.author.face)%>" width="50" height="50" />&nbsp;<span class="author"><%=clip.author.name%></span></a>
 	<%}%>
       </div>
     </div>

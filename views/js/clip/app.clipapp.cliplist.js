@@ -8,6 +8,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommened:{},//列表推荐的clip时有此属性
+
       content:{
 	text:"",//text:String
 	image:""//image:imgid || url
