@@ -50,10 +50,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       url: P+"/user/"+ editModel.id+"/face",
       type: "POST",
       success:function(model,res){
-	console.info("success!!!!!!!!!!");
+	//console.info("success!!!!!!!!!!");
       },
       error:function(model,res){
-	console.info("error!!!!!!!!!!");
+	//console.info("error!!!!!!!!!!");
       }
     });
   },
@@ -62,10 +62,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     editModel.destroy({
       url: P+"/user/"+ editModel.id+"/face/" +face_id,
       success:function(){
-	console.info("delete success!!!!!!!!!!");
+	//console.info("delete success!!!!!!!!!!");
       },
       error:function(){
-	console.info("delete error!!!!!!!!!!");
+	//console.info("delete error!!!!!!!!!!");
       }
     });
   },
@@ -74,7 +74,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var editModel = new EditModel();
     editModel.fetch({
       success:function(){
-	console.info("originalFace:" + editModel.get("face"));
+	//console.info("originalFace:" + editModel.get("face"));
 	originalFace = editModel.get("face");
 	var user = editModel.get("id");
 	var url = P+"/user/" + user + "/image";
