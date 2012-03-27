@@ -3,6 +3,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
 
   var DetailModel = App.Model.extend({
+    defaults:{
+      imguid:""
+    },
     url: function(){
       return P+"/clip/"+this.id;
     }
@@ -154,7 +157,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }else{
 	detailModel.set("manage",["收","转","评"]);
       }
-      detailModel.set("users",[]);
       showDetail(detailModel);
       ClipDetail.showComment(cid);
       ClipDetail.showAddComm(cid);
