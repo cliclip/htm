@@ -132,6 +132,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       this.getTemplate(function(template){
         var html = that.renderTemplate(template, data);
+
         that.$el.html(html);
 
         if (that.onRender){
@@ -220,7 +221,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // each of them with the specified `itemView`.
     render: function(){
       this.renderModel();
-      console.info("render");
+
       this.collection.each(this.addChildView);
       if (this.onRender){
         this.onRender();
@@ -238,6 +239,7 @@ Backbone.Marionette = (function(Backbone, _, $){
           template: this.template
         });
         modelView.render();
+
         this.$el.append(modelView.el);
       }
     },
