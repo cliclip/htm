@@ -30,8 +30,8 @@
         <a title="详细" class="detailButton controlSprite" id="detail">详细</a>
 	<div class="content-container">
 	  <% if(clip.content && clip.content.image) {%>
-	  <div class="preview-image left">
-	    <img src="<%= App.util.url(clip.content.image) %>">
+	  <div class="preview-image">
+	    <img src="<%= App.util.url(clip.imguid,clip.content.image) %>">
 	  </div>
 	  <% } %>
 	  <% if(clip.content && clip.content.text){ %>
