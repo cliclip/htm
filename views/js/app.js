@@ -92,6 +92,7 @@ App.Routing = (function(App, Backbone){
 })(App, Backbone);
 
 App.addRegions({
+  
   mineRegion: "#mine",
   faceRegion: "#face",
   bubbRegion: "#bubb",

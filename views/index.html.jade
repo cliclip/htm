@@ -26,6 +26,11 @@ html
     link(rel="stylesheet",href="tmpl/jquery-ui.css")
     link(rel="stylesheet",href="tmpl/bubb-view.css")
     
+    link(rel="stylesheet",href="../waterfall.html")
+
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")
+    script(src="./js/lib/jquery.masonry.js")
+
     //- pack :: script(src="/js/libs.js")
     script(src="/js/lib/json2.js")
     script(src="/js/lib/jquery.js")
@@ -81,14 +86,19 @@ html
     
   body
 
-    #mine
-    #face
-    #bubb
-    #list
-    #view
-    #pop
-    #query
+    .main
 
+      .left
+        #mine
+        #face
+        #bubb
+      .head
+        #query
+      #list
+      #view
+      #pop
+    .loader loading...
+    .gotop Go Top
     //- templates
     include tmpl/login-view-template.html
     include tmpl/me-view-template.html

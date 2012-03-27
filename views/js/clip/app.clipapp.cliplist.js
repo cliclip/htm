@@ -146,6 +146,46 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("clip:preview:scroll", function(view, options){
+    var paddingTop = 0;
+    $(window).scroll(function() {
+      var st = $(window).scrollTop();
+      var wh = window.innerHeight;
+      // fix left while scroll
+      var mt = $(".main").offset().top;
+      if(st > mt){
+	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+	$(".gotop").fadeIn();
+	// show go-top while scroll
+      } else {
+	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$(".gotop").fadeOut();
+      }
+      // loader while scroll down to the page end
+      // var lt = $(".loader").offset().top;
+      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
+      if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
+	start += App.ClipApp.Url.page;
+	end += App.ClipApp.Url.page;
+	options.url = options.clips.url + "/" +start + ".." + end;
+	options.add = true;
+	options.clips.fetch(options,{
+	  success:function(collection,resp){
+	    if(resp[0] == 0){
+	      if(s != 0){
+	      }
+	      else{
+	      }
+	    }else{
+	      //server response exception
+	    }
+	  },
+	  error:function(collection,resp){
+	    //client request error
+	  }
+	});
+      }
+    });
+/*
     $(document).scroll(function(evt){
       var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
       if(view.$el[0].scrollHeight > 0 &&$(window).height()+scrollTop-view.$el[0].scrollHeight>=100 ){
@@ -163,6 +203,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
       }
     });
+*/
   });
 
   var getClips = function(options){
@@ -177,6 +218,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
     // console.info(options);
     options.clips.fetch(options);
+
     options.clips.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
@@ -226,6 +268,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
+    console.info(clipListView);
+
     App.listRegion.show(clipListView);
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
