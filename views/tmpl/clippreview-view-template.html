@@ -34,7 +34,7 @@
 	<div class="content-container">
 	  <% if(clip.content && clip.content.image) {%>
 	  <div class="preview-image left">
-	    <img src="<%= App.util.url(clip.imguid,clip.content.image) %>">
+	    <img src="<%= App.util.url(clip.content.image) %>">
 	  </div>
 	  <% } %>
 	  <% if(clip.content && clip.content.text){ %>

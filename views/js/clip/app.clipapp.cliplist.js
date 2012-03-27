@@ -17,7 +17,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	sound:""//{sound:sndid}
       },
       tag:[],
-      parent:"",
+      root:"",
       device:"",
       city:"",
       source:{
@@ -41,15 +41,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	// 使得resp中的每一项内容都是对象
 	if(!resp[i].clip){
 	  var clip = resp[i];
-	  if(clip.parent){
-	    clip.imguid = clip.parent.split(":")[0];
-	  }else{
-	    clip.imguid = clip.user;
-	  }
 	  resp[i] = {clip: clip};
 	  resp[i].id = clip.user+":"+clip.id;
 	}else{
-	  resp[i].clip.imguid = resp[i].clip.user;
 	  resp[i].id = resp[i].clip.user+":"+resp[i].clip.id;
 	}
 	if(resp[i].clip.user != App.ClipApp.Me.me.get("id")){
@@ -185,7 +179,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   // site == user0
   ClipList.showSiteClips = function(tag){
     var url = App.ClipApp.Url.base+"/user/2/query";
-    var data = {user: 2, "public": ture};
+    var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
     getClips({url: url, type: "POST", data:data});
   };

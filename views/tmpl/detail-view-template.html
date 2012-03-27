@@ -9,25 +9,25 @@
       <input type="button" value="<%= manage[2]%>" class="operate"/>
     </div> <!-- clip_detail右边的三个按钮--> 
     <div id="left">收藏路线图
-      <%
-         for(var i =0; i<users.length; i++){
+     <%
+       for(var i =0; i<users.length; i++){
+	 if( i == 0){
       %>
-      <div>
-	<img src="<%= users[i].avatar%>">
-      </div>
-      <%
-	 if( i == 1){
-      %>
-         收藏路线图
+         <%= users[i].name%>
       <%  
-	 }
-	 if( i < user.length){
+	 }else{
       %>
 	 <div>向上箭头</div>
+	 <%= users[i].name%>
       <%
 	 }
+      %>
+	<div>
+	  <img src="<%= App.util.url(users[i].face)%>" height="50px" width="50px">
+	</div>
+      <%
       }
-    %>
+     %>
     </div>
 
     <div id="center_clip">
@@ -39,7 +39,7 @@
       <% 
 	 }else if(content[i].image){ 
       %>
-      <img src="<%=App.util.url(user,content[i].image)%>"/>
+      <img src="<%=App.util.url(content[i].image)%>"/>
       <% } 
        } 
       %>

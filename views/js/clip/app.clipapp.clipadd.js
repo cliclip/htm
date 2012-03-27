@@ -43,7 +43,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  if(returnObj[0] == 0){
 	    var imgids = returnObj[1];
 	    for(var i=0;i<imgids.length;i++){
-	      var url = P+"/user/"+ uid+"/image/" +imgids[i];
+	      var imgid = imgids[i].split(":")[1];
+	      var url = P+"/user/"+ uid+"/image/" +imgid;
 	      var img = $("<img class='detail-image' src= "+url+">");
 	      $(".addClip-container").append(img);
 	    }
@@ -102,7 +103,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  var prefix = P + "/user/"+user+"/image/";
 	  if(src.indexOf(prefix) != -1){
 	    id = src.split(prefix);
-	    src = id[1];
+	    src = user+":"+id[1];
 	  }
 	  _data.content.push({image:src});
 	}
