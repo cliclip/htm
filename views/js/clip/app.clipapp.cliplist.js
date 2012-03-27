@@ -7,28 +7,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var precliplength=0,flag=true;;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
-      recommened:{},//列表推荐的clip时有此属性
-
-      content:{
-	text:"",//text:String
-	image:""//image:imgid || url
-      },
-      note:{
-	text:"",//{text:string}
-	sound:""//{sound:sndid}
-      },
-      tag:[],
-      parent:"",
-      device:"",
-      city:"",
-      source:{
-	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
-      },
-      id:"",
-      user:"",
-      reprint_count:0,//此clip被转摘的次数
-      reply_count:0,//此clip被回复的次数
-      author:{}//此clip的作者，列表推荐和列表follow动态时有此属性
+      recommend:"",//列表推荐的clip时有此属性
+      clip :{}
     }
   });
 
