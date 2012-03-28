@@ -8,6 +8,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommened:{},//列表推荐的clip时有此属性
+
       content:{
 	text:"",//text:String
 	image:""//image:imgid || url
@@ -17,7 +18,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	sound:""//{sound:sndid}
       },
       tag:[],
-      parent:"",
+      root:"",
       device:"",
       city:"",
       source:{
@@ -41,15 +42,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	// 使得resp中的每一项内容都是对象
 	if(!resp[i].clip){
 	  var clip = resp[i];
-	  if(clip.parent){
-	    clip.imguid = clip.parent.split(":")[0];
-	  }else{
-	    clip.imguid = clip.user;
-	  }
 	  resp[i] = {clip: clip};
 	  resp[i].id = clip.user+":"+clip.id;
 	}else{
-	  resp[i].clip.imguid = resp[i].clip.user;
 	  resp[i].id = resp[i].clip.user+":"+resp[i].clip.id;
 	}
 	if(resp[i].clip.user != App.ClipApp.Me.me.get("id")){
@@ -196,7 +191,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	options.url = options.clips.url + "/" +start + ".." + end;
 	options.add = true;
 	if(options.clips.length-precliplength<end-start){
-	    flag=false;
+	  flag=false;
 	}
 	if(flag){
 	  options.clips.fetch(options);
@@ -224,33 +219,37 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
+  // site == user0
   ClipList.showSiteClips = function(tag){
-    var url =  App.ClipApp.Url.base+"/user/2/clip";
-    if(tag) url += "/tag/"+tag;
-    getClips({url: url, type: 'GET'});
+    var url = App.ClipApp.Url.base+"/user/2/query";
+    var data = {user: 2, "public": true};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type: "POST", data:data});
   };
 
   ClipList.showUserClips = function(uid, tag){
-    var	url = App.ClipApp.Url.base + "/user/"+uid+"/clip";
-    if(tag) url += "/tag/"+tag;
-    getClips({url:url, type:"GET"});
+    var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
+    var data = {user: uid};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type:"POST", data: data});
   };
 
+  // 这两个Query对结果是没有要求的，按照关键字相关度
   ClipList.showSiteQuery = function(word, tag){
-    getUserQuery(2,word,tag);
+    var url = "/query";
+    url = App.ClipApp.Url.base + url;
+    var data = {text: word};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type: "POST", data: data});
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
-    getUserQuery(uid, word, tag);
-  };
-
-  function getUserQuery(uid, word, tag){
-    var url = "/user/" + uid + "/query";
+    var url = "/user/"+uid+"/query";
     url = App.ClipApp.Url.base + url;
-    var data = { text:word , user:uid};
-    if(tag) data.tag = tag;
-    getClips({url:url,type:"POST",data:data});
-  }
+    var data = {text: word, user: uid};
+    if(tag) data.tag = [tag];
+    getClips({url: url, type:"POST", data:data});
+  };
 
   ClipList.showUserInterest = function(uid, tag){
     var url = "/user/" + uid + "/interest";
