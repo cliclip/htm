@@ -102,7 +102,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    if(returnVal != null && returnVal != ""){
 	      var returnObj = eval(returnVal);
 	      if(returnObj[0] == 0){
-		var url = P+"/user/"+ user+"/image/" +returnObj[1][0];
+		var ids = returnObj[1][0].split(":");
+		var url =  P + "/user/" + ids[0]+ "/image/" + ids[1];
 		var img = $("<img class='face-image' src= "+url+" height='240' width='240'>");
 		$("#userFace").empty();
 		$("#userFace").append(img);
