@@ -26,13 +26,16 @@ html
     link(rel="stylesheet",href="tmpl/jquery-ui.css")
     link(rel="stylesheet",href="tmpl/bubb-view.css")
     
+    link(rel="stylesheet",href="../waterfall.html")
+
     //- pack :: script(src="/js/libs.js")
     script(src="/js/lib/json2.js")
     script(src="/js/lib/jquery.js")
     script(src="/js/lib/underscore.js")
     script(src="/js/lib/backbone.js")
-    script(src="js/lib/jquery.tagsinput.js")
-    script(src="js/lib/jquery-ui.min.js")
+    script(src="/js/lib/jquery-ui.min.js")
+    script(src="/js/lib/jquery.tagsinput.js")
+    script(src="/js/lib/jquery.masonry.js")
 
     //- pack :: script(src="/js/app.js")
     script(src="/js/lib/backbone.marionette.js")
@@ -80,15 +83,21 @@ html
     script $(function(){ App.start(); });
     
   body
-
-    #mine
-    #face
-    #bubb
-    #list
-    #view
-    #pop
-    #query
-
+    a(name='my')
+    .main
+      .left
+        #face
+        #bubb
+      .head
+        #mine
+        #query
+      #view
+      #pop
+      #list
+    .loader loading...
+    .gotop 
+      a(href='#my')
+        | Go Top
     //- templates
     include tmpl/login-view-template.html
     include tmpl/me-view-template.html

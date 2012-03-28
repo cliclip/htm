@@ -2,7 +2,7 @@
   <div id="editUser">
     <a id="popup_ContactClose">X</a>   
     <div id="userFace">
-      <img id="myface-image" src="<%=App.util.face_url(id,face)%>" height="240" width="240"/>
+      <img id="myface-image" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
     </div>
     <div id="user-name">
       <%=name%>
@@ -14,7 +14,7 @@
       <form method="POST" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
 	<span class="file">
 	  <input type="button" class="btn" id="localImg" value="选择本地头像">
-	  <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.image_change()">
+	  <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
 	</span>
 	  <input type="submit" id="confirm" value="上传">  
       </form>
