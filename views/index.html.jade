@@ -83,7 +83,7 @@ html
     script $(function(){ App.start(); });
     
   body
-
+    a(name='top')
     .main
 
       .left
@@ -96,7 +96,8 @@ html
       #view
       #pop
     .loader loading...
-    .gotop Go Top
+    .gotop 
+      a(href='#top')  Go Top
     //- templates
     include tmpl/login-view-template.html
     include tmpl/me-view-template.html

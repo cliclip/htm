@@ -1,5 +1,5 @@
 <script type="text/template" id="reclip-view-template">
-  <div align="center"  style="position:relative;left:500px;top:50px;width:400px;height:300px;background:yellow;z-index:400;display:block; ">
+  <div align="center"  style="width:400px;height:300px;background:yellow;">
     <% if(count){ %>
     <label>您将收藏该用户此tag下<%= count%>条数据</label><br>
     <% } else { %>
@@ -17,6 +17,5 @@
     <input type="button" value="确定" id="submit_button"/>
     <input type="button" value="取消" id="cancel_button"/><br>
     <span class="error"><%= typeof error != "undefined" && error ? error : "" %></span>   
-    <!-- textarea  id="tag" rows="1" cols="40" /><br -->
   </div>
 </script>
