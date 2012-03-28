@@ -39,6 +39,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipPreviewView = App.ItemView.extend({
     tagName: "div",
+    className: "clip",
     template: "#clippreview-view-template",
     events: {
       "click #detail" : "show_detail",
@@ -247,9 +248,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
-    console.info(clipListView);
-
+    //console.info(clipListView);
+    //console.info($("#list"));
+    //console.dir(clipListView);
+    $("#list").masonry({
+      itemSelector : '.clip',
+      columnWidth : 320
+    });
     App.listRegion.show(clipListView);
+    $("#list").masonry("reload");
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 
