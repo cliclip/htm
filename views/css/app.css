@@ -40,10 +40,10 @@
  z-index:10;
 }
 #pop{
- top:200px;
+ top:100px;
  left:450px;
  display:block; 
- position: absolute;
+ position: fixed;
  z-index:11;
 }
 .head {
