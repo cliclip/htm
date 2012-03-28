@@ -169,7 +169,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     comment.fetch();
     comment.onChange(function(commentModel){
       var commentView = new CommentView({model: commentModel});
-      ClipDetail.commentRegion = new App.RegionManager({
+      ClipDetail.commentRegion = new App.Region({
 	el:"#comment_showDiv"
       });
       ClipDetail.commentRegion.show(commentView);
@@ -262,7 +262,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var self = (cid.split(":")[0] == App.ClipApp.Me.me.get("id"));
     addCommModel.set("self",self);
     var addCommView = new AddCommView({model: addCommModel});
-    ClipDetail.addCommRegion = new App.RegionManager({
+    ClipDetail.addCommRegion = new App.Region({
       el:"#addComm_showDiv"
     });
     ClipDetail.addCommRegion.show(addCommView);
@@ -275,7 +275,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var replyCommModel = new CommentModel({id : cid});
     replyCommModel.set("pid",id);
     var replyCommView = new AddCommView({model: replyCommModel});
-    ClipDetail.replyCommRegion = new App.RegionManager({
+    ClipDetail.replyCommRegion = new App.Region({
       el: "#reply_Comm_showDiv"
     });
     ClipDetail.replyCommRegion.show(replyCommView);

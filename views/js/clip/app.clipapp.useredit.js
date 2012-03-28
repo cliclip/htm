@@ -95,7 +95,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var editView = new EditView({model: editModel});
 	  App.popRegion.show(editView);
 	});
-	UserEdit.LocalImgRegion = new App.RegionManager({el:"#faceUploadDiv"});
+	UserEdit.LocalImgRegion = new App.Region({el:"#faceUploadDiv"});
 	if($("#faceUploadDiv").html() == ""){
 	  $("#post_frame").load(function(){ // 加载图片
 	    var returnVal = this.contentDocument.documentElement.textContent;
