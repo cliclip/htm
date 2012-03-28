@@ -26,8 +26,6 @@ html
     link(rel="stylesheet",href="tmpl/jquery-ui.css")
     link(rel="stylesheet",href="tmpl/bubb-view.css")
     
-    link(rel="stylesheet",href="../waterfall.html")
-
     //- pack :: script(src="/js/libs.js")
     script(src="/js/lib/json2.js")
     script(src="/js/lib/jquery.js")
@@ -37,7 +35,8 @@ html
     script(src="/js/lib/jquery.tagsinput.js")
     script(src="/js/lib/jquery.masonry.js")
 
-    //- pack :: script(src="/js/app.js")
+    //- pack :: script(src="/js/app.js"
+    // script(src="/js/lib/backbone.marionette2.js")
     script(src="/js/lib/backbone.marionette.js")
     script(src="/js/app.js")
     // script(src="/js/Constants.js") 
@@ -83,7 +82,6 @@ html
     script $(function(){ App.start(); });
     
   body
-    a(name='my')
     .main
       .left
         #face
@@ -96,7 +94,7 @@ html
       #list
     .loader loading...
     .gotop 
-      a(href='#my')
+      a(href='javascript:scroll(0,0)')
         | Go Top
     //- templates
     include tmpl/login-view-template.html

@@ -106,7 +106,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     var recommModel = new RecommModel({id: cid});
     if (model) recommModel.set(model.toJSON());
     if (error) recommModel.set({"error":error});
-    Recommend.nameListRegion = new App.RegionManager({
+    Recommend.nameListRegion = new App.Region({
       el:"#name_listDiv"
     });
     recommView=new RecommView({model:recommModel});
