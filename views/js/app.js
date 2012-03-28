@@ -64,7 +64,7 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView;
-App.RegionManager= Backbone.Marionette.RegionManager;
+App.Region = Backbone.Marionette.Region;
 App.CollectionView = Backbone.Marionette.CollectionView;
 
 App.Routing = (function(App, Backbone){
@@ -92,7 +92,7 @@ App.Routing = (function(App, Backbone){
 })(App, Backbone);
 
 App.addRegions({
-  
+
   mineRegion: "#mine",
   faceRegion: "#face",
   bubbRegion: "#bubb",
