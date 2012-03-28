@@ -55,6 +55,8 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.clipdelete:success", function(){
     ClipDelete.close();
+    // 操作成功刷新页面
+    location.reload();
   });
 
   App.vent.bind("app.clipapp.clipdelete:error", function(model, error){

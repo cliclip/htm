@@ -2,12 +2,12 @@
   <div style="margin-left:50px;">
     <br>
     <br>
-    <span><a href="#user/<%=id%>/tag/<%=tag%>"><%=tag%></a>:</span>
-   <%
+    <span><a href="#user/<%=App.ClipApp.getMyUid()%>/tag/<%=tag%>"><%=tag%></a>:</span>
+   <% 
     for(var i=0; i<user.length; i++){
    %>
     <span><a href="#user/<%=user[i].id%>"><%=user[i].name%></span>
-    <span><img width="30" heigth="30" src="../img/a.jpg" /></span></a>
+    <span><img width="30" heigth="30" src="<%=App.util.face_url(user[i].id,user[i].face)%>" /></span></a>
 <%}%>
   </div>
 </script>

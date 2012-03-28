@@ -141,6 +141,7 @@ $(function() {
       defaults: function(){
 	return {
 	  "text":    "oops",
+	  "self": false,
 	  "current": false,
 	  "size":    48,
 	  "sink":   false,
@@ -492,11 +493,14 @@ $(function() {
 	  balls = [];
 	  mouseOver = null;
 	  mouseJoint = null;
+	  var self = options.self;
+	  delete options.self;
 	  _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs && options.bubs.indexOf(e)!=-1) ? 64 : 48;
 	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
 	    var ball = new BallModel({
 	      "text": e,
+	      "self": self,
 	      "size": size,
 	      "body": body,
 	      "current": ( options.default && options.default == e ),

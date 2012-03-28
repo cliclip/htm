@@ -47,6 +47,18 @@
   border:1px solid #cecece;  
   z-index:12; 
 }
+#editUser{
+  display:block;  
+  margin-left: 140px;
+  margin-top: 0px;
+  _position:fixed;  
+  position:relative; /* hack for internet explorer 6*/  
+  _height:1200px;  
+  _width:960px;  
+  background:#888;
+  border:1px solid #cecece;  
+  z-index:12; 
+}
 
 #top{
  height: 50px;
@@ -59,7 +71,7 @@
 #left{
   text-align: center;
   font-size: 16px;
-  color: #FFF;
+  color: #000;
   left: 0;
   align: center;
   width: 60px;

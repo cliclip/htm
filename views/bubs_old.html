@@ -23,14 +23,16 @@
 	
   <script type="text/template" id="ball-shadow-template">
     <div class="shadow s<%=size+60%>" style="left:-30px;top:-30px;height:<%=size+60%>px; width:<%=size+60%>px; line-height:<%= size * 2 + 90 %>px">
-      <span>
-	<% if (follow) {%>
-	<a href="#" class="unfollow">停</a>
-	<% } else { %>
-	<a href="#" class="follow">追</a>
-	<% } %>
-	<a href="#" class="reclip">收</a>
-      </span>
+    <% if (!self) {%>
+    <span>
+    <% if (follow) {%>
+    <a href="#" class="unfollow">停</a>
+    <% } else { %>
+    <a href="#" class="follow">追</a>
+    <% } %>
+    <a href="#" class="reclip">收</a>
+    </span>
+    <% } %>
     </div>
   </script>
 		

@@ -18,6 +18,7 @@ html
     link(rel="stylesheet",href="css/preview.css")
     link(rel="stylesheet",href="css/app.css")
     link(rel="stylesheet",href="css/app.clipapp.css")
+    link(rel="stylesheet",href="css/uploadImage.css")
     //-link(rel="stylesheet",href="/tmpl/me-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userface-view-template.css")
     //-link(rel="stylesheet",href="/tmpl/userbubb-view-template.css")
@@ -52,13 +53,14 @@ html
     script(src="/js/clip/app.clipapp.register.js")
     script(src="/js/clip/app.clipapp.login.js")
     script(src="/js/clip/app.clipapp.logout.js")
-    //- script(src="/js/clip/app.clipapp.me.js")
+    script(src="/js/clip/app.clipapp.me.js")
+    script(src="/js/clip/app.clipapp.useredit.js")    
     //- bubb
     script(src="/js/clip/app.clipapp.bubb.js")
-    script(src="/js/clip/app.clipapp.me.js")    
     //- clip_detail
     script(src="/js/clip/app.clipapp.clipdetail.js")
     script(src="/js/clip/app.clipapp.clipedit.js")
+    script(src="/js/clip/app.clipapp.clipadd.js")
     //- clip_preview 
     script(src="/js/clip/app.clipapp.cliplist.js")
     script(src="/js/clip/app.clipapp.routing.js")
@@ -93,12 +95,15 @@ html
     include tmpl/userface-view-template.html
     include tmpl/userbubb-view-template.html
     include tmpl/register-view-template.html
+    include tmpl/editUser-view-template.html
 
     include tmpl/detail-view-template.html
     include tmpl/editDetail-view-template.html
+    include tmpl/addclip-view-template.html
     include tmpl/localImg-view-template.html
     include tmpl/showcomment-view-template.html
     include tmpl/addcomm-view-template.html
+    include tmpl/comment-view-template.html
 
     include tmpl/delete-view-template
     include tmpl/reclip-view-template.html

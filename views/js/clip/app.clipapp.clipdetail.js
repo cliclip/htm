@@ -3,6 +3,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
 
   var DetailModel = App.Model.extend({
+    defaults:{
+      imguid:""
+    },
     url: function(){
       return P+"/clip/"+this.id;
     }
@@ -21,11 +24,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var opt = $(e.currentTarget).val();
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
+      var pub = this.model.get("public");
       var tags = this.model.get("tag");
-      var text = "";
-      var ns = _(this.model.get("note")).select(function(e){return e.text; })
-	   .map(function(e){ return e.text; });
-	   _(ns).each(function(n){ text +=n+" "; });
+      var note = this.model.get("note");
       switch(opt){
 	case '收':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
@@ -34,7 +35,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case '评':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case '注':
-	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,text);break;
+	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
 	case '改':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case '删':
@@ -70,10 +71,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     discoloration : function(e){
       e.preventDefault();
+      var id = e.currentTarget.id;
+      $("#reply_"+id).css("display","block");
       $(e.currentTarget).css("background","#f0f");
     },
     resume : function(e){
       e.preventDefault();
+      var id = e.currentTarget.id;
+      $("#reply_"+id).css("display","none");
       $(e.currentTarget).css("background","#fff");
     },
     reply_comment : function(e){
@@ -98,6 +103,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var model = (_model) ? _model.toJSON() :  this.model.toJSON();
       // 将拿到的model对象变为数组
       var res = [];
+      var clip_owner = model.id.split(":")[0];
+      var auth = App.ClipApp.getMyUid();
       for(var i in model){
 	if(i != "id" )
 	  res.push(model[i]);
@@ -109,6 +116,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  if(!e) {
 	    return html;
 	  } else {
+	    e.auth = auth;
+	    e.clip_owner = clip_owner;
 	    var str = that.renderTemplate(template, e);
 	    if (e.children && e.children.length > 0) {
 	      str += "<div class='children'>";
@@ -136,19 +145,19 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     App.viewRegion.show(detailView);
   };
 
-  ClipDetail.show = function(cid, uid){
+  // uid为当前登录用户
+  ClipDetail.show = function(uid, cid){
+    // 此处的cid并不等于detailModel.id
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
       var user = detailModel.get("user");
-      if(user == uid){ // 应该是 user == self
+      if(user == uid){
 	detailModel.set("manage",["注","改","删"]);
       }else{
 	detailModel.set("manage",["收","转","评"]);
       }
-      detailModel.set("users",[]);
       showDetail(detailModel);
-      // App.vent.trigger("app.clipapp.clipdetail:showComment", cid);
       ClipDetail.showComment(cid);
       ClipDetail.showAddComm(cid);
     });
@@ -211,25 +220,29 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }
     },
     comment : function(e){
-      e.preventDefault();
-      var id = this.model.id;
-      var pid = this.model.get("pid") ? this.model.get("pid") : 0;
-      var text = $("#comm_text").val();
-      var params = {text: text, pid: pid};
-      this.model.save({text: text,pid : pid},
-      {
-	url: P+"/clip/"+id+"/comment",
-	type: "POST",
-	success:function(comment,response){
-	  ClipDetail.showComment(id);
-	  ClipDetail.showAddComm(id);
-	},
-	error:function(comment,response){}
-      });
-      if($("#collect").attr("checked")){
-	var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
-	// console.log("同时收");
-	App.vent.trigger("collect", id,params1);
+      if(!App.ClipApp.getMyUid()){
+	App.vent.trigger("app.clipapp:login");
+      }else{
+	e.preventDefault();
+	var id = this.model.id;
+	var pid = this.model.get("pid") ? this.model.get("pid") : 0;
+	var text = $("#comm_text").val();
+	var params = {text: text, pid: pid};
+	this.model.save({text: text,pid : pid},
+	{
+	  url: P+"/clip/"+id+"/comment",
+	  type: "POST",
+	  success:function(comment,response){
+	    ClipDetail.showComment(id);
+	    ClipDetail.showAddComm(id);
+	  },
+	  error:function(comment,response){}
+	});
+	if($("#reclip").attr("checked")){
+	  var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
+	  // console.log("同时收");
+	  App.vent.trigger("app.clipapp.reclip:submit",this.model,params1);
+	}
       }
     },
     cancel : function(){
@@ -246,6 +259,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   ClipDetail.showAddComm = function(cid, focus){
     var addCommModel = new CommentModel({id: cid});
+    var self = (cid.split(":")[0] == App.ClipApp.Me.me.get("id"));
+    addCommModel.set("self",self);
     var addCommView = new AddCommView({model: addCommModel});
     ClipDetail.addCommRegion = new App.RegionManager({
       el:"#addComm_showDiv"
@@ -304,9 +319,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.clipdetail:comment", function(cid){
     // 当点击clipdetail的评时
-    if(ClipDetail.replyCommRegion)
-      ClipDetail.replyCommRegion.close();
-    ClipDetail.showAddComm(cid, true);
+    if(App.ClipApp.Me.me.get("id")){
+      if(ClipDetail.replyCommRegion)
+	ClipDetail.replyCommRegion.close();
+      ClipDetail.showAddComm(cid, true);
+    }else{
+      App.vent.trigger("app.clipapp:login");
+    }
   });
 
   App.vent.bind("app.clipapp.clipdetail:hide_addComm", function(){

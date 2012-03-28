@@ -2,13 +2,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
 
-  var ImgModel = App.Model.extend({});
-  var LocalImgView = App.ItemView.extend({
-    tagName: "form",
-    className: "localImg-view",
-    template: "#localImg-view-template"
-  });
-
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
@@ -21,7 +14,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     template: "#editDetail-view-template",
     events: {
       "click #exImg":"extImg",
-      "click #localImg":"localImg",
+      "change #formUpload": "image_change",
       "click #upformat":"upFormat",
       "click #edit_remark":"remarkClip",
       "click #editClip_Save":"saveUpdate",
@@ -36,37 +29,24 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // contentContainer.append(img);
       $(".editContent-container").append(img);
     },
-    localImg:function(){
-      var user = this.model.get("user");
-      var url =	P+"/user/" + user + "/image";
-      console.log(url);
-      var imgModel = new ImgModel();
-      imgModel.set("actUrl",url);
-      var localImgView = new LocalImgView({
-	model: imgModel
-      });
-      ClipEdit.LocalImgRegion = new App.RegionManager({el: "#imgUploadDiv"});
-      if($("#imgUploadDiv").html() == ""){
-	ClipEdit.LocalImgRegion.show(localImgView);
-	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-				console.log(returnVal);
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var imgids = returnObj[1];
-	      for(var i=0;i<imgids.length;i++){
-		var url = P+"/user/"+ user+"/image/" +imgids[i];
-		var img = $("<img class='detail-image' src= "+url+">");
-		$(".editContent-container").append(img);
-	      }
+    image_change:function(e){
+      var uid = this.model.get("uid");
+      $("#img_form").submit();
+      $("#post_frame").load(function(){ // 加载图片
+	var returnVal = this.contentDocument.documentElement.textContent;
+	if(returnVal != null && returnVal != ""){
+	  var returnObj = eval(returnVal);
+	  if(returnObj[0] == 0){
+	    var imgids = returnObj[1];
+	    for(var i=0;i<imgids.length;i++){
+	      var imgid = imgids[i].split(":")[1];
+	      var url = P+"/user/"+ uid+"/image/" +imgid;
+	      var img = $("<img class='detail-image' src= "+url+">");
+	      $(".editContent-container").append(img);
 	    }
 	  }
-	});
-      }else{
-	$("#imgUploadDiv").empty();
-	// ClipEdit.LocalImgRegion.close();
-      }
+	}
+      });
     },
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
@@ -76,7 +56,10 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     remarkClip:function(){
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
-      App.vent.trigger("app.clipapp:clipmemo", cid);
+      var tag = this.model.get("tag");
+      var note = this.model.get("note");
+      var pub = this.model.get("public");
+      App.vent.trigger("app.clipapp:clipmemo", cid, tag, note, pub);
       // App.OrganizeApp.open(cid);
     },
     editText:function(evt){
@@ -106,8 +89,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       });
     },
     saveUpdate: function(){
-      var _data = new Object();
-      _data.content = [];
+      var user = this.model.get("user");
+      var _data = {content :[]};
       $(".editContent-container").children().each(function(){
 	var _text = $(this).text() ? $(this).text().replace(/(^\s*)|(\s*$)/g,"") : "";
 	var src = this.src;
@@ -117,15 +100,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	if(_text){ // && text.replace(/(^\s*)|(\s*$)/g,"") != ""){
 	  _data.content.push({text:_text});//.replace(/(^\s*)|(\s*$)/g,"") );
 	}else if(src){ //如果有图片
-	  var prefix = P + "user/1/image/";
+	  var prefix = P + "user/"+user+"/image/";
 	  if(src.indexOf(prefix) != -1){
 	    id = src.split(prefix);
-	    src = id[1];
+	    src = user+":"+id[1];
 	  }
 	  _data.content.push({image:src});
 	}
       });
-      var user = this.model.get("user");
       var cid =	user+":"+this.model.id;
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
@@ -149,7 +131,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   });
 
   ClipEdit.show = function(clipid, uid){
-    var editModel = new EditModel({id: clipid});
+    var editModel = new EditModel({
+      id: clipid,
+      uid: uid,
+      actUrl:P+"/user/"+uid+"/image"
+    });
     editModel.fetch();
     editModel.onChange(function(editModel){
       var editView = new EditView({model: editModel});

@@ -5,11 +5,22 @@ App.util = (function(){
     return document.cookie.split("=")[1].split(":")[0];
   };
 
-  util.url = function(uid,imageid){
-    var pattern = /^[a-z0-9]{32}/;
-    if(imageid&& pattern.test(imageid))
-      return P + "/user/" + uid+ "/image/" + imageid ;
-    else return imageid;
+  util.url = function(imageid){
+    var pattern = /^[0-9]:[a-z0-9]{32}/;
+    if(imageid && pattern.test(imageid)){
+      var ids = imageid.split(":");
+      return P + "/user/" + ids[0]+ "/image/" + ids[1];
+    }else return imageid;
+  };
+
+  util.face_url = function(uid,imageid){
+    var pattern = /^[0-9]:[a-z0-9]{32}/;
+    if(imageid == ""){
+      return "img/f.jpg";
+    }else if(imageid&& pattern.test(imageid)){
+      var ids = imageid.split(":");
+      return P + "/user/" + ids[0]+ "/image/" + ids[1];
+    }else return imageid;
   };
 
   util.generatePastTime = function(time){
