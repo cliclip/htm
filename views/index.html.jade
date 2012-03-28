@@ -83,20 +83,21 @@ html
     script $(function(){ App.start(); });
     
   body
-
+    a(name='my')
     .main
-
       .left
-        #mine
         #face
         #bubb
       .head
+        #mine
         #query
       #list
       #view
       #pop
     .loader loading...
-    .gotop Go Top
+    .gotop 
+      a(href='#my')
+        | Go Top
     //- templates
     include tmpl/login-view-template.html
     include tmpl/me-view-template.html

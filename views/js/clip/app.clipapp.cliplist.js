@@ -2,9 +2,9 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var start = 0;
-  var end = App.ClipApp.Url.page-1;
-  var precliplength=0,flag=true;;
+  var start = 1;
+  var end = App.ClipApp.Url.page;
+  var precliplength=0,flag=true;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommened:{},//列表推荐的clip时有此属性
@@ -162,28 +162,28 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	$(".gotop").fadeOut();
       }
       // loader while scroll down to the page end
-      // var lt = $(".loader").offset().top;
+      var lt = $(".loader").offset().top;
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
-      if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
-	start += App.ClipApp.Url.page;
-	end += App.ClipApp.Url.page;
-	options.url = options.clips.url + "/" +start + ".." + end;
-	options.add = true;
-	options.clips.fetch(options,{
-	  success:function(collection,resp){
-	    if(resp[0] == 0){
-	      if(s != 0){
-	      }
-	      else{
-	      }
+      //if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
+      if(st + wh > lt){
+	if(flag){
+	  start += App.ClipApp.Url.page;
+	  end += App.ClipApp.Url.page;
+	  options.url = options.clips.url + "/" +start + ".." + end;
+	  options.add = true;
+	  options.clips.fetch(options);
+	  flag = false;
+	  setTimeout(function(){
+	    $("#list").masonry("reload");
+	    flag = true;
+	    if(options.clips.length-precliplength<App.ClipApp.Url.page){
+	      flag = false;
+	      $(".loader").text("reach to the end.");
 	    }else{
-	      //server response exception
+	      precliplength = options.clips.length;
 	    }
-	  },
-	  error:function(collection,resp){
-	    //client request error
-	  }
-	});
+	  },500);
+	}
       }
     });
 /*
@@ -210,8 +210,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var getClips = function(options){
     options.clips = new ClipPreviewList();
     options.clips.url = options.url;
-    start = 0;
-    end = App.ClipApp.Url.page - 1;
+    //start = 0;
+    //end = App.ClipApp.Url.page - 1;
     options.url += "/" + start+".."+end;
     if(options.data){
       options.data = JSON.stringify(options.data),
@@ -219,7 +219,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
     // console.info(options);
     options.clips.fetch(options);
-
     options.clips.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
@@ -269,9 +268,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
-    //console.info(clipListView);
-    //console.info($("#list"));
-    //console.dir(clipListView);
     $("#list").masonry({
       itemSelector : '.clip',
       columnWidth : 320
