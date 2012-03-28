@@ -35,22 +35,27 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     image_change:function(e){
       var uid = this.model.get("id");
-      $("#img_form").submit();
-      $("#post_frame").load(function(){ // 加载图片
-	var returnVal = this.contentDocument.documentElement.textContent;
-	if(returnVal != null && returnVal != ""){
-	  var returnObj = eval(returnVal);
-	  if(returnObj[0] == 0){
-	    var imgids = returnObj[1];
-	    for(var i=0;i<imgids.length;i++){
-	      var imgid = imgids[i].split(":")[1];
-	      var url = P+"/user/"+ uid+"/image/" +imgid;
-	      var img = $("<img class='detail-image' src= "+url+">");
-	      $(".addClip-container").append(img);
+      var change = App.util.isImage("formUpload");
+      if(change){
+	$("#img_form").submit();
+	$("#post_frame").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1];
+	      for(var i=0;i<imgids.length;i++){
+		var imgid = imgids[i].split(":")[1];
+		var url = P+"/user/"+ uid+"/image/" +imgid;
+		var img = $("<img class='detail-image' src= "+url+">");
+		$(".addClip-container").append(img);
+	      }
 	    }
 	  }
-	}
-      });
+	});
+      }else{
+	alert("图片格式无效");
+      }
     },
     addText: function(evt){
       var newText = $("<p class='detail-text'>新内容</p>");
@@ -107,6 +112,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  }
 	  _data.content.push({image:src});
 	}
+	console.log(_data.content);
       });
       this.model.save(_data,{
 	url: P+"/clip",

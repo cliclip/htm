@@ -42,10 +42,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if( sender.files &&sender.files[0] ){
 	objPreview.src = window.URL.createObjectURL(sender.files[0]);
       }
+      return true;
     }
   };
 
-  UserEdit.image_change = function(){
+/*  UserEdit.image_change = function(){
     var sender = document.getElementById("formUpload");
     if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
       alert('图片格式无效！');
@@ -53,7 +54,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }else{
       return true;
     }
-  };
+  };*/
 
   UserEdit.saveFace = function(editModel,params){
     editModel.save(params,{

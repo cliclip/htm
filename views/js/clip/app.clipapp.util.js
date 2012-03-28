@@ -13,6 +13,15 @@ App.util = (function(){
     }else return imageid;
   };
 
+  util.isImage = function(id){
+    var sender = document.getElementById(id);
+    if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+      return false;
+    }else{
+      return true;
+    }
+  };
+
   util.face_url = function(imageid){
     var pattern = /^[0-9]:[a-z0-9]{32}/;
     if(imageid == ""){

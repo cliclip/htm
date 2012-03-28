@@ -31,22 +31,27 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     image_change:function(e){
       var uid = this.model.get("uid");
-      $("#img_form").submit();
-      $("#post_frame").load(function(){ // 加载图片
-	var returnVal = this.contentDocument.documentElement.textContent;
-	if(returnVal != null && returnVal != ""){
-	  var returnObj = eval(returnVal);
-	  if(returnObj[0] == 0){
-	    var imgids = returnObj[1];
-	    for(var i=0;i<imgids.length;i++){
-	      var imgid = imgids[i].split(":")[1];
-	      var url = P+"/user/"+ uid+"/image/" +imgid;
-	      var img = $("<img class='detail-image' src= "+url+">");
-	      $(".editContent-container").append(img);
+      var change = App.util.isImage("formUpload");
+      if(change){
+	$("#img_form").submit();
+	$("#post_frame").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1];
+	      for(var i=0;i<imgids.length;i++){
+		var imgid = imgids[i].split(":")[1];
+		var url = P+"/user/"+ uid+"/image/" +imgid;
+		var img = $("<img class='detail-image' src= "+url+">");
+		$(".editContent-container").append(img);
+	      }
 	    }
 	  }
-	}
-      });
+	});
+      }else{
+	alert("图片格式无效");
+      }
     },
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
@@ -100,13 +105,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	if(_text){ // && text.replace(/(^\s*)|(\s*$)/g,"") != ""){
 	  _data.content.push({text:_text});//.replace(/(^\s*)|(\s*$)/g,"") );
 	}else if(src){ //如果有图片
-	  var prefix = P + "user/"+user+"/image/";
+	  var prefix = P + "/user/"+user+"/image/";
 	  if(src.indexOf(prefix) != -1){
 	    id = src.split(prefix);
 	    src = user+":"+id[1];
 	  }
 	  _data.content.push({image:src});
 	}
+	console.log(_data.content);
       });
       var cid =	user+":"+this.model.id;
       this.model.save(_data,{
