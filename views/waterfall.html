@@ -1,0 +1,183 @@
+<html>
+
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+  <script src="./js/lib/jquery.masonry.js"></script>
+  <style>
+  .head {
+    height: 100px;
+    background-color: #eef;
+    margin-bottom: 20px;
+  }
+  .main .left {
+    float: left;
+    width: 242px;
+  }
+  .main .left.fixed {
+    position: fixed;
+  }
+  .main .left .face {
+    width: 240px;
+    height: 240px;
+    border: 1px solid #DDD;
+  }
+  .main .left .bubb {
+    width: 240px;
+    height: 360px;
+    border: 1px solid #DDD;
+  }
+  .main .container {
+    margin-left: 262px;
+  }
+  .main .container .clip {
+    margin-bottom: 20px;
+    width: 300px;
+    min-height:100px;
+    border: 1px solid #DDD;
+  }
+  .main + div {
+    clear: both;
+  }
+  .loader {
+    text-align: right;
+    line-height: 30px;
+    height: 30px;
+  }
+  .gotop {
+    display: none;
+    width: 100px;
+    height: 100px;
+    background-color: yellow;
+    position: fixed;
+    right: 5px;
+    bottom: 30px;
+  }
+  </style>
+</head>
+
+<body>
+
+<a name="top"></a>
+
+<div class="head">
+</div>
+
+<div class="main">
+  <div class="left">
+    <div class="face">
+      face
+    </div>
+    <div class="bubb">
+      bubb
+    </div>
+  </div>
+  <div class="container">
+  </div>
+</div>
+
+<div class="loader">
+  loading...
+</div>
+
+<div class="gotop">
+  <a href="#top">Go Top</a>
+</div>
+
+<script>
+$(function(){
+
+  var count = 0;
+  var xtext = ' 测试文字 ECMAScript v3\
+24.173.1. Synopsis\
+string.slice(start, end)\
+24.173.1.1. Arguments\
+start\
+The string index where the slice is to begin. If negative, this argument specifies a position measured from the end of the string. That is, -1 indicates the last character, -2 indicates the second from last character, and so on.\
+end\
+The string index immediately after the end of the slice. If not specified, the slice includes all characters from start to the end of the string. If this argument is negative, it specifies a position measured from the end of the string.\
+24.173.1.2. Returns\
+A new string that contains all the characters of string from and including start, and up to but not including end.\
+24.173.2. Description\
+slice( ) returns a string containing a slice, or substring, of string. It does not modify string.\
+The String methods slice( ), substring( ), and the deprecated substr( ) all return specified portions of a string. slice( ) is more flexible than substring( ) because it allows negative argument values. slice( ) differs from substr( ) in that it specifies a substring with two character positions, while substr( ) uses one position and a length. Note also that String.slice( ) is an analog of Array.slice( ).\
+24.173.3. Example\
+var s = "abcdefg";\
+s.slice(0,4)    // Returns "abcd"\
+s.slice(2,4)    // Returns "cd"\
+s.slice(4)      // Returns "efg"\
+s.slice(3,-1)   // Returns "def"\
+s.slice(3,-2)   // Returns "de"\
+s.slice(-3,-1)  // Should return "ef"; returns "abcdef" in IE 4\
+24.173.4. Bugs\
+Negative values for start do not work in Internet Explorer 4 (but they do in later versions of IE). Instead of specifying a character position measured from the end of the string, they specify character position 0.\
+24.173.5. See Also\
+Array.slice( ), String.substring( )\
+';
+  var loading = false;
+
+  function Box(){
+    var str = xtext.slice(0, 1000*Math.random()+30);
+    return '<div class="clip">'+(count++)+str+'</div>';
+  }
+
+  function loadMore(){
+    function load(){
+      var boxes = "";
+      for(var i = 0 ; i < 20; i++){
+        boxes += Box();
+      }
+      var $boxes = $(boxes);
+      $('.container').append( $boxes ).masonry("appended", $boxes);
+      loading = false;
+    }
+    if (!loading){
+      loading = true;
+      setTimeout(load, 1000*Math.random()+500);
+    }
+  }
+
+  // scroll event
+  var paddingTop = 0;
+  $(window).scroll(function() {
+    var st = $(window).scrollTop();
+    var wh = window.innerHeight;
+    // fix left while scroll
+    var mt = $(".main").offset().top;
+    if(st > mt){
+      $(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+      $(".gotop").fadeIn();
+      // show go-top while scroll
+    } else {
+      $(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
+      $(".gotop").fadeOut();
+    }
+    // loader while scroll down to the page end
+    var lt = $(".loader").offset().top;
+    if(st + wh > lt){
+      if (count < 100){
+        loadMore();
+      } else {
+        $(".loader").text("reach to the end.");
+      }
+    }
+  });
+
+  // imagesLoaded event
+  $('.container').imagesLoaded(function(){
+    console.log("imagesLoaded trigger");
+    $('.container').masonry({
+      itemSelector : '.clip',
+      columnWidth : 320
+    });
+  });
+
+  // init
+  loadMore();
+
+});
+</script>
+
+</body>
+
+</html>

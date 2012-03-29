@@ -31,10 +31,12 @@ html
     script(src="/js/lib/jquery.js")
     script(src="/js/lib/underscore.js")
     script(src="/js/lib/backbone.js")
-    script(src="js/lib/jquery.tagsinput.js")
-    script(src="js/lib/jquery-ui.min.js")
+    script(src="/js/lib/jquery-ui.min.js")
+    script(src="/js/lib/jquery.tagsinput.js")
+    script(src="/js/lib/jquery.masonry.js")
 
-    //- pack :: script(src="/js/app.js")
+    //- pack :: script(src="/js/app.js"
+    // script(src="/js/lib/backbone.marionette2.js")
     script(src="/js/lib/backbone.marionette.js")
     script(src="/js/app.js")
     // script(src="/js/Constants.js") 
@@ -82,15 +84,20 @@ html
     script $(function(){ App.start(); });
     
   body
-
-    #mine
-    #face
-    #bubb
-    #list
-    #view
-    #pop
-    #query
-
+    .main
+      .left
+        #face
+        #bubb
+      .head
+        #mine
+        #query
+      #view
+      #pop
+      #list
+    .loader loading...
+    .gotop 
+      a(href='javascript:scroll(0,0)')
+        | Go Top
     //- templates
     include tmpl/login-view-template.html
     include tmpl/me-view-template.html
