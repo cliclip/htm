@@ -28,6 +28,12 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.register = function(){
     ClipApp.Register.show();
   };
+  ClipApp.findpasswd = function(){
+    ClipApp.FindPass.show();
+  };
+  ClipApp.resetpasswd = function(link){
+    ClipApp.ResetPass.show(link);
+  };
 
   ClipApp.userShow = function(uid, tag){
     ClipApp.Face.showUser(uid);

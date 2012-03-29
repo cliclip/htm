@@ -1,0 +1,20 @@
+<script type='text/template' id='resetpass-view-template'>
+  <form>
+    <div align="center" style="position:relative;left:500px;top:50px;width:300px;height:150px;background:pink;z-index:400;display:block; ">
+      设置你的新密码,两次密码必须相同
+      <br/>
+      <br/>
+      <label>密码：</label>
+      <input type="text" size="12" id="pass1"/>
+      <sapn class="action-info name"><%= typeof error != "undefined"&& error.error ? error.error: "" %></span>
+      <br/> 
+      <label>密码：</label>
+      <input type="text" size="12" id="pass2"/>
+      <sapn class="action-info name"><%= typeof error != "undefined"&& error.error ? error.error: "" %></span>
+      <br/> 
+      <br/>
+      <input type="submit"  value="提交"/>
+      <input type="reset"  value="重置"/> 
+    </div>
+  </form>
+</script>
