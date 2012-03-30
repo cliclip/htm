@@ -85,20 +85,34 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     getCC:function(e){
       var key = e.keyCode;
-      console.log(key);
-      if(key==9||key==188||key==32){
-	$("#copy-to").val($("#copy-to").val()+";");
+      var str = $("#copy-to").val();
+      var last_str = str.charAt(str.length - 1);
+      if(last_str!=";"&&last_str!=" "&&(key==9||key==188||key==32)){
+	$("#copy-to").val(str+";");
+	return false;
+      }else if(key == 8){
+	if(last_str==";"){
+	  str = (_.initial(_.compact(str.split(";")))).join(";");
+	  $("#copy-to").val(str);
+	}
       }
     },
     ruleUpdate: function(){
       if($(".rule_text").attr("disabled")=="disabled"){
 	$(".rule_text").attr("disabled",false);
+	$("#update_rule").val("提交");
       }else{
 	$(".rule_text").attr("disabled","disabled");
+	$("#update_rule").val("更新邮件规则");
 	var title = $("#title").val();
-	var cc = $("#copy-to").val();
-	var to = $("#send").val();
-	var params = {title:title,to:to,cc:cc};
+	var cc =  _.compact($("#copy-to").val().split(";"));
+	var to =  _.compact($("#send").val().split(";"));
+	var enable = false;
+	if($("#open_rule").attr("checked")){
+	  enable =true;
+	}
+	var params = {title:title,to:to,cc:cc,enable:enable};
+	App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
       }
     }
   });
@@ -175,8 +189,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-  UserEdit.showRule = function(uid){
+  UserEdit.showRule = function(uid,model,error){
     var ruleModel = new RuleEditModel({id:uid});
+    if (model) ruleModel.set(model.toJSON());
+    if (error) ruleModel.set("error", error);
     UserEdit.ruleRegion = new App.Region({
       el:".rule"
     });
@@ -201,6 +217,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.useredit:showemail",function(uid){
     UserEdit.showEmail(uid);
   });
+  App.vent.bind("app.clipapp.useredit:showrule",function(uid,model,error){
+    UserEdit.showRule(uid,model,error);
+  });
 
   App.vent.bind("app.clipapp.useredit:emaildel",function(emailModel,address,id){
     var url = P+"/user/"+emailModel.id+"/email/"+address;
@@ -211,9 +230,23 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.useredit:showemail",model.id);
       },
       error: function(model, res){
-	App.vent.trigger("app.clipapp.useredit:showemail",model.id);
+	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,res);
       }
     });
+  });
+  App.vent.bind("app.clipapp.useredit:ruleupdate",function(ruleModel,params){
+		  console.info(params);
+    var url = P+"/user/"+ruleModel.id+"/rule";
+    ruleModel.save(params,{
+	url: url,
+	type: "POST",
+  	success: function(model, res){
+  	  App.vent.trigger("app.clipapp.useredit:success", model.id);
+  	},
+  	error:function(model, res){
+  	  App.vent.trigger("app.clipapp.useredit:error", model, res);
+  	}
+      });
   });
 
   App.bind("initialize:after", function(){
