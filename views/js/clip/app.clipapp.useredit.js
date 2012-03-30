@@ -20,7 +20,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
   var EmailEditModel = App.Model.extend({
     defaults:{
-      // email:[]
+      email:[]
     },
     url:function(){
       return P+"/user/"+this.id+"/email";
@@ -29,7 +29,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var RuleEditModel = App.Model.extend({
     defaults:{
-      rule:""
+      title:"",
+      to:[],
+      cc:[],
+      enable:false
     },
     url:function(){
       return P+"/user/"+this.id+"/rule";
@@ -81,80 +84,42 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#ruleEdit-view-template",
     events: {
       "click #update_rule" : "ruleUpdate",
-      "keydown #copy-to" : "getCC"
+      "keydown #copy-to" : "setCC",
+      "keydown #send" : "setTO"
+
     },
-    getCC:function(e){
+    setCC:function(e){
       var key = e.keyCode;
       var str = $("#copy-to").val();
       var last_str = str.charAt(str.length - 1);
-      if(last_str!=";"&&last_str!=" "&&(key==9||key==188||key==32)){
-	$("#copy-to").val(str+";");
-	return false;
-      }else if(key == 8){
-	if(last_str==";"){
-	  str = (_.initial(_.compact(str.split(";")))).join(";");
-	  $("#copy-to").val(str);
-	}
+      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59)){
+	$("#copy-to").val(str+"; ");
+	if(key==59||key==32) return false;
+      }
+    },
+    setTO:function(e){
+      var key = e.keyCode;
+      var str = $("#send").val();
+      var last_str = str.charAt(str.length - 1);
+      var penultimate = str.charAt(str.length -2,1);
+      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59)){
+	$("#send").val(str+"; ");
+	if(key==59||key==32) return false;
       }
     },
     ruleUpdate: function(){
-      if($(".rule_text").attr("disabled")=="disabled"){
-	$(".rule_text").attr("disabled",false);
-	$("#update_rule").val("提交");
-      }else{
-	$(".rule_text").attr("disabled","disabled");
-	$("#update_rule").val("更新邮件规则");
-	var title = $("#title").val();
-	var cc =  _.compact($("#copy-to").val().split(";"));
-	var to =  _.compact($("#send").val().split(";"));
-	var enable = false;
-	if($("#open_rule").attr("checked")){
-	  enable =true;
-	}
-	var params = {title:title,to:to,cc:cc,enable:enable};
-	App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
+      var title = $("#title").val();
+      var cc =  _.compact($("#copy-to").val().split(";"));
+      var to =  _.compact($("#send").val().split(";"));
+      var enable = false;
+      if($("#open_rule").attr("checked")){
+	enable =true;
       }
+      var params = {title:title,to:to,cc:cc,enable:enable};
+      App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
     }
   });
 
-  UserEdit.onUploadImgChange = function(sender){
-    if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-      alert('图片格式无效！');
-      return flag;
-    }else{
-      var objPreview = document.getElementById('myface-image' );
-      if( sender.files &&sender.files[0] ){
-	objPreview.src = window.URL.createObjectURL(sender.files[0]);
-	flag = true;
-      }
-    }
-  };
-
-  UserEdit.saveFace = function(editModel,params){
-    editModel.save(params,{
-      url: P+"/user/"+ editModel.id+"/face",
-      type: "POST",
-      success:function(model,res){
-	var uid = editModel.get("id");
-	App.vent.trigger("app.clipapp.face:show",uid);
-      },
-      error:function(model,res){
-	//console.info("error!!!!!!!!!!");
-      }
-    });
-  };
-
-  UserEdit.removeFace = function(editModel,face_id){
-    editModel.destroy({
-      url: P+"/user/"+ editModel.id+"/face/" +face_id,
-      success:function(){
-	//console.info("delete success!!!!!!!!!!");
-      },
-      error:function(){
-	//console.info("delete error!!!!!!!!!!");
-      }
-    });
-  };
 
   UserEdit.showUserEdit = function(uid){
     var editModel = new EditModel({id:uid});
@@ -200,17 +165,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     ruleModel.onChange(function(ruleModel){
       var ruleView = new RuleView({model: ruleModel});
       UserEdit.ruleRegion.show(ruleView);
-      	if(ruleModel.get("enable")){
-	  $("#open_rule").attr("checked",true);
-	}
+      if(ruleModel.get("enable")){
+	$("#open_rule").attr("checked",true);
+      }
     });
   };
 
-
+/*
   UserEdit.close = function(){
     App.viewRegion.close();
   };
-
+*/
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
     UserEdit.showFace(uid);
   });
@@ -235,7 +200,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   });
   App.vent.bind("app.clipapp.useredit:ruleupdate",function(ruleModel,params){
-		  console.info(params);
     var url = P+"/user/"+ruleModel.id+"/rule";
     ruleModel.save(params,{
 	url: url,
