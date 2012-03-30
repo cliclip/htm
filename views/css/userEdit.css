@@ -1,0 +1,52 @@
+.editUser {
+  
+}
+.editUser .face .faceEdit {
+    height: 500px;
+    margin-left: 170px;
+    margin-top: 20px;
+    width: 35%;
+    position: absolute;
+//    background-color:#888;
+}
+.editUser .email .emailEdit {
+    float: left;
+    height: 250px;
+    margin-left: 450px;
+    margin-top: 20px;
+    width: 45%;
+    position: absolute;
+ //   background-color:#888;
+}
+.editUser .rule .ruleEdit {
+    float: left;
+    height: 250px;
+    margin-left: 450px;
+    margin-top: 270px;
+    width: 45%;
+    position: absolute;
+//    background-color:#888;
+}
+
+.editUser .riskEdit {
+    float: left;
+    height: 500px;
+    margin-left: 850px;
+    margin-top: 20px;
+    width: 35%;
+//    background-color:#888;
+}
+.file {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+}
+.file input.hifile {
+    cursor: pointer;
+    font-size: 36px;
+    opacity: 0;
+    position: absolute;
+    right: -1px;
+    top: 0;
+}

@@ -75,6 +75,11 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.showUserRecommend(uid, tag);
   };
 
+  ClipApp.mySetup = function(){
+    var uid = getMyUid();
+    ClipApp.UserEdit.showUserEdit(uid);
+  };
+
   App.vent.bind("app.clipapp:login", function(){
     // var uid = getMyUid();
     // ClipApp.Login.show(uid);
