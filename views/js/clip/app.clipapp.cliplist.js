@@ -68,7 +68,20 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "click .operate" : "operate",
       "mouseover .preview-info": "mouseover", // mouseover子类也响应
       "mouseout .preview-info": "mouseout" // mouseout 只自己响应
-
+    },
+    initialize: function(){
+      this.bind("item:rendered",function(itemView){
+	setTimeout(function(){ // STRANGE BEHAVIOUR
+	 $("#list").masonry("appended", itemView.$el);
+	 //$("#list").masonry("reloadItems");
+	},500);
+	var $container = $('#list');
+	$container.imagesLoaded( function(){
+	  $container.masonry({
+	    itemSelector : '.clip'
+	  });
+	});
+      });
     },
     show_detail: function(){
       App.vent.trigger("app.clipapp:clipdetail",this.model.id);
@@ -158,7 +171,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
-  // site == user0
+  // site == user2
   ClipList.showSiteClips = function(tag){
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
@@ -210,20 +223,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       itemSelector : '.clip',
       columnWidth : 320
     });
-    clipListView.bind("item:rendered",function(itemView){
-      var $container = $('#list');
-      $container.imagesLoaded( function(){
-	$container.masonry({
-	  itemSelector : '.clip'
-	});
-      });
+
+
+    clipListView.bind("collection:rendered",function(collectionView){
       setTimeout(function(){ // STRANGE BEHAVIOUR
-	$("#list").masonry("appended", itemView.$el);
+	//$("#list").masonry("reload");
+	//$("#list").masonry("appended", collectionView.$el);
       },0);
     });
+
+
     App.listRegion.show(clipListView);
-    // $("#list").masonry("reload");
-    // $("#list").masonry("appended", clipListView.$el);
+    //$("#list").masonry("reload");
+    //$("#list").masonry("appended", clipListView.$el);
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 
@@ -260,7 +272,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	      flag = false;
 	      $(".loader").text("reach to the end.");
 	    }else{
-	      //$("#list").masonry("reload");
 	      precliplength = options.clips.length;
 	    }
 	  },200);
