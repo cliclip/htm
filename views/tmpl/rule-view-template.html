@@ -7,10 +7,10 @@
       <label>标题必须有:&nbsp;<input type="text" class="rule_text" disabled id="title" value="<%=title?title:''%>" />
     </div>
     <div>
-      <label>&nbsp;&nbsp;必须抄送:&nbsp;<input type="text" class="rule_text" disabled id="copy-to" value="<%=to?to.join(','):''%>" />
+      <label>&nbsp;&nbsp;必须抄送:&nbsp;<input type="text" class="rule_text" disabled id="copy-to" value="<%=to?to.join(','):''%>" style="ime-mode:Disabled;"/>
     </div>
     <div>
-      <label>&nbsp;&nbsp;必须发给:&nbsp;<input type="text" class="rule_text" disabled  id="send" value="<%=cc?cc.join(','):''%>" />
+      <label>&nbsp;&nbsp;必须发给:&nbsp;<input type="text" class="rule_text" disabled  id="send" value="<%=cc?cc.join(','):''%>" style="ime-mode:Disabled;"/>
     </div>
   </div><br/>
   <input type="button" value="更新邮件规则" id="update_rule"/>
