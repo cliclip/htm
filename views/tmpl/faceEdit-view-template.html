@@ -1,0 +1,11 @@
+<script type="text/template" id="faceEdit-view-template">
+<br/><br/>  <label>账户信息</label><br/><br/>
+  <div id="userFace">
+    <img id="myface-image" src="<%=App.util.face_url(face)%>" height="240" width="240"/><br>
+    <input type="button" id="resetUserFace" value="修改头像"/>
+  </div><br>
+  <div id="user-name">
+    <%=name%>
+    <input type="button" id="resetUsername" value="修改用户名"/>
+  </div>
+</script>
