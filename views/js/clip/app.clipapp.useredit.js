@@ -5,7 +5,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var flag = false;
 
   var EditModel = App.Model.extend({});
-
+  var NameModel = App.Model.extend({
+    defaults:{
+      id:""
+    },
+    url:function(){
+     return  P + "/user/" + this.id + "/name";
+    }
+  });
   var FaceEditModel = App.Model.extend({
     defaults:{
       id:"",
@@ -52,11 +59,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #popup_ContactClose":"editClose",
       "click #confirm[type=submit]":"submit"
     },
-    setName: function(){
-      console.info($("#set-name").html());
-      if($("#set-name").html()==""){
-	//$("#set-name").
-	console.info("ssss");
+    setName: function(e){
+      if($("#set-name").html()=="您还没有用户名"){
+	$("#set-name").empty();
+	var username = '<input type="text" id="username"/>';
+	$("#set-name").append(username);
+	$('#username').keydown(function(e){
+	  if(e.keyCode==13){
+	    var nameModel = new NameModel({id:App.util.getMyUid()});
+	    UserEdit.saveName(nameModel,{name:$("#username").val()});
+	  }
+	});
       }
     },
     editClose:function(){
@@ -235,6 +248,23 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       },
       error:function(model,res){
 	//console.info("error!!!!!!!!!!");
+      }
+    });
+  };
+  UserEdit.saveName = function(nameModel,params){
+    nameModel.save(params,{
+      type: "PUT",
+      success:function(model,res){
+	alert("恭喜，命名成功!");
+      },
+      error:function(model,res){
+	if(res.name=="invalidate"){
+	  alert("名称不合法！");
+	}else if(res.name == "is_null" ){
+	  alert("用户名为空");
+	}else if("has_name"){
+	  alert("用户名已存在");
+	}
       }
     });
   };

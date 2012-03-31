@@ -6,10 +6,10 @@
       </div>
       <div id="user-name">
 	<%=name%>
-	<div id="set-name"></div>
 	<% if(name && name!=""){%>
 	<input type="button" class="resetUserName" disabled="disabled" value="设置用户名"/>
 	<%}else{%>
+	<div id="set-name">您还没有用户名</div>
 	<input type="button" class="resetUserName" value="设置用户名"/>    
 	<%}%>
       </div>
