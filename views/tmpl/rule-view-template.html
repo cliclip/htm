@@ -4,13 +4,13 @@
     <input type="checkbox" name="open_rule" id="open_rule"/>
     <label for="open_rule">打开邮件识别</label><br><br>
     <div>
-      <label>标题必须有:&nbsp;<input type="text" class="rule_text" disabled id="title" value="<%=title?title:''%>" />
+      <label>标题必须有:&nbsp;<input type="text" class="rule_text" id="title" value="<% if(rule){ %><%=rule.title?rule.title:''%> <% } %>" />
     </div>
     <div>
-      <label>&nbsp;&nbsp;必须抄送:&nbsp;<input type="text" class="rule_text" disabled id="copy-to" value="<%=to?to.join(','):''%>" style="ime-mode:Disabled;"/>
+      <label>&nbsp;&nbsp;必须抄送:&nbsp;<input type="text" class="rule_text" id="copy-to" value="<% if(rule) {%><%=rule.to?rule.to.join('; '):''%> <% } %>" style="ime-mode:Disabled;"/>
     </div>
     <div>
-      <label>&nbsp;&nbsp;必须发给:&nbsp;<input type="text" class="rule_text" disabled  id="send" value="<%=cc?cc.join(','):''%>" style="ime-mode:Disabled;"/>
+      <label>&nbsp;&nbsp;必须发给:&nbsp;<input type="text" class="rule_text" id="send" value="<% if(rule){ %><%=rule.cc?rule.cc.join('; '):''%><% } %>" style="ime-mode:Disabled;"/>
     </div>
   </div><br/>
   <input type="button" value="更新邮件规则" id="update_rule"/>

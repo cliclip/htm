@@ -1,7 +1,6 @@
 App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
-  var ImgModel = App.Model.extend({});
   var originalFace;
   var flag = false;
 
@@ -20,7 +19,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
   var EmailEditModel = App.Model.extend({
     defaults:{
-      // email:[]
+      email:[]
     },
     url:function(){
       return P+"/user/"+this.id+"/email";
@@ -29,7 +28,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var RuleEditModel = App.Model.extend({
     defaults:{
-      rule:""
+      rule:[]
     },
     url:function(){
       return P+"/user/"+this.id+"/rule";
@@ -49,17 +48,24 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click #resetUserFace" : "ChangeFace",
-      "click .resetUserName" : "setName"
-    },
-    ChangeFace: function(){
-      App.vent.trigger("app.clipapp.editface:show");
+      "click .resetUserName" : "setName",
+      "click #popup_ContactClose":"editClose",
+      "click #confirm[type=submit]":"submit"
     },
     setName: function(){
       console.info($("#set-name").html());
       if($("#set-name").html()==""){
 	//$("#set-name").
 	console.info("ssss");
+      }
+    },
+    editClose:function(){
+      FaceEdit.close();
+    },
+    submit:function(form){
+      if(!flag){
+	form.preventDefault();//此处阻止提交表单
+	alert("上传有误");
       }
     }
   });
@@ -89,80 +95,42 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#ruleEdit-view-template",
     events: {
       "click #update_rule" : "ruleUpdate",
-      "keydown #copy-to" : "getCC"
+      "keydown #copy-to" : "setCC",
+      "keydown #send" : "setTO"
+
     },
-    getCC:function(e){
+    setCC:function(e){
       var key = e.keyCode;
       var str = $("#copy-to").val();
       var last_str = str.charAt(str.length - 1);
-      if(last_str!=";"&&last_str!=" "&&(key==9||key==188||key==32)){
-	$("#copy-to").val(str+";");
-	return false;
-      }else if(key == 8){
-	if(last_str==";"){
-	  str = (_.initial(_.compact(str.split(";")))).join(";");
-	  $("#copy-to").val(str);
-	}
+      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59)){
+	$("#copy-to").val(str+"; ");
+	if(key==59||key==32) return false;
+      }
+    },
+    setTO:function(e){
+      var key = e.keyCode;
+      var str = $("#send").val();
+      var last_str = str.charAt(str.length - 1);
+      var penultimate = str.charAt(str.length -2,1);
+      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59)){
+	$("#send").val(str+"; ");
+	if(key==59||key==32) return false;
       }
     },
     ruleUpdate: function(){
-      if($(".rule_text").attr("disabled")=="disabled"){
-	$(".rule_text").attr("disabled",false);
-	$("#update_rule").val("提交");
-      }else{
-	$(".rule_text").attr("disabled","disabled");
-	$("#update_rule").val("更新邮件规则");
-	var title = $("#title").val();
-	var cc =  _.compact($("#copy-to").val().split(";"));
-	var to =  _.compact($("#send").val().split(";"));
-	var enable = false;
-	if($("#open_rule").attr("checked")){
-	  enable =true;
-	}
-	var params = {title:title,to:to,cc:cc,enable:enable};
-	App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
+      var title = $("#title").val();
+      var cc =  _.compact($("#copy-to").val().split(";"));
+      var to =  _.compact($("#send").val().split(";"));
+      var enable = false;
+      if($("#open_rule").attr("checked")){
+	enable =true;
       }
+      var params = {title:title,to:to,cc:cc,enable:enable};
+      App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
     }
   });
 
-  UserEdit.onUploadImgChange = function(sender){
-    if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-      alert('图片格式无效！');
-      return flag;
-    }else{
-      var objPreview = document.getElementById('myface-image' );
-      if( sender.files &&sender.files[0] ){
-	objPreview.src = window.URL.createObjectURL(sender.files[0]);
-	flag = true;
-      }
-    }
-  };
-
-  UserEdit.saveFace = function(editModel,params){
-    editModel.save(params,{
-      url: P+"/user/"+ editModel.id+"/face",
-      type: "POST",
-      success:function(model,res){
-	var uid = editModel.get("id");
-	App.vent.trigger("app.clipapp.face:show",uid);
-      },
-      error:function(model,res){
-	//console.info("error!!!!!!!!!!");
-      }
-    });
-  };
-
-  UserEdit.removeFace = function(editModel,face_id){
-    editModel.destroy({
-      url: P+"/user/"+ editModel.id+"/face/" +face_id,
-      success:function(){
-	//console.info("delete success!!!!!!!!!!");
-      },
-      error:function(){
-	//console.info("delete error!!!!!!!!!!");
-      }
-    });
-  };
 
   UserEdit.showUserEdit = function(uid){
     var editModel = new EditModel({id:uid});
@@ -178,10 +146,39 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.faceRegion = new App.Region({
       el:".face"
     });
-    faceModel.fetch();
-    faceModel.onChange(function(faceModel){
-      var faceView = new FaceView({model: faceModel});
-      UserEdit.faceRegion.show(faceView);
+    faceModel.fetch({
+      success:function(){
+	//console.info("originalFace:" + editModel.get("face"));
+	originalFace = faceModel.get("face");
+	var user = faceModel.get("id");
+	var url = P+"/user/" + user + "/image";
+	faceModel.set("actUrl",url);
+	faceModel.onChange(function(faceModel){
+	  var faceView = new FaceView({model: faceModel});
+	  UserEdit.faceRegion.show(faceView);
+	});
+	$("#post_frame").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var currentFace = returnObj[1][0];
+	      if(!flag){ //flag为true时图片改变并有效，为false时图片没改变或者无效
+		FaceEdit.close();
+	      }else{
+		if(currentFace){
+		  var facemodel = new FaceEditModel({id:user});
+		  if(originalFace){
+		    UserEdit.removeFace(facemodel,originalFace);
+		  }
+		  UserEdit.saveFace(facemodel,{face:currentFace});
+		}
+	      }
+	    }
+	  }
+	});
+      },
+      error:function(){}
     });
   };
 
@@ -208,22 +205,59 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     ruleModel.onChange(function(ruleModel){
       var ruleView = new RuleView({model: ruleModel});
       UserEdit.ruleRegion.show(ruleView);
-      	if(ruleModel.get("enable")){
-	  $("#open_rule").attr("checked",true);
-	}
+      if(ruleModel.get("rule")&&ruleModel.get("rule").enable){
+	$("#open_rule").attr("checked",true);
+      }
     });
   };
 
+  UserEdit.onUploadImgChange = function(sender){
+    if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+      alert('图片格式无效！');
+      return flag;
+    }else{
+      var objPreview = document.getElementById('myface' );
+      if( sender.files &&sender.files[0] ){
+	objPreview.src = window.URL.createObjectURL(sender.files[0]);
+	flag =true;
+	return flag;
+      }
+    }
+  };
 
+  UserEdit.saveFace = function(editModel,params){
+    editModel.save(params,{
+      url: P+"/user/"+ editModel.id+"/face",
+      type: "POST",
+      success:function(model,res){
+	var uid = editModel.get("id");
+	alert("上传成功!");
+      },
+      error:function(model,res){
+	//console.info("error!!!!!!!!!!");
+      }
+    });
+  };
+
+  UserEdit.removeFace = function(editModel,face_id){
+    editModel.destroy({
+      url: P+"/user/"+ editModel.id+"/face/" +face_id,
+      success:function(){
+	//console.info("delete success!!!!!!!!!!");
+      },
+      error:function(){
+	//console.info("delete error!!!!!!!!!!");
+      }
+    });
+  };
+
+/*
   UserEdit.close = function(){
     App.viewRegion.close();
   };
-
+*/
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
     UserEdit.showFace(uid);
-  });
-  App.vent.bind("app.clipapp.useredit:showemail",function(uid){
-    UserEdit.showEmail(uid);
   });
   App.vent.bind("app.clipapp.useredit:showrule",function(uid,model,error){
     UserEdit.showRule(uid,model,error);
@@ -243,13 +277,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   });
   App.vent.bind("app.clipapp.useredit:ruleupdate",function(ruleModel,params){
-		  console.info(params);
     var url = P+"/user/"+ruleModel.id+"/rule";
     ruleModel.save(params,{
 	url: url,
 	type: "POST",
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:success", model.id);
+	  alert("更新邮件规则成功！");
   	},
   	error:function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:error", model, res);
