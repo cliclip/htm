@@ -28,6 +28,12 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.register = function(){
     ClipApp.Register.show();
   };
+  ClipApp.findpasswd = function(){
+    ClipApp.FindPass.show();
+  };
+  ClipApp.resetpasswd = function(link){
+    ClipApp.ResetPass.show(link);
+  };
 
   ClipApp.userShow = function(uid, tag){
     ClipApp.Face.showUser(uid);
@@ -73,6 +79,11 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserRecommend(uid, tag);
+  };
+
+  ClipApp.mySetup = function(){
+    var uid = getMyUid();
+    ClipApp.UserEdit.showUserEdit(uid);
   };
 
   App.vent.bind("app.clipapp:login", function(){

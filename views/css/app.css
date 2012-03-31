@@ -29,16 +29,68 @@
 
 #list{
  top:60px;
- width:600px;
+// width:1000px;
  margin-left:300px;
  position: absolute;
  z-index:9;
 }
 #view{
+ top:100px;
  position: absolute;
  z-index:10;
 }
 #pop{
- position: absolute;
+ top:100px;
+ left:450px;
+ display:block; 
+ position: fixed;
  z-index:11;
+}
+.head {
+  height: 100px;
+  background-color: #eef;
+  margin-bottom: 20px;
+}
+.main .left {
+  float: left;
+  width: 242px;
+}
+.main .left.fixed {
+  position: fixed;
+}
+.main .left .face {
+  width: 240px;
+  height: 240px;
+  border: 1px solid #DDD;
+}
+.main .left .bubb {
+  width: 240px;
+  height: 360px;
+  border: 1px solid #DDD;
+}
+.main #list {
+  margin-left: 262px;
+}
+
+.main + div {
+  clear: both;
+}
+.loader {
+  text-align: right;
+  line-height: 30px;
+  height: 30px;
+}
+.gotop {
+  display: none;
+  width: 100px;
+  height: 100px;
+  background-color: yellow;
+  position: fixed;
+  right: 5px;
+  bottom: 30px;
+  z-index:10;
+}
+
+.preview-view {
+  /* width:310px; */
 }

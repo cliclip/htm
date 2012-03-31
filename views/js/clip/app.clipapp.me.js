@@ -60,6 +60,11 @@ App.ClipApp.Me = (function(App, Backbone, $){
     location.reload();
   });
 
+  App.vent.bind("app.clipapp.useredit:show", function(){
+    Backbone.history.navigate("my/setup");
+    location.reload();
+  });
+
   App.addInitializer(function(){
     Me.me = new Model();
     Me.me.fetch();

@@ -2,33 +2,13 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var start = 0;
-  var end = App.ClipApp.Url.page-1;
+  var start = 1;
+  var end = App.ClipApp.Url.page;
   var precliplength=0,flag=true;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
-      recommened:{},//列表推荐的clip时有此属性
-
-      content:{
-	text:"",//text:String
-	image:""//image:imgid || url
-      },
-      note:{
-	text:"",//{text:string}
-	sound:""//{sound:sndid}
-      },
-      tag:[],
-      root:"",
-      device:"",
-      city:"",
-      source:{
-	type:""//type : "browser" | "clipboard" | "photolib" | "camera"
-      },
-      id:"",
-      user:"",
-      reprint_count:0,//此clip被转摘的次数
-      reply_count:0,//此clip被回复的次数
-      author:{}//此clip的作者，列表推荐和列表follow动态时有此属性
+      recommend:"",//列表推荐的clip时有此属性
+      clip :{}
     }
   });
 
@@ -47,7 +27,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}else{
 	  resp[i].id = resp[i].clip.user+":"+resp[i].clip.id;
 	}
-	if(resp[i].clip.user != App.ClipApp.Me.me.get("id")){
+	if(resp[i].clip.user != App.ClipApp.getMyUid("id")){
 	  resp[i].manage = ["收","转","评"];
 	}else{
 	  resp[i].manage = ["注","改","删"];
@@ -59,6 +39,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipPreviewView = App.ItemView.extend({
     tagName: "div",
+    className: "clip",
     template: "#clippreview-view-template",
     events: {
       "click #detail" : "show_detail",
@@ -67,6 +48,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "click .operate" : "operate",
       "mouseover .preview-info": "mouseover", // mouseover子类也响应
       "mouseout .preview-info": "mouseout" // mouseout 只自己响应
+
     },
     show_detail: function(){
       App.vent.trigger("app.clipapp:clipdetail",this.model.id);
@@ -140,31 +122,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     itemView: ClipPreviewView
   });
 
-  App.vent.bind("clip:preview:scroll", function(view, options){
-    $(document).scroll(function(evt){
-      var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
-      if(view.$el[0].scrollHeight > 0 &&$(window).height()+scrollTop-view.$el[0].scrollHeight>=100 ){
-     // if(view.$el[0].scrollHeight > 0 && (view.$el[0].scrollHeight - scrollTop)<500){
-	start += App.ClipApp.Url.page;
-	end += App.ClipApp.Url.page;
-	options.url = options.clips.url + "/" +start + ".." + end;
-	options.add = true;
-	if(options.clips.length-precliplength<end-start){
-	  flag=false;
-	}
-	if(flag){
-	  options.clips.fetch(options);
-	  precliplength=options.clips.length;
-	}
-      }
-    });
-  });
-
   var getClips = function(options){
-    options.clips = new ClipPreviewList();
+    var clips = new ClipPreviewList();
+    options.clips = clips;
     options.clips.url = options.url;
-    start = 0;
-    end = App.ClipApp.Url.page - 1;
     options.url += "/" + start+".."+end;
     if(options.data){
       options.data = JSON.stringify(options.data),
@@ -225,8 +186,67 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
+    $("#list").masonry({
+      itemSelector : '.clip',
+      columnWidth : 320
+    });
+    clipListView.bind("item:rendered",function(itemView){
+      var $container = $('#list');
+      $container.imagesLoaded( function(){
+	$container.masonry({
+	  itemSelector : '.clip'
+	});
+      });
+      setTimeout(function(){ // STRANGE BEHAVIOUR
+	$("#list").masonry("appended", itemView.$el);
+      },0);
+    });
     App.listRegion.show(clipListView);
+    // $("#list").masonry("reload");
+    // $("#list").masonry("appended", clipListView.$el);
     App.vent.trigger("clip:preview:scroll", clipListView, options);
+  });
+
+  App.vent.bind("clip:preview:scroll", function(view, options){
+    var paddingTop = 0;
+    $(window).scroll(function() {
+      var st = $(window).scrollTop();
+      var wh = window.innerHeight;
+      // fix left while scroll
+      var mt = $(".main").offset().top;
+      if(st > mt){
+	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+	$(".gotop").fadeIn();
+	// show go-top while scroll
+      } else {
+	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$(".gotop").fadeOut();
+      }
+      // loader while scroll down to the page end
+      var lt = $(".loader").offset().top;
+      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
+      //if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
+      if(st + wh > lt){
+	if(flag){
+	  start += App.ClipApp.Url.page;
+	  end += App.ClipApp.Url.page;
+	  options.url = options.clips.url + "/" +start + ".." + end;
+	  options.add = true;
+	  options.clips.fetch(options);
+	  flag = false;
+	  setTimeout(function(){
+	    flag = true;
+	    if(options.clips.length-precliplength<App.ClipApp.Url.page){
+	      flag = false;
+	      $(".loader").text("reach to the end.");
+	    }else{
+	      //$("#list").masonry("reload");
+	      precliplength = options.clips.length;
+	    }
+	  },200);
+	}
+      }
+    });
   });
 
   return ClipList;

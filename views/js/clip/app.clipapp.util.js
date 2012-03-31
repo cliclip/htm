@@ -13,7 +13,7 @@ App.util = (function(){
     }else return imageid;
   };
 
-  util.face_url = function(uid,imageid){
+  util.face_url = function(imageid){
     var pattern = /^[0-9]:[a-z0-9]{32}/;
     if(imageid == ""){
       return "img/f.jpg";
