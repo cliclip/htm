@@ -1,7 +1,6 @@
 App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
-  var ImgModel = App.Model.extend({});
   var originalFace;
   var flag = false;
 
@@ -29,10 +28,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var RuleEditModel = App.Model.extend({
     defaults:{
-      title:"",
-      to:[],
-      cc:[],
-      enable:false
+      rule:[]
     },
     url:function(){
       return P+"/user/"+this.id+"/rule";
@@ -52,10 +48,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click #resetUserFace" : "ChangeFace"
+      "click #popup_ContactClose":"editClose",
+      "click #confirm[type=submit]":"submit"
     },
-    ChangeFace: function(){
-      App.vent.trigger("app.clipapp.editface:show");
+    editClose:function(){
+      FaceEdit.close();
+    },
+    submit:function(form){
+      if(!flag){
+	form.preventDefault();//此处阻止提交表单
+	alert("上传有误");
+      }
     }
   });
 
@@ -135,10 +138,39 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.faceRegion = new App.Region({
       el:".face"
     });
-    faceModel.fetch();
-    faceModel.onChange(function(faceModel){
-      var faceView = new FaceView({model: faceModel});
-      UserEdit.faceRegion.show(faceView);
+    faceModel.fetch({
+      success:function(){
+	//console.info("originalFace:" + editModel.get("face"));
+	originalFace = faceModel.get("face");
+	var user = faceModel.get("id");
+	var url = P+"/user/" + user + "/image";
+	faceModel.set("actUrl",url);
+	faceModel.onChange(function(faceModel){
+	  var faceView = new FaceView({model: faceModel});
+	  UserEdit.faceRegion.show(faceView);
+	});
+	$("#post_frame").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var currentFace = returnObj[1][0];
+	      if(!flag){ //flag为true时图片改变并有效，为false时图片没改变或者无效
+		FaceEdit.close();
+	      }else{
+		if(currentFace){
+		  var facemodel = new FaceEditModel({id:user});
+		  if(originalFace){
+		    UserEdit.removeFace(facemodel,originalFace);
+		  }
+		  UserEdit.saveFace(facemodel,{face:currentFace});
+		}
+	      }
+	    }
+	  }
+	});
+      },
+      error:function(){}
     });
   };
 
@@ -165,8 +197,48 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     ruleModel.onChange(function(ruleModel){
       var ruleView = new RuleView({model: ruleModel});
       UserEdit.ruleRegion.show(ruleView);
-      if(ruleModel.get("enable")){
+      if(ruleModel.get("rule")&&ruleModel.get("rule").enable){
 	$("#open_rule").attr("checked",true);
+      }
+    });
+  };
+
+  UserEdit.onUploadImgChange = function(sender){
+    if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+      alert('图片格式无效！');
+      return flag;
+    }else{
+      var objPreview = document.getElementById('myface' );
+      if( sender.files &&sender.files[0] ){
+	objPreview.src = window.URL.createObjectURL(sender.files[0]);
+	flag =true;
+	return flag;
+      }
+    }
+  };
+
+  UserEdit.saveFace = function(editModel,params){
+    editModel.save(params,{
+      url: P+"/user/"+ editModel.id+"/face",
+      type: "POST",
+      success:function(model,res){
+	var uid = editModel.get("id");
+	alert("上传成功!");
+      },
+      error:function(model,res){
+	//console.info("error!!!!!!!!!!");
+      }
+    });
+  };
+
+  UserEdit.removeFace = function(editModel,face_id){
+    editModel.destroy({
+      url: P+"/user/"+ editModel.id+"/face/" +face_id,
+      success:function(){
+	//console.info("delete success!!!!!!!!!!");
+      },
+      error:function(){
+	//console.info("delete error!!!!!!!!!!");
       }
     });
   };
@@ -178,9 +250,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 */
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
     UserEdit.showFace(uid);
-  });
-  App.vent.bind("app.clipapp.useredit:showemail",function(uid){
-    UserEdit.showEmail(uid);
   });
   App.vent.bind("app.clipapp.useredit:showrule",function(uid,model,error){
     UserEdit.showRule(uid,model,error);
@@ -206,6 +275,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	type: "POST",
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:success", model.id);
+	  alert("更新邮件规则成功！");
   	},
   	error:function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:error", model, res);
