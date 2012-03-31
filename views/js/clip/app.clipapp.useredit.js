@@ -78,7 +78,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     submit:function(form){
       if(!flag){
 	form.preventDefault();//此处阻止提交表单
-	alert("上传有误");
+	//alert("上传有误");
       }
     }
   });
@@ -150,8 +150,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var editView = new EditView({model: editModel});
     App.viewRegion.show(editView);
     UserEdit.showFace(uid);
-    //UserEdit.showEmail(uid);
-    //UserEdit.showRule(uid);
+    UserEdit.showEmail(uid);
+    UserEdit.showRule(uid);
   };
 
   UserEdit.showFace = function(uid){
