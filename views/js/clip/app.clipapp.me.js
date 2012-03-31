@@ -38,7 +38,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   Me.show = function(){
-    console.info(App.util.getMyUid());
     if(!App.util.getMyUid()){
       var meView = new View();
       App.mineRegion.show(meView);

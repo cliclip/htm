@@ -258,11 +258,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	alert("恭喜，命名成功!");
       },
       error:function(model,res){
-	if(res.name=="invalidate"){
+	if(res.name== "invalidate"){
 	  alert("名称不合法！");
 	}else if(res.name == "is_null" ){
 	  alert("用户名为空");
-	}else if("has_name"){
+	}else if(res.name == "has_name"){
 	  alert("用户名已存在");
 	}
       }
