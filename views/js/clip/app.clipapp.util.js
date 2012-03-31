@@ -2,7 +2,8 @@ App.util = (function(){
   var util = {};
 
   util.getMyUid = function(){
-    return document.cookie.split("=")[1].split(":")[0];
+    var cookie = document.cookie;
+    return cookie ? cookie.split("=")[1].split(":")[0] : null;
   };
 
   util.url = function(imageid){

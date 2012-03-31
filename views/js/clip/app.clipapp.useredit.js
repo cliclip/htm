@@ -49,10 +49,18 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click #resetUserFace" : "ChangeFace"
+      "click #resetUserFace" : "ChangeFace",
+      "click .resetUserName" : "setName"
     },
     ChangeFace: function(){
       App.vent.trigger("app.clipapp.editface:show");
+    },
+    setName: function(){
+      console.info($("#set-name").html());
+      if($("#set-name").html()==""){
+	//$("#set-name").
+	console.info("ssss");
+      }
     }
   });
 
@@ -161,8 +169,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var editView = new EditView({model: editModel});
     App.viewRegion.show(editView);
     UserEdit.showFace(uid);
-    UserEdit.showEmail(uid);
-    UserEdit.showRule(uid);
+    //UserEdit.showEmail(uid);
+    //UserEdit.showRule(uid);
   };
 
   UserEdit.showFace = function(uid){

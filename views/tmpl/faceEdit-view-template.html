@@ -6,6 +6,11 @@
   </div><br>
   <div id="user-name">
     <%=name%>
-    <input type="button" id="resetUsername" value="修改用户名"/>
+    <div id="set-name"></div>
+    <% if(name && name!=""){%>
+    <input type="button" class="resetUserName" disabled="disabled" value="修改用户名"/>
+    <%}else{%>
+    <input type="button" class="resetUserName" value="修改用户名"/>    
+    <%}%>
   </div>
 </script>
