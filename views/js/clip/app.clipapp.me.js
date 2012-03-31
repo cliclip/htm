@@ -37,7 +37,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.mineRegion.show(meView);
     }
     Me.me.onChange(function(meModel){
-      //console.info("onChange :: "+Me.me.get("id"));
+      // console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
 	model: meModel
       });
@@ -57,6 +57,11 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.me:register", function(){
     Backbone.history.navigate("register");
+    location.reload();
+  });
+
+  App.vent.bind("app.clipapp.useredit:show", function(){
+    Backbone.history.navigate("my/setup");
     location.reload();
   });
 

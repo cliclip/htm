@@ -28,8 +28,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/recommend":"myRecommend",
       "my/recommend/tag/:tag":"myRecommend",
       "my/interest":"myInterest",
-      "my/interest/tag/:tag":"myInterest"
-      // "my/setup":"mySetup"
+      "my/interest/tag/:tag":"myInterest",
+      "my/setup":"mySetup"
     }
   });
   /*

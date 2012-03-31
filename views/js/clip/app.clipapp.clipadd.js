@@ -18,121 +18,66 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "change #formUpload": "image_change",
       "click #save":"save",
       "click #abandon":"abandon",
-      "click #insText": "addText",
-      "click .detail-text":"editText",
       "click #remark": "remark_newClip"
     },
     initialize: function(){
-      _data = {};
+      _data = {content : []};
     },
     extImg:function(evt){
+      var that = this;
       var url = prompt("url","http://");
       if(url == "http://" || url == null)
 	return;
-      var img = $("<img class='detail-image' src= "+url+">");
-      // contentContainer.append(img);
-      $(".addClip-container").append(img);
+      that.editor.execCommand( "insertImage", [{"src":url}] );
     },
     image_change:function(e){
-      var uid = this.model.get("id");
-      var change = App.util.isImage("formUpload");
-      if(change){
-	$("#img_form").submit();
-	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var imgids = returnObj[1];
-	      for(var i=0;i<imgids.length;i++){
-		var imgid = imgids[i].split(":")[1];
-		var url = P+"/user/"+ uid+"/image/" +imgid;
-		var img = $("<img class='detail-image' src= "+url+">");
-		$(".addClip-container").append(img);
-	      }
+      var that = this;
+      var uid = that.model.get("id");
+      $("#img_form").submit();
+      $("#post_frame").load(function(){ // 加载图片
+	var returnVal = this.contentDocument.documentElement.textContent;
+	if(returnVal != null && returnVal != ""){
+	  var returnObj = eval(returnVal);
+	  var imgObjs = [];
+	  if(returnObj[0] == 0){
+	    var imgids = returnObj[1];
+	    for(var i=0;i<imgids.length;i++){
+	      var imgid = imgids[i].split(":")[1];
+	      var url = P+"/user/"+ uid+"/image/" +imgid;
+	      imgObjs.push({src: url});
 	    }
 	  }
-	});
-      }else{
-	alert("图片格式无效");
-      }
-    },
-    addText: function(evt){
-      var newText = $("<p class='detail-text'>新内容</p>");
-      $(".addClip-container").append(newText);
-    },
-    editText:function(evt){
-      var contentText = $(evt.target);
-      contentText.attr("contenteditable",false);
-      var text = contentText.text().replace(/(^\s*)|(\s*$)/g,"");
-      var h = contentText.height()*1.1;
-      var w = contentText.width();
-      contentText.empty();
-
-      var textarea = $(document.createElement("textarea"));
-      if(text == "新内容"){
-	textarea.val("");
-      }else{
-	textarea.val(text);
-      }
-      textarea.width(w);
-      textarea.height(h);
-      contentText.append(textarea);
-      textarea.focus();
-
-      textarea.blur(function(evt){
-	var text = textarea.val().replace(/(^\s*)|(\s*$)/g,"");
-	textarea.remove();
-	if(!text){
-	  contentText.text("新内容");
-	}else{
-	  contentText.text(text);
 	}
-      }).click(function(evt){
-	evt.stopPropagation();
-	evt.preventDefault();
+	that.editor.execCommand( "insertImage", imgObjs );
       });
     },
     save: function(){
-      _data.content = [];
       var user = this.model.get("id");
-      $(".addClip-container").children().each(function(){
-	var _text = $(this).text() ? $(this).text().replace(/(^\s*)|(\s*$)/g,"") : "";
-	var src = this.src;
-	if(_text == "" && !src){
-	  $(this).remove();
-	}
-	if(_text){ // && text.replace(/(^\s*)|(\s*$)/g,"") != ""){
-	  _data.content.push({text:_text});//.replace(/(^\s*)|(\s*$)/g,"") );
-	}else if(src){ //如果有图片,取得id赋值给content.image
-	  var prefix = P + "/user/"+user+"/image/";
-	  if(src.indexOf(prefix) != -1){
-	    id = src.split(prefix);
-	    src = user+":"+id[1];
+      if(this.editor.hasContents()){
+	this.editor.sync();
+	var html = this.editor.getContent();
+	console.log("html:: %j", html);
+	_data.content = App.util.HtmlToContent(html);
+	this.model.save(_data,{
+	  url: P+"/clip",
+	  type: 'POST',
+	  success:function(response){
+	    var cid = user+":";
+	    // 临时处理
+	    for(var i in response.toJSON()){
+	      if(i != "content" && i!= "id")
+		cid += i;
+	    }
+	    App.viewRegion.close();
+	    // 如何只刷新一个region的内容
+	    // location.reload();
+	  },
+	  error:function(response){
+	    // 出现错误，触发统一事件
+	    App.vent.trigger("app.clipapp.clipadd:error");
 	  }
-	  _data.content.push({image:src});
-	}
-	console.log(_data.content);
-      });
-      this.model.save(_data,{
-	url: P+"/clip",
-	type: 'POST',
-	success:function(response){
-	  var cid = user+":";
-	  // 临时处理
-	  for(var i in response.toJSON()){
-	    if(i != "content" && i!= "id")
-	      cid += i;
-	  }
-	  App.viewRegion.close();
-	  // 如何只刷新一个region的内容
-	  location.reload();
-	},
-	error:function(response){
-	  // 出现错误，触发统一事件
-	  App.vent.trigger("app.clipapp.clipadd:error");
-	}
-      });
+	});
+      };
     },
     abandon: function(){
       // 直接返回详情页面
@@ -147,6 +92,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new ClipModel({id: uid, actUrl:P+"/user/"+ uid+"/image"});
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
+    addClipView.editor = new baidu.editor.ui.Editor({
+      toolbars:[['HighlightCode']],
+      contextMenu:[] // 禁止右键菜单
+    });
+    addClipView.editor.render('addClip-container');
   };
 
   App.vent.bind("app.clipapp.clipadd:cancel", function(){
