@@ -1,0 +1,21 @@
+script(type="text/template",id="following-top-view-template")
+  section.follow_frame
+    ul.tab_frame
+      li 追我的人
+      li.tab 我追的人
+script(type="text/template",id="following-view-template")
+  section.follow_frame
+    ul.user_list
+      li.user
+        div.head
+          | <a href="#user/<%=id%>">
+          img(src="../photos/user_head.jpg")
+          | </a>
+          p
+            | <a href="#user/<%=id%>"><%=name%></a>
+        div.tags
+          i.follow
+          <%for(var i=0;i<tag.length;i++){%>
+          span.tag
+            | <a href="#user/<%=App.ClipApp.getMyUid()%>/tag/<%=tag[i]%>"><%=tag[i]%></a>
+          <%}%>

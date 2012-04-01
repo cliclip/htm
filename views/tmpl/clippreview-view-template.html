@@ -1,12 +1,15 @@
 <script type="text/template" id="clippreview-view-template">
-  <div id="container_<%=clip.user%>_<%=clip.id%>" >
+<!--  <div id="container_<%=clip.user%>_<%=clip.id%>" >-->
     <div class="preview-item">
       <div class="recommend-info recommendWrapA">
 	<% if(recommend){ %>
-	<a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>"><img src="<%= App.util.face_url(recommend.user.id,recommend.user.face) %>" width="50" height="50"/><apan class="recommened",id="recommend_<%=recommend.user.id%>"/><%=recommend.user.name%></a>&nbsp;&nbsp;<span class="recomend-text"><%=recommend.text%></span><%}%>
+	<a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
+	  <img src="<%= App.util.face_url(recommend.user.id,recommend.user.face) %>" width="50" height="50"/>
+	  <span class="recommened",id="recommend_<%=recommend.user.id%>"/><%=recommend.user.name%>
+	</a>&nbsp;&nbsp;
+	<span class="recomend-text"><%=recommend.text%></span><%}%>
       </div>
       <div class="preview-info">
-	
 	<div id="opt" style="display:none">
 	  <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[0]%>" class="operate"/>
 	  <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[1]%>" class="operate"/>
@@ -54,5 +57,7 @@
 	<%}%>
       </div>
     </div>
-  </div>
+
+<!--  </div>-->
 </script>
+

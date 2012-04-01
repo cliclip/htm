@@ -52,7 +52,7 @@ html
         aside.left
           div#face
             // **** 用户信息
-            //-include jade/user_info
+            include jade/user_info
             // ****
           div#bubb
             // **** 气泡
@@ -73,6 +73,8 @@ html
               // **** 谁追我／我追谁 TODO 展开
               //-include jade/follow_me
               // ****
+        div.loader
+          | loading...
 
     div#view
       // **** 增

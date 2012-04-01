@@ -1,0 +1,23 @@
+script(type='text/template',id='me-view-template')
+  <% if (App.util.getMyUid()) { %>
+  nav
+    span.my
+      a(href="#my") 我的
+      i 123
+    span.at_me
+      a(href="#my/recommend") @我
+      i 234
+    span.expert
+      a(href="#my/interest") 砖家
+      i 234
+    span.myset
+      a#mysetup 设置
+      a#logout 登出
+  div.my_info
+    div.my_head.
+      <img id="face-image" src="<%=App.util.face_url(face)%>" height="50" width="50"/>
+  <% } else { %>
+  a#register_button 注册 
+  a#login_button 登录  
+  <% } %>
+
