@@ -25,7 +25,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       "click #following" : "followingOpen"
     },
     followingOpen:function(evt){
-      
+      App.vent.trigger("app.clipapp.followinglist:show",App.ClipApp.Face.getUserId());
     }
   });
 
@@ -42,7 +42,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });
-      App.popRegion.show(followerlistView);
+      App.listRegion.show(followerlistView);
       App.vent.trigger("app.clipapp.followerlist:scroll",followerlistView,options);
     });
   };
@@ -73,7 +73,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   });
 
   // TEST
-App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
+//App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
 
   return FollowerList;
 })(App,Backbone,jQuery);

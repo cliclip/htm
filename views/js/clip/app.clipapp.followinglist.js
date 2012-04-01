@@ -31,7 +31,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
-      App.popRegion.show(followinglistView);
+      App.listRegion.show(followinglistView);
       App.vent.trigger("app.clipapp.followerlist:scroll",followinglistView,options);
     });
   };
@@ -40,6 +40,9 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   };
   App.vent.bind("app.clipapp.followinglist:close",function(){
     FollowingList.close();
+  });
+  App.vent.bind("app.clipapp.followinglist:show",function(uid){
+    FollowingList.showUserFollowing(uid);
   });
 
   return FollowingList;
