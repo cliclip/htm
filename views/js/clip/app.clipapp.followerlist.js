@@ -21,11 +21,15 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     className:"follow-item",
     template: "#follow-view-template",
     itemView:FollowerView,
-    events :{
-      "click: #following":"followingOpen"
+    events : {
+      "click #following" : "followingOpen",
+      "click #follower" : "followerOpen"
     },
-    followingOpen: function(e){
-      console.log("111");
+    followingOpen:function(evt){
+      App.vent.trigger("app.clipapp.followinglist:show",App.ClipApp.Face.getUserId());
+    },
+    followerOpen:function(evt){
+      App.vent.trigger("app.clipapp.followerlist:show",App.ClipApp.Face.getUserId());
     }
   });
 
@@ -42,7 +46,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });
-      App.popRegion.show(followerlistView);
+      App.listRegion.show(followerlistView);
       App.vent.trigger("app.clipapp.followerlist:scroll",followerlistView,options);
     });
   };
@@ -71,9 +75,12 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   App.vent.bind("app.clipapp.followerlist:close",function(){
     FollowerList.close();
   });
+  App.vent.bind("app.clipapp.followerlist:show",function(uid){
+    FollowerList.showUserFollower(uid);
+  });
 
   // TEST
-App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
+//App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
 
   return FollowerList;
 })(App,Backbone,jQuery);

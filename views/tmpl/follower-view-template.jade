@@ -1,15 +1,15 @@
 script(type="text/template",id="follow-view-template")
- section.follow_frame 
-   ul.tab_frame
-     li(class="tab",id="follower") 追我的人
-     li(id="following")我追的人
+  section.follow_frame 
+    ul.tab_frame
+      li(class="tab",id="follower") 追我的人
+      li(id="following")我追的人
 script(type="text/template",id="follower-view-template")
   section.follow_frame
     ul.user_list
       li.user
         div.tag_line
           span
-            | <a href="#user/<%=App.ClipApp.getMyUid()%>/tag/<%=tag%>"><%=tag%></a>	
+            | <a href="#user/<%=id%>/tag/<%=tag%>"><%=tag%></a>	
             img(src="../photos/tag.png")
         div.tags
           | <% for(var i=0; i<user.length; i++){%>
@@ -18,19 +18,3 @@ script(type="text/template",id="follower-view-template")
           | <%=user[i].name%>
           | </span></a><%}%>
           i.follow
-
-script(type="text/template",id="following-view-template")
-  section.follow_frame
-    ul.user_list
-      li.user
-        div.head
-          img(src="../photos/user_head.jpg")
-          p
-            a vidar liu
-        div.tags
-          i.follow
-          span.tag
-          span.tag
-          span.tag
-          span.tag
-          span.tag
