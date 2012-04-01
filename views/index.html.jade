@@ -1,3 +1,4 @@
+//- 此文件与 index.jade 完全一致，所不同在于为了嵌入程序可能需要有一个本地的修改版本
 !!! 5
 html
 
@@ -14,122 +15,99 @@ html
     link(rel="apple-touch-icon",sizes="72x72",href="images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
 
-    //- pack :: link(rel="stylesheet",href="/css/app.css") 
-    link(rel="stylesheet",href="css/preview.css")
-    link(rel="stylesheet",href="css/app.css")
-    link(rel="stylesheet",href="css/app.clipapp.css")
-    link(rel="stylesheet",href="css/userEdit.css")
-    //-link(rel="stylesheet",href="/tmpl/me-view-template.css")
-    //-link(rel="stylesheet",href="/tmpl/userface-view-template.css")
-    //-link(rel="stylesheet",href="/tmpl/userbubb-view-template.css")
-    link(rel="stylesheet",href="tmpl/jquery.tagsinput.css")
-    link(rel="stylesheet",href="tmpl/jquery-ui.css")
-    link(rel="stylesheet",href="tmpl/bubb-view.css")
-    
-    //- pack :: script(src="/js/libs.js")
-    script(src="/js/lib/json2.js")
-    script(src="/js/lib/jquery.js")
-    script(src="/js/lib/underscore.js")
-    script(src="/js/lib/backbone.js")
-    script(src="/js/lib/jquery-ui.min.js")
-    script(src="/js/lib/jquery.tagsinput.js")
-    script(src="/js/lib/jquery.masonry.js")
+    link(rel="stylesheet",href="style/bootstrap.min.css")
+    //- client side less
+    link(rel="stylesheet/less",href="style/style.less")
+    script(src="js/less-1.2.2.min.js")
 
-    //- pack :: script(src="/js/app.js"
-    // script(src="/js/lib/backbone.marionette2.js")
-    script(src="/js/lib/backbone.marionette.js")
-    script(src="/js/app.js")
-    // script(src="/js/Constants.js") 
+    //- ie png fix
+    //if lt IE 7
+      script(src="js/png.js")
+      script DD_belatedPNG.fix('.logo,.input,.select,.add,.more,.comer_topleft,.comer_topright,.comer_bottomleft,.comer_bottomright,.pages_top,.pages_right,.pages_bottom,.biezhen,.search_btn,.my_info,.icon_biezhen,.icon_quote,.user_i,.zhui,.stop,.user_more,.all,.no_tag,.yet_del,.upload_img,.link_img,.format,.url_text,.subject_put,.subject_note,.subject_comment,.subject_forward,.subject_del,.verify,.cancel,.my,.at_me,.expert');
+    //- ie html5 fix
+    //if lt IE 9
+      script(src="js/html5.js")
 
-    //- userapp
-    script(src="/js/user/app.userapp.js")
-    script(src="/js/user/app.userapp.routing.js")
-    //- script(src="/js/user/app.userapp.register.js")
-
-    //- clipapp
-    script(src="/js/clip/app.clipapp.js")
-    //- URL && util
-    script(src="/js/clip/app.clipapp.url.js")
-    script(src="/js/clip/app.clipapp.util.js")
-    //- user
-    script(src="/js/clip/app.clipapp.register.js")
-    script(src="/js/clip/app.clipapp.login.js")
-    script(src="/js/clip/app.clipapp.logout.js")
-    script(src="/js/clip/app.clipapp.me.js")
-    script(src="/js/clip/app.clipapp.emailadd.js")    
-    script(src="/js/clip/app.clipapp.useredit.js")
-    script(src="/js/clip/app.clipapp.findpass.js")     
-    script(src="/js/clip/app.clipapp.resetpass.js")     
-
-    //- bubb
-    script(src="/js/clip/app.clipapp.bubb.js")
-    //- clip_detail
-    script(src="/js/clip/app.clipapp.clipdetail.js")
-    script(src="/js/clip/app.clipapp.clipedit.js")
-    script(src="/js/clip/app.clipapp.clipadd.js")
-    //- clip_preview 
-    script(src="/js/clip/app.clipapp.cliplist.js")
-    script(src="/js/clip/app.clipapp.routing.js")
-
-    script(src="/js/clip/app.clipapp.comment.js")
-    script(src="/js/clip/app.clipapp.recommend.js")
-    script(src="/js/clip/app.clipapp.reclip.js")
-    script(src="/js/clip/app.clipapp.clipdelete.js")
-    script(src="/js/clip/app.clipapp.memo.js")
-    script(src="/js/clip/app.clipapp.query.js")
-
-    script(src="/js/clip/app.clipapp.face.js")
-    script(src="/js/clip/app.clipapp.followinglist.js")
-    script(src="/js/clip/app.clipapp.followerlist.js")
-
-    //- kick start
-    script $(function(){ App.start(); });
-    
   body
-    .main
-      .left
-        #face
-        #bubb
-      .head
-        #mine
-        #query
+
+    div.layout
+
+      header.header
+        div.center
+          div#mine
+            // **** 当前登录用户的信息 TODO 未登录显示 “注册 ｜ 登录”
+            include jade/my_info
+            // ****
+          div.logo
+            a(href="index.html")
+          hgroup.search
+            div.select
+              b.add
+              b.more
+            div#query.input
+              input.text(type="text")
+              input.search_btn(type="submit",value="")
+
+      section.clearfix
+        aside.left
+          div#face
+            // **** 用户信息
+            //-include jade/user_info
+            // ****
+          div#bubb
+            // **** 气泡
+            include jade/bubb
+            // ****
+        div.right.clearfix
+          div.left_shadow.clearfix
+            div.left_shadow_top
+            div#list.content_container
+              // **** clip 列表 A风格，转
+              //-include jade/clip_a_c
+              // **** clip 列表 A风格
+              //-include jade/clip_a
+              // **** clip 列表 B风格，转
+              //-include jade/clip_b_c
+              // **** clip 列表 B风格
+              //-include jade/clip_b
+              // **** 谁追我／我追谁 TODO 展开
+              //-include jade/follow_me
+              // ****
+
+    div#view
+      // **** 增
+      //-include jade/dialog_add
+      // **** 改
+      //-include jade/dialog_edit
+      // **** clip 详情
+      //-include jade/dialog_favo
+      // ****
+    div#pop
+      // **** 收
+      //-include jade/dialog_reclip
+      // **** 转
+      //-include jade/dialog_recommend
+      // **** 评
+      //-include jade/dialog_comment
+      // **** 注
+      //-include jade/dialog_note
+      // **** 删
+      //-include jade/dialog_del
+      // **** 登录
+      //-include jade/dialog_login
+      // **** 邮件确认
+      //-include jade/dialog_mail
+      // ****
+
+    //- 程序控制组件插入的要素
+      #mine
+      #face
+      #bubb
+      #list
       #view
       #pop
-      #list
-    .loader loading...
-    .gotop 
-      a(href='javascript:scroll(0,0)')
-        | Go Top
-    //- templates
-    include tmpl/login-view-template.html
-    include tmpl/me-view-template.html
-    include tmpl/userface-view-template.html
-    include tmpl/userbubb-view-template.html
-    include tmpl/register-view-template.html
-    include tmpl/editUser-view-template.html
-    include tmpl/faceEdit-view-template.html
-    include tmpl/email-view-template.html
-    include tmpl/rule-view-template.html
-    include tmpl/emailAdd-view-template.html
+      #query
 
-    include tmpl/detail-view-template.html
-    include tmpl/editDetail-view-template.html
-    include tmpl/addclip-view-template.html
-    include tmpl/showcomment-view-template.html
-    include tmpl/addcomm-view-template.html
-    include tmpl/comment-view-template.html
-
-    include tmpl/delete-view-template
-    include tmpl/reclip-view-template.html
-    include tmpl/recommend-view-template.html
-    include tmpl/clipmemo-view-template.html
-
-    include tmpl/namelist-view-template.html
-    include tmpl/clippreview-view-template.html
-    include tmpl/objtag-view-template.html
-    include tmpl/queryclip-view-template.html
-
-    include tmpl/following-view-template.html
-    include tmpl/follower-view-template.html
-    include tmpl/findpass-view-template.html
-    include tmpl/resetpass-view-template.html
+    // **** 程序代码插入点
+    include app
+    // ****

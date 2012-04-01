@@ -1,5 +1,3 @@
-include design
-
 //- templates
 include tmpl/login-view-template.html
 include tmpl/me-view-template.html
@@ -14,12 +12,12 @@ include tmpl/addclip-view-template.html
 //-include tmpl/localImg-view-template.html
 include tmpl/showcomment-view-template.html
 include tmpl/addcomm-view-template.html
-include tmpl/comment-view-template.html
+include tmpl/comment-view-template
 
 include tmpl/delete-view-template
 include tmpl/reclip-view-template
-include tmpl/recommend-view-template.html
-include tmpl/clipmemo-view-template.html
+include tmpl/recommend-view-template
+include tmpl/clipmemo-view-template
 
 include tmpl/namelist-view-template.html
 include tmpl/clippreview-view-template.html
@@ -27,7 +25,7 @@ include tmpl/objtag-view-template.html
 include tmpl/queryclip-view-template.html
 
 include tmpl/following-view-template.html
-include tmpl/follower-view-template.html
+include tmpl/follower-view-template
 
 //- pack :: link(rel="stylesheet",href="css/app.css") 
 //-link(rel="stylesheet",href="css/app.css")
@@ -37,8 +35,8 @@ include tmpl/follower-view-template.html
 //-link(rel="stylesheet",href="tmpl/me-view-template.css")
 //-link(rel="stylesheet",href="tmpl/userface-view-template.css")
 //-link(rel="stylesheet",href="tmpl/userbubb-view-template.css")
-//-link(rel="stylesheet",href="tmpl/jquery.tagsinput.css")
-//-link(rel="stylesheet",href="tmpl/jquery-ui.css")
+link(rel="stylesheet",href="tmpl/jquery.tagsinput.css")
+link(rel="stylesheet",href="tmpl/jquery-ui.css")
 //-link(rel="stylesheet",href="tmpl/bubb-view.css")
 
 //- pack :: script(src="js/libs.js")
@@ -91,4 +89,4 @@ script(src="js/clip/app.clipapp.followinglist.js")
 script(src="js/clip/app.clipapp.followerlist.js")
 
 //- kick start
-//-script $(function(){ App.start(); });
+script $(function(){ App.start(); });

@@ -82,6 +82,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       clipmemoModel.set({main_tag:tag_main,obj_tag:tag_obj,note:text,model:"update"});
       var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
       App.popRegion.show(clipmemoView);
+      console.log(pub);
       if(pub == "false"){
 	$("#memo_private").attr("checked","true");
       }
@@ -90,6 +91,20 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       clipmemoModel.set({main_tag:[],obj_tag:[],note:[],model:"add"});
       var clipmemoView = new ClipMemoView({model: clipmemoModel});
       App.popRegion.show(clipmemoView);
+    }
+    if(!_.isEmpty(tag_main)){
+      for(i=0;i < tag_main.length; i++){
+	switch(tag_main[i]){
+	  case "好看":$("#main_tag_1").css("backgroundColor","red");break;
+	  case "好听":$("#main_tag_2").css("backgroundColor","red");break;
+	  case "好吃":$("#main_tag_3").css("backgroundColor","red");break;
+	  case "好玩":$("#main_tag_4").css("backgroundColor","red");break;
+	  case "酷":$("#main_tag_5").css("backgroundColor","red");break;
+	}
+      }
+    };
+    if(!_.isEmpty(tag_obj)){
+      $("#obj_tag").val(tag_obj.join(","));
     }
     $('#obj_tag').tagsInput({
       //width: 'auto',
@@ -131,6 +146,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
     //TEST
-// App.bind("initialize:after", function(){ ClipMemo.show(); });
+ App.bind("initialize:after", function(){ ClipMemo.show(); });
   return ClipMemo;
 })(App,Backbone,jQuery);

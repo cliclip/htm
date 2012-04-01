@@ -222,8 +222,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       url: P+"/user/"+ editModel.id+"/face",
       type: "POST",
       success:function(model,res){
-	var uid = editModel.get("id");
+	//var uid = editModel.get("id");
 	alert("上传成功!");
+	flag = false;
       },
       error:function(model,res){
 	//console.info("error!!!!!!!!!!");

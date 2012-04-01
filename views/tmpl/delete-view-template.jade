@@ -1,0 +1,11 @@
+script(type='text/template', id='delete-view-template')
+  div.masker_layer
+  section.small_pop
+    h2.subject_del 删
+    ul.pop_body
+      li.alert.alert-error
+        h3.alert-heading 真的要删除吗？
+        p 删除后将无法恢复
+      li.btn_group.clearfix
+        input.verify(type="button",id='deleteok_button',value="确定")
+        input.cancel(type="button",id='cancel_button',value="取消")
