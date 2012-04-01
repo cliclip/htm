@@ -73,7 +73,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   });
 
   // TEST
-//App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
+App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
 
   return FollowerList;
 })(App,Backbone,jQuery);

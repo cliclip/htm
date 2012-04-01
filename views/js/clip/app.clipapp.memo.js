@@ -146,6 +146,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
     //TEST
- App.bind("initialize:after", function(){ ClipMemo.show(); });
+// App.bind("initialize:after", function(){ ClipMemo.show(); });
   return ClipMemo;
 })(App,Backbone,jQuery);
