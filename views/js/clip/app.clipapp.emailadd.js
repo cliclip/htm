@@ -26,11 +26,10 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     },
     EmailAddcommit: function(){
       var address = $("#email_address").val();
-      console.log(address);
       this.model.save({email: address},{
 	type: "POST",
   	success: function(model, res){
-   	  App.vent.trigger("app.clipapp.emailadd:success",model.id);
+   	  App.vent.trigger("app.clipapp.emailadd:success",address);
   	},
   	error:function(model, res){
   	  App.vent.trigger("app.clipapp.emailadd:error", model, res);
@@ -55,9 +54,17 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     EmailAdd.showEmailAdd(uid);
   });
-  App.vent.bind("app.clipapp.emailadd:success",function(uid){
-    EmailAdd.close();
-    App.vent.bind("app.clipapp.useredit:show",uid);
+  App.vent.bind("app.clipapp.emailadd:success",function(email){
+    $("#email_add").remove();
+      var com = "";
+      if(email.split("@")[1] == "qq.com"){
+	com = "http://mail.qq.com";
+      }else{
+	com = "http://www."+email.split("@")[1];
+      }
+    var emailDiv = "<div id='email_add'>你添加的邮箱是："+email+"<br><a href='"+com+"' target=\"_blank\">点击激活<a></div>";
+    $(".emailadd_edit").append(emailDiv);
+   // App.vent.bind("app.clipapp.useredit:show",uid);
   });
   App.vent.bind("app.clipapp.emailadd:error",function(model,error){
     EmailAdd.showEmailAdd(null,model,error);

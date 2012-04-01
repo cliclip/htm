@@ -104,7 +104,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 
 
   // TEST
- // App.bind("initialize:after", function(){ Comment.show("1:1"); });
+ //App.bind("initialize:after", function(){ Comment.show("1:1"); });
 
   return Comment;
 })(App, Backbone, jQuery);
