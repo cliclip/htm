@@ -21,11 +21,11 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     className:"follow-item",
     template: "#follow-view-template",
     itemView:FollowerView,
-    events :{
-      "click: #following":"followingOpen"
+    events : {
+      "click #following" : "followingOpen"
     },
-    followingOpen: function(e){
-      console.log("111");
+    followingOpen:function(evt){
+      
     }
   });
 
