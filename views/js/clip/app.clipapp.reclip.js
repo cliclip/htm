@@ -15,16 +15,17 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     className : "reclip-view",
     template : "#reclip-view-template",
     events : {
-      "focus #obj_tag":"objtagOpen",
-      "focus #reclip_text":"foucsAction",
-      "blur #reclip_text":"blurAction",
-      "click #submit_button" : "submit",
-      "click #cancel_button" : "cancel",
-      "click .main_tag":"maintagAction"
+      "focus #obj_tag"     :"objtagOpen",
+      "focus #reclip_text" :"foucsAction",
+      "blur #reclip_text"  :"blurAction",
+      "click #submit"      : "submit",
+      "click #cancel"      : "cancel",
+      "click .main_tag"    :"maintagAction"
     },
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
+      console.log(id);
       var color = $("#"+id).css("backgroundColor");
       if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
@@ -70,6 +71,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var text = $("#reclip_text").val();
       var tag = _.without($("#obj_tag").val().split(","),"add a tag","");
       tag = _.union(tag, tag_list);
+      console.info($("#checkbox").attr("checked")); //TODO
       var params = {clip:{note: [{text:text}],tag:tag}};
       if(this.model.get("model") == "clip"){
 	App.vent.trigger("app.clipapp.reclip:submit", that.model, params);

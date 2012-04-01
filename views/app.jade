@@ -1,0 +1,98 @@
+//- templates
+include tmpl/login-view-template.html
+include tmpl/me-view-template.html
+include tmpl/userface-view-template.html
+include tmpl/userbubb-view-template.html
+include tmpl/register-view-template.html
+include tmpl/editUser-view-template.html
+
+include tmpl/detail-view-template.html
+include tmpl/editDetail-view-template.html
+include tmpl/addclip-view-template.html
+//-include tmpl/localImg-view-template.html
+include tmpl/showcomment-view-template.html
+include tmpl/addcomm-view-template.html
+include tmpl/comment-view-template
+
+include tmpl/delete-view-template
+include tmpl/reclip-view-template
+include tmpl/recommend-view-template
+include tmpl/clipmemo-view-template.html
+
+include tmpl/namelist-view-template.html
+include tmpl/clippreview-view-template.html
+include tmpl/objtag-view-template.html
+include tmpl/queryclip-view-template.html
+
+include tmpl/following-view-template
+include tmpl/follower-view-template.html
+
+include tmpl/findpass-view-template
+include tmpl/resetpass-view-template
+
+//- pack :: link(rel="stylesheet",href="css/app.css") 
+//-link(rel="stylesheet",href="css/app.css")
+//-link(rel="stylesheet",href="css/app.clipapp.css")
+//-link(rel="stylesheet",href="css/uploadImage.css")
+//-link(rel="stylesheet",href="css/preview.css")
+//-link(rel="stylesheet",href="tmpl/me-view-template.css")
+//-link(rel="stylesheet",href="tmpl/userface-view-template.css")
+//-link(rel="stylesheet",href="tmpl/userbubb-view-template.css")
+//-link(rel="stylesheet",href="tmpl/jquery.tagsinput.css")
+//-link(rel="stylesheet",href="tmpl/jquery-ui.css")
+//-link(rel="stylesheet",href="tmpl/bubb-view.css")
+
+//- pack :: script(src="js/libs.js")
+script(src="js/lib/json2.js")
+script(src="js/lib/jquery.js")
+script(src="js/lib/underscore.js")
+script(src="js/lib/backbone.js")
+
+//- plugins
+script(src="js/lib/backbone.marionette.js")
+script(src="js/lib/jquery.tagsinput.js")
+script(src="js/lib/jquery-ui.min.js")
+
+//- pack :: script(src="js/app.js")
+script(src="js/app.js")
+//- userapp
+script(src="js/user/app.userapp.js")
+script(src="js/user/app.userapp.routing.js")
+//- script(src="js/user/app.userapp.register.js")
+//- clipapp
+script(src="js/clip/app.clipapp.js")
+//- URL && util
+script(src="js/clip/app.clipapp.url.js")
+script(src="js/clip/app.clipapp.util.js")
+//- user
+script(src="js/clip/app.clipapp.register.js")
+script(src="js/clip/app.clipapp.login.js")
+script(src="js/clip/app.clipapp.logout.js")
+script(src="js/clip/app.clipapp.me.js")
+script(src="js/clip/app.clipapp.useredit.js")    
+//- bubb
+script(src="js/clip/app.clipapp.bubb.js")
+//- clip_detail
+script(src="js/clip/app.clipapp.clipdetail.js")
+script(src="js/clip/app.clipapp.clipedit.js")
+script(src="js/clip/app.clipapp.clipadd.js")
+//- clip_preview 
+script(src="js/clip/app.clipapp.cliplist.js")
+script(src="js/clip/app.clipapp.routing.js")
+
+script(src="js/clip/app.clipapp.comment.js")
+script(src="js/clip/app.clipapp.recommend.js")
+script(src="js/clip/app.clipapp.reclip.js")
+script(src="js/clip/app.clipapp.clipdelete.js")
+script(src="js/clip/app.clipapp.memo.js")
+script(src="js/clip/app.clipapp.query.js")
+
+script(src="js/clip/app.clipapp.face.js")
+script(src="js/clip/app.clipapp.followinglist.js")
+script(src="js/clip/app.clipapp.followerlist.js")
+
+script(src="js/clip/app.clipapp.findpass.js")
+script(src="js/clip/app.clipapp.resetpass.js")
+
+//- kick start
+script $(function(){ App.start(); });

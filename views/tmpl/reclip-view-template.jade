@@ -1,0 +1,30 @@
+script(type="text/template",id="reclip-view-template")
+  div.masker_layer
+  section.small_pop
+    h2.subject_put.
+      <% if(count){ %>
+      您将收藏<%= count%>条数据
+      <% } else { %>
+      收
+      <% } %>
+    ul.pop_body
+      li.alert
+        <%= typeof error != "undefined" && error ? error : "" %>
+      li.tag_box
+        input.main_tag(type="button",id="main_tag_1",value="好看")
+        input.main_tag(type="button",id="main_tag_2",value="好听")
+        input.main_tag(type="button",id="main_tag_3",value="好吃")
+        input.main_tag(type="button",id="main_tag_4",value="好玩")
+        input.main_tag(type="button",id="main_tag_5",value="酷")
+      li.input_text
+        input.obj_tags(type="text",id="obj_tag")
+      br
+      li.input_textarea
+        textarea(id="reclip_text")备注一下吧~
+      li.input_checkbox
+        label
+          input(type="checkbox",id="checkbox")
+          | 不公开
+      li.btn_group.clearfix
+        input.verify(type="button",value="确定",id="submit")
+        input.cancel(type="button",value="取消",id="cancel")

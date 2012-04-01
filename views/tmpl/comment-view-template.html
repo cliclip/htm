@@ -1,18 +1,28 @@
 <!-- comment template -->
 <script type="text/template" id="comment-view-template">
-  <div align="center"  style="width:300px;height:200px;background:yellow;">
-    <label>评</label><br>
-    <textarea  id="comm_text" rows="3" cols="30" >说点什么吧~</textarea><br>
-    <input type="button" class="main_tag" id="main_tag_1" value="好看" />
-    <input type="button" class="main_tag" id="main_tag_2" value="好听" />
-    <input type="button" class="main_tag" id="main_tag_3" value="好吃" />
-    <input type="button" class="main_tag" id="main_tag_4" value="好玩" />
-    <input type="button" class="main_tag" id="main_tag_5" value="酷" /><br>
-    <input type="checkbox" name="reclip_box" id="reclip_box"/>
-    <label for="reclip_box">同时收</label><br>
-    <input type="button" value="确定" id="commentok_button"/>
-    <input type="button" value="取消" id="cancel_button"/><br>
-  </div>
+  <div class="masker_layer"></div>
+  <section class="small_pop">
+    <h2 class="subject_comment">评</h2>
+    <ul class="pop_body">
+    <li class="input_textarea">   
+      <textarea  id="comm_text" rows="3" cols="30" >说点什么吧~
+      </textarea>
+    </li>
+    <li class="tag_box">
+      <input type="button" class="main_tag" id="main_tag_1" value="好看" />
+      <input type="button" class="main_tag" id="main_tag_2" value="好听" />
+      <input type="button" class="main_tag" id="main_tag_3" value="好吃" />
+      <input type="button" class="main_tag" id="main_tag_4" value="好玩" />
+      <input type="button" class="main_tag" id="main_tag_5" value="酷" /><br>
+    </li> 
+    <li class="input_checkbox">  
+      <label><input type="checkbox" name="reclip_box" id="reclip_box"/>同时收</label>
+    <li class="btn_group clearfix">
+      <input type="button" value="确定"  class="verify" id="commentok_button"/>
+      <input type="button" value="取消" class="cancel" id="cancel_button"/>
+    </li>
+    </ul>
+ </section>
 </script>
 
     

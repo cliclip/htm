@@ -1,0 +1,13 @@
+script(type="text/template",id="findpass-view-template")
+  div.masker_layer
+  section.small_pop
+    h2.pop_title 找回密码
+    ul.pop_body
+      li.alert
+        <%= typeof error != "undefined"&& error.address ? error.address: "" %>
+      h3.subject_put 邮箱地址
+      li.input_text.clearfix
+        input(type="text",id="address")
+      li.btn_group.clearfix
+        input.verify(type="button",value="确定",id="submit")
+        input.cancel(type="button",value="取消",id="cancel")

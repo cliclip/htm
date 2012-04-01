@@ -14,9 +14,10 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     tagName:"div",
     template:"#following-view-template"
   });
-  var FollowingListView=App.CollectionView.extend({
+  var FollowingListView=App.CompositeView.extend({
     tagName:"div",
     className:"following-item",
+    template:"#following-top-view-template",
     itemView:FollowingView
   });
 
@@ -30,7 +31,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
-      App.listRegion.show(followinglistView);
+      App.popRegion.show(followinglistView);
       App.vent.trigger("app.clipapp.followerlist:scroll",followinglistView,options);
     });
   };
