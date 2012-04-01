@@ -16,10 +16,21 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     tagName:"div",
     template:"#follower-view-template"
   });
-  var FollowerListView=App.CollectionView.extend({
+  var FollowerListView=App.CompositeView.extend({
     tagName:"div",
-    className:"follower-item",
-    itemView:FollowerView
+    className:"follow-item",
+    template: "#follow-view-template",
+    itemView:FollowerView,
+    events : {
+      "click #following" : "followingOpen",
+      "click #follower" : "followerOpen"
+    },
+    followingOpen:function(evt){
+      App.vent.trigger("app.clipapp.followinglist:show",App.ClipApp.Face.getUserId());
+    },
+    followerOpen:function(evt){
+      App.vent.trigger("app.clipapp.followerlist:show",App.ClipApp.Face.getUserId());
+    }
   });
 
   FollowerList.showUserFollower=function(uid){
@@ -64,6 +75,12 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   App.vent.bind("app.clipapp.followerlist:close",function(){
     FollowerList.close();
   });
+  App.vent.bind("app.clipapp.followerlist:show",function(uid){
+    FollowerList.showUserFollower(uid);
+  });
+
+  // TEST
+//App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
 
   return FollowerList;
 })(App,Backbone,jQuery);

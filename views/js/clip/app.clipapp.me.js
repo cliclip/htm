@@ -4,6 +4,12 @@ App.ClipApp.Me = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var Me = {};
   var Model = App.Model.extend({
+    defaults:{
+      id:"",
+      name:"",
+      face:"",
+      token:""
+    },
     url: P+"/my/info"
   });
 
@@ -32,7 +38,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   Me.show = function(){
-    if(!Me.me.get("id")){
+    if(!App.util.getMyUid()){
       var meView = new View();
       App.mineRegion.show(meView);
     }

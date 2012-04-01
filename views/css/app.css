@@ -1,3 +1,4 @@
+/*
 #mine{
  float: top;
  float: left;
@@ -28,9 +29,9 @@
 }
 
 #list{
- top:60px;
+ top:0px;
 // width:1000px;
- margin-left:300px;
+ margin-left:262px;
  position: absolute;
  z-index:9;
 }
@@ -69,12 +70,13 @@
   border: 1px solid #DDD;
 }
 .main #list {
-  margin-left: 262px;
+//  margin-left: 262px;
 }
 
 .main + div {
   clear: both;
 }
+*/
 .loader {
   text-align: right;
   line-height: 30px;
@@ -92,5 +94,5 @@
 }
 
 .preview-view {
-  /* width:310px; */
+  width:1000px;
 }

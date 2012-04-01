@@ -1,0 +1,28 @@
+script(type='text/template',id='userface-view-template')
+  div.user_info
+    div.user_head
+      div.
+        <a href="#user/<%=id%>">
+          <img id="face-image" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
+        </a>
+      b.user_i
+        i.stop //- i.zhui
+    dl.user_detail.clearfix
+      dt.
+        <a href="#user/<%=id%>">
+          <%=name%>
+        </a>
+      dd.clearfix
+        span.icons_frame
+          span.icon_block
+            i.icon_biezhen
+            div.
+              <a href="#user/<%=id%>/following">
+                转摘(<%=following%>)
+              </a> 
+          span.icon_block
+            i.icon_quote
+            div.
+              <a href="#user/<%=id%>/follower">
+                粉丝(<%=follower%>)
+              </a>
