@@ -1,0 +1,22 @@
+script(type="text/template",id="addClip-view-template")
+  div.masker_layer
+  section.big_pop
+    h2.subject_add
+      div.pop_left
+        注
+      div.pop_right
+        div.button_frame
+          button.upload_img 上传图片
+            span.url_text
+              input.text(type="text")
+              input.btn(type="submit",value="确定")
+          button.link_img 链接图片
+          button.format 整理格式
+        | 增
+    div.pop_left
+    div#pop_right
+      section.pop_inner
+        article.content
+        div.btn_group.clearfix
+          input.verify(type="button",value="确定")
+          input.cancel(type="button",value="取消")

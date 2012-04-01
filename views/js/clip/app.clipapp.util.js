@@ -13,43 +13,61 @@ App.util = (function(){
     }else return imageid;
   };
 
+  // 拿到的html参数是字符串
   util.HtmlToContent = function(html){
-    var src = /<img\s* (src=\"?)([\w\-:\/\.]+)?\"?\s*.*\/?>/;
+    // var src = /<img\s* (src=\"?)([\w\-:\/\.]+)?\"?\s*.*\/?>/;
+    // var src = /<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg]))[\'|\"].*?[\/]?>/;
+    var src = /<[img|IMG].*?src=[\'|\"]([\w\-:\/\.]+)?\"?\s*.*\/?>/;
     var rg = /<img[^>]+\/>|<img[^>]+>/;
     var link = /http:\/\//;
+    var pre = /<pre.*?>/;
     var content = [];
-    for(var k =0; k< $(html).length; k++){
-      var obj = $(html)[k];
-      html = html.replace('/<p>/',"");
-      obj = $(obj).html().replace(/<p>/,"").replace(/<\/p>/,"");
-      // console.log("obj:: %j",obj);
-      if(rg.test(obj) && obj.indexOf('<img') == 0){
-	obj.match(src);
-	var match = obj.match(src);
-	if(match.length >= 2){
-	  if(link.test(match[2])){
-	    content.push({image: match[2]});
-	  }else{
-	    // 本地上传图片
-	    var ids = match[2].split('/');
-	    var imgid = ids[3]+":"+ids[5];
-	    content.push({image:imgid});
+
+    // 此处的html只包含简单的p标签和span标签 [可是还存在像;nbsp这类内容]
+    // <b></b>也没有处理过滤
+    while(html != ""){
+      html = html.replace(/<[\s|\/]*p.*?>/ig,"");
+      html = html.replace(/<[\s|\/]*span.*?>/ig,"");
+      html = html.replace(/<[\s|\/]*b.*?>/ig,"");
+      if(pre.test(html)){
+	// 取得pre标签结束的位置 [TODO]
+	var i = html.indexOf('</pre>') == -1 ? html.indexOf('</ pre>') : html.indexOf('</pre>');
+	var ss = html.replace(pre,"").substring(0,i);
+	content.push({code: ss});
+	html = html.replace(ss, "").replace(/<\/pre>/,"");
+      }else if(rg.test(html)){
+	var i = html.indexOf('<img');
+	if(i == 0){
+	  var match = html.match(src);
+	  if(match.length >= 2){
+	    if(link.test(match[1])){
+	      content.push({image: match[1]});
+	    }else{// 本地上传图片
+	      var ids = match[1].split('/');
+	      var imgid = ids[3]+":"+ids[5];
+	      content.push({image:imgid});
+	    }
 	  }
+	  html = html.replace(rg,"");
+	}else{
+	  var text = html.substring(0,i);
+	  text = text.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	  content.push({text:text});
+	  html = html.substring(i,html.length);
 	}
-	html = html.replace(rg,"").replace(/<\/p>i/,"");
-	// console.log("img :: %j", html);
       }else{
-	var text = obj.replace(/(^\s*)|(\s*$)/g,"").replace(/<br>/,"");
-	content.push({text:text});
-	html = html.replace(obj, "").replace(/<\/p>i/,"");
-	// console.log("no image :: %j",html);
+	var text = html.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	if(text != "")
+	  content.push({text:text});
+	html = html.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	html = html.replace(text, "");
       }
     }
-    console.log("content:: %j", content);
     return content;
   };
 
   util.ContentToHtml = function(content){
+    // console.log(content);
     var html = "";
     for(var i=0; i<content.length; i++){
       for(key in content[i]){
@@ -64,7 +82,7 @@ App.util = (function(){
 	}
       }
     }
-    console.log("html:: %j", html);
+    // console.log("html:: %j", html);
     return html;
   };
 
