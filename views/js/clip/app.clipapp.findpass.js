@@ -9,8 +9,8 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     className:"findpass-view",
     template:"#findpass-view-template",
     events:{
-      "click input[type=submit]"  :  "submit",
-      "click input[type=reset]"  :  "cancel"
+      "click #submit"  :  "submit",
+      "click #cancel"  :  "cancel"
     },
     submit:function(e){
       var address = $("#address").val();
@@ -53,7 +53,8 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
 
   App.vent.bind("app.clipapp.findpass:cancel",function(){
     FindPass.close();
+    Backbone.history.navigate("",true);
   });
-
+ //App.bind("initialize:after", function(){ FindPass.show(); });
   return FindPass;
 })(App,Backbone,jQuery);

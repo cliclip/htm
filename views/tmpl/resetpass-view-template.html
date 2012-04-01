@@ -1,20 +1,25 @@
 <script type='text/template' id='resetpass-view-template'>
-  <form>
-    <div align="center" style="position:relative;left:500px;top:50px;width:300px;height:150px;background:pink;z-index:400;display:block; ">
-      设置你的新密码,两次密码必须相同
-      <br/>
-      <br/>
-      <label>密码：</label>
-      <input type="text" size="12" id="pass1"/>
-      <sapn class="action-info name"><%= typeof error != "undefined"&& error.error ? error.error: "" %></span>
+  <div class="masker_layer"></div>
+  <section class="small_pop">
+    <h2 class="pop_title">设置新密码</h2> 
+    <br/>
+    <ul class="pop_body">
+      <h4 class="subject_put">密码：</h4>
+      <li class="input_text clearfix">
+	<input type="text" id="pass1"/>
+	<sapn class=""><%= typeof error != "undefined"&& error.error ? error.error: "" %></span>
+      </li>
       <br/> 
-      <label>密码：</label>
-      <input type="text" size="12" id="pass2"/>
-      <sapn class="action-info name"><%= typeof error != "undefined"&& error.error ? error.error: "" %></span>
-      <br/> 
+      <h4 class="subject_put">密码：</h4>
+      <li class="input_text clearfix">
+      <input type="text" id="pass2"/>
+      <sapn class=""><%= typeof error != "undefined"&& error.error ? error.error: "" %></span>
+      </li>
       <br/>
-      <input type="submit"  value="提交"/>
-      <input type="reset"  value="重置"/> 
-    </div>
-  </form>
+      <li class="btn_group clearfix">
+       <input type="button" value="提交" class="verify" id="submit"/>
+       <input type="button" value="重置" class="cancel" id="reset"/> 
+     </li>
+    </ul>
+  </section>
 </script>
