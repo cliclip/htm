@@ -38,8 +38,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   var ClipPreviewView = App.ItemView.extend({
-    tagName: "div",
-    className: "clip-div",
+    tagName: "article",
+    className: "clip",
     template: "#clippreview-view-template",
     events: {
       "click #detail" : "show_detail",
@@ -50,22 +50,22 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "mouseout .preview-info": "mouseout" // mouseout 只自己响应
     },
     initialize: function(){
-/*      	var $container = $('#list');
-	$container.imagesLoaded( function(){
-	  $container.masonry({
-	    itemSelector : '.clip-div'
-	  });
+      var $container = $('#list');
+      $container.imagesLoaded( function(){
+	$container.masonry({
+	  itemSelector : '.clip'
 	});
-*/
+      });
+
       this.bind("item:rendered",function(itemView){
 	setTimeout(function(){ // STRANGE BEHAVIOUR
-/*	  var $newElems = itemView.$el.css({ opacity: 0 });
+	  var $newElems = itemView.$el.css({ opacity: 0 });
 	  $newElems.imagesLoaded(function(){
 	    $newElems.animate({ opacity: 1 });
 	    $("#list").masonry( 'appended', $newElems, true );
 	  });
-*/
-	  $("#list").masonry("appended", itemView.$el);
+
+	  //$("#list").masonry("appended", itemView.$el);
 	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
 	  //$("#list").masonry("reload");
 	},0);
@@ -146,7 +146,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       	var $container = $('#list');
 	$container.imagesLoaded( function(){
 	  $container.masonry({
-	    itemSelector : '.clip-div'
+	    itemSelector : '.clip'
 	  });
 	});
 	setTimeout(function(){ // STRANGE BEHAVIOUR
@@ -228,18 +228,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var clipListView = new ClipListView({collection: clips});
     $('#list').imagesLoaded( function(){
       $('#list').masonry({
-	itemSelector : '.clip-div'
+	itemSelector : '.clip'
       });
     });
     $("#list").masonry({
-      itemSelector : '.clip-div',
-      columnWidth : 320,
-      isAnimated: true,
-      animationOptions: {
-	duration: 750,
-	easing: 'linear',
-	queue: false
-      }
+      itemSelector : '.clip',
+      columnWidth : 360,
+      isAnimated: false
     });
     clipListView.bind("collection:rendered",function(collectionView){
       setTimeout(function(){ // STRANGE BEHAVIOUR
