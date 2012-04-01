@@ -18,7 +18,17 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     tagName:"div",
     className:"following-item",
     template:"#following-top-view-template",
-    itemView:FollowingView
+    itemView:FollowingView,
+    events:{
+      "click #following" : "followingOpen",
+      "click #follower" : "followerOpen"
+    },
+    followingOpen:function(e){
+
+    },
+    followerOpen:function(e){
+     
+    }
   });
 
   FollowingList.showUserFollowing=function(uid){
@@ -31,16 +41,13 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
-      App.popRegion.show(followinglistView);
+      App.listRegion.show(followinglistView);
       App.vent.trigger("app.clipapp.followerlist:scroll",followinglistView,options);
     });
   };
   FollowingList.close=function(){
     App.listRegion.close();
   };
-  App.vent.bind("app.clipapp.followinglist:close",function(){
-    FollowingList.close();
-  });
 
   return FollowingList;
 })(App,Backbone,jQuery);
