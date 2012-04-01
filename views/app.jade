@@ -1,7 +1,7 @@
 //- templates
 include tmpl/login-view-template.html
-include tmpl/me-view-template.html
-include tmpl/userface-view-template.html
+include tmpl/me-view-template
+include tmpl/userface-view-template
 include tmpl/userbubb-view-template.html
 include tmpl/register-view-template.html
 include tmpl/editUser-view-template.html
@@ -20,7 +20,7 @@ include tmpl/recommend-view-template.html
 include tmpl/clipmemo-view-template.html
 
 include tmpl/namelist-view-template.html
-include tmpl/clippreview-view-template.html
+include tmpl/clippreview-view-template
 include tmpl/objtag-view-template.html
 include tmpl/queryclip-view-template.html
 
@@ -44,7 +44,7 @@ script(src="js/lib/json2.js")
 script(src="js/lib/jquery.js")
 script(src="js/lib/underscore.js")
 script(src="js/lib/backbone.js")
-
+script(src="js/lib/jquery.masonry.js")		
 //- plugins
 script(src="js/lib/backbone.marionette.js")
 script(src="js/lib/jquery.tagsinput.js")
@@ -89,4 +89,4 @@ script(src="js/clip/app.clipapp.followinglist.js")
 script(src="js/clip/app.clipapp.followerlist.js")
 
 //- kick start
-//-script $(function(){ App.start(); });
+script $(function(){ App.start(); });
