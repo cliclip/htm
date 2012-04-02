@@ -15,7 +15,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     className: "addClip-view",
     template: "#addClip-view-template",
     events: {
-      "click #exImg":"extImg",
+      "click .link_img":"extImg",
       "change #formUpload": "image_change",
       "click .verify":"save",
       "click .cancel":"abandon",
@@ -25,6 +25,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       _data = {content : []};
     },
     extImg:function(evt){
+      console.log("=======");
       var that = this;
       var objEditor = document.getElementById("editor");
       var url = prompt("url","http://");
