@@ -65,9 +65,9 @@ App.Collection = Backbone.Collection.extend({
 
 App.ItemView = Backbone.Marionette.ItemView;
 App.Region = Backbone.Marionette.Region;
+App.TemplateCache = Backbone.Marionette.TemplateCache;
 App.CollectionView = Backbone.Marionette.CollectionView;
 App.CompositeView = Backbone.Marionette.CompositeView;
-
 App.Routing = (function(App, Backbone){
   var Routing = {};
   Routing.showRoute = function(){

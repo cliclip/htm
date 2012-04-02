@@ -17,9 +17,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     events: {
       "click #exImg":"extImg",
       "change #formUpload": "image_change",
-      "click #save":"save",
-      "click #abandon":"abandon",
-      "click #remark": "remark_newClip"
+      "click .verify":"save",
+      "click .cancel":"abandon",
+      "click .pop_left": "remark_newClip"
     },
     initialize: function(){
       _data = {content : []};
