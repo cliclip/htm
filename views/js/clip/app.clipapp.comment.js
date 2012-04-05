@@ -15,8 +15,8 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "focus #comm_text":"foucsAction",
       "blur #comm_text":"blurAction",
       "click .main_tag":"maintagAction",
-      "click #commentok_button" : "comment",
-      "click #cancel_button" : "cancel"
+      "click #submit" : "comment",
+      "click #cancel" : "cancel"
     },
 
     foucsAction:function(evt){
@@ -35,7 +35,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       var id = evt.target.id;
       var color = document.getElementById(id).style.backgroundColor;
       if(!color){
-	document.getElementById(id).style.backgroundColor="red";
+	document.getElementById(id).style.backgroundColor="pink";
 	tag_list.push($("#"+id).val());
 	console.dir(tag_list);
 	if($("#comm_text").val() == "" || $("#comm_text").val() == "说点什么吧~"){
@@ -104,7 +104,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 
 
   // TEST
- // App.bind("initialize:after", function(){ Comment.show("1:1"); });
+ //App.bind("initialize:after", function(){ Comment.show("1:1"); });
 
   return Comment;
 })(App, Backbone, jQuery);

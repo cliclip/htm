@@ -235,16 +235,28 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	flag =true;
 	return flag;
       }
+      return true;
     }
   };
+
+/*  UserEdit.image_change = function(){
+    var sender = document.getElementById("formUpload");
+    if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+      alert('图片格式无效！');
+      return false;
+    }else{
+      return true;
+    }
+  };*/
 
   UserEdit.saveFace = function(editModel,params){
     editModel.save(params,{
       url: P+"/user/"+ editModel.id+"/face",
       type: "POST",
       success:function(model,res){
-	var uid = editModel.get("id");
+	//var uid = editModel.get("id");
 	alert("上传成功!");
+	flag = false;
       },
       error:function(model,res){
 	//console.info("error!!!!!!!!!!");

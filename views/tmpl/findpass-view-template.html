@@ -1,16 +1,19 @@
 <script type='text/template' id='findpass-view-template'>
-  <form>
-    <div align="center" style="position:relative;left:500px;top:50px;width:300px;height:150px;background:pink;z-index:400;display:block; ">
-      找回密码前，请输入你的登录邮箱地址
-      <br/>
-      <br/>
-      <label>邮箱地址：</label>
-      <input type="text" size="12" id="address"/>
-      <sapn class="action-info name"><%= typeof error != "undefined"&& error.address ? error.address: "" %></span>
-      <br/> 
-      <br/>
-      <input type="submit"  value="提交"/>
-      <input type="reset"  value="取消"/> 
-    </div>
-  </form>
+  <div class="masker_layer"></div>
+  <section class="small_pop">
+    <h2 class="pop_title">找回密码</h2>
+    <br/>
+    <ul class="pop_body">
+      <h3 class="subject_put">邮箱地址</h3>
+     <li class="input_text clearfix">
+       <input type="text" id="address"/>
+       <sapn class=""><%= typeof error != "undefined"&& error.address ? error.address: "" %></span>
+     </li>
+     <br/>
+     <li class="btn_group" clearfix>
+       <input type="button" value="确定" class="verify" id="submit"/>
+       <input type="button" value="取消" class="cancel" id="cancel"/> 
+     </li>
+    </ul>
+  </section>
 </script>

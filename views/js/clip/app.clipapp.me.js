@@ -43,7 +43,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.mineRegion.show(meView);
     }
     Me.me.onChange(function(meModel){
-      //console.info("onChange :: "+Me.me.get("id"));
+      // console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
 	model: meModel
       });

@@ -13,7 +13,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   var RecommModel = App.Model.extend({});
   var RecommView = App.ItemView.extend({
     tagName:"div",
-    className:"recommend view",
+    className:"",
     template:"#recommend-view-template",
     events:{
       "click #name_list"     :  "getUserAction",
@@ -22,8 +22,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "mouseover #name_list" :  "MouseOver",
       "mouseout #name_list"  :  "MouseOut",
       "focus #recommend_text":  "clearAction",
-      "click #recomm_button" :  "recommendAction",
-      "click #cancel_button" : "cancelAction"
+      "click #submit"        :  "recommendAction",
+      "click #cancel"        : "cancelAction"
     },
     getUserAction:function(evt){
       // 这里是必须要触发才会取得uid
@@ -53,6 +53,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       };
       if(this.model.get("uid")){
 	App.vent.trigger("app.clipapp.recommend:submit",this.model,params);
+	if($("#reclip_box").attr("checked")){
+	App.vent.trigger("app.clipapp.reclip:submit", that.model,params1);
+      }
       }else{
 	App.vent.trigger("app.clipapp.recommend:error",this.model,{"user":"请添加用户"});
       }

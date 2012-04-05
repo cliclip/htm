@@ -2,6 +2,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
   var _data = {};
+  var objEditor = "";
 
   var ClipModel = App.Model.extend({
     url: function(){
@@ -14,100 +15,47 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     className: "addClip-view",
     template: "#addClip-view-template",
     events: {
-      "click #exImg":"extImg",
+      "click .link_img":"extImg",
       "change #formUpload": "image_change",
-      "click #save":"save",
-      "click #abandon":"abandon",
-      "click #insText": "addText",
-      "click .detail-text":"editText",
-      "click #remark": "remark_newClip"
+      "click .verify":"save",
+      "click .cancel":"abandon",
+      "click .pop_left": "remark_newClip"
     },
     initialize: function(){
-      _data = {};
+      _data = {content : []};
     },
     extImg:function(evt){
+      console.log("=======");
+      var that = this;
+      var objEditor = document.getElementById("editor");
       var url = prompt("url","http://");
       if(url == "http://" || url == null)
 	return;
-      var img = $("<img class='detail-image' src= "+url+">");
-      // contentContainer.append(img);
-      $(".addClip-container").append(img);
+      App.ClipApp.EditPaste.insertImage("editor", {url: url});
     },
     image_change:function(e){
-      var uid = this.model.get("id");
+      var that = this;
+      var uid = that.model.get("id");
       $("#img_form").submit();
       $("#post_frame").load(function(){ // 加载图片
 	var returnVal = this.contentDocument.documentElement.textContent;
 	if(returnVal != null && returnVal != ""){
 	  var returnObj = eval(returnVal);
 	  if(returnObj[0] == 0){
-	    var imgids = returnObj[1];
-	    for(var i=0;i<imgids.length;i++){
-	      var imgid = imgids[i].split(":")[1];
-	      var url = P+"/user/"+ uid+"/image/" +imgid;
-	      var img = $("<img class='detail-image' src= "+url+">");
-	      $(".addClip-container").append(img);
-	    }
+	    var imgids = returnObj[1][0];
+	    // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	    var imgid = imgids.split(":")[1];
+	    var url = P+"/user/"+ uid+"/image/" +imgid;
+	    App.ClipApp.EditPaste.insertImage("editor", {url: url});
+	    // }
 	  }
 	}
-      });
-    },
-    addText: function(evt){
-      var newText = $("<p class='detail-text'>新内容</p>");
-      $(".addClip-container").append(newText);
-    },
-    editText:function(evt){
-      var contentText = $(evt.target);
-      contentText.attr("contenteditable",false);
-      var text = contentText.text().replace(/(^\s*)|(\s*$)/g,"");
-      var h = contentText.height()*1.1;
-      var w = contentText.width();
-      contentText.empty();
-
-      var textarea = $(document.createElement("textarea"));
-      if(text == "新内容"){
-	textarea.val("");
-      }else{
-	textarea.val(text);
-      }
-      textarea.width(w);
-      textarea.height(h);
-      contentText.append(textarea);
-      textarea.focus();
-
-      textarea.blur(function(evt){
-	var text = textarea.val().replace(/(^\s*)|(\s*$)/g,"");
-	textarea.remove();
-	if(!text){
-	  contentText.text("新内容");
-	}else{
-	  contentText.text(text);
-	}
-      }).click(function(evt){
-	evt.stopPropagation();
-	evt.preventDefault();
       });
     },
     save: function(){
-      _data.content = [];
       var user = this.model.get("id");
-      $(".addClip-container").children().each(function(){
-	var _text = $(this).text() ? $(this).text().replace(/(^\s*)|(\s*$)/g,"") : "";
-	var src = this.src;
-	if(_text == "" && !src){
-	  $(this).remove();
-	}
-	if(_text){ // && text.replace(/(^\s*)|(\s*$)/g,"") != ""){
-	  _data.content.push({text:_text});//.replace(/(^\s*)|(\s*$)/g,"") );
-	}else if(src){ //如果有图片,取得id赋值给content.image
-	  var prefix = P + "/user/"+user+"/image/";
-	  if(src.indexOf(prefix) != -1){
-	    id = src.split(prefix);
-	    src = user+":"+id[1];
-	  }
-	  _data.content.push({image:src});
-	}
-      });
+      var html = App.ClipApp.EditPaste.getContent("editor");
+      _data.content = App.util.HtmlToContent(html);
       this.model.save(_data,{
 	url: P+"/clip",
 	type: 'POST',
@@ -120,7 +68,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  }
 	  App.viewRegion.close();
 	  // 如何只刷新一个region的内容
-	  location.reload();
+	  // location.reload();
 	},
 	error:function(response){
 	  // 出现错误，触发统一事件
@@ -141,6 +89,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new ClipModel({id: uid, actUrl:P+"/user/"+ uid+"/image"});
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
+    App.ClipApp.EditPaste.initEditor();
+    /*addClipView.editor = new baidu.editor.ui.Editor({
+      toolbars:[['HighlightCode']],
+      contextMenu:[] // 禁止右键菜单
+    });
+    addClipView.editor.render('addClip-container');*/
   };
 
   App.vent.bind("app.clipapp.clipadd:cancel", function(){

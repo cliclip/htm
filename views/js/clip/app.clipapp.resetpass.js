@@ -7,8 +7,8 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
     className:"resetpass-view",
     template:"#resetpass-view-template",
     events:{
-      "click input[type=submit]"  :  "submit",
-      "click input[type=reset]"  :  "reset"
+      "click #submit" :  "submit",
+      "click #reset"  :  "reset"
     },
     submit:function(e){
       var pass1 = $("#pass1").val();

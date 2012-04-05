@@ -1,3 +1,4 @@
+/*
 #mine{
  float: top;
  float: left;
@@ -75,6 +76,7 @@
 .main + div {
   clear: both;
 }
+*/
 .loader {
   text-align: right;
   line-height: 30px;
@@ -92,5 +94,5 @@
 }
 
 .preview-view {
-  //width:1000px;
+  width:1000px;
 }

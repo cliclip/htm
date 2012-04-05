@@ -66,10 +66,14 @@
   float: left
 }
 
-#edit_remark{
- width: 40px;
- height: 40px;
- padding: 10px;
+#addClip-container{
+  width: 600px;
+  margin-left: 70px;
+}
+
+#editClip-container{
+  width: 600px;
+  margin-left: 70px;
 }
 
 
@@ -79,6 +83,12 @@
   margin-right: 20px;
   width: 50px;
   float: right
+}
+
+#edit_remark{
+ width: 40px;
+ height: 40px;
+ padding: 10px;
 }
 
 
