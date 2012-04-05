@@ -100,7 +100,7 @@ App.addRegions({
   listRegion: "#list",
   viewRegion: "#view",
   popRegion: "#pop",
-  queryRegion:"#query"
+  searchRegion:".search"
 });
 
 App.bind("initialize:after", function(){

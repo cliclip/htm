@@ -59,17 +59,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
 
       this.bind("item:rendered",function(itemView){
-	setTimeout(function(){ // STRANGE BEHAVIOUR
-	  var $newElems = itemView.$el.css({ opacity: 0 });
-	  $newElems.imagesLoaded(function(){
-	    $newElems.animate({ opacity: 1 });
-	    $("#list").masonry( 'appended', $newElems, true );
-	  });
-
-	  //$("#list").masonry("appended", itemView.$el);
-	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-	  //$("#list").masonry("reload");
-	},0);
+	var $newElems = itemView.$el.css({ opacity: 0 });
+	$newElems.imagesLoaded(function(){
+	  $newElems.animate({ opacity: 1 });
+	  //setTimeout(function(){
+	    //$("#list").masonry( 'appended', $newElems,true);
+	    $("#list").masonry("reload");
+	  //},0);
+	});
       });
     },
     show_detail: function(){
@@ -143,7 +140,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     className: "preview-view",
     itemView: ClipPreviewView,
     initialize: function(){
-/*      this.bind("collection:rendered",function(itemView){
+      this.bind("collection:rendered",function(itemView){
       	var $container = $('#list');
 	$container.imagesLoaded( function(){
 	  $container.masonry({
@@ -153,12 +150,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	setTimeout(function(){ // STRANGE BEHAVIOUR
 	  //$("#list").masonry("appended", itemView.$el);
 	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-	  $("#list").masonry("reload");
+//	  $("#list").masonry("reload");
 	},0);
       });
-*/
     }
-
   });
 
   var getClips = function(options){
@@ -227,25 +222,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
-    $('#list').imagesLoaded( function(){
-      $('#list').masonry({
-	itemSelector : '.clip'
-      });
-    });
     $("#list").masonry({
       itemSelector : '.clip',
       columnWidth : 360,
       isAnimated: false
     });
-    clipListView.bind("collection:rendered",function(collectionView){
-      setTimeout(function(){ // STRANGE BEHAVIOUR
-	//$("#list").masonry("reload");
-	//$("#list").masonry("appended", collectionView.$el);
-      },0);
-    });
     App.listRegion.show(clipListView);
-    //$("#list").masonry("reload");
-    //$("#list").masonry("appended", clipListView.$el);
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 

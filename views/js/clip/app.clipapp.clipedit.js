@@ -90,9 +90,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     abandonUpdate: function(){
       // 直接返回详情页面
+      App.viewRegion.close();
       var user = this.model.get("user");
       var cid =	user+":"+this.model.id;
-      App.vent.trigger("app.clipapp:clipdetail", cid);
+      //在clip列表界面触发“改”时不应返回详情页面
+      //App.vent.trigger("app.clipapp:clipdetail", cid);
     }
   });
 
