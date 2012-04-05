@@ -1,0 +1,29 @@
+script(type="text/template",id="addClip-view-template")
+  div.masker_layer
+  section.big_pop
+    h2.subject_add
+      div.pop_left
+        注
+      div.pop_right
+        div.button_frame.
+          <iframe name="post_frame" id="post_frame" style="display:none;" mce_style="display:none;">
+          </iframe>
+          <form method="POST" id="img_form" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
+            <span class="file" style="display:inline-block;overflow:hidden;position: relative;vertical-align: middle;">
+              <button class="upload_img" id="localImg">上传图片
+              <input id="formUpload" class="hifile" type="file" name="image"> 
+            </span>
+          </form>
+          <button class="link_img" id="extImg">链接图片
+          <button class="format">整理格式
+        | 增
+    div.pop_left
+    div#pop_right
+      section.pop_inner
+        article.content.
+          <form id="myForm" method="post">
+            <iframe id="editor" class="editor"></iframe>
+          </form>
+        div.btn_group.clearfix
+          input.verify(type="button",value="确定")
+          input.cancel(type="button",value="取消")

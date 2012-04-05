@@ -17,7 +17,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template: "#detail-view-template",
     events: {
       "click .operate" : "Operate",
-      "click #popup_ContactClose" : "Close"
+      "click .masker_layer" : "Close" // 点击detail下的层，便隐藏
     },
     Operate: function(e){
       e.preventDefault();
@@ -109,7 +109,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	if(i != "id" )
 	  res.push(model[i]);
       }
-      this.getTemplate(function(template){
+      var template = this.getTemplateSelector();
+      var templateRetrieval = App.TemplateCache.get(template);
+      $.when(templateRetrieval).then(function(template){
 	function render_tree(commentList, html){
 	  var e = commentList.shift();
 	  // console.log("render_tree :: %j %s", e, html);
@@ -118,7 +120,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  } else {
 	    e.auth = auth;
 	    e.clip_owner = clip_owner;
-	    var str = that.renderTemplate(template, e);
+	    var str = _.template(template, e);
 	    if (e.children && e.children.length > 0) {
 	      str += "<div class='children'>";
 	      str += render_tree(e.children, "");
@@ -170,7 +172,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     comment.onChange(function(commentModel){
       var commentView = new CommentView({model: commentModel});
       ClipDetail.commentRegion = new App.Region({
-	el:"#comment_showDiv"
+	el:".comments"
       });
       ClipDetail.commentRegion.show(commentView);
     });
@@ -186,21 +188,19 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "focus #comm_text":"foucsAction",
       "blur #comm_text":"blurAction",
       "click .comm":"maintagAction",
-      "click #ok_button":"comment",
-      "click #cancel_button":"cancel"
+      "click .verify":"comment",
+      "click .cancel":"cancel"
     },
     foucsAction:function(evt){
       if($("#comm_text").val() == "评论文本框~" ){
 	$("#comm_text").val("");
       }
     },
-
     blurAction:function(evt){
       if($("#comm_text").val() == ""){
 	$("#comm_text").val("评论文本框~");
       }
     },
-
     maintagAction:function(evt){
       var id = evt.target.id;
       var color = $("#"+id).css("backgroundColor");
@@ -263,7 +263,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     addCommModel.set("self",self);
     var addCommView = new AddCommView({model: addCommModel});
     ClipDetail.addCommRegion = new App.Region({
-      el:"#addComm_showDiv"
+      el:".input_textarea"
     });
     ClipDetail.addCommRegion.show(addCommView);
     if(focus)

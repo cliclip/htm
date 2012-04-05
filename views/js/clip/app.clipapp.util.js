@@ -7,11 +7,93 @@ App.util = (function(){
   };
 
   util.url = function(imageid){
-    var pattern = /^[0-9]:[a-z0-9]{32}/;
+    var pattern = /^\d+:[a-z0-9]{32}/;
     if(imageid && pattern.test(imageid)){
       var ids = imageid.split(":");
       return P + "/user/" + ids[0]+ "/image/" + ids[1];
     }else return imageid;
+  };
+
+  // 拿到的html参数是字符串
+  util.HtmlToContent = function(html){
+    // var src = /<img\s* (src=\"?)([\w\-:\/\.]+)?\"?\s*.*\/?>/;
+    // var src = /<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg]))[\'|\"].*?[\/]?>/;
+    var src = /<[img|IMG].*?src=[\'|\"]([\w\-:\/\.]+)?\"?\s*.*\/?>/;
+    var rg = /<img[^>]+\/>|<img[^>]+>/;
+    var link = /http:\/\//;
+    var pre = /<pre.*?>/;
+    var content = [];
+
+    // 此处的html只包含简单的p标签和span标签 [可是还存在像;nbsp这类内容]
+    // <b></b>也没有处理过滤
+    while(html != ""){
+      html = html.replace(/<[\s|\/]*p.*?>/ig,"");
+      html = html.replace(/<[\s|\/]*span.*?>/ig,"");
+      html = html.replace(/<[\s|\/]*b.*?>/ig,"");
+      if(pre.test(html)){
+	// 取得pre标签结束的位置 [TODO]
+	var i = html.indexOf('</pre>') == -1 ? html.indexOf('</ pre>') : html.indexOf('</pre>');
+	var ss = html.replace(pre,"").substring(0,i);
+	content.push({code: ss});
+	html = html.replace(ss, "").replace(/<\/pre>/,"");
+      }else if(rg.test(html)){
+	var i = html.indexOf('<img');
+	if(i == 0){
+	  var match = html.match(src);
+	  if(match.length >= 2){
+	    if(link.test(match[1])){
+	      content.push({image: match[1]});
+	    }else{// 本地上传图片
+	      var ids = match[1].split('/');
+	      var imgid = ids[3]+":"+ids[5];
+	      content.push({image:imgid});
+	    }
+	  }
+	  html = html.replace(rg,"");
+	}else{
+	  var text = html.substring(0,i);
+	  text = text.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	  content.push({text:text});
+	  html = html.substring(i,html.length);
+	}
+      }else{
+	var text = html.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	if(text != "")
+	  content.push({text:text});
+	html = html.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	html = html.replace(text, "");
+      }
+    }
+    return content;
+  };
+
+  util.ContentToHtml = function(content){
+    // console.log(content);
+    var html = "";
+    for(var i=0; i<content.length; i++){
+      for(key in content[i]){
+	switch(key){
+	  case 'text':
+	    html += '<p>' + content[i][key] + '</p>';break;
+	  case 'image':
+	    html += '<p><img src=' + util.url(content[i][key]) + '></img></p>';
+	    break;
+	  case 'code':
+	    html += '<pre> ' + content[i][key] + '</pre>';break;
+	}
+      }
+    }
+    // console.log("html:: %j", html);
+    return html;
+  };
+
+  util.isImage = function(id){
+    var sender = document.getElementById(id);
+    if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+      return false;
+    }else{
+      return true;
+    }
   };
 
   util.face_url = function(imageid){
