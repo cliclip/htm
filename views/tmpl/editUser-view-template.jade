@@ -1,0 +1,85 @@
+script(type="text/template",id="editUser-view-template")
+  div(class="left_bar")
+  div(class="middle",id="email")
+  div(class="middle",id="rule")
+  div(class="right_bar")
+
+script(type="text/template",id="faceEdit-view-template")
+  .edit_head
+    .head_img.
+      <img id="myface" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
+    .user_name
+      <% if(name && name!=""){%>
+      <input class="name" type="text" value="<%=name%>" />
+      <input type="button" class="edit_username" disabled="disabled" value="设置用户名"/>
+      <%}else{%>
+      <div id="set-name">您还没有用户名</div>
+      <input type="button" class="edit_username" value="设置用户名"/>    
+      <%}%>
+  .head_link
+    iframe(name="post_frame",id="post_frame",style="display:none;",mce_style="display:none;")
+    |<form method="POST" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
+    input.link(type="text",value="粘贴图像地址")
+    .btn_frame
+      button.verify(type="submit",id="confirm") 确定
+      span.file
+        button.upload(type="button")	
+          |上传本地图像
+        |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
+
+script(type="text/template",id="emailEdit-view-template")
+  .mail_verify
+    ul.mail_list
+      h3
+        input.add_mailbind(type="button",id="email_add",value="增加邮箱绑定")
+        |邮箱识别
+      |<% if(email){ for(i=0;i<email.length;i++) { if(email[i]){ %>
+      |<li class="mail_line">
+      |<span class="email_address" id="<%=email[i]%>"></span>
+      |<%=email[i]%>
+      |</li><% }} }%>
+  
+script(type="text/template",id="ruleEdit-view-template")
+  .mail_verify.bottom_s
+    ul.mail_list
+      h3
+        span.open_mailcheck
+          input(type="checkbox",id="open_rule")
+          label(for="check")|打开邮箱识别
+        |邮箱识别
+      li
+        label 标题必须有
+        |<input type="text" class="text_input" id="title" value="<% if(rule){ %><%=rule.title?rule.title:''%> <% } %>" />
+      li
+        label 必须抄送给
+        |<input type="text" class="text_input" id="copy-to" value="<% if(rule) {%><%=rule.cc?rule.cc.join('; '):''%> <% } %>" style="ime-mode:Disabled;"/>
+      li
+        label 必须发给
+        |<input type="text" class="text_input" id="send" value="<% if(rule){ %><%=rule.to?rule.to.join('; '):''%><% } %>" style="ime-mode:Disabled;"/>
+      li
+        input.btn_blue(type="submit",id="update_rule",value="更新邮件规则")
+
+script(type="text/template",id="passEdit-view-template")
+  h3.edit_password 修改密码
+  ul.input_list
+    li
+      input(type="password",id="old_pass")
+    li
+      input(type="password",id="new_pass")
+    li
+      input.btn_blue(type="submit",id="pass_confirm",value="更改")
+  h3.danger 高危操作
+  ul.input_list
+    li.btn_line
+      input.btn_blue(type="submit",value="导出摘录")
+    li
+      input.btn_gray(type="submit",value="删除账户")
+script(type="text/template",id="emailAdd-view-template")
+  .emailadd_edit(align="center",style="width:300px;height:250px;background:yellow;")
+    .email_add
+      h3.edit_password 添加邮件
+      input(type="text",name="email_address",id="email_address",size="30")
+      span.error
+      |<%= typeof error != "undefined" && error.email ? error.email : "" %></span><br>
+      input(type="button",id="emailadd_commit",value="提交")
+      input(type="button",id="emailadd_cancel",value="取消")

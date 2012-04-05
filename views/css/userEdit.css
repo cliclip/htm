@@ -14,40 +14,37 @@
   z-index:12; 
 }
 
-.editUser .face .faceEdit {
-    height: 500px;
+.editUser .face  {
     margin-left: 170px;
     margin-top: 20px;
-    width: 35%;
+//    width: 35%;
     position: absolute;
-    background-color:#888;
+
 }
-.editUser .email .emailEdit {
+.editUser .email {
     float: left;
-    height: 250px;
     margin-left: 450px;
     margin-top: 20px;
-    width: 45%;
+//    width: 45%;
     position: absolute;
-    background-color:#888;
+
 }
-.editUser .rule .ruleEdit {
+.editUser .rule  {
     float: left;
-    height: 250px;
     margin-left: 450px;
     margin-top: 270px;
-    width: 45%;
+//    width: 45%;
     position: absolute;
-    background-color:#888;
+
 }
 
-.editUser .riskEdit {
+.editUser .passedit {
     float: left;
     height: 500px;
-    margin-left: 850px;
-    margin-top: 20px;
-    width: 35%;
-    background-color:#888;
+   // margin-left: 850px;
+   // margin-top: 20px;
+ //   width: 35%;
+
 }
 .file {
     display: inline-block;
