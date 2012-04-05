@@ -52,10 +52,11 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
+		  console.log(uid);
     EmailAdd.showEmailAdd(uid);
   });
   App.vent.bind("app.clipapp.emailadd:success",function(email){
-    $("#email_add").remove();
+    $(".email_add").remove();
       var com = "";
       if(email.split("@")[1] == "qq.com"){
 	com = "http://mail.qq.com";
