@@ -48,7 +48,21 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "click .operate" : "operate",
       "mouseover .preview-info": "mouseover", // mouseover子类也响应
       "mouseout .preview-info": "mouseout" // mouseout 只自己响应
-
+    },
+    initialize: function(){
+      	var $container = $('#list');
+	$container.imagesLoaded( function(){
+	  $container.masonry({
+	    itemSelector : '.clip'
+	  });
+	});
+      this.bind("item:rendered",function(itemView){
+	setTimeout(function(){ // STRANGE BEHAVIOUR
+	  //$("#list").masonry("appended", itemView.$el);
+	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
+	  $("#list").masonry("reload");
+	},0);
+      });
     },
     show_detail: function(){
       App.vent.trigger("app.clipapp:clipdetail",this.model.id);
@@ -119,7 +133,23 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",
-    itemView: ClipPreviewView
+    itemView: ClipPreviewView,
+    initialize: function(){
+      this.bind("collection:rendered",function(itemView){
+      	var $container = $('#list');
+	$container.imagesLoaded( function(){
+	  $container.masonry({
+	    itemSelector : '.clip'
+	  });
+	});
+	setTimeout(function(){ // STRANGE BEHAVIOUR
+	  //$("#list").masonry("appended", itemView.$el);
+	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
+	  $("#list").masonry("reload");
+	},0);
+      });
+    }
+
   });
 
   var getClips = function(options){
@@ -138,7 +168,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
-  // site == user0
+  // site == user2
   ClipList.showSiteClips = function(tag){
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
@@ -186,24 +216,35 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
+    var $container = $('#list');
+    $container.imagesLoaded( function(){
+      $container.masonry({
+	itemSelector : '.clip'
+      });
+    });
+
     $("#list").masonry({
       itemSelector : '.clip',
-      columnWidth : 320
+      columnWidth : 320,
+      isAnimated: true,
+      animationOptions: {
+	duration: 750,
+	easing: 'linear',
+	queue: false
+      }
     });
-    clipListView.bind("item:rendered",function(itemView){
-      var $container = $('#list');
-      $container.imagesLoaded( function(){
-	$container.masonry({
-	  itemSelector : '.clip'
-	});
-      });
+
+    clipListView.bind("collection:rendered",function(collectionView){
       setTimeout(function(){ // STRANGE BEHAVIOUR
-	$("#list").masonry("appended", itemView.$el);
+	//$("#list").masonry("reload");
+	//$("#list").masonry("appended", collectionView.$el);
       },0);
     });
+
+
     App.listRegion.show(clipListView);
-    // $("#list").masonry("reload");
-    // $("#list").masonry("appended", clipListView.$el);
+    //$("#list").masonry("reload");
+    //$("#list").masonry("appended", clipListView.$el);
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 
@@ -240,7 +281,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	      flag = false;
 	      $(".loader").text("reach to the end.");
 	    }else{
-	      //$("#list").masonry("reload");
 	      precliplength = options.clips.length;
 	    }
 	  },200);

@@ -25,9 +25,7 @@ App.ClipApp.RuleUpdate = (function(App, Backbone, $){
       EmailAdd.close();
     },
     EmailAddcommit: function(){
-      console.log("111");
       var address = $("#email_address").val();
-      console.log(address);
       this.model.save({email: address},{
 	type: "POST",
   	success: function(model, res){
