@@ -61,6 +61,11 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.show();
   });
 
+  App.vent.bind("app.clipapp.useredit:faceshow", function(){
+    Me.me.fetch();
+    Me.show();
+  });
+
   App.vent.bind("app.clipapp.me:register", function(){
     Backbone.history.navigate("register");
     location.reload();

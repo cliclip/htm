@@ -283,6 +283,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       type: "POST",
       success:function(model,res){
 	//var uid = editModel.get("id");
+	App.vent.trigger("app.clipapp.useredit:faceshow");
 	alert("上传成功!");
 	flag = false;
       },
