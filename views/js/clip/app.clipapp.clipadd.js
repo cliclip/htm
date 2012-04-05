@@ -68,7 +68,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  }
 	  App.viewRegion.close();
 	  // 如何只刷新一个region的内容
-	  // location.reload();
+	    location.reload();
 	},
 	error:function(response){
 	  // 出现错误，触发统一事件

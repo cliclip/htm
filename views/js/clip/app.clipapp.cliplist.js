@@ -59,17 +59,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
 
       this.bind("item:rendered",function(itemView){
-	setTimeout(function(){ // STRANGE BEHAVIOUR
-	  var $newElems = itemView.$el.css({ opacity: 0 });
-	  $newElems.imagesLoaded(function(){
-	    $newElems.animate({ opacity: 1 });
-	    $("#list").masonry( 'appended', $newElems, true );
-	  });
-
-	  //$("#list").masonry("appended", itemView.$el);
-	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-	  //$("#list").masonry("reload");
-	},0);
+	var $newElems = itemView.$el.css({ opacity: 0 });
+	$newElems.imagesLoaded(function(){
+	  $newElems.animate({ opacity: 1 });
+	  $("#list").masonry( 'appended', $newElems, true );
+	});
       });
     },
     show_detail: function(){
@@ -141,24 +135,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",
-    itemView: ClipPreviewView,
-    initialize: function(){
-/*      this.bind("collection:rendered",function(itemView){
-      	var $container = $('#list');
-	$container.imagesLoaded( function(){
-	  $container.masonry({
-	    itemSelector : '.clip'
-	  });
-	});
-	setTimeout(function(){ // STRANGE BEHAVIOUR
-	  //$("#list").masonry("appended", itemView.$el);
-	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-	  $("#list").masonry("reload");
-	},0);
-      });
-*/
-    }
-
+    itemView: ClipPreviewView
   });
 
   var getClips = function(options){
@@ -237,15 +214,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       columnWidth : 360,
       isAnimated: false
     });
-    clipListView.bind("collection:rendered",function(collectionView){
-      setTimeout(function(){ // STRANGE BEHAVIOUR
-	//$("#list").masonry("reload");
-	//$("#list").masonry("appended", collectionView.$el);
-      },0);
-    });
     App.listRegion.show(clipListView);
-    //$("#list").masonry("reload");
-    //$("#list").masonry("appended", clipListView.$el);
     App.vent.trigger("clip:preview:scroll", clipListView, options);
   });
 
