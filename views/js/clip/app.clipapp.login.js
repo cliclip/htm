@@ -5,7 +5,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
   var Login = {};
 
   var LoginModel = App.Model.extend({
-    url: "/_/login",
     defaults: {
       name : "用户名/Email", pass : ""
     }
@@ -18,11 +17,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
     events : {
       "focus #name"              :"clearAction",
       "blur #name"               :"blurAction",
-      "click input[type=submit]" : "submit",
-      "click input[type=reset]"  : "cancel",
+      "click #submit"            : "loginAction",
+      "click #cancel"            : "cancel",
       "click #register"          : "registerAction"
     },
-    submit : function(e){
+    loginAction : function(e){
       var that = this;
       var name = $("#name").val();
       var pass = $("#pass").val();
@@ -31,16 +30,28 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
-   	  var token = res;
-  	  // console.log("success model = %j, response = %j", model, res);
-  	  App.vent.trigger("app.clipapp.login:success", token);
+  	  App.vent.trigger("app.clipapp.login:success", res);
   	},
   	error:function(model, res){
-  	  // that.model.set("error", res);
-  	  // that.model.change();
-  	  // console.log("error model = %j, response = %j", model, res);
   	  App.vent.trigger("app.clipapp.login:error", model, res);
   	}
+      });
+    },
+    registerAction:function(e){
+      e.preventDefault();
+      var data = {
+	name : $("#name").val(),
+	pass : $("#pass").val()
+      };
+      this.model.save(data,{
+	url : App.ClipApp.Url.base+"/register",
+	type: "POST",
+	success:function(model,response){
+	  App.vent.trigger("app.clipapp.login:success",response);
+	},
+	error:function(model,error){
+	  App.vent.trigger("app.clipapp.login:error",model, error);
+	}
       });
     },
     cancel : function(e){
@@ -56,9 +67,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
       if($("#name").val() == ""){
 	$("#name").val(this.model.get("name"));
       }
-    },
-    registerAction:function(evt){
-       App.vent.trigger("app.clipapp.me:register");
     }
   });
 
@@ -92,7 +100,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
   // TEST
 
-  //App.bind("initialize:after", function(){ Login.open(); });
+  //App.bind("initialize:after", function(){ Login.show(); });
 
   return Login;
 })(App, Backbone, jQuery);

@@ -47,14 +47,16 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     recommendAction:function(e){
       e.preventDefault();
+      var text=$("#recommend_text").val();
       var params = {
-	text:$("#recommend_text").val(),
+	text:text,
 	clipid :this.model.id
       };
+      var params1 = {clip:{note:[{text:text}]}};
       if(this.model.get("uid")){
 	App.vent.trigger("app.clipapp.recommend:submit",this.model,params);
 	if($("#reclip_box").attr("checked")){
-	App.vent.trigger("app.clipapp.reclip:submit", that.model,params1);
+	App.vent.trigger("app.clipapp.reclip:submit", this.model,params1);
       }
       }else{
 	App.vent.trigger("app.clipapp.recommend:error",this.model,{"user":"请添加用户"});
