@@ -71,8 +71,11 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var text = $("#reclip_text").val();
       var tag = _.without($("#obj_tag").val().split(","),"add a tag","");
       tag = _.union(tag, tag_list);
-      console.info($("#checkbox").attr("checked")); //TODO
-      var params = {clip:{note: [{text:text}],tag:tag}};
+      if($("#checkbox").attr("checked")){
+	var params = {clip:{note: [{text:text}],tag:tag,privated:true}};
+      }else{
+	var params = {clip:{note: [{text:text}],tag:tag}};
+      }
       if(this.model.get("model") == "clip"){
 	App.vent.trigger("app.clipapp.reclip:submit", that.model, params);
       }else if (this.model.get("model") == "tag"){

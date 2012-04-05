@@ -9,7 +9,7 @@ script(type="text/template",id="following-view-template")
       li.user
         div.head
           | <a href="#user/<%=id%>">
-          img(src="../photos/user_head.jpg")
+          | <img src="<%=App.util.face_url(face)%>"/>
           | </a>
           p
             | <a href="#user/<%=id%>"><%=name%></a>
