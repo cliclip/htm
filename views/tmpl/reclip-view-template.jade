@@ -16,11 +16,11 @@ script(type="text/template",id="reclip-view-template")
         input.main_tag(type="button",id="main_tag_3",value="好吃")
         input.main_tag(type="button",id="main_tag_4",value="好玩")
         input.main_tag(type="button",id="main_tag_5",value="酷")
-      li.input_text
-        input.obj_tags(type="text",id="obj_tag")
+      li
+        text.obj_tag(type="text",id="obj_tag")
       br
       li.input_textarea
-        textarea(id="reclip_text")备注一下吧~
+        |<textarea id="reclip_text">备注一下吧~</textarea>
       li.input_checkbox
         label
           input(type="checkbox",id="checkbox")

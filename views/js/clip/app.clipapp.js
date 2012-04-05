@@ -26,7 +26,8 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.register = function(){
-    ClipApp.Register.show();
+    ClipApp.Login.show();
+    // ClipApp.Register.show(); 两个框共用
   };
   ClipApp.findpasswd = function(){
     ClipApp.FindPass.show();

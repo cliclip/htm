@@ -11,7 +11,7 @@ script(type="text/template",id="recommend-view-template")
         <%= typeof error != "undefined"&& error.user ? error.user: "" %>
       div#name_listDiv
       li.input_textarea
-        textarea(id="recommend_text")
+        |<textarea id="recommend_text">说点啥吧～</textarea>
       li.input_checkbox
         label
           input(type="checkbox",id="reclip_box")
