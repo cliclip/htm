@@ -3,7 +3,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var originalFace;
   var flag = false;
-
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({});
   var NameModel = App.Model.extend({
@@ -253,12 +252,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
 
   UserEdit.onUploadImgChange = function(sender){
+
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-      alert('图片格式无效！');
+       alert('图片格式无效！');
+      flag = false;
       return flag;
     }else{
-      var objPreview = document.getElementById('myface' );
       if( sender.files &&sender.files[0] ){
+	var objPreview = document.getElementById('myface' );
 	objPreview.src = window.URL.createObjectURL(sender.files[0]);
 	flag =true;
 	return flag;
@@ -266,16 +267,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       return true;
     }
   };
-
-/*  UserEdit.image_change = function(){
-    var sender = document.getElementById("formUpload");
-    if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-      alert('图片格式无效！');
-      return false;
-    }else{
-      return true;
-    }
-  };*/
 
   UserEdit.saveFace = function(editModel,params){
     editModel.save(params,{

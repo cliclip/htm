@@ -33,15 +33,15 @@ script(type="text/template",id="detail-view-template")
         div.input_textarea
 
 script(type="text/template",id="showcomment-view-template")
-  div.user_head
-    img(src="../photos/user_head.jpg")
+  div.user_head.
+    <img src=<%=App.util.face_url(user.face)%> />
   dt.username.
-    <a href="#user/<%=uid%>"><%= uid %></a>time <%=date%>
+    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=date%>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>"><%= text %>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
-    <% if(auth && (uid == auth || auth == clip_owner )){%>
+    <% if(auth && (user.uid == auth || auth == clip_owner )){%>
     <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
     <% } %>
     </div>
