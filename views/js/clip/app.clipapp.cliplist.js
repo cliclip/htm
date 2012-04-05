@@ -62,7 +62,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	var $newElems = itemView.$el.css({ opacity: 0 });
 	$newElems.imagesLoaded(function(){
 	  $newElems.animate({ opacity: 1 });
-	  $("#list").masonry( 'appended', $newElems, true );
+	  //setTimeout(function(){
+	    //$("#list").masonry( 'appended', $newElems,true);
+	    $("#list").masonry("reload");
+	  //},0);
 	});
       });
     },
@@ -135,7 +138,22 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",
-    itemView: ClipPreviewView
+    itemView: ClipPreviewView,
+    initialize: function(){
+      this.bind("collection:rendered",function(itemView){
+      	var $container = $('#list');
+	$container.imagesLoaded( function(){
+	  $container.masonry({
+	    itemSelector : '.clip'
+	  });
+	});
+	setTimeout(function(){ // STRANGE BEHAVIOUR
+	  //$("#list").masonry("appended", itemView.$el);
+	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
+//	  $("#list").masonry("reload");
+	},0);
+      });
+    }
   });
 
   var getClips = function(options){
@@ -204,11 +222,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
     var clipListView = new ClipListView({collection: clips});
-    $('#list').imagesLoaded( function(){
-      $('#list').masonry({
-	itemSelector : '.clip'
-      });
-    });
     $("#list").masonry({
       itemSelector : '.clip',
       columnWidth : 360,
