@@ -11,8 +11,8 @@ script(type="text/template",id="organize-view-template")
         input(type="button",class="main_tag",id="main_tag_5",value="酷")
       li
         input(type="text",class="obj_tags",id="obj_tag")
-      li.input_textarea
-        textarea(id="organize_text")
+      li.input_textarea.
+        <textarea id="organize_text"><%=note%></textarea>
       li.input_checkbox
         label
           input(type="checkbox",id="memo_private")

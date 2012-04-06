@@ -79,7 +79,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "酷" ;});
       var tag_obj = _.without(tags,tag_main);
       var clipmemoModel = new ClipMemoModel();
-      clipmemoModel.set({main_tag:tag_main,obj_tag:tag_obj,note:text,model:"update"});
+      clipmemoModel.set({note:text,model:"update"});
       var clipmemoView = new ClipMemoView({model:clipmemoModel,clipid:cid});
       App.popRegion.show(clipmemoView);
       if(pub == "false"){
@@ -87,7 +87,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       }
     }else{
       var clipmemoModel = new ClipMemoModel();
-      clipmemoModel.set({main_tag:[],obj_tag:[],note:[],model:"add"});
+      clipmemoModel.set({note:[],model:"add"});
       var clipmemoView = new ClipMemoView({model: clipmemoModel});
       App.popRegion.show(clipmemoView);
     }
