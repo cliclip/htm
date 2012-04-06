@@ -3,19 +3,31 @@ script(type="text/template",id="editDetail-view-template")
   section.big_pop
     h2.subject_edit
       div.pop_left
+        button#edit_remark 注
       div.pop_right
         div.button_frame
-          button.upload_img 上传图片
-            span.url_text
-              input.text(type="text")
-              input.btn(type="submit",value="确定")
-          button.link_img 链接图片
-          button.format 整理格式
+          iframe(name="post_frame",id="post_frame",style="display:none;",mce_style="display:none;")
+          |<form method="POST" id="img_form" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
+          span.file
+            button.upload_img#localImg 上传图片
+            input#formUpload.hifile(type="file",name="image")
+          span
+            button.link_img 链接图片
+              span.url_text.img_upload_span(style="display:none;")
+                input.text#img_upload_url(type="text")
+                input.btn(type="submit",value="确定")
+            span.img_upload_span(style="display:none;")
+              input#img_upload_url1(type="text")
+              input#img_upload_btn1(type="submit",value="确定")
+          span
+            button.format 整理格式
         | 改
     div.pop_left
     div.pop_right
       section.pop_inner
-        article.content
-        div.btn_group.clearfix
-          input.verify(type="button",value="确定")
-          input.cancel(type="button",value="取消")
+        form#editForm(metod="post")
+          article.content
+            iframe#editor(width="490",height="490",frameborder="0")
+          div.btn_group.clearfix
+            input#editClip_Save.verify(type="submit",title="保存",value="确定")
+            input#editClip_Abandon.cancel(type="reset",title="放弃",value="取消")

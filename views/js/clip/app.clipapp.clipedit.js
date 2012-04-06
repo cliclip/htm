@@ -2,7 +2,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var _data = {};
-
+  var flag = true;
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
@@ -14,22 +14,37 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     className: "editDetail-view",
     template: "#editDetail-view-template",
     events: {
-      "click #exImg":"extImg",
+      "click .link_img":"extImg",
       "change #formUpload": "image_change",
-      "click #upformat":"upFormat",
+      "click .format":"upFormat",
       "click #edit_remark":"remarkClip",
       "click #editClip_Save":"saveUpdate",
-      "click #editClip_Abandon":"abandonUpdate"
+      "click .cancel":"abandonUpdate",
+      "click #img_upload_btn1":"upload_link_img",
+      "blur #img_upload_url1":"hidden_input"
     },
-
     initialize: function(){
       _data = {content : []};
     },
-    extImg:function(evt){
-      var url = prompt("url","http://");
-      if(url == "http://" || url == null)
-	return;
+    upload_link_img:function(){
+      var url = $("#img_upload_url1").val();
+      if(url == "http://" || url == null)return;
       App.ClipApp.EditPaste.insertImage("editor", {url: url});
+    },
+    hidden_input:function(){
+      setTimeout(function(){
+	$(".img_upload_span").css("display","none");
+      },500);
+    },
+    extImg:function(evt){
+/*
+      if($("#localImg").html().length<40){
+	var span = '<span class="url_text"><input class="text" id="link_img" type="text"><input class="btn" type="submit" value="确定"></span>';
+	$(".link_img").append($(span));
+      }
+*/
+      $(".img_upload_span").css("display","block");
+      $("#img_upload_url1").focus();
     },
     image_change:function(e){
       var that = this;
@@ -37,18 +52,22 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var change = App.util.isImage("formUpload");
       if(change){
 	$("#img_form").submit();
+	flag = true;//此变量用于解决连续上传多张图片时图片加载重复的奇怪问题
 	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var imgids = returnObj[1][0];
-	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	      var imgid = imgids.split(":")[1];
-	      var url = P+"/user/"+ uid+"/image/" +imgid;
-	      App.ClipApp.EditPaste.insertImage("editor", {url: url});
-	      // }
+	  if(flag){
+	    var returnVal = this.contentDocument.documentElement.textContent;
+	    if(returnVal != null && returnVal != ""){
+	      var returnObj = eval(returnVal);
+	      if(returnObj[0] == 0){
+		var imgids = returnObj[1][0];
+		// for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+		var imgid = imgids.split(":")[1];
+		var url = P+"/user/"+ uid+"/image/" +imgid;
+		App.ClipApp.EditPaste.insertImage("editor", {url: url});
+		// }
+	      }
 	    }
+	    flag = false;
 	  }
 	});
       }else{
@@ -97,7 +116,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       //App.vent.trigger("app.clipapp:clipdetail", cid);
     }
   });
-
+  ClipEdit.autoResize1= function() {
+    try {
+      document.all["mainFrame"].style.height=mainFrame.document.body.scrollHeight;
+      }catch(e){}
+  };
   ClipEdit.show = function(clipid, uid){
     var editModel = new EditModel({
       id: clipid,

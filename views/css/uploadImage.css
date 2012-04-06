@@ -11,13 +11,15 @@
     text-align: center;*/
 }
 
-.file {
+.button_frame span {
     display: inline-block;
-    overflow: hidden;
     position: relative;
     vertical-align: middle;
 }
-.file input.hifile {
+.button_frame span.file {
+    overflow: hidden;
+}
+.button_frame input[type=file] {
     cursor: pointer;
     font-size: 36px;
     opacity: 0;
