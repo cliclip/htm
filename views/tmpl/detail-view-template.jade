@@ -11,12 +11,12 @@ script(type="text/template",id="detail-view-template")
       ul.forward_log.
         <%for(var i =0; i<users.length; i++){if( i == 0){%>
         <li class="user_head">
-          <img src="<%= App.util.url(users[i].face)%>">
+          <img src="<%= App.util.face_url(users[i].face)%>">
         </li>
         <%}else{%>
         <div>向上箭头</div>
         <li class="user_head">
-          <img src="<%= App.util.url(users[i].face)%>">
+          <img src="<%= App.util.face_url(users[i].face)%>">
         </li>
         <%}}%>
     div.pop_right
@@ -36,7 +36,7 @@ script(type="text/template",id="showcomment-view-template")
   div.user_head.
     <img src=<%=App.util.face_url(user.face)%> />
   dt.username.
-    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=date%>
+    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=App.util.generatePastTime(date)%>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>"><%= text %>
     <div id="reply_<%=id%>" style="display:none;">
