@@ -69,7 +69,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.show();
   });
 
-  App.vent.bind("app.clipapp.useredit:faceshow", function(){
+  App.vent.bind("app.clipapp.useredit:facesuccess", function(){
     Me.me.fetch();
     Me.show();
   });

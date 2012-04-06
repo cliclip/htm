@@ -5,8 +5,13 @@ script(type='text/template',id='userface-view-template')
         <a href="#user/<%=id%>">
           <img id="face-image" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
         </a>
-      b.user_i
-        i.stop //- i.zhui
+      b.user_i.
+        <% if(App.util.getMyUid() !=id){ %>
+        <% if(_.isEmpty(relation)){ %>
+        <i class=stop/>
+        <% }else{ %>
+        <i class=zhui/>
+        <% }} %>	
     dl.user_detail.clearfix
       dt.
         <a href="#user/<%=id%>">

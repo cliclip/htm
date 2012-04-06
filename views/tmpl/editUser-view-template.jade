@@ -75,11 +75,28 @@ script(type="text/template",id="passEdit-view-template")
     li
       input.btn_gray(type="submit",value="删除账户")
 script(type="text/template",id="emailAdd-view-template")
-  .emailadd_edit(align="center",style="width:300px;height:250px;background:yellow;")
+  div.masker_layer
+  section.small_pop
     .email_add
-      h3.edit_password 添加邮件
-      input(type="text",name="email_address",id="email_address",size="30")
-      span.error
-      |<%= typeof error != "undefined" && error.email ? error.email : "" %></span><br>
-      input(type="button",id="emailadd_commit",value="提交")
-      input(type="button",id="emailadd_cancel",value="取消")
+      h2.subject_put.
+        添加邮件
+      ul.pop_body
+        li.input_text
+          input(type="text",id="email_address")
+        li.alert
+          <%= typeof error != "undefined" && error ? error.email : "" %>
+        br
+        li.btn_group.clearfix
+          input.verify(type="button",value="确定",id="emailadd_commit")
+          input.cancel(type="button",value="取消",id="emailadd_cancel")
+script(type="text/template",id="emailActive-view-template")
+  div.masker_layer
+  section.small_pop
+    h2.subject_put.
+      邮件激活
+    ul.pop_body
+      |您添加的邮箱是：<%=email%><a href="<%=com%>" target="_blank">点击激活</a> 
+      br
+      br
+      li.btn_group.clearfix
+        input.cancel(type="button",value="退出",id="active_cancel")
