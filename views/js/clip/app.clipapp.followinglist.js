@@ -27,7 +27,6 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       App.vent.trigger("app.clipapp.followinglist:show",App.ClipApp.Face.getUserId());
     },
     followerOpen:function(e){
-      console.info(App.ClipApp.Face.getUserId());
       App.vent.trigger("app.clipapp.followerlist:show",App.ClipApp.Face.getUserId());
     }
   });

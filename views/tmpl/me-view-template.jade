@@ -16,6 +16,14 @@ script(type='text/template',id='me-view-template')
   div.my_info
     div.my_head.
       <img id="face-image" src="<%=App.util.face_url(face)%>" height="50" width="50"/>
+      <div id="show_mysetup"style="display:none">
+      <li>
+      <a id="mysetup">设置</a>
+      </li>
+      <li>
+      <a id="logout">登出</a>      
+      </li>
+      </div>
   <% } else { %>
   a#register_button 注册 
   a#login_button 登录  
