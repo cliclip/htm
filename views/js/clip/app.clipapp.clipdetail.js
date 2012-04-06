@@ -54,7 +54,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   var CommentView = App.ItemView.extend({
-    tagName: "div",
+    tagName: "ul",
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
@@ -122,11 +122,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	    e.clip_owner = clip_owner;
 	    var str = _.template(template, e);
 	    if (e.children && e.children.length > 0) {
-	      str += "<div class='children'>";
+	      str += "<ul class='children'>";
 	      str += render_tree(e.children, "");
-	      str += "</div>";
+	      str += "</ul>";
 	    }
-	    str = '<div>'+str+'</div>';
+	    str = '<ul>'+str+'</ul>';
             return render_tree(commentList, html+str);
 	  }
 	}
@@ -185,11 +185,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template : "#addcomm-view-template",
     tag_list : [],
     events : {
-      "focus #comm_text":"foucsAction",
-      "blur #comm_text":"blurAction",
-      "click .comm":"maintagAction",
-      "click .verify":"comment",
-      "click .cancel":"cancel"
+      "focus #comm_text" : "foucsAction",
+      "blur #comm_text"  : "blurAction",
+      "click .main_tag"  : "maintagAction",
+      "click .verify"    : "comment",
+      "click .cancel"    : "cancel"
     },
     foucsAction:function(evt){
       if($("#comm_text").val() == "评论文本框~" ){

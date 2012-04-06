@@ -72,7 +72,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var tag = _.without($("#obj_tag").val().split(","),"add a tag","");
       tag = _.union(tag, tag_list);
       if($("#checkbox").attr("checked")){
-	var params = {clip:{note: [{text:text}],tag:tag,privated:true}};
+	var params = {clip:{note: [{text:text}],tag:tag,"public":"true"}};
       }else{
 	var params = {clip:{note: [{text:text}],tag:tag}};
       }

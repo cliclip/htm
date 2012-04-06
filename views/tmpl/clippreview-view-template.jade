@@ -27,10 +27,10 @@ script(type="text/template",id="clippreview-view-template")
     div.metas.icons_frame
       span.icon_block
         i.icon_biezhen
-        | <%=clip.reply_count?clip.reply_count:0%> 转载
+        | <%=clip.reprint_count?clip.reprint_count:0%> 转载
       span.icon_block
         i.icon_quote
-        | <%=clip.reprint_count?clip.reprint_count:0%> 回复
+        | <%=clip.reply_count?clip.reply_count:0%> 回复
     div.user_info_small
       <% if(!App.ClipApp.getMyUid() && clip.author){ %>
       div.user_more

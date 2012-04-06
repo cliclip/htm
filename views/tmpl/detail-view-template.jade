@@ -11,17 +11,17 @@ script(type="text/template",id="detail-view-template")
       ul.forward_log.
         <%for(var i =0; i<users.length; i++){if( i == 0){%>
         <li class="user_head">
-          <img src="<%= App.util.url(users[i].face)%>">
+          <img src="<%= App.util.face_url(users[i].face)%>">
         </li>
         <%}else{%>
         <div>向上箭头</div>
         <li class="user_head">
-          <img src="<%= App.util.url(users[i].face)%>">
+          <img src="<%= App.util.face_url(users[i].face)%>">
         </li>
         <%}}%>
     div.pop_right
       section.pop_inner
-        article.content.content2.
+        article.content
           <%for(var i=0; i<content.length; i++){if(content[i].text){%>
           <%= content[i].text %>
           <%}else if(content[i].image){%>
@@ -29,26 +29,34 @@ script(type="text/template",id="detail-view-template")
           <%}}%>
           <%= time.match(/\d{4}-\d{2}-\d{2}/)%>
           <%= App.util.generatePastTime(time)%>
+        span
+          a#replykey 评论(2)
         dl.comments.clearfix
         div.input_textarea
 
 script(type="text/template",id="showcomment-view-template")
-  div.user_head
-    img(src="../photos/user_head.jpg")
+  div.user_head.
+    <img src=<%=App.util.face_url(user.face)%> />
   dt.username.
-    <a href="#user/<%=uid%>"><%= uid %></a>time <%=date%>
+    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=App.util.generatePastTime(date)%>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>"><%= text %>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
-    <% if(auth && (uid == auth || auth == clip_owner )){%>
+    <% if(auth && (user.uid == auth || auth == clip_owner )){%>
     <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
     <% } %>
     </div>
     </div>
           
 script(type="text/template",id="addcomm-view-template")
-  textarea(id="comm_text")
+  |<textarea id="comm_text">评论文本框~</textarea>
+  div
+    input.main_tag(type="button",id="main_tag_1",value="好看")
+    input.main_tag(type="button",id="main_tag_2",value="好听")
+    input.main_tag(type="button",id="main_tag_3",value="好吃")
+    input.main_tag(type="button",id="main_tag_4",value="好玩")
+    input.main_tag(type="button",id="main_tag_5",value="酷")
   div.btn_group.clearfix
-    input.verify(type="button",value="确定")
+    input.verify(type="button",value="评论")
     input.cancel(type="button",value="取消")

@@ -17,9 +17,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     events : {
       "focus #name"              :"clearAction",
       "blur #name"               :"blurAction",
-      "click #submit"            : "loginAction",
-      "click #cancel"            : "cancel",
-      "click #register"          : "registerAction"
+      "click .login_btn"         : "loginAction",
+      "click .close_w"           : "cancel",
+      "click .reg_btn"           : "registerAction"
     },
     loginAction : function(e){
       var that = this;
