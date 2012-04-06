@@ -53,7 +53,7 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
   };
 
   App.vent.bind("app.clipapp.resetpass:success",function(link){
-    Backbone.history.navigate("",true);
+    Backbone.history.navigate("register",true);
     ResetPass.close();
   });
   App.vent.bind("app.clipapp.resetpass:error",function(model,error){
