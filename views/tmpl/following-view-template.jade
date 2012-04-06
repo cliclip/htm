@@ -14,7 +14,6 @@ script(type="text/template",id="following-view-template")
           p
             | <a href="#user/<%=id%>"><%=name%></a>
         div.tags
-          i.follow
           <%for(var i=0;i<tag.length;i++){%>
           span.tag
             | <a href="#user/<%=App.ClipApp.getMyUid()%>/tag/<%=tag[i]%>"><%=tag[i]%></a>

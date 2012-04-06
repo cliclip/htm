@@ -185,11 +185,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template : "#addcomm-view-template",
     tag_list : [],
     events : {
-      "focus #comm_text":"foucsAction",
-      "blur #comm_text":"blurAction",
-      "click .comm":"maintagAction",
-      "click .verify":"comment",
-      "click .cancel":"cancel"
+      "focus #comm_text" : "foucsAction",
+      "blur #comm_text"  : "blurAction",
+      "click .main_tag"  : "maintagAction",
+      "click .verify"    : "comment",
+      "click .cancel"    : "cancel"
     },
     foucsAction:function(evt){
       if($("#comm_text").val() == "评论文本框~" ){
