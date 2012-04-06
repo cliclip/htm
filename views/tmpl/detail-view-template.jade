@@ -21,7 +21,7 @@ script(type="text/template",id="detail-view-template")
         <%}}%>
     div.pop_right
       section.pop_inner
-        article.content.content2.
+        article.content
           <%for(var i=0; i<content.length; i++){if(content[i].text){%>
           <%= content[i].text %>
           <%}else if(content[i].image){%>
@@ -29,6 +29,8 @@ script(type="text/template",id="detail-view-template")
           <%}}%>
           <%= time.match(/\d{4}-\d{2}-\d{2}/)%>
           <%= App.util.generatePastTime(time)%>
+        span
+          a#replykey 评论(2)
         dl.comments.clearfix
         div.input_textarea
 
@@ -36,7 +38,7 @@ script(type="text/template",id="showcomment-view-template")
   div.user_head.
     <img src=<%=App.util.face_url(user.face)%> />
   dt.username.
-    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=date%>
+    <a href="#user/<%=user.id%>"><%= user.name %></a> time: <%=date%>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>"><%= text %>
     <div id="reply_<%=id%>" style="display:none;">
@@ -48,7 +50,13 @@ script(type="text/template",id="showcomment-view-template")
     </div>
           
 script(type="text/template",id="addcomm-view-template")
-  textarea(id="comm_text")
+  |<textarea id="comm_text">评论文本框~</textarea>
+  div
+    input.main_tag(type="button",id="main_tag_1",value="好看")
+    input.main_tag(type="button",id="main_tag_2",value="好听")
+    input.main_tag(type="button",id="main_tag_3",value="好吃")
+    input.main_tag(type="button",id="main_tag_4",value="好玩")
+    input.main_tag(type="button",id="main_tag_5",value="酷")
   div.btn_group.clearfix
-    input.verify(type="button",value="确定")
+    input.verify(type="button",value="评论")
     input.cancel(type="button",value="取消")

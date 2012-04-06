@@ -43,7 +43,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
 	}
-      }else if(color == "red"){
+      }else if(color == "pink"){
 	document.getElementById(id).style.backgroundColor="";
 	tag_list = _.without(tag_list,$("#"+id).val());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
