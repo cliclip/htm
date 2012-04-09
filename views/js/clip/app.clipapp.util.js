@@ -2,12 +2,6 @@ App.util = (function(){
   var util = {};
   var paramslength=0,flag=true;
 
-  util.onload=function(that){
-    // console.log(that.height);
-    // console.info(that.document.body.scrollHeight);
-    //that.height=that.document.body.scrollHeight;
-  };
-
   util.getMyUid = function(){
     var cookie = document.cookie;
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
@@ -153,11 +147,11 @@ App.util = (function(){
       var mt = $(".layout").offset().top;
       if(st > mt){
 	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	$(".gotop").fadeIn();
+	$(".return_top").fadeIn();
 	// show go-top while scroll
       } else {
 	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".gotop").fadeOut();
+	$(".return_top").fadeOut();
       }
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;
@@ -184,9 +178,5 @@ App.util = (function(){
       }
     });
   });
-
-
-
-
   return util;
 })();

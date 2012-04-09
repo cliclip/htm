@@ -23,11 +23,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	if(!resp[i].clip){
 	  var clip = resp[i];
 	  resp[i] = {clip: clip};
-	  resp[i].id = clip.user+":"+clip.id;
+	  resp[i].id = clip.user.id+":"+clip.id;
 	}else{
-	  resp[i].id = resp[i].clip.user+":"+resp[i].clip.id;
+	  resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
 	}
-	if(resp[i].clip.user != App.ClipApp.getMyUid("id")){
+	if(resp[i].clip.user.id != App.ClipApp.getMyUid("id")){
 	  resp[i].manage = ["收","转","评"];
 	}else{
 	  resp[i].manage = ["注","改","删"];
@@ -157,14 +157,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   var getClips = function(options){
-    var _start = 1;
-    var _end = App.ClipApp.Url.page;
     var clips = new ClipPreviewList();
     options.params = clips;
-    options.start = start;
-    options.end = end;
+    if(!options.start &&! options.end){
+      options.start = start;
+      options.end = end;
+    }
     options.params.url = options.url;
-    options.url += "/" + _start+".."+ _end;
+    options.url += "/" + options.start+".."+ options.end;
     if(options.data){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
@@ -219,7 +219,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = "/user/"+uid+"/recomm";
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type:"GET"});
+    getClips({url: url, type:"GET",start:0,end:10});
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
@@ -229,6 +229,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       columnWidth : 360,
       isAnimated: false
     });
+    console.info(clips);
     App.listRegion.show(clipListView);
     App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
   });

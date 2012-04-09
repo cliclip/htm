@@ -9,37 +9,33 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     }
   });
 
+  var extImg = false;
+
   var EditView = App.ItemView.extend({
     tagName: "div",
     className: "editDetail-view",
     template: "#editDetail-view-template",
     events: {
-      "click .link_img":"extImg",
+      "click .link_img":"show_extImg",
       "change #formUpload": "image_change",
       "click .format":"upFormat",
       "click .pop_left": "remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
-      "click #img_upload_btn1": "up_extImg",
-      "blur #img_upload_url1":"hidden_input"
+      "click .img_upload_span .btn":"up_extImg",
+      "blur .img_upload_span input":"hide_extImg"
     },
     initialize: function(){
       _data = {content : []};
     },
-    hidden_input:function(){
+    hide_extImg:function(){//隐藏弹出的链接地址对话框
       setTimeout(function(){
-	$(".img_upload_span").css("display","none");
+	$(".img_upload_span").hide();
       },500);
     },
-    extImg:function(evt){
-/*
-      if($("#localImg").html().length<40){
-	var span = '<span class="url_text"><input class="text" id="link_img" type="text"><input class="btn" type="submit" value="确定"></span>';
-	$(".link_img").append($(span));
-      }
-*/
-      $(".img_upload_span").css("display","block");
-      $("#img_upload_url1").focus();
+    show_extImg:function(evt){//弹出输入链接地址的对话框
+      $(".img_upload_span").show();
+      $("#img_upload_url").focus();
     },
     up_extImg: function(){
       var url = $("#img_upload_url1").val();
@@ -136,11 +132,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var html = App.util.ContentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.setContent("editor", html);
     });
-  };
-  // 目的是什么
-  ClipEdit.onload=function(that){
-    console.info("onload");
-    //that.height=editor.document.body.scrollHeight;
   };
   App.vent.trigger("app.clipapp.clipedit.error", function(){
     // 可以弹出错误对话框，提示错误信息
