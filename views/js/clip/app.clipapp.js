@@ -175,9 +175,8 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-/*  setTimeout(function(){
-    App.vent.trigger("app.clipapp:clipdetail", "1:1");
+  setTimeout(function(){
+//    App.vent.trigger("app.clipapp:clipdetail", "1:1");
   }, 500);
-*/
   return ClipApp;
 })(App, Backbone, jQuery);
