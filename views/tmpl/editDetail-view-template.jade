@@ -26,8 +26,9 @@ script(type="text/template",id="editDetail-view-template")
     div.pop_right
       section.pop_inner
         form#editForm(metod="post")
-          article.content
-            iframe#editor(width="490",height="490",frameborder="0")
+            //- iframe#editor(width="490",height="490",frameborder="0" )
+          article.content.
+            <iframe id="editor" class="editor" frameborder='0' onload="<%=App.util.onload(this)%>" frameborder="0" ></iframe>
           div.btn_group.clearfix
             input#editClip_Save.verify(type="submit",title="保存",value="确定")
             input#editClip_Abandon.cancel(type="reset",title="放弃",value="取消")
