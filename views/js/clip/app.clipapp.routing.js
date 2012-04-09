@@ -32,13 +32,6 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/setup":"mySetup"
     }
   });
-  /*
-  App.vent.bind("clip:preview:show",function(uid){
-    if(uid){
-      App.Routing.showRoute("user", uid);
-    }else{
-      App.Routing.showRoute("my");
-    }
 /*
   App.vent.bind("app.clipapp.routing:usercliplist:show",function(uid){
     App.Routing.showRoute("user", uid);
