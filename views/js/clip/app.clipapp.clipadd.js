@@ -17,6 +17,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     events: {
       "click .link_img":"extImg",
       "change #formUpload": "image_change",
+      "click #img_upload_btn1": "up_extImg",
       "click .verify":"save",
       "click .cancel":"abandon",
       "click .pop_left": "remark_newClip"
@@ -25,32 +26,45 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       _data = {content : []};
     },
     extImg:function(evt){
-      console.log("=======");
+      $(".img_upload_span").css("display","block");
+      $("#img_upload_url1").focus();
+/*
       var that = this;
       var objEditor = document.getElementById("editor");
       var url = prompt("url","http://");
       if(url == "http://" || url == null)
 	return;
       App.ClipApp.EditPaste.insertImage("editor", {url: url});
+*/
+    },
+    up_extImg: function(){
+      var url = $("#img_upload_url1").val();
+      if(url){ // 保证不是空提交 [或者不允许空提交]
+	App.ClipApp.EditPaste.insertImage("editor", {url: url});
+      }
     },
     image_change:function(e){
-      var that = this;
-      var uid = that.model.get("id");
+      e.preventDefault();
+      var flag = true;
       $("#img_form").submit();
-      $("#post_frame").load(function(){ // 加载图片
-	var returnVal = this.contentDocument.documentElement.textContent;
-	if(returnVal != null && returnVal != ""){
-	  var returnObj = eval(returnVal);
-	  if(returnObj[0] == 0){
-	    var imgids = returnObj[1][0];
-	    // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	    var imgid = imgids.split(":")[1];
-	    var url = P+"/user/"+ uid+"/image/" +imgid;
-	    App.ClipApp.EditPaste.insertImage("editor", {url: url});
-	    // }
+      $("#post_frame").load(function (){
+	if(flag){
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1][0];
+	      //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	      var ids = imgids.split(":");
+	      var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
+	      App.ClipApp.EditPaste.insertImage("editor", {url: url});
+	      // }
+	    }
 	  }
 	}
-      });
+	flag = false;
+
+    });
     },
     save: function(){
       var user = this.model.get("id");
