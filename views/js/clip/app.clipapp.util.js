@@ -1,5 +1,10 @@
 App.util = (function(){
   var util = {};
+  util.onload=function(that){
+    console.log(that.height);
+    console.info(that.document.body.scrollHeight);
+    //that.height=that.document.body.scrollHeight;
+  };
 
   util.getMyUid = function(){
     var cookie = document.cookie;

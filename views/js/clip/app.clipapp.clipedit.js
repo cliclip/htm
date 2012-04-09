@@ -136,7 +136,10 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.ClipApp.EditPaste.setContent("editor", html);
     });
   };
-
+  ClipEdit.onload=function(that){
+    console.info("onload");
+    //that.height=editor.document.body.scrollHeight;
+  };
   App.vent.trigger("app.clipapp.clipedit.error", function(){
     // 可以弹出错误对话框，提示错误信息
   });

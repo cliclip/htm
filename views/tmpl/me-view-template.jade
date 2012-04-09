@@ -20,6 +20,8 @@ script(type='text/template',id='me-view-template')
     div.my_head.
       <img id="face-image" src="<%=App.util.face_url(face)%>" height="50" width="50"/>
   <% } else { %>
-  a#register_button 注册 
-  a#login_button 登录  
+  div.in_site
+    a#register_button 登陆 
+    |
+    a#login_button 注册
   <% } %>
