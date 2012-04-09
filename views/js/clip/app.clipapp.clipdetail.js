@@ -58,7 +58,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
-      "click .comm_link" : "toggleChildren",
+      "click .comment_con" : "toggleChildren",
       "mouseover .comm_link" : "discoloration",
       "mouseout .comm_link" : "resume",
       "click .reply_comment" : "reply_comment",
@@ -66,8 +66,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     toggleChildren : function(e){
       e.preventDefault();
-      if($(e.target).attr("class") == "comm_link")
+      if($(e.target).attr("class") == "comm_link"){
 	$(e.currentTarget).siblings(".children").toggle();
+      }
     },
     discoloration : function(e){
       e.preventDefault();

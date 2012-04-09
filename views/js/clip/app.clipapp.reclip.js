@@ -20,26 +20,27 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       "blur #reclip_text"  :"blurAction",
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
-      "click .main_tag"    :"maintagAction"
+      "click .size48"    :"maintagAction"
     },
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
       console.log(id);
+      console.log($("#"+id).html());
       var color = $("#"+id).css("backgroundColor");
       if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
-	tag_list.push($("#"+id).val());
+	tag_list.push($("#"+id).html());
 	if($("#reclip_text").val() == "" || $("#reclip_text").val() == "备注一下吧~"){
-	  $("#reclip_text").val($("#"+id).val());
-	  //console.dir(tag_list);
+	  $("#reclip_text").val($("#"+id).html());
+	 // console.dir(tag_list);
 	}else{
-	  $("#reclip_text").val(_.union($("#reclip_text").val().split(","),$("#"+id).val()));
+	  $("#reclip_text").val(_.union($("#reclip_text").val().split(","),$("#"+id).html()));
 	}
       }else if(color == "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","");
-	tag_list = _.without(tag_list,$("#"+id).val());
-	$("#reclip_text").val(_.without($("#reclip_text").val().split(","),$("#"+id).val()));
+	tag_list = _.without(tag_list,$("#"+id).html());
+	$("#reclip_text").val(_.without($("#reclip_text").val().split(","),$("#"+id).html()));
 	//console.dir(tag_list);
       }
     },

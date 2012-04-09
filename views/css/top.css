@@ -1,0 +1,17 @@
+  .fixed {
+    position: fixed;
+  }
+  .loader {
+    text-align: right;
+    line-height: 30px;
+    height: 30px;
+  }
+  .gotop {
+    display: none;
+    width: 100px;
+    height: 100px;
+    background-color: yellow;
+    position: fixed;
+    right: 5px;
+    bottom: 30px;
+  }
