@@ -1,10 +1,10 @@
 App.util = (function(){
   var util = {};
   var paramslength=0,flag=true;
-	      
+
   util.onload=function(that){
-    console.log(that.height);
-    console.info(that.document.body.scrollHeight);
+    // console.log(that.height);
+    // console.info(that.document.body.scrollHeight);
     //that.height=that.document.body.scrollHeight;
   };
 

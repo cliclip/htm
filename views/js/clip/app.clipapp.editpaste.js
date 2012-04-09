@@ -7,10 +7,15 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     ifrm.contentWindow.document.designMode = "On";
     ifrm.contentWindow.document.write("<body style=\"font-size:70%;font-family:Verdana,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
+    ifrm.contentWindow.focus();
     if(isIE){
-      ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){return pasteClipboardData(ifrm.id,e);});
+      ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){
+	return pasteClipboardData(ifrm.id,e);
+      });
     }else{
-      ifrm.contentWindow.document.addEventListener("paste", function(e){return pasteClipboardData(ifrm.id,e);},false);
+      ifrm.contentWindow.document.addEventListener("paste", function(e){
+	return pasteClipboardData(ifrm.id,e);
+      },false);
     }
   };
 
@@ -26,8 +31,8 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
     var objEditor = document.getElementById(editorId);
-    if(isIE){ // TODO
-
+    if(isIE){
+      objEditor.contentWindow.document.execCommand('Paste', false, data);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, data);
     }
@@ -40,8 +45,8 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     if(data.url)
       img = "<img src="+data.url+" />";
     if(isIE){ // TODO
-      var ifmTemp=document.getElementById("ifmTemp");
-      ifmTemp.contentWindow.document.execCommand("Paste",false,img);
+      // var ifmTemp=document.getElementById("ifmTemp");
+      objEditor.contentWindow.document.execCommand("Paste", false, img);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, img);
     }
@@ -316,7 +321,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   return true;
   };
 };
-  return EditPaste;
+  return Editor;
 })(App, Backbone, jQuery);
 
 
