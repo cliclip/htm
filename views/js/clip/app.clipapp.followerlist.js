@@ -1,10 +1,11 @@
 //app.clipapp.followerlist.js
 App.ClipApp.FollowerList=(function(App, Backbone, $){
   var start = 0;
-  var end = App.ClipApp.Url.page-1;
+  var end = App.ClipApp.Url.page;
   var precliplength=0,flag=true;;
   var FollowerModel=App.Model.extend({
-  defaults:{
+    defaults:{
+      uid:"",
       user:{},
       tag:""
     }
@@ -34,40 +35,22 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   });
 
   FollowerList.showUserFollower=function(uid){
-    var options = {url:App.ClipApp.Url.base+"/user/"+uid+"/follow"};
-    collection=new FollowerList();
-    options.collection = collection;
-    collection.url=App.ClipApp.Url.base+"/user/"+uid+"/follow/"+start+".."+end;
-    collection.fetch();
+    var options = {};
+    var collection=new FollowerList({id:uid});
+    options.params = collection;
+    options.start = start;
+    options.end = end;
+    options.params.url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
+    options.url=options.params.url+"/"+start+".."+end;
+    collection.fetch(options);
     collection.onReset(function(followerlist){
-      followerlist.each(function(follower){
-	follower.set({id:uid});
-      });
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });
       App.listRegion.show(followerlistView);
-      App.vent.trigger("app.clipapp.followerlist:scroll",followerlistView,options);
+      App.vent.trigger("app.clipapp.util:scroll",followerlistView,options);
     });
   };
-
-  App.vent.bind("app.clipapp.followerlist:scroll",function(view,options){
-    $(document).scroll(function(evt){
-      var scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
-      if(view.$el[0].scrollHeight > 0 &&$(window).height()+scrollTop-view.$el[0].scrollHeight>=100 ){
-	if(options.collection.length-precliplength<end-start){
-	    flag=false;
-	}
-	if(flag){
-	  start += App.ClipApp.Url.page;
-	  end += App.ClipApp.Url.page;
-	  options.collection.url = options.url + "/" +start + ".." + end;
-	  options.collection.fetch({add:true});
-	  precliplength=options.collection.length;
-	}
-      }
-    });
-  });
 
   FollowerList.close=function(){
     App.listRegion.close();

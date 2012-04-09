@@ -13,8 +13,8 @@ script(type="text/template",id="following-view-template")
           | </a>
           p
             | <a href="#user/<%=id%>"><%=name%></a>
-        div.tags
+        div.tags.tag_box
           <%for(var i=0;i<tag.length;i++){%>
-          span.tag
+          span.size48.blue_48
             | <a href="#user/<%=App.ClipApp.getMyUid()%>/tag/<%=tag[i]%>"><%=tag[i]%></a>
           <%}%>

@@ -3,10 +3,16 @@ script(type="text/template",id="detail-view-template")
   section.big_pop
     h2.subject_edit
       div.pop_left
-      div.pop_right
-        i.comment
-        i.refresh
-        i.biezhen
+      div.pop_right.
+        <% if(!self) {%>
+          <i class="comment operate"></i>
+          <i class="refresh operate"></i>
+          <i class="biezhen operate"></i>
+        <% }else {%>
+          <i class="del operate"></i>
+          <i class="change operate"></i>
+          <i class="note operate"></i>
+        <% } %>
     div.pop_left
       ul.forward_log.
         <%for(var i =0; i<users.length; i++){if( i == 0){%>
@@ -29,8 +35,6 @@ script(type="text/template",id="detail-view-template")
           <%}}%>
           <%= time.match(/\d{4}-\d{2}-\d{2}/)%>
           <%= App.util.generatePastTime(time)%>
-        span
-          a#replykey 评论(2)
         dl.comments.clearfix
         div.input_textarea
 
