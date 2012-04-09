@@ -17,7 +17,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     events: {
       "click .link_img":"extImg",
       "change #formUpload": "image_change",
-      "click #img_upload_btn1": "up_extImg",
+      "click .btn": "up_extImg",
       "click .verify":"save",
       "click .cancel":"abandon",
       "click .pop_left": "remark_newClip"
@@ -27,7 +27,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     extImg:function(evt){
       $(".img_upload_span").css("display","block");
-      $("#img_upload_url1").focus();
+      $("#img_upload_url").focus();
 /*
       var that = this;
       var objEditor = document.getElementById("editor");
@@ -38,7 +38,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 */
     },
     up_extImg: function(){
-      var url = $("#img_upload_url1").val();
+      var url = $("#img_upload_url").val();
       if(url == "http://" || url == null)return;
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
