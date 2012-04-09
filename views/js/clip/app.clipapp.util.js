@@ -1,5 +1,6 @@
 App.util = (function(){
   var util = {};
+  var paramslength=0,flag=true;
 
   util.getMyUid = function(){
     var cookie = document.cookie;
@@ -136,5 +137,50 @@ App.util = (function(){
     }
     return returnVal;
   };
+
+  App.vent.bind("app.clipapp.util:scroll", function(view, options){
+    var paddingTop = 0;
+    $(window).scroll(function() {
+      var st = $(window).scrollTop();
+      var wh = window.innerHeight;
+      // fix left while scroll
+      var mt = $(".layout").offset().top;
+      if(st > mt){
+	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+	$(".gotop").fadeIn();
+	// show go-top while scroll
+      } else {
+	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$(".gotop").fadeOut();
+      }
+      // loader while scroll down to the page end
+      var lt = $(".loader").offset().top;
+      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
+      //if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
+      if(st + wh > lt){
+	if(flag){
+	  options.start += App.ClipApp.Url.page;
+	  options.end += App.ClipApp.Url.page;
+	  options.url = options.params.url + "/" +options.start + ".." + options.end;
+	  options.add = true;
+	  options.params.fetch(options);
+	  flag = false;
+	  setTimeout(function(){
+	    flag = true;
+	    if(options.params.length-paramslength<App.ClipApp.Url.page){
+	      flag = false;
+	      $(".loader").text("reach to the end.");
+	    }else{
+	      paramslength = options.params.length;
+	    }
+	  },200);
+	}
+      }
+    });
+  });
+
+
+
+
   return util;
 })();

@@ -160,16 +160,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var _start = 1;
     var _end = App.ClipApp.Url.page;
     var clips = new ClipPreviewList();
-    options.clips = clips;
-    options.clips.url = options.url;
+    options.params = clips;
+    options.start = start;
+    options.end = end;
+    options.params.url = options.url;
     options.url += "/" + _start+".."+ _end;
     if(options.data){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
     // console.info(options);
-    options.clips.fetch(options);
-    options.clips.onReset(function(previewlist){
+    options.params.fetch(options);
+    options.params.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
@@ -228,49 +230,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       isAnimated: false
     });
     App.listRegion.show(clipListView);
-    App.vent.trigger("clip:preview:scroll", clipListView, options);
+    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
   });
-
-  App.vent.bind("clip:preview:scroll", function(view, options){
-    var paddingTop = 0;
-    $(window).scroll(function() {
-      var st = $(window).scrollTop();
-      var wh = window.innerHeight;
-      // fix left while scroll
-      var mt = $(".layout").offset().top;
-      if(st > mt){
-	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	$(".gotop").fadeIn();
-	// show go-top while scroll
-      } else {
-	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".gotop").fadeOut();
-      }
-      // loader while scroll down to the page end
-      var lt = $(".loader").offset().top;
-      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
-      //if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
-      if(st + wh > lt){
-	if(flag){
-	  start += App.ClipApp.Url.page;
-	  end += App.ClipApp.Url.page;
-	  options.url = options.clips.url + "/" +start + ".." + end;
-	  options.add = true;
-	  options.clips.fetch(options);
-	  flag = false;
-	  setTimeout(function(){
-	    flag = true;
-	    if(options.clips.length-precliplength<App.ClipApp.Url.page){
-	      flag = false;
-	      $(".loader").text("reach to the end.");
-	    }else{
-	      precliplength = options.clips.length;
-	    }
-	  },200);
-	}
-      }
-    });
-  });
-
   return ClipList;
 })(App, Backbone, jQuery);

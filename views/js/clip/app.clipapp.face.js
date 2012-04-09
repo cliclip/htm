@@ -36,8 +36,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
     }
   });
 
-  var getRalation=function(uid){
-  };
   var getUser=function(uid,callback){
     user_id = uid;
     var user=new UserModel();
