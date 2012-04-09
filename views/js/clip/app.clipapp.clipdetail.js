@@ -21,18 +21,18 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     Operate: function(e){
       e.preventDefault();
-      var opt = $(e.currentTarget).val();
+      var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
       var pub = this.model.get("public");
       var tags = this.model.get("tag");
       var note = this.model.get("note");
       switch(opt){
-	case '收':
+	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
-	case '转':
+	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
-	case '评':
+	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case '注':
 	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
@@ -155,9 +155,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     clip.onChange(function(detailModel){
       var user = detailModel.get("user");
       if(user == uid){
-	detailModel.set("manage",["注","改","删"]);
+	detailModel.set("self",true);
       }else{
-	detailModel.set("manage",["收","转","评"]);
+	detailModel.set("self",false);
       }
       showDetail(detailModel);
       ClipDetail.showComment(cid);
