@@ -22,10 +22,11 @@ script(type="text/template",id="faceEdit-view-template")
     input.link(type="text",value="粘贴图像地址")
     .btn_frame
       button.verify(type="submit",id="confirm") 确定
-      span.file
-        button.upload(type="button")	
-          |上传本地图像
-        |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
+      .button_frame
+        span
+          button.upload(type="button")	
+            |上传本地图像
+          |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
 
 script(type="text/template",id="emailEdit-view-template")
   .mail_verify
