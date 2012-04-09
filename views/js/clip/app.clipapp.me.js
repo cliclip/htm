@@ -20,22 +20,22 @@ App.ClipApp.Me = (function(App, Backbone, $){
     events:{
       "click #login_button": "loginAction",
       "click #register_button": "registerAction",
-      "mouseover .my_info":"showMysetup",
-      "mouseout .my_info":"closeMysetup",
+      "click .my_info":"showMysetup",
+      // "mouseout .my_info":"closeMysetup",
       "click #logout": "logoutAction",
       "click #mysetup": "mysetupAction"
     },
     showMysetup: function(){
-      $("#show_mysetup").css("display","block");
-    },
+      $("#show_mysetup").toggle(); // css("display","block");
+    },/*
     closeMysetup: function(){
       $("#show_mysetup").css("display","none");
-    },
+    },*/
     loginAction: function(){
       App.vent.trigger("app.clipapp:login");
     },
     registerAction: function(){
-      App.vent.trigger("app.clipapp:register");
+       App.vent.trigger("app.clipapp:register");
     },
     logoutAction: function(){
       App.vent.trigger("app.clipapp:logout");
