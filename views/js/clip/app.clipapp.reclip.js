@@ -25,8 +25,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
-      console.log(id);
-      console.log($("#"+id).html());
+      //console.log(id);
+      //console.log($("#"+id).html());
       var color = $("#"+id).css("backgroundColor");
       if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
@@ -73,7 +73,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var tag = _.without($("#obj_tag").val().split(","),"add a tag","");
       tag = _.union(tag, tag_list);
       if($("#checkbox").attr("checked")){
-	var params = {clip:{note: [{text:text}],tag:tag,"public":"true"}};
+	var params = {clip:{note: [{text:text}],tag:tag,"public":"false"}};
       }else{
 	var params = {clip:{note: [{text:text}],tag:tag}};
       }
@@ -106,7 +106,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var reclip_tag = function(reclipModel, params){
     var uid = reclipModel.get("user");
     var tag = reclipModel.get("tag");
-    console.log(params);
     reclipModel.save(params, {
       url: P+"/user/"+uid+"/reclip/tag/"+tag,
       type: "POST",

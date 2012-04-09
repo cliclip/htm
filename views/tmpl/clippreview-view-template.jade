@@ -13,9 +13,9 @@ script(type="text/template",id="clippreview-view-template")
     <%}%>
   header#header
     div#opt.
-      <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[0]%>" class="operate"/>
-      <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[1]%>" class="operate"/>
-      <input type="button" id="<%=clip.user%>:<%=clip.id%>" value="<%= manage[2]%>" class="operate"/>
+      <input type="button" id="<%=clip.user.id%>:<%=clip.id%>" value="<%= manage[0]%>" class="operate"/>
+      <input type="button" id="<%=clip.user.id%>:<%=clip.id%>" value="<%= manage[1]%>" class="operate"/>
+      <input type="button" id="<%=clip.user.id%>:<%=clip.id%>" value="<%= manage[2]%>" class="operate"/>
     <% if(clip.content && clip.content.image) {%>
     div.article_photo
       | <img src="<%= App.util.url(clip.content.image)%>" />

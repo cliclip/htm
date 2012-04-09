@@ -162,7 +162,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   UserEdit.showUserEdit = function(uid){
     var editModel = new EditModel({id:uid});
     var editView = new EditView({model: editModel});
-    App.viewRegion.show(editView);
+    App.mysetRegion.show(editView);
     UserEdit.showFace(uid);
     UserEdit.showEmail(uid);
     UserEdit.showRule(uid);
