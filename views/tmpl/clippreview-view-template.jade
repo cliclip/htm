@@ -1,6 +1,6 @@
 script(type="text/template",id="clippreview-view-template")
+  <% if(recommend){ %>
   hgroup.clearfix.
-    <% if(recommend){ %>
     <a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
       <div class="user_info_small">
         <img src="<%=App.util.face_url(recommend.user.id,recommend.user.face) %>" width="50" height="50"/>
@@ -32,11 +32,11 @@ script(type="text/template",id="clippreview-view-template")
         i.icon_quote
         | <%=clip.reply_count?clip.reply_count:0%> 回复
     div.user_info_small
-      <% if(!App.ClipApp.getMyUid() && clip.author){ %>
+      <% if(!App.ClipApp.getMyUid() && clip.user){ %>
       div.user_more
-        a.author(href="/#user/<%=clip.author.id%>")
-          | <img src="<%=App.util.face_url(clip.author.id,clip.author.face)%>" width="50" height="50" />
-          dl.name: dt: <%=clip.author.name%>
+        a.author(href="/#user/<%=clip.user.id%>")
+          | <img src="<%=App.util.face_url(clip.user.face)%>" width="50" height="50" />
+        dl.name: dt: a <%=clip.user.name%>
       <%}%>
   span.biezhen
   b.comer_topleft

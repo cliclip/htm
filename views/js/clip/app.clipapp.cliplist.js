@@ -229,7 +229,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       columnWidth : 360,
       isAnimated: false
     });
-		  console.info(clips);
+    console.info(clips);
     App.listRegion.show(clipListView);
     App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
   });
