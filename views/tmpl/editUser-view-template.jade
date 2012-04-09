@@ -11,7 +11,7 @@ script(type="text/template",id="faceEdit-view-template")
     .user_name
       <% if(name && name!=""){%>
       <input class="name" type="text" value="<%=name%>" />
-      <input type="button" class="edit_username" disabled="disabled" value="设置用户名"/>
+      <input type="button" class="edit_username align-right" disabled="disabled" value="设置用户名"/>
       <%}else{%>
       <div id="set-name">您还没有用户名</div>
       <input type="button" class="edit_username" value="设置用户名"/>    
@@ -28,10 +28,12 @@ script(type="text/template",id="faceEdit-view-template")
           |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
 
 script(type="text/template",id="emailEdit-view-template")
-  .mail_verify
+  .mail_verify.fir
     ul.mail_list
       h3
-        input.add_mailbind(type="button",id="email_add",value="增加邮箱绑定")
+        button.add_mailbind.align-right(type="button",id="email_add",)
+          span
+          |增加邮箱绑定 	
         |邮箱识别
       |<% if(email){ for(i=0;i<email.length;i++) { if(email[i]){ %>
       |<li class="mail_line">
@@ -40,7 +42,7 @@ script(type="text/template",id="emailEdit-view-template")
       |</li><% }} }%>
   
 script(type="text/template",id="ruleEdit-view-template")
-  .mail_verify.bottom_s
+  .mail_verify.sec
     ul.mail_list
       h3
         span.open_mailcheck
