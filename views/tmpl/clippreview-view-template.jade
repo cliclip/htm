@@ -38,9 +38,9 @@ script(type="text/template",id="clippreview-view-template")
         </a>
       <%}%>
     div.action#opt(style="display:none;").
-      <i class="<%=manage[0]%> operate" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-      <i class="<%=manage[1]%> operate" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-      <i class="<%=manage[2]%> operate" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+      <i class="<%=manage[0][0]%> operate" title="<%=manage[0][1]%>" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+      <i class="<%=manage[1][0]%> operate" title="<%=manage[1][1]%>" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+      <i class="<%=manage[2][0]%> operate" title="<%=manage[2][1]%>" id="<%=clip.user.id%>:<%=clip.id%>"></i>
   span.biezhen
   b.comer_topleft
   b.comer_topright
