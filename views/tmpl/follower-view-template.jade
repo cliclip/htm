@@ -5,6 +5,9 @@ script(type="text/template",id="follow-view-template")
       li(id="following")我追的人
 script(type="text/template",id="follower-view-template")
   section.follow_frame
+    | <%if(uid == "null"){%>
+    | <p align="center"><a>还没有人追你哦!</a></p>
+    | <%}%>
     ul.user_list
       li.user
         div.tag_line.tag_box
