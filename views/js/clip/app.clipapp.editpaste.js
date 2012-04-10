@@ -7,12 +7,14 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     ifrm.contentWindow.document.designMode = "On";
     ifrm.contentWindow.document.write("<body style=\"font-size:70%;font-family:Verdana,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
-    ifrm.contentWindow.focus();
     if(isIE){
       ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){
 	return pasteClipboardData(ifrm.id,e);
       });
     }else{
+      // 用于保证chrome可以正确执行inserthtml和paste事件 [焦点获取方面的问题]
+      ifrm.contentWindow.focus();
+      ifrm.contentWindow.document.execCommand('inserthtml', false, "<br/>");
       ifrm.contentWindow.document.addEventListener("paste", function(e){
 	return pasteClipboardData(ifrm.id,e);
       },false);
