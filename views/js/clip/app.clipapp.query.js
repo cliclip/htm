@@ -6,12 +6,23 @@ App.ClipApp.Query = (function(App,Backbone,$){
     template: "#queryclip-view-template",
     events:{
       "click .add": "addClip",
+      "click .more": "showMore",
       "click .search_btn" : "query",
       "click .text":"inputAction"
     },
     initialize:function(){
       //if (window.event.keyCode==13)
 	//window.event.keyCode=0 ;
+    },
+    addClip: function(){
+      App.vent.trigger("app.clipapp:clipadd");
+    },
+    showMore:function(){
+      $(".options").toggle();
+    },
+    query : function(){
+      var word = this.$(".text").val();
+      App.vent.trigger("app.clipapp.query:query",word);
     },
     inputAction: function(){//监听回车事件
       $('.text').keydown(function(e){
@@ -20,13 +31,6 @@ App.ClipApp.Query = (function(App,Backbone,$){
 	  $('.search_btn').click();
 	}
       });
-    },
-    query : function(){
-      var word = this.$(".text").val();
-      App.vent.trigger("app.clipapp.query:query",word);
-    },
-    addClip: function(){
-      App.vent.trigger("app.clipapp:clipadd");
     }
   });
 
