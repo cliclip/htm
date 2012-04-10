@@ -3,7 +3,7 @@ script(type="text/template",id="clippreview-view-template")
   hgroup.clearfix.
     <a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
       <div class="user_info_small">
-        <img src="<%=App.util.face_url(recommend.user.id,recommend.user.face) %>" width="50" height="50"/>
+        <img src="<%=App.util.face_url(recommend.user.face) %>" width="50" height="50"/>
         <%=recommend.user.name%>
       </div>
     </a>&nbsp;&nbsp;
@@ -30,8 +30,8 @@ script(type="text/template",id="clippreview-view-template")
     div.user_info_small
       <% if(clip.user){ %>
       div.user_more
-        | <a class="author" href="/#user/<%=clip.user.id%>">
-        |   <img src="<%=App.util.face_url(clip.user.face)%>" width="50" height="50" />
+        | <a class="author" href="/#user/<%=clip.user.id%>" >
+        | <img src="<%=App.util.face_url(clip.user.face)%>" width="50" height="50" />
         dl.name
           dt.
             <%=clip.user.name%>

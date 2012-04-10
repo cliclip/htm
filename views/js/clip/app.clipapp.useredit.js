@@ -56,6 +56,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       UserEdit.close();
+
     }
   });
 
@@ -342,6 +343,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   UserEdit.close = function(){
     App.mysetRegion.close();
+    window.location.href='javascript:history.go(-1);';
   };
 
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
