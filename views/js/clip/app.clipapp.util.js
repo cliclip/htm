@@ -1,6 +1,10 @@
 App.util = (function(){
   var util = {};
   var paramslength=0,flag=true;
+  util.getMyUid = function(){
+    var cookie = document.cookie;
+    return cookie ? cookie.split("=")[1].split(":")[0] : null;
+  };
 
   util.url = function(imageid){
     var pattern = /^\d+:[a-z0-9]{32}/;
