@@ -222,7 +222,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-		  console.info(clips);
     var clipListView = new ClipListView({collection: clips});
     $("#list").masonry({
       itemSelector : '.clip',
