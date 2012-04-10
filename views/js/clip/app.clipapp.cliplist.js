@@ -27,9 +27,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
 	}
 	if(resp[i].clip.user.id != App.ClipApp.getMyUid("id")){
-	  resp[i].manage = ["收","转","评"];
+	  resp[i].manage = ["biezhen","refresh","comment"];
 	}else{
-	  resp[i].manage = ["注","改","删"];
+	  resp[i].manage = ["note","change","del"];
 	}
       }
       return resp;
@@ -46,8 +46,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",
-      "mouseover .preview-info": "mouseover", // mouseover子类也响应
-      "mouseout .preview-info": "mouseout" // mouseout 只自己响应
+      "mouseover .master": "mouseover", // mouseover子类也响应
+      "mouseout .master": "mouseout" // mouseout 只自己响应
     },
     initialize: function(){
       var $container = $('#list');
@@ -92,24 +92,25 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     },
     operate: function(e){
       e.preventDefault();
-      var opt = $(e.currentTarget).val();
+      var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var clip = this.model.get("clip");
       var cid = this.model.id;
       var pub = clip["public"];
       var tags = clip.tag;
       var note = [clip.note];
       switch(opt){
-	case '收':
+	case 'biezhen'://收
+	  console.log(opt);
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
-	case '转':
+	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
-	case '评':
+	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", cid);break;
-	case '注':
+	case 'note'://注
 	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
-	case '改':
+	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
-	case '删':
+	case 'del'://删
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     }
@@ -171,11 +172,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     // console.info(options);
     options.params.fetch(options);
     options.params.onReset(function(previewlist){
+      //location.reload() ;
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
 
-  // site == user2
+  // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
