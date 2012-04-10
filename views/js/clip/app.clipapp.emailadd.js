@@ -86,7 +86,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       EmailAdd.showActive(email);
   });
   App.vent.bind("app.clipapp.emailadd:error",function(model,error){
-    EmailAdd.showEmailAdd(null,model,App.Messages.getErrorMessage(error));
+    EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(error));
   });
 
   return EmailAdd;

@@ -361,7 +361,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.useredit:showemail",model.id);
       },
       error: function(model, res){
-	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,App.Messages.getErrorMessage(res));
+	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,App.util.getErrorMessage(res));
       }
     });
   });
@@ -375,7 +375,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  App.ClipApp.EmailAdd.showActive("更新邮件规则成功！");
   	},
   	error:function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, App.Messages.getErrorMessage(res));
+  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, App.util.getErrorMessage(res));
   	}
       });
   });

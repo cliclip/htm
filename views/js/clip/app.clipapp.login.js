@@ -91,7 +91,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.login:error", function(model, error){
-    Login.show(model, App.Messages.getErrorMessage(error));
+    Login.show(model, App.util.getErrorMessage(error));
   });
 
   App.vent.bind("app.clipapp.login:cancel", function(){
