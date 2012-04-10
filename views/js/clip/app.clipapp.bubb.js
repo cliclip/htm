@@ -78,7 +78,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       var bubbView = new BubbView();
       App.bubbRegion.show(bubbView);
     }
-    if (changeTags(last, tags, old_self, self)) {
+    if (changeTags(last, tags, old_self, self)||!tags.follow) {
       resetTags(tags);
     } else if (changeDefault(last, tags)) {
       openTag(tags.default);
@@ -93,24 +93,50 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
   });
 
-  App.vent.bind("app.clipapp.bubb:follow", function(tag){
+  App.vent.bind("app.clipapp.bubb:follow", function(tag,uid){
+    var url = "";
+    if(uid) _uid = uid;
+    if(tag == '*') {
+      url = P+"/user/"+_uid+"/follow";
+    }else{
+      url = P+"/user/"+_uid+"/follow/"+tag;
+    }
     var bubbModel = new BubbModel({id: _uid});
-    var url = P+"/user/"+_uid+"/follow/"+tag;
     bubbModel.fetch({
       type:'POST',
       url: url,
       data: JSON.stringify({tag: tag}),
-      contentType:"application/json; charset=utf-8"
+      contentType:"application/json; charset=utf-8",
+      success:function(){
+	if(last && _.isEmpty(last.follows)){
+	  App.vent.trigger("app.clipapp.face:show",_uid);
+	}
+	last.follows.push(tag);
+      },
+      error:function(){}
     });
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(tag){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(tag,uid){
+    var url = "";
+    if(uid) _uid = uid;
+    if(tag == '*') {
+      url = P+"/user/"+_uid+"/follow";
+    }else{
+      url = P+"/user/"+_uid+"/follow/"+tag;
+    }
     // console.log("unfollow %s", tag);
     var bubbModel = new BubbModel({id: _uid});
-    var url = P+"/user/"+_uid+"/follow/"+tag;
     // console.info(bubbModel.id+"   "+url);
     bubbModel.destroy({
-      url: url
+      url: url,
+      success:function(){
+	last.follows = _.without(last.follows,tag);
+	if(last&&_.isEmpty(last.follows)){
+	  App.vent.trigger("app.clipapp.face:show",_uid);
+	}
+      },
+      error:function(){}
     });
   });
 
@@ -152,6 +178,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // 取 uid 的 tag
+  Bubb._getUserTags = getUserTags;
   function getUserTags(uid, callback){
     // API getUserTags
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
@@ -194,8 +221,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // utils
 
-  function mkTag(tags, follows, tag, self){
+  function mkTag(tags, followss, tag, self){
     // DEBUG PURPOSE
+    var follows = _.without(followss,'*');
     tags = _.union(bubs, sink, tags, follows);
     var opt = {
       tags: tags,
@@ -213,8 +241,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var i = url.indexOf("/tag");
     if(i > 0){
       url = url.substr(0, i);
+      return url += "/tag/"+tag;
+    }else{
+      return url = "/user/"+_uid+"/tag/"+tag;
     }
-    return url += "/tag/"+tag;
   }
 
   function changeTags(tags1, tags2, old_self, self){

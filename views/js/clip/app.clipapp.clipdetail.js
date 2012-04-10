@@ -21,24 +21,24 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     Operate: function(e){
       e.preventDefault();
-      var opt = $(e.currentTarget).val();
+      var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
       var pub = this.model.get("public");
       var tags = this.model.get("tag");
       var note = this.model.get("note");
       switch(opt){
-	case '收':
+	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
-	case '转':
+	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
-	case '评':
+	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
-	case '注':
+	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
-	case '改':
+	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
-	case '删':
+	case 'del':
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     },
@@ -54,11 +54,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   var CommentView = App.ItemView.extend({
-    tagName: "div",
+    tagName: "ul",
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
-      "click .comm_link" : "toggleChildren",
+      "click .comment_con" : "toggleChildren",
       "mouseover .comm_link" : "discoloration",
       "mouseout .comm_link" : "resume",
       "click .reply_comment" : "reply_comment",
@@ -66,8 +66,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     toggleChildren : function(e){
       e.preventDefault();
-      if($(e.target).attr("class") == "comm_link")
+      if($(e.target).attr("class") == "comm_link"){
 	$(e.currentTarget).siblings(".children").toggle();
+      }
     },
     discoloration : function(e){
       e.preventDefault();
@@ -122,11 +123,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	    e.clip_owner = clip_owner;
 	    var str = _.template(template, e);
 	    if (e.children && e.children.length > 0) {
-	      str += "<div class='children'>";
+	      str += "<ul class='children'>";
 	      str += render_tree(e.children, "");
-	      str += "</div>";
+	      str += "</ul>";
 	    }
-	    str = '<div>'+str+'</div>';
+	    str = '<ul>'+str+'</ul>';
             return render_tree(commentList, html+str);
 	  }
 	}
@@ -155,9 +156,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     clip.onChange(function(detailModel){
       var user = detailModel.get("user");
       if(user == uid){
-	detailModel.set("manage",["注","改","删"]);
+	detailModel.set("self",true);
       }else{
-	detailModel.set("manage",["收","转","评"]);
+	detailModel.set("self",false);
       }
       showDetail(detailModel);
       ClipDetail.showComment(cid);
@@ -185,11 +186,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template : "#addcomm-view-template",
     tag_list : [],
     events : {
-      "focus #comm_text":"foucsAction",
-      "blur #comm_text":"blurAction",
-      "click .comm":"maintagAction",
-      "click .verify":"comment",
-      "click .cancel":"cancel"
+      "focus #comm_text" : "foucsAction",
+      "blur #comm_text"  : "blurAction",
+      "click .main_tag"  : "maintagAction",
+      "click .verify"    : "comment",
+      "click .cancel"    : "cancel"
     },
     foucsAction:function(evt){
       if($("#comm_text").val() == "评论文本框~" ){

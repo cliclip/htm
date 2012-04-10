@@ -95,12 +95,13 @@ App.Routing = (function(App, Backbone){
 App.addRegions({
 
   mineRegion: "#mine",
+  mysetRegion: "#myset",
   faceRegion: "#face",
   bubbRegion: "#bubb",
   listRegion: "#list",
   viewRegion: "#view",
   popRegion: "#pop",
-  queryRegion:"#query"
+  searchRegion:".search"
 });
 
 App.bind("initialize:after", function(){

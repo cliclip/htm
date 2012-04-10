@@ -14,9 +14,10 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     events : {
       "focus #comm_text":"foucsAction",
       "blur #comm_text":"blurAction",
-      "click .main_tag":"maintagAction",
+      "click .size48":"maintagAction",
       "click #submit" : "comment",
-      "click #cancel" : "cancel"
+      "click #cancel" : "cancel",
+      "click .close_w" : "cancel"
     },
 
     foucsAction:function(evt){
@@ -33,20 +34,20 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 
     maintagAction:function(evt){
       var id = evt.target.id;
-      var color = document.getElementById(id).style.backgroundColor;
-      if(!color){
-	document.getElementById(id).style.backgroundColor="pink";
-	tag_list.push($("#"+id).val());
+      var style =document.getElementById(id).className;
+      if(style != "size48 orange_48"){
+	document.getElementById(id).className="size48 orange_48";
+	tag_list.push($("#"+id).html());
 	console.dir(tag_list);
 	if($("#comm_text").val() == "" || $("#comm_text").val() == "说点什么吧~"){
-	  $("#comm_text").val($("#"+id).val());
+	  $("#comm_text").val($("#"+id).html());
 	}else{
-	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
+	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).html()));
 	}
-      }else if(color == "red"){
-	document.getElementById(id).style.backgroundColor="";
-	tag_list = _.without(tag_list,$("#"+id).val());
-	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
+      }else if(style == "size48 orange_48"){
+	document.getElementById(id).className="size48 white_48";
+	tag_list = _.without(tag_list,$("#"+id).html());
+	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).html()));
 	console.dir(tag_list);
       }
     },

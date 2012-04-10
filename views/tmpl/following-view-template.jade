@@ -5,17 +5,19 @@ script(type="text/template",id="following-top-view-template")
       li.tab(id="following") 我追的人
 script(type="text/template",id="following-view-template")
   section.follow_frame
+    | <%if(uid == "null"){%>
+    | <p align="center"><a>你还没追任何人哦!</a></p>
+    | <%}%>
     ul.user_list
       li.user
         div.head
           | <a href="#user/<%=id%>">
-          img(src="../photos/user_head.jpg")
+          | <img src="<%=App.util.face_url(face)%>"/>
           | </a>
           p
             | <a href="#user/<%=id%>"><%=name%></a>
-        div.tags
-          i.follow
+        div.tags.tag_box
           <%for(var i=0;i<tag.length;i++){%>
-          span.tag
-            | <a href="#user/<%=App.ClipApp.getMyUid()%>/tag/<%=tag[i]%>"><%=tag[i]%></a>
+          span.size48.blue_48
+            | <a href="#user/<%=id%>/tag/<%=tag[i]%>"><%=tag[i]%></a>
           <%}%>

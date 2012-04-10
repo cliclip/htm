@@ -3,8 +3,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var originalFace;
   var flag = false;
-
   var EditModel = App.Model.extend({});
+  var PassEditModel = App.Model.extend({
+    defaults: {
+      new_pass : "请输入新密码", confirm_pass : "确认密码"
+    }
+  });
   var NameModel = App.Model.extend({
     defaults:{
       id:""
@@ -43,10 +47,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   var EditView = App.ItemView.extend({
-    tagName: "div",
-    className: "editUser",
+    tagName: "section",
+    className: "edit_frame",
     template: "#editUser-view-template",
     events: {
+      "click .close_w"           : "cancel"
+    },
+    cancel : function(e){
+      e.preventDefault();
+      UserEdit.close();
+
     }
   });
 
@@ -78,7 +88,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     submit:function(form){
       if(!flag){
 	form.preventDefault();//此处阻止提交表单
-	//alert("上传有误");
+	//alert("请选择上传照片");
       }
     }
   });
@@ -88,17 +98,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "emailEdit",
     template: "#emailEdit-view-template",
     events: {
-      "click #add_email":"emailAdd",
-      "click .email_cut":"emailCut"
+      "click #email_add":"emailAdd",
+      "click .email_address":"emailCut"
     },
     emailAdd:function(e){
       App.vent.trigger("app.clipapp.emailadd:show",this.model.id);
     },
     emailCut:function(e){
       e.preventDefault();
-      var id = e.currentTarget.id;
-      var address = $("#"+id.split("_")[1]).text();
-      App.vent.trigger("app.clipapp.useredit:emaildel",this.model,address,id);
+      var address = e.currentTarget.id;
+      App.vent.trigger("app.clipapp.useredit:emaildel",this.model,address);
     }
   });
 
@@ -107,7 +116,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "ruleEdit",
     template: "#ruleEdit-view-template",
     events: {
-      "click #update_rule" : "ruleUpdate",
+      "click #update_rule[type=submit]" : "ruleUpdate",
       "keydown #copy-to" : "setCC",
       "keydown #send" : "setTO"
 
@@ -115,10 +124,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     setCC:function(e){
       var key = e.keyCode;
       var str = $("#copy-to").val();
+      console.log(key);
       var last_str = str.charAt(str.length - 1);
-      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59)){
+      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==188||key==59)){
 	$("#copy-to").val(str+"; ");
-	if(key==59||key==32) return false;
+	if(key==188||key==32||key==59) return false;
       }
     },
     setTO:function(e){
@@ -126,9 +136,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var str = $("#send").val();
       var last_str = str.charAt(str.length - 1);
       var penultimate = str.charAt(str.length -2,1);
-      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59)){
+      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59||key==188)){
 	$("#send").val(str+"; ");
-	if(key==59||key==32) return false;
+	if(key==188||key==59||key==32) return false;
       }
     },
     ruleUpdate: function(){
@@ -143,21 +153,56 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
     }
   });
+  var PassView = App.ItemView.extend({
+    tagName: "div",
+    className: "passEdit",
+    template: "#passEdit-view-template",
+    events: {
+      "click #pass_confirm[type=submit]" : "passUpdate",
+      "focus #con" : "focusAction",
+      "focus #new" : "focusAction",
+      "blur #new_pass" : "blurAction",
+      "blur #con_pass" : "blurAction"
+    },
+    focusAction:function(e){
+      var id = e.currentTarget.id;
+      $("#"+id).css("display","none");
+      $("#"+id+"_pass").css("display","block");
+      $("#"+id+"_pass").focus();
+    },
+    blurAction:function(e){
+      var id = e.currentTarget.id;
+      if(id=="new_pass" && $("#"+id).val()==""){
+	$("#"+id).css("display","none");
+	$("#new").css("display","block");
+      }else if(id=="con_pass" && $("#"+id).val()==""){
+	$("#"+id).css("display","none");
+	$("#con").css("display","block");
+      }
+    },
+    passUpdate:function(){
+      var oldpass = $("#new_pass").val();
+      var newpass = $("#con_pass").val();
+      var params = {oldpass:oldpass,pass:newpass};
+      App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
+    }
+  });
 
 
   UserEdit.showUserEdit = function(uid){
     var editModel = new EditModel({id:uid});
     var editView = new EditView({model: editModel});
-    App.viewRegion.show(editView);
+    App.mysetRegion.show(editView);
     UserEdit.showFace(uid);
     UserEdit.showEmail(uid);
     UserEdit.showRule(uid);
+    UserEdit.showPassEdit(uid);
   };
 
   UserEdit.showFace = function(uid){
     var faceModel = new FaceEditModel({id:uid});
     UserEdit.faceRegion = new App.Region({
-      el:".face"
+      el:".left_bar"
     });
     faceModel.fetch({
       success:function(){
@@ -198,7 +243,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   UserEdit.showEmail = function(uid){
     var emailModel = new EmailEditModel({id:uid});
     UserEdit.emailRegion = new App.Region({
-      el:".email"
+      el:"#email"
     });
     emailModel.fetch();
     emailModel.onChange(function(emailModel){
@@ -212,7 +257,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     if (model) ruleModel.set(model.toJSON());
     if (error) ruleModel.set("error", error);
     UserEdit.ruleRegion = new App.Region({
-      el:".rule"
+      el:"#rule"
     });
     ruleModel.fetch();
     ruleModel.onChange(function(ruleModel){
@@ -224,13 +269,27 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
+  UserEdit.showPassEdit = function(uid,model,error){
+    var passModel = new PassEditModel({id:uid});
+    if (model) passModel.set(model.toJSON());
+    if (error) passModel.set("error", error);
+    var passView = new PassView({model: passModel});
+    UserEdit.passeditRegion = new App.Region({
+      el:".right_bar"
+    });
+    UserEdit.passeditRegion.show(passView);
+  };
+
+
   UserEdit.onUploadImgChange = function(sender){
+
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-      alert('图片格式无效！');
+       alert('图片格式无效！');
+      flag = false;
       return flag;
     }else{
-      var objPreview = document.getElementById('myface' );
       if( sender.files &&sender.files[0] ){
+	var objPreview = document.getElementById('myface' );
 	objPreview.src = window.URL.createObjectURL(sender.files[0]);
 	flag =true;
 	return flag;
@@ -239,23 +298,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   };
 
-/*  UserEdit.image_change = function(){
-    var sender = document.getElementById("formUpload");
-    if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-      alert('图片格式无效！');
-      return false;
-    }else{
-      return true;
-    }
-  };*/
-
   UserEdit.saveFace = function(editModel,params){
     editModel.save(params,{
       url: P+"/user/"+ editModel.id+"/face",
       type: "POST",
       success:function(model,res){
-	//var uid = editModel.get("id");
 	alert("上传成功!");
+	App.vent.trigger("app.clipapp.useredit:facesuccess");
 	flag = false;
       },
       error:function(model,res){
@@ -293,28 +342,33 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-/*
   UserEdit.close = function(){
-    App.viewRegion.close();
+    App.mysetRegion.close();
+    window.location.href='javascript:history.go(-1);';
   };
-*/
+
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
     UserEdit.showFace(uid);
+  });
+  App.vent.bind("app.clipapp.useredit:showemail",function(uid){
+  UserEdit.showEmail(uid);
   });
   App.vent.bind("app.clipapp.useredit:showrule",function(uid,model,error){
     UserEdit.showRule(uid,model,error);
   });
+  App.vent.bind("app.clipapp.useredit:showpass",function(uid,model,error){
+    UserEdit.showPassEdit(uid,model,error);
+  });
 
-  App.vent.bind("app.clipapp.useredit:emaildel",function(emailModel,address,id){
+  App.vent.bind("app.clipapp.useredit:emaildel",function(emailModel,address){
     var url = P+"/user/"+emailModel.id+"/email/"+address;
     emailModel.destroy({
       url:url,
       success: function(model, res){
-	$("."+id).remove();
 	App.vent.trigger("app.clipapp.useredit:showemail",model.id);
       },
       error: function(model, res){
-	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,res);
+	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,App.util.getErrorMessage(res));
       }
     });
   });
@@ -324,11 +378,25 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	url: url,
 	type: "POST",
   	success: function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:success", model.id);
-	  alert("更新邮件规则成功！");
+  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id);
+	  App.ClipApp.EmailAdd.showActive("更新邮件规则成功！");
   	},
   	error:function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:error", model, res);
+  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, App.util.getErrorMessage(res));
+  	}
+      });
+  });
+  App.vent.bind("app.clipapp.useredit:passchange",function(passModel,params){
+    var url = P+"/user/"+passModel.id+"/passwd";
+    passModel.save(params,{
+	url: url,
+	type: "PUT",
+  	success: function(model, res){
+  	  App.vent.trigger("app.clipapp.useredit:showpass", model.id);
+	  App.ClipApp.EmailAdd.showActive("修改密码成功");
+  	},
+  	error:function(model, res){
+  	  App.vent.trigger("app.clipapp.useredit:showpass", model.id,model, res);
   	}
       });
   });

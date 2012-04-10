@@ -5,15 +5,32 @@ App.ClipApp.Query = (function(App,Backbone,$){
     tagName: "div",
     template: "#queryclip-view-template",
     events:{
-      "click #query_button" : "query",
-      "click #addClip": "addClip"
+      "click .add": "addClip",
+      "click .more": "showMore",
+      "click .search_btn" : "query",
+      "click .text":"inputAction"
     },
-    query : function(){
-      var word = this.$("#input_keyword").val();
-      App.vent.trigger("app.clipapp.query:query",word);
+    initialize:function(){
+      //if (window.event.keyCode==13)
+	//window.event.keyCode=0 ;
     },
     addClip: function(){
       App.vent.trigger("app.clipapp:clipadd");
+    },
+    showMore:function(){
+      $(".options").toggle();
+    },
+    query : function(){
+      var word = this.$(".text").val();
+      App.vent.trigger("app.clipapp.query:query",word);
+    },
+    inputAction: function(){//监听回车事件
+      $('.text').keydown(function(e){
+	if(e.keyCode==13){
+	  console.info("click");
+	  $('.search_btn').click();
+	}
+      });
     }
   });
 
@@ -22,7 +39,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
     var queryView = new QueryView({
       model: queryModel
     });
-    App.queryRegion.show(queryView);
+    App.searchRegion.show(queryView);
   };
 
   App.bind("initialize:after", function(){

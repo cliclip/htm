@@ -10,14 +10,18 @@ script(type='text/template',id='me-view-template')
     span.expert
       a(href="#my/interest") 砖家
       i 234
-    span.myset
-      a#mysetup 设置
-      a#logout 登出
   div.my_info
+    div(id="show_mysetup",style="display:none;")
+      ul.action
+        li.set
+          a(href="javascript:void(0)",id="mysetup") 设置
+        li.logout
+          a(href="javascript:void(0)",id="logout") 登出
     div.my_head.
       <img id="face-image" src="<%=App.util.face_url(face)%>" height="50" width="50"/>
   <% } else { %>
-  a#register_button 注册 
-  a#login_button 登录  
+  div.in_site
+    a#register_button 注册 
+    |
+    a#login_button 登陆
   <% } %>
-

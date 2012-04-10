@@ -17,13 +17,18 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     events:{
       "click #name_list"     :  "getUserAction",
+      "keypress #name"       :  "getUser",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
       "mouseover #name_list" :  "MouseOver",
       "mouseout #name_list"  :  "MouseOut",
       "focus #recommend_text":  "clearAction",
       "click #submit"        :  "recommendAction",
-      "click #cancel"        : "cancelAction"
+      "click #cancel"        : "cancelAction",
+      "click .close_w"        : "cancelAction"
+    },
+    getUser:function(e){
+
     },
     getUserAction:function(evt){
       // 这里是必须要触发才会取得uid
@@ -37,7 +42,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     nameListAction:function(evt){
       var str = this.$("#name").val();
       var params = {q:str};
-      App.vent.trigger("app.clipapp.recommend:lookup",params);
+      App.vent.trigger("app.clipapp.recommend:lookup",params,this.model.id);
     },
     MouseOver:function(evt){
 
@@ -47,14 +52,16 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     recommendAction:function(e){
       e.preventDefault();
+      var text=$("#recommend_text").val();
       var params = {
-	text:$("#recommend_text").val(),
+	text:text,
 	clipid :this.model.id
       };
+      var params1 = {clip:{note:[{text:text}]}};
       if(this.model.get("uid")){
 	App.vent.trigger("app.clipapp.recommend:submit",this.model,params);
 	if($("#reclip_box").attr("checked")){
-	App.vent.trigger("app.clipapp.reclip:submit", that.model,params1);
+	App.vent.trigger("app.clipapp.reclip:submit", this.model,params1);
       }
       }else{
 	App.vent.trigger("app.clipapp.recommend:error",this.model,{"user":"请添加用户"});
@@ -82,10 +89,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     tagName:"div",
     itemView:NameListItemView
   });
-  var showNameList=function(params){
+  var showNameList=function(params,clipid){
     var collection = new NameList({});
     collection.fetch({data:params});
     collection.onReset(function(list){
+      var ownmodel=list.get(clipid.split(":")[0]);
+      list.remove(ownmodel);
       var namelistView = new NameListCollectionView({
 	collection:list
       });
@@ -98,6 +107,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       type:"POST",
       success:function(model,res){
 	Recommend.close();
+	location.reload();
       },
       error:function(model,res){
 	App.vent.trigger("app.clipapp.recommend:error", model, res);
@@ -114,6 +124,11 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     });
     recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
+    if(error){
+      $("#alert").css("display","block");
+    }else{
+      $("#alert").css("display","none");
+    }
   };
 
   // 在别地儿是否有用到
@@ -123,8 +138,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   };
 
 
-  App.vent.bind("app.clipapp.recommend:lookup",function(params){
-    showNameList(params);
+  App.vent.bind("app.clipapp.recommend:lookup",function(params,clipid){
+    showNameList(params,clipid);
   });
 
   App.vent.bind("app.clipapp.recommend:submit",function(model,params){

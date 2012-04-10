@@ -1,6 +1,7 @@
 script(type="text/template",id="reclip-view-template")
   div.masker_layer
   section.small_pop
+    span.close_w
     h2.subject_put.
       <% if(count){ %>
       您将收藏<%= count%>条数据
@@ -8,19 +9,18 @@ script(type="text/template",id="reclip-view-template")
       收
       <% } %>
     ul.pop_body
-      li.alert
-        <%= typeof error != "undefined" && error ? error : "" %>
       li.tag_box
-        input.main_tag(type="button",id="main_tag_1",value="好看")
-        input.main_tag(type="button",id="main_tag_2",value="好听")
-        input.main_tag(type="button",id="main_tag_3",value="好吃")
-        input.main_tag(type="button",id="main_tag_4",value="好玩")
-        input.main_tag(type="button",id="main_tag_5",value="酷")
-      li.input_text
-        input.obj_tags(type="text",id="obj_tag")
+        span.size48.white_48#main_tag_1 好看
+        span.size48.white_48#main_tag_2 好听
+        span.size48.white_48#main_tag_3 好吃
+        span.size48.white_48#main_tag_4 好玩
+        span.size48.white_48#main_tag_5 精辟 
+        span.size48.white_48#main_tag_6 酷 
+      li
+        text.obj_tag(type="text",id="obj_tag")
       br
       li.input_textarea
-        textarea(id="reclip_text")备注一下吧~
+        |<textarea id="reclip_text">备注一下吧~</textarea>
       li.input_checkbox
         label
           input(type="checkbox",id="checkbox")

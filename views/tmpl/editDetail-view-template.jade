@@ -1,7 +1,7 @@
-script(type="text/template",id="addClip-view-template")
+script(type="text/template",id="editDetail-view-template")
   div.masker_layer
   section.big_pop
-    h2.subject_add
+    h2.subject_edit
       div.pop_left
         i.note
       div.pop_right
@@ -18,13 +18,13 @@ script(type="text/template",id="addClip-view-template")
               input.btn(type="submit",value="确定")
           span
             button.format 整理格式
-        | 增
+        | 改
     div.pop_left
     div.pop_right
       section.pop_inner
-        form#addForm(metod="post")
-        article.content.content2
-          iframe#editor(width="100%",height="100%",frameborder="0")
-        div.btn_group.clearfix
-          input.verify(type="submit",title="保存",value="确定")
-          input.cancel(type="reset",title="放弃",value="取消")
+        form#editForm(metod="post")
+          article.content.content2
+            iframe#editor(width="100%",height="100%",frameborder="0" )
+          div.btn_group.clearfix
+            input#editClip_Save.verify(type="submit",title="保存",value="确定")
+            input#editClip_Abandon.cancel(type="reset",title="放弃",value="取消")

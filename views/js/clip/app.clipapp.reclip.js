@@ -20,26 +20,30 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       "blur #reclip_text"  :"blurAction",
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
-      "click .main_tag"    :"maintagAction"
+      "click .size48"      :"maintagAction",
+      "click .close_w"     : "cancel"
     },
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
-      console.log(id);
-      var color = $("#"+id).css("backgroundColor");
-      if(color != "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","red");
-	tag_list.push($("#"+id).val());
+     // console.log(id);
+     // console.log($("#"+id).html());
+     // document.getElementById(id).className="size48 blue_48";
+      var style =document.getElementById(id).className;
+     // console.log(style);
+      if(style != "size48 orange_48"){
+	document.getElementById(id).className="size48 orange_48";
+	tag_list.push($("#"+id).html());
 	if($("#reclip_text").val() == "" || $("#reclip_text").val() == "备注一下吧~"){
-	  $("#reclip_text").val($("#"+id).val());
-	  //console.dir(tag_list);
+	  $("#reclip_text").val($("#"+id).html());
+	 // console.dir(tag_list);
 	}else{
-	  $("#reclip_text").val(_.union($("#reclip_text").val().split(","),$("#"+id).val()));
+	  $("#reclip_text").val(_.union($("#reclip_text").val().split(","),$("#"+id).html()));
 	}
-      }else if(color == "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","");
-	tag_list = _.without(tag_list,$("#"+id).val());
-	$("#reclip_text").val(_.without($("#reclip_text").val().split(","),$("#"+id).val()));
+      }else if(style == "size48 orange_48"){
+	document.getElementById(id).className="size48 white_48";
+	tag_list = _.without(tag_list,$("#"+id).html());
+	$("#reclip_text").val(_.without($("#reclip_text").val().split(","),$("#"+id).html()));
 	//console.dir(tag_list);
       }
     },
@@ -71,8 +75,11 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var text = $("#reclip_text").val();
       var tag = _.without($("#obj_tag").val().split(","),"add a tag","");
       tag = _.union(tag, tag_list);
-      console.info($("#checkbox").attr("checked")); //TODO
-      var params = {clip:{note: [{text:text}],tag:tag}};
+      if($("#checkbox").attr("checked")){
+	var params = {clip:{note: [{text:text}],tag:tag,"public":"false"}};
+      }else{
+	var params = {clip:{note: [{text:text}],tag:tag}};
+      }
       if(this.model.get("model") == "clip"){
 	App.vent.trigger("app.clipapp.reclip:submit", that.model, params);
       }else if (this.model.get("model") == "tag"){
@@ -91,7 +98,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	Reclip.close();
-	Backbone.history.navigate("my", true);
+	location.reload();
       },
       error:function(model, res){
 	Reclip.show(model.id, null, null, model, res);
@@ -102,13 +109,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var reclip_tag = function(reclipModel, params){
     var uid = reclipModel.get("user");
     var tag = reclipModel.get("tag");
-    console.log(params);
     reclipModel.save(params, {
       url: P+"/user/"+uid+"/reclip/tag/"+tag,
       type: "POST",
       success: function(model, res){
 	Reclip.close();
-	Backbone.history.navigate("my", true);
+	location.reload();
       },
       error:function(model, res){
 	Reclip.show(null, model, res);

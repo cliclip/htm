@@ -26,7 +26,8 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.register = function(){
-    ClipApp.Register.show();
+    ClipApp.Login.show();
+    // ClipApp.Register.show(); 两个框共用
   };
   ClipApp.findpasswd = function(){
     ClipApp.FindPass.show();
@@ -90,6 +91,10 @@ App.ClipApp = (function(App, Backbone, $){
     // var uid = getMyUid();
     // ClipApp.Login.show(uid);
     ClipApp.Login.show();
+  });
+
+  App.vent.bind("app.clipapp:register", function(){
+    ClipApp.Login.show();//register login 共用一个弹出框
   });
 
   App.vent.bind("app.clipapp:logout", function(){
@@ -174,9 +179,9 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  setTimeout(function(){
-//    App.vent.trigger("app.clipapp:clipdetail", "1:2");
-  }, 500);
+ // setTimeout(function(){
+   // App.vent.trigger("app.clipapp:clipdetail", "1:1");
+ // }, 500);
 
   return ClipApp;
 })(App, Backbone, jQuery);
