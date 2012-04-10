@@ -26,9 +26,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
 	}
 	if(resp[i].clip.user.id != App.ClipApp.getMyUid("id")){
-	  resp[i].manage = ["biezhen","refresh","comment"];
+	  resp[i].manage = [["biezhen","收"],["refresh","转"],["comment","评"]];
 	}else{
-	  resp[i].manage = ["note","change","del"];
+	  resp[i].manage = [["note","注"],["change","改"],["del","删"]];
 	}
       }
       return resp;
@@ -80,7 +80,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     mouseover: function(e){
       e.preventDefault();
       if(checkHover(e,e.target)){
-	$(e.currentTarget).children("#opt").css("display","block");
+	//console.info("@@@@@@@@@@@@");
+	$(e.currentTarget).children("#opt").toggle();//css("display","block");
       }
     },
     mouseout: function(e){
