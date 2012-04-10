@@ -18,7 +18,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	  	console.info(resp);
 	if(!resp[i].clip){
 	  var clip = resp[i];
 	  resp[i] = {clip: clip};
@@ -224,6 +223,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
+		  console.info(clips);
     var clipListView = new ClipListView({collection: clips});
     $("#list").masonry({
       itemSelector : '.clip',
