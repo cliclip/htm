@@ -18,7 +18,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	  	console.info(resp);
 	if(!resp[i].clip){
 	  var clip = resp[i];
 	  resp[i] = {clip: clip};
@@ -100,7 +99,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var note = [clip.note];
       switch(opt){
 	case 'biezhen'://收
-	  console.log(opt);
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
 	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
