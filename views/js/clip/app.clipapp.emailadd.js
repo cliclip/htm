@@ -67,10 +67,9 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       $("#alert").css("display","none");
     }
   };
-  EmailAdd.showActive = function(email,com){
+  EmailAdd.showActive = function(message){
     var emailActiveModel = new EmailActiveModel();
-    emailActiveModel.set({email:email});
-    emailActiveModel.set({com:com});
+    emailActiveModel.set({message:message});
     var emailActiveView = new EmailActiveView({model : emailActiveModel});
     App.popRegion.show(emailActiveView);
   };
@@ -90,10 +89,10 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	com = "http://www."+email.split("@")[1];
       }
       EmailAdd.close();
-      EmailAdd.showActive(email,com);
+      EmailAdd.showActive(email);
   });
   App.vent.bind("app.clipapp.emailadd:error",function(model,error){
-    EmailAdd.showEmailAdd(null,model,error);
+    EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(error));
   });
 
   return EmailAdd;

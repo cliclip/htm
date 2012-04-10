@@ -2,6 +2,17 @@ script(type="text/template",id="queryclip-view-template")
   div.select
     b.add
     b.more
+    ul.options(style="display:none;")
+      li.bookmark
+        a(href="") bookmark
+      li.addons
+        a(href="") addons
+      li.email
+        a(href="") email
+      li.iphone
+        a(href="") iphone
+      li.andriod
+        a(href="") andriod
   div#query.input
     input.text(type="text",id="input_keyword")
     input.search_btn(type="button",id="query_button")

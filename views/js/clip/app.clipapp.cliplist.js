@@ -2,8 +2,6 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var start = 1;
-  var end = App.ClipApp.Url.page;
   var precliplength=0,flag=true;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
@@ -20,17 +18,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
+	  	console.info(resp);
 	if(!resp[i].clip){
 	  var clip = resp[i];
 	  resp[i] = {clip: clip};
-	  resp[i].id = clip.user+":"+clip.id;
+	  resp[i].id = clip.user.id+":"+clip.id;
 	}else{
-	  resp[i].id = resp[i].clip.user+":"+resp[i].clip.id;
+	  resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
 	}
-	if(resp[i].clip.user != App.ClipApp.getMyUid("id")){
-	  resp[i].manage = ["收","转","评"];
+	if(resp[i].clip.user.id != App.ClipApp.getMyUid("id")){
+	  resp[i].manage = ["biezhen","refresh","comment"];
 	}else{
-	  resp[i].manage = ["注","改","删"];
+	  resp[i].manage = ["note","change","del"];
 	}
       }
       return resp;
@@ -47,8 +46,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",
-      "mouseover .preview-info": "mouseover", // mouseover子类也响应
-      "mouseout .preview-info": "mouseout" // mouseout 只自己响应
+      "mouseover .master": "mouseover", // mouseover子类也响应
+      "mouseout .master": "mouseout" // mouseout 只自己响应
     },
     initialize: function(){
       var $container = $('#list');
@@ -93,24 +92,25 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     },
     operate: function(e){
       e.preventDefault();
-      var opt = $(e.currentTarget).val();
+      var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var clip = this.model.get("clip");
       var cid = this.model.id;
       var pub = clip["public"];
       var tags = clip.tag;
       var note = [clip.note];
       switch(opt){
-	case '收':
+	case 'biezhen'://收
+	  console.log(opt);
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
-	case '转':
+	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
-	case '评':
+	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", cid);break;
-	case '注':
+	case 'note'://注
 	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
-	case '改':
+	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
-	case '删':
+	case 'del'://删
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     }
@@ -157,14 +157,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   var getClips = function(options){
-    var _start = 1;
-    var _end = App.ClipApp.Url.page;
     var clips = new ClipPreviewList();
     options.params = clips;
-    options.start = start;
-    options.end = end;
+    if(!options.start &&! options.end){
+      options.start = 1;
+      options.end = App.ClipApp.Url.page;
+    }
     options.params.url = options.url;
-    options.url += "/" + _start+".."+ _end;
+    options.url += "/" + options.start+".."+ options.end;
     if(options.data){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
@@ -172,11 +172,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     // console.info(options);
     options.params.fetch(options);
     options.params.onReset(function(previewlist){
+      //location.reload() ;
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
 
-  // site == user2
+  // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
@@ -212,14 +213,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = "/user/" + uid + "/interest";
     if(tag) url += "/tag/" + tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type: "GET"});
+    getClips({url: url, type: "GET",start:0,end:App.ClipApp.Url.page});
   };
 
   ClipList.showUserRecommend = function(uid, tag){
     var url = "/user/"+uid+"/recomm";
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type:"GET"});
+    getClips({url: url, type:"GET",start:0,end:App.ClipApp.Url.page});
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
