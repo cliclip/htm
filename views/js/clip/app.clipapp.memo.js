@@ -7,19 +7,20 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     className:"organize-view",
     template:"#organize-view-template",
     events:{
-      "click .main_tag"        :"maintagAction",
+      "click .size48"        :"maintagAction",
       "focus #organize_text"   :"focusAction",
       "blur #organize_text"    :"blurAction",
       "click #organize_button" :"clipmemoAction",
-      "click #cancel_button"   :"cancleAction"
+      "click #cancel_button"   :"cancleAction",
+      "click .close_w"         :"cancleAction"
     },
     maintagAction:function(evt){
       var id = evt.target.id;
-      var color = $("#"+id).css("backgroundColor");
-      if(color != "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","red");
-      }else if(color == "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","");
+      var style =document.getElementById(id).className;
+      if(style != "size48 orange_48"){
+	document.getElementById(id).className="size48 orange_48";
+      }else if(style == "size48 orange_48"){
+	document.getElementById(id).className="size48 white_48";
       }
     },
 
@@ -42,8 +43,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var _data = {};
       var main_tag = [];
       for(var i=1;i<6;i++){
-	if($("#main_tag_"+i).css("backgroundColor") == "rgb(255, 0, 0)"){
-	  main_tag.push($("#main_tag_"+i).val());
+	if(document.getElementById("main_tag_"+i).className == "size48 orange_48"){
+	  main_tag.push($("#main_tag_"+i).html());
 	}
       };
       var obj_tag = $("#obj_tag").val().split(",");
@@ -76,7 +77,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       _(ns).each(function(n){ text += n+" "; });
     // text.slice(0, text.lenth);
     if(cid){
-      var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "酷" ;});
+      var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" ;});
       var tag_obj = _.without(tags,tag_main);
       var clipmemoModel = new ClipMemoModel();
       clipmemoModel.set({note:text,model:"update"});
@@ -94,11 +95,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     if(!_.isEmpty(tag_main)){
       for(i=0;i < tag_main.length; i++){
 	switch(tag_main[i]){
-	  case "好看":$("#main_tag_1").css("backgroundColor","red");break;
-	  case "好听":$("#main_tag_2").css("backgroundColor","red");break;
-	  case "好吃":$("#main_tag_3").css("backgroundColor","red");break;
-	  case "好玩":$("#main_tag_4").css("backgroundColor","red");break;
-	  case "酷":$("#main_tag_5").css("backgroundColor","red");break;
+	  case "好看":document.getElementById("main_tag_1").className="size48 orange_48";break;
+	  case "好听":document.getElementById("main_tag_2").className="size48 orange_48";break;
+	  case "好吃":document.getElementById("main_tag_3").className="size48 orange_48";break;
+	  case "好玩":document.getElementById("main_tag_4").className="size48 orange_48";break;
+	  case "精辟":document.getElementById("main_tag_5").className="size48 orange_48";break;
 	}
       }
     };
