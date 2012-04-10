@@ -178,5 +178,47 @@ App.util = (function(){
       }
     });
   });
+  var getMessage = {};
+
+  getMessage["login_success"] = "登录成功";
+  getMessage["register_success"] = "注册成功";
+  getMessage["auth_success"] = "更改密码成功";
+  getMessage["password_diff"] = "密码输入不一致";
+  getMessage["collect_success"] = "收藏成功";
+  getMessage["comment_success"] = "评论成功";
+  getMessage["recomment_success"] = "转发成功";
+
+  getMessage["auth"] = getMessage["auth"] || {};
+  getMessage["auth"]["not_exist"] = "用户不存在";
+  getMessage["auth"]["not_match"] = "句柄不合法";
+  getMessage["auth"]["not_login"] = "用户未登录";
+
+  getMessage["name"] = getMessage["name"] || {};
+  getMessage["name"]["is_null"] = "用户名为空";
+  getMessage["name"]["invalidate"] = "用户名不符合校验规则（只能是英文、数字和点的组合，长度是5-20）";
+  getMessage["name"]["exist"] = "用户名已存在";
+  getMessage["name"]["not_exist"] = "用户不存在";
+
+  getMessage["pass"] = getMessage["pass"] || {};
+  getMessage["pass"]["is_null"] = "密码为空";
+  getMessage["pass"]["not_match"] = "密码不匹配";
+
+  getMessage["oldpass"] = getMessage["oldpass"] || {};
+  getMessage["oldpass"]["is_null"] = "原密码为空";
+  getMessage["oldpass"]["not_match"] = "原密码不匹配";
+
+  getMessage["email"] = getMessage["email"] || {};
+  getMessage["email"]["invalidate"] = "邮箱不合法";
+
+  getMessage["recomment_success"]= "转发成功";
+  getMessage["clip_not_exist"] = "clip不存在";
+
+  util.getErrorMessage = function(errorCode){
+    for (key in errorCode)
+    errorCode[key] = getMessage[key][errorCode[key]] +"  ";
+    console.info(errorCode);
+     return errorCode;
+ };
+
   return util;
 })();

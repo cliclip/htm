@@ -120,6 +120,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       url:P+"/clip/"+view.options.clipid,
       type:"PUT",
       success:function(model,res){
+	console.info(model);
 	App.vent.trigger("app.clipapp.memo:success");
       },
       error:function(model,res){
@@ -138,6 +139,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   App.vent.bind("app.clipapp.memo:success",function(){
     ClipMemo.close();
+    App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
   });
 
   App.vent.bind("app.clipapp.memo:error",function(model,error){

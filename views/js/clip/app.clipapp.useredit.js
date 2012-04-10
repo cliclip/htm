@@ -4,7 +4,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var originalFace;
   var flag = false;
   var EditModel = App.Model.extend({});
-  var PassEditModel = App.Model.extend({});
+  var PassEditModel = App.Model.extend({
+    defaults: {
+      new_pass : "请输入新密码", confirm_pass : "确认密码"
+    }
+  });
   var NameModel = App.Model.extend({
     defaults:{
       id:""
@@ -148,11 +152,30 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "passEdit",
     template: "#passEdit-view-template",
     events: {
-      "click #pass_confirm[type=submit]" : "passUpdate"
+      "click #pass_confirm[type=submit]" : "passUpdate",
+      "focus #con" : "focusAction",
+      "focus #new" : "focusAction",
+      "blur #new_pass" : "blurAction",
+      "blur #con_pass" : "blurAction"
+    },
+    focusAction:function(e){
+      var id = e.currentTarget.id;
+      $("#"+id).css("display","none");
+      $("#"+id+"_pass").css("display","block");
+    },
+    blurAction:function(e){
+      var id = e.currentTarget.id;
+      if(id=="new_pass" && $("#"+id).val()==""){
+	$("#"+id).css("display","none");
+	$("#new").css("display","block");
+      }else if(id=="con_pass" && $("#"+id).val()==""){
+	$("#"+id).css("display","none");
+	$("#con").css("display","block");
+      }
     },
     passUpdate:function(){
-      var oldpass = $("#old_pass").val();
-      var newpass = $("#new_pass").val();
+      var oldpass = $("#new_pass").val();
+      var newpass = $("#con_pass").val();
       var params = {oldpass:oldpass,pass:newpass};
       App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
     }
@@ -338,7 +361,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.useredit:showemail",model.id);
       },
       error: function(model, res){
-	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,res);
+	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,App.util.getErrorMessage(res));
       }
     });
   });
@@ -349,10 +372,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	type: "POST",
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showrule", model.id);
-	  alert("更新邮件规则成功！");
+	  App.ClipApp.EmailAdd.showActive("更新邮件规则成功！");
   	},
   	error:function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, res);
+  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, App.util.getErrorMessage(res));
   	}
       });
   });
@@ -363,7 +386,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	type: "PUT",
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showpass", model.id);
-	  alert("修改密码成功！");
+	  App.ClipApp.EmailAdd.showActive("修改密码成功");
   	},
   	error:function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showpass", model.id,model, res);
