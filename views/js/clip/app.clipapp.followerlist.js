@@ -44,10 +44,17 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     options.url=options.params.url+"/"+start+".."+end;
     collection.fetch(options);
     collection.onReset(function(followerlist){
+      if(_.isEmpty(followerlist.toJSON())){
+	followerlist.add({uid:"null"});
+	var flag=true;
+      }
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });
       App.listRegion.show(followerlistView);
+      if(flag){
+	$(".user_list").css("display","none");
+      }
       App.vent.trigger("app.clipapp.util:scroll",followerlistView,options);
     });
   };

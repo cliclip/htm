@@ -3,6 +3,8 @@ script(type="text/template",id="detail-view-template")
   section.big_pop
     h2.subject_edit
       div.pop_left
+        span.breadcrumbs
+          |路径图
       div.pop_right.
         <% if(!self) {%>
           <i class="comment operate"></i>
@@ -15,16 +17,13 @@ script(type="text/template",id="detail-view-template")
         <% } %>
     div.pop_left
       ul.forward_log.
-        <%for(var i =0; i<users.length; i++){if( i == 0){%>
+        <%for(var i =0; i<users.length; i++){%>
         <li class="user_head">
-          <img src="<%= App.util.face_url(users[i].face)%>">
+          <a href="#user/<%= users[i].id%>">
+          <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
+          </a>
         </li>
-        <%}else{%>
-        <div>向上箭头</div>
-        <li class="user_head">
-          <img src="<%= App.util.face_url(users[i].face)%>">
-        </li>
-        <%}}%>
+        <%}%>
     div.pop_right
       section.pop_inner
         article.content

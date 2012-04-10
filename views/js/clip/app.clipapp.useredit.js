@@ -51,6 +51,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "edit_frame",
     template: "#editUser-view-template",
     events: {
+      "click .close_w"           : "cancel"
+    },
+    cancel : function(e){
+      e.preventDefault();
+      UserEdit.close();
+
     }
   });
 
@@ -162,6 +168,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var id = e.currentTarget.id;
       $("#"+id).css("display","none");
       $("#"+id+"_pass").css("display","block");
+      $("#"+id+"_pass").focus();
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
@@ -335,11 +342,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-/*
   UserEdit.close = function(){
-    App.viewRegion.close();
+    App.mysetRegion.close();
+    window.location.href='javascript:history.go(-1);';
   };
-*/
+
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
     UserEdit.showFace(uid);
   });

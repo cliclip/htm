@@ -3,7 +3,7 @@ script(type="text/template",id="addClip-view-template")
   section.big_pop
     h2.subject_add
       div.pop_left
-        注
+        i.note
       div.pop_right
         div.button_frame
           iframe(name="post_frame",id="post_frame",style="display:none;",mce_style="display:none;")
@@ -13,12 +13,9 @@ script(type="text/template",id="addClip-view-template")
             input#formUpload.hifile(type="file",name="image")
           span
             button.link_img 链接图片
-              span.url_text.img_upload_span(style="display:none;")
-                input.text#img_upload_url(type="text")
-                input.btn(type="submit",value="确定")
-            span.img_upload_span(style="display:none;")
-              input#img_upload_url1(type="text")
-              input#img_upload_btn1(type="submit",value="确定")
+            span.url_text.img_upload_span(style="display:none;")
+              input.text#img_upload_url(type="text")
+              input.btn(type="submit",value="确定")
           span
             button.format 整理格式
         | 增
@@ -26,8 +23,8 @@ script(type="text/template",id="addClip-view-template")
     div.pop_right
       section.pop_inner
         form#addForm(metod="post")
-        article.content
-          iframe#editor(width="490",height="490",frameborder="0")
+        article.content.content2
+          iframe#editor(width="100%",height="100%",frameborder="0")
         div.btn_group.clearfix
           input.verify(type="submit",title="保存",value="确定")
           input.cancel(type="reset",title="放弃",value="取消")

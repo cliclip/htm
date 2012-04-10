@@ -24,7 +24,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     template: "#emailAdd-view-template",
     events: {
       "click #emailadd_commit":"EmailAddcommit",
-      "click #emailadd_cancel":"EmailAddclose"
+      "click #emailadd_cancel":"EmailAddclose",
+      "click .close_w"        :"EmailAddclose"
     },
     EmailAddclose: function(){
       EmailAdd.close();
@@ -60,6 +61,11 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     if (error) emailAddModel.set("error", error);
     var emailAddView = new EmailAddView({model : emailAddModel});
     App.popRegion.show(emailAddView);
+    if(error){
+      $("#alert").css("display","block");
+    }else{
+      $("#alert").css("display","none");
+    }
   };
   EmailAdd.showActive = function(message){
     var emailActiveModel = new EmailActiveModel();

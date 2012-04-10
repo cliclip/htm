@@ -105,7 +105,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var note = [clip.note];
       switch(opt){
 	case 'biezhen'://收
-	  console.log(opt);
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
 	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
