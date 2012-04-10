@@ -17,7 +17,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     events: {
       "click .link_img":"extImg",
       "change #formUpload": "image_change",
-      "click #img_upload_btn1": "up_extImg",
+      "click .btn": "up_extImg",
       "click .verify":"save",
       "click .cancel":"abandon",
       "click .pop_left": "remark_newClip"
@@ -27,21 +27,20 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     extImg:function(evt){
       $(".img_upload_span").css("display","block");
-      $("#img_upload_url1").focus();
+      $("#img_upload_url").focus();
 /*
       var that = this;
       var objEditor = document.getElementById("editor");
       var url = prompt("url","http://");
       if(url == "http://" || url == null)
 	return;
-      App.ClipApp.EditPaste.insertImage("editor", {url: url});
+      App.ClipApp.Editor.insertImage("editor", {url: url});
 */
     },
     up_extImg: function(){
-      var url = $("#img_upload_url1").val();
-      if(url){ // 保证不是空提交 [或者不允许空提交]
-	App.ClipApp.EditPaste.insertImage("editor", {url: url});
-      }
+      var url = $("#img_upload_url").val();
+      if(url == "http://" || url == null)return;
+      App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     image_change:function(e){
       e.preventDefault();
@@ -57,7 +56,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	      //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 	      var ids = imgids.split(":");
 	      var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
-	      App.ClipApp.EditPaste.insertImage("editor", {url: url});
+	      App.ClipApp.Editor.insertImage("editor", {url: url});
 	      // }
 	    }
 	  }
@@ -68,7 +67,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     save: function(){
       var user = this.model.get("id");
-      var html = App.ClipApp.EditPaste.getContent("editor");
+      var html = App.ClipApp.Editor.getContent("editor");
       _data.content = App.util.HtmlToContent(html);
       this.model.save(_data,{
 	url: P+"/clip",
@@ -103,7 +102,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new ClipModel({id: uid, actUrl:P+"/user/"+ uid+"/image"});
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
-    App.ClipApp.EditPaste.initEditor();
+    App.ClipApp.Editor.init();
     /*addClipView.editor = new baidu.editor.ui.Editor({
       toolbars:[['HighlightCode']],
       contextMenu:[] // 禁止右键菜单

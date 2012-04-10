@@ -44,6 +44,10 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     options.url=options.params.url+"/"+start+".."+end;
     collection.fetch(options);
     collection.onReset(function(followerlist){
+      if(_.isEmpty(followerlist.toJSON())){
+	followerlist.add({error:"nothing"});
+      }
+      console.info(followerlist.toJSON());
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });

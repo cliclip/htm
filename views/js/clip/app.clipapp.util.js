@@ -177,7 +177,6 @@ App.util = (function(){
       }
     });
   });
-
   var getMessage = {};
 
   getMessage["login_success"] = "登录成功";
@@ -219,7 +218,6 @@ App.util = (function(){
     console.info(errorCode);
      return errorCode;
  };
-
 
   return util;
 })();

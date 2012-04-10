@@ -22,16 +22,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .pop_left": "remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
-      "click .img_upload_span .btn":"link_extImg",
+      "click .img_upload_span .btn":"up_extImg",
       "blur .img_upload_span input":"hide_extImg"
     },
     initialize: function(){
       _data = {content : []};
-    },
-    link_extImg:function(){
-      var url = $("#img_upload_url").val();
-      if(url == "http://" || url == null)return;
-      App.ClipApp.EditPaste.insertImage("editor", {url: url});
     },
     hide_extImg:function(){//隐藏弹出的链接地址对话框
       setTimeout(function(){
@@ -41,6 +36,12 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     show_extImg:function(evt){//弹出输入链接地址的对话框
       $(".img_upload_span").show();
       $("#img_upload_url").focus();
+    },
+    up_extImg: function(){
+      var url = $("#img_upload_url1").val();
+      if(url == "http://" || url == null)return;
+      App.ClipApp.Editor.insertImage("editor", {url: url});
+
     },
     image_change:function(e){
       var that = this;
@@ -59,7 +60,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 		// for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 		var imgid = imgids.split(":")[1];
 		var url = P+"/user/"+ uid+"/image/" +imgid;
-		App.ClipApp.EditPaste.insertImage("editor", {url: url});
+		App.ClipApp.Editor.insertImage("editor", {url: url});
 		// }
 	      }
 	    }
@@ -88,7 +89,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
       // 参数为编辑器id
-      var html = App.ClipApp.EditPaste.getContent("editor");
+      var html = App.ClipApp.Editor.getContent("editor");
       _data.content = App.util.HtmlToContent(html);
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
@@ -127,12 +128,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     editModel.onChange(function(editModel){
       var editView = new EditView({model: editModel});
       App.viewRegion.show(editView);
-      App.ClipApp.EditPaste.initEditor();
+      App.ClipApp.Editor.init();
       var html = App.util.ContentToHtml(editModel.toJSON().content);
-      App.ClipApp.EditPaste.setContent("editor", html);
+      App.ClipApp.Editor.setContent("editor", html);
     });
   };
-
   App.vent.trigger("app.clipapp.clipedit.error", function(){
     // 可以弹出错误对话框，提示错误信息
   });
