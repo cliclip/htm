@@ -80,7 +80,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     mouseover: function(e){
       e.preventDefault();
       if(checkHover(e,e.target)){
-	$(e.currentTarget).children("#opt").css("display","block");
+	//console.info("@@@@@@@@@@@@");
+	$(e.currentTarget).children("#opt").toggle();//css("display","block");
       }
     },
     mouseout: function(e){
