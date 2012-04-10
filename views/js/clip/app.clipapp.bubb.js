@@ -241,8 +241,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var i = url.indexOf("/tag");
     if(i > 0){
       url = url.substr(0, i);
+      return url += "/tag/"+tag;
+    }else{
+      return url = "/user/"+_uid+"/tag/"+tag;
     }
-    return url += "/tag/"+tag;
   }
 
   function changeTags(tags1, tags2, old_self, self){
