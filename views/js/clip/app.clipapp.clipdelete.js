@@ -14,7 +14,8 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     template : "#delete-view-template",
     events : {
       "click #deleteok_button" : "delete",
-      "click #cancel_button" : "cancel"
+      "click #cancel_button" : "cancel",
+      "click .close_w"       : "cancel"
     },
     delete : function(e){
       e.preventDefault();

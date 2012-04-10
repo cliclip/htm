@@ -20,16 +20,19 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       "blur #reclip_text"  :"blurAction",
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
-      "click .size48"    :"maintagAction"
+      "click .size48"      :"maintagAction",
+      "click .close_w"     : "cancel"
     },
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
       console.log(id);
       console.log($("#"+id).html());
-      var color = $("#"+id).css("backgroundColor");
-      if(color != "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","red");
+     // document.getElementById(id).className="size48 blue_48";
+      var style =document.getElementById(id).className;
+      console.log(style);
+      if(style != "size48 orange_48"){
+	document.getElementById(id).className="size48 orange_48";
 	tag_list.push($("#"+id).html());
 	if($("#reclip_text").val() == "" || $("#reclip_text").val() == "备注一下吧~"){
 	  $("#reclip_text").val($("#"+id).html());
@@ -37,8 +40,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	}else{
 	  $("#reclip_text").val(_.union($("#reclip_text").val().split(","),$("#"+id).html()));
 	}
-      }else if(color == "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","");
+      }else if(style == "size48 orange_48"){
+	document.getElementById(id).className="size48 white_48";
 	tag_list = _.without(tag_list,$("#"+id).html());
 	$("#reclip_text").val(_.without($("#reclip_text").val().split(","),$("#"+id).html()));
 	//console.dir(tag_list);
@@ -95,7 +98,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	Reclip.close();
-	Backbone.history.navigate("my", true);
+	location.reload();
       },
       error:function(model, res){
 	Reclip.show(model.id, null, null, model, res);
@@ -112,7 +115,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	Reclip.close();
-	Backbone.history.navigate("my", true);
+	location.reload();
       },
       error:function(model, res){
 	Reclip.show(null, model, res);

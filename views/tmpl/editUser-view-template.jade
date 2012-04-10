@@ -77,13 +77,14 @@ script(type="text/template",id="passEdit-view-template")
 script(type="text/template",id="emailAdd-view-template")
   div.masker_layer
   section.small_pop
+    span.close_w
     .email_add
       h2.subject_put.
         添加邮件
       ul.pop_body
         li.input_text
           input(type="text",id="email_address")
-        li.alert
+        li.alert#alert
           <%= typeof error != "undefined" && error ? error.email : "" %>
         br
         li.btn_group.clearfix
