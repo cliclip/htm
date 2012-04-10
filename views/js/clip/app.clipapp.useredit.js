@@ -168,6 +168,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var id = e.currentTarget.id;
       $("#"+id).css("display","none");
       $("#"+id+"_pass").css("display","block");
+      $("#"+id+"_pass").focus();
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
