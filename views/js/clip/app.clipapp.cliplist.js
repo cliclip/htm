@@ -2,8 +2,6 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var start = 1;
-  var end = App.ClipApp.Url.page;
   var precliplength=0,flag=true;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
@@ -20,6 +18,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
+	  	console.info(resp);
 	if(!resp[i].clip){
 	  var clip = resp[i];
 	  resp[i] = {clip: clip};
@@ -161,8 +160,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var clips = new ClipPreviewList();
     options.params = clips;
     if(!options.start &&! options.end){
-      options.start = start;
-      options.end = end;
+      options.start = 1;
+      options.end = App.ClipApp.Url.page;
     }
     options.params.url = options.url;
     options.url += "/" + options.start+".."+ options.end;
@@ -214,14 +213,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = "/user/" + uid + "/interest";
     if(tag) url += "/tag/" + tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type: "GET"});
+    getClips({url: url, type: "GET",start:0,end:App.ClipApp.Url.page});
   };
 
   ClipList.showUserRecommend = function(uid, tag){
     var url = "/user/"+uid+"/recomm";
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type:"GET",start:0,end:10});
+    getClips({url: url, type:"GET",start:0,end:App.ClipApp.Url.page});
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
@@ -231,7 +230,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       columnWidth : 360,
       isAnimated: false
     });
-    console.info(clips);
     App.listRegion.show(clipListView);
     App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
   });
