@@ -51,6 +51,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "edit_frame",
     template: "#editUser-view-template",
     events: {
+      "click .close_w"           : "cancel"
+    },
+    cancel : function(e){
+      e.preventDefault();
+      UserEdit.close();
     }
   });
 
@@ -335,11 +340,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-/*
   UserEdit.close = function(){
-    App.viewRegion.close();
+    App.mysetRegion.close();
   };
-*/
+
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
     UserEdit.showFace(uid);
   });
