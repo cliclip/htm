@@ -180,9 +180,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
-
+  ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
   // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
+    ClipList.flag_show_user = true;
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
@@ -190,6 +191,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserClips = function(uid, tag){
+    ClipList.flag_show_user = false;
     var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
     var data = {user: uid};
     if(tag) data.tag = [tag];
@@ -198,6 +200,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
   ClipList.showSiteQuery = function(word, tag){
+    ClipList.flag_show_user = true;
     var url = "/query";
     url = App.ClipApp.Url.base + url;
     var data = {text: word};
@@ -206,6 +209,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
+    ClipList.flag_show_user = false;
     var url = "/user/"+uid+"/query";
     url = App.ClipApp.Url.base + url;
     var data = {text: word, user: uid};
@@ -214,6 +218,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserInterest = function(uid, tag){
+    ClipList.flag_show_user = true;
     var url = "/user/" + uid + "/interest";
     if(tag) url += "/tag/" + tag;
     url = App.ClipApp.Url.base + url;
@@ -221,6 +226,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserRecommend = function(uid, tag){
+    ClipList.flag_show_user = true;
     var url = "/user/"+uid+"/recomm";
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
