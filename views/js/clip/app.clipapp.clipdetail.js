@@ -25,9 +25,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var user = this.model.get("user");
       var cid = user+":"+this.model.id;
-      var pub = this.model.get("public");
-      var tags = this.model.get("tag");
-      var note = this.model.get("note");
       switch(opt){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
@@ -36,11 +33,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	  App.vent.trigger("app.clipapp:clipmemo", this.model);break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
-	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+	  App.vent.trigger("app.clipapp:clipdelete", this);break;
       }
     },
     Close: function(){
@@ -55,7 +52,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   var CommentView = App.ItemView.extend({
-    tagName: "ul",
+    tagName: "div",
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
@@ -128,7 +125,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	      str += render_tree(e.children, "");
 	      str += "</ul>";
 	    }
-	    str = '<ul>'+str+'</ul>';
+	    str = '<div>'+str+'</div>';
             return render_tree(commentList, html+str);
 	  }
 	}

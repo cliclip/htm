@@ -41,12 +41,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 双击clip就响应show_detail事件
-      "dblclick #header" : "show_detail",
+      "click #header" : "show_detail",
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",
-      "mouseover .master": "mouseover", // mouseover子类也响应
-      "mouseout .master": "mouseout" // mouseout 只自己响应
+      "mouseenter #header":"mouseHand",
+      "mouseenter .clip_item": "mouseEnter",
+      "mouseleave .clip_item": "mouseLeave"
     },
     initialize: function(){
       var $container = $('#list');
@@ -55,7 +56,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  itemSelector : '.clip'
 	});
       });
-
       this.bind("item:rendered",function(itemView){
 	var $newElems = itemView.$el.css({ opacity: 0 });
 	$newElems.imagesLoaded(function(){
@@ -76,8 +76,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     reclipAction: function(){
       App.vent.trigger("app.clipapp:reclip",this.model.id);
     },
-    // mouseover与mouseout的某些区域还是不能正常显示
-    mouseover: function(e){
+/*    mouseover: function(e){
       e.preventDefault();
       if(checkHover(e,e.target)){
 	//console.info("@@@@@@@@@@@@");
@@ -90,14 +89,20 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	$(e.currentTarget).children("#opt").css("display","none");
       }
     },
+*/
+    mouseEnter: function(e){
+      $(e.currentTarget).children(".master").children("#opt").toggle();
+    },
+    mouseLeave: function(e){
+      $(e.currentTarget).children(".master").children("#opt").hide();
+    },
+    mouseHand:function(e){
+      e.currentTarget.style.cursor="pointer";
+    },
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var clip = this.model.get("clip");
       var cid = this.model.id;
-      var pub = clip["public"];
-      var tags = clip.tag;
-      var note = [clip.note];
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
@@ -106,15 +111,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", cid);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	  App.vent.trigger("app.clipapp:clipmemo", this.model);break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
-	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+	  App.vent.trigger("app.clipapp:clipdelete", this);break;
       }
     }
   });
-
+/*
   var contains = function(parentNode,childNode){
     if(parentNode.contains){
       return parentNode != childNode && parentNode.contains(childNode);
@@ -133,7 +138,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var getEvent = function(e){
     return e||window.event;
   };
-
+*/
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",

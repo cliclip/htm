@@ -7,13 +7,14 @@ script(type="text/template",id="detail-view-template")
           |路径图
       div.pop_right.
         <% if(!self) {%>
-          <i class="comment operate"></i>
-          <i class="refresh operate"></i>
-          <i class="biezhen operate"></i>
+          <i class="comment operate" title="评"></i>
+          <i class="refresh operate" title="转"></i>
+          <i class="biezhen operate" title="收"></i>
         <% }else {%>
-          <i class="del operate"></i>
-          <i class="change operate"></i>
-          <i class="note operate"></i>
+          <i class="del operate" title="删"></i>
+          <i class="change operate" title="改"></i>
+          <i class="note operate" title="注"></i>
+          <i class="refresh operate" title="转"></i>	   
         <% } %>
         <span class="close_w"></span>
     div.pop_left

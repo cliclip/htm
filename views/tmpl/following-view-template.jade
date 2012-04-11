@@ -3,11 +3,12 @@ script(type="text/template",id="following-top-view-template")
     ul.tab_frame
       li(id="follower") 追我的人
       li.tab(id="following") 我追的人
+    ul.user_list_info
+      li.user
+        div.info
+          | no one following
 script(type="text/template",id="following-view-template")
   section.follow_frame
-    | <%if(uid == "null"){%>
-    | <p align="center"><a>你还没追任何人哦!</a></p>
-    | <%}%>
     ul.user_list
       li.user
         div.head
