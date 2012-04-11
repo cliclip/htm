@@ -17,7 +17,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     events:{
       "click #name_list"     :  "getUserAction",
-      "keypress #name"       :  "getUser",
+      "blur  #name"          :  "getUser",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
       "mouseover #name_list" :  "MouseOver",
@@ -28,7 +28,23 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "click .close_w"        : "cancelAction"
     },
     getUser:function(e){
-
+      var uid="";
+      var div=$(".action-info");
+      _.each(div,function(e){
+	var li = e.children;
+//	console.log(li[0].id);
+//	console.log($(li[0]).attr("title"));
+//	console.log($(li[0]).text());
+//	console.log($("#name").val());
+	if($("#name").val() == $(li[0]).text()){
+	  console.log("zhengque");
+	  this.$("#name").val($(li[0]).text());
+	  $("#imgId").attr("src",$(li[0]).attr("title"));
+	  uid=li[0].id;
+	  this.$("#name_listDiv").empty();
+	}
+      });
+       this.model.set({uid:uid});
     },
     getUserAction:function(evt){
       // 这里是必须要触发才会取得uid
@@ -88,6 +104,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   var NameListCollectionView=App.CollectionView.extend({
     tagName:"div",
+    className:"list",
     itemView:NameListItemView
   });
   var showNameList=function(params,clipid){
