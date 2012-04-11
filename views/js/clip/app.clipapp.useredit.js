@@ -124,10 +124,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     setCC:function(e){
       var key = e.keyCode;
       var str = $("#copy-to").val();
-      console.log(key);
       var last_str = str.charAt(str.length - 1);
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==188||key==59)){
-	$("#copy-to").val(str+"; ");
+	$("#copy-to").val(str+";");
 	if(key==188||key==32||key==59) return false;
       }
     },
@@ -137,20 +136,47 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var last_str = str.charAt(str.length - 1);
       var penultimate = str.charAt(str.length -2,1);
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59||key==188)){
-	$("#send").val(str+"; ");
+	$("#send").val(str+";");
 	if(key==188||key==59||key==32) return false;
       }
     },
     ruleUpdate: function(){
+      var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
       var title = $("#title").val();
       var cc =  _.compact($("#copy-to").val().split(";"));
       var to =  _.compact($("#send").val().split(";"));
       var enable = false;
+      var message = "";
+      flag = true;
       if($("#open_rule").attr("checked")){
 	enable =true;
       }
       var params = {title:title,to:to,cc:cc,enable:enable};
-      App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
+      if(!_.isEmpty(cc)){
+	_(cc).each(function(c){
+	  if(!email_pattern.test(c)){
+	    flag = false;
+	    message = c;
+	  }else{
+	    flag = true;
+	  }
+	});
+      }
+      if(flag&&!_.isEmpty(to)){
+	_(to).each(function(t){
+	  if(!email_pattern.test(t)){
+	    message = t;
+	    flag = false;
+	  }else{
+	    flag = true;
+	  }
+	});
+      }
+      if(flag){
+	App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
+      }else{
+	alert(message+"邮件不合法");
+      }
     }
   });
   var PassView = App.ItemView.extend({
@@ -181,9 +207,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     },
     passUpdate:function(){
-      var oldpass = $("#new_pass").val();
-      var newpass = $("#con_pass").val();
-      var params = {oldpass:oldpass,pass:newpass};
+      var newpass = $("#new_pass").val();
+      var confirm = $("#con_pass").val();
+      var params = {newpass:newpass,confirm:confirm};
       App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
     }
   });
@@ -344,8 +370,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   UserEdit.close = function(){
     App.mysetRegion.close();
-    window.location.href='javascript:history.go(-1);';
+    location.reload();
   };
+
+  App.vent.bind("app.clipapp.useredit:show", function(uid){
+    UserEdit.showUserEdit (uid);
+  });
 
   App.vent.bind("app.clipapp.useredit:showface",function(uid){
     UserEdit.showFace(uid);
