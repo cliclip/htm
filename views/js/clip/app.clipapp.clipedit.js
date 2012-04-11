@@ -22,8 +22,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .pop_left": "remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
+      "click .close_w":"abandonUpdate",
       "click .img_upload_span .btn":"up_extImg",
-      "blur .img_upload_span input":"hide_extImg"
+      "blur #img_upload_url":"hide_extImg"
     },
     initialize: function(){
       _data = {content : []};
@@ -35,13 +36,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     show_extImg:function(evt){//弹出输入链接地址的对话框
       $(".img_upload_span").show();
+      $("#img_upload_url").val("");
       $("#img_upload_url").focus();
     },
     up_extImg: function(){
-      var url = $("#img_upload_url1").val();
+      var url = $("#img_upload_url").val();
       if(url == "http://" || url == null)return;
+      $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
-
     },
     image_change:function(e){
       var that = this;

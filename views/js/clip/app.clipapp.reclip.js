@@ -114,7 +114,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	Reclip.close();
-	location.reload();
       },
       error:function(model, res){
 	Reclip.show(null, model, res);
@@ -141,15 +140,21 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	url: P+"/user/"+user+"/clip/tag/"+tag
       });
       reclipModel.onChange(function(reclipModel){
-	reclipModel.set("model", "tag");
-	reclipModel.set("user", user);
-	reclipModel.set("tag", tag);
-	var reclipView = new ReclipView({model: reclipModel});
-	App.popRegion.show(reclipView);
-	$('#obj_tag').tagsInput({
-	  //width: 'auto',
-	  autocomplete_url:'test/fake_json_endpoint.html'
-	});
+	if(!reclipModel.get("count")){
+	  // 现在只是公用该事件，事件名称有待改进
+	  App.vent.trigger("app.clipapp.emailadd:success","当前用户该tag下还没有数据");
+	}else{
+	  // 有count表示可以收到数据
+	  reclipModel.set("model", "tag");
+	  reclipModel.set("user", user);
+	  reclipModel.set("tag", tag);
+	  var reclipView = new ReclipView({model: reclipModel});
+	  App.popRegion.show(reclipView);
+	  $('#obj_tag').tagsInput({
+	    //width: 'auto',
+	    autocomplete_url:'test/fake_json_endpoint.html'
+	  });
+	}
       });
     }
   };

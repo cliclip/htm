@@ -17,7 +17,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template: "#detail-view-template",
     events: {
       "click .operate" : "Operate",
-      "click .masker_layer" : "Close" // 点击detail下的层，便隐藏
+      "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
+      "click .close_w":"Close"
     },
     Operate: function(e){
       e.preventDefault();

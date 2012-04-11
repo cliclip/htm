@@ -20,7 +20,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .btn": "up_extImg",
       "click .verify":"save",
       "click .cancel":"abandon",
-      "click .pop_left": "remark_newClip"
+      "click .close_w":"abandon",
+      "click .pop_left": "remark_newClip",
+      "blur #img_upload_url":"hide_extImg"
     },
     initialize: function(){
       _data = {content : []};
@@ -28,18 +30,18 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     extImg:function(evt){
       $(".img_upload_span").css("display","block");
       $("#img_upload_url").focus();
-/*
-      var that = this;
-      var objEditor = document.getElementById("editor");
-      var url = prompt("url","http://");
-      if(url == "http://" || url == null)
-	return;
-      App.ClipApp.Editor.insertImage("editor", {url: url});
-*/
+      $("#img_upload_url").val("");
+
+    },
+    hide_extImg: function(){
+      setTimeout(function(){
+	$(".img_upload_span").hide();
+      },500);
     },
     up_extImg: function(){
       var url = $("#img_upload_url").val();
       if(url == "http://" || url == null)return;
+      $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     image_change:function(e){
@@ -81,7 +83,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  }
 	  App.viewRegion.close();
 	  // 如何只刷新一个region的内容
-	    location.reload();
+	  // location.reload();
 	},
 	error:function(response){
 	  // 出现错误，触发统一事件

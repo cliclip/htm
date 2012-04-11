@@ -23,7 +23,6 @@ App.util = (function(){
     var link = /http:\/\//;
     var pre = /<pre.*?>/;
     var content = [];
-
     // 此处的html只包含简单的p标签和span标签 [可是还存在像;nbsp这类内容]
     // <b></b>也没有处理过滤
     while(html != ""){
@@ -76,7 +75,9 @@ App.util = (function(){
 	  case 'text':
 	    html += '<p>' + content[i][key] + '</p>';break;
 	  case 'image':
-	    html += '<p><img src=' + util.url(content[i][key]) + '></img></p>';
+	    html +=
+	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:485px;max-height:490px;">'
+	    + '</img></p>';
 	    break;
 	  case 'code':
 	    html += '<pre> ' + content[i][key] + '</pre>';break;
