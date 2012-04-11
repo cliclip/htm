@@ -47,7 +47,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){
-	  App.vent.trigger("app.clipapp.login:success",response);
+	  App.vent.trigger("app.clipapp.register:success",response);
 	},
 	error:function(model,error){
 	  App.vent.trigger("app.clipapp.login:error",model, error);
@@ -88,6 +88,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
     Backbone.history.navigate("my",true);
     //location.reload();
     Login.close();
+  });
+ App.vent.bind("app.clipapp.register:success", function(res){
+    document.cookie = "token="+res;
+    App.popRegion.close();
+    App.vent.trigger("app.clipapp.gotosetup:show");
   });
 
   App.vent.bind("app.clipapp.login:error", function(model, error){

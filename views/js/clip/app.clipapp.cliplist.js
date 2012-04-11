@@ -41,10 +41,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 双击clip就响应show_detail事件
-      "dblclick #header" : "show_detail",
+      "click #header" : "show_detail",
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",
+      "mouseenter #header":"mouseHand",
       "mouseenter .clip_item": "mouseEnter",
       "mouseleave .clip_item": "mouseLeave"
     },
@@ -95,14 +96,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     mouseLeave: function(e){
       $(e.currentTarget).children(".master").children("#opt").hide();
     },
+    mouseHand:function(e){
+      e.currentTarget.style.cursor="pointer";
+    },
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var clip = this.model.get("clip");
       var cid = this.model.id;
-      var pub = clip["public"];
-      var tags = clip.tag;
-      var note = [clip.note];
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", cid);break;
@@ -111,11 +111,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", cid);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	  App.vent.trigger("app.clipapp:clipmemo", this.model);break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
-	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+	  App.vent.trigger("app.clipapp:clipdelete", this);break;
       }
     }
   });

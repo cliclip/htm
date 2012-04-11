@@ -13,7 +13,7 @@ script(type="text/template",id="clippreview-view-template")
         <%=recommend.text%>
       </div>
       <%}%>
-    header#header
+    header#header(style="min-height: 216px;")
       <% if(clip.content && clip.content.image) {%>
       div.article_photo
         | <img src="<%= App.util.url(clip.content.image)%>" />
