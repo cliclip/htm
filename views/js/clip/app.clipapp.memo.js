@@ -135,7 +135,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   // 触发更新clip中的注的事件
   App.vent.bind("app.clipapp.memo:rememo", function(view, data){
     view.model.save(data,{
-      url:P+"/clip/"+view.options.clipid,
+      url:App.ClipApp.Url.base+"/clip/"+view.options.clipid,
       type:"PUT",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.memo:success",model,data);
