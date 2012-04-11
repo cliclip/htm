@@ -278,7 +278,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	//console.info("originalFace:" + editModel.get("face"));
 	originalFace = faceModel.get("face");
 	var user = faceModel.get("id");
-	var url = P+"/user/" + user + "/image";
+	var url = P+"/user/" + user + "/upload_face";
 	faceModel.set("actUrl",url);
 	faceModel.onChange(function(faceModel){
 	  var faceView = new FaceView({model: faceModel});
@@ -313,13 +313,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }else{
       if( sender.files &&sender.files[0] ){
 	var img = document.getElementById('myface' );
-	var small_img = document.getElementById("face-image");
+//	var small_img = document.getElementById("face-image");
 	if (window.webkitURL && window.webkitURL.createObjectURL) {//兼容chrmo图片本地预览功能
 	  img.src = window.webkitURL.createObjectURL(sender.files[0]);
-	  small_img.src = window.webkitURL.createObjectURL(sender.files[0]);
+//	  small_img.src = window.webkitURL.createObjectURL(sender.files[0]);
 	}else if(window.URL.createObjectURL) {
 	  img.src = window.URL.createObjectURL(sender.files[0]);
-	  small_img.src = window.URL.createObjectURL(sender.files[0]);
+//	  small_img.src = window.URL.createObjectURL(sender.files[0]);
 	}
 	$("#confirm_face").toggle();
 	return true;
@@ -334,8 +334,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       type: "POST",
       success:function(model,res){
 	alert("上传成功!");
-	//已在前台更改小头像的url 无需去服务器端再次fetch
-	//App.vent.trigger("app.clipapp.useredit:facesuccess");
+	App.vent.trigger("app.clipapp.useredit:facesuccess");
 	$("#confirm_face").hide();
       },
       error:function(model,res){

@@ -11,8 +11,6 @@ App.ClipApp.Query = (function(App,Backbone,$){
       "click .text":"inputAction"
     },
     initialize:function(){
-      //if (window.event.keyCode==13)
-	//window.event.keyCode=0 ;
     },
     addClip: function(){
       App.vent.trigger("app.clipapp:clipadd");
