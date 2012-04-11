@@ -3,7 +3,7 @@ script(type="text/template",id="reclip-view-template")
   section.small_pop
     span.close_w
     h2.subject_put.
-      <% if(count){ %>
+      <% if(model=="tag"&&count){ %>
       您将收藏<%= count%>条数据
       <% } else { %>
       收

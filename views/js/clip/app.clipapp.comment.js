@@ -1,11 +1,8 @@
 // app.comment.js
 
-var P = "/_2_";
-
 App.ClipApp.Comment = (function(App, Backbone, $){
   var Comment = {};
   var tag_list = [];
-  var CommentModel = App.Model.extend({});
 
   var CommentView = App.ItemView.extend({
     tagName : "div",
@@ -72,9 +69,12 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 
   var commentAction = function(commentModel, params){
     commentModel.save(params,{
-      url: P+"/clip/"+commentModel.id+"/comment",
+      url: App.ClipApp.Url.base+"/clip/"+commentModel.id+"/comment",
       type: "POST",
       success: function(model, res){
+	var clip = model.get("clip");
+	clip.reply_count = clip.reply_count+1;
+	model.set({clip:clip});
 	Comment.close();
 	// App.vent.trigger("clip:showDetail", id);
       },
@@ -84,11 +84,8 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     });
   };
 
-  Comment.show = function(cid, model, error){
-    var commentModel = new CommentModel({id: cid});
-    if (model) commentModel.set(model.toJSON());
-    if (error) commentModel.set("error", error);
-    var commentView = new CommentView({model : commentModel});
+  Comment.show = function(model){
+    var commentView = new CommentView({model : model});
     App.popRegion.show(commentView);
     tag_list = [];
   };

@@ -3,13 +3,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var tag_list = [];
   var P = App.ClipApp.Url.base;
   var flag = false;
+
   var ReclipModel = App.Model.extend({
     defaults: {
       count: ""
-    },
-    url: "/_/reclip"
+    }
   });
-
   var ReclipView = App.ItemView.extend({
     tagName : "div",
     className : "reclip-view",
@@ -55,8 +54,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	$("#reclip_text").val(value);
       }
     },
-    submit:function(e){
-      e.preventDefault();
+    submit:function(evt){
+      evt.preventDefault();
       var that = this;
       var text = $("#reclip_text").val();
       var main_tag = [];
@@ -94,7 +93,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	}
       },
       error:function(model, res){
-	Reclip.show(model.id, null, null, model, res);
+	console.info(res);
       }
     });
   };
@@ -114,21 +113,18 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     });
   };
 
-  Reclip.show = function(cid, user, tag, model, error){
+  Reclip.show = function(model, user, tag){
     flag = true;
-    var reclipModel = new ReclipModel();
-    if (model) reclipModel.set(model.toJSON());
-    if (error) reclipModel.set("error", error);
-    if(cid){
-      reclipModel.id = cid;
-      reclipModel.set("model", "clip");
-      var reclipView = new ReclipView({model : reclipModel});
+    if(model){
+      model.set("model", "clip");
+      var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
       $('#obj_tag').tagsInput({
 	//width: 'auto',
 	autocomplete_url:'test/fake_json_endpoint.html'
       });
     }else if (user && tag){
+      var reclipModel = new ReclipModel();
       reclipModel.fetch({
 	type: "GET",
 	url: P+"/user/"+user+"/clip/tag/"+tag
