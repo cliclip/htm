@@ -55,9 +55,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       }
     },
     submit:function(evt){
-      console.info(this.model);
       evt.preventDefault();
-      var that = this;
+      var clip = this.model.get("clip");
       var text = $("#reclip_text").val();
       var main_tag = [];
       for(var i=1;i<7;i++){
@@ -68,14 +67,23 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var tag = _.without($("#obj_tag").val().split(","),"");
       tag = _.union(tag, main_tag);
       if($("#checkbox").attr("checked")){
+	if(clip){
+	  clip.note = [{text:text}];
+	  clip.tag = tag;
+	  clip.public = "false";
+	}
 	var params = {clip:{note: [{text:text}],tag:tag,"public":"false"}};
       }else{
+	if(clip){
+	  clip.note = [{text:text}];
+	  clip.tag = tag;
+	}
 	var params = {clip:{note: [{text:text}],tag:tag}};
       }
       if(this.model.get("model") == "clip"){
-	App.vent.trigger("app.clipapp.reclip:submit", that.model, params);
+	App.vent.trigger("app.clipapp.reclip:submit", this.model, params,clip);
       }else if (this.model.get("model") == "tag"){
-	App.vent.trigger("app.clipapp.reclip_tag:submit", that.model, params);
+	App.vent.trigger("app.clipapp.reclip_tag:submit", this.model, params,clip);
       }
     },
     cancel : function(e){
@@ -84,13 +92,23 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     }
   });
 
-  var reclipSave = function(reclipmodel,params){
+  var reclipSave = function(reclipmodel,params,clip){
+    var clipid = "";
+    if(clip){
+      clipid = reclipmodel.id;
+    }else{
+      clipid = reclipmodel.get("user")+":"+reclipmodel.id;
+    }
     reclipmodel.save(params,{
-      url: P+"/clip/"+reclipmodel.id+"/reclip",
+      url: P+"/clip/"+clipid+"/reclip",
       type: "POST",
       success: function(model, res){
 	if(flag){
-	  //App.vent.trigger("app.clipapp.cliplist:showlist");
+	  if(clip){
+	    clip.reprint_count = clip.reprint_count+1;
+	    model.set({clip:clip});
+	  }
+	  App.vent.trigger("app.clipapp.cliplist:showlist",null,"reclip");
 	  Reclip.close();
 	}
       },
@@ -116,6 +134,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   };
 
   Reclip.show = function(model, user, tag){
+    console.info(model);
     flag = true;
     if(model){
       model.set("model", "clip");
@@ -149,12 +168,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     App.popRegion.close();
     flag = false;
   };
-  App.vent.bind("app.clipapp.reclip:submit", function(model ,params){
-    reclipSave(model, params);
+  App.vent.bind("app.clipapp.reclip:submit", function(model ,params,clip){
+    reclipSave(model, params, clip);
   });
 
-  App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params){
-    reclip_tag(model, params);
+  App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params,clip){
+    reclip_tag(model, params, clip);
   });
 
   App.vent.bind("app.clipapp.reclip:cancel",function(){

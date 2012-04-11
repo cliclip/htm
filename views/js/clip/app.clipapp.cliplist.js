@@ -233,9 +233,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
   });
 
-  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
-    if(collection){
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection, age){
+    if(collection && !age){
       clipListView = new ClipListView({collection: collection});
+    }else if(age == "reclip"){
+ 
     }
     $("#list").masonry({
       itemSelector : '.clip',
