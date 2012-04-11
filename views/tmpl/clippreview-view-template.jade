@@ -1,48 +1,56 @@
 script(type="text/template",id="clippreview-view-template")
-  <% if(recommend){ %>
-  hgroup.clearfix.
-    <a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
-      <div class="user_info_small">
-        <img src="<%=App.util.face_url(recommend.user.id,recommend.user.face) %>" width="50" height="50"/>
-        <%=recommend.user.name%>
+  //- clip_item 用来绑定mouseEnter事件
+  div.clip_item(style="min-height: 307px;")
+    <% if(recommend){ %>
+    hgroup.clearfix.
+      <a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
+        <div class="user_info_small">
+          <img src="<%=App.util.face_url(recommend.user.face)%>" width="50" height="50"/>
+          <%=recommend.user.name%>
+        </div>
+      </a>&nbsp;&nbsp;
+      <div class="user_text">
+        <%=recommend.text%>
       </div>
-    </a>&nbsp;&nbsp;
-    <div class="user-text">
-      <%=recommend.text%>
-    </div>
-    <%}%>
-  header#header
-    <% if(clip.content && clip.content.image) {%>
-    div.article_photo
-      | <img src="<%= App.util.url(clip.content.image)%>" />
-    <% }if(clip.content && clip.content.text){ %>
-    div.article_con
-      | <%= clip.content.text %>
-    <%}%>
-  footer.master
-    div.metas.icons_frame
-      span.icon_block
-        i.icon_biezhen
-        | <%=clip.reprint_count?clip.reprint_count:0%> 转载
-      span.icon_block
-        i.icon_quote
-        | <%=clip.reply_count?clip.reply_count:0%> 回复
-    div.user_info_small
-      <% if(!App.ClipApp.getMyUid() && clip.user){ %>
-      div.user_more
-        | <a class="author" href="/#user/<%=clip.user.id%>">
-        |   <img src="<%=App.util.face_url(clip.user.face)%>" width="50" height="50" />
-        dl.name
-          dt.
-            <%=clip.user.name%>
       <%}%>
-    div.action#opt(style="display:none;").
-      <i class="<%=manage[0]%> operate" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-      <i class="<%=manage[1]%> operate" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-      <i class="<%=manage[2]%> operate" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-  span.biezhen
-  b.comer_topleft
-  b.comer_topright
-  b.comer_bottomleft
-  b.comer_bottomright
+    header#header
+      <% if(clip.content && clip.content.image) {%>
+      div.article_photo
+        | <img src="<%= App.util.url(clip.content.image)%>" />
+      <% }if(clip.content && clip.content.text){%>
+      <%if(clip.content && clip.content.text && !clip.content.image){ %>
+      div.article_con(style="font-size: 16px;line-height: 2.0")
+        br
+        | <%= clip.content.text %>
+      <%}else{%>
+      div.article_con
+        | <%= clip.content.text %>
+      <%}}%>
+    footer.master
+      div.metas.icons_frame
+        span.icon_block
+          i.icon_biezhen
+          | <%=clip.reprint_count?clip.reprint_count:0%> 转载
+        span.icon_block
+          i.icon_quote
+          | <%=clip.reply_count?clip.reply_count:0%> 回复
+      div.user_info_small
+        <% if(clip.user){ %>
+        div.user_more
+          | <a class="author" href="/#user/<%=clip.user.id%>">
+          |   <img src="<%=App.util.face_url(clip.user.face)%>" width="50" height="50" />
+          dl.name
+            dt.
+              <%=clip.user.name%>
+          </a>
+        <%}%>
+      div.action#opt(style="display:none;").
+        <i class="<%=manage[0][0]%> operate" title="<%=manage[0][1]%>" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+        <i class="<%=manage[1][0]%> operate" title="<%=manage[1][1]%>" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+        <i class="<%=manage[2][0]%> operate" title="<%=manage[2][1]%>" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+    span.biezhen
+    b.comer_topleft
+    b.comer_topright
+    b.comer_bottomleft
+    b.comer_bottomright
 

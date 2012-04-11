@@ -143,7 +143,7 @@ App.util = (function(){
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
       // fix left while scroll
-      var mt = $(".layout").offset().top;
+      var mt = $(".clearfix").offset().top;
       if(st > mt){
 	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
 	$(".return_top").fadeIn();
@@ -155,7 +155,6 @@ App.util = (function(){
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
-      //if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
       if(st + wh > lt){
 	if(flag){
 	  options.start += App.ClipApp.Url.page;
@@ -177,7 +176,6 @@ App.util = (function(){
       }
     });
   });
-
   var getMessage = {};
 
   getMessage["login_success"] = "登录成功";
@@ -219,7 +217,6 @@ App.util = (function(){
     console.info(errorCode);
      return errorCode;
  };
-
 
   return util;
 })();
