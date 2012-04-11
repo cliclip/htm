@@ -102,24 +102,20 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var clip = this.model.get("clip");
       var cid = this.model.id;
-      var pub = clip["public"];
-      var tags = clip.tag;
-      var note = [clip.note];
       switch(opt){
 	case 'biezhen'://收
-	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment'://评
-	  App.vent.trigger("app.clipapp:comment", cid);break;
+	  App.vent.trigger("app.clipapp:comment", this.model);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	  App.vent.trigger("app.clipapp:clipmemo", this.model);break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
-	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+	  App.vent.trigger("app.clipapp:clipdelete", this);break;
       }
     }
   });

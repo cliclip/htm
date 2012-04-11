@@ -52,13 +52,13 @@ script(type="text/template",id="ruleEdit-view-template")
         |邮箱识别
       li
         label 标题必须有
-        |<input type="text" class="text_input" id="title" value="<% if(rule){ %><%=rule.title?rule.title:''%> <% } %>" />
+        |<input type="text" class="text_input" id="title" value="<% if(rule){%><%=rule.title?rule.title:''%><% } %>"/>
       li
         label 必须抄送给
-        |<input type="text" class="text_input" id="copy-to" value="<% if(rule) {%><%=rule.cc?rule.cc.join('; '):''%> <% } %>" style="ime-mode:Disabled;"/>
+        |<input type="text" class="text_input" id="copy-to" value="<% if(rule) {%><%=rule.cc?rule.cc.join(';'):''%><% } %>" style="ime-mode:Disabled;"/>
       li
         label 必须发给
-        |<input type="text" class="text_input" id="send" value="<% if(rule){ %><%=rule.to?rule.to.join('; '):''%><% } %>" style="ime-mode:Disabled;"/>
+        |<input type="text" class="text_input" id="send" value="<% if(rule){ %><%=rule.to?rule.to.join(';'):''%><% } %>" style="ime-mode:Disabled;"/>
       li
         input.btn_blue(type="submit",id="update_rule",value="更新邮件规则")
 
