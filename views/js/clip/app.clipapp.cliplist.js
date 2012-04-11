@@ -41,10 +41,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 双击clip就响应show_detail事件
-      "click article.clip" : "show_detail",
+      "click #header" : "show_detail",
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",
+      "mouseenter #header":"mouseHand",
       "mouseenter .clip_item": "mouseEnter",
       "mouseleave .clip_item": "mouseLeave"
     },
@@ -94,6 +95,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     },
     mouseLeave: function(e){
       $(e.currentTarget).children(".master").children("#opt").hide();
+    },
+    mouseHand:function(e){
+      e.currentTarget.style.cursor="pointer";
     },
     operate: function(e){
       e.preventDefault();
