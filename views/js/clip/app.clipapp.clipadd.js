@@ -71,7 +71,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var user = this.model.get("id");
       var html = App.ClipApp.Editor.getContent("editor");
       _data.content = App.util.HtmlToContent(html);
+      // var content = App.util.HtmlToContent(html);
       this.model.save(_data,{
+      //this.model.save("content",content,{
 	url: P+"/clip",
 	type: 'POST',
 	success:function(response){

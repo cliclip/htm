@@ -108,6 +108,7 @@ App.util = (function(){
   };
 
   util.generatePastTime = function(time){
+    if(!time) return null;
     var ftime = new Date(time);
     var ttime = new Date();
     return subTimes(ftime,ttime);

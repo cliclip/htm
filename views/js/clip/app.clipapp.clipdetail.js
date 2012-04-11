@@ -72,7 +72,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var id = e.currentTarget.id;
       $("#reply_"+id).css("display","block");
-      $(e.currentTarget).css("background","#f0f");
+      // $(e.currentTarget).css("background","#f0f");
     },
     resume : function(e){
       e.preventDefault();

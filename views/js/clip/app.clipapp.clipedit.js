@@ -17,9 +17,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     template: "#editDetail-view-template",
     events: {
       "click .link_img":"show_extImg",
-      "change #formUpload": "image_change",
+      "change #formUpload":"image_change",
       "click .format":"upFormat",
-      "click .pop_left": "remarkClip",
+      "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
       "click .close_w":"abandonUpdate",

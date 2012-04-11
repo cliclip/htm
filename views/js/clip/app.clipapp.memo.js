@@ -71,19 +71,16 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   ClipMemo.show = function(clipModel){
     var text = "";
-    var clip = clipModel.get("clip");
     var cid="",pub="",tags=[],note=[];
-    if(clip){
-      cid = clipModel.id;
+    var clip = "";
+    if(clipModel){
+      clip = clipModel.get("clip"); // 从preview中取
+      if(!clip)
+	clip = clipModel.toJSON(); // clipModel来自detail没有被clip包裹
+      cid = clipModel.id; // 无论是preview还是detail都是 uid:id
       pub = clip["public"];
       tags = clip.tag;
-      note = [clip.note];
-    }else{
-      var user = clipModel.get("user");
-      cid = user+":"+clipModel.id;
-      pub = clipModel.get("public");
-      tags = clipModel.get("tag");
-      note = clipModel.get("note");
+      note = clip.note;
     }
     if(typeof(note) == "string"){
       text = note;
@@ -134,6 +131,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   // 触发更新clip中的注的事件
   App.vent.bind("app.clipapp.memo:rememo", function(view, data){
+    console.log(data);
     view.model.save(data,{
       url:App.ClipApp.Url.base+"/clip/"+view.options.clipid,
       type:"PUT",
