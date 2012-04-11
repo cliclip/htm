@@ -3,6 +3,7 @@
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var precliplength=0,flag=true;
+  var clipListView = {};
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -115,7 +116,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
-	  App.vent.trigger("app.clipapp:clipdelete", this);break;
+	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     }
   });
@@ -228,14 +229,24 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    var clipListView = new ClipListView({collection: clips});
+    App.vent.trigger("app.clipapp.cliplist:showlist",clips);
+    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
+  });
+
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
+    if(collection){
+      clipListView = new ClipListView({collection: collection});
+    }
     $("#list").masonry({
       itemSelector : '.clip',
       columnWidth : 360,
       isAnimated: false
     });
     App.listRegion.show(clipListView);
-    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
+  });
+  App.vent.bind("app.clipapp.cliplist:changeshow",function(model){
+    var collection = clipListView.collection.remove(model);
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
 })(App, Backbone, jQuery);

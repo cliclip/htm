@@ -55,6 +55,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       }
     },
     submit:function(evt){
+      console.info(this.model);
       evt.preventDefault();
       var that = this;
       var text = $("#reclip_text").val();
@@ -89,6 +90,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	if(flag){
+	  //App.vent.trigger("app.clipapp.cliplist:showlist");
 	  Reclip.close();
 	}
       },
