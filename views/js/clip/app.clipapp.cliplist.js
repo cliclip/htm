@@ -41,12 +41,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 双击clip就响应show_detail事件
-      "click article.clip" : "show_detail",
+      "click #header" : "show_detail",
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",
-      "mouseover .master": "mouseover", // mouseover子类也响应
-      "mouseout .master": "mouseout" // mouseout 只自己响应
+      "mouseenter #header":"mouseHand",
+      "mouseenter .clip_item": "mouseEnter",
+      "mouseleave .clip_item": "mouseLeave"
     },
     initialize: function(){
       var $container = $('#list');
@@ -55,7 +56,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  itemSelector : '.clip'
 	});
       });
-
       this.bind("item:rendered",function(itemView){
 	var $newElems = itemView.$el.css({ opacity: 0 });
 	$newElems.imagesLoaded(function(){
@@ -76,8 +76,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     reclipAction: function(){
       App.vent.trigger("app.clipapp:reclip",this.model.id);
     },
-    // mouseover与mouseout的某些区域还是不能正常显示
-    mouseover: function(e){
+/*    mouseover: function(e){
       e.preventDefault();
       if(checkHover(e,e.target)){
 	//console.info("@@@@@@@@@@@@");
@@ -89,6 +88,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       if(checkHover(e,e.target)){
 	$(e.currentTarget).children("#opt").css("display","none");
       }
+    },
+*/
+    mouseEnter: function(e){
+      $(e.currentTarget).children(".master").children("#opt").toggle();
+    },
+    mouseLeave: function(e){
+      $(e.currentTarget).children(".master").children("#opt").hide();
+    },
+    mouseHand:function(e){
+      e.currentTarget.style.cursor="pointer";
     },
     operate: function(e){
       e.preventDefault();
@@ -110,7 +119,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
   });
-
+/*
   var contains = function(parentNode,childNode){
     if(parentNode.contains){
       return parentNode != childNode && parentNode.contains(childNode);
@@ -129,7 +138,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var getEvent = function(e){
     return e||window.event;
   };
-
+*/
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",

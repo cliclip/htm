@@ -51,7 +51,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   var CommentView = App.ItemView.extend({
-    tagName: "ul",
+    tagName: "div",
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
@@ -124,7 +124,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	      str += render_tree(e.children, "");
 	      str += "</ul>";
 	    }
-	    str = '<ul>'+str+'</ul>';
+	    str = '<div>'+str+'</div>';
             return render_tree(commentList, html+str);
 	  }
 	}
