@@ -265,6 +265,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       el:".input_textarea"
     });
     ClipDetail.addCommRegion.show(addCommView);
+    $(".cancel").css("display","none");
     if(focus)
       $("#comm_text").focus();
   };

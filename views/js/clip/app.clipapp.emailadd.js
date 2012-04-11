@@ -25,7 +25,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     events: {
       "click #emailadd_commit":"EmailAddcommit",
       "click #emailadd_cancel":"EmailAddclose",
-      "click .close_w"        :"EmailAddclose"
+      "click .close_w"        :"EmailAddclose",
+      "focus .input_text"     :"cleanError"
     },
     EmailAddclose: function(){
       EmailAdd.close();
@@ -41,6 +42,9 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   	  App.vent.trigger("app.clipapp.emailadd:error", model, res);
   	}
       });
+    },
+    cleanError:function(){
+      $("#alert").css("display","none");
     }
   });
   var EmailActiveView = App.ItemView.extend({

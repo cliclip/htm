@@ -40,6 +40,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       this.$("#name_listDiv").empty();
     },
     nameListAction:function(evt){
+      $("#alert").css("display","none");
       var str = this.$("#name").val();
       var params = {q:str};
       App.vent.trigger("app.clipapp.recommend:lookup",params,this.model.id);

@@ -44,9 +44,9 @@ script(type="text/template",id="detail-view-template")
 
 script(type="text/template",id="showcomment-view-template")
   div.user_head.
-    <img src=<%=App.util.face_url(user.face)%> />
-  dt.username.
-    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=App.util.generatePastTime(date)%>
+    <a href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
+  dt.username
+    <a href="#user/<%=user.id%>"><%= user.name %></a> <%=App.util.generatePastTime(date)%>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>"><%= text %>
     <div id="reply_<%=id%>" style="display:none;">
