@@ -1,7 +1,7 @@
 // app.delete.js
 App.ClipApp.ClipDelete = (function(App, Backbone, $){
   var ClipDelete = {};
-  var collection = {};
+  var DeleteModel = App.Model.extend({});
   var DeleteView = App.ItemView.extend({
     tagName : "div",
     className : "delete-view",
@@ -21,9 +21,9 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
      }
    });
 
-   ClipDelete.show = function(view){
-     collection = view.options.model.collection;
-     var deleteView = new DeleteView({model : view.model});
+   ClipDelete.show = function(cid){
+     var deleteModel = new DeleteModel({id:cid});
+     var deleteView = new DeleteView({model : deleteModel});
      App.popRegion.show(deleteView);
    };
 
@@ -43,22 +43,22 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
      });
    };
 
-  App.vent.bind("app.clipapp.clipdelete:action", function(clipModel){
-    deleteAction(clipModel);
-  });
+   App.vent.bind("app.clipapp.clipdelete:action", function(clipModel){
+     deleteAction(clipModel);
+   });
 
-  App.vent.bind("app.clipapp.clipdelete:success", function(model){
-    collection.remove(model);
-    ClipDelete.close();
-  });
+   App.vent.bind("app.clipapp.clipdelete:success", function(model){
+    App.vent.trigger("app.clipapp.cliplist:changeshow", model);
+     ClipDelete.close();
+   });
 
-  App.vent.bind("app.clipapp.clipdelete:error", function(model, error){
-    ClipDelete.show(null);
-  });
+   App.vent.bind("app.clipapp.clipdelete:error", function(model, error){
+     ClipDelete.show(null);
+   });
 
-  App.vent.bind("app.clipapp.clipdelete:cancel", function(){
-   ClipDelete.close();
-  });
+   App.vent.bind("app.clipapp.clipdelete:cancel", function(){
+     ClipDelete.close();
+   });
 
   // TEST
   //App.bind("initialize:after", function(){ ClipDelete.show(); });
