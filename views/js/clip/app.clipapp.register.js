@@ -57,14 +57,14 @@ App.ClipApp.Register = (function(App, Backbone, $){
     var registerView = new RegisterView({model: registerModel});
     App.popRegion.show(registerView);
   };
-
+/*
   App.vent.bind("app.clipapp.register:success", function(res){
     document.cookie = "token="+res;
     App.popRegion.close();
     Backbone.history.navigate("my");
     location.reload();
   });
-
+*/
   App.vent.bind("app.clipapp.register:error",function(model, error){
     Register.show(model, error);
   });

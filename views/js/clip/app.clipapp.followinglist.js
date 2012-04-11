@@ -32,7 +32,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   });
 
   FollowingList.showUserFollowing=function(uid){
-    var options = {};
+    var options = {},flag=false;
     var collection=new FollowingList();
     options.params = collection;
     options.start = start;
@@ -41,10 +41,12 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     options.url=options.params.url+"/"+start+".."+end;
     collection.fetch(options);
     collection.onReset(function(followinglist){
+      if(!_.isEmpty(followinglist.toJSON())) flag=true;
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
       App.listRegion.show(followinglistView);
+      if(flag) $(".user_list_info").css("display","none");
       App.vent.trigger("app.clipapp.util:scroll",followinglistView,options);
     });
   };

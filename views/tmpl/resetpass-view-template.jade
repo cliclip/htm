@@ -1,14 +1,15 @@
 script(type="text/template",id="resetpass-view-template")
   div.masker_layer
   section.small_pop
+    span.close_w
     h2.pop_title 设置新密码
     ur.pop_body
-      li.alert
+      li.alert#alert
         <%= typeof error != "undefined"&& error.error ? error.error: "" %>
-      h3.subject_put 新密码
+      h3 新密码
       li.input_text.clearfix
         input(type="text",id="pass1")
-      h3.subject_put 新密码
+      h3 新密码
       li.input_text.clearfix
         input(type="text",id="pass2")
       li.btn_group.clearfix

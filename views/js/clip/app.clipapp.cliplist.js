@@ -41,7 +41,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 双击clip就响应show_detail事件
-      "dblclick #header" : "show_detail",
+      "click article.clip" : "show_detail",
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",

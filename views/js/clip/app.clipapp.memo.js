@@ -41,7 +41,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       e.preventDefault();
       var _data = {};
       var main_tag = [];
-      for(var i=1;i<6;i++){
+      for(var i=1;i<7;i++){
 	if(document.getElementById("main_tag_"+i).className == "size48 orange_48"){
 	  main_tag.push($("#main_tag_"+i).html());
 	}
@@ -93,7 +93,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	_(ns).each(function(n){ text += n+" "; });
     }
     if(cid){
-      var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" ;});
+      var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});
       var tag_obj = _.without(tags,tag_main);
       //  var clipmemoModel = new ClipMemoModel();
       clipModel.set({note:text,model:"update"});
@@ -116,6 +116,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	  case "好吃":document.getElementById("main_tag_3").className="size48 orange_48";break;
 	  case "好玩":document.getElementById("main_tag_4").className="size48 orange_48";break;
 	  case "精辟":document.getElementById("main_tag_5").className="size48 orange_48";break;
+	  case "酷":document.getElementById("main_tag_6").className="size48 orange_48";break;
 	}
       }
     };
