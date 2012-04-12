@@ -13,14 +13,15 @@ script(type="text/template",id="faceEdit-view-template")
       <img id="myface" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
     .user_name
       <% if(name && name!=""){%>
-      <input class="name" type="text" value="<%=name%>" />
+      span.name.
+        <%=name%>
       <%}else{%>
       <div id="set-name">您还没有用户名</div>
       <input type="button" class="edit_username" value="设置用户名"/>    
       <%}%>
   .head_link
-    iframe(name="post_frame",id="post_frame",style="display:none;",mce_style="display:none;")
-    |<form method="POST" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
+    iframe(name="post_frame_face",id="post_frame_face",style="display:none;",mce_style="display:none;")
+    |<form method="POST" action="<%=actUrl%>" target="post_frame_face" enctype="multipart/form-data">
     .btn_frame
       button.verify(type="submit",id="confirm_face",style="display:none") 确定
       .button_frame
