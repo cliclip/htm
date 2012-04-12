@@ -17,7 +17,7 @@ script(type="text/template",id="faceEdit-view-template")
       <input type="button" class="edit_username" value="设置用户名"/>    
       <%}%>
   .head_link
-    iframe(name="post_frame",id="post_frame",style="display:none;",mce_style="display:none;")
+    iframe(name="post_frame_face",id="post_frame",style="display:none;",mce_style="display:none;")
     |<form method="POST" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
     .btn_frame
       button.verify(type="submit",id="confirm_face",style="display:none") 确定

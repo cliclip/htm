@@ -284,7 +284,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var faceView = new FaceView({model: faceModel});
 	  UserEdit.faceRegion.show(faceView);
 	});
-	$("#post_frame").load(function(){ // 加载图片
+	$("#post_frame_face").load(function(){ // 加载图片
 	  var returnVal = this.contentDocument.documentElement.textContent;
 	  if(returnVal != null && returnVal != ""){
 	    var returnObj = eval(returnVal);
