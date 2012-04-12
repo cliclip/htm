@@ -49,9 +49,6 @@ script(type="text/template",id="showcomment-view-template")
     <%= text %><%= App.util.generatePastTime(date)%>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
-    <% if( auth && (user.uid == auth || auth == clip_owner )){%>
-    <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
-    <% } %>
     </div>
     </div>
   <% } else {%>
@@ -65,7 +62,7 @@ script(type="text/template",id="showcomment-view-template")
     <%= text %><%= App.util.generatePastTime(date)%>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
-    <% if( auth && (user.uid == auth || auth == clip_owner )){%>
+    <% if( auth && (user.id == auth || auth == clip_owner )){%>
     <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
     <% } %>
     </div>
