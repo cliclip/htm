@@ -5,9 +5,10 @@ script(type="text/template",id="recommend-view-template")
     h2.subject_forward 转
     ul.pop_body
       li.select_user.clearfix
-        div.user_small_head#user_image
-          img(id="imgId",src="photos/user_head.jpg")
-        input(type="text",id="name")
+        div.container
+          div.user_small_head#user_image
+            img(id="imgId")
+          input(type="text",id="name",style="border-style:none")
       li.alert#alert
         <%= typeof error != "undefined"&& error.user ? error.user: "" %>
       div(align="center")#name_listDiv

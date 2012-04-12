@@ -16,7 +16,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     className:"",
     template:"#recommend-view-template",
     events:{
-      "click #name_list"     :  "getUserAction",
+      "click .list"     :  "getUserAction",
       "blur  #name"          :  "getUser",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
@@ -29,6 +29,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     getUser:function(e){
       var uid="";
+      $("#imgId").css("display","none");
       var div=$(".action-info");
       _.each(div,function(e){
 	var li = e.children;
@@ -37,9 +38,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 //	console.log($(li[0]).text());
 //	console.log($("#name").val());
 	if($("#name").val() == $(li[0]).text()){
-	  console.log("zhengque");
 	  this.$("#name").val($(li[0]).text());
 	  $("#imgId").attr("src",$(li[0]).attr("title"));
+	  $("#imgId").css("display","block");
 	  uid=li[0].id;
 	  this.$("#name_listDiv").empty();
 	}
@@ -50,8 +51,10 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       // 这里是必须要触发才会取得uid
       var uid=evt.target.id;
       var name=document.getElementById(uid).innerHTML;
+      $("#imgId").css("display","none");
       this.$("#name").val(name);
       $("#imgId").attr("src",document.getElementById(uid).title);
+      $("#imgId").css("display","block");
       this.model.set({uid:uid});
       this.$("#name_listDiv").empty();
     },
