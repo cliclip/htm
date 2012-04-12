@@ -137,6 +137,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     console.info(model);
     flag = true;
     if(model){
+      console.log(model);
       model.set("model", "clip");
       var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
