@@ -115,12 +115,12 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:recommend", function(clipid){
+  App.vent.bind("app.clipapp:recommend", function(model){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.Recommend.show(clipid);
+      ClipApp.Recommend.show(model);
     }
   });
 

@@ -68,13 +68,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
     show_detail: function(){
-      App.vent.trigger("app.clipapp:clipdetail",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:clipdetail",clipid);
     },
     commentAction: function(){
-      App.vent.trigger("app.clipapp:comment",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:comment",clipid);
     },
     reclipAction: function(){
-      App.vent.trigger("app.clipapp:reclip",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:reclip",clipid);
     },
 /*    mouseover: function(e){
       e.preventDefault();
@@ -238,11 +244,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
   });
 
-  App.vent.bind("app.clipapp.cliplist:showlist",function(collection, age){
-    if(collection && !age){
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
+    if(collection){
       clipListView = new ClipListView({collection: collection});
-    }else if(age == "reclip"){
-
     }
     $("#list").masonry({
       itemSelector : '.clip',
@@ -257,9 +261,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(model){
     var collection = clipListView.collection;
-    collection.comparator = function(model) {
-      return model.get("clip").id;
-    };
+    collection.unshift(model);
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;

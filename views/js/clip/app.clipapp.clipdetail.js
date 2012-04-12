@@ -33,7 +33,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh':
-	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
