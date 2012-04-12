@@ -6,6 +6,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
+    },
+    // 跟cliplist一致，使得model.id = "uid:id"
+    parse: function(resp){
+      resp.id = resp.user+":"+resp.id;
+      return resp;
     }
   });
 
@@ -79,17 +84,16 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       console.info("调整页面格式");
     },
     remarkClip:function(){
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
-      var tag = this.model.get("tag");
-      var note = this.model.get("note");
-      var pub = this.model.get("public");
-      App.vent.trigger("app.clipapp:clipmemo", cid, tag, note, pub);
-      // App.OrganizeApp.open(cid);
+      // var user = this.model.get("user");
+      // var cid = user+":"+this.model.id;
+      // var tag = this.model.get("tag");
+      // var note = this.model.get("note");
+      // var pub = this.model.get("public");
+      // 整个的传model方便直接修改
+      App.vent.trigger("app.clipapp:clipmemo", this.model, "update");
     },
     saveUpdate: function(){
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
+      var cid = this.model.id;
       // 参数为编辑器id
       var html = App.ClipApp.Editor.getContent("editor");
       _data.content = App.util.HtmlToContent(html);
@@ -109,8 +113,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     abandonUpdate: function(){
       // 直接返回详情页面
       App.viewRegion.close();
-      var user = this.model.get("user");
-      var cid =	user+":"+this.model.id;
+      var cid =	this.model.id;
       //在clip列表界面触发“改”时不应返回详情页面
       //App.vent.trigger("app.clipapp:clipdetail", cid);
     }

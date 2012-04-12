@@ -1,9 +1,14 @@
 App.util = (function(){
   var util = {};
   var paramslength=0,flag=true;
+  var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
     var cookie = document.cookie;
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
+  };
+
+  util.getImg_upUrl = function(){
+    return P + '/user/'+util.getMyUid()+'/image';
   };
 
   util.url = function(imageid){

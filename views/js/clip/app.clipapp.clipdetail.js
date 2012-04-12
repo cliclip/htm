@@ -8,6 +8,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     url: function(){
       return P+"/clip/"+this.id;
+    },
+    // 跟cliplist一致，使得model.id = "uid:id"
+    parse: function(resp){
+      resp.id = resp.user+":"+resp.id;
+      return resp;
     }
   });
 
@@ -23,8 +28,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     Operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
+      var cid = this.model.id;
       switch(opt){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;

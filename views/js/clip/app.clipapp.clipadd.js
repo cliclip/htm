@@ -1,7 +1,6 @@
 App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
-  var _data = {};
   var objEditor = "";
 
   var ClipModel = App.Model.extend({
@@ -23,9 +22,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .close_w":"abandon",
       "click .pop_left": "remark_newClip",
       "blur #img_upload_url":"hide_extImg"
-    },
-    initialize: function(){
-      _data = {content : []};
     },
     extImg:function(evt){
       $(".img_upload_span").css("display","block");
@@ -69,10 +65,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     save: function(){
       var user = this.model.get("id");
+      var clip = {};
       var html = App.ClipApp.Editor.getContent("editor");
-      _data.content = App.util.HtmlToContent(html);
-      // var content = App.util.HtmlToContent(html);
-      this.model.save(_data,{
+      clip.content = App.util.HtmlToContent(html);
+      clip.tag = this.model.get("tag");
+      clip.note = this.model.get("note");
+      clip.public = this.model.get("public");
+      this.model.save(clip,{
       //this.model.save("content",content,{
 	url: P+"/clip",
 	type: 'POST',
@@ -84,8 +83,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	      cid += i;
 	  }
 	  App.viewRegion.close();
+	  location.reload();
 	  // 如何只刷新一个region的内容
-	  // location.reload();
 	},
 	error:function(response){
 	  // 出现错误，触发统一事件
@@ -98,20 +97,15 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipadd:cancel");
     },
     remark_newClip: function(){
-      App.vent.trigger("app.clipapp:clipmemo");
+      App.vent.trigger("app.clipapp:clipmemo", this.model, "add");
     }
   });
 
   ClipAdd.show = function(uid){
-    var clipModel = new ClipModel({id: uid, actUrl:P+"/user/"+ uid+"/image"});
+    var clipModel = new ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
     App.ClipApp.Editor.init();
-    /*addClipView.editor = new baidu.editor.ui.Editor({
-      toolbars:[['HighlightCode']],
-      contextMenu:[] // 禁止右键菜单
-    });
-    addClipView.editor.render('addClip-container');*/
   };
 
   App.vent.bind("app.clipapp.clipadd:cancel", function(){
@@ -120,12 +114,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.clipadd:error", function(){
     console.info("addClip error");
-  });
-
-  App.vent.bind("app.clipapp.clipadd:memo", function(data){
-    for(var i in data){
-      _data[i] = data[i];
-    }
   });
 
   return ClipAdd;

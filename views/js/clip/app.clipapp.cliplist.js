@@ -112,7 +112,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", this.model);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo", this.model);break;
+	App.vent.trigger("app.clipapp:clipmemo", this.model, "update");break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
@@ -237,7 +237,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(collection && !age){
       clipListView = new ClipListView({collection: collection});
     }else if(age == "reclip"){
- 
+
     }
     $("#list").masonry({
       itemSelector : '.clip',
