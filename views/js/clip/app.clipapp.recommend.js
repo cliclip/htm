@@ -62,8 +62,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       $("#alert").css("display","none");
       $("#imgId").css("display","none");
       var str = this.$("#name").val();
+      var clip = this.model.get("clip");
       var params = {q:str};
-      App.vent.trigger("app.clipapp.recommend:lookup",params,this.model.id);
+      App.vent.trigger("app.clipapp.recommend:lookup",params,clip.user.id);
     },
     MouseOver:function(evt){
 
@@ -74,9 +75,10 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     recommendAction:function(e){
       e.preventDefault();
       var text=$("#recommend_text").val();
+      var clip = this.model.get("clip");
       var params = {
 	text:text,
-	clipid :this.model.id
+	clipid : clip.user.id+":"+clip.id
       };
       var params1 = {clip:{note:[{text:text}]}};
       if(this.model.get("uid")){
@@ -111,11 +113,11 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     className:"list",
     itemView:NameListItemView
   });
-  var showNameList=function(params,clipid){
+  var showNameList=function(params,owner_id){
     var collection = new NameList({});
     collection.fetch({data:params});
     collection.onReset(function(list){
-      var ownmodel=list.get(clipid.split(":")[0]);
+      var ownmodel=list.get(owner_id);
       list.remove(ownmodel);
       var namelistView = new NameListCollectionView({
 	collection:list
@@ -159,8 +161,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   };
 
 
-  App.vent.bind("app.clipapp.recommend:lookup",function(params,clipid){
-    showNameList(params,clipid);
+  App.vent.bind("app.clipapp.recommend:lookup",function(params,owner_id){
+    showNameList(params,owner_id);
   });
 
   App.vent.bind("app.clipapp.recommend:submit",function(model,params){

@@ -78,7 +78,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       cid = clipModel.id; // 无论是preview还是detail都是 uid:id
     }
     if(!clip)
-      clip = clipModel.toJSON(); // clipModel来自detail或者来自add没有clip
+    clip = clipModel.toJSON(); // clipModel来自detail或者来自add没有clip
     pub = clip["public"];
     tags = clip.tag;
     note = clip.note;
