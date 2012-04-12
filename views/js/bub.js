@@ -455,13 +455,15 @@ $(function() {
 	    // console.log("leave %j", body.m_shapeList.m_radius);
 	    body.WakeUp();
 	    body.m_shapeList.m_radius -= 30;
-	    findBall(body).set("hover", false);
+	    var model = findBall(body);
+	    if (model) model.set("hover", false);
 	  }
 	  function enter(body){
 	    // console.log("enter %j", body.m_shapeList.m_radius);
 	    body.WakeUp();
 	    body.m_shapeList.m_radius += 30;
-	    findBall(body).set("hover", true);
+	    var model = findBall(body);
+	    if (model) model.set("hover", true);
 	  }
 	  // console.log("move");
 	  var body = getBodyAt(x, y);

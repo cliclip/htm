@@ -3,17 +3,16 @@ script(type="text/template",id="follow-view-template")
     ul.tab_frame
       li(class="tab",id="follower") 追我的人
       li(id="following")我追的人
-    ul.user_list_info
-      li.user
-        div.info
-          | no one follow
+    ul.empty_user
+      div.msg
+        p 还没有人追你哟
 script(type="text/template",id="follower-view-template")
   section.follow_frame
     ul.user_list
       li.user
         div.tag_line.tag_box
           span.size48.blue_48
-            | <a href="#user/<%=App.ClipApp.Face.getUserId()%>/tag/<%=tag%>"><%=tag%></a>	
+            | <%if(tag== "*"){%> <a href="#user/<%=App.ClipApp.Face.getUserId()%>">所有<%}else{%><a href="#user/<%=App.ClipApp.Face.getUserId()%>/tag/<%=tag%>"><%=tag%><%}%></a>	
         div.tags
           | <% for(var i=0; i<user.length; i++){%>
           | <a href="#user/<%=user[i].id%>"><span class="heads">
