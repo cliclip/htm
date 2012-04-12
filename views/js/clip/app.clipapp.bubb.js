@@ -91,10 +91,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     //console.log("open %s", tag);
     // 可以是在当前路由上加上某个值
-    App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
+    // App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
     // TODO change to
-    // App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
-    // App.vent.trigger("", clipListRefresh);
+    App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
+    App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
   });
 
   App.vent.bind("app.clipapp.bubb:follow", function(tag,uid){
@@ -241,7 +241,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // utils
-
   function mkTag(tags, followss, tag, self){
     // DEBUG PURPOSE
     var follows = _.without(followss,'*');

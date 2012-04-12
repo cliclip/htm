@@ -78,7 +78,6 @@ App.util = (function(){
   };
 
   util.ContentToHtml = function(content){
-    // console.log(content);
     var html = "";
     for(var i=0; i<content.length; i++){
       for(key in content[i]){
@@ -87,7 +86,7 @@ App.util = (function(){
 	    html += '<p>' + content[i][key] + '</p>';break;
 	  case 'image':
 	    html +=
-	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:485px;max-height:490px;">'
+	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:475px;max-height:490px;">'
 	    + '</img></p>';
 	    break;
 	  case 'code':
