@@ -128,7 +128,7 @@ App.util = (function(){
       returnVal = Math.round(dtime/60) + "分钟前";
     }else if(dtime>=60*60 && dtime<60*60*24){//hour
       returnVal = Math.round(dtime/(60*60)) + "小时前";
-  /*  }else if(dtime>=60*60*24 && dtime<60*60*24*7){//day
+    }else if(dtime>=60*60*24 && dtime<60*60*24*7){//day
       returnVal = Math.round(dtime/(60*60*24)) + "天";
     }else if(dtime>=60*60*24*7 && dtime<60*60*24*30){//week
       returnVal = Math.round(dtime/(60*60*24*7)) + "周";
@@ -137,9 +137,7 @@ App.util = (function(){
     }else if(dtime>=60*60*24*30*6 && dtime<60*60*24*30*6*12){//half year
       returnVal = "半年";
     }else if(dtime>=60*60*24*30*6*12){//year
-      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + "年";*/
-    }else{
-      returnVal=Ftime;
+      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + "年";
     }
     return returnVal;
   };
