@@ -1,9 +1,11 @@
 script(type="text/template",id="editUser-view-template")
-  span.close_w
-  div(class="left_bar")
-  div(class="middle",id="email")
-  div(class="middle",id="rule")
-  div(class="right_bar")
+  div.masker_layer
+  section.edit_frame
+    span.close_w
+    div(class="left_bar")
+    div(class="middle",id="email")
+    div(class="middle",id="rule")
+    div(class="right_bar")
 
 script(type="text/template",id="faceEdit-view-template")
   .edit_head
@@ -11,14 +13,15 @@ script(type="text/template",id="faceEdit-view-template")
       <img id="myface" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
     .user_name
       <% if(name && name!=""){%>
-      <input class="name" type="text" value="<%=name%>" />
+      span.name.
+        <%=name%>
       <%}else{%>
       <div id="set-name">您还没有用户名</div>
       <input type="button" class="edit_username" value="设置用户名"/>    
       <%}%>
   .head_link
-    iframe(name="post_frame",id="post_frame",style="display:none;",mce_style="display:none;")
-    |<form method="POST" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
+    iframe(name="post_frame_face",id="post_frame_face",style="display:none;",mce_style="display:none;")
+    |<form method="POST" action="<%=actUrl%>" target="post_frame_face" enctype="multipart/form-data">
     .btn_frame
       button.verify(type="submit",id="confirm_face",style="display:none") 确定
       .button_frame
@@ -47,17 +50,17 @@ script(type="text/template",id="ruleEdit-view-template")
       h3
         span.open_mailcheck
           input(type="checkbox",id="open_rule")
-          label(for="check")|打开邮箱识别
+          label(for="open_rule")|打开邮箱识别
         |邮箱识别
       li
         label 标题必须有
         |<input type="text" class="text_input" id="title" value="<% if(rule){%><%=rule.title?rule.title:''%><% } %>"/>
       li
         label 必须抄送给
-        |<input type="text" class="text_input" id="copy-to" value="<% if(rule) {%><%=rule.cc?rule.cc.join(';'):''%><% } %>" style="ime-mode:Disabled;"/>
+        |<input type="text" class="text_input" id="copy-to" value="<% if(rule) {%><%=rule.cc?rule.cc.join(';'):''%><% } %>" />
       li
         label 必须发给
-        |<input type="text" class="text_input" id="send" value="<% if(rule){ %><%=rule.to?rule.to.join(';'):''%><% } %>" style="ime-mode:Disabled;"/>
+        |<input type="text" class="text_input" id="send" value="<% if(rule){ %><%=rule.to?rule.to.join(';'):''%><% } %>" />
       li
         input.btn_blue(type="submit",id="update_rule",value="更新邮件规则")
 

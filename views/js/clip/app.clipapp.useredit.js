@@ -47,7 +47,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var EditView = App.ItemView.extend({
     tagName: "section",
-    className: "edit_frame",
+    className: "edit",
     template: "#editUser-view-template",
     events: {
       "click .close_w"           : "cancel"
@@ -83,15 +83,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     editClose:function(){
       FaceEdit.close();
-    }
-/*				       ,
+    },
     submit:function(form){
-      if(!flag){
+      	form.preventDefault();//此处阻止提交表单
+/*      if(!flag){
 	form.preventDefault();//此处阻止提交表单
 	//alert("请选择上传照片");
       }
-    }
 */
+    }
   });
 
   var EmailView = App.ItemView.extend({
@@ -119,7 +119,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     events: {
       "click #update_rule[type=submit]" : "ruleUpdate",
       "keydown #copy-to" : "setCC",
-      "keydown #send" : "setTO"
+      "blur #copy-to" : "blurAction",
+      "keydown #send" : "setTO",
+      "blur #send" : "blurAction"
 
     },
     setCC:function(e){
@@ -135,7 +137,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	}
 	if(key==188||key==32||key==59) return false;
       }
-      return false;
+      return true;
     },
     setTO:function(e){
       var key = e.keyCode;
@@ -158,6 +160,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var title = $("#title").val();
       var cc =  _.compact($("#copy-to").val().split(";"));
       var to =  _.compact($("#send").val().split(";"));
+      console.info(cc);
       var enable = false;
       var message = "";
       flag = true;
@@ -188,7 +191,18 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if(flag){
 	App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
       }else{
-	alert(message+"邮件不合法");
+	App.ClipApp.EmailAdd.showActive(message+"    邮件不合法!");
+      }
+    },
+    blurAction:function(e){
+      var id = e.currentTarget.id;
+      var str = $("#"+id).val();
+      if(str){
+	var arr = $("#send").val().split(";");
+	var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
+	arr[arr.length-1] = str1;
+	arr = _.compact(arr);
+	$("#"+id).val(arr.join(";")+";");
       }
     }
   });
@@ -294,7 +308,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var faceView = new FaceView({model: faceModel});
 	  UserEdit.faceRegion.show(faceView);
 	});
-	$("#post_frame").load(function(){ // 加载图片
+	$("#post_frame_face").load(function(){ // 加载图片
 	  var returnVal = this.contentDocument.documentElement.textContent;
 	  if(returnVal != null && returnVal != ""){
 	    var returnObj = eval(returnVal);
@@ -322,6 +336,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       return false;
     }else{
       if( sender.files &&sender.files[0] ){
+	$("#confirm_face").show();
 	var img = document.getElementById('myface' );
 //	var small_img = document.getElementById("face-image");
 	if (window.webkitURL && window.webkitURL.createObjectURL) {//兼容chrmo图片本地预览功能
@@ -331,7 +346,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  img.src = window.URL.createObjectURL(sender.files[0]);
 //	  small_img.src = window.URL.createObjectURL(sender.files[0]);
 	}
-	$("#confirm_face").toggle();
 	return true;
       }
       return false;
@@ -384,7 +398,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   UserEdit.close = function(){
     App.mysetRegion.close();
-    location.reload();
   };
 
   App.vent.bind("app.clipapp.useredit:show", function(uid){
@@ -446,7 +459,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.bind("initialize:after", function(){
-//    UserEdit.showUserEdit(App.util.getMyUid());
+//   UserEdit.showUserEdit(App.util.getMyUid());
   });
 
   return UserEdit;

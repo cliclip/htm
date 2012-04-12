@@ -56,7 +56,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     },
     submit:function(evt){
       evt.preventDefault();
-      var clip = this.model.get("clip");
       var text = $("#reclip_text").val();
       var main_tag = [];
       for(var i=1;i<7;i++){
@@ -67,23 +66,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var tag = _.without($("#obj_tag").val().split(","),"");
       tag = _.union(tag, main_tag);
       if($("#checkbox").attr("checked")){
-	if(clip){
-	  clip.note = [{text:text}];
-	  clip.tag = tag;
-	  clip.public = "false";
-	}
 	var params = {clip:{note: [{text:text}],tag:tag,"public":"false"}};
       }else{
-	if(clip){
-	  clip.note = [{text:text}];
-	  clip.tag = tag;
-	}
 	var params = {clip:{note: [{text:text}],tag:tag}};
       }
       if(this.model.get("model") == "clip"){
-	App.vent.trigger("app.clipapp.reclip:submit", this.model, params,clip);
+	App.vent.trigger("app.clipapp.reclip:submit", this.model, params);
       }else if (this.model.get("model") == "tag"){
-	App.vent.trigger("app.clipapp.reclip_tag:submit", this.model, params,clip);
+	App.vent.trigger("app.clipapp.reclip_tag:submit", this.model, params);
       }
     },
     cancel : function(e){
@@ -92,10 +82,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     }
   });
 
-  var reclipSave = function(reclipmodel,params,clip){
+  var reclipSave = function(reclipmodel,params){
+    var clip = reclipmodel.get("clip");
     var clipid = "";
     if(clip){
       clipid = reclipmodel.id;
+      clip.note = [{text:params.clip.text}];
+      clip.tag = params.clip.tag;
+      if(params.clip.public == "false")   clip.public = params.clip.public;
     }else{
       clipid = reclipmodel.get("user")+":"+reclipmodel.id;
     }
@@ -105,7 +99,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       success: function(model, res){
 	if(flag){
 	  if(clip){
-	    clip.reprint_count = clip.reprint_count+1;
+	    clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
 	    model.set({clip:clip});
 	  }
 	  App.vent.trigger("app.clipapp.cliplist:showlist",null,"reclip");
@@ -134,10 +128,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   };
 
   Reclip.show = function(model, user, tag){
-    console.info(model);
     flag = true;
     if(model){
-      console.log(model);
       model.set("model", "clip");
       var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);

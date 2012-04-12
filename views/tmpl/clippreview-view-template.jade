@@ -5,8 +5,7 @@ script(type="text/template",id="clippreview-view-template")
     hgroup.clearfix.
       <a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
         <div class="user_info_small">
-          <img src="<%=App.util.face_url(recommend.user.face)%>" width="50" height="50"/>
-          <%=recommend.user.name%>
+          <img src="<%=App.util.face_url(recommend.user.face)%>" title="<%=recommend.user.name%>"/>
         </div>
       </a>&nbsp;&nbsp;
       <div class="user_text">
