@@ -83,15 +83,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     editClose:function(){
       FaceEdit.close();
-    }
-/*				       ,
+    },
     submit:function(form){
-      if(!flag){
+      	form.preventDefault();//此处阻止提交表单
+/*      if(!flag){
 	form.preventDefault();//此处阻止提交表单
 	//alert("请选择上传照片");
       }
-    }
 */
+    }
   });
 
   var EmailView = App.ItemView.extend({
@@ -294,7 +294,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var faceView = new FaceView({model: faceModel});
 	  UserEdit.faceRegion.show(faceView);
 	});
-	$("#post_frame").load(function(){ // 加载图片
+	$("#post_frame_face").load(function(){ // 加载图片
 	  var returnVal = this.contentDocument.documentElement.textContent;
 	  if(returnVal != null && returnVal != ""){
 	    var returnObj = eval(returnVal);
@@ -322,6 +322,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       return false;
     }else{
       if( sender.files &&sender.files[0] ){
+	$("#confirm_face").show();
 	var img = document.getElementById('myface' );
 //	var small_img = document.getElementById("face-image");
 	if (window.webkitURL && window.webkitURL.createObjectURL) {//兼容chrmo图片本地预览功能
@@ -331,7 +332,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  img.src = window.URL.createObjectURL(sender.files[0]);
 //	  small_img.src = window.URL.createObjectURL(sender.files[0]);
 	}
-	$("#confirm_face").toggle();
 	return true;
       }
       return false;
