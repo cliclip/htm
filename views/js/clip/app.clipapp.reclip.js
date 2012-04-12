@@ -153,7 +153,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       reclipModel.onChange(function(reclipModel){
 	if(!reclipModel.get("count")){
 	  // 现在只是公用该事件，事件名称有待改进
-	  App.vent.trigger("app.clipapp.emailadd:success","当前用户该tag下还没有数据");
+	  App.vent.trigger("app.clipapp.message:alert","当前用户该tag下还没有数据");
 	}else{
 	  // 有count表示可以收到数据
 	  reclipModel.set("model", "tag");

@@ -316,9 +316,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.onUploadImgChange = function(sender){
-    console.info("imagechange");
+    // console.info("imagechange");
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-       alert('图片格式无效！');
+      App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
       return false;
     }else{
       if( sender.files &&sender.files[0] ){
@@ -343,7 +343,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       url: P+"/user/"+ editModel.id+"/face",
       type: "POST",
       success:function(model,res){
-	alert("上传成功!");
+	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
 	App.vent.trigger("app.clipapp.useredit:facesuccess");
 	$("#confirm_face").hide();
       },

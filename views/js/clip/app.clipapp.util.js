@@ -7,6 +7,11 @@ App.util = (function(){
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
   };
 
+  // 判断当前的用户和传过来的参数是否是同一人
+  util.auth = function(uid){
+    return util.getMyUid() == uid;
+  };
+
   util.getImg_upUrl = function(){
     return P + '/user/'+util.getMyUid()+'/image';
   };
@@ -56,7 +61,8 @@ App.util = (function(){
 	  html = html.replace(rg,"");
 	}else{
 	  var text = html.substring(0,i);
-	  text = text.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	  text = text.replace(/(^\s*)|(\s*$)/g,"");// .replace(/<br*?>/,"");
+	  // 先保留<br />标签
 	  content.push({text:text});
 	  html = html.substring(i,html.length);
 	}

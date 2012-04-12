@@ -75,7 +75,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  }
 	});
       }else{
-	alert("图片格式无效");
+	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
       }
     },
     upFormat:function(){ // 进行正文抽取
