@@ -1,9 +1,19 @@
 App.util = (function(){
   var util = {};
   var paramslength=0,flag=true;
+  var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
     var cookie = document.cookie;
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
+  };
+
+  // 判断当前的用户和传过来的参数是否是同一人
+  util.auth = function(uid){
+    return util.getMyUid() == uid;
+  };
+
+  util.getImg_upUrl = function(){
+    return P + '/user/'+util.getMyUid()+'/image';
   };
 
   util.url = function(imageid){
@@ -23,7 +33,6 @@ App.util = (function(){
     var link = /http:\/\//;
     var pre = /<pre.*?>/;
     var content = [];
-
     // 此处的html只包含简单的p标签和span标签 [可是还存在像;nbsp这类内容]
     // <b></b>也没有处理过滤
     while(html != ""){
@@ -52,7 +61,8 @@ App.util = (function(){
 	  html = html.replace(rg,"");
 	}else{
 	  var text = html.substring(0,i);
-	  text = text.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	  text = text.replace(/(^\s*)|(\s*$)/g,"");// .replace(/<br*?>/,"");
+	  // 先保留<br />标签
 	  content.push({text:text});
 	  html = html.substring(i,html.length);
 	}
@@ -76,7 +86,9 @@ App.util = (function(){
 	  case 'text':
 	    html += '<p>' + content[i][key] + '</p>';break;
 	  case 'image':
-	    html += '<p><img src=' + util.url(content[i][key]) + '></img></p>';
+	    html +=
+	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:485px;max-height:490px;">'
+	    + '</img></p>';
 	    break;
 	  case 'code':
 	    html += '<pre> ' + content[i][key] + '</pre>';break;
@@ -107,6 +119,7 @@ App.util = (function(){
   };
 
   util.generatePastTime = function(time){
+    if(!time) return null;
     var ftime = new Date(time);
     var ttime = new Date();
     return subTimes(ftime,ttime);
@@ -174,7 +187,12 @@ App.util = (function(){
       }
     });
   });
-  var getMessage = {};
+  var getMessage = {
+    auth: {
+      not_exist: "",
+      not_match: ""
+    }
+  };
 
   getMessage["login_success"] = "登录成功";
   getMessage["register_success"] = "注册成功";

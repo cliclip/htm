@@ -2,7 +2,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
   var originalFace;
-  var flag = false;
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
     defaults: {
@@ -66,8 +65,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#faceEdit-view-template",
     events: {
       "click .resetUserName" : "setName",
-      "click #popup_ContactClose":"editClose",
-      "click #confirm[type=submit]":"submit"
+      "click #popup_ContactClose":"editClose"
+ //     "click #confirm_face[type=submit]":"submit"
     },
     setName: function(e){
       if($("#set-name").html()=="您还没有用户名"){
@@ -86,10 +85,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       FaceEdit.close();
     },
     submit:function(form){
-      if(!flag){
+      	form.preventDefault();//此处阻止提交表单
+/*      if(!flag){
 	form.preventDefault();//此处阻止提交表单
 	//alert("请选择上传照片");
       }
+*/
     }
   });
 
@@ -126,9 +127,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var str = $("#copy-to").val();
       var last_str = str.charAt(str.length - 1);
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==188||key==59)){
-	$("#copy-to").val(str+";");
+	if(str){
+	  var arr = _.compact($("#copy-to").val().split(";"));
+	  var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
+	  arr[arr.length-1] = str1;
+	  $("#copy-to").val(arr.join(";")+";");
+	}
 	if(key==188||key==32||key==59) return false;
       }
+      return false;
     },
     setTO:function(e){
       var key = e.keyCode;
@@ -136,9 +143,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var last_str = str.charAt(str.length - 1);
       var penultimate = str.charAt(str.length -2,1);
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59||key==188)){
-	$("#send").val(str+";");
+	if(str){
+	  var arr = _.compact($("#send").val().split(";"));
+	  var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
+	  arr[arr.length-1] = str1;
+	  $("#send").val(arr.join(";")+";");
+	}
 	if(key==188||key==59||key==32) return false;
       }
+      return true;
     },
     ruleUpdate: function(){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
@@ -215,57 +228,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
 
-  UserEdit.showUserEdit = function(uid){
-    var editModel = new EditModel({id:uid});
-    var editView = new EditView({model: editModel});
-    App.mysetRegion.show(editView);
-    UserEdit.showFace(uid);
-    UserEdit.showEmail(uid);
-    UserEdit.showRule(uid);
-    UserEdit.showPassEdit(uid);
-  };
-
-  UserEdit.showFace = function(uid){
-    var faceModel = new FaceEditModel({id:uid});
-    UserEdit.faceRegion = new App.Region({
-      el:".left_bar"
-    });
-    faceModel.fetch({
-      success:function(){
-	//console.info("originalFace:" + editModel.get("face"));
-	originalFace = faceModel.get("face");
-	var user = faceModel.get("id");
-	var url = P+"/user/" + user + "/image";
-	faceModel.set("actUrl",url);
-	faceModel.onChange(function(faceModel){
-	  var faceView = new FaceView({model: faceModel});
-	  UserEdit.faceRegion.show(faceView);
-	});
-	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var currentFace = returnObj[1][0];
-	      if(!flag){ //flag为true时图片改变并有效，为false时图片没改变或者无效
-		FaceEdit.close();
-	      }else{
-		if(currentFace){
-		  var facemodel = new FaceEditModel({id:user});
-		  if(originalFace){
-		    UserEdit.removeFace(facemodel,originalFace);
-		  }
-		  UserEdit.saveFace(facemodel,{face:currentFace});
-		}
-	      }
-	    }
-	  }
-	});
-      },
-      error:function(){}
-    });
-  };
-
   UserEdit.showEmail = function(uid){
     var emailModel = new EmailEditModel({id:uid});
     UserEdit.emailRegion = new App.Region({
@@ -306,21 +268,73 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.passeditRegion.show(passView);
   };
 
+  UserEdit.showUserEdit = function(uid){
+    var editModel = new EditModel({id:uid});
+    var editView = new EditView({model: editModel});
+    App.mysetRegion.show(editView);
+    UserEdit.showFace(uid);
+    UserEdit.showEmail(uid);
+    UserEdit.showRule(uid);
+    UserEdit.showPassEdit(uid);
+  };
+
+  UserEdit.showFace = function(uid){
+    var faceModel = new FaceEditModel({id:uid});
+    UserEdit.faceRegion = new App.Region({
+      el:".left_bar"
+    });
+    faceModel.fetch({
+      success:function(){
+	//console.info("originalFace:" + editModel.get("face"));
+	originalFace = faceModel.get("face");
+	var user = faceModel.get("id");
+	var url = P+"/user/" + user + "/upload_face";
+	faceModel.set("actUrl",url);
+	faceModel.onChange(function(faceModel){
+	  var faceView = new FaceView({model: faceModel});
+	  UserEdit.faceRegion.show(faceView);
+	});
+	$("#post_frame_face").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var currentFace = returnObj[1][0];
+	      if(currentFace){
+		var facemodel = new FaceEditModel({id:user});
+		if(originalFace){
+		  UserEdit.removeFace(facemodel,originalFace);
+		}
+		UserEdit.saveFace(facemodel,{face:currentFace});
+	      }
+	    }
+	  }
+	});
+      },
+      error:function(){}
+    });
+  };
 
   UserEdit.onUploadImgChange = function(sender){
-
+    // console.info("imagechange");
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-       alert('图片格式无效！');
-      flag = false;
-      return flag;
+      App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      return false;
     }else{
       if( sender.files &&sender.files[0] ){
-	var objPreview = document.getElementById('myface' );
-	objPreview.src = window.URL.createObjectURL(sender.files[0]);
-	flag =true;
-	return flag;
+	$("#confirm_face").show();
+	var img = document.getElementById('myface' );
+//	var small_img = document.getElementById("face-image");
+	if (window.webkitURL && window.webkitURL.createObjectURL) {//兼容chrmo图片本地预览功能
+	  img.src = window.webkitURL.createObjectURL(sender.files[0]);
+//	  small_img.src = window.webkitURL.createObjectURL(sender.files[0]);
+	}else if(window.URL.createObjectURL) {
+	  img.src = window.URL.createObjectURL(sender.files[0]);
+//	  small_img.src = window.URL.createObjectURL(sender.files[0]);
+	}
+	return true;
       }
-      return true;
+      return false;
     }
   };
 
@@ -329,9 +343,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       url: P+"/user/"+ editModel.id+"/face",
       type: "POST",
       success:function(model,res){
-	alert("上传成功!");
+	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
 	App.vent.trigger("app.clipapp.useredit:facesuccess");
-	flag = false;
+	$("#confirm_face").hide();
       },
       error:function(model,res){
 	//console.info("error!!!!!!!!!!");
@@ -432,7 +446,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.bind("initialize:after", function(){
-    // UserEdit.show();
+//    UserEdit.showUserEdit(App.util.getMyUid());
   });
 
   return UserEdit;

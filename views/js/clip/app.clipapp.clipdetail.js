@@ -8,6 +8,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     url: function(){
       return P+"/clip/"+this.id;
+    },
+    // 跟cliplist一致，使得model.id = "uid:id"
+    parse: function(resp){
+      resp.id = resp.user+":"+resp.id;
+      return resp;
     }
   });
 
@@ -17,16 +22,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template: "#detail-view-template",
     events: {
       "click .operate" : "Operate",
-      "click .masker_layer" : "Close" // 点击detail下的层，便隐藏
+      "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
+      "click .close_w":"Close"
     },
     Operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
+      var cid = this.model.id;
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment':
@@ -71,7 +76,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var id = e.currentTarget.id;
       $("#reply_"+id).css("display","block");
-      $(e.currentTarget).css("background","#f0f");
+      // $(e.currentTarget).css("background","#f0f");
     },
     resume : function(e){
       e.preventDefault();

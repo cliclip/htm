@@ -8,9 +8,11 @@ script(type="text/template",id="editDetail-view-template")
         div.button_frame
           iframe(name="post_frame",id="post_frame",style="display:none;",mce_style="display:none;")
           |<form method="POST" id="img_form" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
-          span.file
-            button.upload_img#localImg 上传图片
-            input#formUpload.hifile(type="file",name="image")
+          |<span class="file">
+          |<button class="upload_img" id="localImg">上传图片</button>
+          |<input id="formUpload" class="hifile" type="file" name="image"/>
+          |</span>
+          |</form>
           span
             button.link_img 链接图片
             span.url_text.img_upload_span(style="display:none;")
@@ -18,6 +20,7 @@ script(type="text/template",id="editDetail-view-template")
               input.btn(type="submit",value="确定")
           span
             button.format 整理格式
+          span.close_w
         | 改
     div.pop_left
     div.pop_right

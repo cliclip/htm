@@ -63,8 +63,8 @@ $(function() {
 	}
       }
       function orientation(event) {
-	if (event.beta) {
-	  game.roll(beta, gamma);
+	if (event.beta || event.gamma) {
+	  game.roll(event.beta, event.gamma);
 	}
       }
 
@@ -119,11 +119,14 @@ $(function() {
 	chkStage: function() {
 	  try{
   	    if (stage[0] != window.screenX || stage[1] != window.screenY) {
-	      var deltaX = (window.screenX - stage[0]) << 6; // * 64
-	      var deltaY = (window.screenY - stage[1]) << 6; // * 64
+	      var deltaX = (window.screenX - stage[0]);
+	      var deltaY = (window.screenY - stage[1]);
 	      stage[0] = window.screenX;
 	      stage[1] = window.screenY;
-	      game.shake(deltaX, deltaY);
+	      if (Math.abs(deltaX) < 2560 && Math.abs(deltaY) < 1600) {
+		// windows minimize is using move, WQXGA
+		game.shake(deltaX << 6, deltaY << 6); // * 64 as delta
+	      }
 	    }
 	    if (stage[2] != window.innerWidth || stage[3] != window.innerHeight) {
 	      stage[2] = window.innerWidth;
@@ -400,6 +403,8 @@ $(function() {
 	  });
 	},
 	shake : function(deltaX, deltaY){
+	  // console.log("shake(%s,%s)", deltaX, deltaY);
+	  // console.log("x:%s,y:%s", window.screenX, window.screenY);
 	  delta.x = deltaX;
 	  delta.y = deltaY;
 	  _(balls).each(function(ball){ ball.get("body").WakeUp(); });
