@@ -24,7 +24,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i] = {clip: clip};
 	  resp[i].id = clip.user.id+":"+clip.id;
 	}else{
-	  resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
+	  if(resp[i].recommend){
+	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
+	  }else{
+	    resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
+	  }
 	}
       }
       return resp;
