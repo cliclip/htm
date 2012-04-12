@@ -68,13 +68,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
     show_detail: function(){
-      App.vent.trigger("app.clipapp:clipdetail",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:clipdetail",clipid);
     },
     commentAction: function(){
-      App.vent.trigger("app.clipapp:comment",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:comment",clipid);
     },
     reclipAction: function(){
-      App.vent.trigger("app.clipapp:reclip",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:reclip",clipid);
     },
 /*    mouseover: function(e){
       e.preventDefault();

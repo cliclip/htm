@@ -86,7 +86,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     var clip = reclipmodel.get("clip");
     var clipid = "";
     if(clip){
-      clipid = reclipmodel.id;
+      clipid = clip.user.id+":"+clip.id;
       clip.note = [{text:params.clip.text}];
       clip.tag = params.clip.tag;
       if(params.clip.public == "false")   clip.public = params.clip.public;
