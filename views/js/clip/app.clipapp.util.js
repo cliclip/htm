@@ -181,7 +181,12 @@ App.util = (function(){
       }
     });
   });
-  var getMessage = {};
+  var getMessage = {
+    auth: {
+      not_exist: "",
+      not_match: ""
+    }
+  };
 
   getMessage["login_success"] = "登录成功";
   getMessage["register_success"] = "注册成功";
