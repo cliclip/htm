@@ -18,8 +18,8 @@ html
       _.extend(bubbles, Backbone.Events);
       bubbles.on("reset", function(options){
         var bw = document.getElementById('bubbles').contentDocument.defaultView;
-        if(bw.reset){
-          bw.reset(options);
+        if(bw.resetTags){
+          bw.resetTags(options);
         } else { // waiting for bubble iframe load
           setTimeout(function(){ bubbles.trigger("reset", options); }, 100);
         }
