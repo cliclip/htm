@@ -39,7 +39,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 //	console.log($("#name").val());
 	if($("#name").val() == $(li[0]).text()){
 	  this.$("#name").val($(li[0]).text());
-	  $("#imgId").attr("src",$(li[0]).attr("title"));
+	  $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
 	  $("#imgId").css("display","block");
 	  uid=li[0].id;
 	  this.$("#name_listDiv").empty();
@@ -53,13 +53,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var name=document.getElementById(uid).innerHTML;
       $("#imgId").css("display","none");
       this.$("#name").val(name);
-      $("#imgId").attr("src",document.getElementById(uid).title);
+      $("#imgId").attr("src",App.util.face_url(document.getElementById(uid).title));
       $("#imgId").css("display","block");
       this.model.set({uid:uid});
       this.$("#name_listDiv").empty();
     },
     nameListAction:function(evt){
       $("#alert").css("display","none");
+      $("#imgId").css("display","none");
       var str = this.$("#name").val();
       var params = {q:str};
       App.vent.trigger("app.clipapp.recommend:lookup",params,this.model.id);
