@@ -97,15 +97,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       url: P+"/clip/"+clipid+"/reclip",
       type: "POST",
       success: function(model, res){
+	if(clip){
+	  clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
+	  model.set({clip:clip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist");
+	}
 	if(flag){
-	  if(clip){
-	    clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
-	    model.set({clip:clip});
-	    App.vent.trigger("app.clipapp.cliplist:showlist");
-	  }
 	  Reclip.close();
 	}
-	console.info(model);
       },
       error:function(model, res){
 	console.info(res);
