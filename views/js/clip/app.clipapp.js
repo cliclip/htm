@@ -102,6 +102,9 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show(uid);
   });
 
+  App.vent.bind("app.clipapp:cliplist.refresh", function(uid, tag){
+    ClipApp.ClipList.showUserClips(uid, tag);
+  });
   // clipid有值 ==> 对单独clip的reclip 否则是对 user's tag下的clip的reclip
   App.vent.bind("app.clipapp:reclip", function(clipid, user, tag){
     var uid = getMyUid();
