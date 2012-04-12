@@ -260,7 +260,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection.comparator = function(model) {
       return model.get("clip").id;
     };
-      collection.add(model);
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
