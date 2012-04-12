@@ -43,25 +43,30 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     image_change:function(e){
       e.preventDefault();
       var flag = true;
-      $("#img_form").submit();
-      $("#post_frame").load(function (){
-	if(flag){
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var imgids = returnObj[1][0];
-	      //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	      var ids = imgids.split(":");
-	      var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
-	      App.ClipApp.Editor.insertImage("editor", {url: url});
-	      // }
+      var change = App.util.isImage("formUpload");
+      if(change){
+	$("#img_form").submit();
+	$("#post_frame").load(function (){
+	  if(flag){
+	    var returnVal = this.contentDocument.documentElement.textContent;
+	    if(returnVal != null && returnVal != ""){
+	      var returnObj = eval(returnVal);
+	      if(returnObj[0] == 0){
+		var imgids = returnObj[1][0];
+		//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+		var ids = imgids.split(":");
+		var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
+		App.ClipApp.Editor.insertImage("editor", {url: url});
+		// }
+	      }
 	    }
 	  }
-	}
-	flag = false;
+	  flag = false;
 
-    });
+	});
+      }else{
+	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      }
     },
     save: function(){
       var user = this.model.get("id");
@@ -87,7 +92,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  //console.info(response);
 	  App.vent.trigger("app.clipapp.cliplist:addshow", response);
 	  App.viewRegion.close();
-	  //location.reload();
 	  // 如何只刷新一个region的内容
 	},
 	error:function(response){

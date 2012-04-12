@@ -84,10 +84,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     note = clip.note;
     if(typeof(note) == "string"){
       text = note;
-    }else{
+    }else if(Array.isArray(note)){
       var ns = _(note).select(function(e){return e.text; })
 	.map(function(e){ return e.text; });
 	_(ns).each(function(n){ text += n+" "; });
+    }else if(note){
+      text = note.text; //来自于preview的数据
     }
     var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});
     var tag_obj = _.without(tags,tag_main);
@@ -147,12 +149,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   App.vent.bind("app.clipapp.memo:success",function(model,data){
     var clip = model.get("clip");
     if(clip){
-      clip.note = data.note[0];
+      clip.note = data.note; // 之前写的是note[0] ?
       clip.tag = data.tag;
       clip.public = data.public;
       model.set({clip:clip});
     }else{
-      model.set({note:data.text});
+      model.set({note:data.note}); // 之前写的是data.text
       model.set({tag:data.tag});
       model.set({"public":data.public});
     }
