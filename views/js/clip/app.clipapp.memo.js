@@ -14,9 +14,9 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "click .close_w"         :"cancleAction"
     },
     maintagAction:function(evt){
-      var id = evt.target.id;
+      var id = evt.currentTarget.id;
       var style =document.getElementById(id).className;
-      if(style != "size48 orange_48"){
+      if(style == "size48 white_48"){
 	document.getElementById(id).className="size48 orange_48";
       }else if(style == "size48 orange_48"){
 	document.getElementById(id).className="size48 white_48";
@@ -42,8 +42,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var _data = {};
       var main_tag = [];
       for(var i=1;i<7;i++){
-	if(document.getElementById("main_tag_"+i).className == "size48 orange_48"){
-	  main_tag.push($("#main_tag_"+i).html());
+	if(document.getElementById("maintag_"+i).className == "size48 orange_48"){
+	  main_tag.push($("#maintag_"+i).html());
 	}
       };
       var obj_tag = $("#obj_tag").val().split(",");
@@ -107,12 +107,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     if(!_.isEmpty(tag_main)){
       for(i=0;i < tag_main.length; i++){
 	switch(tag_main[i]){
-	  case "好看":document.getElementById("main_tag_1").className="size48 orange_48";break;
-	  case "好听":document.getElementById("main_tag_2").className="size48 orange_48";break;
-	  case "好吃":document.getElementById("main_tag_3").className="size48 orange_48";break;
-	  case "好玩":document.getElementById("main_tag_4").className="size48 orange_48";break;
-	  case "精辟":document.getElementById("main_tag_5").className="size48 orange_48";break;
-	  case "酷":document.getElementById("main_tag_6").className="size48 orange_48";break;
+	  case "好看":document.getElementById("maintag_1").className="size48 orange_48";break;
+	  case "好听":document.getElementById("maintag_2").className="size48 orange_48";break;
+	  case "好吃":document.getElementById("maintag_3").className="size48 orange_48";break;
+	  case "好玩":document.getElementById("maintag_4").className="size48 orange_48";break;
+	  case "精辟":document.getElementById("maintag_5").className="size48 orange_48";break;
+	  case "酷":document.getElementById("maintag_6").className="size48 orange_48";break;
 	}
       }
     };

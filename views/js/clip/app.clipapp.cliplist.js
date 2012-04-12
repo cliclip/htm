@@ -99,7 +99,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var cid = this.model.id;
-      console.log(this.model.toJSON());
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;

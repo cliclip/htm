@@ -3,10 +3,9 @@ script(type="text/template",id="following-top-view-template")
     ul.tab_frame
       li(id="follower") 追我的人
       li.tab(id="following") 我追的人
-    ul.user_list_info
-      li.user
-        div.info
-          | no one following
+    ul.empty_user
+      div.msg
+        p 你还没有追任何人哟
 script(type="text/template",id="following-view-template")
   section.follow_frame
     ul.user_list
@@ -20,5 +19,5 @@ script(type="text/template",id="following-view-template")
         div.tags.tag_box
           <%for(var i=0;i<tag.length;i++){%>
           span.size48.blue_48
-            | <a href="#user/<%=id%>/tag/<%=tag[i]%>"><%=tag[i]%></a>
+            | <%if(tag[i]== "*"){%><a href="#user/<%=id%>">所有<%}else{%><a href="#user/<%=id%>/tag/<%=tag[i]%>"><%=tag[i]%><%}%></a>
           <%}%>
