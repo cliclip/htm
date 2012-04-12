@@ -48,7 +48,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
    });
 
    App.vent.bind("app.clipapp.clipdelete:success", function(model){
-    App.vent.trigger("app.clipapp.cliplist:changeshow", model);
+    App.vent.trigger("app.clipapp.cliplist:removeshow", model);
      ClipDelete.close();
    });
 

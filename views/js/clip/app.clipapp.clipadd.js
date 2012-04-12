@@ -81,14 +81,17 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	url: P+"/clip",
 	type: 'POST',
 	success:function(response){
+	  /*
 	  var cid = user+":";
 	  // 临时处理
 	  for(var i in response.toJSON()){
 	    if(i != "content" && i!= "id")
 	      cid += i;
 	  }
+	   */
+	  //console.info(response);
+	  App.vent.trigger("app.clipapp.cliplist:addshow", response);
 	  App.viewRegion.close();
-	  // location.reload();
 	  // 如何只刷新一个region的内容
 	},
 	error:function(response){

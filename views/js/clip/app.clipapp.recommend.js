@@ -16,8 +16,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     className:"",
     template:"#recommend-view-template",
     events:{
-      "click #name_list"     :  "getUserAction",
-      "keypress #name"       :  "getUser",
+      "click .list"     :  "getUserAction",
+      "blur  #name"          :  "getUser",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
       "mouseover #name_list" :  "MouseOver",
@@ -28,14 +28,33 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "click .close_w"        : "cancelAction"
     },
     getUser:function(e){
-
+      var uid="";
+      $("#imgId").css("display","none");
+      var div=$(".action-info");
+      _.each(div,function(e){
+	var li = e.children;
+//	console.log(li[0].id);
+//	console.log($(li[0]).attr("title"));
+//	console.log($(li[0]).text());
+//	console.log($("#name").val());
+	if($("#name").val() == $(li[0]).text()){
+	  this.$("#name").val($(li[0]).text());
+	  $("#imgId").attr("src",$(li[0]).attr("title"));
+	  $("#imgId").css("display","block");
+	  uid=li[0].id;
+	  this.$("#name_listDiv").empty();
+	}
+      });
+       this.model.set({uid:uid});
     },
     getUserAction:function(evt){
       // 这里是必须要触发才会取得uid
       var uid=evt.target.id;
       var name=document.getElementById(uid).innerHTML;
+      $("#imgId").css("display","none");
       this.$("#name").val(name);
       $("#imgId").attr("src",document.getElementById(uid).title);
+      $("#imgId").css("display","block");
       this.model.set({uid:uid});
       this.$("#name_listDiv").empty();
     },
@@ -88,6 +107,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   var NameListCollectionView=App.CollectionView.extend({
     tagName:"div",
+    className:"list",
     itemView:NameListItemView
   });
   var showNameList=function(params,clipid){

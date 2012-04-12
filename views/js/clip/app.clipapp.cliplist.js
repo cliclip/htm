@@ -247,8 +247,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
     App.listRegion.show(clipListView);
   });
-  App.vent.bind("app.clipapp.cliplist:changeshow",function(model){
+  App.vent.bind("app.clipapp.cliplist:removeshow",function(model){
     var collection = clipListView.collection.remove(model);
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+  });
+  App.vent.bind("app.clipapp.cliplist:addshow",function(model){
+    var collection = clipListView.collection.add(model);
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
