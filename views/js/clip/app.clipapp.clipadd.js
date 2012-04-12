@@ -7,9 +7,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   // 为了刷新collection
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
-      clip :{
-
-      }
+      clip :{}
     },
     url: function(){
       return P+"/clip";
@@ -71,7 +69,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     });
     },
     save: function(){
-      var user = this.model.get("id");
       var clip = {};
       var html = App.ClipApp.Editor.getContent("editor");
       clip.content = App.util.HtmlToContent(html);
@@ -83,19 +80,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	url: P+"/clip",
 	type: 'POST',
       success:function(model,res){
-	  /*
-	  var cid = user+":";
-	  // 临时处理
-	  for(var i in response.toJSON()){
-	    if(i != "content" && i!= "id")
-	      cid += i;
-	  }
-	   */
-	  App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	  App.viewRegion.close();
-	  //location.reload();
-	  // 如何只刷新一个region的内容
-	},
+	clip.id = App.util.getMyUid()+":"+res;
+	model.set({clip:clip});
+	App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	App.viewRegion.close();
+      },
       error:function(model,error){
 	  // 出现错误，触发统一事件
 	  App.vent.trigger("app.clipapp.clipadd:error");
