@@ -220,7 +220,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // utils
-
   function mkTag(tags, followss, tag, self){
     // DEBUG PURPOSE
     var follows = _.without(followss,'*');
