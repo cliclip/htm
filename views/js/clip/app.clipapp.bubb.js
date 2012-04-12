@@ -160,7 +160,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // GET $HOST/$BASE/_/user/0/tag/0..19
     // var follows = ["动漫", "科技"];
     // var tags = ["电影", "音乐", "美女", "穿越", "户外", "流行"];
-    var bubbModel = new BubbModel({id: "1"});
+    var bubbModel = new BubbModel({id: "2"});
     var url = P+"/user/"+bubbModel.id+"/tag/0..19";
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){

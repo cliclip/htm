@@ -35,7 +35,7 @@ script(type="text/template",id="clippreview-view-template")
           i.icon_quote
           | <%=clip.reply_count?clip.reply_count:0%> 回复
       div.user_info_small
-        <% if(clip.user){ %>
+        <% if(clip.user && App.ClipApp.ClipList.flag_show_user){ %>
         div.user_more
           | <a class="author" href="/#user/<%=clip.user.id%>">
           |   <img src="<%=App.util.face_url(clip.user.face)%>" width="50" height="50" />

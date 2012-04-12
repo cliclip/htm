@@ -170,7 +170,7 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:query", function(word, tag){
     var userid = ClipApp.Face.getUserId();
     var uid = getMyUid();
-    if(uid == userid){
+    if(uid == userid && uid!=null && userid!=null){
       App.vent.trigger("app.clipapp.routing:myquery:show", word);
       ClipApp.myQuery(word, tag);
     }else{
