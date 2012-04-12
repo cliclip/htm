@@ -239,11 +239,14 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function mkUrl(tag){
     var url = Backbone.history.fragment;
     var i = url.indexOf("/tag");
-    if(i > 0){
+    if(i >= 0){
       url = url.substr(0, i);
       return url += "/tag/"+tag;
     }else{
-      return url = "/user/"+_uid+"/tag/"+tag;
+      if(url.indexOf("my") >= 0)
+	return "/my/tag/"+tag;
+      else
+	return "/user/"+_uid+"/tag/"+tag;
     }
   }
 

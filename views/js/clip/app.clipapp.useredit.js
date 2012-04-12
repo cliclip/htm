@@ -127,7 +127,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var str = $("#copy-to").val();
       var last_str = str.charAt(str.length - 1);
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==188||key==59)){
-	$("#copy-to").val(str+";");
+	if(str){
+	  var arr = _.compact($("#copy-to").val().split(";"));
+	  var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
+	  arr[arr.length-1] = str1;
+	  $("#copy-to").val(arr.join(";")+";");
+	}
 	if(key==188||key==32||key==59) return false;
       }
       return false;
@@ -138,7 +143,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var last_str = str.charAt(str.length - 1);
       var penultimate = str.charAt(str.length -2,1);
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59||key==188)){
-	$("#send").val(str+";");
+	if(str){
+	  var arr = _.compact($("#send").val().split(";"));
+	  var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
+	  arr[arr.length-1] = str1;
+	  $("#send").val(arr.join(";")+";");
+	}
 	if(key==188||key==59||key==32) return false;
       }
       return true;
@@ -436,7 +446,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.bind("initialize:after", function(){
-    // UserEdit.show();
+//    UserEdit.showUserEdit(App.util.getMyUid());
   });
 
   return UserEdit;

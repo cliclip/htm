@@ -22,7 +22,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
     template: "#userface-view-template",
     events: {
       "click .stop": "followAction",
-      "click .zhui": "stopAction"
+      "click .zhui": "stopAction",
+      "click .user_list": "userList"
     },
     followAction: function(){
       if(!App.util.getMyUid()){
@@ -37,19 +38,28 @@ App.ClipApp.Face = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.bubb:unfollow",'*',this.model.id);
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
+    },
+    userList: function(){
+      Face.showUser(this.model.id);
     }
   });
 
   var getUser=function(uid,callback){
-    user_id = uid;
+    var url = "";
+    if(uid == App.util.getMyUid()){
+      url = P + "/my/info";
+    }else{
+      url = P + "/user/"+ uid + "/info";
+    }
     var user=new UserModel();
-    user.fetch({url:P+"/user/"+ uid + "/info"});
+    user.fetch({url:url});
     user.onChange(function(user){
       callback(user);
     });
   };
 
   Face.showUser = function(uid){
+    user_id = uid;
     if(uid){
       getUser(uid, function(user){
 	App.ClipApp.Bubb._getUserTags(uid,function(tag,follow){
