@@ -10,7 +10,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     url   : P+"/lookup/0..5"
   });
 
-  var RecommModel = App.Model.extend({});
+  //var RecommModel = App.Model.extend({});
   var RecommView = App.ItemView.extend({
     tagName:"div",
     className:"",
@@ -136,8 +136,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     });
   };
 
-  Recommend.show = function(cid, model,error){
-    var recommModel = new RecommModel({id: cid});
+  Recommend.show = function(recommModel,model,error){
+    //var recommModel = new RecommModel({id: cid});
     if (model) recommModel.set(model.toJSON());
     if (error) recommModel.set({"error":error});
     Recommend.nameListRegion = new App.Region({

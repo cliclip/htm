@@ -24,7 +24,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i] = {clip: clip};
 	  resp[i].id = clip.user.id+":"+clip.id;
 	}else{
-	  resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
+	  if(resp[i].recommend){
+	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
+	  }else{
+	    resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
+	  }
 	}
       }
       return resp;
@@ -103,7 +107,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", this.model);break;
 	case 'note'://注
@@ -252,7 +256,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(model){
-    var collection = clipListView.collection.add(model);
+    var collection = clipListView.collection;
+    collection.comparator = function(model) {
+      return model.get("clip").id;
+    };
+      collection.add(model);
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
