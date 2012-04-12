@@ -2,6 +2,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
   var originalFace;
+  UserEdit.margin_top = 0;
+  UserEdit.margin_left = 0;
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
     defaults: {
@@ -348,9 +350,18 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    if(img.width<img.height){
 	      preview_face.width = 240;
 	      preview_face.height = img.height*240/img.width;
+	      //console.info(preview_face);
+	      var top ="-" +  parseInt((preview_face.height-240)/2)+"px";
+	      $("#myface").css({"margin-top":top});
+	      //UserEdit.margin_top = parseInt((img.height-img.width)/2);
 	    }else{
+	      //console.info(preview_face);
 	      preview_face.height = 240;
 	      preview_face.width = img.width*240/img.height;
+	      var left="-" + parseInt((preview_face.width-240)/2)+"px";
+	      $("#myface").css({"margin-left":left});
+	      //UserEdit.margin_left = parseInt((img.width-img.height)/2);
+	      console.info(UserEdit.margin_left);
 	    }
 	    preview_face.src = img.src;
 	    //$(".head_img").css({"overflow":"hidden","text-align":"center"});
@@ -376,9 +387,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
 	//更新右上角的小头像
-	var img = document.getElementById('myface' );
-	var small_img = document.getElementById("face-image");
-        small_img.src = img.src;
+	//var img = document.getElementById('myface' );
+	//var small_img = document.getElementById("face-image");
+        //small_img.src = img.src;
 	$("#confirm_face").hide();
       },
       error:function(model,res){
