@@ -244,11 +244,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
   });
 
-  App.vent.bind("app.clipapp.cliplist:showlist",function(collection, age){
-    if(collection && !age){
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
+    if(collection){
       clipListView = new ClipListView({collection: collection});
-    }else if(age == "reclip"){
-
     }
     $("#list").masonry({
       itemSelector : '.clip',
@@ -263,10 +261,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(model){
     var collection = clipListView.collection;
-    collection.comparator = function(model) {
-      return model.get("clip").id;
-    };
-      collection.add(model);
+    collection.unshift(model);
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
