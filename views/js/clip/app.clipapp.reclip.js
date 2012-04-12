@@ -105,7 +105,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       success: function(model, res){
 	if(flag){
 	  if(clip){
-	    clip.reprint_count = clip.reprint_count+1;
+	    clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
 	    model.set({clip:clip});
 	  }
 	  App.vent.trigger("app.clipapp.cliplist:showlist",null,"reclip");

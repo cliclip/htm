@@ -73,7 +73,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	var clip = model.get("clip");
-	clip.reply_count = clip.reply_count+1;
+	clip.reply_count = clip.reply_count ? clip.reply_count+1 : 1;
 	model.set({clip:clip});
 	App.vent.trigger("app.clipapp.cliplist:showlist");
 	Comment.close();
