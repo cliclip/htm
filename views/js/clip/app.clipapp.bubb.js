@@ -78,7 +78,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       var bubbView = new BubbView();
       App.bubbRegion.show(bubbView);
     }
-    if (changeTags(last, tags, old_self, self)||!tags.follow) {
+    if (changeTags(last, tags, old_self, self)||_.isEmpty(tags.follows)) {
       resetTags(tags);
     } else if (changeDefault(last, tags)) {
       openTag(tags.default);

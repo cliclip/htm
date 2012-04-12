@@ -41,7 +41,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
-	  App.vent.trigger("app.clipapp:clipdelete", this);break;
+	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     },
     Close: function(){

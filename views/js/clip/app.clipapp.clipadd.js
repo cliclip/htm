@@ -74,7 +74,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       }
     },
     save: function(){
-      var clip = {};
+      var clip = this.model.get("clip");
       var html = App.ClipApp.Editor.getContent("editor");
       clip.content = App.util.HtmlToContent(html);
       clip.tag = this.model.get("tag");
@@ -86,6 +86,18 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	type: 'POST',
       success:function(model,res){
 	clip.id = App.util.getMyUid()+":"+res;
+	var content = {};
+	var text = _.detect(clip.content, function(e){ return e.text; });
+	if(text){
+	  text = text.text.slice(0,100);
+	  content.text = text;
+	}
+	var image = _.detect(clip.content, function(e){ return e.image; });
+	if(image){
+	  content.image = image.image;
+	}
+	clip.user = {};
+	clip.content = content;
 	model.set({clip:clip});
 	App.vent.trigger("app.clipapp.cliplist:addshow", model);
 	App.viewRegion.close();
