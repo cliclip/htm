@@ -157,11 +157,11 @@ App.util = (function(){
       var mt = $(".clearfix").offset().top;
       if(st > mt){
 	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	$(".return_top").fadeIn();
+	$(".return_top").show();
 	// show go-top while scroll
       } else {
 	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".return_top").fadeOut();
+	$(".return_top").show();
       }
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;
