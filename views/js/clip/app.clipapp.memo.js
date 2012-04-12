@@ -58,8 +58,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       if(this.model.get("model") == "update"){
 	App.vent.trigger("app.clipapp.memo:rememo", this, _data);
       }else if(this.model.get("model") == "add"){
-	// 触发新建clip中的注的事件
-	App.vent.trigger("app.clipapp.clipadd:memo", _data);
+	// 此处应该将注的内容放入 model中以便没有提交之前注可以直接使用
+	App.vent.trigger("app.clipapp.memo:success", this.model, _data);
       }
     },
     cancleAction:function(e){
@@ -68,23 +68,20 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
   });
 
-
-  ClipMemo.show = function(clipModel){
+  // 此处只有区分 update 和 add
+  ClipMemo.show = function(clipModel, type){
     var text = "";
-    var clip = clipModel.get("clip");
     var cid="",pub="",tags=[],note=[];
-    if(clip){
-      cid = clipModel.id;
-      pub = clip["public"];
-      tags = clip.tag;
-      note = [clip.note];
-    }else{
-      var user = clipModel.get("user");
-      cid = user+":"+clipModel.id;
-      pub = clipModel.get("public");
-      tags = clipModel.get("tag");
-      note = clipModel.get("note");
+    var clip = "";
+    if(type == "update"){
+      clip = clipModel.get("clip"); // 从preview中取
+      cid = clipModel.id; // 无论是preview还是detail都是 uid:id
     }
+    if(!clip)
+      clip = clipModel.toJSON(); // clipModel来自detail或者来自add没有clip
+    pub = clip["public"];
+    tags = clip.tag;
+    note = clip.note;
     if(typeof(note) == "string"){
       text = note;
     }else{
@@ -92,21 +89,18 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	.map(function(e){ return e.text; });
 	_(ns).each(function(n){ text += n+" "; });
     }
-    if(cid){
-      var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});
-      var tag_obj = _.without(tags,tag_main);
-      //  var clipmemoModel = new ClipMemoModel();
-      clipModel.set({note:text,model:"update"});
-      var clipmemoView = new ClipMemoView({model:clipModel,clipid:cid});
-      App.popRegion.show(clipmemoView);
-      if(pub == "false"){
-	$("#memo_private").attr("checked","true");
-      }
+    var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});
+    var tag_obj = _.without(tags,tag_main);
+    clipModel.set({note:text});
+    if(type == "update"){
+      clipModel.set({model:"update"});
     }else{
-      // var clipmemoModel = new ClipMemoModel();
-      clipModel.set({note:[],model:"add"});
-      var clipmemoView = new ClipMemoView({model: clipModel});
-      App.popRegion.show(clipmemoView);
+      clipModel.set({model:"add"});
+    }
+    var clipmemoView = new ClipMemoView({model:clipModel,clipid:cid});
+    App.popRegion.show(clipmemoView);
+    if(pub == "false"){
+      $("#memo_private").attr("checked","true");
     }
     if(!_.isEmpty(tag_main)){
       for(i=0;i < tag_main.length; i++){
@@ -144,10 +138,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	App.vent.trigger("app.clipapp.memo:error",model,res);
       }
     });
-  });
-
-  App.vent.bind("app.clipapp.clipadd:memo", function(){
-    App.vent.trigger("app.clipapp.memo:success");
   });
 
   App.vent.bind("app.clipapp.memo:cancel",function(){

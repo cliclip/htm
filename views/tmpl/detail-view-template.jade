@@ -16,13 +16,17 @@ script(type="text/template",id="detail-view-template")
           <i class="note operate" title="注"></i>
           <i class="refresh operate" title="转"></i>	   
         <% } %>
+        <span class="close_w"></span>
     div.pop_left
       ul.forward_log.
-        <%for(var i =0; i<users.length; i++){%>
+        <% for(var i =0; i<users.length; i++){%>
         <li class="user_head">
           <a href="#user/<%= users[i].id%>">
           <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
           </a>
+          <% if(i < users.length-1 ){ %>
+             <j class="join"></j>
+          <% } %>
         </li>
         <%}%>
     div.pop_right
@@ -39,17 +43,18 @@ script(type="text/template",id="detail-view-template")
         div.input_textarea
 
 script(type="text/template",id="showcomment-view-template")
-  div.user_head.
-    <img src=<%=App.util.face_url(user.face)%> />
-  dt.username.
-    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=App.util.generatePastTime(date)%>
+  div.user_head
+    <a href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
+  dt.username
+    <a href="#user/<%=user.id%>"><%= user.name %></a> <%=App.util.generatePastTime(date)%>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>"><%= text %>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
-    <% if(auth && (user.uid == auth || auth == clip_owner )){%>
+    <% if( auth && (user.uid == auth || auth == clip_owner )){
+    if ( "<%= text %>" != "此内容已被删除" ) {%>
     <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
-    <% } %>
+    <% } } %>
     </div>
     </div>
           

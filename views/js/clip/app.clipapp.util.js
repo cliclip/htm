@@ -1,9 +1,14 @@
 App.util = (function(){
   var util = {};
   var paramslength=0,flag=true;
+  var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
     var cookie = document.cookie;
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
+  };
+
+  util.getImg_upUrl = function(){
+    return P + '/user/'+util.getMyUid()+'/image';
   };
 
   util.url = function(imageid){
@@ -23,7 +28,6 @@ App.util = (function(){
     var link = /http:\/\//;
     var pre = /<pre.*?>/;
     var content = [];
-
     // 此处的html只包含简单的p标签和span标签 [可是还存在像;nbsp这类内容]
     // <b></b>也没有处理过滤
     while(html != ""){
@@ -76,7 +80,9 @@ App.util = (function(){
 	  case 'text':
 	    html += '<p>' + content[i][key] + '</p>';break;
 	  case 'image':
-	    html += '<p><img src=' + util.url(content[i][key]) + '></img></p>';
+	    html +=
+	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:485px;max-height:490px;">'
+	    + '</img></p>';
 	    break;
 	  case 'code':
 	    html += '<pre> ' + content[i][key] + '</pre>';break;
@@ -107,23 +113,22 @@ App.util = (function(){
   };
 
   util.generatePastTime = function(time){
+    if(!time) return null;
     var ftime = new Date(time);
     var ttime = new Date();
-        //console.info(ftime);
-        console.info(ttime);
-    return subTimes(ftime,ttime) + "前";
+    return subTimes(ftime,ttime);
   };
 
   subTimes = function(Ftime,Ttime){
     var dtime = (Ttime.getTime() - Ftime.getTime())/1000;
     var returnVal = "";
     if(dtime<60){//second
-      returnVal = dtime + "秒";
+      returnVal = dtime + "秒前";
     }else if(dtime>=60 && dtime<60*60){//minute
-      returnVal = Math.round(dtime/60) + "分";
+      returnVal = Math.round(dtime/60) + "分钟前";
     }else if(dtime>=60*60 && dtime<60*60*24){//hour
-      returnVal = Math.round(dtime/(60*60)) + "小时";
-    }else if(dtime>=60*60*24 && dtime<60*60*24*7){//day
+      returnVal = Math.round(dtime/(60*60)) + "小时前";
+  /*  }else if(dtime>=60*60*24 && dtime<60*60*24*7){//day
       returnVal = Math.round(dtime/(60*60*24)) + "天";
     }else if(dtime>=60*60*24*7 && dtime<60*60*24*30){//week
       returnVal = Math.round(dtime/(60*60*24*7)) + "周";
@@ -132,7 +137,9 @@ App.util = (function(){
     }else if(dtime>=60*60*24*30*6 && dtime<60*60*24*30*6*12){//half year
       returnVal = "半年";
     }else if(dtime>=60*60*24*30*6*12){//year
-      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + "年";
+      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + "年";*/
+    }else{
+      returnVal=Ftime;
     }
     return returnVal;
   };
