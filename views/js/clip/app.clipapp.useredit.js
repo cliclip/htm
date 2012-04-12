@@ -302,10 +302,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	      var currentFace = returnObj[1][0];
 	      if(currentFace){
 		var facemodel = new FaceEditModel({id:user});
-		if(originalFace){
-		  UserEdit.removeFace(facemodel,originalFace);
+		if(originalFace && originalFace!=currentFace){
+		  UserEdit.removeFace(facemodel,originalFace,function(){
+		    UserEdit.saveFace(facemodel,{face:currentFace});
+		  });
+		}else {
+		  UserEdit.saveFace(facemodel,{face:currentFace});
 		}
-		UserEdit.saveFace(facemodel,{face:currentFace});
 	      }
 	    }
 	  }
@@ -370,13 +373,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-  UserEdit.removeFace = function(editModel,face_id){
+  UserEdit.removeFace = function(editModel,face_id,callback){
     editModel.destroy({
       url: P+"/user/"+ editModel.id+"/face/" +face_id,
       success:function(){
+	callback(true);
 	//console.info("delete success!!!!!!!!!!");
       },
       error:function(){
+	callback(false);
 	//console.info("delete error!!!!!!!!!!");
       }
     });
