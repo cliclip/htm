@@ -13,7 +13,10 @@ script(type='text/template',id='userface-view-template')
     dl.user_detail.clearfix
       dt.
         <a class="user_list">
+          <%if(name){%>
           <%=name%>
+          <%} else {%>
+          <%}%>
         </a>
       dd.clearfix
         span.icons_frame
