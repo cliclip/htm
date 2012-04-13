@@ -2,6 +2,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
   var originalFace;
+  UserEdit.margin_top = 0;
+  UserEdit.margin_left = 0;
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
     defaults: {
@@ -316,10 +318,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	      var currentFace = returnObj[1][0];
 	      if(currentFace){
 		var facemodel = new FaceEditModel({id:user});
-		if(originalFace){
-		  UserEdit.removeFace(facemodel,originalFace);
+		if(originalFace && originalFace!=currentFace){
+		  UserEdit.removeFace(facemodel,originalFace,function(){
+		    UserEdit.saveFace(facemodel,{face:currentFace});
+		  });
+		}else {
+		  UserEdit.saveFace(facemodel,{face:currentFace});
 		}
-		UserEdit.saveFace(facemodel,{face:currentFace});
 	      }
 	    }
 	  }
@@ -337,14 +342,37 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }else{
       if( sender.files &&sender.files[0] ){
 	$("#confirm_face").show();
-	var img = document.getElementById('myface' );
-//	var small_img = document.getElementById("face-image");
-	if (window.webkitURL && window.webkitURL.createObjectURL) {//兼容chrmo图片本地预览功能
+	var img = new Image();
+	img.onload=function(){
+	  if(img.complete){
+	    var preview_face = document.getElementById('myface' );
+	    //var length = img.width>img.height ? img.height : img.width;
+	    if(img.width<img.height){
+	      preview_face.width = 240;
+	      preview_face.height = img.height*240/img.width;
+	      //console.info(preview_face);
+	      var top ="-" +  parseInt((preview_face.height-240)/2)+"px";
+	      $("#myface").css({"margin-top":top});
+	      //UserEdit.margin_top = parseInt((img.height-img.width)/2);
+	    }else{
+	      //console.info(preview_face);
+	      preview_face.height = 240;
+	      preview_face.width = img.width*240/img.height;
+	      var left="-" + parseInt((preview_face.width-240)/2)+"px";
+	      $("#myface").css({"margin-left":left});
+	      //UserEdit.margin_left = parseInt((img.width-img.height)/2);
+	      console.info(UserEdit.margin_left);
+	    }
+	    preview_face.src = img.src;
+	    //$(".head_img").css({"overflow":"hidden","text-align":"center"});
+	  }
+	};
+
+	//兼容chrome图片本地预览功能
+	if (window.webkitURL && window.webkitURL.createObjectURL) {
 	  img.src = window.webkitURL.createObjectURL(sender.files[0]);
-//	  small_img.src = window.webkitURL.createObjectURL(sender.files[0]);
 	}else if(window.URL.createObjectURL) {
 	  img.src = window.URL.createObjectURL(sender.files[0]);
-//	  small_img.src = window.URL.createObjectURL(sender.files[0]);
 	}
 	return true;
       }
@@ -358,7 +386,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       type: "POST",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
-	App.vent.trigger("app.clipapp.useredit:facesuccess");
+	//更新右上角的小头像
+	//var img = document.getElementById('myface' );
+	//var small_img = document.getElementById("face-image");
+        //small_img.src = img.src;
 	$("#confirm_face").hide();
       },
       error:function(model,res){
@@ -384,13 +415,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-  UserEdit.removeFace = function(editModel,face_id){
+  UserEdit.removeFace = function(editModel,face_id,callback){
     editModel.destroy({
       url: P+"/user/"+ editModel.id+"/face/" +face_id,
       success:function(){
+	callback(true);
 	//console.info("delete success!!!!!!!!!!");
       },
       error:function(){
+	callback(false);
 	//console.info("delete error!!!!!!!!!!");
       }
     });

@@ -11,7 +11,7 @@ script(type="text/template",id="editUser-view-template")
 script(type="text/template",id="faceEdit-view-template")
   .edit_head
     .head_img.
-      <img id="myface" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
+      <img id="myface" src="<%=App.util.face_url(face)%>"/>
     .user_name
       <% if(name && name!=""){%>
       span.name.
