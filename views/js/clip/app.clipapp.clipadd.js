@@ -4,9 +4,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var objEditor = "";
 
   var ClipModel = App.Model.extend({
-  // 为了刷新collection
     defaults:{
-      recommend:"",//列表推荐的clip时有此属性
       clip :{}
     },
     url: function(){
@@ -85,7 +83,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	url: P+"/clip",
 	type: 'POST',
       success:function(model,res){
-	clip.id = App.util.getMyUid()+":"+res;
+	clip.id = res;
 	var content = {};
 	var text = _.detect(clip.content, function(e){ return e.text; });
 	if(text){
@@ -96,9 +94,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	if(image){
 	  content.image = image.image;
 	}
-	clip.user = {};
+	clip.user = {id:App.util.getMyUid()};
 	clip.content = content;
+	model.id = App.util.getMyUid()+":"+res;
 	model.set({clip:clip});
+	model.set({recommend:""});
 	App.vent.trigger("app.clipapp.cliplist:addshow", model);
 	App.viewRegion.close();
       },

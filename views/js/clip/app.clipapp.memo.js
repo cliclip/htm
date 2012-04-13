@@ -42,8 +42,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var _data = {};
       var main_tag = [];
       for(var i=1;i<7;i++){
-	if(document.getElementById("maintag_"+i).className == "size48 orange_48"){
-	  main_tag.push($("#maintag_"+i).html());
+	if(document.getElementById("main_tag_"+i).className == "size48 orange_48"){
+	  main_tag.push($("#main_tag_"+i).html());
 	}
       };
       var obj_tag = $("#obj_tag").val().split(",");
@@ -56,7 +56,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       }
       // 为了保证对称性，将this.model传给外部事件
       if(this.model.get("model") == "update"){
-	App.vent.trigger("app.clipapp.memo:rememo", this, _data);
+	App.vent.trigger("app.clipapp.memo:rememo", this.model, _data);
       }else if(this.model.get("model") == "add"){
 	// 此处应该将注的内容放入 model中以便没有提交之前注可以直接使用
 	App.vent.trigger("app.clipapp.memo:success", this.model, _data);
@@ -99,7 +99,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }else{
       clipModel.set({model:"add"});
     }
-    var clipmemoView = new ClipMemoView({model:clipModel,clipid:cid});
+    var clipmemoView = new ClipMemoView({model:clipModel});
     App.popRegion.show(clipmemoView);
     if(pub == "false"){
       $("#memo_private").attr("checked","true");
@@ -107,12 +107,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     if(!_.isEmpty(tag_main)){
       for(i=0;i < tag_main.length; i++){
 	switch(tag_main[i]){
-	  case "好看":document.getElementById("maintag_1").className="size48 orange_48";break;
-	  case "好听":document.getElementById("maintag_2").className="size48 orange_48";break;
-	  case "好吃":document.getElementById("maintag_3").className="size48 orange_48";break;
-	  case "好玩":document.getElementById("maintag_4").className="size48 orange_48";break;
-	  case "精辟":document.getElementById("maintag_5").className="size48 orange_48";break;
-	  case "酷":document.getElementById("maintag_6").className="size48 orange_48";break;
+	  case "好看":document.getElementById("main_tag_1").className="size48 orange_48";break;
+	  case "好听":document.getElementById("main_tag_2").className="size48 orange_48";break;
+	  case "好吃":document.getElementById("main_tag_3").className="size48 orange_48";break;
+	  case "好玩":document.getElementById("main_tag_4").className="size48 orange_48";break;
+	  case "精辟":document.getElementById("main_tag_5").className="size48 orange_48";break;
+	  case "酷":document.getElementById("main_tag_6").className="size48 orange_48";break;
 	}
       }
     };
@@ -129,9 +129,9 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   // 触发更新clip中的注的事件
-  App.vent.bind("app.clipapp.memo:rememo", function(view, data){
-    view.model.save(data,{
-      url:App.ClipApp.Url.base+"/clip/"+view.options.clipid,
+  App.vent.bind("app.clipapp.memo:rememo", function(clipmemoModel,data){
+    clipmemoModel.save(data,{
+      url:App.ClipApp.Url.base+"/clip/"+clipmemoModel.id,
       type:"PUT",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.memo:success",model,data);
