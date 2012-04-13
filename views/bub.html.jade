@@ -19,19 +19,112 @@ html
     script(src="/js/lib/box2d.js")
     script(src="/js/bub.js")
 
-    link(href="/css/bub.css",rel="stylesheet")
+    :less
+      .tag_icon(@x:0, @y:0) {
+        background: url(../images/tag_bg.png) no-repeat;
+        background-position: @x @y;
+        display: block;
+      }
+      body {
+        overflow: hidden;
+        background-color: #d0d0d0;
+        font-family: arial, Helvetica, sans-serif;
+        margin: 0px;
+        padding: 0px;
+      }
+      .ball {
+        position: absolute;
+        text-align: center;
+        font-size: 75%;
+        div {
+          position: absolute;
+          font-weight: bold;
+        }
+        .bub {
+          cursor: pointer;
+        }
+        .shadow {
+          left: -30px;
+          top: -30px;
+        }
+
+        span {
+          color: #999;
+          text-decoration: none;
+        }
+        .bub:hover {
+          font-size: 120%;
+        }
+
+        a {
+          color: #fff;
+          text-decoration: none;
+        }
+        a:hover {
+          font-size: 120%;
+        }
+
+        .s48 {
+          width: 48px;
+          height: 48px;
+          line-height: 48px;
+          .tag_icon(0px, 0px);
+        }
+        .s64 {
+          width: 64px;
+          height: 64px;
+          line-height: 64px;
+          .tag_icon(0px, -304px);
+        }
+
+        .iscurrent span {
+          font-size: 120%;
+        }
+
+        .isfollow span {
+          color: #fff;
+        }
+        .isfollow.s48 {
+          .tag_icon(0px, -48px);
+        }
+        .isfollow.s64 {
+          .tag_icon(0px, -240px);
+        }
+
+        .issink {
+          .tag_icon(0px, -192px);
+        }
+        .issink span {
+          display: none;
+        }
+
+        .shadow.s108 {
+          line-height: 186px;
+          height: 108px;
+          width: 108px;
+          .tag_icon(0px, -368px);
+        }
+        .shadow.s124 {
+          line-height: 214px;
+          height: 124px;
+          width: 124px;
+          .tag_icon(0px, -476px);
+        }
+      }
+
+    //-link(href="/css/bub.css",rel="stylesheet")
 
   body
 
     #bubbles
 
     script(type="text/template",id="ball-template")
-      <div style="height:<%=size%>px;width:<%=size%>px;" class="s<%=size%>">
-      <span style="line-height:<%=size%>px;"><a href="#" class="tag<% if(current) { %> iscurrent<% } %><% if(follow) { %> isfollow<% } %>"><%= text %></a></span>
+      <div class="bub s<%=size%><% if(follow) { %> isfollow<% } %><% if(current) { %> iscurrent<% } %><% if(sink) { %> issink<% } %>">
+      <span><%= text %></span>
       </div>
 
     script(type="text/template",id="ball-shadow-template")
-      <div class="shadow s<%=size+60%>" style="left:-30px;top:-30px;height:<%=size+60%>px; width:<%=size+60%>px; line-height:<%= size * 2 + 90 %>px">
+      <div class="shadow s<%=size+60%>">
       <% if(!self){%>
       <span>
       <% if (follow) {%>
