@@ -44,8 +44,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
     var url = "";
     if(uid == App.util.getMyUid()){
       url = P + "/my/info";
+      App.Routing.ClipRouting.router.navigate("my", false);
     }else{
       url = P + "/user/"+ uid + "/info";
+      App.Routing.ClipRouting.router.navigate("/user/"+ uid , false);
     }
     var user=new UserModel();
     user.fetch({url:url});

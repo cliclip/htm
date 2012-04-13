@@ -161,8 +161,16 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }else{
-      window.location.href="#my";
+      location.href="#my";
       ClipApp.ClipAdd.show(uid);
+    }
+  });
+
+  App.vent.bind("app.clipapp:cliplist.refresh", function(uid, tag){
+    if(!uid){
+      ClipApp.ClipList.showSiteClips(tag);
+    }else {
+      ClipApp.ClipList.showUserClips(uid, tag);
     }
   });
 

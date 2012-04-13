@@ -106,14 +106,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // console.log("open %s", tag + "  " +_uid);
     // 更新bubb显示
     iframe_call('bubbles', "openTag", tag);
-    //设为false也可直接刷新
+    //设为false也可直接刷新 但是提交上去的数据是乱码
     App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
-    /*App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
-     App.vent.bind("app.clipapp:cliplist.refresh", function(uid, tag){
-       if(!uid) ClipApp.ClipList.showSiteClips(tag);
-       else ClipApp.ClipList.showUserClips(uid, tag);
-     });
-     */
+    App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
   });
 
   // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
@@ -266,16 +261,20 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function mkUrl(tag){
     var url = Backbone.history.fragment;
     var i = url.indexOf("/tag");
-    if(i >= 0){
-      url = url.substr(0, i);
-      return url += "/tag/"+tag;
+    if(_uid){
+      if(i >= 0){
+	url = url.substr(0, i);
+	return url += "/tag/"+tag;
+      }else{
+	if(url.indexOf("my") >= 0)
+	  return "/my/tag/"+tag;
+	else
+	  return "/user/"+_uid+"/tag/"+tag;
+      }
     }else{
-      if(url.indexOf("my") >= 0)
-	return "/my/tag/"+tag;
-      else
-	return "/user/"+_uid+"/tag/"+tag;
+      return "/tag/"+tag;
     }
-  }
+  };
 
   function changeTags(tags1, tags2, old_self, self){
     if(old_self != self){
