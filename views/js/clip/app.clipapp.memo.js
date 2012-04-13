@@ -1,6 +1,6 @@
 //app.clipapp.memo.js
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
-  var ClipMemo={};
+  var ClipMemo={},premodel_cid="";
   var ClipMemoView=App.ItemView.extend({
     tagName:"div",
     className:"organize-view",
@@ -69,10 +69,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
   // 此处只有区分 update 和 add
-  ClipMemo.show = function(clipModel, type){
+  ClipMemo.show = function(clipModel, type,pre_cid){
     var text = "";
     var cid="",pub="",tags=[],note=[];
     var clip = "";
+    premodel_cid=pre_cid;
     if(type == "update"){
       clip = clipModel.get("clip"); // 从preview中取
       cid = clipModel.id; // 无论是preview还是detail都是 uid:id
@@ -148,11 +149,20 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   App.vent.bind("app.clipapp.memo:success",function(model,data){
     var clip = model.get("clip");
+    console.log(premodel_cid);
+    console.log(clip);
     if(clip){
       clip.note = data.note; // 之前写的是note[0] ?
       clip.tag = data.tag;
       clip.public = data.public;
       model.set({clip:clip});
+    }else if(premodel_cid){
+      var clipList1="";
+      var ClipList = App.Collection.extend({});
+      clipList = new ClipList();
+      console.log(premodel_cid);
+     clipList1=clipList.getByCid(premodel_cid);
+      console.log(clipList1);
     }else{
       model.set({note:data.note}); // 之前写的是data.text
       model.set({tag:data.tag});

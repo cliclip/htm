@@ -68,7 +68,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
     show_detail: function(){
-      App.vent.trigger("app.clipapp:clipdetail",this.model.id);
+      var model_cid=this.model.cid;//传递给detail中的注弹出框，当保存注的数据时，通过此list中具有唯一性的model.cid更改此模型数据
+      App.vent.trigger("app.clipapp:clipdetail",this.model.id,model_cid);
     },
     commentAction: function(){
       App.vent.trigger("app.clipapp:comment",this.model.id);

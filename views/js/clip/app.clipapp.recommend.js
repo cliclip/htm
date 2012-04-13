@@ -115,7 +115,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     var collection = new NameList({});
     collection.fetch({data:params});
     collection.onReset(function(list){
-      var ownmodel=list.get(clipid.split(":")[0]);
+      var ownmodel=list.get(clipid.split(":")[0]);//过滤掉clip的所有者
       list.remove(ownmodel);
       var namelistView = new NameListCollectionView({
 	collection:list

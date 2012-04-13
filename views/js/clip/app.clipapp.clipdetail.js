@@ -1,7 +1,7 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var P = App.ClipApp.Url.base;
-
+  var previewmodel_cid="";
   var DetailModel = App.Model.extend({
     defaults:{
       imguid:""
@@ -37,7 +37,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
+	App.vent.trigger("app.clipapp:clipmemo", this.model,"update",null,null,null,previewmodel_cid);break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
@@ -151,8 +151,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   // uid为当前登录用户
-  ClipDetail.show = function(uid, cid){
+  ClipDetail.show = function(uid, cid,preview_cid){
     // 此处的cid并不等于detailModel.id
+    previewmodel_cid=preview_cid;
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
