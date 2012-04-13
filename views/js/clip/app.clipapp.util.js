@@ -221,8 +221,8 @@ App.util = (function(){
   util.getErrorMessage = function(errorCode){
     for (key in errorCode)
     errorCode[key] = getMessage[key][errorCode[key]] +"  ";
-    console.info(errorCode);
-     return errorCode;
+    //console.info(errorCode);
+    return errorCode;
  };
 
   return util;
