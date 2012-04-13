@@ -103,20 +103,25 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
-    //console.log("open %s", tag);
+    // console.log("open %s", tag + "  " +_uid);
     // 更新bubb显示
     iframe_call('bubbles', "openTag", tag);
-    // TODO change to
+    //设为false也可直接刷新
     App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
-    App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
+    /*App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
+     App.vent.bind("app.clipapp:cliplist.refresh", function(uid, tag){
+       if(!uid) ClipApp.ClipList.showSiteClips(tag);
+       else ClipApp.ClipList.showUserClips(uid, tag);
+     });
+     */
   });
 
   // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
   App.vent.bind("app.clipapp.bubb:follow", function(tag){
-    App.vent.trigger("app.clipapp:follow", null, tag);
+    App.vent.trigger("app.clipapp:follow", _uid, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(uid,tag){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(tag, uid){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
@@ -210,7 +215,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function unfollowUserTag(uid, tag, callback){
-    if(!uid) uid = _uid;
+    if(!uid){
+      uid = _uid ? _uid : 2;
+    }
     var url = "";
     if(tag == '*') {
       url = P+"/user/"+uid+"/follow";
@@ -232,7 +239,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function iframe_call(ifname, fname, fargs){
     var ifwin = document.getElementById(ifname).contentDocument.defaultView;
     if(ifwin[fname]){
-      console.log("iframe_call(", ifname, fname, fargs, ")");
+      // console.log("iframe_call(", ifname, fname, fargs, ")");
       ifwin[fname](fargs);
     } else { // waiting for iframe load
       setTimeout(function(){ iframe_call(ifname, fname, fargs); }, 100);
@@ -254,6 +261,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     if(tag) opt.default = tag;
     return opt;
   }
+
 
   function mkUrl(tag){
     var url = Backbone.history.fragment;

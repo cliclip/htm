@@ -3,7 +3,6 @@
 App.ClipApp.Comment = (function(App, Backbone, $){
   var Comment = {};
   var tag_list = [];
-
   var CommentView = App.ItemView.extend({
     tagName : "div",
     className : "comment-view",
@@ -74,12 +73,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       url: App.ClipApp.Url.base+"/clip/"+clipid+"/comment",
       type: "POST",
       success: function(model, res){
-	var clip = model.get("clip");
-	clip.reply_count = clip.reply_count ? clip.reply_count+1 : 1;
-	model.set({clip:clip});
-	App.vent.trigger("app.clipapp.cliplist:showlist");
-	Comment.close();
-	// App.vent.trigger("clip:showDetail", id);
+	App.vent.trigger("app.clipapp.comment:success",model,res);
       },
       error:function(model, res){
 	Comment.show(model.id,model, res);
@@ -102,7 +96,13 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.comment:cancel", function(){
     Comment.close();
   });
-
+  App.vent.bind("app.clipapp.comment:success",function(model,res){
+    var clip = model.get("clip");
+    clip.reply_count = clip.reply_count ? clip.reply_count+1 : 1;
+    model.set({clip:clip});
+    App.vent.trigger("app.clipapp.cliplist:showlist");
+    Comment.close();
+  });
 
   // TEST
  //App.bind("initialize:after", function(){ Comment.show("1:1"); });

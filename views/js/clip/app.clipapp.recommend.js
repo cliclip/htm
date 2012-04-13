@@ -136,7 +136,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     var collection = new NameList({});
     collection.fetch({data:params});
     collection.onReset(function(list){
-      var ownmodel=list.get(owner_id);
+      var ownmodel=list.get(owner_id);//过滤掉clip的所有者
       list.remove(ownmodel);
       var namelistView = new NameListCollectionView({
 	collection:list
@@ -149,7 +149,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       url:P+"/user/"+model.get("uid")+"/recomm",
       type:"POST",
       success:function(model,res){
-	Recommend.close();
+	App.vent.trigger("app.clipapp.recommend:success");
       },
       error:function(model,res){
 	App.vent.trigger("app.clipapp.recommend:error", model, res);
@@ -166,6 +166,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     Recommend.nameListRegion = new App.Region({
       el:"#name_listDiv"
     });
+
     recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
     if(error){
@@ -198,6 +199,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   App.vent.bind("app.clipapp.recommend:error",function(model,err){
     Recommend.show(null, model, err);
   });
+  App.vent.bind("app.clipapp.recommend:success",function(){
+    Recommend.close();
+    });
   // TEST
  // App.bind("initialize:after", function(){ Recommend.show("1:1"); });
 
