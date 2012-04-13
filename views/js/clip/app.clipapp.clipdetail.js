@@ -1,7 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var P = App.ClipApp.Url.base;
-  var model = {};
   var DetailModel = App.Model.extend({
     defaults:{
       imguid:""
@@ -29,20 +28,18 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
-      if(!this.model.get("clip")){
-	console.info("111");
-	model = this.model;
+      if(this.model.get("clip")){
+	this.model.unset("clip");
       }
-      console.info(model);
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", model);break;
+	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh':
-	  App.vent.trigger("app.clipapp:recommend", model);break;
+	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	App.vent.trigger("app.clipapp:clipmemo", model,"update");break;
+	App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
