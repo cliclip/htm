@@ -80,9 +80,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       App.bubbRegion.show(bubbView);
     }
     if (changeTags(last, tags, old_self, self)) {
-      resetTags(tags);
+      iframe_call('bubbles', "resetTags", tags);
     } else if (changeDefault(last, tags)) {
-      openTag(tags.default);
+      iframe_call('bubbles', "openTag", tags.default);
     }
     old_self = self;
     last = tags;
@@ -92,6 +92,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     //console.log("open %s", tag);
     // 可以是在当前路由上加上某个值
     App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
+    // 更新bubb显示
+    iframe_call('bubbles', "openTag", tag);
     // TODO change to
     // App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
     // App.vent.trigger("", clipListRefresh);
@@ -99,6 +101,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:follow", function(tag,uid){
     followUserTag(uid, tag, function(){
+      // 更新bubb显示
+      iframe_call('bubbles', "followTag", tag);
       // 若之前未追，则需刷新头像为停
       if(last && last.follows){
 	if(_.isEmpty(last.follows)){
@@ -111,6 +115,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:unfollow", function(tag,uid){
     unfollowUserTag(uid, tag, function(){
+      // 更新bubb显示
+      iframe_call('bubbles', "unfollowTag", tag);
       // 若之后已停，则需刷新头像为追
       if(last && last.follows){
 	last.follows = _.without(last.follows,tag);
@@ -218,25 +224,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   }
 
-  // delegates
+  // call functions inside iframe
 
-  function resetTags(tags){
-    var bw = document.getElementById('bubbles').contentDocument.defaultView;
-    if(bw.resetTags){
-      // console.log("resetTags ",tags);
-      bw.resetTags(tags);
-    } else { // waiting for bubble iframe load
-      setTimeout(function(){ resetTags(tags); }, 100);
-    }
-  }
-
-  function openTag(tag){
-    var bw = document.getElementById('bubbles').contentDocument.defaultView;
-    if(bw.openTag){
-      // console.log("openTags ",tag);
-      bw.openTag(tag);
-    } else { // waiting for bubble iframe load
-      setTimeout(function(){ openTag(tag); }, 100);
+  function iframe_call(ifname, fname, fargs){
+    var ifwin = document.getElementById(ifname).contentDocument.defaultView;
+    if(ifwin[fname]){
+      console.log("iframe_call(", ifname, fname, fargs, ")");
+      ifwin[fname](fargs);
+    } else { // waiting for iframe load
+      setTimeout(function(){ iframe_call(ifname, fname, fargs); }, 100);
     }
   }
 
