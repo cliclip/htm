@@ -101,6 +101,7 @@ App.addRegions({
   listRegion: "#list",
   viewRegion: "#view",
   popRegion: "#pop",
+  setpopRegion:"#setpop",
   searchRegion:".search"
 });
 
