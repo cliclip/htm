@@ -1,6 +1,6 @@
 //app.clipapp.memo.js
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
-  var ClipMemo={},premodel_cid="",precollection="";
+  var ClipMemo={},cid="";
   var ClipMemoView=App.ItemView.extend({
     tagName:"div",
     className:"organize-view",
@@ -69,12 +69,10 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
   // 此处只有区分 update 和 add
-  ClipMemo.show = function(clipModel,type,pre_cid,collection){
+  ClipMemo.show = function(clipModel,type){
     var text = "";
-    var cid="",pub="",tags=[],note=[];
+    var pub="",tags=[],note=[];
     var clip = "";
-    premodel_cid=pre_cid;
-    precollection=collection;
     if(type == "update"){
       clip = clipModel.get("clip"); // 从preview中取
       cid = clipModel.id; // 无论是preview还是detail都是 uid:id
@@ -156,13 +154,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       clip.public = data.public;
       model.set({clip:clip});
     }else{//此处的注为从detail点击触发的，注成功后，修改cliplist中对应的model
-      var premodel=precollection.getByCid(premodel_cid);
-      var preclip=premodel.get("clip");
-      preclip.note = data.note;
-      preclip.tag = data.tag;
-      preclip.public = data.public;
-      premodel.set({clip:preclip});
-
+      var listmodel=App.listRegion.currentView.collection.get(cid);
+      var modifyclip=listmodel.get("clip");
+      modifyclip.note = data.note;
+      modifyclip.tag = data.tag;
+      modifyclip.public = data.public;
+      listmodel.set({clip:modifyclip});
       model.set({note:data.note}); // 之前写的是data.text
       model.set({tag:data.tag});
       model.set({"public":data.public});

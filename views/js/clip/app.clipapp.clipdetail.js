@@ -1,7 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var P = App.ClipApp.Url.base;
-  var previewmodel_cid="";
   var DetailModel = App.Model.extend({
     defaults:{
       imguid:""
@@ -36,11 +35,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh':
-	  App.vent.trigger("app.clipapp:recommend", this.model);break;
+	App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment':
-	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
+	App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	App.vent.trigger("app.clipapp:beforeclipmemo", this.model,"update",previewmodel_cid);break;
+	App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
@@ -165,9 +164,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   // uid为当前登录用户
-  ClipDetail.show = function(uid, cid,preview_cid){
+  ClipDetail.show = function(uid, cid){
     // 此处的cid并不等于detailModel.id
-    previewmodel_cid=preview_cid;
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
@@ -247,6 +245,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  success:function(comment,response){
 	    ClipDetail.showComment(id);
 	    ClipDetail.showAddComm(id);
+	    var listmodel=App.listRegion.currentView.collection.get(id);
+	    var modifyclip=listmodel.get("clip");
+	    modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
+	  listmodel.set({clip:modifyclip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	  },
 	  error:function(comment,response){}
 	});
