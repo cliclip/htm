@@ -68,8 +68,10 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   });
 
   var commentAction = function(commentModel, params){
+    var clip = commentModel.get("clip");
+    var clipid = clip.user.id+":"+clip.id;
     commentModel.save(params,{
-      url: App.ClipApp.Url.base+"/clip/"+commentModel.id+"/comment",
+      url: App.ClipApp.Url.base+"/clip/"+clipid+"/comment",
       type: "POST",
       success: function(model, res){
 	var clip = model.get("clip");

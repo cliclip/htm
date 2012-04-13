@@ -2,6 +2,7 @@
 
 App.ClipApp.Recommend = (function(App,Backbone,$){
   var Recommend = {};
+  var recommModel;
   var P = App.ClipApp.Url.base;
   // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
@@ -59,11 +60,18 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       this.$("#name_listDiv").empty();
     },
     nameListAction:function(evt){
+      var uid = "";
       $("#alert").css("display","none");
       $("#imgId").css("display","none");
       var str = this.$("#name").val();
+      var clip = this.model.get("clip");
+      if(clip){
+	uid = clip.user.id;
+      }else{
+	uid = this.model.get("user");
+      }
       var params = {q:str};
-      App.vent.trigger("app.clipapp.recommend:lookup",params,this.model.id);
+      App.vent.trigger("app.clipapp.recommend:lookup",params,uid);
     },
     MouseOver:function(evt){
 
@@ -73,10 +81,17 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     recommendAction:function(e){
       e.preventDefault();
+      var clipid = "";
       var text=$("#recommend_text").val();
+      var clip = this.model.get("clip");
+      if(clip){
+	clipid = clip.user.id+":"+clip.id;
+      }else{
+	clipid = this.model.get("id");
+      }
       var params = {
 	text:text,
-	clipid :this.model.id
+	clipid : clipid
       };
       var params1 = {clip:{note:[{text:text}]}};
       if(this.model.get("uid")){
@@ -111,11 +126,11 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     className:"list",
     itemView:NameListItemView
   });
-  var showNameList=function(params,clipid){
+  var showNameList=function(params,owner_id){
     var collection = new NameList({});
     collection.fetch({data:params});
     collection.onReset(function(list){
-      var ownmodel=list.get(clipid.split(":")[0]);//过滤掉clip的所有者
+      var ownmodel=list.get(owner_id);//过滤掉clip的所有者
       list.remove(ownmodel);
       var namelistView = new NameListCollectionView({
 	collection:list
@@ -136,8 +151,10 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     });
   };
 
-  Recommend.show = function(recommModel,model,error){
-    //var recommModel = new RecommModel({id: cid});
+  Recommend.show = function(clipModel,model,error){
+    if(clipModel){
+       recommModel = clipModel;
+    }
     if (model) recommModel.set(model.toJSON());
     if (error) recommModel.set({"error":error});
     Recommend.nameListRegion = new App.Region({
@@ -159,8 +176,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   };
 
 
-  App.vent.bind("app.clipapp.recommend:lookup",function(params,clipid){
-    showNameList(params,clipid);
+  App.vent.bind("app.clipapp.recommend:lookup",function(params,owner_id){
+    showNameList(params,owner_id);
   });
 
   App.vent.bind("app.clipapp.recommend:submit",function(model,params){

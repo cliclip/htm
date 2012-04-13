@@ -29,11 +29,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
+      if(this.model.get("clip")){
+	this.model.unset("clip");
+      }
       switch(opt){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh':
-	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
@@ -69,6 +72,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     toggleChildren : function(e){
       e.preventDefault();
       if($(e.target).attr("class") == "comm_link"){
+	// 取得当前的marking
+	var marking = $(e.target).children(".marking").text();
+	if(marking){ // 如果有值取反
+	  marking = marking == '+' ? '-' :'+';
+	  $(e.target).children(".marking").text(marking);
+	}
 	$(e.currentTarget).siblings(".children").toggle();
       }
     },
@@ -123,6 +132,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  } else {
 	    e.auth = auth;
 	    e.clip_owner = clip_owner;
+	    if(e.children && e.children.length <= 0){
+	      e.has_child = false; // 表明该结点没有子节点
+ 	    }else{
+	      e.has_child = true;
+	    }
 	    var str = _.template(template, e);
 	    if (e.children && e.children.length > 0) {
 	      str += "<ul class='children'>";
@@ -157,12 +171,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
-      var user = detailModel.get("user");
-      if(user == uid){
-	detailModel.set("self",true);
-      }else{
-	detailModel.set("self",false);
-      }
       showDetail(detailModel);
       ClipDetail.showComment(cid);
       ClipDetail.showAddComm(cid);

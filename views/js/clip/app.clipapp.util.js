@@ -78,7 +78,6 @@ App.util = (function(){
   };
 
   util.ContentToHtml = function(content){
-    // console.log(content);
     var html = "";
     for(var i=0; i<content.length; i++){
       for(key in content[i]){
@@ -87,7 +86,7 @@ App.util = (function(){
 	    html += '<p>' + content[i][key] + '</p>';break;
 	  case 'image':
 	    html +=
-	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:485px;max-height:490px;">'
+	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:475px;max-height:490px;">'
 	    + '</img></p>';
 	    break;
 	  case 'code':
@@ -157,11 +156,11 @@ App.util = (function(){
       var mt = $(".clearfix").offset().top;
       if(st > mt){
 	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	$(".return_top").fadeIn();
+	$(".return_top").show();
 	// show go-top while scroll
       } else {
 	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".return_top").fadeOut();
+	$(".return_top").show();
       }
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;

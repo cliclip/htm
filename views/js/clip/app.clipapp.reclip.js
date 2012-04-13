@@ -86,23 +86,23 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     var clip = reclipmodel.get("clip");
     var clipid = "";
     if(clip){
-      clipid = reclipmodel.id;
+      clipid = clip.user.id+":"+clip.id;
       clip.note = [{text:params.clip.text}];
       clip.tag = params.clip.tag;
       if(params.clip.public == "false")   clip.public = params.clip.public;
     }else{
-      clipid = reclipmodel.get("user")+":"+reclipmodel.id;
+      clipid = reclipmodel.get("id");
     }
     reclipmodel.save(params,{
       url: P+"/clip/"+clipid+"/reclip",
       type: "POST",
       success: function(model, res){
+	if(clip){
+	  clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
+	  model.set({clip:clip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist");
+	}
 	if(flag){
-	  if(clip){
-	    clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
-	    model.set({clip:clip});
-	  }
-	  App.vent.trigger("app.clipapp.cliplist:showlist",null,"reclip");
 	  Reclip.close();
 	}
       },

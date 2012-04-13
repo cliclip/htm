@@ -48,8 +48,11 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
    });
 
    App.vent.bind("app.clipapp.clipdelete:success", function(model){
-    App.vent.trigger("app.clipapp.cliplist:removeshow", model);
+     App.vent.trigger("app.clipapp.cliplist:removeshow", model);
      ClipDelete.close();
+     if(App.viewRegion){ // 从detail来，需要关闭viewRegion
+       App.viewRegion.close();
+     }
    });
 
    App.vent.bind("app.clipapp.clipdelete:error", function(model, error){

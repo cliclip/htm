@@ -1,16 +1,17 @@
 script(type="text/template",id="editUser-view-template")
   div.masker_layer
-  section.edit_frame
-    span.close_w
-    div(class="left_bar")
-    div(class="middle",id="email")
-    div(class="middle",id="rule")
-    div(class="right_bar")
+  div.edit_user
+    section.edit_frame
+      span.close_w
+      div(class="left_bar")
+      div(class="middle",id="email")
+      div(class="middle",id="rule")
+      div(class="right_bar")
 
 script(type="text/template",id="faceEdit-view-template")
   .edit_head
     .head_img.
-      <img id="myface" src="<%=App.util.face_url(face)%>" height="240" width="240"/>
+      <img id="myface" src="<%=App.util.face_url(face)%>"/>
     .user_name
       <% if(name && name!=""){%>
       span.name.
