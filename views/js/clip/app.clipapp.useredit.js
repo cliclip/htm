@@ -166,7 +166,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var title = $("#title").val();
       var cc =  _.compact($("#copy-to").val().split(";"));
       var to =  _.compact($("#send").val().split(";"));
-      console.info(cc);
+      //console.info(cc);
       var enable = false;
       var message = "";
       flag = true;
@@ -365,7 +365,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	      var left="-" + parseInt((preview_face.width-240)/2)+"px";
 	      $("#myface").css({"margin-left":left});
 	      //UserEdit.margin_left = parseInt((img.width-img.height)/2);
-	      console.info(UserEdit.margin_left);
+	      //console.info(UserEdit.margin_left);
 	    }
 	    preview_face.src = img.src;
 	    //$(".head_img").css({"overflow":"hidden","text-align":"center"});
@@ -391,9 +391,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
 	//更新右上角的小头像
-	//var img = document.getElementById('myface' );
-	//var small_img = document.getElementById("face-image");
-        //small_img.src = img.src;
 	$("#confirm_face").hide();
       },
       error:function(model,res){
@@ -434,7 +431,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.close = function(){
+   // var img = document.getElementById('myface' );
     App.mysetRegion.close();
+   // var smail_face = document.getElementById("smail_face");
+   // var big_face = document.getElementById("big_face");
+   // smail_face.src = img.src;
+   // big_face.src = img.src;
+   // console.info(img.src);
+    App.vent.trigger("app.clipapp.face:show",App.util.getMyUid());
+    App.vent.trigger("app.clipapp.useredit:facesuccess");
   };
 
   App.vent.bind("app.clipapp.useredit:show", function(uid){
