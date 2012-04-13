@@ -206,7 +206,8 @@ App.util = (function(){
       not_match: "密码不匹配"
     },
     email:{
-      invalidate: "邮箱不合法"
+      invalidate: "邮箱不合法",
+      no_uname: "你还没有设置用户名"
     }
   };
 

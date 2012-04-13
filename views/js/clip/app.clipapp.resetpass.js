@@ -7,8 +7,13 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
     className:"resetpass-view",
     template:"#resetpass-view-template",
     events:{
+      "focus .input_text":"clearmsg",
       "click #submit" :  "submit",
-      "click #reset"  :  "reset"
+      "click #reset"  :  "reset",
+      "click .close_w":  "cancel"
+    },
+    clearmsg:function(){
+      $("#alert").css("display","none");
     },
     submit:function(e){
       var pass1 = $("#pass1").val();
@@ -37,6 +42,9 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
       e.preventDefault();
       $("#pass1").val("");
       $("#pass2").val("");
+    },
+    cancel:function(e){
+       App.vent.trigger("app.clipapp.resetpass:cancel");
     }
   });
   ResetPass.show=function(link,model,error){
@@ -47,6 +55,11 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
     if(error) resetPassModel.set("error",error);
     var resetPassView=new ResetPassView({model:resetPassModel});
     App.popRegion.show(resetPassView);
+    if(error){
+      $("#alert").css("display","block");
+    }else{
+      $("#alert").css("display","none");
+    }
   };
   ResetPass.close=function(){
     App.popRegion.close();
@@ -59,6 +72,9 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
   App.vent.bind("app.clipapp.resetpass:error",function(model,error){
     ResetPass.show(model.get("link"),model,error);
   });
-
+  App.vent.bind("app.clipapp.resetpass:cancel",function(){
+    ResetPass.close();
+    Backbone.history.navigate("",true);
+  });
   return ResetPass;
 })(App,Backbone,jQuery);

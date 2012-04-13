@@ -3,7 +3,6 @@
 App.ClipApp.Comment = (function(App, Backbone, $){
   var Comment = {};
   var tag_list = [];
-  var premodel_cid="",precollection="";
   var CommentView = App.ItemView.extend({
     tagName : "div",
     className : "comment-view",
@@ -82,10 +81,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     });
   };
 
-  Comment.show = function(model,pre_cid,collection){
-    console.log(pre_cid);
-    premodel_cid=pre_cid;
-    precollection=collection;
+  Comment.show = function(model){
     var commentView = new CommentView({model : model});
     App.popRegion.show(commentView);
     tag_list = [];

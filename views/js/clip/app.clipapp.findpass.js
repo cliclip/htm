@@ -9,8 +9,13 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     className:"findpass-view",
     template:"#findpass-view-template",
     events:{
+      "focus .input_text":"clearmsg",
       "click #submit"  :  "submit",
-      "click #cancel"  :  "cancel"
+      "click #cancel"  :  "cancel",
+      "click .close_w" :  "cancel"
+    },
+    clearmsg:function(){
+      $("#alert").css("display","none");
     },
     submit:function(e){
       var address = $("#address").val();
