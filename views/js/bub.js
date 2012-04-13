@@ -156,6 +156,7 @@ $(function() {
     });
 
     function fire(event, value){
+      // console.log(event, value);
       var App = window.top.App;
       if(App) App.vent.trigger('app.clipapp.bubb:'+event, value);
     }
@@ -165,7 +166,7 @@ $(function() {
       template: _.template($("#ball-template").html()),
       shadow_tmpl: _.template($("#ball-shadow-template").html()),
       events: {
-	"click a.tag": 	    "open",
+	"click .bub":   "open",
 	"click a.follow":   "follow",
 	"click a.unfollow": "unfollow",
 	"click a.reclip":   "reclip"
@@ -189,16 +190,16 @@ $(function() {
 	});
 	if(this.model.hasChanged("current")){
 	  if(this.model.get("current")){
-	    this.$("span a.tag").addClass("iscurrent");
+	    this.$(".bub").addClass("iscurrent");
 	  } else {
-	    this.$("span a.tag").removeClass("iscurrent");
+	    this.$(".bub").removeClass("iscurrent");
 	  }
 	}
 	if(this.model.hasChanged("follow")){
 	  if(this.model.get("follow")){
-	    this.$("span a.tag").addClass("isfollow");
+	    this.$(".bub").addClass("isfollow");
 	  } else {
-	    this.$("span a.tag").removeClass("isfollow");
+	    this.$(".bub").removeClass("isfollow");
 	  }
 	  this.$(".shadow").remove();
 	  if (this.model.get("hover")){
@@ -219,19 +220,19 @@ $(function() {
       },
       open: function(){
 	// this.model.set("current", true);
-	game.open(this.$("a.tag").text());
-	fire("open", this.$("a.tag").text());
+	// game.open(this.$(".bub span").text());
+	fire("open", this.$(".bub span").text());
       },
       follow: function(){
-	this.model.set("follow", true);
-	fire("follow", this.$("a.tag").text());
+	// this.model.set("follow", true);
+	fire("follow", this.$(".bub span").text());
       },
       unfollow: function(){
-	this.model.set("follow", false);
-	fire("unfollow", this.$("a.tag").text());
+	// this.model.set("follow", false);
+	fire("unfollow", this.$(".bub span").text());
       },
       reclip: function(){
-	fire("reclip", this.$("a.tag").text());
+	fire("reclip", this.$(".bub span").text());
       }
     });
 
@@ -529,6 +530,20 @@ $(function() {
 	    ball.set("current", ball.get("text") == tag);
 	  });
 	},
+	follow : function(tag){
+	  _(balls).each(function(ball){
+	    if(ball.get("text") == tag){
+	      ball.set("follow", true);
+	    }
+	  });
+	},
+	unfollow : function(tag){
+	  _(balls).each(function(ball){
+	    if(ball.get("text") == tag){
+	      ball.set("follow", false);
+	    }
+	  });
+	},
 	info : info
       };
     })();
@@ -539,6 +554,12 @@ $(function() {
     };
     window.openTag = function(tag){
       game.open(tag);
+    };
+    window.followTag = function(tag){
+      game.follow(tag);
+    };
+    window.unfollowTag = function(tag){
+      game.unfollow(tag);
     };
 
     game.init();
