@@ -130,11 +130,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var key = e.keyCode;
       var str = $("#copy-to").val();
       var last_str = str.charAt(str.length - 1);
+      //当字符串最后一个字符不是;或者空格
+      //并且按键为 tab 空格 , ; 时处理输入框中的字符串
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==188||key==59)){
 	if(str){
+	  // 以;把字符串分为数组，去点无用数据
 	  var arr = _.compact($("#copy-to").val().split(";"));
+	  // 去掉数组最后一项的的前后空格，保证邮件前后没空格
 	  var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
 	  arr[arr.length-1] = str1;
+	  //在最后放回输入框
 	  $("#copy-to").val(arr.join(";")+";");
 	}
 	if(key==188||key==32||key==59) return false;
@@ -145,7 +150,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var key = e.keyCode;
       var str = $("#send").val();
       var last_str = str.charAt(str.length - 1);
-      var penultimate = str.charAt(str.length -2,1);
       if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59||key==188)){
 	if(str){
 	  var arr = _.compact($("#send").val().split(";"));
