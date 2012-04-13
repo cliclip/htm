@@ -5,7 +5,6 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.getMyUid = getMyUid;
   function getMyUid(){
     // console.log("getMyUid  :: "+ClipApp.Me.me.get("id"));
-    // return ClipApp.Me.me.get("id");
     var id = null;
     if(document.cookie){
       id =  document.cookie.split("=")[1].split(":")[0];
@@ -102,17 +101,11 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show(uid);
   });
 
-  App.vent.bind("app.clipapp:cliplist.refresh", function(uid, tag){
-    ClipApp.ClipList.showUserClips(uid, tag);
-  });
   // clipid有值 ==> 对单独clip的reclip 否则是对 user's tag下的clip的reclip
   App.vent.bind("app.clipapp:reclip", function(clipid, user, tag){
     var uid = getMyUid();
-    if(!uid){
-      ClipApp.Login.show();
-    }else{
-      ClipApp.Reclip.show(clipid, user, tag);
-    }
+    if(!uid) ClipApp.Login.show();
+    else ClipApp.Reclip.show(clipid, user, tag);
   });
 
   // 当前用户追某用户的tag uid一直与face的保持一致
@@ -168,7 +161,16 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }else{
+      location.href="#my";
       ClipApp.ClipAdd.show(uid);
+    }
+  });
+
+  App.vent.bind("app.clipapp:cliplist.refresh", function(uid, tag){
+    if(!uid){
+      ClipApp.ClipList.showSiteClips(tag);
+    }else {
+      ClipApp.ClipList.showUserClips(uid, tag);
     }
   });
 

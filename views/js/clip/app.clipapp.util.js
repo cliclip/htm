@@ -206,7 +206,9 @@ App.util = (function(){
       not_match: "密码不匹配"
     },
     email:{
-      invalidate: "邮箱不合法"
+      invalidate: "邮箱不合法",
+      is_null: "邮件地址不能为空",
+      no_uname: "你还没有设置用户名"
     }
   };
 
@@ -221,10 +223,15 @@ App.util = (function(){
   getMessage["clip_not_exist"] = "clip不存在";
 
   util.getErrorMessage = function(errorCode){
-    for (key in errorCode)
-    errorCode[key] = getMessage[key][errorCode[key]] +"  ";
-    //console.info(errorCode);
-    return errorCode;
+    for (key in errorCode){
+      var error = getMessage[key][errorCode[key]];
+      if(errorCode && error){
+	errorCode[key] = error;
+	return errorCode;
+      }else{
+	return errorCode;
+      }
+    }
  };
 
   return util;

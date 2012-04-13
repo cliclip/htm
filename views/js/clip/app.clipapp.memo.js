@@ -120,8 +120,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       $("#obj_tag").val(tag_obj.join(","));
     }
     $('#obj_tag').tagsInput({
-      //width: 'auto',
-      autocomplete_url:'test/fake_json_endpoint.html'
+      //autocomplete_url:'test/fake_json_endpoint.html'
     });
   };
   ClipMemo.close=function(){

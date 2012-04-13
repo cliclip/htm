@@ -71,6 +71,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       }else{
 	var params = {clip:{note: [{text:text}],tag:tag}};
       }
+      console.log(this.model.toJSON());
       if(this.model.get("model") == "clip"){
 	App.vent.trigger("app.clipapp.reclip:submit", this.model, params);
       }else if (this.model.get("model") == "tag"){
@@ -101,6 +102,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	if(clip){
 	  clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
 	  model.set({clip:clip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist");
+	}else{
+	  var listmodel=App.listRegion.currentView.collection.get(reclipmodel.id);
+	    var modifyclip=listmodel.get("clip");
+	    modifyclip.reprint_count = modifyclip.reprint_count ? modifyclip.reprint_count+1 : 1;
+	  listmodel.set({clip:modifyclip});
 	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	}
 	if(flag){
@@ -169,11 +176,11 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     flag = false;
   };
   App.vent.bind("app.clipapp.reclip:submit", function(model ,params,clip){
-    reclipSave(model, params, clip);
+    reclipSave(model, params);
   });
 
   App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params,clip){
-    reclip_tag(model, params, clip);
+    reclip_tag(model, params);
   });
 
   App.vent.bind("app.clipapp.reclip:cancel",function(){

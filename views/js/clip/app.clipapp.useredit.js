@@ -204,7 +204,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var id = e.currentTarget.id;
       var str = $("#"+id).val();
       if(str){
-	var arr = $("#send").val().split(";");
+	var arr = $("#"+id).val().split(";");
 	var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
 	arr[arr.length-1] = str1;
 	arr = _.compact(arr);
@@ -242,6 +242,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     passUpdate:function(){
       var newpass = $("#new_pass").val();
       var confirm = $("#con_pass").val();
+
       var params = {newpass:newpass,confirm:confirm};
       App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
     }
