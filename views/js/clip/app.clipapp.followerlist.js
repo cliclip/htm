@@ -27,10 +27,12 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       "click #follower" : "followerOpen"
     },
     followingOpen:function(evt){
-      App.vent.trigger("app.clipapp.followinglist:show",App.ClipApp.Face.getUserId());
+      var uid = App.ClipApp.Face.getUserId();
+      App.vent.trigger("app.clipapp.followinglist:show", uid);
     },
     followerOpen:function(evt){
-      App.vent.trigger("app.clipapp.followerlist:show",App.ClipApp.Face.getUserId());
+      var uid = App.ClipApp.Face.getUserId();
+      App.vent.trigger("app.clipapp.followerlist:show",uid);
     }
   });
 
@@ -62,6 +64,12 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.followerlist:show",function(uid){
     FollowerList.showUserFollower(uid);
+    var my = App.util.getMyUid();
+    if(uid == my){
+      App.vent.trigger("app.clipapp.routing:myfollowerlist:show");
+    }else{
+      App.vent.trigger("app.clipapp.routing:userfollowerlist:show", uid);
+    }
   });
 
   // TEST

@@ -41,16 +41,22 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.showUserClips(uid, tag);
   };
 
+  // user所追的人的列表 无需在请求Face 和 Bubb
   ClipApp.userFollowing = function(uid, tag){
+    if(!uid) uid = getMyUid();
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
-    ClipApp.FollowingList.showUserFollowing(uid); // TODO
+    App.vent.trigger("app.clipapp.followinglist:show", uid);
+    // ClipApp.FollowingList.showUserFollowing(uid); // TODO
   };
 
+  // 追user的人的列表 无需再请求Face 和 Bubb
   ClipApp.userFollower = function(uid, tag){
+    if(!uid) uid = getMyUid();
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
-    ClipApp.FollowerList.showUserFollower(uid); // TODO
+    App.vent.trigger("app.clipapp.followerlist:show",uid);
+    // ClipApp.FollowerList.showUserFollower(uid); // TODO
   };
 
   ClipApp.myShow = function(tag){
