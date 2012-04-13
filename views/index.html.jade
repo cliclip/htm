@@ -1,4 +1,3 @@
-//- 此文件与 index.jade 完全一致，所不同在于为了嵌入程序可能需要有一个本地的修改版本
 !!! 5
 html
 
@@ -15,18 +14,22 @@ html
     link(rel="apple-touch-icon",sizes="72x72",href="images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
 
-    link(rel="stylesheet",href="style/bootstrap.min.css")
-    //- client side less
-    link(rel="stylesheet/less",href="style/style.less")
-    script(src="js/less-1.2.2.min.js")
+    //- pack :: css
+    link(rel="stylesheet",href="css/app.css")
+    //- pack :: libs
+    script(src="js/libs.js")
+    //- pack :: app
+    script(src="js/app.js")
+    //- kick start
+    script $(function(){ App.start(); });
 
     //- ie png fix
     //if lt IE 7
-      script(src="js/png.js")
+      script(src="js/lib/png.js")
       script DD_belatedPNG.fix('.logo,.input,.select,.add,.more,.comer_topleft,.comer_topright,.comer_bottomleft,.comer_bottomright,.pages_top,.pages_right,.pages_bottom,.biezhen,.search_btn,.my_info,.icon_biezhen,.icon_quote,.user_i,.zhui,.stop,.user_more,.all,.no_tag,.yet_del,.upload_img,.link_img,.format,.url_text,.subject_put,.subject_note,.subject_comment,.subject_forward,.subject_del,.verify,.cancel,.my,.at_me,.expert');
     //- ie html5 fix
     //if lt IE 9
-      script(src="js/html5.js")
+      script(src="js/lib/html5.js")
 
   body
 
@@ -36,13 +39,14 @@ html
         div.center
           div#mine
             // **** 当前登录用户的信息 TODO 未登录显示 “注册 ｜ 登录”
-            include jade/my_info
+            //-include jade/my_info
             // ****
           div.logo
             a(href="")
           hgroup.search
             // **** 新建clip 查找clip 相关介绍的下拉列表
       div#myset
+        //-
       section.clearfix
         aside.left
           div#face
@@ -109,5 +113,5 @@ html
      //- #query
 
     // **** 程序代码插入点
-    include app
+    include tmpl/app
     // ****
