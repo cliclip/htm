@@ -18,7 +18,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     events:{
       "click .list"     :  "getUserAction",
-      "blur  #name"          :  "getUser",
+      "keydown  #name"          :  "getUser",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
       "mouseover #name_list" :  "MouseOver",
@@ -30,31 +30,37 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     getUser:function(e){
       var uid="";
-      $("#imgId").css("display","none");
       var div=$(".action-info");
-      _.each(div,function(e){
-	var li = e.children;
-//	console.log(li[0].id);
-//	console.log($(li[0]).attr("title"));
-//	console.log($(li[0]).text());
-//	console.log($("#name").val());
-	if($("#name").val() == $(li[0]).text()){
-	  this.$("#name").val($(li[0]).text());
-	  $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
-	  $("#imgId").css("display","block");
-	  uid=li[0].id;
-	  this.$("#name_listDiv").empty();
+      console.info(e.keyCode);
+      if(e.keyCode ==9 || e.keyCode == 13 ){  //当点击回车或tab键时执行下面方法
+	if(div.length != 0){
+	  $("#imgId").css("display","none");
+	  _.each(div,function(e){
+	    var li = e.children;
+//	    console.log(li[0].id);
+//     	    console.log($(li[0]).attr("title"));
+//	    console.log($(li[0]).text());
+//	    console.log($("#name").val());
+	    if($("#name").val() == $(li[0]).text()){
+	      this.$("#name").val($(li[0]).text());
+	      $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
+	      $("#imgId").css("display","block");
+	      uid=li[0].id.split("_")[1];
+	      this.$("#name_listDiv").empty();
+	    }
+	    });
+	  this.model.set({uid:uid});
 	}
-      });
-       this.model.set({uid:uid});
+      }
     },
     getUserAction:function(evt){
       // 这里是必须要触发才会取得uid
-      var uid=evt.target.id;
-      var name=document.getElementById(uid).innerHTML;
+      var id=evt.target.id;
+      var uid = id.split("_")[1];
+      var name=document.getElementById(id).innerHTML;
       $("#imgId").css("display","none");
       this.$("#name").val(name);
-      $("#imgId").attr("src",App.util.face_url(document.getElementById(uid).title));
+      $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
       $("#imgId").css("display","block");
       this.model.set({uid:uid});
       this.$("#name_listDiv").empty();
