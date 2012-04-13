@@ -97,7 +97,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     },
 */
     mouseEnter: function(e){
-      $(e.currentTarget).children(".master").children("#opt").toggle();
+      $(e.currentTarget).children(".master").children("#opt").show();
     },
     mouseLeave: function(e){
       $(e.currentTarget).children(".master").children("#opt").hide();

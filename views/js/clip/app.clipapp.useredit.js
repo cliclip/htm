@@ -66,7 +66,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click .resetUserName" : "setName",
+      "click .set_username" : "setName",
       "click #popup_ContactClose":"editClose"
  //     "click #confirm_face[type=submit]":"submit"
     },
@@ -390,7 +390,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       type: "POST",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
-	//更新右上角的小头像
 	$("#confirm_face").hide();
       },
       error:function(model,res){
@@ -402,15 +401,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     nameModel.save(params,{
       type: "PUT",
       success:function(model,res){
-	alert("恭喜，命名成功!");
+	App.vent.trigger("app.clipapp.message:alert","恭喜，命名成功!");
+	App.vent.trigger("app.clipapp.useredit:showface",App.util.getMyUid());
       },
       error:function(model,res){
 	if(res.name== "invalidate"){
-	  alert("名称不合法！");
+	  App.vent.trigger("app.clipapp.message:alert","名称不合法！");
 	}else if(res.name == "is_null" ){
-	  alert("用户名为空");
+	  App.vent.trigger("app.clipapp.message:alert","用户名不能为空");
 	}else if(res.name == "has_name"){
-	  alert("用户名已存在");
+	  App.vent.trigger("app.clipapp.message:alert","用户名已存在");
 	}
       }
     });
