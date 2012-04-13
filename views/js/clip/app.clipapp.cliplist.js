@@ -69,10 +69,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     },
     show_detail: function(){
       var model_cid=this.model.cid;//传递给detail中的注弹出框，当保存注的数据时，通过此list中具有唯一性的model.cid更改此模型数据
-      App.vent.trigger("app.clipapp:clipdetail",this.model.id,model_cid);
       var clip = this.model.get("clip");
       var clipid = clip.user.id+":"+clip.id;
-      App.vent.trigger("app.clipapp:clipdetail",clipid);
+      App.vent.trigger("app.clipapp:clipdetail",clipid,model_cid);
     },
     commentAction: function(){
       var clip = this.model.get("clip");
@@ -184,6 +183,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     // console.info(options);
     options.params.fetch(options);
     options.params.onReset(function(previewlist){
+    App.vent.bind("app.clipapp:beforeclipmemo", function(clipmodel, type,premodel_cid){
+      App.vent.trigger("app.clipapp:clipmemo", clipmodel, type,null,null,null,premodel_cid,previewlist);
+    });
       //location.reload() ;
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
