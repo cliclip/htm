@@ -25,6 +25,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
+      console.info(id);
       var style =document.getElementById(id).className;
       if(style != "size48 orange_48"){
 	document.getElementById(id).className="size48 orange_48";

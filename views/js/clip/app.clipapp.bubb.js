@@ -72,6 +72,21 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
+  Bubb.followUsreBubs = function(uid, tag){
+    if(!uid) _uid = 2;
+    followUserTag(uid, tag, function(){
+      // 更新bubb显示
+      iframe_call('bubbles', "followTag", tag);
+      // 
+      if(last && last.follows){
+	if(_.isEmpty(last.follows)){
+	  App.vent.trigger("app.clipapp.face:show",_uid);
+	}
+	last.follows.push(tag);
+      }
+    });
+  };
+
   // events
 
   App.vent.bind("app.clipapp.bubb:show", function(tags){
@@ -97,21 +112,12 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:follow", function(tag,uid){
-    followUserTag(uid, tag, function(){
-      // 更新bubb显示
-      iframe_call('bubbles', "followTag", tag);
-      // 若之前未追，则需刷新头像为停
-      if(last && last.follows){
-	if(_.isEmpty(last.follows)){
-	  App.vent.trigger("app.clipapp.face:show",_uid);
-	}
-	last.follows.push(tag);
-      }
-    });
+  // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
+  App.vent.bind("app.clipapp.bubb:follow", function(tag){
+    App.vent.trigger("app.clipapp:follow", null, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(tag,uid){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(uid,tag){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
@@ -187,7 +193,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function followUserTag(uid, tag, callback){
     var url = "";
-    if(uid) uid = _uid;
+    if(!uid) uid = _uid;
     if(tag == '*') {
       url = P+"/user/"+uid+"/follow";
     }else{

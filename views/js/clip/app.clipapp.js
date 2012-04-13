@@ -115,6 +115,17 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
+  // 当前用户追某用户的tag uid一直与face的保持一致
+  App.vent.bind("app.clipapp:follow", function(uid, tag){
+    var me = getMyUid();
+    if(!me){
+      ClipApp.Login.show();
+    }else{
+      if(!uid) uid = ClipApp.Face.getUserId();
+      ClipApp.Bubb.followUsreBubs(uid, tag);
+    }
+  });
+
   App.vent.bind("app.clipapp:recommend", function(model){
     var uid = getMyUid();
     if(!uid){
@@ -133,17 +144,17 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:clipdetail", function(clipid){
-    var uid = getMyUid();
-    ClipApp.ClipDetail.show(uid, clipid);
+  App.vent.bind("app.clipapp:clipdetail", function(clipid,model_cid){
+    var uid = getMyUid();//model_cid为model的id，用来当detail的model改变时，改变相应list的model的数据
+    ClipApp.ClipDetail.show(uid, clipid,model_cid);
   });
 
-  App.vent.bind("app.clipapp:clipmemo", function(clipid,tags,note,pub,model){
+    App.vent.bind("app.clipapp:clipmemo", function(clipid,tags,note,pub,model){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.ClipMemo.show(clipid, tags, note, pub);
+      ClipApp.ClipMemo.show(clipid, tags,note, pub);
     }
   });
 
@@ -172,8 +183,8 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:query", function(word, tag){
     var userid = ClipApp.Face.getUserId();
-    var uid = getMyUid();
-    if(uid == userid && uid!=null && userid!=null){
+    var myid = getMyUid();
+    if(myid == userid && myid!=null){
       App.vent.trigger("app.clipapp.routing:myquery:show", word);
       ClipApp.myQuery(word, tag);
     }else{

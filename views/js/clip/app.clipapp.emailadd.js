@@ -55,7 +55,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       "click #active_cancel":"EmailActiveclose"
     },
     EmailActiveclose: function(){
-      App.popRegion.close();
+      App.setpopRegion.close();
     }
   });
 
@@ -64,7 +64,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     if (model) emailAddModel.set(model.toJSON());
     if (error) emailAddModel.set("error", error);
     var emailAddView = new EmailAddView({model : emailAddModel});
-    App.popRegion.show(emailAddView);
+    App.setpopRegion.show(emailAddView);
     if(error){
       $("#alert").css("display","block");
     }else{
@@ -75,11 +75,11 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     var emailActiveModel = new EmailActiveModel();
     emailActiveModel.set({message:message});
     var emailActiveView = new EmailActiveView({model : emailActiveModel});
-    App.popRegion.show(emailActiveView);
+    App.setpopRegion.show(emailActiveView);
   };
 
   EmailAdd.close = function(){
-    App.popRegion.close();
+    App.setpopRegion.close();
   };
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){

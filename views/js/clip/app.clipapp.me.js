@@ -71,7 +71,10 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.useredit:facesuccess", function(){
     Me.me.fetch();
-    Me.show();
+    //解决小头像上传头像到服务器后还是显示原头像的奇怪问题
+    setTimeout(function(){
+      Me.show();
+    },1000);
   });
 
 

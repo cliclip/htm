@@ -26,16 +26,12 @@ App.ClipApp.Face = (function(App, Backbone, $){
       "click .user_list": "userList"
     },
     followAction: function(){
-      if(!App.util.getMyUid()){
-	App.ClipApp.Login.show();
-      }else{
-	App.vent.trigger("app.clipapp.bubb:follow",'*',this.model.id);
-	App.vent.trigger("app.clipapp.face:show",this.model.id);
-	App.ClipApp.Bubb.showUserTags(this.model.id);
-      }
+      App.vent.trigger("app.clipapp:follow",this.model.id,'*');
+      App.vent.trigger("app.clipapp.face:show",this.model.id);
+      App.ClipApp.Bubb.showUserTags(this.model.id);
     },
     stopAction: function(){
-      App.vent.trigger("app.clipapp.bubb:unfollow",'*',this.model.id);
+      App.vent.trigger("app.clipapp.bubb:unfollow",this.model.id,'*');
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
     },
