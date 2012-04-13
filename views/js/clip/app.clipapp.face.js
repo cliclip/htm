@@ -36,7 +36,14 @@ App.ClipApp.Face = (function(App, Backbone, $){
       App.ClipApp.Bubb.showUserTags(this.model.id);
     },
     userList: function(){
-      Face.showUser(this.model.id);
+      var uid =	user_id;
+      if(uid == App.util.getMyUid()){
+	App.vent.trigger("app.clipapp.routing:mycliplist:show");
+	App.ClipApp.ClipList.showUserClips(my);
+      }else{
+	App.vent.trigger("app.clipapp.routing:usercliplist:show", uid);
+	App.ClipApp.ClipList.showUserClips(uid);
+      }
     }
   });
 
