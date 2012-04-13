@@ -100,6 +100,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	model.set({clip:clip});
 	model.set({recommend:""});
 	App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	//App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
 	App.viewRegion.close();
       },
       error:function(model,error){
