@@ -72,6 +72,21 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
+  Bubb.followUsreBubs = function(uid, tag){
+    if(!uid) _uid = 2;
+    followUserTag(uid, tag, function(){
+      // 更新bubb显示
+      iframe_call('bubbles', "followTag", tag);
+      // 
+      if(last && last.follows){
+	if(_.isEmpty(last.follows)){
+	  App.vent.trigger("app.clipapp.face:show",_uid);
+	}
+	last.follows.push(tag);
+      }
+    });
+  };
+
   // events
 
   App.vent.bind("app.clipapp.bubb:show", function(tags){
@@ -80,9 +95,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       App.bubbRegion.show(bubbView);
     }
     if (changeTags(last, tags, old_self, self)) {
-      resetTags(tags);
+      iframe_call('bubbles', "resetTags", tags);
     } else if (changeDefault(last, tags)) {
-      openTag(tags.default);
+      iframe_call('bubbles', "openTag", tags.default);
     }
     old_self = self;
     last = tags;
@@ -90,27 +105,22 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     //console.log("open %s", tag);
-    // 可以是在当前路由上加上某个值
-    // App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
+    // 更新bubb显示
+    iframe_call('bubbles', "openTag", tag);
     // TODO change to
     App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
     App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:follow", function(tag,uid){
-    followUserTag(uid, tag, function(){
-      // 若之前未追，则需刷新头像为停
-      if(last && last.follows){
-	if(_.isEmpty(last.follows)){
-	  App.vent.trigger("app.clipapp.face:show",_uid);
-	}
-	last.follows.push(tag);
-      }
-    });
+  // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
+  App.vent.bind("app.clipapp.bubb:follow", function(tag){
+    App.vent.trigger("app.clipapp:follow", null, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(tag,uid){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(uid,tag){
     unfollowUserTag(uid, tag, function(){
+      // 更新bubb显示
+      iframe_call('bubbles', "unfollowTag", tag);
       // 若之后已停，则需刷新头像为追
       if(last && last.follows){
 	last.follows = _.without(last.follows,tag);
@@ -183,7 +193,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function followUserTag(uid, tag, callback){
     var url = "";
-    if(uid) uid = _uid;
+    if(!uid) uid = _uid;
     if(tag == '*') {
       url = P+"/user/"+uid+"/follow";
     }else{
@@ -218,25 +228,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   }
 
-  // delegates
+  // call functions inside iframe
 
-  function resetTags(tags){
-    var bw = document.getElementById('bubbles').contentDocument.defaultView;
-    if(bw.resetTags){
-      // console.log("resetTags ",tags);
-      bw.resetTags(tags);
-    } else { // waiting for bubble iframe load
-      setTimeout(function(){ resetTags(tags); }, 100);
-    }
-  }
-
-  function openTag(tag){
-    var bw = document.getElementById('bubbles').contentDocument.defaultView;
-    if(bw.openTag){
-      // console.log("openTags ",tag);
-      bw.openTag(tag);
-    } else { // waiting for bubble iframe load
-      setTimeout(function(){ openTag(tag); }, 100);
+  function iframe_call(ifname, fname, fargs){
+    var ifwin = document.getElementById(ifname).contentDocument.defaultView;
+    if(ifwin[fname]){
+      console.log("iframe_call(", ifname, fname, fargs, ")");
+      ifwin[fname](fargs);
+    } else { // waiting for iframe load
+      setTimeout(function(){ iframe_call(ifname, fname, fargs); }, 100);
     }
   }
 
