@@ -345,7 +345,7 @@ $(function() {
 	  var body = ball.get("body");
 	  var x = body.m_position0.x;
 	  var y = body.m_position0.y;
-	  console.log("ball %s: %s,%s",text,x,y);
+	  // console.log("ball %s: %s,%s",text,x,y);
 	});
       }
 
