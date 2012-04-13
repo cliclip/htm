@@ -40,7 +40,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     className: "clip",
     template: "#clippreview-view-template",
     events: {
-      // 双击clip就响应show_detail事件
+      // 单击clip就响应show_detail事件
       "click #header" : "show_detail",
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",

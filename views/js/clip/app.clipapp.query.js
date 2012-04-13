@@ -15,6 +15,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
       flag = true;
     },
     addClip: function(){
+      window.location.href="#my";
       App.vent.trigger("app.clipapp:clipadd");
     },
     showMore:function(){

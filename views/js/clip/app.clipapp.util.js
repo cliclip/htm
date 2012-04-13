@@ -38,7 +38,7 @@ App.util = (function(){
     while(html != ""){
       html = html.replace(/<[\s|\/]*p.*?>/ig,"");
       html = html.replace(/<[\s|\/]*span.*?>/ig,"");
-      html = html.replace(/<[\s|\/]*b.*?>/ig,"");
+      // html = html.replace(/<[\s|\/]*b.*?>/ig,"");
       if(pre.test(html)){
 	// 取得pre标签结束的位置 [TODO]
 	var i = html.indexOf('</pre>') == -1 ? html.indexOf('</ pre>') : html.indexOf('</pre>');
@@ -153,13 +153,15 @@ App.util = (function(){
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
       // fix left while scroll
-      var mt = $(".clearfix").offset().top + $("#face").height();
-      if($("#list").height()<=175)return;
+      var mt = $(".clearfix").offset().top + 240;//$("#face").height();
+      if($("#list").height()<=200)return;
       if(st > mt ){
-	$("#bubb").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+	$("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
 	$(".return_top").show();
 	// show go-top while scroll
       } else {
+	$(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
 	$("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
 	$(".return_top").hide();
       }
