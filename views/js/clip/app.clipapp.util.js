@@ -154,14 +154,15 @@ App.util = (function(){
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
       // fix left while scroll
-      var mt = $(".clearfix").offset().top;
-      if(st > mt){
-	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+      var mt = $(".clearfix").offset().top + $("#face").height();
+      if($("#list").height()<=175)return;
+      if(st > mt ){
+	$("#bubb").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
 	$(".return_top").show();
 	// show go-top while scroll
       } else {
-	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".return_top").show();
+	$("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$(".return_top").hide();
       }
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;
