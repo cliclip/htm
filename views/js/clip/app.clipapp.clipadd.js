@@ -75,9 +75,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var clip = this.model.get("clip");
       var html = App.ClipApp.Editor.getContent("editor");
       clip.content = App.util.HtmlToContent(html);
-      clip.tag = this.model.get("tag");
-      clip.note = this.model.get("note");
-      clip.public = this.model.get("public");
+      //clip.tag = this.model.get("tag");
+      //clip.note = this.model.get("note");
+      //clip.public = this.model.get("public");
       this.model.save(clip,{
       //this.model.save("content",content,{
 	url: P+"/clip",
