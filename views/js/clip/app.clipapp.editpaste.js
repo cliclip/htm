@@ -45,7 +45,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId);
     var img = "";
     if(data.url)
-      img = "<img src="+data.url+" />";
+      img = "<img src="+data.url+" style='max-width:475px;max-height:490px;' />";
     if(isIE){ // TODO
       // var ifmTemp=document.getElementById("ifmTemp");
       objEditor.contentWindow.document.execCommand("Paste", false, img);

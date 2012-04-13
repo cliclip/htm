@@ -1,11 +1,12 @@
 script(type="text/template",id="findpass-view-template")
   div.masker_layer
   section.small_pop
+    span.close_w
     h2.pop_title 找回密码
     ul.pop_body
-      li.alert
+      li.alert#alert
         <%= typeof error != "undefined"&& error.address ? error.address: "" %>
-      h3.subject_put 邮箱地址
+      h3 邮箱地址
       li.input_text.clearfix
         input(type="text",id="address")
       li.btn_group.clearfix

@@ -41,7 +41,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:logout");
     },
     mysetupAction: function(){
-      App.vent.trigger("app.clipapp.useredit:show");
+      App.vent.trigger("app.clipapp.useredit:show",this.model.get("id"));
     }
   });
 
@@ -74,10 +74,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.show();
   });
 
-  App.vent.bind("app.clipapp.useredit:show", function(){
-    Backbone.history.navigate("my/setup");
-    location.reload();
-  });
 
   App.addInitializer(function(){
     Me.me = new Model();

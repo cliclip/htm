@@ -37,6 +37,11 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     if(error) findPassModel.set("error",error);
     var findPassView=new FindPassView({model:findPassModel});
     App.popRegion.show(findPassView);
+    if(error){
+      $("#alert").css("display","block");
+    }else{
+      $("#alert").css("display","none");
+    }
   };
   FindPass.close=function(){
     App.popRegion.close();

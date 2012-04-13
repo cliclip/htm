@@ -3,6 +3,7 @@
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var precliplength=0,flag=true;
+  var clipListView = {};
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -23,12 +24,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i] = {clip: clip};
 	  resp[i].id = clip.user.id+":"+clip.id;
 	}else{
-	  resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
-	}
-	if(resp[i].clip.user.id != App.ClipApp.getMyUid("id")){
-	  resp[i].manage = [["biezhen","收"],["refresh","转"],["comment","评"]];
-	}else{
-	  resp[i].manage = [["note","注"],["change","改"],["del","删"]];
+	  if(resp[i].recommend){
+	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
+	  }else{
+	    resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
+	  }
 	}
       }
       return resp;
@@ -41,12 +41,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 双击clip就响应show_detail事件
-      "dblclick #header" : "show_detail",
+      "click #header" : "show_detail",
       "click #comment": "commentAction",
       "click #reclip" : "reclipAction",
       "click .operate" : "operate",
-      "mouseover .master": "mouseover", // mouseover子类也响应
-      "mouseout .master": "mouseout" // mouseout 只自己响应
+      "mouseenter #header":"mouseHand",
+      "mouseenter .clip_item": "mouseEnter",
+      "mouseleave .clip_item": "mouseLeave"
     },
     initialize: function(){
       var $container = $('#list');
@@ -55,7 +56,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  itemSelector : '.clip'
 	});
       });
-
       this.bind("item:rendered",function(itemView){
 	var $newElems = itemView.$el.css({ opacity: 0 });
 	$newElems.imagesLoaded(function(){
@@ -68,16 +68,21 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
     show_detail: function(){
-      App.vent.trigger("app.clipapp:clipdetail",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:clipdetail",clipid);
     },
     commentAction: function(){
-      App.vent.trigger("app.clipapp:comment",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:comment",clipid);
     },
     reclipAction: function(){
-      App.vent.trigger("app.clipapp:reclip",this.model.id);
+      var clip = this.model.get("clip");
+      var clipid = clip.user.id+":"+clip.id;
+      App.vent.trigger("app.clipapp:reclip",clipid);
     },
-    // mouseover与mouseout的某些区域还是不能正常显示
-    mouseover: function(e){
+/*    mouseover: function(e){
       e.preventDefault();
       if(checkHover(e,e.target)){
 	//console.info("@@@@@@@@@@@@");
@@ -90,23 +95,29 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	$(e.currentTarget).children("#opt").css("display","none");
       }
     },
+*/
+    mouseEnter: function(e){
+      $(e.currentTarget).children(".master").children("#opt").toggle();
+    },
+    mouseLeave: function(e){
+      $(e.currentTarget).children(".master").children("#opt").hide();
+    },
+    mouseHand:function(e){
+      e.currentTarget.style.cursor="pointer";
+    },
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var clip = this.model.get("clip");
       var cid = this.model.id;
-      var pub = clip["public"];
-      var tags = clip.tag;
-      var note = [clip.note];
       switch(opt){
 	case 'biezhen'://收
-	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment'://评
-	  App.vent.trigger("app.clipapp:comment", cid);break;
+	  App.vent.trigger("app.clipapp:comment", this.model);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	App.vent.trigger("app.clipapp:clipmemo", this.model, "update");break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
@@ -114,7 +125,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
   });
-
+/*
   var contains = function(parentNode,childNode){
     if(parentNode.contains){
       return parentNode != childNode && parentNode.contains(childNode);
@@ -133,7 +144,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var getEvent = function(e){
     return e||window.event;
   };
-
+*/
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",
@@ -175,9 +186,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
-
+  ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
   // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
+    ClipList.flag_show_user = true;
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
@@ -185,6 +197,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserClips = function(uid, tag){
+    ClipList.flag_show_user = false;
     var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
     var data = {user: uid};
     if(tag) data.tag = [tag];
@@ -193,6 +206,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
   ClipList.showSiteQuery = function(word, tag){
+    ClipList.flag_show_user = true;
     var url = "/query";
     url = App.ClipApp.Url.base + url;
     var data = {text: word};
@@ -201,6 +215,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
+    ClipList.flag_show_user = false;
     var url = "/user/"+uid+"/query";
     url = App.ClipApp.Url.base + url;
     var data = {text: word, user: uid};
@@ -209,6 +224,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserInterest = function(uid, tag){
+    ClipList.flag_show_user = true;
     var url = "/user/" + uid + "/interest";
     if(tag) url += "/tag/" + tag;
     url = App.ClipApp.Url.base + url;
@@ -216,6 +232,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   ClipList.showUserRecommend = function(uid, tag){
+    ClipList.flag_show_user = true;
     var url = "/user/"+uid+"/recomm";
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
@@ -223,14 +240,29 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    var clipListView = new ClipListView({collection: clips});
+    App.vent.trigger("app.clipapp.cliplist:showlist",clips);
+    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
+  });
+
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
+    if(collection){
+      clipListView = new ClipListView({collection: collection});
+    }
     $("#list").masonry({
       itemSelector : '.clip',
       columnWidth : 360,
       isAnimated: false
     });
     App.listRegion.show(clipListView);
-    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
+  });
+  App.vent.bind("app.clipapp.cliplist:removeshow",function(model){
+    var collection = clipListView.collection.remove(model);
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+  });
+  App.vent.bind("app.clipapp.cliplist:addshow",function(model){
+    var collection = clipListView.collection;
+    collection.unshift(model);
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
 })(App, Backbone, jQuery);

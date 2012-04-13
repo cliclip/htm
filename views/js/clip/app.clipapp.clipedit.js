@@ -6,6 +6,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
+    },
+    // 跟cliplist一致，使得model.id = "uid:id"
+    parse: function(resp){
+      resp.id = resp.user+":"+resp.id;
+      return resp;
     }
   });
 
@@ -17,13 +22,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     template: "#editDetail-view-template",
     events: {
       "click .link_img":"show_extImg",
-      "change #formUpload": "image_change",
+      "change #formUpload":"image_change",
       "click .format":"upFormat",
-      "click .pop_left": "remarkClip",
+      "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
+      "click .close_w":"abandonUpdate",
       "click .img_upload_span .btn":"up_extImg",
-      "blur .img_upload_span input":"hide_extImg"
+      "blur #img_upload_url":"hide_extImg"
     },
     initialize: function(){
       _data = {content : []};
@@ -35,13 +41,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     show_extImg:function(evt){//弹出输入链接地址的对话框
       $(".img_upload_span").show();
+      $("#img_upload_url").val("");
       $("#img_upload_url").focus();
     },
     up_extImg: function(){
-      var url = $("#img_upload_url1").val();
+      var url = $("#img_upload_url").val();
       if(url == "http://" || url == null)return;
+      $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
-
     },
     image_change:function(e){
       var that = this;
@@ -68,7 +75,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  }
 	});
       }else{
-	alert("图片格式无效");
+	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
       }
     },
     upFormat:function(){ // 进行正文抽取
@@ -77,17 +84,16 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       console.info("调整页面格式");
     },
     remarkClip:function(){
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
-      var tag = this.model.get("tag");
-      var note = this.model.get("note");
-      var pub = this.model.get("public");
-      App.vent.trigger("app.clipapp:clipmemo", cid, tag, note, pub);
-      // App.OrganizeApp.open(cid);
+      // var user = this.model.get("user");
+      // var cid = user+":"+this.model.id;
+      // var tag = this.model.get("tag");
+      // var note = this.model.get("note");
+      // var pub = this.model.get("public");
+      // 整个的传model方便直接修改
+      App.vent.trigger("app.clipapp:clipmemo", this.model, "update");
     },
     saveUpdate: function(){
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
+      var cid = this.model.id;
       // 参数为编辑器id
       var html = App.ClipApp.Editor.getContent("editor");
       _data.content = App.util.HtmlToContent(html);
@@ -107,8 +113,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     abandonUpdate: function(){
       // 直接返回详情页面
       App.viewRegion.close();
-      var user = this.model.get("user");
-      var cid =	user+":"+this.model.id;
+      var cid =	this.model.id;
       //在clip列表界面触发“改”时不应返回详情页面
       //App.vent.trigger("app.clipapp:clipdetail", cid);
     }

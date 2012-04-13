@@ -1,13 +1,17 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var P = App.ClipApp.Url.base;
-
   var DetailModel = App.Model.extend({
     defaults:{
       imguid:""
     },
     url: function(){
       return P+"/clip/"+this.id;
+    },
+    // 跟cliplist一致，使得model.id = "uid:id"
+    parse: function(resp){
+      resp.id = resp.user+":"+resp.id;
+      return resp;
     }
   });
 
@@ -17,25 +21,25 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template: "#detail-view-template",
     events: {
       "click .operate" : "Operate",
-      "click .masker_layer" : "Close" // 点击detail下的层，便隐藏
+      "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
+      "click .close_w":"Close"
     },
     Operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
-      var user = this.model.get("user");
-      var cid = user+":"+this.model.id;
-      var pub = this.model.get("public");
-      var tags = this.model.get("tag");
-      var note = this.model.get("note");
+      var cid = this.model.id;
+      if(this.model.get("clip")){
+	this.model.unset("clip");
+      }
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh':
-	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	  App.vent.trigger("app.clipapp:clipmemo", cid,tags,note,pub);break;
+	App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
@@ -54,7 +58,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   var CommentView = App.ItemView.extend({
-    tagName: "ul",
+    tagName: "div",
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
@@ -67,6 +71,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     toggleChildren : function(e){
       e.preventDefault();
       if($(e.target).attr("class") == "comm_link"){
+	// 取得当前的marking
+	var marking = $(e.target).children(".marking").text();
+	if(marking){ // 如果有值取反
+	  marking = marking == '+' ? '-' :'+';
+	  $(e.target).children(".marking").text(marking);
+	}
 	$(e.currentTarget).siblings(".children").toggle();
       }
     },
@@ -74,7 +84,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var id = e.currentTarget.id;
       $("#reply_"+id).css("display","block");
-      $(e.currentTarget).css("background","#f0f");
+      // $(e.currentTarget).css("background","#f0f");
     },
     resume : function(e){
       e.preventDefault();
@@ -121,13 +131,18 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  } else {
 	    e.auth = auth;
 	    e.clip_owner = clip_owner;
+	    if(e.children && e.children.length <= 0){
+	      e.has_child = false; // 表明该结点没有子节点
+ 	    }else{
+	      e.has_child = true;
+	    }
 	    var str = _.template(template, e);
 	    if (e.children && e.children.length > 0) {
 	      str += "<ul class='children'>";
 	      str += render_tree(e.children, "");
 	      str += "</ul>";
 	    }
-	    str = '<ul>'+str+'</ul>';
+	    str = '<div>'+str+'</div>';
             return render_tree(commentList, html+str);
 	  }
 	}
@@ -154,12 +169,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var clip = new DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
-      var user = detailModel.get("user");
-      if(user == uid){
-	detailModel.set("self",true);
-      }else{
-	detailModel.set("self",false);
-      }
       showDetail(detailModel);
       ClipDetail.showComment(cid);
       ClipDetail.showAddComm(cid);
@@ -267,6 +276,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       el:".input_textarea"
     });
     ClipDetail.addCommRegion.show(addCommView);
+    $(".cancel").css("display","none");
     if(focus)
       $("#comm_text").focus();
   };

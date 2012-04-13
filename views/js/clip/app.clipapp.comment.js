@@ -1,11 +1,8 @@
 // app.comment.js
 
-var P = "/_2_";
-
 App.ClipApp.Comment = (function(App, Backbone, $){
   var Comment = {};
   var tag_list = [];
-  var CommentModel = App.Model.extend({});
 
   var CommentView = App.ItemView.extend({
     tagName : "div",
@@ -38,7 +35,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       if(style != "size48 orange_48"){
 	document.getElementById(id).className="size48 orange_48";
 	tag_list.push($("#"+id).html());
-	console.dir(tag_list);
+	//console.dir(tag_list);
 	if($("#comm_text").val() == "" || $("#comm_text").val() == "说点什么吧~"){
 	  $("#comm_text").val($("#"+id).html());
 	}else{
@@ -48,7 +45,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	document.getElementById(id).className="size48 white_48";
 	tag_list = _.without(tag_list,$("#"+id).html());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).html()));
-	console.dir(tag_list);
+	//console.dir(tag_list);
       }
     },
 
@@ -71,10 +68,16 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   });
 
   var commentAction = function(commentModel, params){
+    var clip = commentModel.get("clip");
+    var clipid = clip.user.id+":"+clip.id;
     commentModel.save(params,{
-      url: P+"/clip/"+commentModel.id+"/comment",
+      url: App.ClipApp.Url.base+"/clip/"+clipid+"/comment",
       type: "POST",
       success: function(model, res){
+	var clip = model.get("clip");
+	clip.reply_count = clip.reply_count ? clip.reply_count+1 : 1;
+	model.set({clip:clip});
+	App.vent.trigger("app.clipapp.cliplist:showlist");
 	Comment.close();
 	// App.vent.trigger("clip:showDetail", id);
       },
@@ -84,11 +87,8 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     });
   };
 
-  Comment.show = function(cid, model, error){
-    var commentModel = new CommentModel({id: cid});
-    if (model) commentModel.set(model.toJSON());
-    if (error) commentModel.set("error", error);
-    var commentView = new CommentView({model : commentModel});
+  Comment.show = function(model){
+    var commentView = new CommentView({model : model});
     App.popRegion.show(commentView);
     tag_list = [];
   };

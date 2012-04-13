@@ -1,5 +1,6 @@
 App.ClipApp.Query = (function(App,Backbone,$){
   var Query = {};
+  var flag = true;
   var QueryModel = App.Model.extend({});
   var QueryView = App.ItemView.extend({
     tagName: "div",
@@ -11,8 +12,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
       "click .text":"inputAction"
     },
     initialize:function(){
-      //if (window.event.keyCode==13)
-	//window.event.keyCode=0 ;
+      flag = true;
     },
     addClip: function(){
       App.vent.trigger("app.clipapp:clipadd");
@@ -24,13 +24,15 @@ App.ClipApp.Query = (function(App,Backbone,$){
       var word = this.$(".text").val();
       App.vent.trigger("app.clipapp.query:query",word);
     },
-    inputAction: function(){//监听回车事件
-      $('.text').keydown(function(e){
-	if(e.keyCode==13){
-	  console.info("click");
-	  $('.search_btn').click();
-	}
-      });
+    inputAction: function(){
+      if(flag){ // 在第一次点击查询输入框的时候 进行keydown事件的绑定
+	flag = false;
+	$('.text').keydown(function(e){
+	  if(e.keyCode==13){ // 响应回车事件
+	    $('.search_btn').click();
+	  }
+	});
+      }
     }
   });
 

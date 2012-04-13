@@ -2,6 +2,7 @@
 
 App.ClipApp.Recommend = (function(App,Backbone,$){
   var Recommend = {};
+  var recommModel;
   var P = App.ClipApp.Url.base;
   // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
@@ -10,14 +11,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     url   : P+"/lookup/0..5"
   });
 
-  var RecommModel = App.Model.extend({});
+  //var RecommModel = App.Model.extend({});
   var RecommView = App.ItemView.extend({
     tagName:"div",
     className:"",
     template:"#recommend-view-template",
     events:{
-      "click #name_list"     :  "getUserAction",
-      "keypress #name"       :  "getUser",
+      "click .list"     :  "getUserAction",
+      "keydown  #name"          :  "getUser",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
       "mouseover #name_list" :  "MouseOver",
@@ -28,21 +29,55 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "click .close_w"        : "cancelAction"
     },
     getUser:function(e){
-
+      var uid="";
+      var div=$(".action-info");
+      console.info(e.keyCode);
+      if(e.keyCode ==9 || e.keyCode == 13 ){  //当点击回车或tab键时执行下面方法
+	if(div.length != 0){
+	  $("#imgId").css("display","none");
+	  _.each(div,function(e){
+	    var li = e.children;
+//	    console.log(li[0].id);
+//     	    console.log($(li[0]).attr("title"));
+//	    console.log($(li[0]).text());
+//	    console.log($("#name").val());
+	    if($("#name").val() == $(li[0]).text()){
+	      this.$("#name").val($(li[0]).text());
+	      $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
+	      $("#imgId").css("display","block");
+	      uid=li[0].id.split("_")[1];
+	      this.$("#name_listDiv").empty();
+	    }
+	    });
+	  this.model.set({uid:uid});
+	}
+      }
     },
     getUserAction:function(evt){
       // 这里是必须要触发才会取得uid
-      var uid=evt.target.id;
-      var name=document.getElementById(uid).innerHTML;
+      var id=evt.target.id;
+      var uid = id.split("_")[1];
+      var name=document.getElementById(id).innerHTML;
+      $("#imgId").css("display","none");
       this.$("#name").val(name);
-      $("#imgId").attr("src",document.getElementById(uid).title);
+      $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
+      $("#imgId").css("display","block");
       this.model.set({uid:uid});
       this.$("#name_listDiv").empty();
     },
     nameListAction:function(evt){
+      var uid = "";
+      $("#alert").css("display","none");
+      $("#imgId").css("display","none");
       var str = this.$("#name").val();
+      var clip = this.model.get("clip");
+      if(clip){
+	uid = clip.user.id;
+      }else{
+	uid = this.model.get("user");
+      }
       var params = {q:str};
-      App.vent.trigger("app.clipapp.recommend:lookup",params,this.model.id);
+      App.vent.trigger("app.clipapp.recommend:lookup",params,uid);
     },
     MouseOver:function(evt){
 
@@ -52,17 +87,24 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     recommendAction:function(e){
       e.preventDefault();
+      var clipid = "";
       var text=$("#recommend_text").val();
+      var clip = this.model.get("clip");
+      if(clip){
+	clipid = clip.user.id+":"+clip.id;
+      }else{
+	clipid = this.model.get("id");
+      }
       var params = {
 	text:text,
-	clipid :this.model.id
+	clipid : clipid
       };
       var params1 = {clip:{note:[{text:text}]}};
       if(this.model.get("uid")){
 	App.vent.trigger("app.clipapp.recommend:submit",this.model,params);
 	if($("#reclip_box").attr("checked")){
-	App.vent.trigger("app.clipapp.reclip:submit", this.model,params1);
-      }
+	  App.vent.trigger("app.clipapp.reclip:submit", this.model,params1);
+	}
       }else{
 	App.vent.trigger("app.clipapp.recommend:error",this.model,{"user":"请添加用户"});
       }
@@ -87,13 +129,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   var NameListCollectionView=App.CollectionView.extend({
     tagName:"div",
+    className:"list",
     itemView:NameListItemView
   });
-  var showNameList=function(params,clipid){
+  var showNameList=function(params,owner_id){
     var collection = new NameList({});
     collection.fetch({data:params});
     collection.onReset(function(list){
-      var ownmodel=list.get(clipid.split(":")[0]);
+      var ownmodel=list.get(owner_id);
       list.remove(ownmodel);
       var namelistView = new NameListCollectionView({
 	collection:list
@@ -107,7 +150,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       type:"POST",
       success:function(model,res){
 	Recommend.close();
-	location.reload();
       },
       error:function(model,res){
 	App.vent.trigger("app.clipapp.recommend:error", model, res);
@@ -115,8 +157,10 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     });
   };
 
-  Recommend.show = function(cid, model,error){
-    var recommModel = new RecommModel({id: cid});
+  Recommend.show = function(clipModel,model,error){
+    if(clipModel){
+       recommModel = clipModel;
+    }
     if (model) recommModel.set(model.toJSON());
     if (error) recommModel.set({"error":error});
     Recommend.nameListRegion = new App.Region({
@@ -138,8 +182,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   };
 
 
-  App.vent.bind("app.clipapp.recommend:lookup",function(params,clipid){
-    showNameList(params,clipid);
+  App.vent.bind("app.clipapp.recommend:lookup",function(params,owner_id){
+    showNameList(params,owner_id);
   });
 
   App.vent.bind("app.clipapp.recommend:submit",function(model,params){

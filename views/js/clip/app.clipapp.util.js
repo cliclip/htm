@@ -1,9 +1,19 @@
 App.util = (function(){
   var util = {};
   var paramslength=0,flag=true;
+  var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
     var cookie = document.cookie;
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
+  };
+
+  // 判断当前的用户和传过来的参数是否是同一人
+  util.auth = function(uid){
+    return util.getMyUid() == uid;
+  };
+
+  util.getImg_upUrl = function(){
+    return P + '/user/'+util.getMyUid()+'/image';
   };
 
   util.url = function(imageid){
@@ -23,7 +33,6 @@ App.util = (function(){
     var link = /http:\/\//;
     var pre = /<pre.*?>/;
     var content = [];
-
     // 此处的html只包含简单的p标签和span标签 [可是还存在像;nbsp这类内容]
     // <b></b>也没有处理过滤
     while(html != ""){
@@ -52,7 +61,8 @@ App.util = (function(){
 	  html = html.replace(rg,"");
 	}else{
 	  var text = html.substring(0,i);
-	  text = text.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
+	  text = text.replace(/(^\s*)|(\s*$)/g,"");// .replace(/<br*?>/,"");
+	  // 先保留<br />标签
 	  content.push({text:text});
 	  html = html.substring(i,html.length);
 	}
@@ -68,7 +78,6 @@ App.util = (function(){
   };
 
   util.ContentToHtml = function(content){
-    // console.log(content);
     var html = "";
     for(var i=0; i<content.length; i++){
       for(key in content[i]){
@@ -76,7 +85,9 @@ App.util = (function(){
 	  case 'text':
 	    html += '<p>' + content[i][key] + '</p>';break;
 	  case 'image':
-	    html += '<p><img src=' + util.url(content[i][key]) + '></img></p>';
+	    html +=
+	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:475px;max-height:490px;">'
+	    + '</img></p>';
 	    break;
 	  case 'code':
 	    html += '<pre> ' + content[i][key] + '</pre>';break;
@@ -107,22 +118,21 @@ App.util = (function(){
   };
 
   util.generatePastTime = function(time){
+    if(!time) return null;
     var ftime = new Date(time);
     var ttime = new Date();
-        //console.info(ftime);
-        console.info(ttime);
-    return subTimes(ftime,ttime) + "前";
+    return subTimes(ftime,ttime);
   };
 
   subTimes = function(Ftime,Ttime){
     var dtime = (Ttime.getTime() - Ftime.getTime())/1000;
     var returnVal = "";
     if(dtime<60){//second
-      returnVal = dtime + "秒";
+      returnVal = dtime + "秒前";
     }else if(dtime>=60 && dtime<60*60){//minute
-      returnVal = Math.round(dtime/60) + "分";
+      returnVal = Math.round(dtime/60) + "分钟前";
     }else if(dtime>=60*60 && dtime<60*60*24){//hour
-      returnVal = Math.round(dtime/(60*60)) + "小时";
+      returnVal = Math.round(dtime/(60*60)) + "小时前";
     }else if(dtime>=60*60*24 && dtime<60*60*24*7){//day
       returnVal = Math.round(dtime/(60*60*24)) + "天";
     }else if(dtime>=60*60*24*7 && dtime<60*60*24*30){//week
@@ -143,19 +153,18 @@ App.util = (function(){
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
       // fix left while scroll
-      var mt = $(".layout").offset().top;
+      var mt = $(".clearfix").offset().top;
       if(st > mt){
 	$(".left").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	$(".return_top").fadeIn();
+	$(".return_top").show();
 	// show go-top while scroll
       } else {
 	$(".left").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".return_top").fadeOut();
+	$(".return_top").show();
       }
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
-      //if(view.$el[0].scrollHeight>0&&(view.$el[0].scrollHeight-scrollTop)<500){
       if(st + wh > lt){
 	if(flag){
 	  options.start += App.ClipApp.Url.page;
@@ -177,7 +186,26 @@ App.util = (function(){
       }
     });
   });
-  var getMessage = {};
+  var getMessage = {
+    auth: {
+      not_exist: "用户不存在",
+      not_match: "句柄不合法",
+      not_login: "用户为登录"
+    },
+    name:{
+      is_null: "用户名为空",
+      invalidate: "用户名不符合校验规则（只能是英文、数字和点的组合，长度是5-20）",
+      exist: "用户名已存在",
+      not_exist: "用户名不存在"
+    },
+    pass:{
+      is_null: "密码为空",
+      not_match: "密码不匹配"
+    },
+    email:{
+      invalidate: "邮箱不合法"
+    }
+  };
 
   getMessage["login_success"] = "登录成功";
   getMessage["register_success"] = "注册成功";
@@ -186,29 +214,6 @@ App.util = (function(){
   getMessage["collect_success"] = "收藏成功";
   getMessage["comment_success"] = "评论成功";
   getMessage["recomment_success"] = "转发成功";
-
-  getMessage["auth"] = getMessage["auth"] || {};
-  getMessage["auth"]["not_exist"] = "用户不存在";
-  getMessage["auth"]["not_match"] = "句柄不合法";
-  getMessage["auth"]["not_login"] = "用户未登录";
-
-  getMessage["name"] = getMessage["name"] || {};
-  getMessage["name"]["is_null"] = "用户名为空";
-  getMessage["name"]["invalidate"] = "用户名不符合校验规则（只能是英文、数字和点的组合，长度是5-20）";
-  getMessage["name"]["exist"] = "用户名已存在";
-  getMessage["name"]["not_exist"] = "用户不存在";
-
-  getMessage["pass"] = getMessage["pass"] || {};
-  getMessage["pass"]["is_null"] = "密码为空";
-  getMessage["pass"]["not_match"] = "密码不匹配";
-
-  getMessage["oldpass"] = getMessage["oldpass"] || {};
-  getMessage["oldpass"]["is_null"] = "原密码为空";
-  getMessage["oldpass"]["not_match"] = "原密码不匹配";
-
-  getMessage["email"] = getMessage["email"] || {};
-  getMessage["email"]["invalidate"] = "邮箱不合法";
-
   getMessage["recomment_success"]= "转发成功";
   getMessage["clip_not_exist"] = "clip不存在";
 

@@ -2,14 +2,13 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var tag_list = [];
   var P = App.ClipApp.Url.base;
+  var flag = false;
 
   var ReclipModel = App.Model.extend({
     defaults: {
       count: ""
-    },
-    url: "/_/reclip"
+    }
   });
-
   var ReclipView = App.ItemView.extend({
     tagName : "div",
     className : "reclip-view",
@@ -26,25 +25,11 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
-     // console.log(id);
-     // console.log($("#"+id).html());
-     // document.getElementById(id).className="size48 blue_48";
       var style =document.getElementById(id).className;
-     // console.log(style);
       if(style != "size48 orange_48"){
 	document.getElementById(id).className="size48 orange_48";
-	tag_list.push($("#"+id).html());
-	if($("#reclip_text").val() == "" || $("#reclip_text").val() == "备注一下吧~"){
-	  $("#reclip_text").val($("#"+id).html());
-	 // console.dir(tag_list);
-	}else{
-	  $("#reclip_text").val(_.union($("#reclip_text").val().split(","),$("#"+id).html()));
-	}
       }else if(style == "size48 orange_48"){
 	document.getElementById(id).className="size48 white_48";
-	tag_list = _.without(tag_list,$("#"+id).html());
-	$("#reclip_text").val(_.without($("#reclip_text").val().split(","),$("#"+id).html()));
-	//console.dir(tag_list);
       }
     },
     objtagOpen:function(evt){
@@ -69,21 +54,26 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	$("#reclip_text").val(value);
       }
     },
-    submit:function(e){
-      e.preventDefault();
-      var that = this;
+    submit:function(evt){
+      evt.preventDefault();
       var text = $("#reclip_text").val();
-      var tag = _.without($("#obj_tag").val().split(","),"add a tag","");
-      tag = _.union(tag, tag_list);
+      var main_tag = [];
+      for(var i=1;i<7;i++){
+	if(document.getElementById("main_tag_"+i).className == "size48 orange_48"){
+	  main_tag.push($("#main_tag_"+i).html());
+	}
+      };
+      var tag = _.without($("#obj_tag").val().split(","),"");
+      tag = _.union(tag, main_tag);
       if($("#checkbox").attr("checked")){
 	var params = {clip:{note: [{text:text}],tag:tag,"public":"false"}};
       }else{
 	var params = {clip:{note: [{text:text}],tag:tag}};
       }
       if(this.model.get("model") == "clip"){
-	App.vent.trigger("app.clipapp.reclip:submit", that.model, params);
+	App.vent.trigger("app.clipapp.reclip:submit", this.model, params);
       }else if (this.model.get("model") == "tag"){
-	App.vent.trigger("app.clipapp.reclip_tag:submit", that.model, params);
+	App.vent.trigger("app.clipapp.reclip_tag:submit", this.model, params);
       }
     },
     cancel : function(e){
@@ -93,15 +83,31 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   });
 
   var reclipSave = function(reclipmodel,params){
+    var clip = reclipmodel.get("clip");
+    var clipid = "";
+    if(clip){
+      clipid = clip.user.id+":"+clip.id;
+      clip.note = [{text:params.clip.text}];
+      clip.tag = params.clip.tag;
+      if(params.clip.public == "false")   clip.public = params.clip.public;
+    }else{
+      clipid = reclipmodel.get("id");
+    }
     reclipmodel.save(params,{
-      url: P+"/clip/"+reclipmodel.id+"/reclip",
+      url: P+"/clip/"+clipid+"/reclip",
       type: "POST",
       success: function(model, res){
-	Reclip.close();
-	location.reload();
+	if(clip){
+	  clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
+	  model.set({clip:clip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist");
+	}
+	if(flag){
+	  Reclip.close();
+	}
       },
       error:function(model, res){
-	Reclip.show(model.id, null, null, model, res);
+	console.info(res);
       }
     });
   };
@@ -114,7 +120,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	Reclip.close();
-	location.reload();
       },
       error:function(model, res){
 	Reclip.show(null, model, res);
@@ -122,47 +127,52 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     });
   };
 
-  Reclip.show = function(cid, user, tag, model, error){
-    var reclipModel = new ReclipModel();
-    if (model) reclipModel.set(model.toJSON());
-    if (error) reclipModel.set("error", error);
-    if(cid){
-      reclipModel.id = cid;
-      reclipModel.set("model", "clip");
-      var reclipView = new ReclipView({model : reclipModel});
+  Reclip.show = function(model, user, tag){
+    flag = true;
+    if(model){
+      model.set("model", "clip");
+      var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
       $('#obj_tag').tagsInput({
 	//width: 'auto',
 	autocomplete_url:'test/fake_json_endpoint.html'
       });
     }else if (user && tag){
+      var reclipModel = new ReclipModel();
       reclipModel.fetch({
 	type: "GET",
 	url: P+"/user/"+user+"/clip/tag/"+tag
       });
       reclipModel.onChange(function(reclipModel){
-	reclipModel.set("model", "tag");
-	reclipModel.set("user", user);
-	reclipModel.set("tag", tag);
-	var reclipView = new ReclipView({model: reclipModel});
-	App.popRegion.show(reclipView);
-	$('#obj_tag').tagsInput({
-	  //width: 'auto',
-	  autocomplete_url:'test/fake_json_endpoint.html'
-	});
+	if(!reclipModel.get("count")){
+	  // 现在只是公用该事件，事件名称有待改进
+	  App.vent.trigger("app.clipapp.message:alert","当前用户该tag下还没有数据");
+	}else{
+	  // 有count表示可以收到数据
+	  reclipModel.set("model", "tag");
+	  reclipModel.set("user", user);
+	  reclipModel.set("tag", tag);
+	  var reclipView = new ReclipView({model: reclipModel});
+	  App.popRegion.show(reclipView);
+	  $('#obj_tag').tagsInput({
+	    //width: 'auto',
+	    autocomplete_url:'test/fake_json_endpoint.html'
+	  });
+	}
       });
     }
   };
 
   Reclip.close = function(){
     App.popRegion.close();
+    flag = false;
   };
-  App.vent.bind("app.clipapp.reclip:submit", function(model ,params){
-    reclipSave(model, params);
+  App.vent.bind("app.clipapp.reclip:submit", function(model ,params,clip){
+    reclipSave(model, params, clip);
   });
 
-  App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params){
-    reclip_tag(model, params);
+  App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params,clip){
+    reclip_tag(model, params, clip);
   });
 
   App.vent.bind("app.clipapp.reclip:cancel",function(){

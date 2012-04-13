@@ -90,13 +90,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     //console.log("open %s", tag);
-    // 可以是在当前路由上加上某个值
-    App.Routing.ClipRouting.router.navigate(mkUrl(tag), true);
     // 更新bubb显示
     iframe_call('bubbles', "openTag", tag);
     // TODO change to
-    // App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
-    // App.vent.trigger("", clipListRefresh);
+    App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
+    App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
   });
 
   App.vent.bind("app.clipapp.bubb:follow", function(tag,uid){
@@ -147,7 +145,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // GET $HOST/$BASE/_/user/0/tag/0..19
     // var follows = ["动漫", "科技"];
     // var tags = ["电影", "音乐", "美女", "穿越", "户外", "流行"];
-    var bubbModel = new BubbModel({id: "1"});
+    var bubbModel = new BubbModel({id: "2"});
     var url = P+"/user/"+bubbModel.id+"/tag/0..19";
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
@@ -237,7 +235,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // utils
-
   function mkTag(tags, followss, tag, self){
     // DEBUG PURPOSE
     var follows = _.without(followss,'*');
@@ -256,11 +253,14 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function mkUrl(tag){
     var url = Backbone.history.fragment;
     var i = url.indexOf("/tag");
-    if(i > 0){
+    if(i >= 0){
       url = url.substr(0, i);
       return url += "/tag/"+tag;
     }else{
-      return url = "/user/"+_uid+"/tag/"+tag;
+      if(url.indexOf("my") >= 0)
+	return "/my/tag/"+tag;
+      else
+	return "/user/"+_uid+"/tag/"+tag;
     }
   }
 

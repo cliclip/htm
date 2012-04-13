@@ -25,7 +25,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     events: {
       "click #emailadd_commit":"EmailAddcommit",
       "click #emailadd_cancel":"EmailAddclose",
-      "click .close_w"        :"EmailAddclose"
+      "click .close_w"        :"EmailAddclose",
+      "focus .input_text"     :"cleanError"
     },
     EmailAddclose: function(){
       EmailAdd.close();
@@ -41,6 +42,9 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   	  App.vent.trigger("app.clipapp.emailadd:error", model, res);
   	}
       });
+    },
+    cleanError:function(){
+      $("#alert").css("display","none");
     }
   });
   var EmailActiveView = App.ItemView.extend({
@@ -81,15 +85,15 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     EmailAdd.showEmailAdd(uid);
   });
+
+  App.vent.bind("app.clipapp.message:alert", function(message){
+    EmailAdd.showActive(message);
+  });
+
   App.vent.bind("app.clipapp.emailadd:success",function(email){
-      var com = "";
-      if(email.split("@")[1] == "qq.com"){
-	com = "http://mail.qq.com";
-      }else{
-	com = "http://www."+email.split("@")[1];
-      }
       EmailAdd.close();
-      EmailAdd.showActive(email);
+      App.vent.trigger("app.clipapp.message:alert", email);
+      // EmailAdd.showActive(email);
   });
   App.vent.bind("app.clipapp.emailadd:error",function(model,error){
     EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(error));

@@ -6,51 +6,68 @@ script(type="text/template",id="detail-view-template")
         span.breadcrumbs
           |路径图
       div.pop_right.
-        <% if(!self) {%>
-          <i class="comment operate"></i>
-          <i class="refresh operate"></i>
-          <i class="biezhen operate"></i>
+        <% if(!App.util.auth(user)) {%>
+          <i class="comment operate" title="评"></i>
+          <i class="refresh operate" title="转"></i>
+          <i class="biezhen operate" title="收"></i>
         <% }else {%>
-          <i class="del operate"></i>
-          <i class="change operate"></i>
-          <i class="note operate"></i>
+          <i class="del operate" title="删"></i>
+          <i class="change operate" title="改"></i>
+          <i class="note operate" title="注"></i>
+          <i class="refresh operate" title="转"></i>	   
         <% } %>
+        <span class="close_w"></span>
     div.pop_left
       ul.forward_log.
-        <%for(var i =0; i<users.length; i++){%>
+        <% for(var i =0; i<users.length; i++){%>
         <li class="user_head">
           <a href="#user/<%= users[i].id%>">
           <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
           </a>
+          <% if(i < users.length-1 ){ %>
+             <j class="join"></j>
+          <% } %>
         </li>
         <%}%>
     div.pop_right
       section.pop_inner
         article.content
           <%for(var i=0; i<content.length; i++){if(content[i].text){%>
-          <%= content[i].text %>
+          p<%= content[i].text %>
           <%}else if(content[i].image){%>
           <img src="<%=App.util.url(content[i].image)%>"/>
           <%}}%>
-          <%= time.match(/\d{4}-\d{2}-\d{2}/)%>
-          <%= App.util.generatePastTime(time)%>
+        <%= App.util.generatePastTime(time)%>
         dl.comments.clearfix
         div.input_textarea
 
 script(type="text/template",id="showcomment-view-template")
-  div.user_head.
-    <img src=<%=App.util.face_url(user.face)%> />
-  dt.username.
-    <a href="#user/<%=user.id%>"><%= user.uid %></a>time <%=App.util.generatePastTime(date)%>
-  dd.comment_con.
-    <div class="comm_link" id="<%= id %>"><%= text %>
+  <% if (text == "此内容已被删除"){ %>
+  dd.comment_con.del_comm.
+    <div class="comm_link" id="<%= id %>">
+    <a class="marking"><% if(has_child) {%> - <%}%></a>
+    <%= text %><%= App.util.generatePastTime(date)%>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
-    <% if(auth && (user.uid == auth || auth == clip_owner )){%>
+    </div>
+    </div>
+  <% } else {%>
+  div.user_head
+    <a href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
+  dt.username
+    <a href="#user/<%=user.id%>"><%= user.name %></a>
+  dd.comment_con.
+    <div class="comm_link" id="<%= id %>">
+    <a class="marking"><% if(has_child) {%> - <%}%></a>
+    <%= text %><%= App.util.generatePastTime(date)%>
+    <div id="reply_<%=id%>" style="display:none;">
+    <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
+    <% if( auth && (user.id == auth || auth == clip_owner )){%>
     <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
     <% } %>
     </div>
     </div>
+  <%}%>
           
 script(type="text/template",id="addcomm-view-template")
   |<textarea id="comm_text">评论文本框~</textarea>
@@ -59,7 +76,8 @@ script(type="text/template",id="addcomm-view-template")
     input.main_tag(type="button",id="main_tag_2",value="好听")
     input.main_tag(type="button",id="main_tag_3",value="好吃")
     input.main_tag(type="button",id="main_tag_4",value="好玩")
-    input.main_tag(type="button",id="main_tag_5",value="酷")
+    input.main_tag(type="button",id="main_tag_5",value="精辟")
+    input.main_tag(type="button",id="main_tag_6",value="酷")
   div.btn_group.clearfix
     input.verify(type="button",value="评论")
     input.cancel(type="button",value="取消")
