@@ -38,7 +38,7 @@ App.util = (function(){
     while(html != ""){
       html = html.replace(/<[\s|\/]*p.*?>/ig,"");
       html = html.replace(/<[\s|\/]*span.*?>/ig,"");
-      html = html.replace(/<[\s|\/]*b.*?>/ig,"");
+      // html = html.replace(/<[\s|\/]*b.*?>/ig,"");
       if(pre.test(html)){
 	// 取得pre标签结束的位置 [TODO]
 	var i = html.indexOf('</pre>') == -1 ? html.indexOf('</ pre>') : html.indexOf('</pre>');

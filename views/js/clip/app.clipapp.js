@@ -115,6 +115,17 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
+  // 当前用户追某用户的tag uid一直与face的保持一致
+  App.vent.bind("app.clipapp:follow", function(uid, tag){
+    var me = getMyUid();
+    if(!me){
+      ClipApp.Login.show();
+    }else{
+      if(!uid) uid = ClipApp.Face.getUserId();
+      ClipApp.Bubb.followUsreBubs(uid, tag);
+    }
+  });
+
   App.vent.bind("app.clipapp:recommend", function(model){
     var uid = getMyUid();
     if(!uid){
