@@ -99,8 +99,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	model.id = App.util.getMyUid()+":"+res;
 	model.set({clip:clip});
 	model.set({recommend:""});
-	App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	//App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
+	//App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
+	App.ClipApp.Bubb.showUserTags(clip.user.id);
 	App.viewRegion.close();
       },
       error:function(model,error){
