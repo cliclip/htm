@@ -154,7 +154,7 @@ App.util = (function(){
       var wh = window.innerHeight;
       // fix left while scroll
       var mt = $(".clearfix").offset().top + 240;//$("#face").height();
-      if($("#list").height()<=500)return;
+      if($("#list").height()<=200)return;
       if(st > mt ){
 	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
 	$("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
