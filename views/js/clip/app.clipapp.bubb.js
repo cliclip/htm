@@ -116,7 +116,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp:follow", _uid, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(tag, uid){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
