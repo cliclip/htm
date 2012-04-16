@@ -15,11 +15,29 @@ App.ClipApp.Login = (function(App, Backbone, $){
     className : "login-view",
     template : "#login-view-template",
     events : {
-      "focus #name"              :"clearAction",
-      "blur #name"               :"blurAction",
+      "focus #name"              : "clearAction",
+      "blur #name"               : "blurAction",
+      "keydown #name"            : "name_keydown",
+      "keydown #pass"            : "pass_keydown",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
       "click .reg_btn"           : "registerAction"
+    },
+    initialize:function(){
+    },
+    name_keydown:function(){
+      $('#name').keydown(function(e){
+	if(e.keyCode==13){ // 响应回车事件
+	  $('#pass').focus();
+	}
+      });
+    },
+    pass_keydown:function(){
+      $('#pass').keydown(function(e){
+	if(e.keyCode==13){ // 响应回车事件
+	  $('.login_btn').click();
+	}
+      });
     },
     loginAction : function(e){
       var that = this;
