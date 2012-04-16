@@ -22,11 +22,11 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
+    App.vent.trigger("app.clipapp.routing:query:show", word);
   };
 
   ClipApp.register = function(){
     ClipApp.Login.show();
-    // ClipApp.Register.show(); 两个框共用
   };
   ClipApp.findpasswd = function(){
     ClipApp.FindPass.show();
@@ -71,6 +71,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
+    App.vent.trigger("app.clipapp.routing:myquery:show", word);
   };
 
   ClipApp.myInterest = function(tag){
@@ -193,10 +194,8 @@ App.ClipApp = (function(App, Backbone, $){
     var userid = ClipApp.Face.getUserId();
     var myid = getMyUid();
     if(myid == userid && myid!=null){
-      App.vent.trigger("app.clipapp.routing:myquery:show", word);
       ClipApp.myQuery(word, tag);
     }else{
-      App.vent.trigger("app.clipapp.routing:query:show", word);
       ClipApp.siteQuery(word, tag);
     }
   });
