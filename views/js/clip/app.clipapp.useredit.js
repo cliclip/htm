@@ -7,7 +7,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
     defaults: {
-      new_pass : "请输入新密码", confirm_pass : "确认密码"
+      newpass : "请输入新密码", confirm : "确认密码"
     }
   });
   var NameModel = App.Model.extend({
@@ -255,10 +255,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if(newpass&&confirm&&newpass!=confirm){
 	error["confirm"] = "password_diff";
       }
-      if(error){
+      if(!_.isEmpty(error)){
   	App.vent.trigger("app.clipapp.useredit:showpass", this.model.id,this.model, App.util.getErrorMessage(error));
       }else{
-	var params = {new_pass:newpass,confirm_pass:confirm};
+	var params = {newpass:newpass,confirm:confirm};
 	App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
       }
     }
@@ -521,6 +521,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showpass", model.id);
 	  App.ClipApp.EmailAdd.showActive("修改密码成功");
+	  console.info(res);
+	  document.cookie = "token="+res;
   	},
   	error:function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showpass", model.id,model, res);

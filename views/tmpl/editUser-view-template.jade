@@ -69,12 +69,12 @@ script(type="text/template",id="passEdit-view-template")
   h3.edit_password 修改密码
   ul.input_list
     li
-      |<input type="text" id="new" value="<%=new_pass%>"/>
+      |<input type="text" id="new" value="<%=newpass%>"/>
       input(type="password",id="new_pass",style="display:none;")
       li.alert#pass(style="display:none")	
         <%= typeof error != "undefined"&& error.pass ? error.pass: "" %>
     li
-      |<input type="text" id="con" value="<%=confirm_pass%>"/>
+      |<input type="text" id="con" value="<%=confirm%>"/>
       input(type="password",id="con_pass",style="display:none;")
       li.alert#confirm(style="display:none")
         <%= typeof error != "undefined"&& error.confirm ? error.confirm: "" %>
