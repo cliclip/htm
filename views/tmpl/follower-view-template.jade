@@ -17,6 +17,6 @@ script(type="text/template",id="follower-view-template")
           | <% for(var i=0; i<user.length; i++){%>
           | <a href="#user/<%=user[i].id%>"><span class="heads">
           | <img src="<%=App.util.face_url(user[i].face)%>" />
-          | <%=user[i].name%>
+          |<p> <%=user[i].name%></p>
           | </span></a><%}%>
           i.follow

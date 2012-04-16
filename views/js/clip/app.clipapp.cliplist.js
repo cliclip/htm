@@ -225,6 +225,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) url += "/tag/" + tag;
     url = App.ClipApp.Url.base + url;
     getClips({base_url: url, type: "GET",start:0,end:App.ClipApp.Url.page});
+    App.vent.trigger("interest:show", tag);
   };
 
   ClipList.showUserRecommend = function(uid, tag){
@@ -233,6 +234,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
     getClips({base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page});
+    App.vent.trigger("recommend:show", tag);
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
