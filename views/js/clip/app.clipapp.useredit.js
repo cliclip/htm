@@ -57,7 +57,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       UserEdit.close();
-
     }
   });
 
@@ -163,7 +162,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     ruleUpdate: function(){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
-      var title = $("#title").val();
+      var title = "";
+      if($("#title").val()){
+	title=_.last($("#title").val()).replace(/(^\s*)|(\s*$)/g,"");
+      }
       var cc =  _.compact($("#copy-to").val().split(";"));
       var to =  _.compact($("#send").val().split(";"));
       //console.info(cc);
@@ -228,6 +230,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $("#"+id).css("display","none");
       $("#"+id+"_pass").css("display","block");
       $("#"+id+"_pass").focus();
+      $(".alert").css("display","none");
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
@@ -242,9 +245,22 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     passUpdate:function(){
       var newpass = $("#new_pass").val();
       var confirm = $("#con_pass").val();
-
-      var params = {newpass:newpass,confirm:confirm};
-      App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
+      var error = {};
+      if(!newpass){
+	error["pass"] = "is_null";
+      }
+      if(!confirm){
+	error["confirm"] = "is_null";
+      }
+      if(newpass&&confirm&&newpass!=confirm){
+	error["confirm"] = "password_diff";
+      }
+      if(error){
+  	App.vent.trigger("app.clipapp.useredit:showpass", this.model.id,this.model, App.util.getErrorMessage(error));
+      }else{
+	var params = {new_pass:newpass,confirm_pass:confirm};
+	App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
+      }
     }
   });
 
@@ -287,6 +303,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       el:".right_bar"
     });
     UserEdit.passeditRegion.show(passView);
+    if(error){
+      if(error.pass){
+	console.info(error);
+	$("#pass").css("display","block");
+      }
+      if(error.confirm){
+	$("#confirm").css("display","block");
+      }
+    }else{
+      $(".alert").css("display","none");
+    }
   };
 
   UserEdit.showUserEdit = function(uid){
