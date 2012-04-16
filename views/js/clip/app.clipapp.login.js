@@ -77,7 +77,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.login:cancel");
     },
     clearAction:function(evt){
-      if($("#name").val() == this.model.get("name")){
+      if($("#name").val() == "用户名/Email"){ //this.model.get("name")
 	$("#name").val("");
       }
     },
@@ -94,6 +94,16 @@ App.ClipApp.Login = (function(App, Backbone, $){
     if (error) loginModel.set("error", error);
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
+    $("#name").focus();
+    if(error){
+      if(error.name){
+	$("#name").val(model.get("name"));
+	$("#name").select();
+      }
+      if(!error.name&&error.pass){
+	$("#pass").select();
+      }
+    }
   };
 
   Login.close = function(){

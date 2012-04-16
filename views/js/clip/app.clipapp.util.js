@@ -216,7 +216,8 @@ App.util = (function(){
       not_exist: "用户名不存在"
     },
     pass:{
-      is_null: "密码为空"
+      is_null: "密码为空",
+      not_match: "密码不匹配"
     },
     confirm:{
       is_null: "确认密码为空",
@@ -254,7 +255,6 @@ App.util = (function(){
   };
 
   util.getErrorMessage = function(errorCode){
-    console.info(errorCode);
     var error = "";
     if(typeof(errorCode)=="string"){
       error = getMessage[errorCode];
