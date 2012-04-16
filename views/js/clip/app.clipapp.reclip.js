@@ -71,7 +71,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       }else{
 	var params = {clip:{note: [{text:text}],tag:tag}};
       }
-      console.log(this.model.toJSON());
       if(this.model.get("model") == "clip"){
 	App.vent.trigger("app.clipapp.reclip:submit", this.model, params);
       }else if (this.model.get("model") == "tag"){
