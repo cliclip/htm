@@ -56,22 +56,19 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var change = App.util.isImage("formUpload");
       if(change){
 	$("#img_form").submit();
-	flag = true;//此变量用于解决连续上传多张图片时图片加载重复的奇怪问题
+	$("#post_frame").unbind("load");
 	$("#post_frame").load(function(){ // 加载图片
-	  if(flag){
-	    var returnVal = this.contentDocument.documentElement.textContent;
-	    if(returnVal != null && returnVal != ""){
-	      var returnObj = eval(returnVal);
-	      if(returnObj[0] == 0){
-		var imgids = returnObj[1][0];
-		// for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-		var imgid = imgids.split(":")[1];
-		var url = P+"/user/"+ uid+"/image/" +imgid;
-		App.ClipApp.Editor.insertImage("editor", {url: url});
-		// }
-	      }
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1][0];
+	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	      var imgid = imgids.split(":")[1];
+	      var url = P+"/user/"+ uid+"/image/" +imgid;
+	      App.ClipApp.Editor.insertImage("editor", {url: url});
+	      // }
 	    }
-	    flag = false;
 	  }
 	});
       }else{

@@ -45,13 +45,13 @@ script(type="text/template",id="clippreview-view-template")
         <%}%>
       div.action#opt(style="display:none;").
         <% if( App.util.auth(clip.user.id) ) {%>
-          <i class="note operate" title="备注" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-          <i class="change operate" title="修改" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-          <i class="del operate" title="删除" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+          <i class="note operate" title="注" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+          <i class="change operate" title="改" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+          <i class="del operate" title="删" id="<%=clip.user.id%>:<%=clip.id%>"></i>
         <% } else {%>
-          <i class="biezhen operate" title="收藏" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-          <i class="refresh operate" title="转发" id="<%=clip.user.id%>:<%=clip.id%>"></i>
-          <i class="comment operate" title="评论" id="<%=clip.user.id%>:<%=clip.id%>"></i>          
+          <i class="biezhen operate" title="收" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+          <i class="refresh operate" title="转" id="<%=clip.user.id%>:<%=clip.id%>"></i>
+          <i class="comment operate" title="评" id="<%=clip.user.id%>:<%=clip.id%>"></i>          
         <% } %>
     span.biezhen
     b.comer_topleft

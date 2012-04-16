@@ -1,6 +1,5 @@
 App.util = (function(){
   var util = {};
-  var paramslength=0,flag=true;
   var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
     var cookie = document.cookie;
@@ -147,10 +146,11 @@ App.util = (function(){
     return returnVal;
   };
   util.list_scroll = function(view, _options){
+    var collection_length=0;
+    var scroll_flag = true;
     var paddingTop = 0;
-    console.info("11111111111111");
-    console.info(_options.params.url);
     var lo = _options;
+    $(window).unbind("scroll");
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
@@ -171,26 +171,20 @@ App.util = (function(){
       var lt = $(".loader").offset().top;
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
       if(st + wh > lt){
-	if(flag){
+	if(scroll_flag){
 	  lo.start += App.ClipApp.Url.page;
 	  lo.end += App.ClipApp.Url.page;
-	  console.info("options:params");
-	  console.info(lo.base_url);
-	  console.info(lo.url);
-	  lo.url = lo.params.url + "/" +lo.start + ".." + lo.end;
+	  lo.url = lo.base_url + "/" +lo.start + ".." + lo.end;
 	  lo.add = true;
-	  lo.params.fetch(lo);
-	  flag = false;
+	  lo.collection.fetch(lo);
+	  scroll_flag = false;
 	  setTimeout(function(){
-	    flag = true;
-	    if(lo.params.length-paramslength<App.ClipApp.Url.page){
-	      console.log("!!!!!!!!!!!!!!!!!!!!");
-	      console.info(lo.params.toJSON());
-	      console.log(lo.params.length + " " +paramslength + " " +App.ClipApp.Url.page );
-	      flag = false;
-	      $(".loader").text("reach to the end.");
+	    scroll_flag = true;
+	    if(lo.collection.length-collection_length<App.ClipApp.Url.page){
+	      scroll_flag = false;
+	      //$(".loader").text("reach to the end.");
 	    }else{
-	      paramslength = lo.params.length;
+	      collection_length = lo.collection.length;
 	    }
 	  },200);
 	}
