@@ -92,7 +92,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       text = note.text; //来自于preview的数据
     }
     var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});
-    var tag_obj = _.without(tags,tag_main);
+    var tag_obj = _.without(tags,"好看","好听","好吃","好玩","精辟","酷");
     clipModel.set({note:text});
     if(type == "update"){
       clipModel.set({model:"update"});
@@ -148,6 +148,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   App.vent.bind("app.clipapp.memo:success",function(model,data){
     var clip = model.get("clip");
     if(clip){
+      console.info(data.note);
       clip.note = data.note; // 之前写的是note[0] ?
       clip.tag = data.tag;
       clip.public = data.public;
@@ -159,9 +160,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       modifyclip.tag = data.tag;
       modifyclip.public = data.public;
       listmodel.set({clip:modifyclip});
-      model.set({note:data.note}); // 之前写的是data.text
-      model.set({tag:data.tag});
-      model.set({"public":data.public});
     }
     ClipMemo.close();
   });

@@ -216,11 +216,11 @@ App.util = (function(){
       not_exist: "用户名不存在"
     },
     pass:{
-      is_null: "密码为空",
-      password_diff: "密码输入不一致"
+      is_null: "密码为空"
     },
     confirm:{
-      is_null: "确认密码为空"
+      is_null: "确认密码为空",
+      password_diff: "密码输入不一致"
     },
     email:{
       email_exists: "邮件已存在",
@@ -254,7 +254,7 @@ App.util = (function(){
   };
 
   util.getErrorMessage = function(errorCode){
-    //console.info(typeof(errorCode));
+    console.info(errorCode);
     var error = "";
     if(typeof(errorCode)=="string"){
       error = getMessage[errorCode];
@@ -269,14 +269,10 @@ App.util = (function(){
 	  error = getMessage[key][errorCode[key]];
 	  if(errorCode && error){
 	    errorCode[key] = error;
-	    return errorCode;
-	  }else{
-	    return errorCode;
 	  }
-	}else{
-	  return errorCode;
 	}
       }
+      return errorCode;
     }else{
       return errorCode;
     }

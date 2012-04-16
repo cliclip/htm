@@ -97,11 +97,27 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
 	type: 'PUT',
-	success:function(response){
-	  App.viewRegion.close();
+	success:function(model,res){
+	  var clip = model.toJSON();
+	  var listmodel=App.listRegion.currentView.collection.get(cid);
+	  var modifyclip=listmodel.get("clip");
+	  var content = {};
+	  var text = _.detect(clip.content, function(e){ return e.text; });
+	  if(text){
+	    text = text.text.slice(0,100);
+	    content.text = text;
+	  }
+	  var image = _.detect(clip.content, function(e){ return e.image; });
+	  if(image){
+	    content.image = image.image;
+	  }
+	  modifyclip.content = content;
+	  listmodel.set({clip:modifyclip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	  // App.vent.trigger("app.clipapp:clipdetail", cid);
+	  App.viewRegion.close();
 	},
-	error:function(response){
+	error:function(model,res){
 	  // 出现错误，触发统一事件
 	  // App.vent.trigger("app.clipapp.clipedit:error", cid);
 	}
