@@ -190,6 +190,17 @@ App.util = (function(){
     });
   });
   var getMessage = {
+
+    login_success : "登录成功",
+    register_success : "注册成功",
+    auth_success : "更改密码成功",
+    collect_success : "收藏成功",
+    comment_success : "评论成功",
+    recomment_success : "转发成功",
+
+    user:{
+      not_exist: "用户不存在"
+    },
     auth: {
       not_exist: "用户不存在",
       not_match: "句柄不合法",
@@ -203,34 +214,68 @@ App.util = (function(){
     },
     pass:{
       is_null: "密码为空",
-      not_match: "密码不匹配"
+      password_diff: "密码输入不一致"
+    },
+    confirm:{
+      is_null: "确认密码为空"
     },
     email:{
+      email_exists: "邮件已存在",
       invalidate: "邮箱不合法",
       is_null: "邮件地址不能为空",
       no_uname: "你还没有设置用户名"
+    },
+    active:{
+      _isExists: "激活连接不存在",
+      fail: "激活失败"
+    },
+    recommend:{
+      not_exist: "推荐不存在"
+    },
+    clip:{
+      not_exist: "clip不存在"
+    },
+    content:{
+      is_null: "摘录不存在",
+      not_array: "摘录必须是数组",
+      is_empty: "摘录不能为空"
+    },
+    follow:{
+      all: "你追了该用户的全部"
+    },
+    error:{
+      "link 已作废": "连接已作废",
+      "link doesnt exist": "连接不存在",
+      "link invalidate": "连接不合法"
     }
   };
 
-  getMessage["login_success"] = "登录成功";
-  getMessage["register_success"] = "注册成功";
-  getMessage["auth_success"] = "更改密码成功";
-  getMessage["password_diff"] = "密码输入不一致";
-  getMessage["collect_success"] = "收藏成功";
-  getMessage["comment_success"] = "评论成功";
-  getMessage["recomment_success"] = "转发成功";
-  getMessage["recomment_success"]= "转发成功";
-  getMessage["clip_not_exist"] = "clip不存在";
-
   util.getErrorMessage = function(errorCode){
-    for (key in errorCode){
-      var error = getMessage[key][errorCode[key]];
-      if(errorCode && error){
-	errorCode[key] = error;
-	return errorCode;
+    //console.info(typeof(errorCode));
+    var error = "";
+    if(typeof(errorCode)=="string"){
+      error = getMessage[errorCode];
+      if(error){
+	return error;
       }else{
 	return errorCode;
       }
+    } else if(typeof(errorCode)=="object"){
+      for (key in errorCode){
+	if(getMessage[key]){
+	  error = getMessage[key][errorCode[key]];
+	  if(errorCode && error){
+	    errorCode[key] = error;
+	    return errorCode;
+	  }else{
+	    return errorCode;
+	  }
+	}else{
+	  return errorCode;
+	}
+      }
+    }else{
+      return errorCode;
     }
  };
 
