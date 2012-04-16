@@ -56,6 +56,7 @@
 		margin-left:240px;
 		background:#d9d9d9 url(../img/top_shadow.jpg) repeat-x left top;
 		.left_shadow{
+			min-height:600px;
 			padding:30px 15px 0 25px;
 			background:url(../img/left_shadow.jpg) repeat-y left top;
 			position:relative;
@@ -68,9 +69,19 @@
 				left:0;
 				top:0;
 			}
-		}
-		.content_container{ // 改为采用程序绝对定位的方式来布局，所以，取消多列结构
-			margin:0 15px;			
+			.content_container{ //采用程序绝对定位的方式布局，取消多列结构
+				margin:0 15px;
+				.preview-view{
+					.clip{
+						.clip_item{
+							min-height:307px;
+							.header{
+								min-height:216px;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		.return_top{

@@ -17,6 +17,7 @@ html
     //- pack :: css
     link(rel="stylesheet",href="css/app.css")
 
+    //- pack :: script(src="/js/libs.js")
     //- pack :: use js cdn instead
     script(src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js")
     script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js")
@@ -80,7 +81,6 @@ html
           a(href="javascript:scroll(0,0)")
             div.return_top.gotop
         div.loader
-          | loading...
     div#view
       // **** 增
       //-include jade/dialog_add
