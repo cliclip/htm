@@ -106,7 +106,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     del_comment : function(e){
       e.preventDefault();
       var id = e.target.id;
-      App.vent.trigger("app.clipapp.clipdetail:delComment", id, this.model.id);
+      var that = this;
+      App.vent.trigger("app.clipapp.message:alert", "删除评论!");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	App.vent.trigger("app.clipapp.clipdetail:delComment", id, that.model.id);
+      });
     },
     render:function(_model){
       // 针对commetModel进行处理显示

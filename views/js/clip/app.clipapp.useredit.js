@@ -109,7 +109,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     emailCut:function(e){
       e.preventDefault();
       var address = e.currentTarget.id;
-      App.vent.trigger("app.clipapp.useredit:emaildel",this.model,address);
+      var that = this;
+      App.vent.trigger("app.clipapp.message:alert", "删除绑定邮件!");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	App.vent.trigger("app.clipapp.useredit:emaildel",that.model,address);
+      });
     }
   });
 
