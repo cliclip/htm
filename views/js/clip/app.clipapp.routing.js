@@ -25,6 +25,10 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my":"myShow",
       "my/tag/:tag":"myShow",
       "my/query/:word":"myQuery",
+
+      "my/following":"userFollowing",
+      "my/follower":"userFollower",
+      
       "my/recommend":"myRecommend",
       "my/recommend/tag/:tag":"myRecommend",
       "my/interest":"myInterest",
@@ -42,9 +46,12 @@ App.Routing.ClipRouting = (function(App, Backbone){
   });
 
   App.vent.bind("user:tag:show",function(uid,tag){
-      App.Routing.showRoute("user", uid, tag);
+    if(tag)
+     App.Routing.showRoute("user", uid, "tag", tag);
+    else
+     App.Routing.showRoute("user", uid);
   });
-*/
+ */
   //输入内容搜索，返回显示结果需要更新hash
   App.vent.bind("app.clipapp.routing:query:show",function(word){
     App.Routing.showRoute("query",word);
@@ -63,21 +70,37 @@ App.Routing.ClipRouting = (function(App, Backbone){
     App.Routing.showRoute("my");
   });
 
+  App.vent.bind("app.clipapp.routing:myfollowinglist:show",function(){
+    App.Routing.showRoute("my","following");
+  });
+
+  App.vent.bind("app.clipapp.routing:myfollowerlist:show",function(){
+    App.Routing.showRoute("my","follower");
+  });
+
+  App.vent.bind("app.clipapp.routing:userfollowinglist:show",function(uid){
+    App.Routing.showRoute("user",uid, "following");
+  });
+
+  App.vent.bind("app.clipapp.routing:userfollowerlist:show",function(uid){
+    App.Routing.showRoute("user",uid, "follower");
+  });
+
+
 
 /*
   App.vent.bind("my:tag:show",function(tag){
     App.Routing.showRoute("my", tag);
   });
 
-  App.vent.bind("interest:show",function(){
-      App.Routing.showRoute("my");
+  App.vent.bind("interest:show",function(tag){
+    App.Routing.showRoute("my/interest", tag);
   });
 
-  App.vent.bind("recommend:show",function(start,end){
-    App.Routing.showRoute("my", start + ".." + end);
+  App.vent.bind("recommend:show",function(tag){
+    App.Routing.showRoute("my/recommend", tag);
   });
 */
-
   App.addInitializer(function(){
     ClipRouting.router = new ClipRouting.Router({
       controller: App.ClipApp

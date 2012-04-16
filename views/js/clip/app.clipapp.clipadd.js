@@ -75,9 +75,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var clip = this.model.get("clip");
       var html = App.ClipApp.Editor.getContent("editor");
       clip.content = App.util.HtmlToContent(html);
-      clip.tag = this.model.get("tag");
-      clip.note = this.model.get("note");
-      clip.public = this.model.get("public");
+      //clip.tag = this.model.get("tag");
+      //clip.note = this.model.get("note");
+      //clip.public = this.model.get("public");
       this.model.save(clip,{
       //this.model.save("content",content,{
 	url: P+"/clip",
@@ -99,7 +99,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	model.id = App.util.getMyUid()+":"+res;
 	model.set({clip:clip});
 	model.set({recommend:""});
-	App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	//App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
+	App.ClipApp.Bubb.showUserTags(clip.user.id);
 	App.viewRegion.close();
       },
       error:function(model,error){
