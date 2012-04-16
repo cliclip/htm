@@ -146,9 +146,11 @@ App.util = (function(){
     }
     return returnVal;
   };
-
-  App.vent.bind("app.clipapp.util:scroll", function(view, options){
+  util.list_scroll = function(view, _options){
     var paddingTop = 0;
+    console.info("11111111111111");
+    console.info(_options.params.url);
+    var lo = _options;
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
@@ -170,25 +172,32 @@ App.util = (function(){
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
       if(st + wh > lt){
 	if(flag){
-	  options.start += App.ClipApp.Url.page;
-	  options.end += App.ClipApp.Url.page;
-	  options.url = options.params.url + "/" +options.start + ".." + options.end;
-	  options.add = true;
-	  options.params.fetch(options);
+	  lo.start += App.ClipApp.Url.page;
+	  lo.end += App.ClipApp.Url.page;
+	  console.info("options:params");
+	  console.info(lo.base_url);
+	  console.info(lo.url);
+	  lo.url = lo.params.url + "/" +lo.start + ".." + lo.end;
+	  lo.add = true;
+	  lo.params.fetch(lo);
 	  flag = false;
 	  setTimeout(function(){
 	    flag = true;
-	    if(options.params.length-paramslength<App.ClipApp.Url.page){
+	    if(lo.params.length-paramslength<App.ClipApp.Url.page){
+	      console.log("!!!!!!!!!!!!!!!!!!!!");
+	      console.info(lo.params.toJSON());
+	      console.log(lo.params.length + " " +paramslength + " " +App.ClipApp.Url.page );
 	      flag = false;
 	      $(".loader").text("reach to the end.");
 	    }else{
-	      paramslength = options.params.length;
+	      paramslength = lo.params.length;
 	    }
 	  },200);
 	}
       }
     });
-  });
+  };
+// App.vent.bind("app.clipapp.util:scroll", });
   var getMessage = {
     auth: {
       not_exist: "用户不存在",

@@ -173,6 +173,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.start = 1;
       options.end = App.ClipApp.Url.page;
     }
+    options.base_url = options.url;
     options.params.url = options.url;
     options.url += "/" + options.start+".."+ options.end;
     if(options.data){
@@ -240,11 +241,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    App.vent.trigger("app.clipapp.cliplist:showlist",clips);
-    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
+    console.info("#########################");
+    console.info(options.url);
+    App.vent.trigger("app.clipapp.cliplist:showlist",clips,options);
   });
 
-  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection,options){
     if(collection){
       clipListView = new ClipListView({collection: collection});
     }
@@ -253,7 +255,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       columnWidth : 360,
       isAnimated: false
     });
+    console.info("@@@@@@@@@@@");
     App.listRegion.show(clipListView);
+    App.util.list_scroll(clipListView, options);
+    console.info("@@@@@@@@@@@");
   });
   App.vent.bind("app.clipapp.cliplist:removeshow",function(model){
     var collection = clipListView.collection.remove(model);
