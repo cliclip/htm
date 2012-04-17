@@ -73,41 +73,27 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     save: function(){
       var clip = this.model.get("clip");
-      var html = App.ClipApp.Editor.getContent("editor");
-      clip.content = App.util.HtmlToContent(html);
-      //clip.tag = this.model.get("tag");
-      //clip.note = this.model.get("note");
-      //clip.public = this.model.get("public");
+      clip.content = App.ClipApp.Editor.getContent("editor");
       this.model.save(clip,{
 	url: P+"/clip",
 	type: 'POST',
-      success:function(model,res){
-	var modifyclip = {};
-	modifyclip.id = res;
-	modifyclip.tag = clip.tag;
-	modifyclip.note = clip.note;
-	modifyclip.public = clip.public;
-	var content = {};
-	var text = _.detect(clip.content, function(e){ return e.text; });
-	if(text){
-	  text = text.text.slice(0,100) + "...";
-	  content.text = text;
-	}
-	var image = _.detect(clip.content, function(e){ return e.image; });
-	if(image){
-	  content.image = image.image;
-	}
-	modifyclip.user = {id:App.util.getMyUid()};
-	modifyclip.content = content;
-	var id = App.util.getMyUid()+":"+res;
-	model.id = id;
-	model.set({clip:modifyclip,id:id});
-	model.set({recommend:""});
-	App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	App.ClipApp.Bubb.showUserTags(modifyclip.user.id);
-	App.viewRegion.close();
-      },
-      error:function(model,error){
+      	success:function(model,res){
+	  var modifyclip = {};
+	  modifyclip.id = res;
+	  modifyclip.tag = clip.tag;
+	  modifyclip.note = clip.note;
+	  modifyclip.public = clip.public;
+	  modifyclip.user = {id:App.util.getMyUid()};
+	  modifyclip.content = App.util.getPreview(clip.content);
+	  var id = App.util.getMyUid()+":"+res;
+	  model.id = id;
+	  model.set({clip:modifyclip,id:id});
+	  model.set({recommend:""});
+	  App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	  App.ClipApp.Bubb.showUserTags(modifyclip.user.id);
+	  App.viewRegion.close();
+	},
+	error:function(model,error){
 	  // 出现错误，触发统一事件
 	  App.vent.trigger("app.clipapp.clipadd:error");
 	}

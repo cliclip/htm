@@ -23,6 +23,7 @@ App.util = (function(){
     }else return imageid;
   };
 
+  /*
   // 拿到的html参数是字符串
   util.HtmlToContent = function(html){
     // var src = /<img\s* (src=\"?)([\w\-:\/\.]+)?\"?\s*.*\/?>/;
@@ -74,28 +75,31 @@ App.util = (function(){
       }
     }
     return content;
+  };*/
+
+  util.getPreview = function(content){
+    var data = {};
+    var reg = /\[img\].*?\[\/img\]/;
+    var img = content.match(reg);
+    if(img) data.image = img[0].replace('[img]',"").replace('[/img]',"");
+    data.text = _getContentText(content) + "...";
+    return data;
   };
 
-  util.ContentToHtml = function(content){
-    var html = "";
-    for(var i=0; i<content.length; i++){
-      for(key in content[i]){
-	switch(key){
-	  case 'text':
-	    html += '<p>' + content[i][key] + '</p>';break;
-	  case 'image':
-	    html +=
-	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:475px;max-height:490px;">'
-	    + '</img></p>';
-	    break;
-	  case 'code':
-	    html += '<pre> ' + content[i][key] + '</pre>';break;
-	}
-      }
+  function _getContentText (content){
+    // 取得ubb中常用的标签之后留下的内容
+    // 去掉所有的ubb标签中的内容，只留下文本内容
+    var reg1 = /\[img\].*\[\/img\]?/;
+    var reg = /\[\/?[^].*?\]/gi;
+    while(reg1.test(content)){ // 去除img标签
+      content = content.replace(reg1,"");
     }
-    // console.log("html:: %j", html);
-    return html;
+    while(reg.test(content)){ // 去除其他标签
+      content = content.replace(reg,"");
+    }
+    return content;
   };
+
 
   util.isImage = function(id){
     var sender = document.getElementById(id);
