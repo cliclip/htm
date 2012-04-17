@@ -24,6 +24,7 @@ App.util = (function(){
     }else return imageid;
   };
 
+  /*
   // 拿到的html参数是字符串
   util.HtmlToContent = function(html){
     // var src = /<img\s* (src=\"?)([\w\-:\/\.]+)?\"?\s*.*\/?>/;
@@ -75,28 +76,7 @@ App.util = (function(){
       }
     }
     return content;
-  };
-
-  util.ContentToHtml = function(content){
-    var html = "";
-    for(var i=0; i<content.length; i++){
-      for(key in content[i]){
-	switch(key){
-	  case 'text':
-	    html += '<p>' + content[i][key] + '</p>';break;
-	  case 'image':
-	    html +=
-	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:475px;max-height:490px;">'
-	    + '</img></p>';
-	    break;
-	  case 'code':
-	    html += '<pre> ' + content[i][key] + '</pre>';break;
-	}
-      }
-    }
-    // console.log("html:: %j", html);
-    return html;
-  };
+  };*/
 
   util.isImage = function(id){
     var sender = document.getElementById(id);

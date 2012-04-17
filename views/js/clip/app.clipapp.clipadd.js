@@ -73,38 +73,22 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     save: function(){
       var clip = this.model.get("clip");
-      var html = App.ClipApp.Editor.getContent("editor");
-      clip.content = App.util.HtmlToContent(html);
-      //clip.tag = this.model.get("tag");
-      //clip.note = this.model.get("note");
-      //clip.public = this.model.get("public");
+      clip.content = App.ClipApp.Editor.getContent("editor");
       this.model.save(clip,{
-      //this.model.save("content",content,{
 	url: P+"/clip",
 	type: 'POST',
-      success:function(model,res){
-	clip.id = res;
-	var content = {};
-	var text = _.detect(clip.content, function(e){ return e.text; });
-	if(text){
-	  text = text.text.slice(0,100);
-	  content.text = text;
-	}
-	var image = _.detect(clip.content, function(e){ return e.image; });
-	if(image){
-	  content.image = image.image;
-	}
-	clip.user = {id:App.util.getMyUid()};
-	clip.content = content;
-	model.id = App.util.getMyUid()+":"+res;
-	model.set({clip:clip});
-	model.set({recommend:""});
-	//App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
-	App.ClipApp.Bubb.showUserTags(clip.user.id);
-	App.viewRegion.close();
-      },
-      error:function(model,error){
+	success:function(model,res){
+	  clip.id = res;
+	  clip.user = {id:App.util.getMyUid()}; // 用于cliplist的显示 user对象
+	  model.id = App.util.getMyUid()+":"+res;
+	  model.set({clip:clip});
+	  model.set({recommend:""});
+	  //App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	  App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
+	  App.ClipApp.Bubb.showUserTags(clip.user.id);
+	  App.viewRegion.close();
+	},
+	error:function(model,error){
 	  // 出现错误，触发统一事件
 	  App.vent.trigger("app.clipapp.clipadd:error");
 	}

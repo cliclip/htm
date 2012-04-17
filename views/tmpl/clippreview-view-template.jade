@@ -15,7 +15,7 @@ script(type="text/template",id="clippreview-view-template")
     header#header(style="min-height: 216px;")
       <% if(clip.content && clip.content.image) {%>
       div.article_photo
-        | <img src="<%= App.util.url(clip.content.image)%>" />
+        | <img src="<%= clip.content.image%>" />
       <% }if(clip.content && clip.content.text){%>
       <%if(clip.content && clip.content.text && !clip.content.image){ %>
       div.article_con(style="font-size: 16px;line-height: 2.0")

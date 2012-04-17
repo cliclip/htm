@@ -84,19 +84,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       console.info("调整页面格式");
     },
     remarkClip:function(){
-      // var user = this.model.get("user");
-      // var cid = user+":"+this.model.id;
-      // var tag = this.model.get("tag");
-      // var note = this.model.get("note");
-      // var pub = this.model.get("public");
       // 整个的传model方便直接修改
       App.vent.trigger("app.clipapp:clipmemo", this.model, "update");
     },
     saveUpdate: function(){
       var cid = this.model.id;
       // 参数为编辑器id
-      var html = App.ClipApp.Editor.getContent("editor");
-      _data.content = App.util.HtmlToContent(html);
+      _data.content = App.ClipApp.Editor.getContent("editor");
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
 	type: 'PUT',
@@ -134,7 +128,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var editView = new EditView({model: editModel});
       App.viewRegion.show(editView);
       App.ClipApp.Editor.init();
-      var html = App.util.ContentToHtml(editModel.toJSON().content);
+      var html = editModel.toJSON().content;
       App.ClipApp.Editor.setContent("editor", html);
     });
   };

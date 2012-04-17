@@ -24,10 +24,11 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   Editor.getContent = function(editorId){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     if(isIE){
-      return objEditor.contentWindow.document.body.innerText;
+      var data = objEditor.contentWindow.document.body.innerText;
     }else{
-      return objEditor.contentWindow.document.body.innerHTML;
+      var data = objEditor.contentWindow.document.body.innerHTML;;
     }
+    return Filter.htmlToUbb(data);
   };
 
   // 与getContent对称 该js内部实现 [没有必要]
@@ -59,7 +60,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   };
 
   var ensureUnits = function(v) {
-      return v + ((v !== "0") && (/\d$/.test(v)))? "px" : "";
+    return v + ((v !== "0") && (/\d$/.test(v)))? "px" : "";
   };
 
   var setRange = function (sel,r){
@@ -338,12 +339,14 @@ var Filter = (function(){
     }
     html = cleanHtml(html);
     // console.log(html);
-    html = htmlToUbb(html);
+    html = _htmlToUbb(html);
     // console.log(html);
     html = ubbToHtml(html);
     // console.log(html);
     return html;
   };
+
+  exports.htmlToUbb = _htmlToUbb;
 
   function isWord(strValue) {
     var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
@@ -490,7 +493,8 @@ var Filter = (function(){
     } while (len != str.length);
     return str;
   }
-  function htmlToUbb(html){
+
+  function _htmlToUbb(html){
     var text = html;
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
