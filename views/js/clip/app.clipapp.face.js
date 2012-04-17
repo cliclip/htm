@@ -86,5 +86,13 @@ App.ClipApp.Face = (function(App, Backbone, $){
     Face.showUser(uid);
   });
 
+  App.vent.bind("app.clipapp.face:setup_face_show", function(uid){
+    //请求一次数据 取得头像，用此头像来修改右上角的小头像，减少向服务器请求
+    Face.showUser(uid);
+    var imageid = document.getElementById("big_face").src;
+    var smail_face = document.getElementById("smail_face");
+    smail_face.src = imageid;
+  });
+
   return Face;
 })(App, Backbone, jQuery);

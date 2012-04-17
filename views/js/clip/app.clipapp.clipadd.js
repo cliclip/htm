@@ -90,7 +90,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	var content = {};
 	var text = _.detect(clip.content, function(e){ return e.text; });
 	if(text){
-	  text = text.text.slice(0,100);
+	  text = text.text.slice(0,100) + "...";
 	  content.text = text;
 	}
 	var image = _.detect(clip.content, function(e){ return e.image; });

@@ -52,7 +52,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "edit",
     template: "#editUser-view-template",
     events: {
-      "click .close_w"           : "cancel"
+      "click .close_w" : "cancel"
     },
     cancel : function(e){
       e.preventDefault();
@@ -74,6 +74,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	$("#set-name").empty();
 	var username = '<input type="text" id="username"/>';
 	$("#set-name").append(username);
+	$('#username').unbind("keydown");
 	$('#username').keydown(function(e){
 	  if(e.keyCode==13){
 	    var nameModel = new NameModel({id:App.util.getMyUid()});
@@ -472,8 +473,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
    // smail_face.src = img.src;
    // big_face.src = img.src;
    // console.info(img.src);
-    App.vent.trigger("app.clipapp.face:show",App.util.getMyUid());
-    App.vent.trigger("app.clipapp.useredit:facesuccess");
+    App.vent.trigger("app.clipapp.face:setup_face_show",App.util.getMyUid());
+    //App.vent.trigger("app.clipapp.useredit:facesuccess");
   };
 
   App.vent.bind("app.clipapp.useredit:show", function(uid){

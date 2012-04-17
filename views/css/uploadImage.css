@@ -26,7 +26,7 @@
 }
 .button_frame input[type=file] {
     cursor: pointer;
-    font-size: 36px;
+    // font-size: 36px;
     opacity: 0;
     position: absolute;
     right: -1px;

@@ -60,10 +60,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	var $newElems = itemView.$el.css({ opacity: 0 });
 	$newElems.imagesLoaded(function(){
 	  $newElems.animate({ opacity: 1 });
-	  //setTimeout(function(){
-	    //$("#list").masonry( 'appended', $newElems,true);
-	    $("#list").masonry("reload");
-	  //},0);
+	  $("#list").masonry("reload");
 	});
       });
     },
@@ -186,7 +183,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
   // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
-
     ClipList.flag_show_user = true;
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
@@ -240,7 +236,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    console.info(clips.toJSON());
     App.vent.trigger("app.clipapp.cliplist:showlist",clips,options);
     App.util.list_scroll(clips, options);
   });
