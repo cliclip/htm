@@ -79,11 +79,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       //clip.note = this.model.get("note");
       //clip.public = this.model.get("public");
       this.model.save(clip,{
-      //this.model.save("content",content,{
 	url: P+"/clip",
 	type: 'POST',
       success:function(model,res){
-	clip.id = res;
+	var modifyclip = {};
+	modifyclip.id = res;
+	modifyclip.tag = clip.tag;
+	modifyclip.note = clip.note;
+	modifyclip.public = clip.public;
 	var content = {};
 	var text = _.detect(clip.content, function(e){ return e.text; });
 	if(text){
@@ -94,14 +97,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	if(image){
 	  content.image = image.image;
 	}
-	clip.user = {id:App.util.getMyUid()};
-	clip.content = content;
-	model.id = App.util.getMyUid()+":"+res;
-	model.set({clip:clip});
+	modifyclip.user = {id:App.util.getMyUid()};
+	modifyclip.content = content;
+	var id = App.util.getMyUid()+":"+res;
+	model.id = id;
+	model.set({clip:modifyclip,id:id});
 	model.set({recommend:""});
-	//App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
-	App.ClipApp.Bubb.showUserTags(clip.user.id);
+	App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	App.ClipApp.Bubb.showUserTags(modifyclip.user.id);
 	App.viewRegion.close();
       },
       error:function(model,error){

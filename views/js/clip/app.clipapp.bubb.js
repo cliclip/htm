@@ -116,7 +116,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp:follow", _uid, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(tag, uid){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
@@ -257,7 +257,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     return opt;
   }
 
-
+  // 需要区分 my/interest、 my/recommend、和 my
   function mkUrl(tag){
     var url = Backbone.history.fragment;
     var i = url.indexOf("/tag");
@@ -266,7 +266,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	url = url.substr(0, i);
 	return url += "/tag/"+tag;
       }else{
-	if(url.indexOf("my") >= 0)
+	if(url.indexOf("my/interest") >= 0)
+	  return "/my/interest/"+tag;
+	else if(url.indexOf("my/recommend") >= 0)
+	  return "/my/recommend/"+tag;
+	else if(url.indexOf("my") >= 0)
 	  return "/my/tag/"+tag;
 	else
 	  return "/user/"+_uid+"/tag/"+tag;

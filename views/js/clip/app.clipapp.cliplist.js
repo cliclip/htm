@@ -85,7 +85,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 /*    mouseover: function(e){
       e.preventDefault();
       if(checkHover(e,e.target)){
-	//console.info("@@@@@@@@@@@@");
 	$(e.currentTarget).children("#opt").toggle();//css("display","block");
       }
     },
@@ -168,21 +167,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var getClips = function(options){
     var clips = new ClipPreviewList();
-    options.params = clips;
+    options.collection = clips;
     if(!options.start &&! options.end){
       options.start = 1;
       options.end = App.ClipApp.Url.page;
     }
-    options.params.url = options.url;
-    options.url += "/" + options.start+".."+ options.end;
+    options.url = options.base_url + "/" + options.start+".."+ options.end;
     if(options.data){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
-    // console.info(options);
-    options.params.fetch(options);
-    options.params.onReset(function(previewlist){
-      //location.reload() ;
+    options.collection.fetch(options);
+    options.collection.onReset(function(previewlist){
       App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
     });
   };
@@ -193,7 +189,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
-    getClips({url: url, type: "POST", data:data});
+    getClips({base_url: url, type: "POST", data:data});
   };
 
   ClipList.showUserClips = function(uid, tag){
@@ -201,7 +197,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
     var data = {user: uid};
     if(tag) data.tag = [tag];
-    getClips({url: url, type:"POST", data: data});
+    getClips({base_url: url, type:"POST", data: data});
   };
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
@@ -211,7 +207,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     var data = {text: word};
     if(tag) data.tag = [tag];
-    getClips({url: url, type: "POST", data: data});
+    getClips({base_url: url, type: "POST", data: data});
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
@@ -220,7 +216,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     var data = {text: word, user: uid};
     if(tag) data.tag = [tag];
-    getClips({url: url, type:"POST", data:data});
+    getClips({base_url: url, type:"POST", data:data});
   };
 
   ClipList.showUserInterest = function(uid, tag){
@@ -228,7 +224,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = "/user/" + uid + "/interest";
     if(tag) url += "/tag/" + tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type: "GET",start:0,end:App.ClipApp.Url.page});
+    getClips({base_url: url, type: "GET",start:0,end:App.ClipApp.Url.page});
+    App.vent.trigger("interest:show", tag);
   };
 
   ClipList.showUserRecommend = function(uid, tag){
@@ -236,15 +233,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = "/user/"+uid+"/recomm";
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type:"GET",start:0,end:App.ClipApp.Url.page});
+    getClips({base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page});
+    App.vent.trigger("recommend:show", tag);
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    App.vent.trigger("app.clipapp.cliplist:showlist",clips);
-    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
+    App.vent.trigger("app.clipapp.cliplist:showlist",clips,options);
+    App.util.list_scroll(clipListView, options);
   });
 
-  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection,options){
     if(collection){
       clipListView = new ClipListView({collection: collection});
     }
@@ -261,7 +259,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
     var collection = clipListView.collection;
-    collection.unshift(addmodel);
+    collection.add(addmodel,{at:0});
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;

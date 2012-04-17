@@ -56,22 +56,19 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var change = App.util.isImage("formUpload");
       if(change){
 	$("#img_form").submit();
-	flag = true;//此变量用于解决连续上传多张图片时图片加载重复的奇怪问题
+	$("#post_frame").unbind("load");
 	$("#post_frame").load(function(){ // 加载图片
-	  if(flag){
-	    var returnVal = this.contentDocument.documentElement.textContent;
-	    if(returnVal != null && returnVal != ""){
-	      var returnObj = eval(returnVal);
-	      if(returnObj[0] == 0){
-		var imgids = returnObj[1][0];
-		// for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-		var imgid = imgids.split(":")[1];
-		var url = P+"/user/"+ uid+"/image/" +imgid;
-		App.ClipApp.Editor.insertImage("editor", {url: url});
-		// }
-	      }
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1][0];
+	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	      var imgid = imgids.split(":")[1];
+	      var url = P+"/user/"+ uid+"/image/" +imgid;
+	      App.ClipApp.Editor.insertImage("editor", {url: url});
+	      // }
 	    }
-	    flag = false;
 	  }
 	});
       }else{
@@ -100,11 +97,27 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
 	type: 'PUT',
-	success:function(response){
-	  App.viewRegion.close();
+	success:function(model,res){
+	  var clip = model.toJSON();
+	  var listmodel=App.listRegion.currentView.collection.get(cid);
+	  var modifyclip=listmodel.get("clip");
+	  var content = {};
+	  var text = _.detect(clip.content, function(e){ return e.text; });
+	  if(text){
+	    text = text.text.slice(0,100);
+	    content.text = text;
+	  }
+	  var image = _.detect(clip.content, function(e){ return e.image; });
+	  if(image){
+	    content.image = image.image;
+	  }
+	  modifyclip.content = content;
+	  listmodel.set({clip:modifyclip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	  // App.vent.trigger("app.clipapp:clipdetail", cid);
+	  App.viewRegion.close();
 	},
-	error:function(response){
+	error:function(model,res){
 	  // 出现错误，触发统一事件
 	  // App.vent.trigger("app.clipapp.clipedit:error", cid);
 	}
