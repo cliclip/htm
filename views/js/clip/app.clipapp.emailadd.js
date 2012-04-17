@@ -13,8 +13,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   });
   var EmailActiveModel = App.Model.extend({
     defaults:{
-      email:"",
-      com:""
+      message:""
     }
   });
 
@@ -49,13 +48,19 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   });
   var EmailActiveView = App.ItemView.extend({
     tagName: "div",
-    className: "emailactive-view",
-    template: "#emailActive-view-template",
+    className: "message-view",
+    template: "#message-view-template",
     events: {
-      "click #active_cancel":"EmailActiveclose"
+      "click #sure": "MessageSure",
+      "click #cancel":"Messageclose"
     },
-    EmailActiveclose: function(){
+    MessageSure: function(){
       App.setpopRegion.close();
+      App.vent.trigger("app.clipapp.message:sure");
+    },
+    Messageclose: function(){
+      App.setpopRegion.close();
+      App.vent.trigger("app.clipapp.message:cancel");
     }
   });
 

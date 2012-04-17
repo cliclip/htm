@@ -80,15 +80,15 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     if(!clip)
     clip = clipModel.toJSON(); // clipModel来自detail或者来自add没有clip
     pub = clip["public"];
-    tags = clip.tag;
-    note = clip.note;
-    if(typeof(note) == "string"){
+    tags = clip.tag?clip.tag:[];
+    note = clip.note?clip.note:"";
+    if(!_.isEmpty(note)&&typeof(note) == "string"){
       text = note;
-    }else if(Array.isArray(note)){
+    }else if(!_.isEmpty(note)&&Array.isArray(note)){
       var ns = _(note).select(function(e){return e.text; })
 	.map(function(e){ return e.text; });
 	_(ns).each(function(n){ text += n+" "; });
-    }else if(note){
+    }else if(!_.isEmpty(note)&&note){
       text = note.text; //来自于preview的数据
     }
     var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});

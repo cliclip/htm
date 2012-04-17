@@ -262,7 +262,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
     var collection = clipListView.collection;
-    collection.unshift(addmodel);
+    collection.add(addmodel,{at:0});
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
