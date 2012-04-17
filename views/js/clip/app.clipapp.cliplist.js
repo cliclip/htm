@@ -149,6 +149,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     className: "preview-view",
     itemView: ClipPreviewView,
     initialize: function(){
+/*
       this.bind("collection:rendered",function(itemView){
       	var $container = $('#list');
 	$container.imagesLoaded( function(){
@@ -159,9 +160,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	setTimeout(function(){ // STRANGE BEHAVIOUR
 	  //$("#list").masonry("appended", itemView.$el);
 	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-//	  $("#list").masonry("reload");
+	  //$("#list").masonry("reload");
 	},0);
-      });
+      });*/
     }
   });
 
@@ -185,6 +186,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
   // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
+
     ClipList.flag_show_user = true;
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
@@ -238,8 +240,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
+    console.info(clips.toJSON());
     App.vent.trigger("app.clipapp.cliplist:showlist",clips,options);
-    App.util.list_scroll(clipListView, options);
+    App.util.list_scroll(clips, options);
   });
 
   App.vent.bind("app.clipapp.cliplist:showlist",function(collection,options){

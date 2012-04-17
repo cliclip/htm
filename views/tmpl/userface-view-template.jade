@@ -2,7 +2,7 @@ script(type='text/template',id='userface-view-template')
   div.user_info
     div.user_head.
       <a class="user_list">
-        <img class="face-image" id="big_face"  src="<%=App.util.face_url(face)%>" height="20" width="20"/>
+        <img class="face-image" id="big_face"  src="<%=App.util.face_url(face)%>"/>
       </a>
       <% if(App.util.getMyUid() !=id){ %>
       <% if(_.isEmpty(relation)){ %>

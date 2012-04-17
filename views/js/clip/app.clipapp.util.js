@@ -155,7 +155,7 @@ App.util = (function(){
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
       // fix left while scroll
-      var mt = $(".clearfix").offset().top + 240;//$("#face").height();
+      var mt = $(".clearfix").offset().top + $(".user_head").height();
       if($("#list").height()<=200)return;
       if(st > mt ){
 	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});

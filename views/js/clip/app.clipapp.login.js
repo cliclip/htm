@@ -26,13 +26,17 @@ App.ClipApp.Login = (function(App, Backbone, $){
     initialize:function(){
     },
     name_keydown:function(){
+      $("#name").unbind("keydown");
       $('#name').keydown(function(e){
 	if(e.keyCode==13){ // 响应回车事件
-	  $('#pass').focus();
+	  setTimeout(function(){
+	    $('#pass').focus();
+	  },100);
 	}
       });
     },
     pass_keydown:function(){
+      $("#pass").unbind("keydown");
       $('#pass').keydown(function(e){
 	if(e.keyCode==13){ // 响应回车事件
 	  $('.login_btn').click();
