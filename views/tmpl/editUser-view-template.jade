@@ -69,11 +69,15 @@ script(type="text/template",id="passEdit-view-template")
   h3.edit_password 修改密码
   ul.input_list
     li
-      |<input type="text" id="new" value="<%=new_pass%>"/>
+      |<input type="text" id="new" value="<%=newpass%>"/>
       input(type="password",id="new_pass",style="display:none;")
+      li.alert#pass(style="display:none")	
+        <%= typeof error != "undefined"&& error.pass ? error.pass: "" %>
     li
-      |<input type="text" id="con" value="<%=confirm_pass%>"/>
+      |<input type="text" id="con" value="<%=confirm%>"/>
       input(type="password",id="con_pass",style="display:none;")
+      li.alert#confirm(style="display:none")
+        <%= typeof error != "undefined"&& error.confirm ? error.confirm: "" %>
     li
       input.btn_blue(type="submit",id="pass_confirm",value="更改")
   h3.danger 高危操作
@@ -98,7 +102,7 @@ script(type="text/template",id="emailAdd-view-template")
         li.btn_group.clearfix
           input.verify(type="button",value="确定",id="emailadd_commit")
           input.cancel(type="button",value="取消",id="emailadd_cancel")
-script(type="text/template",id="emailActive-view-template")
+script(type="text/template",id="message-view-template")
   div.masker_layer
   section.small_pop
     h2
@@ -108,4 +112,5 @@ script(type="text/template",id="emailActive-view-template")
       br
       br
       li.btn_group.clearfix
-        input.verify(type="button",value="确定",id="active_cancel")
+        input.verify(type="button",value="确定",id="sure")
+        input.cancel(type="button",value="取消",id="cancel")

@@ -7,7 +7,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
     defaults: {
-      new_pass : "请输入新密码", confirm_pass : "确认密码"
+      newpass : "请输入新密码", confirm : "确认密码"
     }
   });
   var NameModel = App.Model.extend({
@@ -57,7 +57,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       UserEdit.close();
-
     }
   });
 
@@ -109,8 +108,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     emailCut:function(e){
       e.preventDefault();
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       var address = e.currentTarget.id;
-      App.vent.trigger("app.clipapp.useredit:emaildel",this.model,address);
+      var that = this;
+      App.vent.trigger("app.clipapp.message:alert", "删除绑定邮件!");
+      App.vent.bind("app.clipapp.message:sure",function(){
+		      console.info(address);
+	App.vent.trigger("app.clipapp.useredit:emaildel",that.model,address);
+      });
     }
   });
 
@@ -163,7 +168,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     ruleUpdate: function(){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
-      var title = $("#title").val();
+      var title = "";
+      if($("#title").val()){
+	title=_.last($("#title").val()).replace(/(^\s*)|(\s*$)/g,"");
+      }
       var cc =  _.compact($("#copy-to").val().split(";"));
       var to =  _.compact($("#send").val().split(";"));
       //console.info(cc);
@@ -228,6 +236,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $("#"+id).css("display","none");
       $("#"+id+"_pass").css("display","block");
       $("#"+id+"_pass").focus();
+      $(".alert").css("display","none");
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
@@ -242,9 +251,22 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     passUpdate:function(){
       var newpass = $("#new_pass").val();
       var confirm = $("#con_pass").val();
-
-      var params = {newpass:newpass,confirm:confirm};
-      App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
+      var error = {};
+      if(!newpass){
+	error["pass"] = "is_null";
+      }
+      if(!confirm){
+	error["confirm"] = "is_null";
+      }
+      if(newpass&&confirm&&newpass!=confirm){
+	error["confirm"] = "password_diff";
+      }
+      if(!_.isEmpty(error)){
+  	App.vent.trigger("app.clipapp.useredit:showpass", this.model.id,this.model, App.util.getErrorMessage(error));
+      }else{
+	var params = {newpass:newpass,confirm:confirm};
+	App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
+      }
     }
   });
 
@@ -287,6 +309,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       el:".right_bar"
     });
     UserEdit.passeditRegion.show(passView);
+    if(error){
+      if(error.pass){
+	console.info(error);
+	$("#pass").css("display","block");
+      }
+      if(error.confirm){
+	$("#confirm").css("display","block");
+      }
+    }else{
+      $(".alert").css("display","none");
+    }
   };
 
   UserEdit.showUserEdit = function(uid){
@@ -494,6 +527,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showpass", model.id);
 	  App.ClipApp.EmailAdd.showActive("修改密码成功");
+	  console.info(res);
+	  document.cookie = "token="+res;
   	},
   	error:function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showpass", model.id,model, res);
@@ -502,7 +537,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.bind("initialize:after", function(){
-//   UserEdit.showUserEdit(App.util.getMyUid());
+   //UserEdit.showUserEdit(App.util.getMyUid());
   });
 
   return UserEdit;

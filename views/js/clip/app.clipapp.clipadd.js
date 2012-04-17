@@ -78,14 +78,20 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	url: P+"/clip",
 	type: 'POST',
 	success:function(model,res){
-	  clip.id = res;
-	  clip.user = {id:App.util.getMyUid()}; // 用于cliplist的显示 user对象
-	  model.id = App.util.getMyUid()+":"+res;
-	  model.set({clip:clip});
+	  var modifyclip = {};
+	  modifyclip.id = res;
+	  modifyclip.tag = clip.tag;
+	  modifyclip.note = clip.note;
+	  modifyclip.public = clip.public;
+	  var content = App.util.getPreviw(clip.content);
+	  modifyclip.user = {id:App.util.getMyUid()};
+	  modifyclip.content = content;
+	  var id = App.util.getMyUid()+":"+res;
+	  model.id = id;
+	  model.set({clip:modifyclip,id:id});
 	  model.set({recommend:""});
-	  //App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	  App.ClipApp.ClipList.showUserClips(App.util.getMyUid());
-	  App.ClipApp.Bubb.showUserTags(clip.user.id);
+	  App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	  App.ClipApp.Bubb.showUserTags(modifyclip.user.id);
 	  App.viewRegion.close();
 	},
 	error:function(model,error){

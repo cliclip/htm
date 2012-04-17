@@ -15,11 +15,29 @@ App.ClipApp.Login = (function(App, Backbone, $){
     className : "login-view",
     template : "#login-view-template",
     events : {
-      "focus #name"              :"clearAction",
-      "blur #name"               :"blurAction",
+      "focus #name"              : "clearAction",
+      "blur #name"               : "blurAction",
+      "keydown #name"            : "name_keydown",
+      "keydown #pass"            : "pass_keydown",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
       "click .reg_btn"           : "registerAction"
+    },
+    initialize:function(){
+    },
+    name_keydown:function(){
+      $('#name').keydown(function(e){
+	if(e.keyCode==13){ // 响应回车事件
+	  $('#pass').focus();
+	}
+      });
+    },
+    pass_keydown:function(){
+      $('#pass').keydown(function(e){
+	if(e.keyCode==13){ // 响应回车事件
+	  $('.login_btn').click();
+	}
+      });
     },
     loginAction : function(e){
       var that = this;
@@ -59,7 +77,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.login:cancel");
     },
     clearAction:function(evt){
-      if($("#name").val() == this.model.get("name")){
+      if($("#name").val() == "用户名/Email"){ //this.model.get("name")
 	$("#name").val("");
       }
     },
@@ -76,6 +94,16 @@ App.ClipApp.Login = (function(App, Backbone, $){
     if (error) loginModel.set("error", error);
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
+    $("#name").focus();
+    if(error){
+      if(error.name){
+	$("#name").val(model.get("name"));
+	$("#name").select();
+      }
+      if(!error.name&&error.pass){
+	$("#pass").select();
+      }
+    }
   };
 
   Login.close = function(){
