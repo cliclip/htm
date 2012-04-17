@@ -105,6 +105,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     del_comment : function(e){
       e.preventDefault();
+      App.vent.unbind("app.clipapp.message:sure");//解绑  解决请求多次的问题。
       var id = e.target.id;
       var that = this;
       App.vent.trigger("app.clipapp.message:alert", "删除评论!");

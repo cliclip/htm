@@ -59,8 +59,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.message:sure");
     },
     Messageclose: function(){
-      App.vent.trigger("app.clipapp.message:cancel");
       App.setpopRegion.close();
+      App.vent.trigger("app.clipapp.message:cancel");
     }
   });
 

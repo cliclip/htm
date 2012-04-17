@@ -108,10 +108,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     emailCut:function(e){
       e.preventDefault();
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       var address = e.currentTarget.id;
       var that = this;
       App.vent.trigger("app.clipapp.message:alert", "删除绑定邮件!");
       App.vent.bind("app.clipapp.message:sure",function(){
+		      console.info(address);
 	App.vent.trigger("app.clipapp.useredit:emaildel",that.model,address);
       });
     }
@@ -535,7 +537,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.bind("initialize:after", function(){
-//   UserEdit.showUserEdit(App.util.getMyUid());
+   //UserEdit.showUserEdit(App.util.getMyUid());
   });
 
   return UserEdit;
