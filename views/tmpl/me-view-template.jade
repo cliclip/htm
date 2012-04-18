@@ -18,7 +18,7 @@ script(type='text/template',id='me-view-template')
         li.logout
           a(href="javascript:void(0)",id="logout") 登出
     div.my_head.
-      <img class="face-image" id="smail_face" src="<%=App.util.face_url(face)%>" height="50" width="50"/>
+      <img class="face-image" id="smail_face" src="<%=App.util.face_url(face,50)%>"/>
   <% } else { %>
   div.in_site
     a#register_button 注册 

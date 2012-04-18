@@ -23,6 +23,20 @@ App.util = (function(){
     }else return imageid;
   };
 
+  util.face_url = function(imageid,size){
+    var pattern = /^[0-9]:[a-z0-9]{32}/;
+    if(imageid == ""){
+      return "img/f.jpg";
+    }else if(imageid&& pattern.test(imageid)){
+      var ids = imageid.split(":");
+      if(size){
+	return P + "/user/" + ids[0]+ "/image/" + ids[1] + "/" + size;
+      }else{
+	return P + "/user/" + ids[0]+ "/image/" + ids[1];
+      }
+    }else return imageid;
+  };
+
   /*
   // 拿到的html参数是字符串
   util.HtmlToContent = function(html){
@@ -108,16 +122,6 @@ App.util = (function(){
     }else{
       return true;
     }
-  };
-
-  util.face_url = function(imageid){
-    var pattern = /^[0-9]:[a-z0-9]{32}/;
-    if(imageid == ""){
-      return "img/f.jpg";
-    }else if(imageid&& pattern.test(imageid)){
-      var ids = imageid.split(":");
-      return P + "/user/" + ids[0]+ "/image/" + ids[1];
-    }else return imageid;
   };
 
   util.generatePastTime = function(time){

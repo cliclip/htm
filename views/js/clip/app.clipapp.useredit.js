@@ -2,6 +2,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
   var originalFace;
+  var face_flag = false;
   UserEdit.margin_top = 0;
   UserEdit.margin_left = 0;
   var EditModel = App.Model.extend({});
@@ -426,6 +427,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
 	$("#confirm_face").hide();
+	face_flag = true;
       },
       error:function(model,res){
 	//console.info("error!!!!!!!!!!");
@@ -473,8 +475,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
    // smail_face.src = img.src;
    // big_face.src = img.src;
    // console.info(img.src);
-    App.vent.trigger("app.clipapp.face:setup_face_show",App.util.getMyUid());
-    //App.vent.trigger("app.clipapp.useredit:facesuccess");
+    if(face_flag){
+      App.vent.trigger("app.clipapp.face:show",App.util.getMyUid());
+      App.vent.trigger("app.clipapp.useredit:facesuccess");
+      face_flag = false;
+    }
   };
 
   App.vent.bind("app.clipapp.useredit:show", function(uid){
