@@ -236,11 +236,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    App.vent.trigger("app.clipapp.cliplist:showlist",clips,options);
+    App.vent.trigger("app.clipapp.cliplist:showlist",clips);
     App.util.list_scroll(clips, options);
   });
 
-  App.vent.bind("app.clipapp.cliplist:showlist",function(collection,options){
+  App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
     if(collection){
       clipListView = new ClipListView({collection: collection});
     }
