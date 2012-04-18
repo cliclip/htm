@@ -91,12 +91,13 @@ App.util = (function(){
     return content;
   };*/
 
-  util.getPreview = function(content){
+  util.getPreview = function(content, length){
     var data = {};
     var reg = /\[img\].*?\[\/img\]/;
     var img = content.match(reg);
     if(img) data.image = img[0].replace('[img]',"").replace('[/img]',"");
-    data.text = _getContentText(content) + "...";
+    var text = _getContentText(content);
+    data.text = _trim(text, length);
     return data;
   };
 
@@ -105,15 +106,25 @@ App.util = (function(){
     // 去掉所有的ubb标签中的内容，只留下文本内容
     var reg1 = /\[img\].*\[\/img\]?/;
     var reg = /\[\/?[^].*?\]/gi;
-    while(reg1.test(content)){ // 去除img标签
-      content = content.replace(reg1,"");
-    }
-    while(reg.test(content)){ // 去除其他标签
-      content = content.replace(reg,"");
-    }
+    // 去除img标签
+    while(reg1.test(content)) content = content.replace(reg1,"");
+    // 去除其他标签
+    while(reg.test(content)) content = content.replace(reg,"");
     return content;
   };
 
+  function _trim(content, length){
+    var r = undefined;
+    if (!content) return r;
+    if (_.isString(content) && content.length){
+      if(content.length < length){
+	r = content;
+      } else {
+	r = content.substring(0, length) + "...";
+      }
+    }
+    return r;
+  };
 
   util.isImage = function(id){
     var sender = document.getElementById(id);

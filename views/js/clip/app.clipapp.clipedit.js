@@ -95,7 +95,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  var clip = model.toJSON();
 	  var listmodel=App.listRegion.currentView.collection.get(cid);
 	  var modifyclip=listmodel.get("clip");
-	  modifyclip.content = App.util.getPreview(clip.content);
+	  modifyclip.content = App.util.getPreview(clip.content, 100);
 	  listmodel.set({clip:modifyclip});
 	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	  // App.vent.trigger("app.clipapp:clipdetail", cid);

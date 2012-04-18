@@ -84,7 +84,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  modifyclip.note = clip.note;
 	  modifyclip.public = clip.public;
 	  modifyclip.user = {id:App.util.getMyUid()};
-	  modifyclip.content = App.util.getPreview(clip.content);
+	  modifyclip.content = App.util.getPreview(clip.content, 100);
 	  var id = App.util.getMyUid()+":"+res;
 	  model.id = id;
 	  model.set({clip:modifyclip,id:id});
