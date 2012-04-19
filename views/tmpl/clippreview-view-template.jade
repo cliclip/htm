@@ -37,7 +37,7 @@ script(type="text/template",id="clippreview-view-template")
         <% if(clip.user && App.ClipApp.ClipList.flag_show_user){ %>
         div.user_more
           | <a class="author" href="/#user/<%=clip.user.id%>">
-          |   <img src="<%=App.util.face_url(clip.user.face,33)%>"/>
+          |   <img src="<%=App.util.face_url(clip.user.face,50)%>"/>
           dl.name
             dt.
               <%=clip.user.name%>

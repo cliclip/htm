@@ -164,12 +164,13 @@ App.util = (function(){
     }
     return returnVal;
   };
-  util.list_scroll = function(view, _options){
+  util.list_scroll = function(_options){
     var collection_length=0;
     var scroll_flag = true;
     var paddingTop = 0;
     var lo = _options;
     $(window).unbind("scroll");
+    if(lo.collection.length<App.ClipApp.Url.page)return;
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var wh = window.innerHeight;

@@ -20,6 +20,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
     },
     query : function(){
       var word = this.$(".text").val();
+      this.$(".text").val("");
       App.vent.trigger("app.clipapp.query:query",word);
     },
     inputAction: function(){

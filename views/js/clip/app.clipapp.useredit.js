@@ -171,7 +171,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
       var title = "";
       if($("#title").val()){
-	title=_.last($("#title").val()).replace(/(^\s*)|(\s*$)/g,"");
+	_.last($("#title").val()).replace(/(^\s*)|(\s*$)/g,"");
+	title = $("#title").val();
       }
       var cc =  _.compact($("#copy-to").val().split(";"));
       var to =  _.compact($("#send").val().split(";"));

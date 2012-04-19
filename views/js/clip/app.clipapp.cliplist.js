@@ -176,8 +176,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.contentType = "application/json; charset=utf-8";
     }
     options.collection.fetch(options);
-    options.collection.onReset(function(previewlist){
-      App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
+    options.collection.onReset(function(clips){
+      App.vent.trigger("app.clipapp.cliplist:showlist",clips);
+      App.util.list_scroll(options);
+      //App.vent.trigger("app.clipapp.cliplist:show",clips, options);
     });
   };
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
@@ -235,21 +237,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("recommend:show", tag);
   };
 
-  App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    App.vent.trigger("app.clipapp.cliplist:showlist",clips);
-    App.util.list_scroll(clips, options);
-  });
-
   App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
-    if(collection){
       clipListView = new ClipListView({collection: collection});
-    }
-    $("#list").masonry({
-      itemSelector : '.clip',
-      columnWidth : 360,
-      isAnimated: false
-    });
-    App.listRegion.show(clipListView);
+      $("#list").masonry({
+	itemSelector : '.clip',
+	columnWidth : 360,
+	isAnimated: false
+      });
+      $("#list").css({height:"0px"});
+      App.listRegion.show(clipListView);
+      if(collection.length==0){
+	//$("#list").append("抱歉，没有找到相应的信息...");
+      }
   });
   App.vent.bind("app.clipapp.cliplist:removeshow",function(removemodel){
     var collection = clipListView.collection.remove(removemodel);
