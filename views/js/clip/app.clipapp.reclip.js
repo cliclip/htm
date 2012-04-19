@@ -14,12 +14,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     className : "reclip-view",
     template : "#reclip-view-template",
     events : {
-      "focus #obj_tag"     :"objtagOpen",
-      "focus #reclip_text" :"foucsAction",
-      "blur #reclip_text"  :"blurAction",
+      "focus #obj_tag"     : "objtagOpen",
+      "focus #reclip_text" : "foucsAction",
+      "blur #reclip_text"  : "blurAction",
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
-      "click .size48"      :"maintagAction",
+      "click .size48"      : "maintagAction",
       "click .close_w"     : "cancel"
     },
     maintagAction:function(evt){

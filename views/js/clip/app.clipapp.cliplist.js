@@ -238,17 +238,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
+    if(collection){
       clipListView = new ClipListView({collection: collection});
-      $("#list").masonry({
-	itemSelector : '.clip',
-	columnWidth : 360,
-	isAnimated: false
-      });
-      $("#list").css({height:"0px"});
-      App.listRegion.show(clipListView);
-      if(collection.length==0){
-	//$("#list").append("抱歉，没有找到相应的信息...");
-      }
+    }
+    $("#list").masonry({
+      itemSelector : '.clip',
+      columnWidth : 360,
+      isAnimated: false
+    });
+    $("#list").css({height:"0px"});
+    App.listRegion.show(clipListView);
+    if(collection && collection.length==0){
+      //$("#list").append("抱歉，没有找到相应的信息...");
+    }
   });
   App.vent.bind("app.clipapp.cliplist:removeshow",function(removemodel){
     var collection = clipListView.collection.remove(removemodel);

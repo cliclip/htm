@@ -211,6 +211,18 @@ App.util = (function(){
       }
     });
   };
+  //解决关于本地预览图片的浏览器兼容问题
+  util.get_img_src = function(source){
+    //chrome
+    if (window.webkitURL && window.webkitURL.createObjectURL) {
+      return window.webkitURL.createObjectURL(source);
+    }else if(window.URL.createObjectURL) {
+      return window.URL.createObjectURL(source);
+    }else{
+      alert("the problem of compatible");
+      return window.URL.createObjectURL(source);
+    }
+  };
 // App.vent.bind("app.clipapp.util:scroll", });
   var getMessage = {
 

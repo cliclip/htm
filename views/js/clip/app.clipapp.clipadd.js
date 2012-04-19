@@ -18,7 +18,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     template: "#addClip-view-template",
     events: {
       "click .link_img":"extImg",
-      "change #formUpload": "image_change",
+//      "change #formUpload": "image_change",
       "click .btn": "up_extImg",
       "click .verify":"save",
       "click .cancel":"abandon",
@@ -42,34 +42,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       if(url == "http://" || url == null)return;
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
-    },
-    image_change:function(e){
-      e.preventDefault();
-      var flag = true;
-      var change = App.util.isImage("formUpload");
-      if(change){
-	$("#img_form").submit();
-	$("#post_frame").load(function (){
-	  if(flag){
-	    var returnVal = this.contentDocument.documentElement.textContent;
-	    if(returnVal != null && returnVal != ""){
-	      var returnObj = eval(returnVal);
-	      if(returnObj[0] == 0){
-		var imgids = returnObj[1][0];
-		//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-		var ids = imgids.split(":");
-		var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
-		App.ClipApp.Editor.insertImage("editor", {url: url});
-		// }
-	      }
-	    }
-	  }
-	  flag = false;
-
-	});
-      }else{
-	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
-      }
     },
     save: function(){
       var clip = this.model.get("clip");
@@ -107,7 +79,40 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:clipmemo", this.model, "add");
     }
   });
-
+  ClipAdd.image_change = function(sender){
+      var flag = true;
+      var change = App.util.isImage("formUpload");
+      if(change){
+	/*
+	if( sender.files &&sender.files[0] ){
+	  var img = new Image();
+	  img.src = App.util.get_img_src(sender.files[0]);
+	  img.onload=function(){
+	    if(img.complete){
+	      App.ClipApp.Editor.insertImage("editor", {url: img.src});
+	    }
+	  };
+	}*/
+	$("#img_form").submit();
+	$("#post_frame").unbind("load");
+	$("#post_frame").load(function (){
+	    var returnVal = this.contentDocument.documentElement.textContent;
+	    if(returnVal != null && returnVal != ""){
+	      var returnObj = eval(returnVal);
+	      if(returnObj[0] == 0){
+		var imgids = returnObj[1][0];
+		//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+		var ids = imgids.split(":");
+		var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
+		App.ClipApp.Editor.insertImage("editor", {url: url});
+		// }
+	      }
+	    }
+	});
+      }else{
+	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      }
+    };
   ClipAdd.show = function(uid){
     var clipModel = new ClipModel();
     var addClipView = new AddClipView({model: clipModel});

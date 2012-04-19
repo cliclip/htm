@@ -382,6 +382,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if( sender.files &&sender.files[0] ){
 	$("#confirm_face").show();
 	var img = new Image();
+	img.src = App.util.get_img_src(sender.files[0]);
 	img.onload=function(){
 	  if(img.complete){
 	    document.getElementById('myface').src = img.src;
@@ -401,13 +402,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    $("#myface").css({"height":_height,"width":_width,"margin-top":_top,"margin-left":_left});
 	  }
 	};
-
-	//兼容chrome图片本地预览功能
-	if (window.webkitURL && window.webkitURL.createObjectURL) {
-	  img.src = window.webkitURL.createObjectURL(sender.files[0]);
-	}else if(window.URL.createObjectURL) {
-	  img.src = window.URL.createObjectURL(sender.files[0]);
-	}
 	return true;
       }
       return false;
