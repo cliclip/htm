@@ -2,8 +2,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var _data = {};
-  var flag = true;
-  var edit_model;
+  var edit_view = {};
   var img_list = [];
   var EditModel = App.Model.extend({
     url : function(){
@@ -34,8 +33,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "blur #img_upload_url":"hide_extImg"
     },
     initialize: function(){
+      console.info("initialize");
       _data = {content : []};
-      edit_model = this;
+      edit_view = this;
     },
     hide_extImg:function(){//隐藏弹出的链接地址对话框
       setTimeout(function(){
@@ -90,12 +90,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // 直接返回详情页面
       App.viewRegion.close();
       var cid =	this.model.id;
+      console.info(this);
       //在clip列表界面触发“改”时不应返回详情页面
       //App.vent.trigger("app.clipapp:clipdetail", cid);
     }
   });
   ClipEdit.image_change = function(sender){
-      var that = edit_modle;
+      var that = edit_view;
       var uid = that.model.get("uid");
       var change = App.util.isImage("formUpload");
       if(change){
