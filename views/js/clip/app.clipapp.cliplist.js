@@ -175,6 +175,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
+    /*options.collection.comparator = function(clip) {
+      return clip.get("id");
+    };*/
     options.collection.fetch(options);
     options.collection.onReset(function(clips){
       App.vent.trigger("app.clipapp.cliplist:showlist",clips);
@@ -240,6 +243,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
     if(collection){
       clipListView = new ClipListView({collection: collection});
+      console.info(collection) ;
+    }else {
+      //console.info("此事件未传入collection");
     }
     $("#list").masonry({
       itemSelector : '.clip',

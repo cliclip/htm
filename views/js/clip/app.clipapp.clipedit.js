@@ -33,7 +33,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "blur #img_upload_url":"hide_extImg"
     },
     initialize: function(){
-      console.info("initialize");
+      //console.info("initialize");
       _data = {content : []};
       edit_view = this;
     },
@@ -90,7 +90,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // 直接返回详情页面
       App.viewRegion.close();
       var cid =	this.model.id;
-      console.info(this);
+      //console.info(this);
       //在clip列表界面触发“改”时不应返回详情页面
       //App.vent.trigger("app.clipapp:clipdetail", cid);
     }
@@ -119,7 +119,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	      var imgids = returnObj[1][0];
 	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 	      var imgid = imgids.split(":")[1];
-	      var url = P+"/user/"+ uid+"/image" +imgid;
+	      var url = P+"/user/"+ uid+"/image/" +imgid;
 	      img_list.push(url);
 	      //App.ClipApp.Editor.insertImage("editor", {url: url});
 	      // }
