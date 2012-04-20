@@ -164,12 +164,13 @@ App.util = (function(){
     }
     return returnVal;
   };
-  util.list_scroll = function(view, _options){
+  util.list_scroll = function(_options){
     var collection_length=0;
     var scroll_flag = true;
     var paddingTop = 0;
     var lo = _options;
     $(window).unbind("scroll");
+    if(lo.collection.length<App.ClipApp.Url.page)return;
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
@@ -209,6 +210,18 @@ App.util = (function(){
 	}
       }
     });
+  };
+  //解决关于本地预览图片的浏览器兼容问题
+  util.get_img_src = function(source){
+    //chrome
+    if (window.webkitURL && window.webkitURL.createObjectURL) {
+      return window.webkitURL.createObjectURL(source);
+    }else if(window.URL.createObjectURL) {
+      return window.URL.createObjectURL(source);
+    }else{
+      alert("the problem of compatible");
+      return window.URL.createObjectURL(source);
+    }
   };
 // App.vent.bind("app.clipapp.util:scroll", });
   var getMessage = {

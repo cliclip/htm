@@ -3,8 +3,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var originalFace;
   var face_flag = false;
-  UserEdit.margin_top = 0;
-  UserEdit.margin_left = 0;
+  //UserEdit.margin_top = 0;
+  //UserEdit.margin_left = 0;
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
     defaults: {
@@ -115,7 +115,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var that = this;
       App.vent.trigger("app.clipapp.message:alert", "删除绑定邮件!");
       App.vent.bind("app.clipapp.message:sure",function(){
-		      console.info(address);
 	App.vent.trigger("app.clipapp.useredit:emaildel",that.model,address);
       });
     }
@@ -172,7 +171,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
       var title = "";
       if($("#title").val()){
-	title=_.last($("#title").val()).replace(/(^\s*)|(\s*$)/g,"");
+	_.last($("#title").val()).replace(/(^\s*)|(\s*$)/g,"");
+	title = $("#title").val();
       }
       var cc =  _.compact($("#copy-to").val().split(";"));
       var to =  _.compact($("#send").val().split(";"));
@@ -313,7 +313,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.passeditRegion.show(passView);
     if(error){
       if(error.pass){
-	console.info(error);
 	$("#pass").css("display","block");
       }
       if(error.confirm){
@@ -383,37 +382,26 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if( sender.files &&sender.files[0] ){
 	$("#confirm_face").show();
 	var img = new Image();
+	img.src = App.util.get_img_src(sender.files[0]);
 	img.onload=function(){
 	  if(img.complete){
-	    var preview_face = document.getElementById('myface' );
-	    //var length = img.width>img.height ? img.height : img.width;
+	    document.getElementById('myface').src = img.src;
+	    var _height,_width,_top, _left;
+	    var preview = document.getElementById('myface');
 	    if(img.width<img.height){
-	      preview_face.width = 240;
-	      preview_face.height = img.height*240/img.width;
-	      //console.info(preview_face);
-	      var top ="-" +  parseInt((preview_face.height-240)/2)+"px";
-	      $("#myface").css({"margin-top":top});
-	      //UserEdit.margin_top = parseInt((img.height-img.width)/2);
+	      _width = 240;
+	      _height = img.height*240/img.width;
+	      _top ="-" + (_height-240)/2+"px";
+	      _left = 0 + "px";
 	    }else{
-	      //console.info(preview_face);
-	      preview_face.height = 240;
-	      preview_face.width = img.width*240/img.height;
-	      var left="-" + parseInt((preview_face.width-240)/2)+"px";
-	      $("#myface").css({"margin-left":left});
-	      //UserEdit.margin_left = parseInt((img.width-img.height)/2);
-	      //console.info(UserEdit.margin_left);
+	      _height = 240;
+	      _width =  img.width*240/img.height;
+	      _left = "-" + (_width-240)/2+"px";
+	      _top = 0 + "px";
 	    }
-	    preview_face.src = img.src;
-	    //$(".head_img").css({"overflow":"hidden","text-align":"center"});
+	    $("#myface").css({"height":_height,"width":_width,"margin-top":_top,"margin-left":_left});
 	  }
 	};
-
-	//兼容chrome图片本地预览功能
-	if (window.webkitURL && window.webkitURL.createObjectURL) {
-	  img.src = window.webkitURL.createObjectURL(sender.files[0]);
-	}else if(window.URL.createObjectURL) {
-	  img.src = window.URL.createObjectURL(sender.files[0]);
-	}
 	return true;
       }
       return false;
@@ -470,11 +458,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   UserEdit.close = function(){
    // var img = document.getElementById('myface' );
     App.mysetRegion.close();
-   // var smail_face = document.getElementById("smail_face");
-   // var big_face = document.getElementById("big_face");
-   // smail_face.src = img.src;
-   // big_face.src = img.src;
-   // console.info(img.src);
     if(face_flag){
       App.vent.trigger("app.clipapp.face:show",App.util.getMyUid());
       App.vent.trigger("app.clipapp.useredit:facesuccess");
@@ -533,7 +516,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.useredit:showpass", model.id);
 	  App.ClipApp.EmailAdd.showActive("修改密码成功");
-	  console.info(res);
 	  document.cookie = "token="+res;
   	},
   	error:function(model, res){
