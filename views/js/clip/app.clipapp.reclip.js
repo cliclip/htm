@@ -94,18 +94,20 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     }else{
       clipid = reclipmodel.get("id");
     }
-    reclipmodel.save(params,{
+    var model = new App.Model();
+    model.set({id : reclipmodel.id});
+    model.save(params,{
       url: P+"/clip/"+clipid+"/reclip",
       type: "POST",
       success: function(model, res){
 	if(clip){
 	  clip.reprint_count = clip.reprint_count?clip.reprint_count+1:1;
-	  model.set({clip:clip});
+	  reclipModel.set({clip:clip});
 	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	}else{
 	  var listmodel=App.listRegion.currentView.collection.get(reclipmodel.id);
-	    var modifyclip=listmodel.get("clip");
-	    modifyclip.reprint_count = modifyclip.reprint_count ? modifyclip.reprint_count+1 : 1;
+	  var modifyclip=listmodel.get("clip");
+	  modifyclip.reprint_count = modifyclip.reprint_count ? modifyclip.reprint_count+1 : 1;
 	  listmodel.set({clip:modifyclip});
 	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	}

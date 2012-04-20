@@ -49,9 +49,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       this.model.save(clip,{
 	url: P+"/clip",
 	type: 'POST',
-      	success:function(model,res){
+      	success:function(model,res){ // 返回值res为clipid:clipid
 	  var modifyclip = {};
-	  modifyclip.id = res;
+	  modifyclip.id = res.clipid;
 	  modifyclip.tag = clip.tag;
 	  modifyclip.note = clip.note;
 	  modifyclip.public = clip.public;
@@ -62,6 +62,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  model.set({clip:modifyclip,id:id});
 	  model.set({recommend:""});
 	  App.vent.trigger("app.clipapp.cliplist:addshow", model);
+	  console.log(model);
 	  App.ClipApp.Bubb.showUserTags(modifyclip.user.id);
 	  App.viewRegion.close();
 	},

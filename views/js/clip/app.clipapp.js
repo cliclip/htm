@@ -4,7 +4,6 @@ App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
   ClipApp.getMyUid = getMyUid;
   function getMyUid(){
-    // console.log("getMyUid  :: "+ClipApp.Me.me.get("id"));
     var id = null;
     if(document.cookie){
       id =  document.cookie.split("=")[1].split(":")[0];
@@ -149,12 +148,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.show(uid, clipid,model_cid);
   });
 
-    App.vent.bind("app.clipapp:clipmemo", function(clipid,tags,note,pub,model){
+    App.vent.bind("app.clipapp:clipmemo", function(model, operate){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.ClipMemo.show(clipid, tags,note, pub);
+      ClipApp.ClipMemo.show(model, operate);
     }
   });
 
@@ -173,11 +172,17 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:cliplist.refresh", function(uid, tag){
-    if(!uid){
-      ClipApp.ClipList.showSiteClips(tag);
-    }else {
-      ClipApp.ClipList.showUserClips(uid, tag);
+  App.vent.bind("app.clipapp:cliplist.refresh", function(uid, url, tag){
+    if(/interest/.test(url)){
+      ClipApp.ClipList.showUserInterest(uid, tag);
+    }else if(/recommend/.test(url)){
+      ClipApp.ClipList.showUserRecommend(uid, tag);
+    }else{
+      if(!uid){
+	ClipApp.ClipList.showSiteClips(tag);
+      }else {
+	ClipApp.ClipList.showUserClips(uid, tag);
+      }
     }
   });
 

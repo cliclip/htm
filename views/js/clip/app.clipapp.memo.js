@@ -22,21 +22,18 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	document.getElementById(id).className="size48 white_48";
       }
     },
-
     focusAction:function(evt){
       var value = "备注一下吧~";
       if($("#organize_text").val() == value){
 	$("#organize_text").val("");
       }
     },
-
     blurAction:function(evt){
       var value = "备注一下吧~";
       if($("#organize_text").val() == ""){
 	$("#organize_text").val(value);
       }
     },
-
     clipmemoAction:function(e){
       e.preventDefault();
       var _data = {};
@@ -70,6 +67,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   // 此处只有区分 update 和 add
   ClipMemo.show = function(clipModel,type){
+    console.log(" show ",clipModel);
     var text = "";
     var pub="",tags=[],note=[];
     var clip = "";
@@ -78,7 +76,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       cid = clipModel.id; // 无论是preview还是detail都是 uid:id
     }
     if(!clip)
-    clip = clipModel.toJSON(); // clipModel来自detail或者来自add没有clip
+      clip = clipModel.toJSON(); // clipModel来自detail或者来自add没有clip
     pub = clip["public"];
     tags = clip.tag?clip.tag:[];
     note = clip.note?clip.note:"";
@@ -129,14 +127,17 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   // 触发更新clip中的注的事件
   App.vent.bind("app.clipapp.memo:rememo", function(clipmemoModel,data){
-    clipmemoModel.save(data,{
+    var model = new App.Model();
+    model.set({id:clipmemoModel.id});
+    model.save(data, {
       url:App.ClipApp.Url.base+"/clip/"+clipmemoModel.id,
       type:"PUT",
       success:function(model,res){
-	App.vent.trigger("app.clipapp.memo:success",model,data);
+	// console.log(" after save ", model.get("id"), res);
+	App.vent.trigger("app.clipapp.memo:success",clipmemoModel,data);
       },
       error:function(model,res){
-	App.vent.trigger("app.clipapp.memo:error",model,res);
+	App.vent.trigger("app.clipapp.memo:error",clipmemoModel,res);
       }
     });
   });
@@ -147,8 +148,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   App.vent.bind("app.clipapp.memo:success",function(model,data){
     var clip = model.get("clip");
-    if(clip){
-      console.info(data.note);
+    if(clip){ // 相当于已经更新了list
       clip.note = data.note; // 之前写的是note[0] ?
       clip.tag = data.tag;
       clip.public = data.public;
@@ -156,7 +156,10 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }else{//此处的注为从detail点击触发的，注成功后，修改cliplist中对应的model
       var listmodel=App.listRegion.currentView.collection.get(cid);
       var modifyclip=listmodel.get("clip");
-      modifyclip.note = data.note;
+      model.set("note", data.note); // 先更新detail
+      model.set("tag", data.tag);
+      model.set("public", data.public);
+      modifyclip.note = data.note; // 接着更新list
       modifyclip.tag = data.tag;
       modifyclip.public = data.public;
       listmodel.set({clip:modifyclip});

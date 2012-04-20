@@ -114,15 +114,15 @@ App.ClipApp.Login = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.login:success", function(token){
-    document.cookie = "token="+token;
+  App.vent.bind("app.clipapp.login:success", function(res){
+    document.cookie = "token="+res.token;
     // 用户登录成功 页面跳转
     Backbone.history.navigate("my",true);
     //location.reload();
     Login.close();
   });
- App.vent.bind("app.clipapp.register:success", function(res){
-    document.cookie = "token="+res;
+  App.vent.bind("app.clipapp.register:success", function(res){
+    document.cookie = "token="+res.token;
     App.popRegion.close();
     App.vent.trigger("app.clipapp.gotosetup:show");
   });
@@ -135,9 +135,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     Login.close();
   });
 
-  // TEST
+ // TEST
 
-  //App.bind("initialize:after", function(){ Login.show(); });
+ //App.bind("initialize:after", function(){ Login.show(); });
 
-  return Login;
+ return Login;
 })(App, Backbone, jQuery);
