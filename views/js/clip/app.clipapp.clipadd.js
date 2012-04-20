@@ -2,7 +2,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
   var objEditor = "";
-
+  var img_list = [];
   var ClipModel = App.Model.extend({
     defaults:{
       clip :{}
@@ -45,7 +45,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     save: function(){
       var clip = this.model.get("clip");
-      clip.content = App.ClipApp.Editor.getContent("editor");
+      clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(clip,{
 	url: P+"/clip",
 	type: 'POST',
@@ -80,10 +80,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   });
   ClipAdd.image_change = function(sender){
-      var flag = true;
       var change = App.util.isImage("formUpload");
       if(change){
-	/*
 	if( sender.files &&sender.files[0] ){
 	  var img = new Image();
 	  img.src = App.util.get_img_src(sender.files[0]);
@@ -92,7 +90,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	      App.ClipApp.Editor.insertImage("editor", {url: img.src});
 	    }
 	  };
-	}*/
+	}
 	$("#img_form").submit();
 	$("#post_frame").unbind("load");
 	$("#post_frame").load(function (){
@@ -104,7 +102,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 		//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 		var ids = imgids.split(":");
 		var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
-		App.ClipApp.Editor.insertImage("editor", {url: url});
+		img_list.push(url);
+		//App.ClipApp.Editor.insertImage("editor", {url: url});
 		// }
 	      }
 	    }

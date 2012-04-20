@@ -3,6 +3,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var _data = {};
   var flag = true;
+  var edit_model;
+  var img_list = [];
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
@@ -22,7 +24,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     template: "#editDetail-view-template",
     events: {
       "click .link_img":"show_extImg",
-      "change #formUpload":"image_change",
+//      "change #formUpload":"image_change",
       "click .format":"upFormat",
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
@@ -33,6 +35,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       _data = {content : []};
+      edit_model = this;
     },
     hide_extImg:function(){//隐藏弹出的链接地址对话框
       setTimeout(function(){
@@ -50,31 +53,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
-    image_change:function(e){
-      var that = this;
-      var uid = this.model.get("uid");
-      var change = App.util.isImage("formUpload");
-      if(change){
-	$("#img_form").submit();
-	$("#post_frame").unbind("load");
-	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var imgids = returnObj[1][0];
-	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	      var imgid = imgids.split(":")[1];
-	      var url = P+"/user/"+ uid+"/image/" +imgid;
-	      App.ClipApp.Editor.insertImage("editor", {url: url});
-	      // }
-	    }
-	  }
-	});
-      }else{
-	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
-      }
-    },
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
       // 为.editContent-container下的p标签添加click事件
@@ -87,7 +65,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     saveUpdate: function(){
       var cid = this.model.id;
       // 参数为编辑器id
-      _data.content = App.ClipApp.Editor.getContent("editor");
+      _data.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
 	type: 'PUT',
@@ -116,6 +94,41 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       //App.vent.trigger("app.clipapp:clipdetail", cid);
     }
   });
+  ClipEdit.image_change = function(sender){
+      var that = edit_modle;
+      var uid = that.model.get("uid");
+      var change = App.util.isImage("formUpload");
+      if(change){
+	if( sender.files &&sender.files[0] ){
+	  var img = new Image();
+	  img.src = App.util.get_img_src(sender.files[0]);
+	  img.onload=function(){
+	    if(img.complete){
+	      App.ClipApp.Editor.insertImage("editor", {url: img.src});
+	    }
+	  };
+	}
+	$("#img_form").submit();
+	$("#post_frame").unbind("load");
+	$("#post_frame").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1][0];
+	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	      var imgid = imgids.split(":")[1];
+	      var url = P+"/user/"+ uid+"/image" +imgid;
+	      img_list.push(url);
+	      //App.ClipApp.Editor.insertImage("editor", {url: url});
+	      // }
+	    }
+	  }
+	});
+      }else{
+	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      }
+  };
   ClipEdit.autoResize1= function() {
     try {
       document.all["mainFrame"].style.height=mainFrame.document.body.scrollHeight;

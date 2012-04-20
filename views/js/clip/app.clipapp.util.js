@@ -15,12 +15,11 @@ App.util = (function(){
     return P + '/user/'+util.getMyUid()+'/image';
   };
 
-  util.url = function(imageid){
-    var pattern = /^\d+:[a-z0-9]{32}/;
-    if(imageid && pattern.test(imageid)){
-      var ids = imageid.split(":");
-      return P + "/user/" + ids[0]+ "/image/" + ids[1];
-    }else return imageid;
+  util.url = function(image_url){
+    var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
+    if(image_url && pattern.test(image_url)){
+      return image_url + "/300";
+    }else return image_url;
   };
 
   util.face_url = function(imageid,size){

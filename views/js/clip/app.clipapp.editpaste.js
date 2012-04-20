@@ -21,8 +21,12 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }
   };
 
-  Editor.getContent = function(editorId){
+  Editor.getContent = function(editorId,img_list){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
+    // i 是顺序号，从0开始；n 是img元素
+    $(objEditor.contentWindow.document.body).children("img").each(function(i,n){
+      $(n).attr("src",img_list[i]);
+    });
     if(isIE){
       var data = objEditor.contentWindow.document.body.innerText;
     }else{
