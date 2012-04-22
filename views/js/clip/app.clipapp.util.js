@@ -151,23 +151,23 @@ App.util = (function(){
     var paddingTop = 0;
     $(window).scroll(function() {
       var st = $(window).scrollTop();
-      var wh = window.innerHeight;
-      // fix left while scroll
-      var mt = $(".clearfix").offset().top + 240;//$("#face").height();
-      if($("#list").height()<=200)return;
-      if(st > mt ){
-	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	$("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
-	$(".return_top").show();
-	// show go-top while scroll
-      } else {
-	$(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".return_top").hide();
-      }
-      // loader while scroll down to the page end
-      var lt = $(".loader").offset().top;
-      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
+       var wh = window.innerHeight;
+       // fix left while scroll
+       var mt = $(".clearfix").offset().top + 240;//$("#face").height();
+       if($("#list").height()<=200)return;
+       if(st > mt ){
+	 $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+	 $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
+	 $(".return_top").show();
+	 // show go-top while scroll
+       } else {
+	 $(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
+	 $("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
+	 $(".return_top").hide();
+       }
+       // loader while scroll down to the page end
+       var lt = $(".loader").offset().top;
+       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
       if(st + wh > lt){
 	if(flag){
 	  options.start += App.ClipApp.Url.page;
