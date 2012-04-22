@@ -52,6 +52,8 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       e.preventDefault();
       var that = this;
       var text = $("#comm_text").val();
+      var _text = text.replace(/^[\s]$/g, "");
+      if(_text == "" || _text == "说点什么吧~")return;
       var params = {text: text, pid: 0};
       // console.dir(that.tag_list);
       var params1 = {clip:{tag:tag_list,note:[{text:text}]}};

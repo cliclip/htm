@@ -2,7 +2,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var _data = {};
-  var flag = true;
+  var edit_view = {};
+  var img_list = [];
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
@@ -22,7 +23,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     template: "#editDetail-view-template",
     events: {
       "click .link_img":"show_extImg",
-      "change #formUpload":"image_change",
+//      "change #formUpload":"image_change",
       "click .format":"upFormat",
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
@@ -32,7 +33,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "blur #img_upload_url":"hide_extImg"
     },
     initialize: function(){
+      //console.info("initialize");
       _data = {content : []};
+      edit_view = this;
     },
     hide_extImg:function(){//隐藏弹出的链接地址对话框
       setTimeout(function(){
@@ -50,61 +53,34 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
-    image_change:function(e){
-      var that = this;
-      var uid = this.model.get("uid");
-      var change = App.util.isImage("formUpload");
-      if(change){
-	$("#img_form").submit();
-	flag = true;//此变量用于解决连续上传多张图片时图片加载重复的奇怪问题
-	$("#post_frame").load(function(){ // 加载图片
-	  if(flag){
-	    var returnVal = this.contentDocument.documentElement.textContent;
-	    if(returnVal != null && returnVal != ""){
-	      var returnObj = eval(returnVal);
-	      if(returnObj[0] == 0){
-		var imgids = returnObj[1][0];
-		// for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-		var imgid = imgids.split(":")[1];
-		var url = P+"/user/"+ uid+"/image/" +imgid;
-		App.ClipApp.Editor.insertImage("editor", {url: url});
-		// }
-	      }
-	    }
-	    flag = false;
-	  }
-	});
-      }else{
-	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
-      }
-    },
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
       // 为.editContent-container下的p标签添加click事件
       console.info("调整页面格式");
     },
     remarkClip:function(){
-      // var user = this.model.get("user");
-      // var cid = user+":"+this.model.id;
-      // var tag = this.model.get("tag");
-      // var note = this.model.get("note");
-      // var pub = this.model.get("public");
       // 整个的传model方便直接修改
       App.vent.trigger("app.clipapp:clipmemo", this.model, "update");
     },
     saveUpdate: function(){
       var cid = this.model.id;
       // 参数为编辑器id
-      var html = App.ClipApp.Editor.getContent("editor");
-      _data.content = App.util.HtmlToContent(html);
+      _data.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
 	type: 'PUT',
-	success:function(response){
-	  App.viewRegion.close();
+	success:function(model,res){
+	  var clip = model.toJSON();
+	  var _collection = App.listRegion.currentView.collection;
+	  var listmodel=App.listRegion.currentView.collection.get(cid);
+	  var modifyclip=listmodel.get("clip");
+	  modifyclip.content = App.util.getPreview(clip.content, 100);
+	  listmodel.set({clip:modifyclip});
+	  App.vent.trigger("app.clipapp.cliplist:showlist",_collection);
 	  // App.vent.trigger("app.clipapp:clipdetail", cid);
+	  App.viewRegion.close();
 	},
-	error:function(response){
+	error:function(model,res){
 	  // 出现错误，触发统一事件
 	  // App.vent.trigger("app.clipapp.clipedit:error", cid);
 	}
@@ -114,10 +90,46 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // 直接返回详情页面
       App.viewRegion.close();
       var cid =	this.model.id;
+      //console.info(this);
       //在clip列表界面触发“改”时不应返回详情页面
       //App.vent.trigger("app.clipapp:clipdetail", cid);
     }
   });
+  ClipEdit.image_change = function(sender){
+      var that = edit_view;
+      var uid = that.model.get("uid");
+      var change = App.util.isImage("formUpload");
+      if(change){
+	if( sender.files &&sender.files[0] ){
+	  var img = new Image();
+	  img.src = App.util.get_img_src(sender.files[0]);
+	  img.onload=function(){
+	    if(img.complete){
+	      App.ClipApp.Editor.insertImage("editor", {url: img.src});
+	    }
+	  };
+	}
+	$("#img_form").submit();
+	$("#post_frame").unbind("load");
+	$("#post_frame").load(function(){ // 加载图片
+	  var returnVal = this.contentDocument.documentElement.textContent;
+	  if(returnVal != null && returnVal != ""){
+	    var returnObj = eval(returnVal);
+	    if(returnObj[0] == 0){
+	      var imgids = returnObj[1][0];
+	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	      var imgid = imgids.split(":")[1];
+	      var url = P+"/user/"+ uid+"/image/" +imgid;
+	      img_list.push(url);
+	      //App.ClipApp.Editor.insertImage("editor", {url: url});
+	      // }
+	    }
+	  }
+	});
+      }else{
+	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      }
+  };
   ClipEdit.autoResize1= function() {
     try {
       document.all["mainFrame"].style.height=mainFrame.document.body.scrollHeight;
@@ -134,7 +146,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var editView = new EditView({model: editModel});
       App.viewRegion.show(editView);
       App.ClipApp.Editor.init();
-      var html = App.util.ContentToHtml(editModel.toJSON().content);
+      var html = editModel.toJSON().content;
       App.ClipApp.Editor.setContent("editor", html);
     });
   };

@@ -1,9 +1,0 @@
-
-//- style
-//-!= code("views/js/lib/bootstrap.js")
-
-//- high level structure
-!= code("views/js/lib/backbone.marionette.js")
-
-//- app
-!= code("views/js/app.js")

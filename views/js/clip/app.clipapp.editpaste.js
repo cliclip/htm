@@ -21,15 +21,23 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }
   };
 
-  Editor.getContent = function(editorId){
+  Editor.getContent = function(editorId,img_list){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
+    // i 是顺序号，从0开始；n 是img元素
+    // console.info(img_list);
+    $(objEditor.contentWindow.document.body).find("img.new").each(function(i,n){
+      // console.info(n);
+      $(n).attr("src",img_list[i]);
+      img_list.shift();
+    });
     if(isIE){
-      return objEditor.contentWindow.document.body.innerText;
+      var data = objEditor.contentWindow.document.body.innerText;
     }else{
-      return objEditor.contentWindow.document.body.innerHTML;
+      var data = objEditor.contentWindow.document.body.innerHTML;;
     }
+    // console.info(data);
+    return Filter.htmlToUbb(data);
   };
-
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
     var objEditor = document.getElementById(editorId);
@@ -45,7 +53,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId);
     var img = "";
     if(data.url)
-      img = "<img src="+data.url+" style='max-width:475px;max-height:490px;' />";
+      img = "<img class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
     if(isIE){ // TODO
       // var ifmTemp=document.getElementById("ifmTemp");
       objEditor.contentWindow.document.execCommand("Paste", false, img);
@@ -59,7 +67,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   };
 
   var ensureUnits = function(v) {
-      return v + ((v !== "0") && (/\d$/.test(v)))? "px" : "";
+    return v + ((v !== "0") && (/\d$/.test(v)))? "px" : "";
   };
 
   var setRange = function (sel,r){
@@ -338,12 +346,14 @@ var Filter = (function(){
     }
     html = cleanHtml(html);
     // console.log(html);
-    html = htmlToUbb(html);
+    html = _htmlToUbb(html);
     // console.log(html);
     html = ubbToHtml(html);
     // console.log(html);
     return html;
   };
+
+  exports.htmlToUbb = _htmlToUbb;
 
   function isWord(strValue) {
     var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
@@ -490,7 +500,8 @@ var Filter = (function(){
     } while (len != str.length);
     return str;
   }
-  function htmlToUbb(html){
+
+  function _htmlToUbb(html){
     var text = html;
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"

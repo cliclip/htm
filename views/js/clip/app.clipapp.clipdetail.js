@@ -105,8 +105,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     del_comment : function(e){
       e.preventDefault();
+      App.vent.unbind("app.clipapp.message:sure");//解绑  解决请求多次的问题。
       var id = e.target.id;
-      App.vent.trigger("app.clipapp.clipdetail:delComment", id, this.model.id);
+      var that = this;
+      App.vent.trigger("app.clipapp.message:alert", "删除评论!");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	App.vent.trigger("app.clipapp.clipdetail:delComment", id, that.model.id);
+      });
     },
     render:function(_model){
       // 针对commetModel进行处理显示
@@ -202,13 +207,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .cancel"    : "cancel"
     },
     foucsAction:function(evt){
-      if($("#comm_text").val() == "评论文本框~" ){
+      if($("#comm_text").val() == "说点什么吧~" ){
 	$("#comm_text").val("");
       }
     },
     blurAction:function(evt){
       if($("#comm_text").val() == ""){
-	$("#comm_text").val("评论文本框~");
+	$("#comm_text").val("说点什么吧~");
       }
     },
     maintagAction:function(evt){
@@ -218,7 +223,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	$("#"+id).css("backgroundColor","red");
 	// document.getElementById(id).style.backgroundColor="red";
 	this.tag_list.push($("#"+id).val());
-	if($("#comm_text").val() == "" || $("#comm_text").val() == "评论文本框~"){
+	if($("#comm_text").val() == "" || $("#comm_text").val() == "说点什么吧~"){
 	  $("#comm_text").val($("#"+id).val());
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
@@ -237,6 +242,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	var id = this.model.id;
 	var pid = this.model.get("pid") ? this.model.get("pid") : 0;
 	var text = $("#comm_text").val();
+	var _text = text.replace(/[\s]/g, "");
+	if(_text == "" || _text == "说点什么吧~")return;
 	var params = {text: text, pid: pid};
 	this.model.save({text: text,pid : pid},
 	{
@@ -262,7 +269,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     cancel : function(){
       // 需要将选中状态进行重置，同时将this.tag_list重置
-      $("#comm_text").val("评论文本框~");
+      $("#comm_text").val("说点什么吧~");
       this.tag_list.forEach(function(e){
 	var id = $("input[value="+e+"]").attr("id");
 	$("#"+id).css("backgroundColor","");

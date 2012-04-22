@@ -1,6 +1,5 @@
 App.util = (function(){
   var util = {};
-  var paramslength=0,flag=true;
   var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
     var cookie = document.cookie;
@@ -16,14 +15,28 @@ App.util = (function(){
     return P + '/user/'+util.getMyUid()+'/image';
   };
 
-  util.url = function(imageid){
-    var pattern = /^\d+:[a-z0-9]{32}/;
-    if(imageid && pattern.test(imageid)){
+  util.url = function(image_url){
+    var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
+    if(image_url && pattern.test(image_url)){
+      return image_url + "/300";
+    }else return image_url;
+  };
+
+  util.face_url = function(imageid,size){
+    var pattern = /^[0-9]:[a-z0-9]{32}/;
+    if(imageid == ""){
+      return "img/f.jpg";
+    }else if(imageid&& pattern.test(imageid)){
       var ids = imageid.split(":");
-      return P + "/user/" + ids[0]+ "/image/" + ids[1];
+      if(size){
+	return P + "/user/" + ids[0]+ "/image/" + ids[1] + "/" + size;
+      }else{
+	return P + "/user/" + ids[0]+ "/image/" + ids[1];
+      }
     }else return imageid;
   };
 
+  /*
   // 拿到的html参数是字符串
   util.HtmlToContent = function(html){
     // var src = /<img\s* (src=\"?)([\w\-:\/\.]+)?\"?\s*.*\/?>/;
@@ -75,27 +88,41 @@ App.util = (function(){
       }
     }
     return content;
+  };*/
+
+  util.getPreview = function(content, length){
+    var data = {};
+    var reg = /\[img\].*?\[\/img\]/;
+    var img = content.match(reg);
+    if(img) data.image = img[0].replace('[img]',"").replace('[/img]',"");
+    var text = _getContentText(content);
+    data.text = _trim(text, length);
+    return data;
   };
 
-  util.ContentToHtml = function(content){
-    var html = "";
-    for(var i=0; i<content.length; i++){
-      for(key in content[i]){
-	switch(key){
-	  case 'text':
-	    html += '<p>' + content[i][key] + '</p>';break;
-	  case 'image':
-	    html +=
-	    '<p><img src=' + util.url(content[i][key]) + ' style="max-width:475px;max-height:490px;">'
-	    + '</img></p>';
-	    break;
-	  case 'code':
-	    html += '<pre> ' + content[i][key] + '</pre>';break;
-	}
+  function _getContentText (content){
+    // 取得ubb中常用的标签之后留下的内容
+    // 去掉所有的ubb标签中的内容，只留下文本内容
+    var reg1 = /\[img\].*\[\/img\]?/;
+    var reg = /\[\/?[^].*?\]/gi;
+    // 去除img标签
+    while(reg1.test(content)) content = content.replace(reg1,"");
+    // 去除其他标签
+    while(reg.test(content)) content = content.replace(reg,"");
+    return content;
+  };
+
+  function _trim(content, length){
+    var r = undefined;
+    if (!content) return r;
+    if (_.isString(content) && content.length){
+      if(content.length < length){
+	r = content;
+      } else {
+	r = content.substring(0, length) + "...";
       }
     }
-    // console.log("html:: %j", html);
-    return html;
+    return r;
   };
 
   util.isImage = function(id){
@@ -105,16 +132,6 @@ App.util = (function(){
     }else{
       return true;
     }
-  };
-
-  util.face_url = function(imageid){
-    var pattern = /^[0-9]:[a-z0-9]{32}/;
-    if(imageid == ""){
-      return "img/f.jpg";
-    }else if(imageid&& pattern.test(imageid)){
-      var ids = imageid.split(":");
-      return P + "/user/" + ids[0]+ "/image/" + ids[1];
-    }else return imageid;
   };
 
   util.generatePastTime = function(time){
@@ -146,50 +163,78 @@ App.util = (function(){
     }
     return returnVal;
   };
-
-  App.vent.bind("app.clipapp.util:scroll", function(view, options){
+  util.list_scroll = function(_options){
+    var collection_length=0;
+    var scroll_flag = true;
     var paddingTop = 0;
+    var lo = _options;
+    $(window).unbind("scroll");
+    if(lo.collection.length<App.ClipApp.Url.page)return;
     $(window).scroll(function() {
       var st = $(window).scrollTop();
-       var wh = window.innerHeight;
-       // fix left while scroll
-       var mt = $(".clearfix").offset().top + 240;//$("#face").height();
-       if($("#list").height()<=200)return;
-       if(st > mt ){
-	 $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	 $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
-	 $(".return_top").show();
-	 // show go-top while scroll
-       } else {
-	 $(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
-	 $("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
-	 $(".return_top").hide();
-       }
-       // loader while scroll down to the page end
-       var lt = $(".loader").offset().top;
-       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
+      var wh = window.innerHeight;
+      // fix left while scroll
+      var mt = $(".clearfix").offset().top + $(".user_head").height();
+      if($("#list").height()<=200)return;
+      if(st > mt ){
+	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
+	$("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
+	$(".return_top").show();
+	// show go-top while scroll
+      } else {
+	$(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$(".return_top").hide();
+      }
+      // loader while scroll down to the page end
+      var lt = $(".loader").offset().top;
+      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
       if(st + wh > lt){
-	if(flag){
-	  options.start += App.ClipApp.Url.page;
-	  options.end += App.ClipApp.Url.page;
-	  options.url = options.params.url + "/" +options.start + ".." + options.end;
-	  options.add = true;
-	  options.params.fetch(options);
-	  flag = false;
+	if(scroll_flag){
+	  lo.start += App.ClipApp.Url.page;
+	  lo.end += App.ClipApp.Url.page;
+	  lo.url = lo.base_url + "/" +lo.start + ".." + lo.end;
+	  lo.add = true;
+	  lo.collection.fetch(lo);
+	  scroll_flag = false;
 	  setTimeout(function(){
-	    flag = true;
-	    if(options.params.length-paramslength<App.ClipApp.Url.page){
-	      flag = false;
-	      $(".loader").text("reach to the end.");
+	    scroll_flag = true;
+	    if(lo.collection.length-collection_length<App.ClipApp.Url.page){
+	      scroll_flag = false;
+	      //$(".loader").text("reach to the end.");
 	    }else{
-	      paramslength = options.params.length;
+	      collection_length = lo.collection.length;
 	    }
 	  },200);
 	}
       }
     });
-  });
+  };
+  //解决关于本地预览图片的浏览器兼容问题
+  util.get_img_src = function(source){
+    //chrome
+    if (window.webkitURL && window.webkitURL.createObjectURL) {
+      return window.webkitURL.createObjectURL(source);
+    }else if(window.URL.createObjectURL) {
+      return window.URL.createObjectURL(source);
+    }else{
+      alert("the problem of compatible");
+      return window.URL.createObjectURL(source);
+    }
+  };
+// App.vent.bind("app.clipapp.util:scroll", });
   var getMessage = {
+
+    login_success : "登录成功",
+    register_success : "注册成功",
+    auth_success : "更改密码成功",
+    collect_success : "收藏成功",
+    comment_success : "评论成功",
+    recomment_success : "转发成功",
+
+    user:{
+      not_exist: "用户不存在"
+    },
     auth: {
       not_exist: "用户不存在",
       not_match: "句柄不合法",
@@ -205,32 +250,62 @@ App.util = (function(){
       is_null: "密码为空",
       not_match: "密码不匹配"
     },
+    confirm:{
+      is_null: "确认密码为空",
+      password_diff: "密码输入不一致"
+    },
     email:{
+      email_exists: "邮件已存在",
       invalidate: "邮箱不合法",
       is_null: "邮件地址不能为空",
       no_uname: "你还没有设置用户名"
+    },
+    active:{
+      _isExists: "激活连接不存在",
+      fail: "激活失败"
+    },
+    recommend:{
+      not_exist: "推荐不存在"
+    },
+    clip:{
+      not_exist: "clip不存在"
+    },
+    content:{
+      is_null: "摘录不存在",
+      not_array: "摘录必须是数组",
+      is_empty: "摘录不能为空"
+    },
+    follow:{
+      all: "你追了该用户的全部"
+    },
+    error:{
+      "link 已作废": "连接已作废",
+      "link doesnt exist": "连接不存在",
+      "link invalidate": "连接不合法"
     }
   };
 
-  getMessage["login_success"] = "登录成功";
-  getMessage["register_success"] = "注册成功";
-  getMessage["auth_success"] = "更改密码成功";
-  getMessage["password_diff"] = "密码输入不一致";
-  getMessage["collect_success"] = "收藏成功";
-  getMessage["comment_success"] = "评论成功";
-  getMessage["recomment_success"] = "转发成功";
-  getMessage["recomment_success"]= "转发成功";
-  getMessage["clip_not_exist"] = "clip不存在";
-
   util.getErrorMessage = function(errorCode){
-    for (key in errorCode){
-      var error = getMessage[key][errorCode[key]];
-      if(errorCode && error){
-	errorCode[key] = error;
-	return errorCode;
+    var error = "";
+    if(typeof(errorCode)=="string"){
+      error = getMessage[errorCode];
+      if(error){
+	return error;
       }else{
 	return errorCode;
       }
+    } else if(typeof(errorCode)=="object"){
+      for (key in errorCode){
+	if(getMessage[key]){
+	  error = getMessage[key][errorCode[key]];
+	  if(errorCode && error){
+	    errorCode[key] = error;
+	  }
+	}
+      }
+      return errorCode;
+    }else{
+      return errorCode;
     }
  };
 

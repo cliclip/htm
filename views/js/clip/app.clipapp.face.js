@@ -23,7 +23,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
     events: {
       "click .stop": "followAction",
       "click .zhui": "stopAction",
-      "click .user_list": "userList"
+      "click .user_list": "userList",
+      "click .following": "following",
+      "click .follower": "follower"
     },
     followAction: function(){
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
@@ -39,11 +41,17 @@ App.ClipApp.Face = (function(App, Backbone, $){
       var uid =	user_id;
       if(uid == App.util.getMyUid()){
 	App.vent.trigger("app.clipapp.routing:mycliplist:show");
-	App.ClipApp.ClipList.showUserClips(my);
+	App.ClipApp.ClipList.showUserClips("my");
       }else{
 	App.vent.trigger("app.clipapp.routing:usercliplist:show", uid);
 	App.ClipApp.ClipList.showUserClips(uid);
       }
+    },
+    following: function(){
+      App.vent.trigger("app.clipapp.followinglist:show", user_id);
+    },
+    follower: function(){
+      App.vent.trigger("app.clipapp.followerlist:show", user_id);
     }
   });
 

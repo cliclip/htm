@@ -10,7 +10,7 @@ script(type="text/template",id="editDetail-view-template")
           |<form method="POST" id="img_form" action="<%=actUrl%>" target="post_frame" enctype="multipart/form-data">
           |<span class="file">
           |<button class="upload_img" id="localImg">上传图片</button>
-          |<input id="formUpload" class="hifile" type="file" name="image"/>
+          |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipEdit.image_change(this)"/>
           |</span>
           |</form>
           span
@@ -29,5 +29,5 @@ script(type="text/template",id="editDetail-view-template")
           article.content.content2
             iframe#editor(width="100%",height="100%",frameborder="0" )
           div.btn_group.clearfix
-            input#editClip_Save.verify(type="submit",title="保存",value="确定")
+            input#editClip_Save.verify(type="button",title="保存",value="确定")
             input#editClip_Abandon.cancel(type="reset",title="放弃",value="取消")

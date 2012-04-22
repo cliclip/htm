@@ -60,10 +60,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	var $newElems = itemView.$el.css({ opacity: 0 });
 	$newElems.imagesLoaded(function(){
 	  $newElems.animate({ opacity: 1 });
-	  //setTimeout(function(){
-	    //$("#list").masonry( 'appended', $newElems,true);
-	    $("#list").masonry("reload");
-	  //},0);
+	  $("#list").masonry("reload");
 	});
       });
     },
@@ -85,7 +82,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 /*    mouseover: function(e){
       e.preventDefault();
       if(checkHover(e,e.target)){
-	//console.info("@@@@@@@@@@@@");
 	$(e.currentTarget).children("#opt").toggle();//css("display","block");
       }
     },
@@ -150,6 +146,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     className: "preview-view",
     itemView: ClipPreviewView,
     initialize: function(){
+/*
       this.bind("collection:rendered",function(itemView){
       	var $container = $('#list');
 	$container.imagesLoaded( function(){
@@ -160,30 +157,32 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	setTimeout(function(){ // STRANGE BEHAVIOUR
 	  //$("#list").masonry("appended", itemView.$el);
 	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-//	  $("#list").masonry("reload");
+	  //$("#list").masonry("reload");
 	},0);
-      });
+      });*/
     }
   });
 
   var getClips = function(options){
     var clips = new ClipPreviewList();
-    options.params = clips;
+    options.collection = clips;
     if(!options.start &&! options.end){
       options.start = 1;
       options.end = App.ClipApp.Url.page;
     }
-    options.params.url = options.url;
-    options.url += "/" + options.start+".."+ options.end;
+    options.url = options.base_url + "/" + options.start+".."+ options.end;
     if(options.data){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
-    // console.info(options);
-    options.params.fetch(options);
-    options.params.onReset(function(previewlist){
-      //location.reload() ;
-      App.vent.trigger("app.clipapp.cliplist:show",previewlist, options);
+    /*options.collection.comparator = function(clip) {
+      return clip.get("id");
+    };*/
+    options.collection.fetch(options);
+    options.collection.onReset(function(clips){
+      App.vent.trigger("app.clipapp.cliplist:showlist",clips);
+      App.util.list_scroll(options);
+      //App.vent.trigger("app.clipapp.cliplist:show",clips, options);
     });
   };
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
@@ -193,7 +192,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = App.ClipApp.Url.base+"/user/2/query";
     var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
-    getClips({url: url, type: "POST", data:data});
+    getClips({base_url: url, type: "POST", data:data});
   };
 
   ClipList.showUserClips = function(uid, tag){
@@ -201,7 +200,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = App.ClipApp.Url.base+"/user/"+uid+"/query";
     var data = {user: uid};
     if(tag) data.tag = [tag];
-    getClips({url: url, type:"POST", data: data});
+    getClips({base_url: url, type:"POST", data: data});
   };
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
@@ -211,7 +210,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     var data = {text: word};
     if(tag) data.tag = [tag];
-    getClips({url: url, type: "POST", data: data});
+    getClips({base_url: url, type: "POST", data: data});
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
@@ -220,7 +219,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     var data = {text: word, user: uid};
     if(tag) data.tag = [tag];
-    getClips({url: url, type:"POST", data:data});
+    getClips({base_url: url, type:"POST", data:data});
   };
 
   ClipList.showUserInterest = function(uid, tag){
@@ -228,7 +227,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = "/user/" + uid + "/interest";
     if(tag) url += "/tag/" + tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type: "GET",start:0,end:App.ClipApp.Url.page});
+    getClips({base_url: url, type: "GET",start:0,end:App.ClipApp.Url.page});
+    App.vent.trigger("interest:show", tag);
   };
 
   ClipList.showUserRecommend = function(uid, tag){
@@ -236,24 +236,27 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var url = "/user/"+uid+"/recomm";
     if(tag) url += "/tag/"+tag;
     url = App.ClipApp.Url.base + url;
-    getClips({url: url, type:"GET",start:0,end:App.ClipApp.Url.page});
+    getClips({base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page});
+    App.vent.trigger("recommend:show", tag);
   };
-
-  App.vent.bind("app.clipapp.cliplist:show", function(clips, options){
-    App.vent.trigger("app.clipapp.cliplist:showlist",clips);
-    App.vent.trigger("app.clipapp.util:scroll", clipListView, options);
-  });
 
   App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
     if(collection){
       clipListView = new ClipListView({collection: collection});
+      console.info(collection) ;
+    }else {
+      //console.info("此事件未传入collection");
     }
     $("#list").masonry({
       itemSelector : '.clip',
       columnWidth : 360,
       isAnimated: false
     });
+    $("#list").css({height:"0px"});
     App.listRegion.show(clipListView);
+    if(collection && collection.length==0){
+      //$("#list").append("抱歉，没有找到相应的信息...");
+    }
   });
   App.vent.bind("app.clipapp.cliplist:removeshow",function(removemodel){
     var collection = clipListView.collection.remove(removemodel);
@@ -261,7 +264,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
     var collection = clipListView.collection;
-    collection.unshift(addmodel);
+    collection.add(addmodel,{at:0});
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;

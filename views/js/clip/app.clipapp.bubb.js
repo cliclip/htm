@@ -107,8 +107,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // 更新bubb显示
     iframe_call('bubbles', "openTag", tag);
     //设为false也可直接刷新 但是提交上去的数据是乱码
-    App.Routing.ClipRouting.router.navigate(mkUrl(tag), false);
-    App.vent.trigger("app.clipapp:cliplist.refresh", _uid, tag);
+    var url = mkUrl(tag);
+    App.Routing.ClipRouting.router.navigate(url, false);
+    App.vent.trigger("app.clipapp:cliplist.refresh", _uid, url, tag);
   });
 
   // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
@@ -116,7 +117,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp:follow", _uid, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(tag, uid){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
@@ -147,11 +148,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function getSiteTags(callback){
     // API getSiteTags
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
-    // GET $HOST/$BASE/_/user/0/tag/0..19
+    // GET $HOST/$BASE/_/user/0/meta/0..19
     // var follows = ["动漫", "科技"];
     // var tags = ["电影", "音乐", "美女", "穿越", "户外", "流行"];
     var bubbModel = new BubbModel({id: "2"});
-    var url = P+"/user/"+bubbModel.id+"/tag/0..19";
+    var url = P+"/user/"+bubbModel.id+"/meta/0..19";
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
@@ -174,7 +175,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
-    var url = P+"/user/"+uid+"/tag/0..19";
+    var url = P+"/user/"+uid+"/meta/0..19";
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
@@ -257,7 +258,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     return opt;
   }
 
-
+  // 需要区分 my/interest、 my/recommend、和 my
   function mkUrl(tag){
     var url = Backbone.history.fragment;
     var i = url.indexOf("/tag");
@@ -266,7 +267,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	url = url.substr(0, i);
 	return url += "/tag/"+tag;
       }else{
-	if(url.indexOf("my") >= 0)
+	if(url.indexOf("my/interest") >= 0)
+	  return "/my/interest/"+tag;
+	else if(url.indexOf("my/recommend") >= 0)
+	  return "/my/recommend/"+tag;
+	else if(url.indexOf("my") >= 0)
 	  return "/my/tag/"+tag;
 	else
 	  return "/user/"+_uid+"/tag/"+tag;

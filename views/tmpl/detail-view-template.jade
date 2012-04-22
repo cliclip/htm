@@ -32,11 +32,7 @@ script(type="text/template",id="detail-view-template")
     div.pop_right
       section.pop_inner
         article.content
-          <%for(var i=0; i<content.length; i++){if(content[i].text){%>
-          p<%= content[i].text %>
-          <%}else if(content[i].image){%>
-          <img src="<%=App.util.url(content[i].image)%>"/>
-          <%}}%>
+          <%= content%>
         <%= App.util.generatePastTime(time)%>
         dl.comments.clearfix
         div.input_textarea
@@ -70,7 +66,7 @@ script(type="text/template",id="showcomment-view-template")
   <%}%>
           
 script(type="text/template",id="addcomm-view-template")
-  |<textarea id="comm_text">评论文本框~</textarea>
+  |<textarea id="comm_text">说点什么吧~</textarea>
   div
     input.main_tag(type="button",id="maintag_1",value="好看")
     input.main_tag(type="button",id="maintag_2",value="好听")

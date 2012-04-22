@@ -15,11 +15,33 @@ App.ClipApp.Login = (function(App, Backbone, $){
     className : "login-view",
     template : "#login-view-template",
     events : {
-      "focus #name"              :"clearAction",
-      "blur #name"               :"blurAction",
+      "focus #name"              : "clearAction",
+      "blur #name"               : "blurAction",
+      "keydown #name"            : "name_keydown",
+      "keydown #pass"            : "pass_keydown",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
       "click .reg_btn"           : "registerAction"
+    },
+    initialize:function(){
+    },
+    name_keydown:function(){
+      $("#name").unbind("keydown");
+      $('#name').keydown(function(e){
+	if(e.keyCode==13){ // 响应回车事件
+	  setTimeout(function(){
+	    $('#pass').focus();
+	  },100);
+	}
+      });
+    },
+    pass_keydown:function(){
+      $("#pass").unbind("keydown");
+      $('#pass').keydown(function(e){
+	if(e.keyCode==13){ // 响应回车事件
+	  $('.login_btn').click();
+	}
+      });
     },
     loginAction : function(e){
       var that = this;
@@ -59,7 +81,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.login:cancel");
     },
     clearAction:function(evt){
-      if($("#name").val() == this.model.get("name")){
+      if($("#name").val() == "用户名/Email"){ //this.model.get("name")
 	$("#name").val("");
       }
     },
@@ -76,21 +98,31 @@ App.ClipApp.Login = (function(App, Backbone, $){
     if (error) loginModel.set("error", error);
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
+    $("#name").focus();
+    if(error){
+      if(error.name){
+	$("#name").val(model.get("name"));
+	$("#name").select();
+      }
+      if(!error.name&&error.pass){
+	$("#pass").select();
+      }
+    }
   };
 
   Login.close = function(){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.login:success", function(token){
-    document.cookie = "token="+token;
+  App.vent.bind("app.clipapp.login:success", function(res){
+    document.cookie = "token="+res.token;
     // 用户登录成功 页面跳转
     Backbone.history.navigate("my",true);
     //location.reload();
     Login.close();
   });
- App.vent.bind("app.clipapp.register:success", function(res){
-    document.cookie = "token="+res;
+  App.vent.bind("app.clipapp.register:success", function(res){
+    document.cookie = "token="+res.token;
     App.popRegion.close();
     App.vent.trigger("app.clipapp.gotosetup:show");
   });
@@ -103,9 +135,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     Login.close();
   });
 
-  // TEST
+ // TEST
 
-  //App.bind("initialize:after", function(){ Login.show(); });
+ //App.bind("initialize:after", function(){ Login.show(); });
 
-  return Login;
+ return Login;
 })(App, Backbone, jQuery);
