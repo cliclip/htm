@@ -139,7 +139,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       App.popRegion.show(reclipView);
       $('#obj_tag').tagsInput({
       //width: 'auto',
-      autocomplete_url:'test/fake_json_endpoint.html'
+      //autocomplete_url:'test/fake_json_endpoint.html'
     });
     }else if (user && tag){
       var reclipModel = new ReclipModel();
@@ -160,7 +160,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	  App.popRegion.show(reclipView);
 	  $('#obj_tag').tagsInput({
 	    //width: 'auto',
-	    autocomplete_url:'test/fake_json_endpoint.html'
+	    //autocomplete_url:'test/fake_json_endpoint.html'
 	  });
 	}
       });
