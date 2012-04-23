@@ -31,9 +31,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
   var EmailEditModel = App.Model.extend({
-    defaults:{
-      email:[]
-    },
     url:function(){
       return P+"/user/"+this.id+"/email";
     }
@@ -41,7 +38,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var RuleEditModel = App.Model.extend({
     defaults:{
-      rule:[]
+      title:"",
+      to:[],
+      cc:[]
     },
     url:function(){
       return P+"/user/"+this.id+"/rule";
