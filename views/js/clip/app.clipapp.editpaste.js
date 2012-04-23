@@ -25,10 +25,11 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     // i 是顺序号，从0开始；n 是img元素
     console.info(img_list);
-    $(objEditor.contentWindow.document.body).find("img.new").each(function(i,n){
+    $(objEditor.contentWindow.document.body)
+    .find("img.new").each(function(i,n){
       console.info(n);
-      $(n).attr("src",img_list[i]);
-      img_list.shift();
+      var at = $(n).attr("id");
+      $(n).attr("src",img_list[at]);
     });
     if(isIE){
       var data = objEditor.contentWindow.document.body.innerText;
@@ -53,7 +54,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId);
     var img = "";
     if(data.url)
-      img = "<img class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
+      img = "<img id="+data.id +" class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
     if(isIE){ // TODO
       // var ifmTemp=document.getElementById("ifmTemp");
       objEditor.contentWindow.document.execCommand("Paste", false, img);

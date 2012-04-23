@@ -172,13 +172,12 @@ App.util = (function(){
     $(window).unbind("scroll");
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
     $("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
-    if(lo.collection.length<App.ClipApp.Url.page)return;
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
       // fix left while scroll
       var mt = $(".clearfix").offset().top + $(".user_head").height();
-      if($("#list").height()<=200)return;
+      if($("#list").height()<=$(".left").height())return;
       if(st > mt ){
 	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
 	$("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
