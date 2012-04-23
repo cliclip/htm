@@ -31,7 +31,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       $(".img_upload_span").css("display","block");
       $("#img_upload_url").focus();
       $("#img_upload_url").val("");
-
     },
     hide_extImg: function(){
       setTimeout(function(){
