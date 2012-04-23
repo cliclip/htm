@@ -97,7 +97,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   });
   ClipEdit.image_change = function(sender){
       var that = edit_view;
-      var uid = that.model.get("uid");
+      var uid = that.model.get("user");
       var change = App.util.isImage("formUpload");
       if(change){
 	if( sender.files &&sender.files[0] ){
@@ -137,9 +137,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   };
   ClipEdit.show = function(clipid, uid){
     var editModel = new EditModel({
-      id: clipid,
-      uid: uid,
-      actUrl:P+"/user/"+uid+"/image"
+      id: clipid
     });
     editModel.fetch();
     editModel.onChange(function(editModel){
