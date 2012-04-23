@@ -144,15 +144,18 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       Recommend.nameListRegion.show(namelistView);
     });
   };
-  var recommendSave=function(model,params){
-    model.save(params,{
-      url:P+"/user/"+model.get("uid")+"/recomm",
+  var recommendSave=function(clipModel,params){
+    var newModel = new App.Model();
+    newModel.set({id:clipModel.id});
+    newModel.set({uid:clipModel.get("uid")});
+    newModel.save(params,{
+      url:P+"/user/"+newModel.get("uid")+"/recomm",
       type:"POST",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.recommend:success");
       },
       error:function(model,res){
-	App.vent.trigger("app.clipapp.recommend:error", model, res);
+	App.vent.trigger("app.clipapp.recommend:error", clipModel, res);
       }
     });
   };
