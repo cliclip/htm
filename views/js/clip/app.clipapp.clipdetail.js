@@ -25,18 +25,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
-      if(this.model.get("clip")){
-	this.model.unset("clip");
-      }
+      // if(this.model.get("clip")){this.model.unset("clip");}
       switch(opt){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh':
-	App.vent.trigger("app.clipapp:recommend", this.model);break;
+	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment':
-	App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
+	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
+	  App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
@@ -166,7 +164,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   // uid为当前登录用户
-  ClipDetail.show = function(uid, cid){
+  ClipDetail.show = function(cid){
     // 此处的cid并不等于detailModel.id
     var clip = new DetailModel({id: cid});
     clip.fetch();
@@ -291,14 +289,18 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   // 对评论进行回复，应该要有取消按钮在，评论的对应位置显示评论输入框
-  ClipDetail.show_reply = function(id, cid){
-    var replyCommModel = new CommentModel({id : cid});
-    replyCommModel.set("pid",id);
-    var replyCommView = new AddCommView({model: replyCommModel});
-    ClipDetail.replyCommRegion = new App.Region({
-      el: "#reply_Comm_showDiv"
-    });
-    ClipDetail.replyCommRegion.show(replyCommView);
+  ClipDetail.show_reply = function(id, cid){ // 需要先判断
+    if(App.ClipApp.Me.me.get("id")){
+      var replyCommModel = new CommentModel({id : cid});
+      replyCommModel.set("pid",id);
+      var replyCommView = new AddCommView({model: replyCommModel});
+      ClipDetail.replyCommRegion = new App.Region({
+	el: "#reply_Comm_showDiv"
+      });
+      ClipDetail.replyCommRegion.show(replyCommView);
+    }else{
+      App.vent.trigger("app.clipapp:login");
+    }
   };
 
   ClipDetail.delComment = function(id, cid){
