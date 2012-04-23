@@ -1,7 +1,5 @@
 //app.clipapp.followinglist.js
 App.ClipApp.FollowingList=(function(App, Backbone, $){
-  var start = 0;
-  var end = App.ClipApp.Url.page;
   var FollowingModel=App.Model.extend({
       defaults:{
 	user:[]
@@ -36,20 +34,23 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   FollowingList.showUserFollowing=function(uid){
     var options = {},flag=false;
     var collection=new FollowingList();
-    options.params = collection;
-    options.start = start;
-    options.end = end;
-    options.params.url = App.ClipApp.Url.base+"/user/"+uid+"/following";
-    options.url=options.params.url+"/"+start+".."+end;
-    collection.fetch(options);
-    collection.onReset(function(followinglist){
+    options.collection=collection;
+    if(!options.start &&! options.end){
+      options.start = 1;
+      options.end = App.ClipApp.Url.page;
+    }
+    options.collection.url = App.ClipApp.Url.base+"/user/"+uid+"/following";
+    options.url=options.collection.url+"/"+options.start+".."+options.end;
+    options.collection.fetch(options);
+    options.collection.onReset(function(followinglist){
       if(!_.isEmpty(followinglist.toJSON())) flag=true;
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
       App.listRegion.show(followinglistView);
       if(flag) $(".empty_user").css("display","none");
-      App.vent.trigger("app.clipapp.util:scroll",followinglistView,options);
+      App.util.list_scroll(options);
+     // App.vent.trigger("app.clipapp.util:scroll",followinglistView,options);
     });
   };
   FollowingList.close=function(){

@@ -8,12 +8,12 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     className : "comment-view",
     template : "#comment-view-template",
     events : {
-      "focus #comm_text":"foucsAction",
-      "blur #comm_text":"blurAction",
-      "click .size48":"maintagAction",
-      "click #submit" : "comment",
-      "click #cancel" : "cancel",
-      "click .close_w" : "cancel"
+      "focus #comm_text" :"foucsAction",
+      "blur #comm_text"  :"blurAction",
+      "click .size48"    :"maintagAction",
+      "click #submit"    :"comment",
+      "click #cancel"    :"cancel",
+      "click .close_w"   :"cancel"
     },
 
     foucsAction:function(evt){
@@ -105,9 +105,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.cliplist:showlist");
     Comment.close();
   });
-
-  // TEST
- //App.bind("initialize:after", function(){ Comment.show("1:1"); });
 
   return Comment;
 })(App, Backbone, jQuery);
