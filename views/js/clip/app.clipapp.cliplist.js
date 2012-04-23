@@ -243,7 +243,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
     if(collection){
       clipListView = new ClipListView({collection: collection});
-      console.info(collection) ;
+      // console.info(collection) ;
     }else {
       //console.info("此事件未传入collection");
     }

@@ -15,6 +15,7 @@ App.util = (function(){
     return P + '/user/'+util.getMyUid()+'/image';
   };
 
+  //clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
     if(image_url && pattern.test(image_url)){
@@ -169,13 +170,14 @@ App.util = (function(){
     var paddingTop = 0;
     var lo = _options;
     $(window).unbind("scroll");
-    if(lo.collection.length<App.ClipApp.Url.page)return;
+    $(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
+    $("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var wh = window.innerHeight;
       // fix left while scroll
       var mt = $(".clearfix").offset().top + $(".user_head").height();
-      if($("#list").height()<=200)return;
+      if($("#list").height()<=$(".left").height())return;
       if(st > mt ){
 	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
 	$("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
