@@ -15,6 +15,7 @@ App.util = (function(){
     return P + '/user/'+util.getMyUid()+'/image';
   };
 
+  //clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
     if(image_url && pattern.test(image_url)){
@@ -169,6 +170,8 @@ App.util = (function(){
     var paddingTop = 0;
     var lo = _options;
     $(window).unbind("scroll");
+    $(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
+    $("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
     if(lo.collection.length<App.ClipApp.Url.page)return;
     $(window).scroll(function() {
       var st = $(window).scrollTop();

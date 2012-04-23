@@ -103,6 +103,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 		var ids = imgids.split(":");
 		var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
 		img_list.push(url);
+		console.info(url);
 		//App.ClipApp.Editor.insertImage("editor", {url: url});
 		// }
 	      }

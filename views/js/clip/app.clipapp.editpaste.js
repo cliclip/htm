@@ -24,9 +24,9 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   Editor.getContent = function(editorId,img_list){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     // i 是顺序号，从0开始；n 是img元素
-    // console.info(img_list);
+    console.info(img_list);
     $(objEditor.contentWindow.document.body).find("img.new").each(function(i,n){
-      // console.info(n);
+      console.info(n);
       $(n).attr("src",img_list[i]);
       img_list.shift();
     });
@@ -35,7 +35,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }else{
       var data = objEditor.contentWindow.document.body.innerHTML;;
     }
-    // console.info(data);
+    console.info(data);
     return Filter.htmlToUbb(data);
   };
   // 与getContent对称 该js内部实现 [没有必要]
