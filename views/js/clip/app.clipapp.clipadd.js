@@ -3,6 +3,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var objEditor = "";
   var img_list = [];
+  var clip = {};
   var ClipModel = App.Model.extend({
     defaults:{
       clip :{}
@@ -44,7 +45,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     save: function(){
-      var clip = this.model.get("clip");
       clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(clip,{
 	url: P+"/clip",
@@ -57,14 +57,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  modifyclip.public = clip.public;
 	  modifyclip.user = {id:App.util.getMyUid()};
 	  modifyclip.content = App.util.getPreview(clip.content, 100);
-	  var id = App.util.getMyUid()+":"+res;
+	  var id = App.util.getMyUid()+":"+res.clipid;
 	  model.id = id;
 	  model.set({clip:modifyclip,id:id});
 	  model.set({recommend:""});
 	  App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	  console.log(model);
+	  //console.log(model);
 	  App.ClipApp.Bubb.showUserTags(modifyclip.user.id);
-	  App.viewRegion.close();
+	  ClipAdd.close();
 	},
 	error:function(model,error){
 	  // 出现错误，触发统一事件
@@ -77,9 +77,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipadd:cancel");
     },
     remark_newClip: function(){
-      App.vent.trigger("app.clipapp:clipmemo", this.model, "add");
+      this.model.set({clip:clip});
+      App.vent.trigger("app.clipapp:clipmemo", null, "add" ,this.model);
     }
   });
+
   ClipAdd.image_change = function(sender){
       var change = App.util.isImage("formUpload");
       if(change){
@@ -120,8 +122,19 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.ClipApp.Editor.init();
   };
 
-  App.vent.bind("app.clipapp.clipadd:cancel", function(){
+  ClipAdd.close = function(){
     App.viewRegion.close();
+    clip = {};
+  };
+
+  App.vent.bind("app.clipapp.clip:update",function(data){
+    clip.note = data.note;
+    clip.tag = data.tag;
+    clip.public = data.public;
+  });
+
+  App.vent.bind("app.clipapp.clipadd:cancel", function(){
+    ClipAdd.close();
   });
 
   App.vent.bind("app.clipapp.clipadd:error", function(){

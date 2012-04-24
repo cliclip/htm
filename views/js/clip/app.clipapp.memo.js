@@ -1,6 +1,17 @@
 //app.clipapp.memo.js
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
-  var ClipMemo={},cid="";
+  var ClipMemo={};
+  var memotype = "";
+  App.Model.DetailModel = App.Model.extend({
+    url: function(){
+      return P+"/clip/"+this.id;
+    },
+    parse: function(resp){
+      resp.id = resp.user+":"+resp.id;
+      return resp;
+    }
+  });
+
   var ClipMemoView=App.ItemView.extend({
     tagName:"div",
     className:"organize-view",
@@ -51,12 +62,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       }else{
 	_data={note:[{text: $("#organize_text").val()}],tag:tag_list,"public":"true"};
       }
-      // 为了保证对称性，将this.model传给外部事件
-      if(this.model.get("model") == "update"){
-	App.vent.trigger("app.clipapp.memo:rememo", this.model, _data);
-      }else if(this.model.get("model") == "add"){
-	// 此处应该将注的内容放入 model中以便没有提交之前注可以直接使用
-	App.vent.trigger("app.clipapp.memo:success", this.model, _data);
+      if(memotype == "update"){
+	// clip在update时需要clip的id
+	App.vent.trigger("app.clipapp.memo:rememo",this.model.id, _data);
+      }else if(memotype == "add"){
+	// 此处trigger的success事件是为了关闭 注的对话框。
+	App.vent.trigger("app.clipapp.memo:success", _data);
       }
     },
     cancleAction:function(e){
@@ -66,75 +77,74 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
   // 此处只有区分 update 和 add
-  ClipMemo.show = function(clipModel,type){
-    console.log(" show ",clipModel);
-    var text = "";
-    var pub="",tags=[],note=[];
-    var clip = "";
+  ClipMemo.show = function(cid,type,model){
+    memotype = type;
+    var memoModel = "";
+    var clipmemoModel = "";
+    var clipmemoView = "";
+    var data = {};
     if(type == "update"){
-      clip = clipModel.get("clip"); // 从preview中取
-      cid = clipModel.id; // 无论是preview还是detail都是 uid:id
+      memoModel = new App.Model.DetailModel({id:cid});
+      memoModel.fetch({
+	success:function(model,res){
+	  data = getData(model);
+	  clipmemoModel = new App.Model.DetailModel(data);//此model作显示用
+	  clipmemoModel.set({id:cid});
+	  clipmemoView = new ClipMemoView({model:clipmemoModel});
+	  App.popRegion.show(clipmemoView);
+	  $('#obj_tag').tagsInput({
+	    //autocomplete_url:'test/fake_json_endpoint.html'
+	  });
+	},
+	error:function(model,res){}
+      });
+    }else if(type=="add"){
+      data = getData(model);
+      //console.info(data);
+      clipmemoModel = new App.Model(data);//在clip  add时显示
+      clipmemoView = new ClipMemoView({model:clipmemoModel});
+      App.popRegion.show(clipmemoView);
+      $('#obj_tag').tagsInput({
+	//autocomplete_url:'test/fake_json_endpoint.html'
+      });
     }
-    if(!clip)
-      clip = clipModel.toJSON(); // clipModel来自detail或者来自add没有clip
-    pub = clip["public"];
-    tags = clip.tag?clip.tag:[];
-    note = clip.note?clip.note:"";
-    if(!_.isEmpty(note)&&typeof(note) == "string"){
-      text = note;
-    }else if(!_.isEmpty(note)&&Array.isArray(note)){
-      var ns = _(note).select(function(e){return e.text; })
-	.map(function(e){ return e.text; });
-	_(ns).each(function(n){ text += n+" "; });
-    }else if(!_.isEmpty(note)&&note){
-      text = note.text; //来自于preview的数据
-    }
-    var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});
-    var tag_obj = _.without(tags,"好看","好听","好吃","好玩","精辟","酷");
-    clipModel.set({note:text});
-    if(type == "update"){
-      clipModel.set({model:"update"});
-    }else{
-      clipModel.set({model:"add"});
-    }
-    var clipmemoView = new ClipMemoView({model:clipModel});
-    App.popRegion.show(clipmemoView);
-    if(pub == "false"){
-      $("#memo_private").attr("checked","true");
-    }
-    if(!_.isEmpty(tag_main)){
-      for(i=0;i < tag_main.length; i++){
-	switch(tag_main[i]){
-	  case "好看":document.getElementById("main_tag_1").className="size48 orange_48";break;
-	  case "好听":document.getElementById("main_tag_2").className="size48 orange_48";break;
-	  case "好吃":document.getElementById("main_tag_3").className="size48 orange_48";break;
-	  case "好玩":document.getElementById("main_tag_4").className="size48 orange_48";break;
-	  case "精辟":document.getElementById("main_tag_5").className="size48 orange_48";break;
-	  case "酷":document.getElementById("main_tag_6").className="size48 orange_48";break;
-	}
-      }
-    };
-    if(!_.isEmpty(tag_obj)){
-      $("#obj_tag").val(tag_obj.join(","));
-    }
-    $('#obj_tag').tagsInput({
-      //autocomplete_url:'test/fake_json_endpoint.html'
-    });
   };
   ClipMemo.close=function(){
     App.popRegion.close();
   };
 
+  var getData = function(model){
+    var text = "";
+    var main_tag = {};
+    var clip = "";
+    clip = model.get("clip");
+    if(!clip) clip = model.toJSON();
+    pub = clip["public"];
+    tags = clip.tag?clip.tag:[];
+    note = clip.note?clip.note:"";
+    if(!_.isEmpty(note)){
+      var ns = _(note).select(function(e){return e.text; })
+	.map(function(e){ return e.text; });
+	_(ns).each(function(n){ text += n+" "; });
+    }
+    var tag_main = _.filter(tags,function(tag){return tag == "好看" || tag == "好听" || tag == "好吃" || tag == "好玩" || tag == "精辟" || tag == "酷" ;});
+    if(!_.isEmpty(tag_main)){
+      for(i=0;i < tag_main.length; i++){
+	main_tag[tag_main[i]] = true;
+      }
+    }
+    var tag_obj = _.without(tags,"好看","好听","好吃","好玩","精辟","酷");
+    var _data = {note:text,main_tag:main_tag,obj_tag:tag_obj,pub:pub};
+    return _data;
+  };
+
   // 触发更新clip中的注的事件
-  App.vent.bind("app.clipapp.memo:rememo", function(clipmemoModel,data){
-    var model = new App.Model();
-    model.set({id:clipmemoModel.id});
-    model.save(data, {
-      url:App.ClipApp.Url.base+"/clip/"+clipmemoModel.id,
-      type:"PUT",
-      success:function(model,res){
-	// console.log(" after save ", model.get("id"), res);
-	App.vent.trigger("app.clipapp.memo:success",clipmemoModel,data);
+  App.vent.bind("app.clipapp.memo:rememo", function(cid,data){
+    var model = new App.Model.DetailModel(data);
+    model.set({id:cid});
+    model.save({},{
+      success: function(model, res){
+	App.vent.trigger("app.clipapp.memo:success");
       },
       error:function(model,res){
 	App.vent.trigger("app.clipapp.memo:error",clipmemoModel,res);
@@ -146,24 +156,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     ClipMemo.close();
   });
 
-  App.vent.bind("app.clipapp.memo:success",function(model,data){
-    var clip = model.get("clip");
-    if(clip){ // 相当于已经更新了list
-      clip.note = data.note; // 之前写的是note[0] ?
-      clip.tag = data.tag;
-      clip.public = data.public;
-      model.set({clip:clip});
-    }else{//此处的注为从detail点击触发的，注成功后，修改cliplist中对应的model
-      var listmodel=App.listRegion.currentView.collection.get(cid);
-      var modifyclip=listmodel.get("clip");
-      model.set("note", data.note); // 先更新detail
-      model.set("tag", data.tag);
-      model.set("public", data.public);
-      modifyclip.note = data.note; // 接着更新list
-      modifyclip.tag = data.tag;
-      modifyclip.public = data.public;
-      listmodel.set({clip:modifyclip});
-    }
+  App.vent.bind("app.clipapp.memo:success",function(data){
+    App.vent.trigger("app.clipapp.clip:update", data);
     ClipMemo.close();
   });
 

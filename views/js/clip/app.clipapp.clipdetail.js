@@ -39,7 +39,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'comment':
 	App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
+	App.vent.trigger("app.clipapp:clipmemo", cid ,"update");break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':

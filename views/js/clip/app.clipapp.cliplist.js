@@ -113,7 +113,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", this.model);break;
 	case 'note'://注
-	App.vent.trigger("app.clipapp:clipmemo", this.model, "update");break;
+	App.vent.trigger("app.clipapp:clipmemo", cid, "update");break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
@@ -178,11 +178,31 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     /*options.collection.comparator = function(clip) {
       return clip.get("id");
     };*/
+    console.info(options.collection);
     options.collection.fetch(options);
     options.collection.onReset(function(clips){
-      App.vent.trigger("app.clipapp.cliplist:showlist",clips);
+      App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
       App.util.list_scroll(options);
       //App.vent.trigger("app.clipapp.cliplist:show",clips, options);
+    });
+    App.vent.bind("app.clipapp.cliplist:collectionChange",function(age,model){
+	if(age == "add"){
+	  options.collection.add(model,{at:0});
+	  options.start++;
+	  options.end++;
+	  App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
+	}
+	if(age == "remove"){
+	  options.collection.remove(model);
+	  options.start--;
+	  options.end--;
+	  App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
+	}
+	options.collection.onReset(function(clips){
+	  console.info(options.collection);
+	  App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
+	  App.util.list_scroll(options);
+	});
     });
   };
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
@@ -243,7 +263,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.cliplist:showlist",function(collection){
     if(collection){
       clipListView = new ClipListView({collection: collection});
-      console.info(collection) ;
+      //console.info(collection) ;
     }else {
       //console.info("此事件未传入collection");
     }
@@ -259,13 +279,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   });
   App.vent.bind("app.clipapp.cliplist:removeshow",function(removemodel){
-    var collection = clipListView.collection.remove(removemodel);
-    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+    //var collection = clipListView.collection.remove(removemodel);
+    //App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+    //App.vent.trigger("app.clipapp.cliplist:collectionChange","remove",collection);
+    App.vent.trigger("app.clipapp.cliplist:collectionChange","remove",removemodel);
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
-    var collection = clipListView.collection;
-    collection.add(addmodel,{at:0});
-    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+    //var collection = optionss.collection;
+    //collection.add(addmodel,{at:0});
+    //App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+    App.vent.trigger("app.clipapp.cliplist:collectionChange","add",addmodel);
   });
   return ClipList;
 })(App, Backbone, jQuery);
