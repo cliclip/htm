@@ -1,10 +1,7 @@
 App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
-  var originalFace;
   var face_flag = false;
-  //UserEdit.margin_top = 0;
-  //UserEdit.margin_left = 0;
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
     defaults: {
@@ -23,8 +20,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     defaults:{
       id:"",
       name:"",
-      face:"",
-      actUrl:""
+      face:""
     },
     url:function(){
       return P+"/my/info";
@@ -56,7 +52,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      UserEdit.close();
+      App.vent.trigger("app.clipapp.useredit:close");
+      //UserEdit.close();
     }
   });
 
@@ -65,9 +62,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click .set_username" : "setName",
-      "click #popup_ContactClose":"editClose"
- //     "click #confirm_face[type=submit]":"submit"
+      "click .set_username" : "setName"
+  //    "click #popup_ContactClose":"editClose"
+  //    "click #confirm_face[type=submit]":"submit"
     },
     setName: function(e){
       if($("#set-name").html()=="您还没有用户名"){
@@ -82,18 +79,19 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  }
 	});
       }
-    },
+    }
+/*
     editClose:function(){
       FaceEdit.close();
     },
     submit:function(form){
-      	form.preventDefault();//此处阻止提交表单
-/*      if(!flag){
+      form.preventDefault();//此处阻止提交表单
+      if(!flag){
 	form.preventDefault();//此处阻止提交表单
 	//alert("请选择上传照片");
       }
-*/
     }
+*/
   });
 
   var EmailView = App.ItemView.extend({
@@ -340,14 +338,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     faceModel.fetch({
       success:function(){
 	//console.info("originalFace:" + editModel.get("face"));
-	originalFace = faceModel.get("face");
-	var user = faceModel.get("id");
-	var url = P+"/user/" + user + "/upload_face";
-	faceModel.set("actUrl",url);
+	var originalFace = faceModel.get("face");
 	faceModel.onChange(function(faceModel){
 	  var faceView = new FaceView({model: faceModel});
 	  UserEdit.faceRegion.show(faceView);
 	});
+	$("#post_frame_face").unbind("load");
 	$("#post_frame_face").load(function(){ // 加载图片
 	  var returnVal = this.contentDocument.documentElement.textContent;
 	  if(returnVal != null && returnVal != ""){
@@ -355,7 +351,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    if(returnObj[0] == 0){
 	      var currentFace = returnObj[1][0];
 	      if(currentFace){
-		var facemodel = new FaceEditModel({id:user});
+		var facemodel = new FaceEditModel({id:faceModel.get("id")});
 		if(originalFace && originalFace!=currentFace){
 		  UserEdit.removeFace(facemodel,originalFace,function(){
 		    UserEdit.saveFace(facemodel,{face:currentFace});
@@ -407,9 +403,23 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   };
 
-  UserEdit.saveFace = function(editModel,params){
-    editModel.save(params,{
-      url: P+"/user/"+ editModel.id+"/face",
+  UserEdit.removeFace = function(facemodel,face_id,callback){
+    facemodel.destroy({
+      url: P+"/user/"+ faceodel.id+"/face/" +face_id,
+      success:function(){
+	callback(true);
+	//console.info("delete success!!!!!!!!!!");
+      },
+      error:function(){
+	callback(false);
+	//console.info("delete error!!!!!!!!!!");
+      }
+    });
+  };
+
+  UserEdit.saveFace = function(facemodel,params){
+    facemodel.save(params,{
+      url: P+"/user/"+ facemodel.id+"/face",
       type: "POST",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
@@ -440,29 +450,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-  UserEdit.removeFace = function(editModel,face_id,callback){
-    editModel.destroy({
-      url: P+"/user/"+ editModel.id+"/face/" +face_id,
-      success:function(){
-	callback(true);
-	//console.info("delete success!!!!!!!!!!");
-      },
-      error:function(){
-	callback(false);
-	//console.info("delete error!!!!!!!!!!");
-      }
-    });
-  };
-
   UserEdit.close = function(){
-   // var img = document.getElementById('myface' );
-    App.mysetRegion.close();
     if(face_flag){
-      App.vent.trigger("app.clipapp.face:show",App.util.getMyUid());
-      App.vent.trigger("app.clipapp.useredit:facesuccess");
+      App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
       face_flag = false;
     }
+    App.mysetRegion.close();
   };
+
+  App.vent.bind("app.clipapp.useredit:close", function(){
+    UserEdit.close();
+  });
 
   App.vent.bind("app.clipapp.useredit:show", function(uid){
     UserEdit.showUserEdit (uid);

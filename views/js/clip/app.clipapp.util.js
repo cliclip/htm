@@ -15,6 +15,10 @@ App.util = (function(){
     return P + '/user/'+util.getMyUid()+'/image';
   };
 
+  util.getFace_upUrl = function(){
+    return P+"/user/" + util.getMyUid() + "/upload_face";
+  };
+
   //clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
@@ -164,6 +168,7 @@ App.util = (function(){
     }
     return returnVal;
   };
+
   util.list_scroll = function(_options){
     var collection_length=0;
     var scroll_flag = true;
@@ -184,8 +189,8 @@ App.util = (function(){
 	$(".return_top").show();
 	// show go-top while scroll
       } else {
-	$(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$(".user_detail").removeClass("fixed");//.css("margin-top", paddingTop+"px");
+	$("#bubb").removeClass("fixed");//.css("margin-top", paddingTop+"px");
 	$(".return_top").hide();
       }
       // loader while scroll down to the page end
@@ -224,6 +229,27 @@ App.util = (function(){
       return window.URL.createObjectURL(source);
     }
   };
+
+  util.get_imgid = function(frameid,callback){
+    $("#" + frameid).unbind("load");
+    $("#" + frameid).load(function(){ // 加载图片
+      var returnVal = this.contentDocument.documentElement.textContent;
+      if(returnVal != null && returnVal != ""){
+	var returnObj = eval(returnVal);
+	if(returnObj[0] == 0){
+	  var imgids = returnObj[1][0];
+	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	  var uid = imgids.split(":")[0];
+	  var imgid = imgids.split(":")[1];
+	  var url = P+"/user/"+ uid +"/image/" +imgid;
+	  //App.ClipApp.Editor.insertImage("editor", {url: url});
+	  //}
+	  callback(url);
+	}
+      }
+    });
+  };
+
 // App.vent.bind("app.clipapp.util:scroll", });
   var getMessage = {
 

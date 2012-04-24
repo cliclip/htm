@@ -3,8 +3,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var _data = {};
   var edit_view = {};
-  var img_list = [];
-  var count = 0;
+  //var img_list = [];
+  //var count = 0;
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
@@ -66,13 +66,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     saveUpdate: function(){
       var cid = this.model.id;
       // 参数为编辑器id
-      _data.content = App.ClipApp.Editor.getContent("editor",img_list);
+      _data.content = App.ClipApp.Editor.getContent("editor");
+      //_data.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(_data,{
 	url: P+"/clip/"+cid,
 	type: 'PUT',
 	success:function(model,res){
-	  img_list = [];
-	  count = 0;
+	  //img_list = [];
+	  //count = 0;
 	  var clip = model.toJSON();
 	  var _collection = App.listRegion.currentView.collection;
 	  var listmodel=App.listRegion.currentView.collection.get(cid);
@@ -103,7 +104,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var uid = that.model.get("user");
       var change = App.util.isImage("formUpload");
       if(change){
-	if( sender.files &&sender.files[0] ){
+/*      if( sender.files &&sender.files[0] ){
 	  var img = new Image();
 	  img.src = App.util.get_img_src(sender.files[0]);
 	  img.onload=function(){
@@ -112,22 +113,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	    }
 	  };
 	}
+*/
 	$("#img_form").submit();
-	$("#post_frame").unbind("load");
-	$("#post_frame").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var imgids = returnObj[1][0];
-	      // for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	      var imgid = imgids.split(":")[1];
-	      var url = P+"/user/"+ uid+"/image/" +imgid;
-	      img_list.push(url);
-	      //App.ClipApp.Editor.insertImage("editor", {url: url});
-	      // }
-	    }
-	  }
+	App.util.get_imgid("post_frame",function(img_src){
+	  //img_list.push(img_src);
+	  App.ClipApp.Editor.insertImage("editor", {url: img_src});
 	});
       }else{
 	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
