@@ -2,9 +2,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var P = App.ClipApp.Url.base;
   var DetailModel = App.Model.extend({
-    defaults:{
-      imguid:""
-    },
     url: function(){
       return P+"/clip/"+this.id;
     },

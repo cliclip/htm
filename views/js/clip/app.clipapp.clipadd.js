@@ -4,6 +4,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var objEditor = "";
   var img_list = [];
   var clip = {};
+  var count = 0;
   var ClipModel = App.Model.extend({
     defaults:{
       clip :{}
@@ -31,7 +32,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       $(".img_upload_span").css("display","block");
       $("#img_upload_url").focus();
       $("#img_upload_url").val("");
-
     },
     hide_extImg: function(){
       setTimeout(function(){
@@ -50,6 +50,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	url: P+"/clip",
 	type: 'POST',
       	success:function(model,res){ // 返回值res为clipid:clipid
+	  img_list = [];
+	  count = 0;
 	  var modifyclip = {};
 	  modifyclip.id = res.clipid;
 	  modifyclip.tag = clip.tag;
@@ -90,7 +92,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  img.src = App.util.get_img_src(sender.files[0]);
 	  img.onload=function(){
 	    if(img.complete){
-	      App.ClipApp.Editor.insertImage("editor", {url: img.src});
+	      App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++});
 	    }
 	  };
 	}
@@ -106,6 +108,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 		var ids = imgids.split(":");
 		var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
 		img_list.push(url);
+		console.info(url);
 		//App.ClipApp.Editor.insertImage("editor", {url: url});
 		// }
 	      }

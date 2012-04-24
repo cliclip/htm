@@ -4,6 +4,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var _data = {};
   var edit_view = {};
   var img_list = [];
+  var count = 0;
   var EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
@@ -70,6 +71,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	url: P+"/clip/"+cid,
 	type: 'PUT',
 	success:function(model,res){
+	  img_list = [];
+	  count = 0;
 	  var clip = model.toJSON();
 	  var _collection = App.listRegion.currentView.collection;
 	  var listmodel=App.listRegion.currentView.collection.get(cid);
@@ -97,7 +100,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   });
   ClipEdit.image_change = function(sender){
       var that = edit_view;
-      var uid = that.model.get("uid");
+      var uid = that.model.get("user");
       var change = App.util.isImage("formUpload");
       if(change){
 	if( sender.files &&sender.files[0] ){
@@ -105,7 +108,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  img.src = App.util.get_img_src(sender.files[0]);
 	  img.onload=function(){
 	    if(img.complete){
-	      App.ClipApp.Editor.insertImage("editor", {url: img.src});
+	      App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++});
 	    }
 	  };
 	}
@@ -137,9 +140,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   };
   ClipEdit.show = function(clipid, uid){
     var editModel = new EditModel({
-      id: clipid,
-      uid: uid,
-      actUrl:P+"/user/"+uid+"/image"
+      id: clipid
     });
     editModel.fetch();
     editModel.onChange(function(editModel){

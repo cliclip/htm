@@ -2,7 +2,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var tag_list = [];
   var P = App.ClipApp.Url.base;
-  var flag = false;
 
   var ReclipModel = App.Model.extend({
     defaults: {
@@ -25,7 +24,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
-      console.info(id);
       var style =document.getElementById(id).className;
       if(style != "size48 orange_48"){
 	document.getElementById(id).className="size48 orange_48";
@@ -111,9 +109,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	  listmodel.set({clip:modifyclip});
 	  App.vent.trigger("app.clipapp.cliplist:showlist");
 	}
-	if(flag){
-	  Reclip.close();
-	}
+	Reclip.close();
       },
       error:function(model, res){
 	console.info(res);
@@ -137,15 +133,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   };
 
   Reclip.show = function(model, user, tag){
-    flag = true;
     if(model){
       model.set("model", "clip");
       var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
       $('#obj_tag').tagsInput({
-	//width: 'auto',
-	autocomplete_url:'test/fake_json_endpoint.html'
-      });
+      //width: 'auto',
+      //autocomplete_url:'test/fake_json_endpoint.html'
+    });
     }else if (user && tag){
       var reclipModel = new ReclipModel();
       reclipModel.fetch({
@@ -165,7 +160,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	  App.popRegion.show(reclipView);
 	  $('#obj_tag').tagsInput({
 	    //width: 'auto',
-	    autocomplete_url:'test/fake_json_endpoint.html'
+	    //autocomplete_url:'test/fake_json_endpoint.html'
 	  });
 	}
       });
@@ -174,7 +169,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 
   Reclip.close = function(){
     App.popRegion.close();
-    flag = false;
   };
   App.vent.bind("app.clipapp.reclip:submit", function(model ,params,clip){
     reclipSave(model, params);

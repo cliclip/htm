@@ -17,8 +17,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     className:"",
     template:"#recommend-view-template",
     events:{
-      "click .list"     :  "getUserAction",
-      "keydown  #name"          :  "getUser",
+      "click .list"          :  "getUserAction",
+      "keydown  #name"       :  "getUser",
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
       "mouseover #name_list" :  "MouseOver",
@@ -26,12 +26,11 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "focus #recommend_text":  "clearAction",
       "click #submit"        :  "recommendAction",
       "click #cancel"        : "cancelAction",
-      "click .close_w"        : "cancelAction"
+      "click .close_w"       : "cancelAction"
     },
     getUser:function(e){
       var uid="";
       var div=$(".action-info");
-      console.info(e.keyCode);
       if(e.keyCode ==9 || e.keyCode == 13 ){  //当点击回车或tab键时执行下面方法
 	if(div.length != 0){
 	  $("#imgId").css("display","none");
@@ -66,16 +65,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       this.$("#name_listDiv").empty();
     },
     nameListAction:function(evt){
-      var uid = "";
       $("#alert").css("display","none");
       $("#imgId").css("display","none");
-      var str = this.$("#name").val();
+      var str = this.$("#name").val(),uid = "";
       var clip = this.model.get("clip");
-      if(clip){
-	uid = clip.user.id;
-      }else{
-	uid = this.model.get("user");
-      }
+      if(clip) uid = clip.user.id;
+      else uid = this.model.get("user");
       var params = {q:str};
       App.vent.trigger("app.clipapp.recommend:lookup",params,uid);
     },
@@ -90,11 +85,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var clipid = "";
       var text=$("#recommend_text").val();
       var clip = this.model.get("clip");
-      if(clip){
-	clipid = clip.user.id+":"+clip.id;
-      }else{
-	clipid = this.model.get("id");
-      }
+      if(clip) clipid = clip.user.id+":"+clip.id;
+      else clipid = this.model.get("id");
       var params = {
 	text:text,
 	clipid : clipid
@@ -179,7 +171,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     }
   };
 
-  // 在别地儿是否有用到
   Recommend.close = function(){
     Recommend.nameListRegion.close();
     App.popRegion.close();
@@ -198,15 +189,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   });
 
 
-  // 可能要对error信息进行不同的处理
   App.vent.bind("app.clipapp.recommend:error",function(model,err){
     Recommend.show(null, model, err);
   });
   App.vent.bind("app.clipapp.recommend:success",function(){
     Recommend.close();
     });
-  // TEST
- // App.bind("initialize:after", function(){ Recommend.show("1:1"); });
 
   return Recommend;
 
