@@ -12,6 +12,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "query/:word":"siteQuery",
 
       "register": "register",
+      "invite/:key" : "invite",
+      "active/:key": "active",
       "password/find":"findpasswd",
       "password/reset/:link":"resetpasswd",
 

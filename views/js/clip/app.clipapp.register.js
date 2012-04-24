@@ -69,6 +69,20 @@ App.ClipApp.Register = (function(App, Backbone, $){
     Register.show(model, error);
   });
 
+  App.vent.bind("app.clipapp.register:invite", function(key){
+    var model = new RegisterModel();
+    model.save({},{
+      url : App.ClipApp.Url.base+"/invite"+key,
+      type: "POST",
+      success:function(model,response){
+	console.log("success :: " + response);
+      },
+      error:function(model,error){
+	console.log("success :: " + error);
+      }
+    });
+  });
+
   // Test
   // App.bind("initialize:after", function(){Register.show();});
 
