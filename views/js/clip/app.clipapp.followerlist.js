@@ -1,7 +1,5 @@
 //app.clipapp.followerlist.js
 App.ClipApp.FollowerList=(function(App, Backbone, $){
-  var start = 0;
-  var end = App.ClipApp.Url.page;
   var precliplength=0;
   var FollowerModel=App.Model.extend({
     defaults:{
@@ -39,20 +37,23 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   FollowerList.showUserFollower=function(uid){
     var options = {},flag=false;
     var collection=new FollowerList({id:uid});
-    options.params = collection;
-    options.start = start;
-    options.end = end;
-    options.params.url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
-    options.url=options.params.url+"/"+start+".."+end;
-    collection.fetch(options);
-    collection.onReset(function(followerlist){
+    options.collection=collection;
+    if(!options.start &&! options.end){
+      options.start = 1;
+      options.end = App.ClipApp.Url.page;
+    }
+    options.collection.url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
+    options.url=options.collection.url+"/"+options.start+".."+options.end;
+    options.collection.fetch(options);
+    options.collection.onReset(function(followerlist){
       if(!_.isEmpty(followerlist.toJSON())) flag=true;
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });
       App.listRegion.show(followerlistView);
       if(flag) $(".empty_user").css("display","none");
-      App.vent.trigger("app.clipapp.util:scroll",followerlistView,options);
+      App.util.list_scroll(options);
+     // App.vent.trigger("app.clipapp.util:scroll",followerlistView,options);
     });
   };
 
