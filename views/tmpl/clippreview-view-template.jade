@@ -44,7 +44,7 @@ script(type="text/template",id="clippreview-view-template")
           </a>
         <%}%>
       div.action#opt(style="display:none;").
-        <% if( App.util.auth(clip.user.id) ) {%>
+        <% if( App.util.self(clip.user.id) ) {%>
           <i class="note operate" title="注" id="<%=clip.user.id%>:<%=clip.id%>"></i>
           <i class="change operate" title="改" id="<%=clip.user.id%>:<%=clip.id%>"></i>
           <i class="del operate" title="删" id="<%=clip.user.id%>:<%=clip.id%>"></i>

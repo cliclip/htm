@@ -32,24 +32,6 @@ App.Model = Backbone.Model.extend({
   }
 });
 
-var P = "/_2_";
-
-App.Model.ClipModel = App.Model.extend({
-  url: function(){ return P+"/clip"; }
-});
-App.Model.CommentModel = App.Model.extend({
-  url: function(){
-    if(this.get("commid")){
-      return P+"/clip/"+id+"/comment/"+commid;
-    }else{
-      return P+"/clip/"+id+"/comment";
-    }
-  }
-});
-App.Model.DetailModel = App.Model.extend({
-  url: function(){ return P+"/clip/"+id;}
-});
-
 App.Collection = Backbone.Collection.extend({
   constructor: function(){
     var args = Array.prototype.slice.call(arguments);

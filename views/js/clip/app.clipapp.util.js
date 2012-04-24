@@ -7,7 +7,7 @@ App.util = (function(){
   };
 
   // 判断当前的用户和传过来的参数是否是同一人
-  util.auth = function(uid){
+  util.self = function(uid){
     return util.getMyUid() == uid;
   };
 

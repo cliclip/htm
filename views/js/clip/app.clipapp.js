@@ -27,6 +27,15 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.register = function(){
     ClipApp.Login.show();
   };
+
+  ClipApp.invite = function(key){
+    App.vent.trigger("app.clipapp.register:invite", key);
+  };
+
+  ClipApp.active = function(key){
+    App.vent.trigger("app.clipapp.useredit:active", key);
+  };
+
   ClipApp.findpasswd = function(){
     ClipApp.FindPass.show();
   };
