@@ -405,7 +405,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   UserEdit.removeFace = function(facemodel,face_id,callback){
     facemodel.destroy({
-      url: P+"/user/"+ faceodel.id+"/face/" +face_id,
+      url: P+"/user/"+ facemodel.id+"/face/" +face_id,
       success:function(){
 	callback(true);
 	//console.info("delete success!!!!!!!!!!");
