@@ -4,14 +4,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var objEditor = "";
   var img_list = [];
   var count = 0;
-  var ClipModel = App.Model.extend({
-    defaults:{
-      clip :{}
-    },
-    url: function(){
-      return P+"/clip";
-    }
-  });
+  var ClipModel = App.Model.ClipModel.extend({});
 
   var AddClipView = App.ItemView.extend({
     tagName: "div",
