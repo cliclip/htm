@@ -189,15 +189,15 @@ App.util = (function(){
 	$(".return_top").show();
 	// show go-top while scroll
       } else {
-	$(".user_detail").removeClass("fixed");//.css("margin-top", paddingTop+"px");
-	$("#bubb").removeClass("fixed");//.css("margin-top", paddingTop+"px");
+	$(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
+	$("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
 	$(".return_top").hide();
       }
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
       if(st + wh > lt){
-	if(scroll_flag){
+	if(scroll_flag && lo.collection.length>=App.ClipApp.Url.page){
 	  lo.start += App.ClipApp.Url.page;
 	  lo.end += App.ClipApp.Url.page;
 	  lo.url = lo.base_url + "/" +lo.start + ".." + lo.end;

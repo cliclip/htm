@@ -2,7 +2,7 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var precliplength=0,flag=true;
+//  var precliplength=0,flag=true;
   var clipListView = {};
   var ClipPreviewModel = App.Model.extend({
     defaults:{
@@ -42,8 +42,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     events: {
       // 单击clip就响应show_detail事件
       "click #header" : "show_detail",
-      "click #comment": "commentAction",
-      "click #reclip" : "reclipAction",
+      //"click #comment": "commentAction",
+      //"click #reclip" : "reclipAction",
       "click .operate" : "operate",
       "mouseenter #header":"mouseHand",
       "mouseenter .clip_item": "mouseEnter",
@@ -69,6 +69,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var clipid = clip.user.id+":"+clip.id;
       App.vent.trigger("app.clipapp:clipdetail",clipid);
     },
+/*
     commentAction: function(){
       var clip = this.model.get("clip");
       var clipid = clip.user.id+":"+clip.id;
@@ -78,18 +79,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var clip = this.model.get("clip");
       var clipid = clip.user.id+":"+clip.id;
       App.vent.trigger("app.clipapp:reclip",clipid);
-    },
-/*    mouseover: function(e){
-      e.preventDefault();
-      if(checkHover(e,e.target)){
-	$(e.currentTarget).children("#opt").toggle();//css("display","block");
-      }
-    },
-    mouseout: function(e){
-      e.preventDefault();
-      if(checkHover(e,e.target)){
-	$(e.currentTarget).children("#opt").css("display","none");
-      }
     },
 */
     mouseEnter: function(e){
@@ -121,26 +110,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
   });
-/*
-  var contains = function(parentNode,childNode){
-    if(parentNode.contains){
-      return parentNode != childNode && parentNode.contains(childNode);
-    }else{
-      return  !!(parentNode.compareDocumentPosition(childNode) & 16);
-    }
-  };
 
-  var checkHover = function(e,target){
-    if(getEvent(e).type=="mouseover")
-      return !contains(target,getEvent(e).relatedTarget||getEvent(e).fromElement) && !((getEvent(e).relatedTarget||getEvent(e).fromElement)===target);
-    else
-      return !contains(target,getEvent(e).relatedTarget||getEvent(e).toElement) && !((getEvent(e).relatedTarget||getEvent(e).toElement)===target);
-  };
-
-  var getEvent = function(e){
-    return e||window.event;
-  };
-*/
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",
@@ -175,9 +145,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
-    /*options.collection.comparator = function(clip) {
-      return clip.get("id");
-    };*/
     options.collection.fetch(options);
     options.collection.onReset(function(clips){
       App.vent.trigger("app.clipapp.cliplist:showlist",clips);
@@ -185,7 +152,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //App.vent.trigger("app.clipapp.cliplist:show",clips, options);
     });
   };
+
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
+
   // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
     ClipList.flag_show_user = true;

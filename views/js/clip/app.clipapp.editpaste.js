@@ -42,7 +42,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   };
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
-    console.info(data);
+    //console.info(data);
     var objEditor = document.getElementById(editorId);
     if(isIE){
       objEditor.contentWindow.document.execCommand('Paste', false, data);

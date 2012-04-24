@@ -42,18 +42,19 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       options.start = 1;
       options.end = App.ClipApp.Url.page;
     }
-    options.collection.url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
-    options.url=options.collection.url+"/"+options.start+".."+options.end;
+    options.base_url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
+    options.url=options.base_url+"/"+options.start+".."+options.end;
     options.collection.fetch(options);
     options.collection.onReset(function(followerlist){
       if(!_.isEmpty(followerlist.toJSON())) flag=true;
       var followerlistView=new FollowerListView({
 	collection:followerlist
       });
+      $("#list").css({height:"0px"});
       App.listRegion.show(followerlistView);
       if(flag) $(".empty_user").css("display","none");
       App.util.list_scroll(options);
-     // App.vent.trigger("app.clipapp.util:scroll",followerlistView,options);
+      // App.vent.trigger("app.clipapp.util:scroll",followerlistView,options);
     });
   };
 
