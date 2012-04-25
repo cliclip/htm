@@ -109,4 +109,12 @@ App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
   }
+  // 不确定是否合适，目前只能写在这里
+  $(".logo").bind("click", function(){
+    if(App.ClipApp.getMyUid()){
+      App.Routing.ClipRouting.router.navigate("my", true);
+    }else{
+      App.Routing.ClipRouting.router.navigate("", true);
+    }
+  });
 });
