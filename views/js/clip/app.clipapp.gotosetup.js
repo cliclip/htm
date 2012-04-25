@@ -14,13 +14,13 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
      }
    });
 
-   GotoSetup.show = function(){
-     var gotoSetupModel = new GotoSetupModel();
+   GotoSetup.show = function(text){
+     var gotoSetupModel = new GotoSetupModel({text: text});
      var gotoSetupView = new GotoSetupView({model : gotoSetupModel});
      App.popRegion.show(gotoSetupView);
    };
-   App.vent.bind("app.clipapp.gotosetup:show", function(){
-     GotoSetup.show();
+   App.vent.bind("app.clipapp.gotosetup:show", function(text){
+     GotoSetup.show(text);
    });
 
   App.vent.bind("app.clipapp.gotosetup:go", function(){
