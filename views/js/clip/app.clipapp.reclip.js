@@ -71,9 +71,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     return params;
   }
 
-  var reclipSave = function(params){
-  };
-
+ 
   var reclip_tag = function(reclipModel, params){
     var uid = reclipModel.get("user");
     var tag = reclipModel.get("tag");

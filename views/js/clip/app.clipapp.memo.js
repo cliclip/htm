@@ -25,10 +25,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
       $(e.currentTarget).toggleClass("orange_48");
-      /*$("#"+id).toggleClass(function(white_48){
-	var clazz = "size48 ";
-	return ($("#"+id).hasClass("white_48")) ? "orange_48" : "white_48";
-      });*/
     },
     noteFocus:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultNote ? "" :
