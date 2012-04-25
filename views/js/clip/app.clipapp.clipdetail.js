@@ -29,7 +29,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       // if(this.model.get("clip")){this.model.unset("clip");}
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", this.model);break;
+	  App.vent.trigger("app.clipapp:reclip", cid);break;
 	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment':
@@ -138,7 +138,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       return this;
      }
   });
-			    
+
   var AddCommView = App.ItemView.extend({
     tagName : "div",
     className : "addcomment-view",
@@ -236,7 +236,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.show = function(cid){   // 此处的cid等于detailModel.id
-    var clip = new DetailModel({id: cid});
+    var clip = new App.Model.DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
       showDetail(detailModel);

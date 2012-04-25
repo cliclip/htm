@@ -3,6 +3,7 @@
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   //var precliplength=0,flag=true;
+  var model_id ;//缓存model的id
   var clipListView = {};
   var ClipPreviewModel = App.Model.extend({
     defaults:{
@@ -67,7 +68,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     show_detail: function(){
       var clip = this.model.get("clip");
       var clipid = clip.user.id+":"+clip.id;
-      id = this.model.id;
+      model_id = this.model.id;
       App.vent.trigger("app.clipapp:clipdetail",clipid);
     },
 /*
@@ -96,12 +97,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var clip = this.model.get("clip");
       var cid = clip.user.id+":"+clip.id;
-      id = this.model.id;
+      model_id = this.model.id;
       switch(opt){
 	case 'biezhen'://收
-	  App.vent.trigger("app.clipapp:reclip", this.model);break;
+	  App.vent.trigger("app.clipapp:reclip", cid);break;
 	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend", this.model);break;
+	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", cid);break;
 	case 'note'://注
@@ -232,14 +233,24 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.cliplist:comment",function(pid){
     if(pid == 0){
-      console.info(id);
-      var listmodel=App.listRegion.currentView.collection.get(id);
+      console.info(model_id);
+      var listmodel=App.listRegion.currentView.collection.get(model_id);
       var modifyclip=listmodel.get("clip");
       modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
       listmodel.set({clip:modifyclip});
       App.vent.trigger("app.clipapp.cliplist:showlist");
-      id = null;
+      model_id = null;
     }
+  });
+
+  App.vent.bind("app.clipapp.cliplist:reclip",function(){
+      console.info(model_id);
+      var listmodel=App.listRegion.currentView.collection.get(model_id);
+      var modifyclip=listmodel.get("clip");
+      modifyclip.reprint_count = modifyclip.reprint_count ? modifyclip.reprint_count+1 : 1;
+      listmodel.set({clip:modifyclip});
+      App.vent.trigger("app.clipapp.cliplist:showlist");
+      model_id = null;
   });
 
   App.vent.bind("app.clipapp.cliplist:removeshow",function(removemodel){
