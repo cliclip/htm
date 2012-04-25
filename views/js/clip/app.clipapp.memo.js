@@ -49,7 +49,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   function loadData(el){
     var main_tag = [];
-    for(var i=1;i<7;i++){
+
+    for(var i=0;i<6;i++){
       if($("#main_tag_"+i, el).attr("class") == "size48 orange_48"){
 	main_tag.push($("#main_tag_"+i, el).html().trim());
       }
@@ -76,6 +77,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var tags = clip.tag?clip.tag:[];
     var note = clip.note?clip.note:"";
     var text = "";
+    console.info(tags);
     if(!_.isEmpty(note)){
       var ns = _(note).select(function(e){return e.text; })
 	.map(function(e){ return e.text; });
