@@ -69,7 +69,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){
-	  App.vent.trigger("app.clipapp.register:success",response);
+	  var res = {};
+	  res.token = response.token;
+	  res.text = "您已经成功注册，现在可以添加邮件，邮件添加完成后可以方便进行数据的存储以及密码的找回";
+	  App.vent.trigger("app.clipapp.register:success",res);
 	},
 	error:function(model,error){
 	  App.vent.trigger("app.clipapp.login:error",model, error);
@@ -120,11 +123,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     Backbone.history.navigate("my",true);
     //location.reload();
     Login.close();
-  });
-  App.vent.bind("app.clipapp.register:success", function(res){
-    document.cookie = "token="+res.token;
-    App.popRegion.close();
-    App.vent.trigger("app.clipapp.gotosetup:show");
   });
 
   App.vent.bind("app.clipapp.login:error", function(model, error){
