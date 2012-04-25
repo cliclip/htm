@@ -491,20 +491,37 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     });
   });
+
   App.vent.bind("app.clipapp.useredit:ruleupdate",function(ruleModel,params){
     var url = P+"/user/"+ruleModel.id+"/rule";
     ruleModel.save(params,{
-	url: url,
-	type: "POST",
-  	success: function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id);
-	  App.ClipApp.EmailAdd.showActive("更新邮件规则成功！");
-  	},
-  	error:function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, App.util.getErrorMessage(res));
-  	}
-      });
+      url: url,
+      type: "POST",
+      success: function(model, res){
+  	App.vent.trigger("app.clipapp.useredit:showrule", model.id);
+	App.ClipApp.EmailAdd.showActive("更新邮件规则成功！");
+      },
+      error:function(model, res){
+  	App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, App.util.getErrorMessage(res));
+      }
+    });
   });
+
+  App.vent.bind("app.clipapp.useredit:active", function(key){
+    var model = new App.Model();
+    model.save({},{
+      url: App.ClipApp.Url.base+"/active/"+key,
+      type: "POST",
+      success:function(model,response){
+	// 不只是弹出提示框这么简单
+	App.vent.trigger("app.clipapp.message:alert", "邮件激活成功，您可以方便的是有该邮件地址进行数据的存储了");
+      },
+      error:function(model,error){
+
+      }
+    });
+  });
+
   App.vent.bind("app.clipapp.useredit:passchange",function(passModel,params){
     var url = P+"/user/"+passModel.id+"/passwd";
     passModel.save(params,{

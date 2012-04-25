@@ -27,6 +27,15 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.register = function(){
     ClipApp.Login.show();
   };
+
+  ClipApp.invite = function(key){ // 接受处理用户的激活注册
+    App.vent.trigger("app.clipapp.register:invite", key);
+  };
+
+  ClipApp.active = function(key){ // 接受用户的邮件添加激活或者是合并激活
+    App.vent.trigger("app.clipapp.useredit:active", key);
+  };
+
   ClipApp.findpasswd = function(){
     ClipApp.FindPass.show();
   };
@@ -134,26 +143,27 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:comment", function(clipid){
+  App.vent.bind("app.clipapp:comment", function(cid,id){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.Comment.show(clipid);
+      ClipApp.Comment.show(cid,id);
     }
   });
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid,model_cid){
-    var uid = getMyUid();//model_cid为model的id，用来当detail的model改变时，改变相应list的model的数据
-    ClipApp.ClipDetail.show(uid, clipid,model_cid);
+    // var uid = getMyUid();
+    //model_cid为model的id，用来当detail的model改变时，改变list的model的数据
+    ClipApp.ClipDetail.show(clipid,model_cid);
   });
 
-    App.vent.bind("app.clipapp:clipmemo", function(model, operate){
+  App.vent.bind("app.clipapp:clipmemo", function(cid){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.ClipMemo.show(model, operate);
+      ClipApp.ClipMemo.show(cid);
     }
   });
 
