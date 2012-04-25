@@ -158,12 +158,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.show(clipid,model_cid);
   });
 
-  App.vent.bind("app.clipapp:clipmemo", function(cid, operate, model){
+  App.vent.bind("app.clipapp:clipmemo", function(cid){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.ClipMemo.show(cid, operate, model);
+      ClipApp.ClipMemo.show(cid);
     }
   });
 

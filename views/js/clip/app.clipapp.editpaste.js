@@ -1,7 +1,6 @@
 App.ClipApp.Editor = (function(App, Backbone, $){
   var Editor = {};
   var isIE=(navigator.appName.indexOf("Microsoft")!=-1)?true:false;
-  // 不能正确处理<pre>标签的内容
   Editor.init = function(){
     var ifrm=document.getElementById("editor");
     ifrm.contentWindow.document.designMode = "On";
@@ -58,7 +57,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       //img = "<img id="+data.id +" class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
       img = "<img src="+data.url+" style='max-width:475px;max-height:490px;' />";
     if(isIE){ // TODO
-      // var ifmTemp=document.getElementById("ifmTemp");
       objEditor.contentWindow.document.execCommand("Paste", false, img);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, img);
@@ -349,9 +347,9 @@ var Filter = (function(){
     }
     html = cleanHtml(html);
     // console.log(html);
-    html = _htmlToUbb(html);
+    html = _htmlToUbb(html); // 过滤
     // console.log(html);
-    html = ubbToHtml(html);
+    html = ubbToHtml(html); // 显示
     // console.log(html);
     return html;
   };
