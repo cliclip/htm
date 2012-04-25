@@ -83,11 +83,10 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	.map(function(e){ return e.text; });
 	_(ns).each(function(n){ text += n+" "; });
     }
-    var bubs = ["好看", "好听", "好吃", "好玩", "精辟", "酷"];//顺序必须和template的main_tag一致
-    var tag_main = _(_(bubs).map(function(e){
+    var tag_main = _(_(App.util.getBubbs()).map(function(e){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
-    var tag_obj = _.difference(tags,bubs);
+    var tag_obj = _.difference(tags,App.util.getBubbs());
     return {id:id,note:text,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
   };
 

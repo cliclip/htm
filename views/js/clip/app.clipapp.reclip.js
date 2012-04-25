@@ -56,7 +56,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       text = $("#reclip_text", el).val().trim();
     }
     var main_tag = [];
-    for(var i=1;i<7;i++){
+    for(var i=0;i<6;i++){
       if($("#main_tag_"+i,el).attr("class") == "size48 orange_48"){
 	main_tag.push($("#main_tag_"+i,el).html().trim());
       }
@@ -71,7 +71,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     return params;
   }
 
- 
+
   var reclip_tag = function(reclipModel, params){
     var uid = reclipModel.get("user");
     var tag = reclipModel.get("tag");
