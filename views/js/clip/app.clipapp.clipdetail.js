@@ -2,7 +2,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var COMM_TEXT = "说点什么吧~";
   var P = App.ClipApp.Url.base;
-  var DetailModel = App.Model.extend({
+  App.Model.DetailModel = App.Model.extend({
     url: function(){
       return P+"/clip/"+this.id;
     },
@@ -35,7 +35,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	  App.vent.trigger("app.clipapp:clipmemo", this.model,"update");break;
+	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
@@ -138,7 +138,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       return this;
      }
   });
-
+			    
   var AddCommView = App.ItemView.extend({
     tagName : "div",
     className : "addcomment-view",

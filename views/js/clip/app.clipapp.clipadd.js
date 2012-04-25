@@ -1,6 +1,7 @@
 App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
+  var clip = {};
   App.Model.ClipModel = App.Model.extend({
     url:function(){
       return P+"/clip";
@@ -54,14 +55,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  modifyclip.public = clip.public;
 	  modifyclip.user = {id:App.util.getMyUid()};
 	  modifyclip.content = App.util.getPreview(clip.content, 100);
-	  var id = App.util.getMyUid()+":"+res;
+	  var id = App.util.getMyUid()+":"+res.clipid;
 	  model.id = id;
 	  model.set({clip:modifyclip,id:id});
 	  model.set({recommend:""});
 	  App.vent.trigger("app.clipapp.cliplist:addshow", model);
-	  console.log(model);
+	  //console.log(model);
 	  App.ClipApp.Bubb.showUserTags(modifyclip.user.id);
-	  App.viewRegion.close();
+	  ClipAdd.close();
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
 	  App.vent.trigger("app.clipapp.clipadd:error");
@@ -72,12 +73,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipadd:cancel");
     },
     remark_clip: function(){
-      App.vent.trigger("app.clipapp:clipmemo", this.model, "add");
+      this.model.set({clip:clip});
+      App.vent.trigger("app.clipapp:clipmemo", this.model);
     }
   });
-  ClipAdd.image_change = function(sender){ // 在view中直接给
-      var change = App.util.isImage("formUpload");
-      if(change){
+
+  ClipAdd.image_change = function(sender){ // 在view中直接绑定
+    var change = App.util.isImage("formUpload");
+    if(change){
 /*	if( sender.files &&sender.files[0] ){//图片本地预览代码
 	  var img = new Image();
 	  img.src = App.util.get_img_src(sender.files[0]);
@@ -87,15 +90,15 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	    }
 	  };
 	}*/
-	$("#img_form").submit();
-	App.util.get_imgid("post_frame",function(img_src){
-	  //img_list.push(img_src);
-	  App.ClipApp.Editor.insertImage("editor", {url: img_src});
-	});
-      }else{
-	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
-      }
-    };
+      $("#img_form").submit();
+      App.util.get_imgid("post_frame",function(img_src){
+	//img_list.push(img_src);
+	App.ClipApp.Editor.insertImage("editor", {url: img_src});
+      });
+    }else{
+      App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+    }
+  };
 
   ClipAdd.show = function(uid){
     var clipModel = new App.Model.ClipModel();
@@ -106,11 +109,18 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   ClipAdd.close = function(){
     App.viewRegion.close();
+    clip = {};
   };
 
   App.vent.bind("app.clipapp.clipadd:success", function(clip){
     ClipAdd.close(); // 关闭clipadd,同步list的数据
     App.vent.trigger("app.clipapp.cliplist:addshow", clip);
+  });
+
+  App.vent.bind("app.clipapp.clip:update",function(data){
+    clip.note = data.note;
+    clip.tag = data.tag;
+    clip.public = data.public;
   });
 
   App.vent.bind("app.clipapp.clipadd:cancel", function(){

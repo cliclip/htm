@@ -1,19 +1,16 @@
 App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var tag_list = [];
+  var value = "备注一下吧~";
   var P = App.ClipApp.Url.base;
 
   var ReclipModel = App.Model.extend({
-    defaults: {
-      count: ""
-    }
   });
   var ReclipView = App.ItemView.extend({
     tagName : "div",
     className : "reclip-view",
     template : "#reclip-view-template",
     events : {
-      "focus #obj_tag"     : "objtagOpen",
       "focus #reclip_text" : "foucsAction",
       "blur #reclip_text"  : "blurAction",
       "click #submit"      : "submit",
@@ -24,23 +21,17 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     maintagAction:function(evt){
       evt.preventDefault();
       var id = evt.target.id;
-      var style =document.getElementById(id).className;
+      var style = $("#"+id).attr("class");
+      //var style =document.getElementById(id).className;
       if(style != "size48 orange_48"){
-	document.getElementById(id).className="size48 orange_48";
+	$("#"+id).attr("class","size48 orange_48");
       }else if(style == "size48 orange_48"){
-	document.getElementById(id).className="size48 white_48";
-      }
-    },
-    objtagOpen:function(evt){
-      evt.preventDefault();
-      if($("#obj_tag").val() == "add a tag"){
-	$("#obj_tag").val("");
+	$("#"+id).attr("class","size48 white_48");
       }
     },
 
     foucsAction:function(evt){
       evt.preventDefault();
-      var value = "备注一下吧~";
       if($("#reclip_text").val() == value){
 	$("#reclip_text").val("");
       }
@@ -48,7 +39,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 
     blurAction:function(evt){
       evt.preventDefault();
-      var value = "备注一下吧~";
       if($("#reclip_text").val() == ""){
 	$("#reclip_text").val(value);
       }
@@ -120,7 +110,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var reclip_tag = function(reclipModel, params){
     var uid = reclipModel.get("user");
     var tag = reclipModel.get("tag");
-    reclipModel.save(params, {
+    var model = new App.Model();
+    model.save(params, {
       url: P+"/user/"+uid+"/reclip/tag/"+tag,
       type: "POST",
       success: function(model, res){
@@ -135,6 +126,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   Reclip.show = function(model, user, tag){
     if(model){
       model.set("model", "clip");
+      console.info(model);
       var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
       $('#obj_tag').tagsInput({
@@ -174,7 +166,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     reclipSave(model, params);
   });
 
-  App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params,clip){
+  App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params){
     reclip_tag(model, params);
   });
 

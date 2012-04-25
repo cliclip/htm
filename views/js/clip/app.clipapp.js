@@ -143,12 +143,12 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:comment", function(clipid){
+  App.vent.bind("app.clipapp:comment", function(cid,id){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.Comment.show(clipid);
+      ClipApp.Comment.show(cid,id);
     }
   });
 
@@ -158,12 +158,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.show(clipid,model_cid);
   });
 
-    App.vent.bind("app.clipapp:clipmemo", function(model, operate){
+  App.vent.bind("app.clipapp:clipmemo", function(cid, operate, model){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.ClipMemo.show(model, operate);
+      ClipApp.ClipMemo.show(cid, operate, model);
     }
   });
 

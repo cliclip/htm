@@ -4,20 +4,20 @@ script(type="text/template",id="organize-view-template")
     span.close_w
     h2.subject_note 注
     ul.pop_body
-      li.tag_box
-        span.size48.white_48#main_tag_1 好看
-        span.size48.white_48#main_tag_2 好听
-        span.size48.white_48#main_tag_3 好吃
-        span.size48.white_48#main_tag_4 好玩
-        span.size48.white_48#main_tag_5 精辟
-        span.size48.white_48#main_tag_6 酷
-      li
-        input(type="text",class="obj_tags",id="obj_tag")
+      li.tag_box.
+        <span <% if(main_tag[0].tag=="好看"&&main_tag[0].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_1">好看</span>
+        <span <% if(main_tag[1].tag=="好听"&&main_tag[1].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_2">好听</span>
+        <span <% if(main_tag[2].tag=="好吃"&&main_tag[2].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_3">好吃</span>
+        <span <% if(main_tag[3].tag=="好玩"&&main_tag[3].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_4">好玩</span>
+        <span <% if(main_tag[4].tag=="精辟"&&main_tag[4].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_5">精辟</span>
+        <span <% if(main_tag[5].tag=="酷"&&main_tag[5].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_6">酷</span> 
+      li.
+        <input type="text" class="obj_tags" id="obj_tag" value="<%=obj_tag.join(",")%>" />
       li.input_textarea.
-        <textarea id="organize_text"><%=note%></textarea>
+        <textarea id="organize_text"><% if(note){%><%=note%><% }else{ %>备注一下吧~<%}%></textarea>
       li.input_checkbox
         label
-          input(type="checkbox",id="memo_private")
+          | <input type="checkbox" id="memo_private" <% if(pub=="false"){ %>checked="checked" <% } %>/>
           | 不公开
       li.btn_group.clearfix
         input.verify(type="button",id="organize_button",value="确定")
