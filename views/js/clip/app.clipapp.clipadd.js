@@ -1,6 +1,7 @@
 App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
+  var clip = {};
   App.Model.ClipModel = App.Model.extend({
     url:function(){
       return P+"/clip";
@@ -36,7 +37,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     save: function(){
-      var clip = {}; //this.model.get("clip");
+      //this.model.get("clip");
+      console.info(clip);
       clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(clip,{
 	url: P+"/clip",
@@ -70,7 +72,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       // 直接返回详情页面
       App.vent.trigger("app.clipapp.clipadd:cancel");
     },
-    remark_newClip: function(){
+    remark_clip: function(){
       this.model.set({clip:clip});
       App.vent.trigger("app.clipapp:clipmemo", this.model);
     }

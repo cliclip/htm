@@ -166,7 +166,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   ClipDetail.show = function(cid){   // 此处的cid等于detailModel.id
-    var clip = new DetailModel({id: cid});
+    var clip = new App.Model.DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
       showDetail(detailModel);
