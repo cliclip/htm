@@ -2,7 +2,7 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var precliplength=0,flag=true;
+  var precliplength=0,flag=true,id;
   var clipListView = {};
   var ClipPreviewModel = App.Model.extend({
     defaults:{
@@ -67,6 +67,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     show_detail: function(){
       var clip = this.model.get("clip");
       var clipid = clip.user.id+":"+clip.id;
+      id = this.model.id;
       App.vent.trigger("app.clipapp:clipdetail",clipid);
     },
     commentAction: function(){
@@ -104,16 +105,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var cid = this.model.id;
+      var clip = this.model.get("clip");
+      var cid = clip.user.id+":"+clip.id;
+      id = this.model.id;
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", this.model);break;
 	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend", this.model);break;
 	case 'comment'://评
-	  App.vent.trigger("app.clipapp:comment", this.model);break;
+	  App.vent.trigger("app.clipapp:comment", cid);break;
 	case 'note'://注
-	App.vent.trigger("app.clipapp:clipmemo", cid, "update");break;
+	App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
@@ -175,34 +178,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       options.data = JSON.stringify(options.data),
       options.contentType = "application/json; charset=utf-8";
     }
-    /*options.collection.comparator = function(clip) {
-      return clip.get("id");
-    };*/
-    console.info(options.collection);
     options.collection.fetch(options);
     options.collection.onReset(function(clips){
       App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
       App.util.list_scroll(options);
       //App.vent.trigger("app.clipapp.cliplist:show",clips, options);
-    });
-    App.vent.bind("app.clipapp.cliplist:collectionChange",function(age,model){
-	if(age == "add"){
-	  options.collection.add(model,{at:0});
-	  options.start++;
-	  options.end++;
-	  App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
-	}
-	if(age == "remove"){
-	  options.collection.remove(model);
-	  options.start--;
-	  options.end--;
-	  App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
-	}
-	options.collection.onReset(function(clips){
-	  console.info(options.collection);
-	  App.vent.trigger("app.clipapp.cliplist:showlist",options.collection);
-	  App.util.list_scroll(options);
-	});
     });
   };
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
@@ -278,17 +258,25 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //$("#list").append("抱歉，没有找到相应的信息...");
     }
   });
+  App.vent.bind("app.clipapp.cliplist:comment",function(id,pid){
+    if(pid == 0){
+      console.info(id);
+      var listmodel=App.listRegion.currentView.collection.get(id);
+      var modifyclip=listmodel.get("clip");
+      modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
+      listmodel.set({clip:modifyclip});
+      App.vent.trigger("app.clipapp.cliplist:showlist");
+    }
+  });
+
   App.vent.bind("app.clipapp.cliplist:removeshow",function(removemodel){
-    //var collection = clipListView.collection.remove(removemodel);
-    //App.vent.trigger("app.clipapp.cliplist:showlist",collection);
-    //App.vent.trigger("app.clipapp.cliplist:collectionChange","remove",collection);
-    App.vent.trigger("app.clipapp.cliplist:collectionChange","remove",removemodel);
+    var collection = clipListView.collection.remove(removemodel);
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
-    //var collection = optionss.collection;
-    //collection.add(addmodel,{at:0});
-    //App.vent.trigger("app.clipapp.cliplist:showlist",collection);
-    App.vent.trigger("app.clipapp.cliplist:collectionChange","add",addmodel);
+    var collection = clipListView.collection;
+    collection.add(addmodel,{at:0});
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   return ClipList;
 })(App, Backbone, jQuery);

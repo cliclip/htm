@@ -134,12 +134,12 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:comment", function(clipid){
+  App.vent.bind("app.clipapp:comment", function(cid,id){
     var uid = getMyUid();
     if(!uid){
       ClipApp.Login.show();
     }else{
-      ClipApp.Comment.show(clipid);
+      ClipApp.Comment.show(cid,id);
     }
   });
 

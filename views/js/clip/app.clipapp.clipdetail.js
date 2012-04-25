@@ -1,7 +1,7 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var P = App.ClipApp.Url.base;
-  var DetailModel = App.Model.extend({
+  App.Model.DetailModel = App.Model.extend({
     url: function(){
       return P+"/clip/"+this.id;
     },
@@ -36,7 +36,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'comment':
 	App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
 	case 'note':
-	App.vent.trigger("app.clipapp:clipmemo", cid ,"update");break;
+	App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change':
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
@@ -166,9 +166,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   // uid为当前登录用户
+  // id为clip list处model的id
   ClipDetail.show = function(uid, cid){
     // 此处的cid并不等于detailModel.id
-    var clip = new DetailModel({id: cid});
+    var clip = new App.Model.DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
       showDetail(detailModel);
@@ -249,11 +250,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  success:function(comment,response){
 	    ClipDetail.showComment(id);
 	    ClipDetail.showAddComm(id);
-	    var listmodel=App.listRegion.currentView.collection.get(id);
-	    var modifyclip=listmodel.get("clip");
-	    modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
-	  listmodel.set({clip:modifyclip});
-	  App.vent.trigger("app.clipapp.cliplist:showlist");
+	    App.vent.trigger("app.clipapp.cliplist:comment",id,pid);
 	  },
 	  error:function(comment,response){}
 	});

@@ -80,7 +80,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     remark_newClip: function(){
       this.model.set({clip:clip});
-      App.vent.trigger("app.clipapp:clipmemo", null, "add" ,this.model);
+      App.vent.trigger("app.clipapp:clipmemo", this.model);
     }
   });
 
