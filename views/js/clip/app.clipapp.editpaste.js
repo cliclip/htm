@@ -21,26 +21,28 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }
   };
 
-  Editor.getContent = function(editorId,img_list){
+  Editor.getContent = function(editorId){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     // i 是顺序号，从0开始；n 是img元素
-    console.info(img_list);
+/*  console.info(img_list);
     $(objEditor.contentWindow.document.body)
     .find("img.new").each(function(i,n){
       console.info(n);
       var at = $(n).attr("id");
       $(n).attr("src",img_list[at]);
     });
+*/
     if(isIE){
       var data = objEditor.contentWindow.document.body.innerText;
     }else{
       var data = objEditor.contentWindow.document.body.innerHTML;;
     }
-    console.info(data);
+    //console.info(data);
     return Filter.htmlToUbb(data);
   };
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
+    //console.info(data);
     var objEditor = document.getElementById(editorId);
     if(isIE){
       objEditor.contentWindow.document.execCommand('Paste', false, data);
@@ -54,7 +56,8 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId);
     var img = "";
     if(data.url)
-      img = "<img id="+data.id +" class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
+      //img = "<img id="+data.id +" class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
+      img = "<img src="+data.url+" style='max-width:475px;max-height:490px;' />";
     if(isIE){ // TODO
       // var ifmTemp=document.getElementById("ifmTemp");
       objEditor.contentWindow.document.execCommand("Paste", false, img);

@@ -1,32 +1,23 @@
 App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
-  var objEditor = "";
-  var img_list = [];
-  var clip = {};
-  var count = 0;
-  var ClipModel = App.Model.extend({
-    defaults:{
-      clip :{}
-    },
-    url: function(){
+  App.Model.ClipModel = App.Model.extend({
+    url:function(){
       return P+"/clip";
     }
   });
-
   var AddClipView = App.ItemView.extend({
     tagName: "div",
     className: "addClip-view",
     template: "#addClip-view-template",
     events: {
       "click .link_img":"extImg",
-//      "change #formUpload": "image_change",
       "click .btn": "up_extImg",
+      "blur #img_upload_url":"hide_extImg", // extImg输入框失焦就隐藏
+      "click .pop_left": "remark_clip",
       "click .verify":"save",
       "click .cancel":"abandon",
-      "click .close_w":"abandon",
-      "click .pop_left": "remark_newClip",
-      "blur #img_upload_url":"hide_extImg"
+      "click .close_w":"abandon"
     },
     extImg:function(evt){
       $(".img_upload_span").css("display","block");
@@ -45,13 +36,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     save: function(){
+      var clip = {}; //this.model.get("clip");
       clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(clip,{
 	url: P+"/clip",
 	type: 'POST',
       	success:function(model,res){ // 返回值res为clipid:clipid
-	  img_list = [];
-	  count = 0;
+	  //img_list = [];
+	  //count = 0;
 	  var modifyclip = {};
 	  modifyclip.id = res.clipid;
 	  modifyclip.tag = clip.tag;
@@ -87,7 +79,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   ClipAdd.image_change = function(sender){
       var change = App.util.isImage("formUpload");
       if(change){
-	if( sender.files &&sender.files[0] ){
+/*	if( sender.files &&sender.files[0] ){//图片本地预览代码
 	  var img = new Image();
 	  img.src = App.util.get_img_src(sender.files[0]);
 	  img.onload=function(){
@@ -96,30 +88,18 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	    }
 	  };
 	}
+*/
 	$("#img_form").submit();
-	$("#post_frame").unbind("load");
-	$("#post_frame").load(function (){
-	    var returnVal = this.contentDocument.documentElement.textContent;
-	    if(returnVal != null && returnVal != ""){
-	      var returnObj = eval(returnVal);
-	      if(returnObj[0] == 0){
-		var imgids = returnObj[1][0];
-		//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-		var ids = imgids.split(":");
-		var url = P+"/user/"+ ids[0]+"/image/" +ids[1];
-		img_list.push(url);
-		console.info(url);
-		//App.ClipApp.Editor.insertImage("editor", {url: url});
-		// }
-	      }
-	    }
+	App.util.get_imgid("post_frame",function(img_src){
+	  //img_list.push(img_src);
+	  App.ClipApp.Editor.insertImage("editor", {url: img_src});
 	});
       }else{
 	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
       }
     };
   ClipAdd.show = function(uid){
-    var clipModel = new ClipModel();
+    var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
     App.ClipApp.Editor.init();

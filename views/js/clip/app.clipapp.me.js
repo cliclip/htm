@@ -49,6 +49,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     if(!App.util.getMyUid()){
       var meView = new View();
       App.mineRegion.show(meView);
+      //console.info("用户未登录");
     }
     Me.me.onChange(function(meModel){
       // console.info("onChange :: "+Me.me.get("id"));
@@ -56,6 +57,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 	model: meModel
       });
       App.mineRegion.show(meView);
+      //console.info("用户已登录");
     });
   };
 
@@ -69,7 +71,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.show();
   });
 
-  App.vent.bind("app.clipapp.useredit:facesuccess", function(){
+  App.vent.bind("app.clipapp.face:reset", function(){
     Me.me.fetch();
     //解决小头像上传头像到服务器后还是显示原头像的奇怪问题
     setTimeout(function(){

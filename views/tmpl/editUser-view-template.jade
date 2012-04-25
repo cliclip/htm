@@ -22,7 +22,7 @@ script(type="text/template",id="faceEdit-view-template")
       <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face",style="display:none;",mce_style="display:none;")
-    |<form method="POST" action="<%=actUrl%>" target="post_frame_face" enctype="multipart/form-data">
+    |<form method="POST" action="<%=App.util.getFace_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
     .btn_frame
       button.verify(type="submit",id="confirm_face",style="display:none") 确定
       .button_frame

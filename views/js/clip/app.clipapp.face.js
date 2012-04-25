@@ -94,5 +94,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
     Face.showUser(uid);
   });
 
+  App.vent.bind("app.clipapp.face:reset", function(uid){
+    Face.showUser(uid);
+  });
+
   return Face;
 })(App, Backbone, jQuery);

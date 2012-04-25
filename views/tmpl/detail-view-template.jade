@@ -6,7 +6,7 @@ script(type="text/template",id="detail-view-template")
         span.breadcrumbs
           |路径图
       div.pop_right.
-        <% if(!App.util.auth(user)) {%>
+        <% if(!App.util.self(user)) {%>
           <i class="comment operate" title="评"></i>
           <i class="refresh operate" title="转"></i>
           <i class="biezhen operate" title="收"></i>
@@ -58,7 +58,7 @@ script(type="text/template",id="showcomment-view-template")
     <%= text %><%= App.util.generatePastTime(date)%>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
-    <% if( auth && (user.id == auth || auth == clip_owner )){%>
+    <% auth = App.util.getMyUid(); if(user.id == auth || auth == clip_owner){%>
     <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
     <% } %>
     </div>
@@ -74,6 +74,10 @@ script(type="text/template",id="addcomm-view-template")
     input.main_tag(type="button",id="maintag_4",value="好玩")
     input.main_tag(type="button",id="maintag_5",value="精辟")
     input.main_tag(type="button",id="maintag_6",value="酷")
+  .input_checkbox
+    span
+      input(type="checkbox",id="reclip_box")
+      |  同时收
   div.btn_group.clearfix
     input.verify(type="button",value="评论")
     input.cancel(type="button",value="取消")

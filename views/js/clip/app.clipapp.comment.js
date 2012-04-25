@@ -1,12 +1,16 @@
 // app.comment.js
-
 App.ClipApp.Comment = (function(App, Backbone, $){
   var Comment = {};
   var tag_list = [];
   var value = "说点什么吧~";
+  // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
-    url: function(){
-      return App.ClipApp.Url.base+"/clip/"+this.id+"/comment";
+    url:function(){
+      if(this.id){
+	return P+"/clip/"+this.get("cid")+"/comment/"+this.id;
+      }else{
+	return P+"/clip/"+this.get("cid")+"/comment";
+      }
     }
   });
   var CommentView = App.ItemView.extend({
@@ -21,19 +25,16 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click #cancel"    :"cancel",
       "click .close_w"   :"cancel"
     },
-
     foucsAction:function(evt){
       if($("#comm_text").val() == value ){
 	$("#comm_text").val("");
       }
     },
-
     blurAction:function(evt){
       if($("#comm_text").val() == ""){
 	$("#comm_text").val(value);
       }
     },
-
     maintagAction:function(evt){
       var id = evt.target.id;
       var style = $("#"+id).attr("class");
@@ -90,12 +91,13 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     });
   };
 
-  Comment.show = function(cid){
-    var model = new App.Model.CommentModel({id:cid});
-    var commentView = new CommentView({model : model});
-    App.popRegion.show(commentView);
-    tag_list = [];
+  Comment.show = function(clipid){
+    var model = new App.Model.CommentModel({id: clipid});
+    var view = new CommentView({model : model});
+    App.popRegion.show(view);
+    var tag_list = [];
   };
+
   Comment.close = function(){
     App.popRegion.close();
   };

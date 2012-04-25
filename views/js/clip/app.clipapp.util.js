@@ -7,12 +7,16 @@ App.util = (function(){
   };
 
   // 判断当前的用户和传过来的参数是否是同一人
-  util.auth = function(uid){
+  util.self = function(uid){
     return util.getMyUid() == uid;
   };
 
   util.getImg_upUrl = function(){
     return P + '/user/'+util.getMyUid()+'/image';
+  };
+
+  util.getFace_upUrl = function(){
+    return P+"/user/" + util.getMyUid() + "/upload_face";
   };
 
   //clip列表时取得img 的 url 为裁剪后的图片
@@ -164,54 +168,62 @@ App.util = (function(){
     }
     return returnVal;
   };
+  var collection_length,scroll_flag;
   util.list_scroll = function(_options){
-    var collection_length=0;
-    var scroll_flag = true;
-    var paddingTop = 0;
     var lo = _options;
+    collection_length=0;
+    scroll_flag = lo.collection.length>=App.ClipApp.Url.page ? true :false;
+    var paddingTop = 0 + "px";
     $(window).unbind("scroll");
-    $(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
-    $("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
+    util.remove_fixed(paddingTop);
     $(window).scroll(function() {
       var st = $(window).scrollTop();
-      var wh = window.innerHeight;
-      // fix left while scroll
       var mt = $(".clearfix").offset().top + $(".user_head").height();
+      var wh = window.innerHeight;
       if($("#list").height()<=$(".left").height())return;
       if(st > mt ){
-	$(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop+"px"});
-	$("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop+"px"});
-	$(".return_top").show();
-	// show go-top while scroll
+	util.fixed(paddingTop);
       } else {
-	$(".user_detail").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$("#bubb").removeClass("fixed").css("margin-top", paddingTop+"px");
-	$(".return_top").hide();
+	  util.remove_fixed(paddingTop);
       }
       // loader while scroll down to the page end
       var lt = $(".loader").offset().top;
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
-      if(st + wh > lt){
-	if(scroll_flag){
-	  lo.start += App.ClipApp.Url.page;
-	  lo.end += App.ClipApp.Url.page;
-	  lo.url = lo.base_url + "/" +lo.start + ".." + lo.end;
-	  lo.add = true;
-	  lo.collection.fetch(lo);
-	  scroll_flag = false;
-	  setTimeout(function(){
-	    scroll_flag = true;
-	    if(lo.collection.length-collection_length<App.ClipApp.Url.page){
-	      scroll_flag = false;
-	      //$(".loader").text("reach to the end.");
-	    }else{
-	      collection_length = lo.collection.length;
-	    }
-	  },200);
-	}
+      if(st + wh > lt && scroll_flag){
+	util.request_data(lo);
       }
     });
   };
+
+  util.fixed = function(paddingTop){
+    $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
+    $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
+    $(".return_top").show();
+  };
+
+  util.remove_fixed = function(paddingTop){
+    $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
+    $("#bubb").removeClass("fixed").css("margin-top", paddingTop);
+    $(".return_top").hide();
+  };
+  util.request_data = function(lo){
+    lo.start += App.ClipApp.Url.page;
+    lo.end += App.ClipApp.Url.page;
+    lo.url = lo.base_url + "/" +lo.start + ".." + lo.end;
+    lo.add = true;
+    lo.collection.fetch(lo);
+    scroll_flag = false;
+    setTimeout(function(){
+      scroll_flag = true;
+      if(lo.collection.length-collection_length<App.ClipApp.Url.page){
+	scroll_flag = false;
+	//$(".loader").text("reach to the end.");
+      }else{
+	collection_length = lo.collection.length;
+      }
+    },200);
+  };
+
   //解决关于本地预览图片的浏览器兼容问题
   util.get_img_src = function(source){
     //chrome
@@ -224,6 +236,27 @@ App.util = (function(){
       return window.URL.createObjectURL(source);
     }
   };
+
+  util.get_imgid = function(frameid,callback){
+    $("#" + frameid).unbind("load");
+    $("#" + frameid).load(function(){ // 加载图片
+      var returnVal = this.contentDocument.documentElement.textContent;
+      if(returnVal != null && returnVal != ""){
+	var returnObj = eval(returnVal);
+	if(returnObj[0] == 0){
+	  var imgids = returnObj[1][0];
+	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	  var uid = imgids.split(":")[0];
+	  var imgid = imgids.split(":")[1];
+	  var url = P+"/user/"+ uid +"/image/" +imgid;
+	  //App.ClipApp.Editor.insertImage("editor", {url: url});
+	  //}
+	  callback(url);
+	}
+      }
+    });
+  };
+
 // App.vent.bind("app.clipapp.util:scroll", });
   var getMessage = {
 
