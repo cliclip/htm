@@ -284,6 +284,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(comment,response){
 	showComment(data.cid);
 	showAddComm(data.cid);
+	App.vent.trigger("app.clipapp.cliplist:comment",data.pid);
 	// 触发preview中对回复条数的同步
 	// var listmodel=App.listRegion.currentView.collection.get(id);
 	// var modifyclip=listmodel.get("clip");

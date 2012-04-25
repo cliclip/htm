@@ -23,8 +23,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "click .close_w"         :"cancelClick"
     },
     tagToggle:function(e){
-      $(e.currentTarget).toggleClass("white_48") ? $(e.currentTarget).toggleClass("orange_48"):
       $(e.currentTarget).toggleClass("white_48");
+      $(e.currentTarget).toggleClass("orange_48");
       /*$("#"+id).toggleClass(function(white_48){
 	var clazz = "size48 ";
 	return ($("#"+id).hasClass("white_48")) ? "orange_48" : "white_48";

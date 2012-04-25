@@ -231,7 +231,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //$("#list").append("抱歉，没有找到相应的信息...");
     }
   });
-  App.vent.bind("app.clipapp.cliplist:comment",function(id,pid){
+  App.vent.bind("app.clipapp.cliplist:comment",function(pid){
     if(pid == 0){
       console.info(id);
       var listmodel=App.listRegion.currentView.collection.get(id);
@@ -239,6 +239,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
       listmodel.set({clip:modifyclip});
       App.vent.trigger("app.clipapp.cliplist:showlist");
+      id = null;
     }
   });
 

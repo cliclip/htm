@@ -1,8 +1,5 @@
 // app.comment.js
 App.ClipApp.Comment = (function(App, Backbone, $){
-  var Comment = {};
-  var tag_list = [];
-  var value = "说点什么吧~";
   // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
     url:function(){
@@ -25,25 +22,22 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click #cancel"    :"cancel",
       "click .close_w"   :"cancel"
     },
-    foucsAction:function(evt){
-      if($("#comm_text").val() == value ){
-	$("#comm_text").val("");
-      }
+    foucsAction:function(e){
+      $(e.currentTarget).val( $(e.currentTarget).val() == defaultComm ? "" :
+      $(e.currentTarget).val() );
     },
-    blurAction:function(evt){
-      if($("#comm_text").val() == ""){
-	$("#comm_text").val(value);
-      }
+    blurAction:function(e){
+      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultComm :
+      $(e.currentTarget).val() );
     },
-    maintagAction:function(evt){
-      var id = evt.target.id;
+    maintagAction:function(e){
+      var id = e.target.id;
       var style = $("#"+id).attr("class");
-      //var style =document.getElementById(id).className;
       if(style != "size48 orange_48"){
 	$("#"+id).attr("class","size48 orange_48");
 	tag_list.push($("#"+id).html());
 	//console.dir(tag_list);
-	if($("#comm_text").val() == "" || $("#comm_text").val() == value){
+	if($("#comm_text").val() == "" || $("#comm_text").val() == defaultComm){
 	  $("#comm_text").val($("#"+id).html());
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).html()));
@@ -60,13 +54,13 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       e.preventDefault();
       var that = this;
       var text = $("#comm_text").val().trim();
-      if(text == "" || text == value){
+      if(text == "" || text == defaultComm){
 	$("#comm_text").focus();
 	return;
       }
-      var params = {id:this.model.id,text: text, pid: 0};
+      var params = {cid:this.model.get("cid"),text: text, pid: 0};
       // console.dir(that.tag_list);
-      var params1 = {id:this.model.id,clip:{tag:tag_list,note:[{text:text}]}};
+      var params1 = {id:this.model.get("cid"),clip:{tag:tag_list,note:[{text:text}]}};
       App.vent.trigger("app.clipapp.comment:submit", params);
       if($("#reclip_box").attr("checked")){
 	App.vent.trigger("app.clipapp.reclip:submit", params1);
@@ -74,25 +68,15 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.comment:cancel");
+      App.vent.trigger("app.clipapp.comment:close");
     }
   });
 
-  var commentAction = function(params){
-    var model = new App.Model.CommentModel(params);
-    model.save({},{
-      type: "POST",
-      success: function(model, res){
-	App.vent.trigger("app.clipapp.comment:success",params.pid);
-      },
-      error:function(model, res){
-	Comment.show(model.id,model, res);
-      }
-    });
-  };
+  var Comment = {};
+  var tag_list = [],defaultComm = "说点什么吧~";
 
-  Comment.show = function(clipid){
-    var model = new App.Model.CommentModel({id: clipid});
+  Comment.show = function(cid){
+    var model = new App.Model.CommentModel({cid: cid});
     var view = new CommentView({model : model});
     App.popRegion.show(view);
     var tag_list = [];
@@ -103,13 +87,19 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.comment:submit", function(params){
-    commentAction(params);
+    var model = new App.Model.CommentModel(params);
+    model.save({},{
+      type: "POST",
+      success: function(model, res){
+	App.vent.trigger("app.clipapp.cliplist:comment",params.pid);
+	Comment.close();
+      },
+      error:function(model, res){
+
+      }
+    });
   });
-  App.vent.bind("app.clipapp.comment:cancel", function(){
-    Comment.close();
-  });
-  App.vent.bind("app.clipapp.comment:success",function(pid){
-    App.vent.trigger("app.clipapp.cliplist:comment",pid);
+  App.vent.bind("app.clipapp.comment:close", function(){
     Comment.close();
   });
 
