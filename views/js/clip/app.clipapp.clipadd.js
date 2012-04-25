@@ -39,7 +39,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     save: function(){
       var img_list = [];
-      var clip = {}; //this.model.get("clip");
       clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(clip,{
       	success:function(model,res){ // 返回值res为clipid:clipid

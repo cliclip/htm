@@ -508,16 +508,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.useredit:active", function(key){
-    console.log("active :: key = "+key);
     var model = new App.Model();
     model.save({},{
       url: App.ClipApp.Url.base+"/active/"+key,
       type: "POST",
       success:function(model,response){
-	console.log("success :: " + response);
+	// 不只是弹出提示框这么简单
+	App.vent.trigger("app.clipapp.message:alert", "邮件激活成功，您可以方便的是有该邮件地址进行数据的存储了");
       },
       error:function(model,error){
-	console.log("success :: " + error);
+
       }
     });
   });

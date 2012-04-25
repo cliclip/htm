@@ -151,17 +151,15 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .verify"    : "comment",
       "click .cancel"    : "cancel"
     },
-    foucsAction:function(evt){
-      if($("#comm_text").val() == COMM_TEXT ){
-	$("#comm_text").val("");
-      }
+    foucsAction:function(e){
+      var text = $(e.currentTarget).val();
+      $(e.currentTarget).val(text == COMM_TEXT ? "" : text );
     },
     blurAction:function(evt){
-      if($("#comm_text").val() == ""){
-	$("#comm_text").val(COMM_TEXT);
-      }
+      var text = $(e.currentTarget).val();
+      $(e.currentTarget).val( text == "" ? COMM_TEXT : text);
     },
-    maintagAction:function(evt){
+    maintagAction:function(evt){;
       var id = evt.target.id;
       // 可以在css中添加两个class，点击过后在两个class之间切换
       var color = $("#"+id).css("backgroundColor");

@@ -59,7 +59,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     remarkClip:function(){
       // 整个的传model方便直接修改
-      App.vent.trigger("app.clipapp:clipmemo", this.model, "update");
+      App.vent.trigger("app.clipapp:clipmemo", this.model.id);
     },
     saveUpdate: function(){
       var cid = this.model.id;
@@ -87,7 +87,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       });
     },
     abandonUpdate: function(){
-      App.vent.trigger("app.clipapp.clipedit:cancel", cid);
+      App.vent.trigger("app.clipapp.clipedit:cancel");
     }
   });
 
@@ -143,7 +143,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.cliplist:show", clip);
   });
 
-  App.vent.trigger("app.clipapp.clipedit:cancel", function(){
+  App.vent.bind("app.clipapp.clipedit:cancel", function(){
     ClipEdit.close();
   });
 
