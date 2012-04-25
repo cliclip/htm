@@ -91,7 +91,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     model.save({},{
       type: "POST",
       success: function(model, res){
-	App.vent.trigger("app.clipapp.cliplist:comment",params.pid);
+	App.vent.trigger("app.clipapp.cliplist:reload",{type:"comment",pid:params.pid});
 	Comment.close();
       },
       error:function(model, res){

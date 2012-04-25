@@ -72,17 +72,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   }
 
   var reclipSave = function(params){
-    var model = new ReclipModel(params);
-    model.save({},{
-      type: "POST",
-      success: function(model, res){
-	App.vent.trigger("app.clipapp.cliplist:reclip");
-	Reclip.close();
-      },
-      error:function(model, res){
-	console.info(res);
-      }
-    });
   };
 
   var reclip_tag = function(reclipModel, params){
@@ -137,8 +126,18 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   Reclip.close = function(){
     App.popRegion.close();
   };
-  App.vent.bind("app.clipapp.reclip:submit", function(model ,params,clip){
-    reclipSave(model, params);
+  App.vent.bind("app.clipapp.reclip:submit", function(params){
+    var model = new ReclipModel(params);
+    model.save({},{
+      type: "POST",
+      success: function(model, res){
+	App.vent.trigger("app.clipapp.cliplist:reload",{type:"reclip"});
+	Reclip.close();
+      },
+      error:function(model, res){
+	console.info(res);
+      }
+    });
   });
 
   App.vent.bind("app.clipapp.reclip_tag:submit", function(model, params){

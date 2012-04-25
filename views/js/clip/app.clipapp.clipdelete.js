@@ -11,51 +11,46 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     className : "delete-view",
     template : "#delete-view-template",
     events : {
-      "click #deleteok_button" : "delete",
-      "click #cancel_button" : "cancel",
-      "click .close_w"       : "cancel"
+      "click #deleteok_button" : "okClick",
+      "click #cancel_button" : "cancelClick",
+      "click .close_w"       : "cancelClick"
     },
-    delete : function(e){
-      e.preventDefault();
-      deleteAction(this.model);
+    okClick : function(e){
+      App.vent.trigger("app.clipapp.clipdelete:ok",this.model);
     },
-    cancel : function(e){
-      e.preventDefault();
-      ClipDelete.close();
+    cancelClick : function(e){
+      App.vent.trigger("app.clipapp.clipdelete:close");
      }
    });
 
    ClipDelete.show = function(cid){
-     var deleteModel = new DeleteModel({id:cid});
-     var deleteView = new DeleteView({model : deleteModel});
-     App.popRegion.show(deleteView);
-   };
-
-   var deleteAction = function(clipModel){
-     clipModel.destroy({
-       success: function(model, res){
-	 App.vent.trigger("app.clipapp.clipdelete:success",model);
-       },
-       error: function(model, res){
-	 App.vent.trigger("app.clipapp.clipdelete:error", model, res);
-       }
-     });
+     var model = new DeleteModel({id:cid});
+     var view = new DeleteView({model : model});
+     App.popRegion.show(view);
    };
 
    ClipDelete.close = function(){
      App.popRegion.close();
    };
-
-   App.vent.bind("app.clipapp.clipdelete:success", function(model){
-     App.vent.trigger("app.clipapp.cliplist:removeshow", model);
-     ClipDelete.close();
-     if(App.viewRegion){ // 从detail来，需要关闭viewRegion
-       App.viewRegion.close();
-     }
+   App.vent.bind("app.clipapp.clipdelete:ok",function(deleteModel){
+     deleteModel.destroy({
+       success: function(model, res){
+	 App.vent.trigger("app.clipapp.cliplist:removeshow");
+	 ClipDelete.close();
+	 if(App.viewRegion){ // 从detail来，需要关闭viewRegion
+	   App.viewRegion.close();
+	 }
+       },
+       error: function(model, res){
+	 App.vent.trigger("app.clipapp.clipdelete:error", model, res);
+       }
+     });
    });
-
+   App.vent.bind("app.clipapp.clipdelete:close", function(){
+     ClipDelete.close();
+   });
    App.vent.bind("app.clipapp.clipdelete:error", function(model, error){
-     ClipDelete.show(null);
+     ClipDelete.show();
    });
 
   // TEST

@@ -231,30 +231,26 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //$("#list").append("抱歉，没有找到相应的信息...");
     }
   });
-  App.vent.bind("app.clipapp.cliplist:comment",function(pid){
-    if(pid == 0){
-      console.info(model_id);
-      var listmodel=App.listRegion.currentView.collection.get(model_id);
-      var modifyclip=listmodel.get("clip");
-      modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
-      listmodel.set({clip:modifyclip});
-      App.vent.trigger("app.clipapp.cliplist:showlist");
-      model_id = null;
+
+  App.vent.bind("app.clipapp.cliplist:reload",function(args){
+    console.info(model_id);
+    var listmodel=App.listRegion.currentView.collection.get(model_id);
+    var modifyclip=listmodel.get("clip");
+    if(args.type == "comment"){
+      if(args.pid == 0){
+	modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
+      }
     }
-  });
-
-  App.vent.bind("app.clipapp.cliplist:reclip",function(){
-      console.info(model_id);
-      var listmodel=App.listRegion.currentView.collection.get(model_id);
-      var modifyclip=listmodel.get("clip");
+    if(args.type == "reclip"){
       modifyclip.reprint_count = modifyclip.reprint_count ? modifyclip.reprint_count+1 : 1;
-      listmodel.set({clip:modifyclip});
-      App.vent.trigger("app.clipapp.cliplist:showlist");
-      model_id = null;
+    }
+    listmodel.set({clip:modifyclip});
+    App.vent.trigger("app.clipapp.cliplist:showlist");
   });
 
-  App.vent.bind("app.clipapp.cliplist:removeshow",function(removemodel){
-    var collection = clipListView.collection.remove(removemodel);
+  App.vent.bind("app.clipapp.cliplist:removeshow",function(){
+    var listmodel=App.listRegion.currentView.collection.get(model_id);
+    var collection = clipListView.collection.remove(listmodel);
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
