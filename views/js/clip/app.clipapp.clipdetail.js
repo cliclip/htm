@@ -92,12 +92,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     del_comment : function(e){
       e.preventDefault();
       // App.vent.unbind("app.clipapp.message:sure");//解绑 解决请求多次的问题
-      var cid = this.model.id;
-      var comm_id = e.target.id;
+      var cid = this.model.get("cid");
+      var id = e.target.id;
       App.vent.trigger("app.clipapp.message:alert", "删除评论!");
-      // App.vent.bind("app.clipapp.message:sure",function(){
-      App.vent.trigger("app.clipapp.clipdetail:delComment", cid, id);
-      //});
+      App.vent.bind("app.clipapp.message:sure",function(){
+	App.vent.trigger("app.clipapp.clipdetail:delComment", cid, id);
+      });
     },
     render:function(_model){
       // 针对commetModel进行处理显示
@@ -139,42 +139,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
      }
   });
 
-  // 显示clip的detail内容 [clipDetiail 以及 Comment]
-  var showDetail = function(detailModel){
-    var detailView = new DetailView({model: detailModel});
-    App.viewRegion.show(detailView);
-  };
-
-  // 获取comment内容，需要对得到的数据进行显示
-  var showComment = function(cid){
-    var comment = new App.Model.CommentModel({cid: cid});
-    comment.fetch();
-    comment.onChange(function(commentModel){
-      var commentView = new CommentView({model: commentModel});
-      ClipDetail.commentRegion = new App.Region({el:".comments"});
-      ClipDetail.commentRegion.show(commentView);
-    });
-  };
-
-  var showAddComm = function(cid, focus){
-    var model = new App.Model.CommentModel({cid: cid});
-    var addCommView = new AddCommView({model: model});
-    ClipDetail.addCommRegion = new App.Region({el:".input_textarea"});
-    ClipDetail.addCommRegion.show(addCommView);
-    $(".cancel").css("display","none");
-    if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
-  };
-
-  ClipDetail.show = function(cid){   // 此处的cid等于detailModel.id
-    var clip = new DetailModel({id: cid});
-    clip.fetch();
-    clip.onChange(function(detailModel){
-      showDetail(detailModel);
-      showComment(cid);
-      showAddComm(cid);
-    });
-  };
-
   var AddCommView = App.ItemView.extend({
     tagName : "div",
     className : "addcomment-view",
@@ -199,6 +163,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     maintagAction:function(evt){
       var id = evt.target.id;
+      // 可以在css中添加两个class，点击过后在两个class之间切换
       var color = $("#"+id).css("backgroundColor");
       if(color != "rgb(255, 0, 0)"){
 	$("#"+id).css("backgroundColor","red");
@@ -243,6 +208,42 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipdetail:cancel_addComm", this.model.id);
     }
   });
+
+  // 显示clip的detail内容 [clipDetiail 以及 Comment]
+  function showDetail (detailModel){
+    var detailView = new DetailView({model: detailModel});
+    App.viewRegion.show(detailView);
+  };
+
+  // 获取comment内容，需要对得到的数据进行显示
+  function showComment (cid){
+    var comment = new App.Model.CommentModel({cid: cid});
+    comment.fetch();
+    comment.onChange(function(commentModel){
+      var commentView = new CommentView({model: commentModel});
+      ClipDetail.commentRegion = new App.Region({el:".comments"});
+      ClipDetail.commentRegion.show(commentView);
+    });
+  };
+
+  function showAddComm (cid, focus){
+    var model = new App.Model.CommentModel({cid: cid});
+    var addCommView = new AddCommView({model: model});
+    ClipDetail.addCommRegion = new App.Region({el:".input_textarea"});
+    ClipDetail.addCommRegion.show(addCommView);
+    $(".cancel").css("display","none");
+    if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
+  };
+
+  ClipDetail.show = function(cid){   // 此处的cid等于detailModel.id
+    var clip = new DetailModel({id: cid});
+    clip.fetch();
+    clip.onChange(function(detailModel){
+      showDetail(detailModel);
+      showComment(cid);
+      showAddComm(cid);
+    });
+  };
 
   ClipDetail.close = function(){
     if(ClipDetail.commentRegion){

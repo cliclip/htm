@@ -5,7 +5,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var edit_view = {};
   //var img_list = [];
   //var count = 0;
-  var EditModel = App.Model.extend({
+  // var extImg = false; 有何作用
+  App.Model.EditModel = App.Model.extend({
     url : function(){
       return P+"/clip/"+this.id;
     },
@@ -16,15 +17,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     }
   });
 
-  var extImg = false;
-
   var EditView = App.ItemView.extend({
     tagName: "div",
     className: "editDetail-view",
     template: "#editDetail-view-template",
     events: {
       "click .link_img":"show_extImg",
-//      "change #formUpload":"image_change",
+      // "change #formUpload":"image_change", // 改成了直接在jade中绑定
       "click .format":"upFormat",
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
@@ -34,7 +33,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "blur #img_upload_url":"hide_extImg"
     },
     initialize: function(){
-      //console.info("initialize");
       _data = {content : []};
       edit_view = this;
     },
@@ -69,41 +67,35 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       _data.content = App.ClipApp.Editor.getContent("editor");
       //_data.content = App.ClipApp.Editor.getContent("editor",img_list);
       this.model.save(_data,{
-	url: P+"/clip/"+cid,
-	type: 'PUT',
 	success:function(model,res){
 	  //img_list = [];
 	  //count = 0;
-	  var clip = model.toJSON();
+	  var clip = model.toJSON(); // clip用于同步preview的数据
+	  // App.vent.trigger("app.clipapp.clipedit:success", clip);
+
 	  var _collection = App.listRegion.currentView.collection;
 	  var listmodel=App.listRegion.currentView.collection.get(cid);
 	  var modifyclip=listmodel.get("clip");
 	  modifyclip.content = App.util.getPreview(clip.content, 100);
 	  listmodel.set({clip:modifyclip});
 	  App.vent.trigger("app.clipapp.cliplist:showlist",_collection);
-	  // App.vent.trigger("app.clipapp:clipdetail", cid);
-	  App.viewRegion.close();
 	},
 	error:function(model,res){
 	  // 出现错误，触发统一事件
-	  // App.vent.trigger("app.clipapp.clipedit:error", cid);
+	  App.vent.trigger("app.clipapp.clipedit:error", cid);
 	}
       });
     },
     abandonUpdate: function(){
-      // 直接返回详情页面
-      App.viewRegion.close();
-      var cid =	this.model.id;
-      //console.info(this);
-      //在clip列表界面触发“改”时不应返回详情页面
-      //App.vent.trigger("app.clipapp:clipdetail", cid);
+      App.vent.trigger("app.clipapp.clipedit:cancel", cid);
     }
   });
+
   ClipEdit.image_change = function(sender){
-      var that = edit_view;
-      var uid = that.model.get("user");
-      var change = App.util.isImage("formUpload");
-      if(change){
+    var that = edit_view;
+    var uid = that.model.get("user");
+    var change = App.util.isImage("formUpload");
+    if(change){
 /*      if( sender.files &&sender.files[0] ){
 	  var img = new Image();
 	  img.src = App.util.get_img_src(sender.files[0]);
@@ -114,25 +106,25 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  };
 	}
 */
-	$("#img_form").submit();
-	App.util.get_imgid("post_frame",function(img_src){
-	  //img_list.push(img_src);
-	  App.ClipApp.Editor.insertImage("editor", {url: img_src});
-	});
-      }else{
-	App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
-      }
+      $("#img_form").submit();
+      App.util.get_imgid("post_frame",function(img_src){
+	//img_list.push(img_src);
+	App.ClipApp.Editor.insertImage("editor", {url: img_src});
+      });
+    }else{
+      App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+    }
   };
-  ClipEdit.autoResize1= function() {
+
+  ClipEdit.autoResize1= function() { // 作用？
     try {
-      document.all["mainFrame"].style.height=mainFrame.document.body.scrollHeight;
-      }catch(e){}
+      document.all["mainFrame"].style.height = mainFrame.document.body.scrollHeight;
+    }catch(e){}
   };
+
   ClipEdit.show = function(clipid, uid){
-    var editModel = new EditModel({
-      id: clipid
-    });
-    editModel.fetch();
+    var editModel = new App.Model.EditModel({id: clipid});
+    editModel.fetch(); // fetch来的model中的content已经是html了
     editModel.onChange(function(editModel){
       var editView = new EditView({model: editModel});
       App.viewRegion.show(editView);
@@ -141,6 +133,20 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.ClipApp.Editor.setContent("editor", html);
     });
   };
+
+  ClipEdit.close = function(){
+    App.viewRegion.close();
+  };
+
+  App.vent.trigger("app.clipapp.clipedit:success", function(clip){
+    ClipEdit.close();
+    App.vent.trigger("app.clipapp.cliplist:show", clip);
+  });
+
+  App.vent.trigger("app.clipapp.clipedit:cancel", function(){
+    ClipEdit.close();
+  });
+
   App.vent.trigger("app.clipapp.clipedit.error", function(){
     // 可以弹出错误对话框，提示错误信息
   });

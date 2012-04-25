@@ -2,7 +2,7 @@
 
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-//  var precliplength=0,flag=true;
+  //var precliplength=0,flag=true;
   var clipListView = {};
   var ClipPreviewModel = App.Model.extend({
     defaults:{

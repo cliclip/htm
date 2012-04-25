@@ -37,7 +37,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }else{
       var data = objEditor.contentWindow.document.body.innerHTML;;
     }
-    //console.info(data);
     return Filter.htmlToUbb(data);
   };
   // 与getContent对称 该js内部实现 [没有必要]
