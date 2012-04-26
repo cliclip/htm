@@ -29,10 +29,12 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.invite = function(key){ // 接受处理用户的激活注册
+    // 首页看看
     App.vent.trigger("app.clipapp.register:invite", key);
   };
 
   ClipApp.active = function(key){ // 接受用户的邮件添加激活或者是合并激活
+    // 
     App.vent.trigger("app.clipapp.useredit:active", key);
   };
 

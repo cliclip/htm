@@ -251,7 +251,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.cliplist:removeshow",function(){
     var listmodel=App.listRegion.currentView.collection.get(model_id);
     var collection = clipListView.collection.remove(listmodel);
-    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+    App.vent.trigger("app.clipapp.cliplist:@showlist",collection);
   });
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
     var uid = App.util.getMyUid();
