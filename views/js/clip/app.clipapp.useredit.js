@@ -4,6 +4,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var face_flag = false;
   var EditModel = App.Model.extend({});
   var PassEditModel = App.Model.extend({
+    url:function(){
+      return P+"/user/"+this.id+"/passwd";
+    },
     defaults: {
       newpass : "请输入新密码", confirm : "确认密码"
     }
@@ -16,19 +19,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
      return  P + "/user/" + this.id + "/name";
     }
   });
-  var FaceEditModel = App.Model.extend({
-    defaults:{
-      id:"",
-      name:"",
-      face:""
-    },
-    url:function(){
-      return P+"/my/info";
-    }
-  });
+
   var EmailEditModel = App.Model.extend({
     url:function(){
-      return P+"/user/"+this.id+"/email";
+      if(this.get("address")){
+	return P+"/user/"+this.id+"/email/"+this.get("address");
+      }else{
+	return P+"/user/"+this.id+"/email";
+      }
     }
   });
 
@@ -52,8 +50,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.useredit:close");
-      //UserEdit.close();
+      App.vent.trigger("app.clipapp.useredit:@close");
     }
   });
 
@@ -63,7 +60,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#faceEdit-view-template",
     events: {
       "click .set_username" : "setName"
-  //    "click #popup_ContactClose":"editClose"
   //    "click #confirm_face[type=submit]":"submit"
     },
     setName: function(e){
@@ -81,9 +77,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     }
 /*
-    editClose:function(){
-      FaceEdit.close();
-    },
     submit:function(form){
       form.preventDefault();//此处阻止提交表单
       if(!flag){
@@ -108,11 +101,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     emailCut:function(e){
       e.preventDefault();
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
-      var address = e.currentTarget.id;
-      var that = this;
+      var params = {id:this.model.id,address:e.currentTarget.id};
       App.vent.trigger("app.clipapp.message:alert", "删除绑定邮件!");
       App.vent.bind("app.clipapp.message:sure",function(){
-	App.vent.trigger("app.clipapp.useredit:emaildel",that.model,address);
+	App.vent.trigger("app.clipapp.useredit:@emaildel",params);
       });
     }
   });
@@ -131,91 +123,41 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     setCC:function(e){
       var key = e.keyCode;
-      var str = $("#copy-to").val();
-      var last_str = str.charAt(str.length - 1);
-      //当字符串最后一个字符不是;或者空格
-      //并且按键为 tab 空格 , ; 时处理输入框中的字符串
-      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==188||key==59)){
-	if(str){
-	  // 以;把字符串分为数组，去点无用数据
-	  var arr = _.compact($("#copy-to").val().split(";"));
-	  // 去掉数组最后一项的的前后空格，保证邮件前后没空格
-	  var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
-	  arr[arr.length-1] = str1;
-	  //在最后放回输入框
-	  $("#copy-to").val(arr.join(";")+";");
-	}
-	if(key==188||key==32||key==59) return false;
-      }
-      return true;
+      dealEmail(e);
+      if(key==188||key==59||key==32) return false;
+      else return true;
     },
     setTO:function(e){
       var key = e.keyCode;
-      var str = $("#send").val();
-      var last_str = str.charAt(str.length - 1);
-      if(last_str!=";"&&last_str!=" "&&(key==9||key==32||key==59||key==188)){
-	if(str){
-	  var arr = _.compact($("#send").val().split(";"));
-	  var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
-	  arr[arr.length-1] = str1;
-	  $("#send").val(arr.join(";")+";");
-	}
-	if(key==188||key==59||key==32) return false;
-      }
-      return true;
+      dealEmail(e);
+      if(key==188||key==59||key==32) return false;
+      else return true;
     },
     ruleUpdate: function(){
-      var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
-      var title = "";
-      if($("#title").val()){
-	_.last($("#title").val()).replace(/(^\s*)|(\s*$)/g,"");
-	title = $("#title").val();
-      }
-      var cc =  _.compact($("#copy-to").val().split(";"));
-      var to =  _.compact($("#send").val().split(";"));
-      //console.info(cc);
+      var title = $("#title").val().trim();
+      var cc =  _.compact($("#copy-to").val().trim().split(";"));
+      var to =  _.compact($("#send").val().trim().split(";"));
       var enable = false;
-      var message = "";
-      flag = true;
       if($("#open_rule").attr("checked")){
 	enable =true;
       }
-      var params = {title:title,to:to,cc:cc,enable:enable};
-      if(!_.isEmpty(cc)){
-	_(cc).each(function(c){
-	  if(!email_pattern.test(c)){
-	    flag = false;
-	    message = c;
-	  }else{
-	    flag = true;
-	  }
-	});
-      }
-      if(flag&&!_.isEmpty(to)){
-	_(to).each(function(t){
-	  if(!email_pattern.test(t)){
-	    message = t;
-	    flag = false;
-	  }else{
-	    flag = true;
-	  }
-	});
-      }
-      if(flag){
-	App.vent.trigger("app.clipapp.useredit:ruleupdate",this.model,params);
+      var params = {id:this.model.id,title:title,to:to,cc:cc,enable:enable};
+      var message = mail_validate(params);
+      if(!message){
+	App.vent.trigger("app.clipapp.useredit:@ruleupdate",params);
       }else{
 	App.ClipApp.EmailAdd.showActive(message+"    邮件不合法!");
       }
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
-      var str = $("#"+id).val();
+      var str = $("#"+id).val().trim();
       if(str){
-	var arr = $("#"+id).val().split(";");
-	var str1=_.last(arr).replace(/(^\s*)|(\s*$)/g,"");
-	arr[arr.length-1] = str1;
-	arr = _.compact(arr);
-	$("#"+id).val(arr.join(";")+";");
+	var arr = [];
+	_.each(str.split(";"),function(a){
+	  arr.push(a.trim());
+	});
+	$("#"+id).val(_.compact(arr).join(";")+";");
       }
     }
   });
@@ -232,43 +174,85 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     focusAction:function(e){
       var id = e.currentTarget.id;
-      $("#"+id).css("display","none");
-      $("#"+id+"_pass").css("display","block");
+      $("#"+id).hide();
+      $("#"+id+"_pass").show();
       $("#"+id+"_pass").focus();
-      $(".alert").css("display","none");
+      $(".alert").hide();
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
       if(id=="new_pass" && $("#"+id).val()==""){
-	$("#"+id).css("display","none");
-	$("#new").css("display","block");
+	$("#"+id).hide();
+	$("#new").show();
       }else if(id=="con_pass" && $("#"+id).val()==""){
-	$("#"+id).css("display","none");
-	$("#con").css("display","block");
+	$("#"+id).hide();
+	$("#con").show();
       }
     },
     passUpdate:function(){
       var newpass = $("#new_pass").val();
       var confirm = $("#con_pass").val();
-      var error = {};
-      if(!newpass){
-	error["pass"] = "is_null";
-      }
-      if(!confirm){
-	error["confirm"] = "is_null";
-      }
-      if(newpass&&confirm&&newpass!=confirm){
-	error["confirm"] = "password_diff";
-      }
+      var params = {id:this.model.id,newpass:newpass,confirm:confirm};
+      var error = pass_validate(newpass,confirm);
       if(!_.isEmpty(error)){
-  	App.vent.trigger("app.clipapp.useredit:showpass", this.model.id,this.model, App.util.getErrorMessage(error));
+  	App.vent.trigger("app.clipapp.useredit:@showpass", this.model.id,this.model, App.util.getErrorMessage(error));
       }else{
-	var params = {newpass:newpass,confirm:confirm};
-	App.vent.trigger("app.clipapp.useredit:passchange",this.model,params);
+	App.vent.trigger("app.clipapp.useredit:@passchange",params);
       }
     }
   });
 
+  function dealEmail(e){
+    var key = e.keyCode;
+    var str = ($(e.currentTarget).val()).trim();
+    //按键为 tab 空格 , ; 时处理输入框中的字符串
+    if((key==9||key==32||key==188||key==59)){
+      if(str){
+	// 以;把字符串分为数组，取出没个email的前后空格。
+	var arr = [];
+	_.each(str.split(";"),function(a){
+	  arr.push(a.trim());
+	});
+	//在取出无用数据后（空字符串等），再放回输入框
+	$(e.currentTarget).val(_.compact(arr).join(";")+";");
+      }
+
+    }
+  }
+
+  function mail_validate(params){
+    var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
+    var message = "";
+    if(!message&&!_.isEmpty(params.to)){
+      _(params.to).each(function(t){
+	if(!message&&!email_pattern.test(t)){
+	  message = t;
+	}
+      });
+    }
+    if(!message&&!_.isEmpty(params.cc)){
+      _(params.cc).each(function(c){
+	if(!message&&!email_pattern.test(c)){
+	  message = c;
+	}
+      });
+    }
+    return message;
+  }
+
+  function pass_validate(newpass,confirm){
+    var error = {};
+    if(!newpass){
+      error["pass"] = "is_null";
+    }
+    if(!confirm){
+      error["confirm"] = "is_null";
+    }
+    if(newpass&&confirm&&newpass!=confirm){
+      error["confirm"] = "password_diff";
+    }
+    return error;
+  }
 
   UserEdit.showEmail = function(uid){
     var emailModel = new EmailEditModel({id:uid});
@@ -293,9 +277,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     ruleModel.onChange(function(ruleModel){
       var ruleView = new RuleView({model: ruleModel});
       UserEdit.ruleRegion.show(ruleView);
-      if(ruleModel.get("rule")&&ruleModel.get("rule").enable){
-	$("#open_rule").attr("checked",true);
-      }
     });
   };
 
@@ -310,13 +291,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.passeditRegion.show(passView);
     if(error){
       if(error.pass){
-	$("#pass").css("display","block");
+	$("#pass").show();
       }
       if(error.confirm){
-	$("#confirm").css("display","block");
+	$("#confirm").show();
       }
     }else{
-      $(".alert").css("display","none");
+      $(".alert").hide();
     }
   };
 
@@ -331,7 +312,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.showFace = function(uid){
-    var faceModel = new FaceEditModel({id:uid});
+    var faceModel = new App.Model.MyInfoModel({id:uid});
     UserEdit.faceRegion = new App.Region({
       el:".left_bar"
     });
@@ -343,26 +324,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var faceView = new FaceView({model: faceModel});
 	  UserEdit.faceRegion.show(faceView);
 	});
-	$("#post_frame_face").unbind("load");
-	$("#post_frame_face").load(function(){ // 加载图片
-	  var returnVal = this.contentDocument.documentElement.textContent;
-	  if(returnVal != null && returnVal != ""){
-	    var returnObj = eval(returnVal);
-	    if(returnObj[0] == 0){
-	      var currentFace = returnObj[1][0];
-	      if(currentFace){
-		var facemodel = new FaceEditModel({id:faceModel.get("id")});
-		if(originalFace && originalFace!=currentFace){
-		  UserEdit.removeFace(facemodel,originalFace,function(){
-		    UserEdit.saveFace(facemodel,{face:currentFace});
-		  });
-		}else {
-		  UserEdit.saveFace(facemodel,{face:currentFace});
-		}
-	      }
-	    }
-	  }
-	});
+	faceLoad(originalFace,uid);//修改头像
       },
       error:function(){}
     });
@@ -380,9 +342,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	img.src = App.util.get_img_src(sender.files[0]);
 	img.onload=function(){
 	  if(img.complete){
-	    document.getElementById('myface').src = img.src;
+	    $("#myface").attr("src",img.src);
 	    var _height,_width,_top, _left;
-	    var preview = document.getElementById('myface');
+	    //var preview = $("#myface");
 	    if(img.width<img.height){
 	      _width = 240;
 	      _height = img.height*240/img.width;
@@ -403,7 +365,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   };
 
-  UserEdit.removeFace = function(facemodel,face_id,callback){
+  function removeFace(facemodel,face_id,callback){
     facemodel.destroy({
       url: P+"/user/"+ facemodel.id+"/face/" +face_id,
       success:function(){
@@ -417,7 +379,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-  UserEdit.saveFace = function(facemodel,params){
+  function saveFace(facemodel,params){
     facemodel.save(params,{
       url: P+"/user/"+ facemodel.id+"/face",
       type: "POST",
@@ -431,12 +393,36 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     });
   };
+
+  function faceLoad(originalFace,uid){
+    $("#post_frame_face").unbind("load");
+    $("#post_frame_face").load(function(){ // 加载图片
+      var returnVal = this.contentDocument.documentElement.textContent;
+      if(returnVal != null && returnVal != ""){
+	var returnObj = eval(returnVal);
+	if(returnObj[0] == 0){
+	  var currentFace = returnObj[1][0];
+	  if(currentFace){
+	    var facemodel = new App.Model.MyInfoModel({id:uid});
+	    if(originalFace && originalFace!=currentFace){
+	      removeFace(facemodel,originalFace,function(){ //删除原始头像
+		saveFace(facemodel,{face:currentFace}); //保存新上传的头像
+	      });
+	    }else {
+	      saveFace(facemodel,{face:currentFace});
+	    }
+	  }
+	}
+      }
+    });
+  }
+
   UserEdit.saveName = function(nameModel,params){
     nameModel.save(params,{
       type: "PUT",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:alert","恭喜，命名成功!");
-	App.vent.trigger("app.clipapp.useredit:showface",App.util.getMyUid());
+	App.vent.trigger("app.clipapp.useredit:@showface",App.util.getMyUid());
       },
       error:function(model,res){
 	if(res.name== "invalidate"){
@@ -458,7 +444,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     App.mysetRegion.close();
   };
 
-  App.vent.bind("app.clipapp.useredit:close", function(){
+  App.vent.bind("app.clipapp.useredit:@close", function(){
     UserEdit.close();
   });
 
@@ -466,43 +452,38 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showUserEdit (uid);
   });
 
-  App.vent.bind("app.clipapp.useredit:showface",function(uid){
+  App.vent.bind("app.clipapp.useredit:@showface",function(uid){
     UserEdit.showFace(uid);
   });
-  App.vent.bind("app.clipapp.useredit:showemail",function(uid){
-  UserEdit.showEmail(uid);
-  });
-  App.vent.bind("app.clipapp.useredit:showrule",function(uid,model,error){
+  App.vent.bind("app.clipapp.useredit:@showrule",function(uid,model,error){
     UserEdit.showRule(uid,model,error);
   });
-  App.vent.bind("app.clipapp.useredit:showpass",function(uid,model,error){
+  App.vent.bind("app.clipapp.useredit:@showpass",function(uid,model,error){
     UserEdit.showPassEdit(uid,model,error);
   });
 
-  App.vent.bind("app.clipapp.useredit:emaildel",function(emailModel,address){
-    var url = P+"/user/"+emailModel.id+"/email/"+address;
-    emailModel.destroy({
-      url:url,
+  App.vent.bind("app.clipapp.useredit:@emaildel",function(params){
+    var delModel = new EmailEditModel(params);
+    delModel.destroy({
       success: function(model, res){
-	App.vent.trigger("app.clipapp.useredit:showemail",model.id);
+	UserEdit.showEmail(params.id);
       },
       error: function(model, res){
-	App.vent.trigger("app.clipapp.useredit:showemail",model.id,model,App.util.getErrorMessage(res));
+	console.info(res);
       }
     });
   });
 
-  App.vent.bind("app.clipapp.useredit:ruleupdate",function(ruleModel,params){
-    var url = P+"/user/"+ruleModel.id+"/rule";
+  App.vent.bind("app.clipapp.useredit:@ruleupdate",function(params){
+    var ruleModel = new RuleEditModel(params);
     ruleModel.save(params,{
-      url: url,
       type: "POST",
       success: function(model, res){
-  	App.vent.trigger("app.clipapp.useredit:showrule", model.id);
-	App.ClipApp.EmailAdd.showActive("更新邮件规则成功！");
+	UserEdit.showRule(params.id);
+	App.vent.trigger("app.clipapp.message:alert","更新邮件规则成功！");
       },
       error:function(model, res){
-  	App.vent.trigger("app.clipapp.useredit:showrule", model.id,model, App.util.getErrorMessage(res));
+  	UserEdit.showRule(params.id,model, App.util.getErrorMessage(res));
       }
     });
   });
@@ -522,18 +503,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   });
 
-  App.vent.bind("app.clipapp.useredit:passchange",function(passModel,params){
-    var url = P+"/user/"+passModel.id+"/passwd";
-    passModel.save(params,{
-	url: url,
+  App.vent.bind("app.clipapp.useredit:@passchange",function(params){
+    var passModel = new PassEditModel(params);
+    passModel.save({},{
 	type: "PUT",
   	success: function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:showpass", model.id);
-	  App.ClipApp.EmailAdd.showActive("修改密码成功");
-	  document.cookie = "token="+res;
+	  UserEdit.showPassEdit(params.id);
+	  App.vent.trigger("app.clipapp.message:alert","修改密码成功！");
+	  document.cookie = "token="+res.token;
   	},
   	error:function(model, res){
-  	  App.vent.trigger("app.clipapp.useredit:showpass", model.id,model, res);
+	  UserEdit.showPassEdit(params.id,model,App.util.getErrorMessage(res));
   	}
       });
   });
