@@ -50,8 +50,8 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       $("#list").css({height:"0px"});
       App.listRegion.show(followinglistView);
       if(flag) $(".empty_user").css("display","none");
-      App.util.list_scroll(options);
-     // App.vent.trigger("app.clipapp.util:scroll",followinglistView,options);
+      // App.util.list_scroll(options);
+      App.vent.trigger("app.clipapp.page:next",options);
     });
   };
   FollowingList.close=function(){
