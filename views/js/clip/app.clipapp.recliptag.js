@@ -1,17 +1,18 @@
-App.ClipApp.Reclip = (function(App, Backbone, $){
-  var Reclip = {};
+App.ClipApp.ReclipTag = (function(App, Backbone, $){
+  var ReclipTag = {};
   var defaultNote = "备注一下吧~";
   var P = App.ClipApp.Url.base;
 
-  var ReclipModel = App.Model.extend({
+  var ReclipTagModel = App.Model.extend({
     url: function(){
-      return P+"/clip/"+this.id+"/reclip";
+      return P+"/user/"+this.id+"/reclip/tag/"+this.get("tag");
     }
   });
-  var ReclipView = App.ItemView.extend({
+
+  var ReclipTagView = App.ItemView.extend({
     tagName : "div",
-    className : "reclip-view",
-    template : "#reclip-view-template",
+    className : "reclipTag-view",
+    template : "#reclipTag-view-template",
     events : {
       "focus #reclip_text" : "foucsAction",
       "blur #reclip_text"  : "blurAction",
@@ -37,14 +38,16 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     submit:function(evt){
       evt.preventDefault();
       var params = loadData(this.$el);
-      params["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.reclip:@submit", params);
+      params["id"] = this.model.get("user");
+      params["tag"] = this.model.get("tag");
+      App.vent.trigger("app.clipapp.reclip_tag:@submit", params);
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.reclip:@close");
+      App.vent.trigger("app.clipapp.reclip_tag:@close");
     }
   });
+
 
   function loadData(el){
     var text = "";
@@ -67,47 +70,51 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     return params;
   }
 
-  Reclip.show = function(cid){
-    var model = new ReclipModel({id:cid});
-    var reclipView = new ReclipView({model : model});
-    App.popRegion.show(reclipView);
-    $('#obj_tag').tagsInput({
-      //autocomplete_url:'test/fake_json_endpoint.html'
+  ReclipTag.show = function(user, tag){
+    var model = new ReclipTagModel(); //此model只用于取数据
+    model.fetch({
+      type: "GET",
+      url: P+"/user/"+user+"/clip/tag/"+tag,
+      success: function(model, res){
+	if(!model.get("count")){
+	  // 现在只是公用该事件，事件名称有待改进
+	  App.vent.trigger("app.clipapp.message:alert","当前用户该tag下还没有数据");
+	}else{
+	  // 有count表示可以收到数据
+	  model.set({user:user,tag:tag});
+	  var view = new ReclipTagView({model : model});
+	  App.popRegion.show(view);
+	  $('#obj_tag').tagsInput({
+	    //autocomplete_url:'test/fake_json_endpoint.html'
+	  });
+	}
+      },
+      error:function(model, res){
+	  console.info(res);
+      }
     });
   };
 
-  Reclip.close = function(){
+  ReclipTag.close = function(){
     App.popRegion.close();
   };
 
-  function reclipSave(params){
-    var model = new ReclipModel(params);
-    model.save({},{
+  App.vent.bind("app.clipapp.reclip_tag:@submit", function(params){
+    var model = new ReclipTagModel(params);
+    model.save({}, {
       type: "POST",
       success: function(model, res){
-	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip"});
+	ReclipTag.close();
       },
       error:function(model, res){
 	console.info(res);
       }
     });
-  }
-
-  App.vent.bind("app.clipapp.reclip:@submit", function(params){
-    reclipSave(params);
-    Reclip.close();
   });
 
-  App.vent.bind("app.clipapp.reclip:sync", function(params){
-    reclipSave(params);
+  App.vent.bind("app.clipapp.reclip_tag:@close",function(){
+    ReclipTag.close();
   });
 
-  App.vent.bind("app.clipapp.reclip:@close",function(){
-    Reclip.close();
-  });
-
-
-    // TEST
-   // App.bind("initialize:after", function(){ Reclip.show("1:1"); });
-  return Reclip;
+  return ReclipTag;
 })(App, Backbone, jQuery);

@@ -263,7 +263,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $("#list").masonry("reload");
   });
 
-  App.vent.bind("app.clipapp.cliplist:removeshow",function(){
+  App.vent.bind("app.clipapp.cliplist:remove",function(){
     var model = clipListView.collection.get(model_id);
     clipListView.collection.remove(model);
     $("#list").masonry("reload");
@@ -271,7 +271,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     options.end--;
   });
 
-  App.vent.bind("app.clipapp.cliplist:reload",function(args){
+  App.vent.bind("app.clipapp.cliplist:refresh",function(args){
     var listmodel=App.listRegion.currentView.collection.get(model_id);
     var modifyclip=listmodel.get("clip");
     if(args.type == "comment"){
@@ -313,30 +313,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     listmodel.set({clip:modifyclip});
     App.vent.trigger("app.clipapp.cliplist:@showlist",collection);
   });
-  /*
-  App.vent.bind("app.clipapp.cliplist:removeshow",function(){
-    var listmodel=App.listRegion.currentView.collection.get(model_id);
-    var collection = clipListView.collection.remove(listmodel);
-    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
-  });
-  App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
-    var uid = App.util.getMyUid();
-    var id = uid+":"+addmodel.id;
-    var model = new ClipPreviewModel();
-    var clip = {};
-    clip.id = addmodel.id;
-    clip.tag = addmodel.get("tag");
-    clip.note = addmodel.get("note");
-    clip.public = addmodel.get("public");
-    clip.user = {id : uid};
-    clip.content = App.util.getPreview(addmodel.get("content"), 100);
-    //clip本身的id为自己的id，model的id为uid:cid
-    model.set({clip:clip,id:id});
-    model.set({recommend:""});
-    var collection = clipListView.collection;
-    collection.add(model,{at:0});
-    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
-  });*/
 
   return ClipList;
 
