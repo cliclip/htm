@@ -277,7 +277,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var collection = clipListView.collection.remove(listmodel);
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
-			  /*
+
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
     var uid = App.util.getMyUid();
     var id = uid+":"+addmodel.id;
@@ -296,7 +296,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection.add(model,{at:0});
     App.vent.trigger("app.clipapp.cliplist:showlist",collection);
   });
-*/
+
   App.vent.bind("app.clipapp.cliplist:editshow", function(content){
     var collection = clipListView.collection;
     var listmodel = collection.get(model_id);
