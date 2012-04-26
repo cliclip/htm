@@ -69,7 +69,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.message:alert", function(key, value){
-    Message.getMessage(key, value);
+    var message = Message.getMessage(key, value);
     Message.show("warning", message);
   });
 
