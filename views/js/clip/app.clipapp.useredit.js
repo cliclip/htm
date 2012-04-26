@@ -101,8 +101,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     emailCut:function(e){
       e.preventDefault();
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
-      var params = {id:this.model.id,address:e.currentTarget.id};
-      App.vent.trigger("app.clipapp.message:alert", "删除绑定邮件!");
+      var address = e.currentTarget.id;
+      var params = {id:this.model.id,address:address};
+      App.vent.trigger("app.clipapp.message:alert", "delemail", address);
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.vent.trigger("app.clipapp.useredit:@emaildel",params);
       });
@@ -333,7 +334,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   UserEdit.onUploadImgChange = function(sender){
     // console.info("imagechange");
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
-      App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
     }else{
       if( sender.files &&sender.files[0] ){
@@ -384,7 +385,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       url: P+"/user/"+ facemodel.id+"/face",
       type: "POST",
       success:function(model,res){
-	App.vent.trigger("app.clipapp.message:alert","头像上传成功");
+	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
 	$("#confirm_face").hide();
 	face_flag = true;
       },
@@ -421,16 +422,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     nameModel.save(params,{
       type: "PUT",
       success:function(model,res){
-	App.vent.trigger("app.clipapp.message:alert","恭喜，命名成功!");
+	App.vent.trigger("app.clipapp.message:confirm","rename_success");
 	App.vent.trigger("app.clipapp.useredit:@showface",App.util.getMyUid());
       },
       error:function(model,res){
-	if(res.name== "invalidate"){
-	  App.vent.trigger("app.clipapp.message:alert","名称不合法！");
+	if(res.name== "invalidate"){ // 这种提示方法不合适
+	  App.vent.trigger("app.clipapp.message:confirm","名称不合法！");
 	}else if(res.name == "is_null" ){
-	  App.vent.trigger("app.clipapp.message:alert","用户名不能为空");
+	  App.vent.trigger("app.clipapp.message:confirm","用户名不能为空");
 	}else if(res.name == "has_name"){
-	  App.vent.trigger("app.clipapp.message:alert","用户名已存在");
+	  App.vent.trigger("app.clipapp.message:confirm","用户名已存在");
 	}
       }
     });
@@ -480,25 +481,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	UserEdit.showRule(params.id);
-	App.vent.trigger("app.clipapp.message:alert","更新邮件规则成功！");
+  	App.vent.trigger("app.clipapp.useredit:showrule", model.id);
+	App.vent.trigger("app.clipapp.message:confirm", "setRule_success");
       },
       error:function(model, res){
   	UserEdit.showRule(params.id,model, App.util.getErrorMessage(res));
-      }
-    });
-  });
-
-  App.vent.bind("app.clipapp.useredit:active", function(key){
-    var model = new App.Model();
-    model.save({},{
-      url: App.ClipApp.Url.base+"/active/"+key,
-      type: "POST",
-      success:function(model,response){
-	// 不只是弹出提示框这么简单
-	App.vent.trigger("app.clipapp.message:alert", "邮件激活成功，您可以方便的是有该邮件地址进行数据的存储了");
-      },
-      error:function(model,error){
-
       }
     });
   });
@@ -509,8 +496,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	type: "PUT",
   	success: function(model, res){
 	  UserEdit.showPassEdit(params.id);
-	  App.vent.trigger("app.clipapp.message:alert","修改密码成功！");
-	  document.cookie = "token="+res.token;
+	  App.vent.trigger("app.clipapp.message:confirm", "passwd_success");
+	  document.cookie = "token="+res;
   	},
   	error:function(model, res){
 	  UserEdit.showPassEdit(params.id,model,App.util.getErrorMessage(res));

@@ -145,6 +145,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
     options = {base_url: url, type: "POST", data:data};
+    App.vent.trigger("app.clipapp.routing:siteshow:show", tag);
     getClips();
   };
 
@@ -200,7 +201,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.routing:recommend:show", tag);
   };
 
-  var getClips = function(){
+  function getClips(){
     var clips = new ClipPreviewList();
     options.collection = clips;
     if(!options.start &&! options.end){
