@@ -116,11 +116,18 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show(uid);
   });
 
-  // clipid有值 ==> 对单独clip的reclip 否则是对 user's tag下的clip的reclip
-  App.vent.bind("app.clipapp:reclip", function(clipid, user, tag){
+  //reclip 用户一个clip
+  App.vent.bind("app.clipapp:reclip", function(clipid){
     var uid = getMyUid();
     if(!uid) ClipApp.Login.show();
-    else ClipApp.Reclip.show(clipid, user, tag);
+    else ClipApp.Reclip.show(clipid);
+  });
+
+  //对 user's tag下的clip的reclip
+  App.vent.bind("app.clipapp:reclip_tag", function(user,tag){
+    var uid = getMyUid();
+    if(!uid) ClipApp.Login.show();
+    else ClipApp.ReclipTag.show(user,tag);
   });
 
   // 当前用户追某用户的tag uid一直与face的保持一致
@@ -152,10 +159,9 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:clipdetail", function(clipid,model_cid){
-    // var uid = getMyUid();
+  App.vent.bind("app.clipapp:clipdetail", function(clipid){
     //model_cid为model的id，用来当detail的model改变时，改变list的model的数据
-    ClipApp.ClipDetail.show(clipid,model_cid);
+    ClipApp.ClipDetail.show(clipid);
   });
 
   App.vent.bind("app.clipapp:clipmemo", function(cid){
@@ -168,8 +174,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:clipedit", function(clipid){
-    var uid = getMyUid();
-    ClipApp.ClipEdit.show(clipid, uid);
+    ClipApp.ClipEdit.show(clipid);
   });
 
   App.vent.bind("app.clipapp:clipadd", function(){
@@ -178,7 +183,7 @@ App.ClipApp = (function(App, Backbone, $){
       ClipApp.Login.show();
     }else{
       location.href="#my";
-      ClipApp.ClipAdd.show(uid);
+      ClipApp.ClipAdd.show();
     }
   });
 

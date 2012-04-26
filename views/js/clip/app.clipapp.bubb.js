@@ -37,7 +37,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     _uid = null;
     self = false;
     getSiteTags(function(tags, follows){
-      App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
 
@@ -45,7 +45,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     _uid = null;
     self = false;
     getSiteBubs(function(tags, follows){
-      App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
 
@@ -57,7 +57,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       if(token && token.split(":")[0] == uid){
 	self = true;
       }
-      App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
 
@@ -68,7 +68,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     getUserBubs(uid, function(tags, follows){
       if(token && token.split(":")[0] == uid)
 	self = true;
-      App.vent.trigger("app.clipapp.bubb:show", mkTag(tags, follows, tag, self));
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
 
@@ -88,7 +88,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // events
 
-  App.vent.bind("app.clipapp.bubb:show", function(tags){
+  App.vent.bind("app.clipapp.bubb:@show", function(tags){
     if($('#bubbles').length == 0){
       var bubbView = new BubbView();
       App.bubbRegion.show(bubbView);
@@ -133,10 +133,13 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // 有_uid作为全局变量，进行url地址匹配
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
-    App.vent.trigger("app.clipapp:reclip", null, _uid, tag);
+    App.vent.trigger("app.clipapp:reclip_tag",  _uid, tag);
   });
 
   // init
+  App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
+    Bubb.showUserTags(uid);
+  });
 
   App.addInitializer(function(){
   });

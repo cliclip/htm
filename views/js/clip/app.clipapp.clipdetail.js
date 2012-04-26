@@ -191,7 +191,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	if($("#reclip").attr("checked")){ // console.log("同时收");
 	  // 没有重构 可否在detail中就收了该clip
 	  var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
-	  App.vent.trigger("app.clipapp.reclip:submit",this.model,params1);
+	  App.vent.trigger("app.clipapp.reclip:sync",this.model,params1);
 	}
       }
     },

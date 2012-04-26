@@ -6,6 +6,11 @@ App.util = (function(){
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
   };
 
+  // main_tag 部分从这取,
+  util.getBubbs = function(){
+    return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
+  };
+
   // 判断当前的用户和传过来的参数是否是同一人
   util.self = function(uid){
     return util.getMyUid() == uid;
