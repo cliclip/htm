@@ -28,7 +28,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
       this.model.save(data,{
 	success:function(model,response){
 	  // 转到用户登录页面
-	  App.vent.trigger("app.clipapp.register:success",response, "register_success");
+	  console.log(response);
+	  App.vent.trigger("app.clipapp.register:success","register_success",response);
 	},
 	error:function(model,error){
 	  // 提示登录出错
@@ -58,7 +59,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     App.popRegion.show(registerView);
   };
 
-  App.vent.bind("app.clipapp.register:success", function(res, key){
+  App.vent.bind("app.clipapp.register:success", function(key, res){
     document.cookie = "token="+res.token;
     Register.close();
     App.vent.trigger("app.clipapp.gotosetup:show", key, res.email);
@@ -74,7 +75,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
       url : App.ClipApp.Url.base+"/invite/"+key,
       type: "POST",
       success:function(model,response){
-	App.vent.trigger("app.clipapp.register:success", response, "invite");
+	console.log(response);
+	App.vent.trigger("app.clipapp.register:success", 'invite', response);
       },
       error:function(model,error){
 	App.vent.trigger("app.clipapp.message:confirm", "invite_fail");
