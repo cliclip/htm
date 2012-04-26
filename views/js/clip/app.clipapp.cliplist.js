@@ -273,45 +273,26 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.cliplist:refresh",function(args){
     var listmodel=App.listRegion.currentView.collection.get(model_id);
-    var modifyclip=listmodel.get("clip");
+    var clip=listmodel.get("clip");
     if(args.type == "comment"){
       if(args.pid == 0){
-	modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
+	clip.reply_count = clip.reply_count ? clip.reply_count+1 : 1;
       }
     }
     if(args.type == "reclip"){
-      modifyclip.reprint_count = modifyclip.reprint_count ? modifyclip.reprint_count+1 : 1;
+      clip.reprint_count = clip.reprint_count ? clip.reprint_count+1 : 1;
     }
-    listmodel.set({clip:modifyclip});
-    // App.vent.trigger("app.clipapp.cliplist:@showlist");
-  });
-
-  App.vent.bind("app.clipapp.cliplist:@showlist",function(collection){
-    if(collection){
-      clipListView = new ClipListView({collection: collection});
-      // console.info(collection) ;
-    }else {
-      //console.info("此事件未传入collection");
-    }
-    $("#list").masonry({
-      itemSelector : '.clip',
-      columnWidth : 360,
-      isAnimated: false
-    });
-    $("#list").css({height:"0px"});
+    listmodel.set({clip:clip});
     App.listRegion.show(clipListView);
-    if(collection && collection.length==0){
-      //$("#list").append("抱歉，没有找到相应的信息...");
-    }
   });
 
   App.vent.bind("app.clipapp.cliplist:editshow", function(content){
     var collection = clipListView.collection;
     var listmodel = collection.get(model_id);
-    var modifyclip = listmodel.get("clip");
-    modifyclip.content = App.util.getPreview(content, 100);
-    listmodel.set({clip:modifyclip});
-    App.vent.trigger("app.clipapp.cliplist:@showlist",collection);
+    var clip = listmodel.get("clip");
+    clip.content = App.util.getPreview(content, 100);
+    listmodel.set({clip:clip});
+    App.listRegion.show(clipListView);
   });
 
   return ClipList;
