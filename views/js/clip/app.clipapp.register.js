@@ -28,10 +28,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
       this.model.save(data,{
 	success:function(model,response){
 	  // 转到用户登录页面
-	  var res = {};
-	  res.token = response.token;
-	  res.text = "您已经成功注册，现在可以添加邮件，邮件添加完成后可以方便进行数据的存储以及找回密码";
-	  App.vent.trigger("app.clipapp.register:success",res);
+	  App.vent.trigger("app.clipapp.register:success",response, "register_success");
 	},
 	error:function(model,error){
 	  // 提示登录出错
@@ -61,10 +58,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
     App.popRegion.show(registerView);
   };
 
-  App.vent.bind("app.clipapp.register:success", function(res){
+  App.vent.bind("app.clipapp.register:success", function(res, key){
     document.cookie = "token="+res.token;
     Register.close();
-    App.vent.trigger("app.clipapp.gotosetup:show", res.text);
+    App.vent.trigger("app.clipapp.gotosetup:show", key, res.email);
   });
 
   App.vent.bind("app.clipapp.register:error",function(model, error){
@@ -77,13 +74,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
       url : App.ClipApp.Url.base+"/invite/"+key,
       type: "POST",
       success:function(model,response){
-	var res = {};
-	res.token = response.token;
-	res.text = "您以使用邮箱注册成功，现在请先进行用户名的添加以及密码的修改";
-	App.vent.trigger("app.clipapp.register:success", res);
+	App.vent.trigger("app.clipapp.register:success", response, "invite");
       },
       error:function(model,error){
-	App.vent.trigger("app.clipapp.register:error", model, error);
+	App.vent.trigger("app.clipapp.message:confirm", "invite_fail");
       }
     });
   });

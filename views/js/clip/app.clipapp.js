@@ -29,11 +29,17 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.invite = function(key){ // 接受处理用户的激活注册
+    ClipApp.Face.showUser();
+    ClipApp.Bubb.showSiteTags();
+    ClipApp.ClipList.showSiteClips();
     App.vent.trigger("app.clipapp.register:invite", key);
   };
 
   ClipApp.active = function(key){ // 接受用户的邮件添加激活或者是合并激活
-    App.vent.trigger("app.clipapp.useredit:active", key);
+    ClipApp.Face.showUser();
+    ClipApp.Bubb.showSiteTags();
+    ClipApp.ClipList.showSiteClips();
+    App.vent.trigger("app.clipapp.emailadd:active", key);
   };
 
   ClipApp.findpasswd = function(){

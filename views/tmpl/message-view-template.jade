@@ -1,0 +1,24 @@
+script(type="text/template",id="message-view-template")
+  div.masker_layer
+  section.small_pop
+    h2
+      消息提示
+    ul.pop_body
+      |<%=message%>
+      br
+      br
+      li.btn_group.clearfix
+        input.verify(type="button",value="确定",id="sure")
+
+script(type="text/template",id="warning-view-template")
+  div.masker_layer
+  section.small_pop
+    h2
+      操作确认
+    ul.pop_body
+      |<%=message%>
+      br
+      br
+      li.btn_group.clearfix
+        input.verify(type="button",value="确定",id="sure")
+        input.cancel(type="button",value="取消",id="cancel")

@@ -79,7 +79,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     var uid = that.model.get("user");
     var change = App.util.isImage("formUpload");
     if(!change){
-      App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
     }else{
 
       /*if( sender.files &&sender.files[0] ){

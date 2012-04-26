@@ -264,11 +264,38 @@ App.util = (function(){
     });
   };
 
-// App.vent.bind("app.clipapp.util:scroll", });
-  var getMessage = {
+  var MESSAGE = {
+    pre_addemail:"您所要添加的邮箱",
+    post_addemail:"需要先进行激活才可以加入到系统中,激活链接以及发送到您的邮箱",
 
-    login_success : "登录成功",
     register_success : "注册成功",
+    pre_invite:"您已经使用",
+    post_invite:"成功注册，现在请先进行用户名的添加以及密码的修改",
+
+    "pre_active":"邮件地址",
+    "post_active":"已经激活成功，您可以方便的使用该邮件地址进行数据的存储了",
+
+    pre_delemail: "确认删除",
+    post_delemail: "的绑定",
+    del_comment: "确认要删除该条评论",
+
+
+    reclip_null:"该tag下还没有数据",
+    imageUp_fail:"您上传的图片格式无效",
+    faceUp_success:"头像设置成功",
+    passwd_success:"密码修改成功",
+    rename_success:"恭喜您,命名成功"
+  };
+
+  util.getMessage = function(key){
+    console.log(key);
+    console.log(MESSAGE[key]);
+    return MESSAGE[key] ? MESSAGE[key] : key;
+  };
+
+
+  var ERROR = {
+    login_success : "登录成功",
     auth_success : "更改密码成功",
     collect_success : "收藏成功",
     comment_success : "评论成功",
@@ -297,14 +324,17 @@ App.util = (function(){
       password_diff: "密码输入不一致"
     },
     email:{
+      is_Exist: "邮件地址已经存在",
       email_exists: "邮件已存在",
       invalidate: "邮箱不合法",
       is_null: "邮件地址不能为空",
       no_uname: "你还没有设置用户名"
     },
+    accept:{
+      fial:"您的注册链接已经失效,您可以先进行注册,然后添加邮箱地址到你的帐号,进行数据存储"
+    },
     active:{
-      _isExists: "激活连接不存在",
-      fail: "激活失败"
+      fail: "您的激活链接已经失效,需要重新进行邮件地址的添加,并且要在16小时内进行激活操作。"
     },
     recommend:{
       not_exist: "推荐不存在"
@@ -330,22 +360,18 @@ App.util = (function(){
   util.getErrorMessage = function(errorCode){
     var error = "";
     if(typeof(errorCode)=="string"){
-      error = getMessage[errorCode];
-      if(error){
-	return error;
-      }else{
-	return errorCode;
-      }
+      error = ERROR[errorCode];
+      return error ? error : errorCode;
     } else if(typeof(errorCode)=="object"){
       for (key in errorCode){
-	if(getMessage[key]){
-	  error = getMessage[key][errorCode[key]];
+	if(ERROR[key]){
+	  error = ERROR[key][errorCode[key]];
 	  if(errorCode && error){
 	    errorCode[key] = error;
 	  }
 	}
       }
-      return errorCode;
+      return errorCode; // 构造一个对象值
     }else{
       return errorCode;
     }

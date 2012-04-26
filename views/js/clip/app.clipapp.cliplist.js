@@ -145,6 +145,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
     options = {base_url: url, type: "POST", data:data};
+    App.vent.trigger("app.clipapp.routing:siteshow:show", tag);
     getClips();
   };
 
@@ -200,7 +201,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.routing:recommend:show", tag);
   };
 
-  var getClips = function(){
+  function getClips(){
     var clips = new ClipPreviewList();
     options.collection = clips;
     if(!options.start &&! options.end){
@@ -234,6 +235,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     } */
   });
 
+/*
+  App.vent.bind("app.clipapp.cliplist:removeshow",function(){
+    var listmodel=App.listRegion.currentView.collection.get(model_id);
+    var collection = clipListView.collection.remove(listmodel);
+    App.vent.trigger("app.clipapp.cliplist:@showlist",collection);
+  });
+*/
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
     var uid = App.util.getMyUid();
     var id = uid+":"+addmodel.id;
