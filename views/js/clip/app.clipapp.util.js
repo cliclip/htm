@@ -174,18 +174,18 @@ App.util = (function(){
     return returnVal;
   };
 
-  var collection_length,scroll_flag;
-  App.vent.bind("app.clipapp.page:next",function(_options){
-    var lo = _options;
-    collection_length=0;
-    scroll_flag = lo.collection.length>=App.ClipApp.Url.page ? true :false;
+  App.vent.bind("app.clipapp.page:next",function(options){
+    var lo = options;
+    var init_flag = true;
+    lo.collection_length = 0;
+    lo.scroll_flag = lo.collection.length>=App.ClipApp.Url.page ? true :false;
     var paddingTop = 0 + "px";
     $(window).unbind("scroll");
     util.remove_fixed(paddingTop);
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var mt = $(".clearfix").offset().top + $(".user_head").height();
-      if($("#list").height()<=$(".left").height())return;
+      //if($("#list").height()<=$(".left").height())return;
       if(st > mt ){
 	util.fixed(paddingTop);
       } else {
@@ -194,8 +194,10 @@ App.util = (function(){
       // loader while scroll down to the page end
       var wh = window.innerHeight;
       var lt = $(".loader").offset().top;
-      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
-      if(st + wh > lt && scroll_flag){
+		       //st + wh > lt
+
+      console.info(st,document.body.scrollHeight);
+      if(document.body.scrollHeight-st<500 && lo.scroll_flag){
 	util.request_data(lo);
       }
     });
@@ -219,14 +221,14 @@ App.util = (function(){
     lo.url = lo.base_url + "/" +lo.start + ".." + lo.end;
     lo.add = true;
     lo.collection.fetch(lo);
-    scroll_flag = false;
+    lo.scroll_flag = false;
     setTimeout(function(){
-      scroll_flag = true;
-      if(lo.collection.length-collection_length<App.ClipApp.Url.page){
-	scroll_flag = false;
+      lo.scroll_flag = true;
+      if(lo.collection.length-lo.collection_length<App.ClipApp.Url.page){
+	lo.scroll_flag = false;
 	//$(".loader").text("reach to the end.");
       }else{
-	collection_length =  lo.collection.length;
+	lo.collection_length =  lo.collection.length;
       }
     },200);
   };

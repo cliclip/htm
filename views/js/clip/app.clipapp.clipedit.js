@@ -123,7 +123,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.clipedit:@success", function(content,cid){
     ClipEdit.close();
-    App.vent.trigger("app.clipapp.cliplist:editshow", content,cid);
+    App.vent.trigger("app.clipapp.cliplist:edit", content,cid);
   });
 
   App.vent.bind("app.clipapp.clipedit:@cancel", function(){

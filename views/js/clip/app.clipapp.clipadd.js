@@ -105,7 +105,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.clipadd:@success", function(model){
     ClipAdd.close(); // 关闭clipadd,同步list的数据
-    App.vent.trigger("app.clipapp.cliplist:addshow", model);
+    App.vent.trigger("app.clipapp.cliplist:add", model);
     if(model.get("tag")){
       var uid = App.util.getMyUid();
       App.vent.trigger("app.clipapp.bubb:showUserTags", uid);

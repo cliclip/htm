@@ -105,8 +105,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp:comment", cid,this.model.id);break;
 	case 'note'://注
 	App.vent.trigger("app.clipapp:clipmemo", cid);break;
-	case 'change'://改
+	case 'change':{//改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
+	}
 	case 'del'://删
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
@@ -228,13 +229,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $("#list").css({height:"0px"});
     App.listRegion.show(clipListView);
     App.vent.trigger("app.clipapp.page:next",options);
-    /* console.info(clipListView);
+    /*
     if(options.collection && options.collection.length==0){
       //$("#list").append("抱歉，没有找到相应的信息...");
     } */
   });
 
-  App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
+  App.vent.bind("app.clipapp.cliplist:add",function(addmodel){
     var uid = App.util.getMyUid();
     var id = uid+":"+addmodel.id;
     var model = new ClipPreviewModel();
@@ -257,6 +258,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     clipListView.collection.add(model,{at:0});
     options.start++;
     options.end++;
+    options.collection_length++;
     $("#list").masonry("reload");
   });
 
@@ -266,30 +268,39 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $("#list").masonry("reload");
     options.start--;
     options.end--;
+    options.collection_length--;
+    if(options.collection_length == 0){
+      // App.vent.trigger("请求数据");
+    }
   });
 
   App.vent.bind("app.clipapp.cliplist:refresh",function(args){
-    var listmodel=App.listRegion.currentView.collection.get(args.model_id);
-    var clip=listmodel.get("clip");
+    var model=App.listRegion.currentView.collection.get(args.model_id);
+    var clip=model.get("clip");
     if(args.type == "comment"){
-      if(args.pid == 0){
+      if(args.pid == 0)
 	clip.reply_count = clip.reply_count ? clip.reply_count+1 : 1;
-      }
     }
     if(args.type == "reclip"){
       clip.reprint_count = clip.reprint_count ? clip.reprint_count+1 : 1;
     }
-    listmodel.set({clip:clip});
+    model.set({clip:clip});
     App.listRegion.show(clipListView);
+    var that = clipListView;
+    that.bindTo(that.collection, "add", that.addChildView, that);
+    that.bindTo(that.collection, "remove", that.removeItemView, that);
   });
 
-    App.vent.bind("app.clipapp.cliplist:editshow", function(content,model_id){
+  App.vent.bind("app.clipapp.cliplist:edit", function(content,model_id){
     var collection = clipListView.collection;
-    var listmodel = collection.get(model_id);
-    var clip = listmodel.get("clip");
+    var model = collection.get(model_id);
+    var clip = model.get("clip");
     clip.content = App.util.getPreview(content, 100);
-    listmodel.set({clip:clip});
+    model.set({clip:clip});
     App.listRegion.show(clipListView);
+    var that = clipListView;
+    that.bindTo(that.collection, "add", that.addChildView, that);
+    that.bindTo(that.collection, "remove", that.removeItemView, that);
   });
 
   return ClipList;
