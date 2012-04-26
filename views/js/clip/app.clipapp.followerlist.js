@@ -54,7 +54,6 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       App.listRegion.show(followerlistView);
       if(flag) $(".empty_user").css("display","none");
       App.util.list_scroll(options);
-      // App.vent.trigger("app.clipapp.util:scroll",followerlistView,options);
     });
   };
 
@@ -73,9 +72,6 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       App.vent.trigger("app.clipapp.routing:userfollowerlist:show", uid);
     }
   });
-
-  // TEST
-//App.bind("initialize:after", function(){ FollowerList.showUserFollower("4"); });
 
   return FollowerList;
 })(App,Backbone,jQuery);
