@@ -31,8 +31,16 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).val() );
     },
     maintagAction:function(e){
+      var text = $("#comm_text").val().trim();
+      var tag = $(e.currentTarget).text();
       var id = e.target.id;
       var style = $("#"+id).attr("class");
+      if($(e.currentTarget).hasClass("white_48")){
+	$(".white_48").replaceWith($(".orange_48"));
+      }else{
+	$(".orange_48").replaceWith($(".white_48"));
+      }
+/*
       if(style != "size48 orange_48"){
 	$("#"+id).attr("class","size48 orange_48");
 	tag_list.push($("#"+id).html());
@@ -48,6 +56,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).html()));
 	//console.dir(tag_list);
       }
+*/
     },
 
     comment : function(e){
