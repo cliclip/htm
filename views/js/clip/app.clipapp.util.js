@@ -6,6 +6,11 @@ App.util = (function(){
     return cookie ? cookie.split("=")[1].split(":")[0] : null;
   };
 
+  // main_tag 部分从这取,
+  util.getBubbs = function(){
+    return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
+  };
+
   // 判断当前的用户和传过来的参数是否是同一人
   util.self = function(uid){
     return util.getMyUid() == uid;
@@ -168,8 +173,9 @@ App.util = (function(){
     }
     return returnVal;
   };
+
   var collection_length,scroll_flag;
-  util.list_scroll = function(_options){
+  App.vent.bind("app.clipapp.page:next",function(_options){
     var lo = _options;
     collection_length=0;
     scroll_flag = lo.collection.length>=App.ClipApp.Url.page ? true :false;
@@ -179,21 +185,21 @@ App.util = (function(){
     $(window).scroll(function() {
       var st = $(window).scrollTop();
       var mt = $(".clearfix").offset().top + $(".user_head").height();
-      var wh = window.innerHeight;
       if($("#list").height()<=$(".left").height())return;
       if(st > mt ){
 	util.fixed(paddingTop);
       } else {
-	  util.remove_fixed(paddingTop);
+	util.remove_fixed(paddingTop);
       }
       // loader while scroll down to the page end
+      var wh = window.innerHeight;
       var lt = $(".loader").offset().top;
       var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
       if(st + wh > lt && scroll_flag){
 	util.request_data(lo);
       }
     });
-  };
+  });
 
   util.fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
@@ -206,6 +212,7 @@ App.util = (function(){
     $("#bubb").removeClass("fixed").css("margin-top", paddingTop);
     $(".return_top").hide();
   };
+
   util.request_data = function(lo){
     lo.start += App.ClipApp.Url.page;
     lo.end += App.ClipApp.Url.page;
@@ -219,7 +226,7 @@ App.util = (function(){
 	scroll_flag = false;
 	//$(".loader").text("reach to the end.");
       }else{
-	collection_length = lo.collection.length;
+	collection_length =  lo.collection.length;
       }
     },200);
   };

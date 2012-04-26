@@ -68,12 +68,8 @@ script(type="text/template",id="showcomment-view-template")
 script(type="text/template",id="addcomm-view-template")
   |<textarea id="comm_text">说点什么吧~</textarea>
   div
-    input.main_tag(type="button",id="maintag_1",value="好看")
-    input.main_tag(type="button",id="maintag_2",value="好听")
-    input.main_tag(type="button",id="maintag_3",value="好吃")
-    input.main_tag(type="button",id="maintag_4",value="好玩")
-    input.main_tag(type="button",id="maintag_5",value="精辟")
-    input.main_tag(type="button",id="maintag_6",value="酷")
+    <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+    <input type="button" class="main_tag" id="maintag_<%=i%>" value="<%=main_tag[i]%>" /><% } %>
   .input_checkbox
     span
       input(type="checkbox",id="reclip_box")

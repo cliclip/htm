@@ -25,10 +25,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
       $(e.currentTarget).toggleClass("orange_48");
-      /*$("#"+id).toggleClass(function(white_48){
-	var clazz = "size48 ";
-	return ($("#"+id).hasClass("white_48")) ? "orange_48" : "white_48";
-      });*/
     },
     noteFocus:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultNote ? "" :
@@ -43,17 +39,18 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var data = loadData(this.$el);
       // clip在update时需要clip的id
       data["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.memo:ok", data);
+      App.vent.trigger("app.clipapp.memo:@ok", data);
     },
     cancelClick:function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.memo:close");
+      App.vent.trigger("app.clipapp.memo:@close");
     }
   });
 
   function loadData(el){
     var main_tag = [];
-    for(var i=1;i<7;i++){
+
+    for(var i=0;i<6;i++){
       if($("#main_tag_"+i, el).attr("class") == "size48 orange_48"){
 	main_tag.push($("#main_tag_"+i, el).html().trim());
       }
@@ -80,16 +77,16 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var tags = clip.tag?clip.tag:[];
     var note = clip.note?clip.note:"";
     var text = "";
+    console.info(tags);
     if(!_.isEmpty(note)){
       var ns = _(note).select(function(e){return e.text; })
 	.map(function(e){ return e.text; });
 	_(ns).each(function(n){ text += n+" "; });
     }
-    var bubs = ["好看", "好听", "好吃", "好玩", "精辟", "酷"];//顺序必须和template的main_tag一致
-    var tag_main = _(_(bubs).map(function(e){
+    var tag_main = _(_(App.util.getBubbs()).map(function(e){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
-    var tag_obj = _.difference(tags,bubs);
+    var tag_obj = _.difference(tags,App.util.getBubbs());
     return {id:id,note:text,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
   };
 
@@ -130,7 +127,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   // 触发更新clip中的注的事件
-  App.vent.bind("app.clipapp.memo:ok", function(data){
+  App.vent.bind("app.clipapp.memo:@ok", function(data){
     if(memoType == "update"){
       var model = new App.Model.DetailModel(data);
       model.save({}, {
@@ -138,7 +135,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	  ClipMemo.close();
 	},
 	error:function(model,res){
-	  App.vent.trigger("app.clipapp.memo:error",model,res);
+	  App.vent.trigger("app.clipapp.memo:@error",model,res);
 	}
       });
     }else if(memoType == "add"){
@@ -147,11 +144,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
   });
 
-  App.vent.bind("app.clipapp.memo:close",function(){
+  App.vent.bind("app.clipapp.memo:@close",function(){
     ClipMemo.close();
   });
 
-  App.vent.bind("app.clipapp.memo:error",function(model,error){
+  App.vent.bind("app.clipapp.memo:@error",function(model,error){
     console.info(error);
   });
 
