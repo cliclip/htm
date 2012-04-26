@@ -1,15 +1,15 @@
 script(type='text/template',id='me-view-template')
   <% if (App.util.getMyUid()) { %>
   nav
-    span.my
+    span.my.navigate#my
       a(href="#my") 我的
-      i 123
-    span.at_me
+      //- i 123
+    span.at_me.navigate#at_me
       a(href="#my/recommend") @我
-      i 234
-    span.expert
+      //- i 234
+    span.expert.navigate#expert
       a(href="#my/interest") 砖家
-      i 234
+      //- i 234
   div.my_info
     div(id="show_mysetup",style="display:none;")
       ul.action
