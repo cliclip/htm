@@ -39,11 +39,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var data = loadData(this.$el);
       // clip在update时需要clip的id
       data["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.memo:ok", data);
+      App.vent.trigger("app.clipapp.memo:@ok", data);
     },
     cancelClick:function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.memo:close");
+      App.vent.trigger("app.clipapp.memo:@close");
     }
   });
 
@@ -126,7 +126,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   // 触发更新clip中的注的事件
-  App.vent.bind("app.clipapp.memo:ok", function(data){
+  App.vent.bind("app.clipapp.memo:@ok", function(data){
     if(memoType == "update"){
       var model = new App.Model.DetailModel(data);
       model.save({}, {
@@ -134,7 +134,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	  ClipMemo.close();
 	},
 	error:function(model,res){
-	  App.vent.trigger("app.clipapp.memo:error",model,res);
+	  App.vent.trigger("app.clipapp.memo:@error",model,res);
 	}
       });
     }else if(memoType == "add"){
@@ -143,11 +143,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
   });
 
-  App.vent.bind("app.clipapp.memo:close",function(){
+  App.vent.bind("app.clipapp.memo:@close",function(){
     ClipMemo.close();
   });
 
-  App.vent.bind("app.clipapp.memo:error",function(model,error){
+  App.vent.bind("app.clipapp.memo:@error",function(model,error){
     console.info(error);
   });
 

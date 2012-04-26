@@ -2,16 +2,37 @@ script(type="text/template",id="reclip-view-template")
   div.masker_layer
   section.small_pop
     span.close_w
-    h2.subject_put.
-      <% if(model=="tag"&&count){ %>
-      您将收藏<%= count%>条数据
-      <% } else { %>
-      收
-      <% } %>
+    h2.subject_put 收
     ul.pop_body
       li.tag_box.
         <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
-        <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i].tag%></span><% } %>
+        <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i]%></span><% } %>
+      li
+        text.obj_tag(type="text",id="obj_tag")
+      br
+      li.input_textarea
+        |<textarea id="reclip_text">备注一下吧~</textarea>
+      li.input_checkbox
+        label
+          input(type="checkbox",id="checkbox")
+          | 不公开
+      li.btn_group.clearfix
+        input.verify(type="button",value="确定",id="submit")
+        input.cancel(type="button",value="取消",id="cancel")
+
+
+script(type="text/template",id="reclipTag-view-template")
+  div.masker_layer
+  section.small_pop
+    span.close_w
+    h2.subject_put.
+      <% if(count){ %>
+      您将收藏<%= count%>条数据
+      <% }  %>
+    ul.pop_body
+      li.tag_box.
+        <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+        <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i]%></span><% } %>
       li
         text.obj_tag(type="text",id="obj_tag")
       br

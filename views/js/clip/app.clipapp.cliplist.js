@@ -249,7 +249,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $("#list").masonry("reload");
   });
 
-  App.vent.bind("app.clipapp.cliplist:removeshow",function(){
+  App.vent.bind("app.clipapp.cliplist:remove",function(){
     var model = clipListView.collection.get(model_id);
     clipListView.collection.remove(model);
     $("#list").masonry("reload");
@@ -257,7 +257,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     options.end--;
   });
 
-  App.vent.bind("app.clipapp.cliplist:reload",function(args){
+  App.vent.bind("app.clipapp.cliplist:refresh",function(args){
     var listmodel=App.listRegion.currentView.collection.get(model_id);
     var modifyclip=listmodel.get("clip");
     if(args.type == "comment"){
@@ -273,5 +273,5 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   return ClipList;
-			  
+
 })(App, Backbone, jQuery);

@@ -116,11 +116,18 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show(uid);
   });
 
-  // clipid有值 ==> 对单独clip的reclip 否则是对 user's tag下的clip的reclip
-  App.vent.bind("app.clipapp:reclip", function(clipid, user, tag){
+  //reclip 用户一个clip
+  App.vent.bind("app.clipapp:reclip", function(clipid){
     var uid = getMyUid();
     if(!uid) ClipApp.Login.show();
-    else ClipApp.Reclip.show(clipid, user, tag);
+    else ClipApp.Reclip.show(clipid);
+  });
+
+  //对 user's tag下的clip的reclip
+  App.vent.bind("app.clipapp:reclip_tag", function(user,tag){
+    var uid = getMyUid();
+    if(!uid) ClipApp.Login.show();
+    else ClipApp.ReclipTag.show(user,tag);
   });
 
   // 当前用户追某用户的tag uid一直与face的保持一致

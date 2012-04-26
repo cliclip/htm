@@ -133,7 +133,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // 有_uid作为全局变量，进行url地址匹配
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
-    App.vent.trigger("app.clipapp:reclip", null, _uid, tag);
+    App.vent.trigger("app.clipapp:reclip_tag",  _uid, tag);
   });
 
   // init

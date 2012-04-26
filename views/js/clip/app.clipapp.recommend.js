@@ -51,7 +51,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var clip_owner = this.model.id.split(":")[0];//clip的拥有者
       var params = {q:str};
       //查询friend
-      App.vent.trigger("app.clipapp.recommend:lookup",params,clip_owner);
+      App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
       //和查询出的结果进行匹配，查询结果包含输入的name则取得name的uid，并显示头像
       var uid="";
       var div=$(".action-info");
@@ -88,15 +88,15 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       //reclip需要clipid
       var params1 = {id:this.model.id,clip:{note:[{text:text}]}};
       if(this.model.get("uid")){
-	App.vent.trigger("app.clipapp.recommend:submit", params);
+	App.vent.trigger("app.clipapp.recommend:@submit", params);
 	if($("#reclip_box").attr("checked")){
-	  App.vent.trigger("app.clipapp.reclip:submit", params1);
+	  App.vent.trigger("app.clipapp.reclip:sync", params1);
 	}
       }else{
 	if($("#name").val().trim() == ""){
-	  App.vent.trigger("app.clipapp.recommend:error",this.model,{"user":"请添加用户"});
+	  App.vent.trigger("app.clipapp.recommend:@error",this.model,{"user":"请添加用户"});
 	}else{
-	  App.vent.trigger("app.clipapp.recommend:error",this.model,{"user":"用户不存在"});
+	  App.vent.trigger("app.clipapp.recommend:@error",this.model,{"user":"用户不存在"});
 	}
       }
     },
@@ -109,7 +109,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       $(e.currentTarget).val() );
     },
     cancelAction:function(e){
-      App.vent.trigger("app.clipapp.recommend:close");
+      App.vent.trigger("app.clipapp.recommend:@close");
     }
   });
 
@@ -144,7 +144,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   };
 
 
-  App.vent.bind("app.clipapp.recommend:lookup",function(params,owner_id){
+  App.vent.bind("app.clipapp.recommend:@lookup",function(params,owner_id){
     var collection = new NameList({});
     collection.fetch({data:params});
     collection.onReset(function(list){
@@ -160,7 +160,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     });
   });
 
-  App.vent.bind("app.clipapp.recommend:submit",function(params){
+  App.vent.bind("app.clipapp.recommend:@submit",function(params){
     var model = new RecommModel(params);
     model.save({},{
       type:"POST",
@@ -168,15 +168,15 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	Recommend.close();
       },
       error:function(model,res){
-	App.vent.trigger("app.clipapp.recommend:error", model, res);
+	App.vent.trigger("app.clipapp.recommend:@error", model, res);
       }
     });
   });
-  App.vent.bind("app.clipapp.recommend:close",function(){
+  App.vent.bind("app.clipapp.recommend:@close",function(){
     Recommend.close();
   });
 
-  App.vent.bind("app.clipapp.recommend:error",function(model,err){
+  App.vent.bind("app.clipapp.recommend:@error",function(model,err){
     Recommend.show(null, model, err);
   });
 

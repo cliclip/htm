@@ -16,10 +16,10 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
       "click .close_w"       : "cancelClick"
     },
     okClick : function(e){
-      App.vent.trigger("app.clipapp.clipdelete:ok",this.model);
+      App.vent.trigger("app.clipapp.clipdelete:@ok",this.model);
     },
     cancelClick : function(e){
-      App.vent.trigger("app.clipapp.clipdelete:close");
+      App.vent.trigger("app.clipapp.clipdelete:@close");
      }
    });
 
@@ -32,24 +32,24 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
    ClipDelete.close = function(){
      App.popRegion.close();
    };
-   App.vent.bind("app.clipapp.clipdelete:ok",function(deleteModel){
+   App.vent.bind("app.clipapp.clipdelete:@ok",function(deleteModel){
      deleteModel.destroy({
        success: function(model, res){
-	 App.vent.trigger("app.clipapp.cliplist:removeshow");
+	 App.vent.trigger("app.clipapp.cliplist:remove");
 	 ClipDelete.close();
 	 if(App.viewRegion){ // 从detail来，需要关闭viewRegion
 	   App.viewRegion.close();
 	 }
        },
        error: function(model, res){
-	 App.vent.trigger("app.clipapp.clipdelete:error", model, res);
+	 App.vent.trigger("app.clipapp.clipdelete:@error", model, res);
        }
      });
    });
-   App.vent.bind("app.clipapp.clipdelete:close", function(){
+   App.vent.bind("app.clipapp.clipdelete:@close", function(){
      ClipDelete.close();
    });
-   App.vent.bind("app.clipapp.clipdelete:error", function(model, error){
+   App.vent.bind("app.clipapp.clipdelete:@error", function(model, error){
      ClipDelete.show();
    });
 

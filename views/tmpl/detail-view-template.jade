@@ -69,7 +69,7 @@ script(type="text/template",id="addcomm-view-template")
   |<textarea id="comm_text">说点什么吧~</textarea>
   div
     <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
-    <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i].tag%></span><% } %>
+    <input type="button" class="main_tag" id="maintag_<%=i%>" value="<%=main_tag[i]%>" /><% } %>
   .input_checkbox
     span
       input(type="checkbox",id="reclip_box")
