@@ -11,11 +11,6 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       return P+"/user/"+this.id+"/email";
     }
   });
-  var EmailActiveModel = App.Model.extend({
-    defaults:{
-      message:""
-    }
-  });
 
   var EmailAddView = App.ItemView.extend({
     tagName: "div",
@@ -46,24 +41,6 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       $("#alert").css("display","none");
     }
   });
-  var EmailActiveView = App.ItemView.extend({
-    tagName: "div",
-    className: "message-view",
-    template: "#message-view-template",
-    events: {
-      "click #sure": "MessageSure",
-      "click #cancel":"Messageclose"
-    },
-    MessageSure: function(){
-      App.setpopRegion.close();
-      App.vent.trigger("app.clipapp.message:sure");
-    },
-    Messageclose: function(){
-      App.setpopRegion.close();
-      App.vent.trigger("app.clipapp.message:cancel");
-    }
-  });
-
   EmailAdd.showEmailAdd = function(uid,model,error){
     var emailAddModel = new EmailAddModel({id:uid});
     if (model) emailAddModel.set(model.toJSON());
@@ -76,12 +53,24 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       $("#alert").css("display","none");
     }
   };
-  EmailAdd.showActive = function(message){
-    var emailActiveModel = new EmailActiveModel();
-    emailActiveModel.set({message:message});
-    var emailActiveView = new EmailActiveView({model : emailActiveModel});
-    App.setpopRegion.show(emailActiveView);
-  };
+
+
+  App.vent.bind("app.clipapp.emailadd:active", function(key){
+    var model = new App.Model();
+    model.save({},{
+      url: App.ClipApp.Url.base+"/active/"+key,
+      type: "POST",
+      success:function(model,response){
+	// 不只是弹出提示框这么简单
+	App.vent.trigger("app.clipapp.message:confirm", "active", response.email);
+      },
+      error:function(model,error){
+	// 则显示该链接不能再点击
+	App.vent.trigger("app.clipapp.message:confirm", "active_fail");
+      }
+    });
+  });
+
 
   EmailAdd.close = function(){
     App.setpopRegion.close();
@@ -91,14 +80,9 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     EmailAdd.showEmailAdd(uid);
   });
 
-  App.vent.bind("app.clipapp.message:alert", function(message){
-    EmailAdd.showActive(message);
-  });
-
   App.vent.bind("app.clipapp.emailadd:success",function(email){
       EmailAdd.close();
-      App.vent.trigger("app.clipapp.message:alert", email);
-      // EmailAdd.showActive(email);
+      App.vent.trigger("app.clipapp.message:confirm", "addemail", email);
   });
   App.vent.bind("app.clipapp.emailadd:error",function(model,error){
     EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(error));

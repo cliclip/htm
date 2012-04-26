@@ -67,7 +67,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   ClipAdd.image_change = function(sender){ // 在view中直接绑定
     var change = App.util.isImage("formUpload");
     if(!change){
-      App.vent.trigger("app.clipapp.message:alert","上传图片格式无效");
+      App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
     }else{
       /*if( sender.files &&sender.files[0] ){//图片本地预览代码
        var img = new Image();

@@ -19,8 +19,10 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
      var gotoSetupView = new GotoSetupView({model : gotoSetupModel});
      App.popRegion.show(gotoSetupView);
    };
-   App.vent.bind("app.clipapp.gotosetup:show", function(text){
-     GotoSetup.show(text);
+
+   App.vent.bind("app.clipapp.gotosetup:show", function(key, email){
+     var message = App.ClipApp.Message.getMessage(key, email);
+     GotoSetup.show(message);
    });
 
   App.vent.bind("app.clipapp.gotosetup:go", function(){

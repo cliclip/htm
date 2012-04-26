@@ -80,6 +80,10 @@ App.Routing.ClipRouting = (function(App, Backbone){
     App.Routing.showRoute("my/recommend", tag);
   });
 
+  App.vent.bind("app.clipapp.routing:siteshow:show", function(tag){
+    App.Routing.showRoute(tag);
+  });
+
   App.addInitializer(function(){
     ClipRouting.router = new ClipRouting.Router({
       controller: App.ClipApp

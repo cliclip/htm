@@ -94,7 +94,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       // App.vent.unbind("app.clipapp.message:sure");//解绑 解决请求多次的问题
       var cid = this.model.get("cid");
       var id = e.target.id;
-      App.vent.trigger("app.clipapp.message:alert", "删除评论!");
+      App.vent.trigger("app.clipapp.message:alert", "del_comment");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.vent.trigger("app.clipapp.clipdetail:delComment", cid, id);
       });

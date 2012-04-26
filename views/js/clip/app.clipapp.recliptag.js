@@ -76,9 +76,9 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       type: "GET",
       url: P+"/user/"+user+"/clip/tag/"+tag,
       success: function(model, res){
-	if(!model.get("count")){
+	if(res.count == null){
 	  // 现在只是公用该事件，事件名称有待改进
-	  App.vent.trigger("app.clipapp.message:alert","当前用户该tag下还没有数据");
+	  App.vent.trigger("app.clipapp.message:confirm","reclip_null");
 	}else{
 	  // 有count表示可以收到数据
 	  model.set({user:user,tag:tag});
