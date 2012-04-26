@@ -1,4 +1,4 @@
-// app.clipapp.cliplist.js
+ // app.clipapp.cliplist.js
 App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipList = {};
@@ -283,7 +283,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     App.listRegion.show(clipListView);
   });
 
-  App.vent.bind("app.clipapp.cliplist:editshow", function(content){
+    App.vent.bind("app.clipapp.cliplist:editshow", function(content,model_id){
     var collection = clipListView.collection;
     var listmodel = collection.get(model_id);
     var clip = listmodel.get("clip");
