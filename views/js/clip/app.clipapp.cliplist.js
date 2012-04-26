@@ -267,7 +267,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $("#list").masonry("reload");
   });
 
-  App.vent.bind("app.clipapp.cliplist:remove",function(){
+  App.vent.bind("app.clipapp.cliplist:remove",function(model_id){
     var model = clipListView.collection.get(model_id);
     clipListView.collection.remove(model);
     $("#list").masonry("reload");

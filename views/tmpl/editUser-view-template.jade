@@ -50,7 +50,7 @@ script(type="text/template",id="ruleEdit-view-template")
     ul.mail_list
       h3
         span.open_mailcheck
-          input(type="checkbox",id="open_rule")
+          | <input type="checkbox" id="open_rule" <% if(enable){ %> checked="checked" <%}%> />
           label(for="open_rule")|打开邮箱识别
         |邮箱识别
       li

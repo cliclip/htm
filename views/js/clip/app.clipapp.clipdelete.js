@@ -35,7 +35,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
    App.vent.bind("app.clipapp.clipdelete:@ok",function(deleteModel){
      deleteModel.destroy({
        success: function(model, res){
-	 App.vent.trigger("app.clipapp.cliplist:remove");
+	 App.vent.trigger("app.clipapp.cliplist:remove",deleteModel.id);
 	 ClipDelete.close();
 	 if(App.viewRegion){ // 从detail来，需要关闭viewRegion
 	   App.viewRegion.close();
