@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var COMM_TEXT = "说点什么吧~";
+  var mid,COMM_TEXT = "说点什么吧~";
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -29,11 +29,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       // if(this.model.get("clip")){this.model.unset("clip");}
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	App.vent.trigger("app.clipapp:reclip", cid,mid);break;
 	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment':
-	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
+	  App.vent.trigger("app.clipapp.clipdetail:comment", cid,mid);break;
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change':
@@ -233,7 +233,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  ClipDetail.show = function(cid){   // 此处的cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id){   // 此处的cid等于detailModel.id
+    mid = model_id;
     var clip = new App.Model.DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
@@ -254,6 +255,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
     App.popRegion.close();
     App.viewRegion.close();
+    mid = null;
   };
 
   App.vent.bind("app.clipapp.clipdetail:show_reply", function(cid, pid){
@@ -283,7 +285,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(comment,response){
 	showComment(data.cid);
 	showAddComm(data.cid);
-	App.vent.trigger("app.clipapp.cliplist:comment",data.pid);
+	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:data.pid,model_id:mid});
 	// 触发preview中对回复条数的同步
 	// var listmodel=App.listRegion.currentView.collection.get(id);
 	// var modifyclip=listmodel.get("clip");
