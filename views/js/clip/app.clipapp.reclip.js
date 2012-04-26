@@ -1,11 +1,8 @@
 App.ClipApp.Reclip = (function(App, Backbone, $){
-  var Reclip = {};
-  var defaultNote = "备注一下吧~";
-  var P = App.ClipApp.Url.base;
 
   var ReclipModel = App.Model.extend({
     url: function(){
-      return P+"/clip/"+this.id+"/reclip";
+      return App.ClipApp.Url.base+"/clip/"+this.id+"/reclip";
     }
   });
   var ReclipView = App.ItemView.extend({
@@ -38,7 +35,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       evt.preventDefault();
       var params = loadData(this.$el);
       params["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.reclip:@submit", params);
+      App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
     },
     cancel : function(e){
       e.preventDefault();
@@ -67,7 +64,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     return params;
   }
 
-  Reclip.show = function(cid){
+
+  var Reclip = {};
+  var mid, defaultNote = "备注一下吧~";
+
+  Reclip.show = function(cid,model_id){
+    mid = model_id;
     var model = new ReclipModel({id:cid});
     var reclipView = new ReclipView({model : model});
     App.popRegion.show(reclipView);
@@ -78,14 +80,15 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 
   Reclip.close = function(){
     App.popRegion.close();
+    mid = null;
   };
 
-  function reclipSave(params){
+  function reclipSave(params,mid){
     var model = new ReclipModel(params);
     model.save({},{
       type: "POST",
       success: function(model, res){
-	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip"});
+	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
       },
       error:function(model, res){
 	console.info(res);
@@ -93,13 +96,13 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     });
   }
 
-  App.vent.bind("app.clipapp.reclip:@submit", function(params){
-    reclipSave(params);
+  App.vent.bind("app.clipapp.reclip:@submit", function(params,mid){
+    reclipSave(params,mid);
     Reclip.close();
   });
 
-  App.vent.bind("app.clipapp.reclip:sync", function(params){
-    reclipSave(params);
+  App.vent.bind("app.clipapp.reclip:sync", function(params,mid){
+    reclipSave(params,mid);
   });
 
   App.vent.bind("app.clipapp.reclip:@close",function(){

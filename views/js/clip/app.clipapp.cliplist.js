@@ -3,7 +3,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipList = {};
   var options = {};
-  var model_id ;//缓存model的id
   var clipListView = {};
 
   var ClipPreviewModel = App.Model.extend({
@@ -69,8 +68,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     show_detail: function(){
       var clip = this.model.get("clip");
       var clipid = clip.user.id+":"+clip.id;
-      model_id = this.model.id;
-      App.vent.trigger("app.clipapp:clipdetail",clipid);
+      App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id);
     },
 /*
     commentAction: function(){
@@ -98,14 +96,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var clip = this.model.get("clip");
       var cid = clip.user.id+":"+clip.id;
-      model_id = this.model.id;
       switch(opt){
 	case 'biezhen'://收
-	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	  App.vent.trigger("app.clipapp:reclip", cid,this.model.id);break;
 	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
 	case 'comment'://评
-	  App.vent.trigger("app.clipapp:comment", cid);break;
+	  App.vent.trigger("app.clipapp:comment", cid,this.model.id);break;
 	case 'note'://注
 	App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change'://改
@@ -258,7 +255,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.cliplist:refresh",function(args){
-    var listmodel=App.listRegion.currentView.collection.get(model_id);
+    console.info(args);
+    var listmodel=App.listRegion.currentView.collection.get(args.model_id);
     var modifyclip=listmodel.get("clip");
     if(args.type == "comment"){
       if(args.pid == 0){
@@ -269,13 +267,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       modifyclip.reprint_count = modifyclip.reprint_count ? modifyclip.reprint_count+1 : 1;
     }
     listmodel.set({clip:modifyclip});
-    // App.vent.trigger("app.clipapp.cliplist:showlist");
-  });
-
-  App.vent.bind("app.clipapp.cliplist:removeshow",function(){
-    var listmodel=App.listRegion.currentView.collection.get(model_id);
-    var collection = clipListView.collection.remove(listmodel);
-    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+    //App.vent.trigger("app.clipapp.cliplist:showlist");
   });
 
   App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){

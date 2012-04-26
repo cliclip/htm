@@ -1,19 +1,17 @@
 //app.Recommapp.js
 
 App.ClipApp.Recommend = (function(App,Backbone,$){
-  var Recommend = {};
-  var defaultText = "说点啥吧～";
-  var P = App.ClipApp.Url.base;
+
   // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
     model : NameListModel,
-    url   : P+"/lookup/0..5"
+    url   : App.ClipApp.Url.base+"/lookup/0..5"
   });
 
   var RecommModel = App.Model.extend({
     url: function(){
-      return P+"/user/"+this.id+"/recomm";
+      return App.ClipApp.Url.base+"/user/"+this.id+"/recomm";
     }
   });
   var RecommView = App.ItemView.extend({
@@ -71,7 +69,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       }
     },
     nameBlur:function(){
-      this.$("#name_listDiv").empty();
+     // this.$("#name_listDiv").empty();
     },
     MouseOver:function(evt){
 
@@ -90,7 +88,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       if(this.model.get("uid")){
 	App.vent.trigger("app.clipapp.recommend:@submit", params);
 	if($("#reclip_box").attr("checked")){
-	  App.vent.trigger("app.clipapp.reclip:sync", params1);
+	  App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	}
       }else{
 	if($("#name").val().trim() == ""){
@@ -126,7 +124,11 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   });
 
 
-  Recommend.show = function(cid,model,error){
+  var Recommend = {};
+  var mid,defaultText = "说点啥吧～";
+
+  Recommend.show = function(cid,model_id,model,error){
+    mid = model_id;
     var recommModel = new RecommModel({id:cid});
     if (model) recommModel.set(model.toJSON());
     if (error) recommModel.set({"error":error});
@@ -141,6 +143,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   Recommend.close = function(){
     App.popRegion.close();
+    mid = null;
   };
 
 

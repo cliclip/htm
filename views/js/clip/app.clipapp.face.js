@@ -25,8 +25,17 @@ App.ClipApp.Face = (function(App, Backbone, $){
       "click .zhui": "stopAction",
       "click .user_list": "userList",
       "click .following": "following",
-      "click .follower": "follower"
+      "click .follower": "follower",
+      "mouseenter .user_head": "mouseEnter",
+      "mouseleave .user_head": "mouseLeave"
     },
+    mouseEnter: function(e){
+      $(e.currentTarget).children(".user_i").show();
+    },
+    mouseLeave: function(e){
+      $(e.currentTarget).children(".user_i").hide();
+    },
+
     followAction: function(){
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
       App.vent.trigger("app.clipapp.face:show",this.model.id);
