@@ -341,9 +341,13 @@
 
 #view {
 	z-index: 10;
+	.masker_layer {
+		z-index: 2;
+	}		
 }
 #pop{
 	z-index: 20;
+	position:fixed;
 }
 #setpop{
 	z-index: 3;
@@ -460,7 +464,7 @@
 }
 section.edit {
   .masker_layer {
-    z-index: 1;
+    z-index: 2;
   }
   .edit_user {
     background: #d9d9d9;
@@ -849,7 +853,9 @@ section.follow_frame{
 		.sprites(-589px,-342px);
 	}
 }
+
 .big_pop{
+	z-index:2;
 	width:595px;
 	position: absolute;
 	left:50%;
@@ -1042,7 +1048,7 @@ section.follow_frame{
 .login_window{
 	width:735px;
 	height:415px;
-	position: absolute;
+	position: fixed;
 	left:50%;
 	top:10%;
 	margin-left:-367px;
