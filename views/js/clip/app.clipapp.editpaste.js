@@ -36,6 +36,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }else{
       var data = objEditor.contentWindow.document.body.innerHTML;;
     }
+    // console.log(data);
     return Filter.htmlToUbb(data);
   };
   // 与getContent对称 该js内部实现 [没有必要]
@@ -78,7 +79,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 
 
   var filterPasteWord = function(str){
-    // console.log(str);
     //remove link break
     str = str.replace(/\r\n|\n|\r/ig, "");
     //remove &nbsp; entities at the start of contents
@@ -87,7 +87,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     str = str.replace(/(&nbsp;|<br[^>]*>)+\s*$/ig,"");
     // Remove comments
     str = str.replace(/<!--[\s\S]*?-->/ig, "");
-    // str = str.replace(/<!--.*-->/gi,"");
+    // str = str.replace(/<!--.*-->/gi,""); // 上面的方法更合适
     // Remove scripts (e.g., msoShowComment), XML tag, VML content, MS Office namespaced tags, and a few other tags
     str = str.replace(/<(!|script[^>]*>.*?<\/script(?=[>\s])|\/?(\?xml(:\w+)?|xml|meta|link|style|\w:\w+)(?=[\s\/>]))[^>]*>/gi,"");
     // console.log(str);
@@ -318,6 +318,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
        if (or){
 	 setRange(getSel(w),or);
        }
+       // console.log(newData);
        newData=filterPasteData(newData);
        // console.log(newData);
        divTemp.innerHTML=newData;
@@ -474,26 +475,27 @@ var Filter = (function(){
 
   function cleanHtml(str) {
     str = str.replace(/\r\n|\n|\r/ig, "");
-        //remove html body form
+    //remove html body form
     str = str.replace(/<\/?(html|body|form)(?=[\s\/>])[^>]*>/ig, "");
-        //remove doctype
+    //remove doctype
     str = str.replace(/<(!DOCTYPE)(\n|.)*?>/ig, "");
-        // Word comments like conditional comments etc
+    // Word comments like conditional comments etc
     str = str.replace(/<!--[\s\S]*?-->/ig, "");
-        //remove xml tags
+    //remove xml tags
     str = str.replace(/<(\/?(\?xml(:\w+)?|xml|\w+:\w+)(?=[\s\/>]))[^>]*>/gi, "");
-        //remove head
+    //remove head
     str = str.replace(/<head[^>]*>(\n|.)*?<\/head>/ig, "");
-        //remove <xxx />
+    //remove <xxx />
     str = str.replace(/<(script|style|link|title|meta|textarea|option|select|iframe|hr)(\n|.)*?\/>/ig, "");
-        //remove empty span
+    //remove empty span
     str = str.replace(/<span[^>]*?><\/span>/ig, "");
-        //remove <xxx>...</xxx>
+    //remove <xxx>...</xxx>
     str = str.replace(/<(head|script|style|textarea|button|select|option|iframe)[^>]*>(\n|.)*?<\/\1>/ig, "");
-        //remove table and <a> tag,<input> tag (this can help filter unclosed tag)
+    //remove table and <a> tag,<input> tag (this can help filter unclosed tag)
     str = str.replace(/<\/?(input|iframe|div)[^>]*>/ig, "");
-        // keep img
+    // keep img
     // str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|img|input|iframe|div)[^>]*>/ig, "");
+    str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
     //remove bad attributes
     do {
       len = str.length;
@@ -502,6 +504,7 @@ var Filter = (function(){
     return str;
   }
 
+  // 对与pre和code类的标签此处是作为文本内容进行处理的
   function _htmlToUbb(html){
     var text = html;
     // Format anchor tags properly.

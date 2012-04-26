@@ -272,6 +272,40 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     // App.vent.trigger("app.clipapp.cliplist:showlist");
   });
 
+  App.vent.bind("app.clipapp.cliplist:removeshow",function(){
+    var listmodel=App.listRegion.currentView.collection.get(model_id);
+    var collection = clipListView.collection.remove(listmodel);
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+  });
+			  /*
+  App.vent.bind("app.clipapp.cliplist:addshow",function(addmodel){
+    var uid = App.util.getMyUid();
+    var id = uid+":"+addmodel.id;
+    var model = new ClipPreviewModel();
+    var clip = {};
+    clip.id = addmodel.id;
+    clip.tag = addmodel.get("tag");
+    clip.note = addmodel.get("note");
+    clip.public = addmodel.get("public");
+    clip.user = {id : uid};
+    clip.content = App.util.getPreview(addmodel.get("content"), 100);
+    //clip本身的id为自己的id，model的id为uid:cid
+    model.set({clip:clip,id:id});
+    model.set({recommend:""});
+    var collection = clipListView.collection;
+    collection.add(model,{at:0});
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+  });
+*/
+  App.vent.bind("app.clipapp.cliplist:editshow", function(content){
+    var collection = clipListView.collection;
+    var listmodel = collection.get(model_id);
+    var modifyclip = listmodel.get("clip");
+    modifyclip.content = App.util.getPreview(content, 100);
+    listmodel.set({clip:modifyclip});
+    App.vent.trigger("app.clipapp.cliplist:showlist",collection);
+  });
+
   return ClipList;
 
 })(App, Backbone, jQuery);

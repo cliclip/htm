@@ -159,10 +159,9 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:clipdetail", function(clipid,model_cid){
-    // var uid = getMyUid();
+  App.vent.bind("app.clipapp:clipdetail", function(clipid){
     //model_cid为model的id，用来当detail的model改变时，改变list的model的数据
-    ClipApp.ClipDetail.show(clipid,model_cid);
+    ClipApp.ClipDetail.show(clipid);
   });
 
   App.vent.bind("app.clipapp:clipmemo", function(cid){
@@ -175,8 +174,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:clipedit", function(clipid){
-    var uid = getMyUid();
-    ClipApp.ClipEdit.show(clipid, uid);
+    ClipApp.ClipEdit.show(clipid);
   });
 
   App.vent.bind("app.clipapp:clipadd", function(){
@@ -185,7 +183,7 @@ App.ClipApp = (function(App, Backbone, $){
       ClipApp.Login.show();
     }else{
       location.href="#my";
-      ClipApp.ClipAdd.show(uid);
+      ClipApp.ClipAdd.show();
     }
   });
 

@@ -115,8 +115,9 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	error:function(model,res){}
       });
     }else if(memoType == "add"){
-      var model = args;
-      var data = getData(model.get("clip"));//从clip add 中取得的model
+      var clip = args;
+      var data = getData(clip);
+      // var data = getData(model.get("clip"));//从clip add 中取得的model
       showMemo(data);
     }
   };
