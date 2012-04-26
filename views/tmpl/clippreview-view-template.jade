@@ -17,7 +17,7 @@ script(type="text/template",id="clippreview-view-template")
       div.article_photo
         | <img src="<%=App.util.url(clip.content.image)%>" />
       <% }if(clip.content && clip.content.text){%>
-      <%if(clip.content && clip.content.text && !clip.content.image){ %>
+      <%if(!clip.content.image){ %>
       div.article_con(style="font-size: 16px;line-height: 2.0")
         br
         | <%= clip.content.text %>
@@ -53,7 +53,9 @@ script(type="text/template",id="clippreview-view-template")
           <i class="refresh operate" title="转" id="<%=clip.user.id%>:<%=clip.id%>"></i>
           <i class="comment operate" title="评" id="<%=clip.user.id%>:<%=clip.id%>"></i>          
         <% } %>
+    <%if(clip.content && clip.content.image){ %>
     span.biezhen
+    <%}%>
     b.comer_topleft
     b.comer_topright
     b.comer_bottomleft

@@ -6,13 +6,9 @@ script(type='text/template',id='comment-view-template')
     ul.pop_body
       li.input_textarea
         |<textarea id="comm_text">说点什么吧~</textarea>
-      li.tag_box
-        span.size48.white_48#main_tag_1 好看
-        span.size48.white_48#main_tag_2 好听
-        span.size48.white_48#main_tag_3 好吃
-        span.size48.white_48#main_tag_4 好玩
-        span.size48.white_48#main_tag_5 精辟
-        span.size48.white_48#main_tag_6 酷  
+      li.tag_box.
+        <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+        <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i]%></span><% } %>
       li.input_checkbox
         label
           input(type="checkbox",id="reclip_box")

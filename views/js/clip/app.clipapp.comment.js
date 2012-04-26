@@ -61,21 +61,22 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       var params = {cid:this.model.get("cid"),text: text, pid: 0};
       // console.dir(that.tag_list);
       var params1 = {id:this.model.get("cid"),clip:{tag:tag_list,note:[{text:text}]}};
-      App.vent.trigger("app.clipapp.comment:submit", params);
+      App.vent.trigger("app.clipapp.comment:@submit", params);
       if($("#reclip_box").attr("checked")){
-	App.vent.trigger("app.clipapp.reclip:submit", params1);
+	App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
       }
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.comment:close");
+      App.vent.trigger("app.clipapp.comment:@close");
     }
   });
 
   var Comment = {};
-  var tag_list = [],defaultComm = "说点什么吧~";
+  var mid,tag_list = [],defaultComm = "说点什么吧~";//mid为model_id
 
-  Comment.show = function(cid){
+  Comment.show = function(cid,model_id){
+    mid = model_id;
     var model = new App.Model.CommentModel({cid: cid});
     var view = new CommentView({model : model});
     App.popRegion.show(view);
@@ -84,14 +85,15 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 
   Comment.close = function(){
     App.popRegion.close();
+    mid = null;
   };
 
-  App.vent.bind("app.clipapp.comment:submit", function(params){
+  App.vent.bind("app.clipapp.comment:@submit", function(params){
     var model = new App.Model.CommentModel(params);
     model.save({},{
       type: "POST",
       success: function(model, res){
-	App.vent.trigger("app.clipapp.cliplist:reload",{type:"comment",pid:params.pid});
+	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
 	Comment.close();
       },
       error:function(model, res){
@@ -99,7 +101,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       }
     });
   });
-  App.vent.bind("app.clipapp.comment:close", function(){
+  App.vent.bind("app.clipapp.comment:@close", function(){
     Comment.close();
   });
 

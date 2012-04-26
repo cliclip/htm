@@ -72,12 +72,16 @@ App.Routing.ClipRouting = (function(App, Backbone){
     App.Routing.showRoute("user",uid, "follower");
   });
 
-  App.vent.bind("interest:show",function(tag){
+  App.vent.bind("app.clipapp.routing:interest:show",function(tag){
     App.Routing.showRoute("my/interest", tag);
   });
 
-  App.vent.bind("recommend:show",function(tag){
+  App.vent.bind("app.clipapp.routing:recommend:show",function(tag){
     App.Routing.showRoute("my/recommend", tag);
+  });
+
+  App.vent.bind("app.clipapp.routing:siteshow:show", function(tag){
+    App.Routing.showRoute(tag);
   });
 
   App.addInitializer(function(){

@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var COMM_TEXT = "说点什么吧~";
+  var mid,COMM_TEXT = "说点什么吧~";
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -29,11 +29,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       // if(this.model.get("clip")){this.model.unset("clip");}
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", cid);break;
+	App.vent.trigger("app.clipapp:reclip", cid,mid);break;
 	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment':
-	  App.vent.trigger("app.clipapp.clipdetail:comment", cid);break;
+	  App.vent.trigger("app.clipapp.clipdetail:comment", cid,mid);break;
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change':
@@ -94,7 +94,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       // App.vent.unbind("app.clipapp.message:sure");//解绑 解决请求多次的问题
       var cid = this.model.get("cid");
       var id = e.target.id;
-      App.vent.trigger("app.clipapp.message:alert", "删除评论!");
+      App.vent.trigger("app.clipapp.message:alert", "del_comment");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.vent.trigger("app.clipapp.clipdetail:delComment", cid, id);
       });
@@ -191,7 +191,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	if($("#reclip").attr("checked")){ // console.log("同时收");
 	  // 没有重构 可否在detail中就收了该clip
 	  var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
-	  App.vent.trigger("app.clipapp.reclip:submit",this.model,params1);
+	  App.vent.trigger("app.clipapp.reclip:sync",this.model,params1);
 	}
       }
     },
@@ -233,7 +233,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  ClipDetail.show = function(cid){   // 此处的cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id){   // 此处的cid等于detailModel.id
+    mid = model_id;
     var clip = new App.Model.DetailModel({id: cid});
     clip.fetch();
     clip.onChange(function(detailModel){
@@ -254,6 +255,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
     App.popRegion.close();
     App.viewRegion.close();
+    mid = null;
   };
 
   App.vent.bind("app.clipapp.clipdetail:show_reply", function(cid, pid){
@@ -283,7 +285,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(comment,response){
 	showComment(data.cid);
 	showAddComm(data.cid);
-	App.vent.trigger("app.clipapp.cliplist:comment",data.pid);
+	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:data.pid,model_id:mid});
 	// 触发preview中对回复条数的同步
 	// var listmodel=App.listRegion.currentView.collection.get(id);
 	// var modifyclip=listmodel.get("clip");

@@ -53,7 +53,8 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       $("#list").css({height:"0px"});
       App.listRegion.show(followerlistView);
       if(flag) $(".empty_user").css("display","none");
-      App.util.list_scroll(options);
+      //App.util.list_scroll(options);
+      App.vent.trigger("app.clipapp.page:next",options);
     });
   };
 
