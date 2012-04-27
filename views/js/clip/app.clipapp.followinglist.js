@@ -1,5 +1,6 @@
 //app.clipapp.followinglist.js
 App.ClipApp.FollowingList=(function(App, Backbone, $){
+  var options = {};
   var FollowingModel=App.Model.extend({
       defaults:{
 	user:[]
@@ -32,25 +33,30 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   });
 
   FollowingList.showUserFollowing=function(uid){
-    var options = {},flag=false;
+    var flag=false;
     var collection=new FollowingList();
     options.collection=collection;
-    if(!options.start &&! options.end){
+    //if(!options.start &&! options.end){
       options.start = 1;
       options.end = App.ClipApp.Url.page;
-    }
+    //}
+    options.add = false;
     options.base_url = App.ClipApp.Url.base+"/user/"+uid+"/following";
     options.url=options.base_url+"/"+options.start+".."+options.end;
     options.collection.fetch(options);
     options.collection.onReset(function(followinglist){
       if(!_.isEmpty(followinglist.toJSON())) flag=true;
+      options.collection_length = options.collection.length;
+      options.fetch_flag = options.collection.length==App.ClipApp.Url.page ? true :false;
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
-      $("#list").css({height:"0px"});
+      $("#list").css({height:"auto"});
       App.listRegion.show(followinglistView);
+      //console.info(App.listRegion.currentView.$el[0].className);
       if(flag) $(".empty_user").css("display","none");
-      App.vent.trigger("app.clipapp.page:next",options);
+      App.vent.trigger("app.clipapp:showpage");
+      //App.vent.trigger("app.clipapp.page:next",options);
     });
   };
   FollowingList.close=function(){
@@ -66,6 +72,25 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       App.vent.trigger("app.clipapp.routing:myfollowinglist:show");
     }else{
       App.vent.trigger("app.clipapp.routing:userfollowinglist:show", uid);
+    }
+  });
+
+  App.vent.bind("app.clipapp:nextpage",function(){
+    if(App.listRegion.currentView.$el[0].className=="following-view"&&options.fetch_flag){
+    //if(options.fetch_flag){
+      options.start += App.ClipApp.Url.page;
+      options.end += App.ClipApp.Url.page;
+      options.url = options.base_url + "/" +options.start + ".." + options.end;
+      options.add = true;
+      options.error = function(){ options.fetch_flag = false; };
+      options.success = function(){
+	if(options.collection.length-options.collection_length>=App.ClipApp.Url.page){
+	  options.collection_length = options.collection.length;
+	}else{
+	  options.fetch_flag = false;
+	}
+      };
+      options.collection.fetch(options);
     }
   });
 

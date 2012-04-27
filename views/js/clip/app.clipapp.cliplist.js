@@ -211,10 +211,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   function getClips(){
     var clips = new ClipPreviewList();
     options.collection = clips;
-    if(!options.start &&! options.end){
+    //if(!options.start &&! options.end){
       options.start = 1;
       options.end = App.ClipApp.Url.page;
-    }
+    //}
     options.url = options.base_url + "/" + options.start+".."+ options.end;
     if(options.data){
       options.data = JSON.stringify(options.data),
@@ -245,7 +245,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:nextpage",function(){
-    if(options.fetch_flag){
+    if(App.listRegion.currentView.$el[0].className=="preview-view"&&options.fetch_flag){
       options.start += App.ClipApp.Url.page;
       options.end += App.ClipApp.Url.page;
       options.url = options.base_url + "/" +options.start + ".." + options.end;
