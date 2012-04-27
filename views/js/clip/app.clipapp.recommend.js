@@ -180,7 +180,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   });
 
   App.vent.bind("app.clipapp.recommend:@error",function(model,err){
-    Recommend.show(null, model, err);
+    Recommend.show(null, null, model, err);
   });
 
   return Recommend;
