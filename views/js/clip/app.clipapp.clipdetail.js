@@ -155,12 +155,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == COMM_TEXT ? "" : text );
     },
-    blurAction:function(evt){
+    blurAction:function(e){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val( text == "" ? COMM_TEXT : text);
     },
-    maintagAction:function(evt){;
-      var id = evt.target.id;
+    maintagAction:function(e){;
+      var id = e.target.id;
       // 可以在css中添加两个class，点击过后在两个class之间切换
       var color = $("#"+id).css("backgroundColor");
       if(color != "rgb(255, 0, 0)"){

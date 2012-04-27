@@ -43,7 +43,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     up_extImg: function(){ // 确定上传
       var url = $("#img_upload_url").val();
-      if(url == "http://" || url == null)return;
+      if(url == "http://" || !url )return;
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },

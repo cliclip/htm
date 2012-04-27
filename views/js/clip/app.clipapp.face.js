@@ -35,26 +35,19 @@ App.ClipApp.Face = (function(App, Backbone, $){
     mouseLeave: function(e){
       $(e.currentTarget).children(".user_i").hide();
     },
-
     followAction: function(){
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
+      // 能否触发去修改bubbs中的tag和follow的事件而不是直接showUserTags
     },
     stopAction: function(){
-      App.vent.trigger("app.clipapp.bubb:unfollow",this.model.id,'*');
+      App.vent.trigger("app.clipapp.bubb:unfollow",'*',this.model.id);
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
     },
-    userList: function(){
-      var uid =	user_id;
-      if(uid == App.util.getMyUid()){
-	App.vent.trigger("app.clipapp.routing:mycliplist:show");
-	App.ClipApp.ClipList.showUserClips("my");
-      }else{
-	App.vent.trigger("app.clipapp.routing:usercliplist:show", uid);
-	App.ClipApp.ClipList.showUserClips(uid);
-      }
+    userList: function(e){
+      App.vent.trigger("app.clipapp.face:@listshow", user_id);
     },
     following: function(){
       App.vent.trigger("app.clipapp.followinglist:show", user_id);
@@ -106,6 +99,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.face:reset", function(uid){
     Face.showUser(uid);
   });
+  App.vent.bind("app.clipapp.face:@listshow", function(uid){
+    App.ClipApp.ClipList.showUserClips(uid);
+  });
+
 
   return Face;
 })(App, Backbone, jQuery);
