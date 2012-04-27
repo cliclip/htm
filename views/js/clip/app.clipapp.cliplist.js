@@ -216,6 +216,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
     options.collection.fetch(options);
     options.collection.onReset(function(clips){
+      options.collection_length = options.collection.length;
+      options.fetch_flag = options.collection.length==App.ClipApp.Url.page ? true :false;
       App.vent.trigger("app.clipapp.cliplist:@reset",clips);
     });
   };
@@ -229,11 +231,29 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
     $("#list").css({height:"0px"});
     App.listRegion.show(clipListView);
-    App.vent.trigger("app.clipapp.page:next",options);
+    App.vent.trigger("app.clipapp:showpage");
     /*
     if(options.collection && options.collection.length==0){
       //$("#list").append("抱歉，没有找到相应的信息...");
     } */
+  });
+
+  App.vent.bind("app.clipapp:nextpage",function(){
+    if(options.fetch_flag){
+      options.start += App.ClipApp.Url.page;
+      options.end += App.ClipApp.Url.page;
+      options.url = options.base_url + "/" +options.start + ".." + options.end;
+      options.add = true;
+      options.error = function(){ options.fetch_flag = false; };
+      options.success = function(){
+	if(options.collection.length-options.collection_length>=App.ClipApp.Url.page){
+	  options.collection_length = options.collection.length;
+	}else{
+	  options.fetch_flag = false;
+	}
+      };
+      options.collection.fetch(options);
+    }
   });
 
   App.vent.bind("app.clipapp.cliplist:add",function(addmodel){
@@ -258,7 +278,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     };
     clipListView.collection.add(model,{at:0});
     options.start++;
-    options.end++;
     options.collection_length++;
     $("#list").masonry("reload");
   });
@@ -268,10 +287,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     clipListView.collection.remove(model);
     $("#list").masonry("reload");
     options.start--;
-    options.end--;
     options.collection_length--;
+    //console.info(options.collection_length);
     if(options.collection_length == 0){
-      // App.vent.trigger("请求数据");
+      App.vent.trigger("app.clipapp:nextpage");
     }
   });
 
