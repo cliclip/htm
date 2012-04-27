@@ -59,7 +59,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.message:chinese", function(key){
-    var chinese = Message.getMessage(key);
+    var chinese = Message.getError(key);
     Message.show("confirm", chinese);
   });
 
