@@ -78,8 +78,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $('#username').unbind("keydown");
       $('#username').keydown(function(e){
 	if(e.keyCode==13){
-	  var params = {id:that.model.id,name:$("#username").val().trim()};
-	  App.vent.trigger("app.clipapp.useredit:@savename",params);
+	  $('.set_username').click();
 	}
       });
     }
