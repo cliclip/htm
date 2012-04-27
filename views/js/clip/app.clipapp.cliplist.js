@@ -157,6 +157,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type:"POST", data: data};
     getClips();
+    //修改地址栏的内容
+    if(uid == App.util.getMyUid()){
+      App.vent.trigger("app.clipapp.routing:mycliplist:show", tag);
+    }else{
+      App.vent.trigger("app.clipapp.routing:usercliplist:show", uid, tag);
+    }
   };
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
