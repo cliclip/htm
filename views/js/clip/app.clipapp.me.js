@@ -26,9 +26,10 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "click #mysetup": "mysetupAction",
       // "mouseenter .navigate": "mouseEnter",
       // "mouseleave .navigate": "mouseLeave",
-      "click #my": "switch_my",
-      "click #at_me": "switch_at_me",
-      "click #expert": "switch_expert"
+      "click .my": "switch_my",
+      "click .at_me": "switch_at_me",
+      "click .expert": "switch_expert"
+
     },
     showMysetup: function(){
       $("#show_mysetup").toggle(); // css("display","block");
@@ -49,19 +50,19 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.useredit:show",this.model.get("id"));
     },
     switch_my:function(){
-      $("#my").css({"z-index":2});
-      $("#at_me").css({"z-index":1});
-      $("#expert").css({"z-index":0});
+      $(".my").css({"z-index":2});
+      $(".at_me").css({"z-index":1});
+      $(".expert").css({"z-index":0});
     },
     switch_at_me:function(){
-      $("#my").css({"z-index":1});
-      $("#at_me").css({"z-index":1});
-      $("#expert").css({"z-index":0});
+      $(".my").css({"z-index":1});
+      $(".at_me").css({"z-index":1});
+      $(".expert").css({"z-index":0});
     },
     switch_expert:function(){
-      $("#my").css({"z-index":0});
-      $("#at_me").css({"z-index":0});
-      $("#expert").css({"z-index":0});
+      $(".my").css({"z-index":0});
+      $(".at_me").css({"z-index":0});
+      $(".expert").css({"z-index":0});
     }
     /*
     mouseEnter: function(e){

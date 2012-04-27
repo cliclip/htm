@@ -202,14 +202,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }else{
       tag = [tag];
     }
-    var bubbModel = new BubbModel({id: uid});
-    bubbModel.fetch({
-      type:'POST',
+    var bubbModel = new BubbModel();
+    bubbModel.save({tag: tag}, {
       url: url,
       data: JSON.stringify({tag: tag}),
       contentType:"application/json; charset=utf-8",
       success:callback,
-      error:function(){}
+      error:function(model, error){
+	App.vent.trigger("app.clipapp.message:chinese", error);
+      }
     });
   }
 
@@ -243,7 +244,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   }
 
-  // utils
+  // utils 因为追了所有没有办法只停追一个
   function mkTag(tags, followss, tag, self){
     // DEBUG PURPOSE
     var follows = _.without(followss,'*');

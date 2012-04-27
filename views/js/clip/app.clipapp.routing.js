@@ -47,13 +47,13 @@ App.Routing.ClipRouting = (function(App, Backbone){
     App.Routing.showRoute("my","query",word);
   });
 
-  App.vent.bind("app.clipapp.routing:usercliplist:show", function(uid){
-    App.Routing.showRoute("user", uid);
+  App.vent.bind("app.clipapp.routing:usercliplist:show", function(uid, tag){
+    App.Routing.showRoute("user", uid, tag);
   });
 
   //登陆后自动显示clip列表需要更新hash
-  App.vent.bind("app.clipapp.routing:mycliplist:show",function(){
-    App.Routing.showRoute("my");
+  App.vent.bind("app.clipapp.routing:mycliplist:show",function(tag){
+    App.Routing.showRoute("my", tag);
   });
 
   App.vent.bind("app.clipapp.routing:myfollowinglist:show",function(){
