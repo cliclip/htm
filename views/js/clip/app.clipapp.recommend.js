@@ -103,7 +103,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       $(e.currentTarget).val() );
     },
     textBlur:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaulText :
+      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultText :
       $(e.currentTarget).val() );
     },
     cancelAction:function(e){

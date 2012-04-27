@@ -34,7 +34,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     defaults:{
       title:"",
       to:[],
-      cc:[]
+      cc:[],
+      enable:""
     },
     url:function(){
       return P+"/user/"+this.id+"/rule";
@@ -147,7 +148,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if(!message){
 	App.vent.trigger("app.clipapp.useredit:@ruleupdate",params);
       }else{
-	App.ClipApp.EmailAdd.showActive(message+"    邮件不合法!");
+	App.vent.trigger("app.clipapp.message:confirm",message+"    邮件不合法!");
       }
     },
     blurAction:function(e){
