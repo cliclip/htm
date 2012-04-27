@@ -62,7 +62,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       this.model.save({content: content},{
 	success:function(model,res){
 	  var content = model.get("content");
-	  App.vent.trigger("app.clipapp.clipedit:@success", content);
+	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
 	},
 	error:function(model,res){  // 出现错误，触发统一事件
 	  App.vent.trigger("app.clipapp.clipedit:@error", cid);
@@ -121,9 +121,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     App.viewRegion.close();
   };
 
-  App.vent.bind("app.clipapp.clipedit:@success", function(content){
+  App.vent.bind("app.clipapp.clipedit:@success", function(content,cid){
     ClipEdit.close();
-    App.vent.trigger("app.clipapp.cliplist:editshow", content);
+    App.vent.trigger("app.clipapp.cliplist:edit", content,cid);
   });
 
   App.vent.bind("app.clipapp.clipedit:@cancel", function(){

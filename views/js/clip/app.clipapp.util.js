@@ -174,18 +174,16 @@ App.util = (function(){
     return returnVal;
   };
 
-  var collection_length,scroll_flag;
-  App.vent.bind("app.clipapp.page:next",function(_options){
-    var lo = _options;
-    collection_length=0;
-    scroll_flag = lo.collection.length>=App.ClipApp.Url.page ? true :false;
+  App.vent.bind("app.clipapp:showpage",function(length){
     var paddingTop = 0 + "px";
     $(window).unbind("scroll");
     util.remove_fixed(paddingTop);
     $(window).scroll(function() {
       var st = $(window).scrollTop();
-      var mt = $(".clearfix").offset().top + $(".user_head").height();
-      if($("#list").height()<=$(".left").height())return;
+      //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
+      var shifting =$(".user_head").height() ? $(".user_head").height()+15 :0;
+      var mt = $(".clearfix").offset().top + shifting;
+      //if($("#list").height()<=$(".left").height())return;
       if(st > mt ){
 	util.fixed(paddingTop);
       } else {
@@ -194,41 +192,25 @@ App.util = (function(){
       // loader while scroll down to the page end
       var wh = window.innerHeight;
       var lt = $(".loader").offset().top;
-      var scrollTop=document.body.scrollTop+document.documentElement.scrollTop;
-      if(st + wh > lt && scroll_flag){
-	util.request_data(lo);
+      if(st + wh > lt){
+	App.vent.trigger("app.clipapp:nextpage");
       }
     });
   });
 
   util.fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
-    $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
+   // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
+    //var y = $(".user_detail").height() ? $(".user_detail").height() + 5 :0;
+    var y = $(".user_detail").height()+5;
+    $("#bubb").addClass("fixed").css({"margin-top":y+"px", "top": paddingTop});
     $(".return_top").show();
   };
 
   util.remove_fixed = function(paddingTop){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
-    $("#bubb").removeClass("fixed").css("margin-top", paddingTop);
+    $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
     $(".return_top").hide();
-  };
-
-  util.request_data = function(lo){
-    lo.start += App.ClipApp.Url.page;
-    lo.end += App.ClipApp.Url.page;
-    lo.url = lo.base_url + "/" +lo.start + ".." + lo.end;
-    lo.add = true;
-    lo.collection.fetch(lo);
-    scroll_flag = false;
-    setTimeout(function(){
-      scroll_flag = true;
-      if(lo.collection.length-collection_length<App.ClipApp.Url.page){
-	scroll_flag = false;
-	//$(".loader").text("reach to the end.");
-      }else{
-	collection_length =  lo.collection.length;
-      }
-    },200);
   };
 
   //解决关于本地预览图片的浏览器兼容问题
