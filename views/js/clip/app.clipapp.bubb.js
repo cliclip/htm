@@ -117,7 +117,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp:follow", _uid, tag);
   });
 
-  App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
+  App.vent.bind("app.clipapp.bubb:unfollow", function(tag, uid){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
@@ -195,14 +195,13 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function followUserTag(uid, tag, callback){
-    var url = "";
     if(!uid) uid = _uid;
+    var url = url = P+"/user/"+uid+"/follow";
     if(tag == '*') {
       tag = "all";
     }else{
       tag = [tag];
     }
-    url = P+"/user/"+uid+"/follow";
     var bubbModel = new BubbModel({id: uid});
     bubbModel.fetch({
       type:'POST',
@@ -215,18 +214,16 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function unfollowUserTag(uid, tag, callback){
+    var url = "";
     if(!uid){
       uid = _uid ? _uid : 2;
     }
-    var url = "";
     if(tag == '*') {
       url = P+"/user/"+uid+"/follow";
     }else{
-      url = P+"/user/"+uid+"/follow/"+tag;
+      url  = P+"/user/"+uid+"/follow/"+tag;
     }
-    // console.log("unfollow %s", tag);
     var bubbModel = new BubbModel({id: uid});
-    // console.info(bubbModel.id+"   "+url);
     bubbModel.destroy({
       url: url,
       success:callback,
