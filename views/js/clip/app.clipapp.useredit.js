@@ -32,6 +32,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var RuleEditModel = App.Model.extend({
     defaults:{
+      enable:"",
       title:"",
       to:[],
       cc:[],

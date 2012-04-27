@@ -69,10 +69,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){
-	  var res = {};
-	  res.token = response.token;
-	  res.text = "您已经成功注册，现在可以添加邮件，邮件添加完成后可以方便进行数据的存储以及密码的找回";
-	  App.vent.trigger("app.clipapp.register:success",res);
+	  App.vent.trigger("app.clipapp.register:success","register_success",response);
 	},
 	error:function(model,error){
 	  App.vent.trigger("app.clipapp.login:error",model, error);

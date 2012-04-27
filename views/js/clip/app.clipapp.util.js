@@ -268,7 +268,7 @@ App.util = (function(){
     pre_addemail:"您所要添加的邮箱",
     post_addemail:"需要先进行激活才可以加入到系统中,激活链接以及发送到您的邮箱",
 
-    register_success : "注册成功",
+    register_success : "注册成功,您可以先进行邮件地址的添加,以方便数据的存储以及找回密码",
     pre_invite:"您已经使用",
     post_invite:"成功注册，现在请先进行用户名的添加以及密码的修改",
 
