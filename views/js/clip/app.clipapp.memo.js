@@ -77,7 +77,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var tags = clip.tag?clip.tag:[];
     var note = clip.note?clip.note:"";
     var text = "";
-    console.info(tags);
+    //console.info(tags);
     if(!_.isEmpty(note)){
       var ns = _(note).select(function(e){return e.text; })
 	.map(function(e){ return e.text; });

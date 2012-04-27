@@ -35,7 +35,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       enable:"",
       title:"",
       to:[],
-      cc:[]
+      cc:[],
+      enable:""
     },
     url:function(){
       return P+"/user/"+this.id+"/rule";
@@ -61,31 +62,26 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#faceEdit-view-template",
     events: {
       "click .set_username" : "setName"
-  //    "click #confirm_face[type=submit]":"submit"
     },
     setName: function(e){
-      if($("#set-name").html()=="您还没有用户名"){
+      var IdValue = $(e.currentTarget).val();
+      var that = this;
+      if(IdValue == "设置用户名"){
 	$("#set-name").empty();
 	var username = '<input type="text" id="username"/>';
 	$("#set-name").append(username);
-	$('#username').unbind("keydown");
-	$('#username').keydown(function(e){
-	  if(e.keyCode==13){
-	    var nameModel = new NameModel({id:App.util.getMyUid()});
-	    UserEdit.saveName(nameModel,{name:$("#username").val()});
-	  }
-	});
+	$(".set_username").val("确定");
+      }else{
+	var params = {id:this.model.id,name:$("#username").val().trim()};
+	App.vent.trigger("app.clipapp.useredit:@savename",params);
       }
+      $('#username').unbind("keydown");
+      $('#username').keydown(function(e){
+	if(e.keyCode==13){
+	  $('.set_username').click();
+	}
+      });
     }
-/*
-    submit:function(form){
-      form.preventDefault();//此处阻止提交表单
-      if(!flag){
-	form.preventDefault();//此处阻止提交表单
-	//alert("请选择上传照片");
-      }
-    }
-*/
   });
 
   var EmailView = App.ItemView.extend({
@@ -419,25 +415,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   }
 
-  UserEdit.saveName = function(nameModel,params){
-    nameModel.save(params,{
-      type: "PUT",
-      success:function(model,res){
-	App.vent.trigger("app.clipapp.message:confirm","rename_success");
-	App.vent.trigger("app.clipapp.useredit:@showface",App.util.getMyUid());
-      },
-      error:function(model,res){
-	if(res.name== "invalidate"){ // 这种提示方法不合适
-	  App.vent.trigger("app.clipapp.message:confirm","名称不合法！");
-	}else if(res.name == "is_null" ){
-	  App.vent.trigger("app.clipapp.message:confirm","用户名不能为空");
-	}else if(res.name == "has_name"){
-	  App.vent.trigger("app.clipapp.message:confirm","用户名已存在");
-	}
-      }
-    });
-  };
-
   UserEdit.close = function(){
     if(face_flag){
       App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
@@ -462,6 +439,20 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
   App.vent.bind("app.clipapp.useredit:@showpass",function(uid,model,error){
     UserEdit.showPassEdit(uid,model,error);
+  });
+
+  App.vent.bind("app.clipapp.useredit:@savename",function(params){
+    var nameModel = new NameModel(params);
+    nameModel.save({} ,{
+      type: "PUT",
+      success:function(model,res){
+	App.vent.trigger("app.clipapp.message:confirm","rename_success");
+	App.vent.trigger("app.clipapp.useredit:@showface",params.id);
+      },
+      error:function(model,res){
+	App.vent.trigger("app.clipapp.message:confirm",App.util.getErrorMessage(res));
+      }
+    });
   });
 
   App.vent.bind("app.clipapp.useredit:@emaildel",function(params){
