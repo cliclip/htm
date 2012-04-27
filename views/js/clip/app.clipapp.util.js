@@ -247,26 +247,24 @@ App.util = (function(){
   };
 
   var MESSAGE = {
-    pre_addemail:"您所要添加的邮箱",
-    post_addemail:"需要先进行激活才可以加入到系统中,激活链接以及发送到您的邮箱",
+    register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
+    pre_invite   : "您已通过发往",
+    post_invite  : "邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
+    pre_addemail : "您已添加",
+    post_addemail: "邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
+    pre_active   : "您已激活",
+    post_active  : "邮件地址。您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。",
+    pre_delemail : "您真的要删除",
+    post_delemail: "邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 
-    register_success : "注册成功,您可以先进行邮件地址的添加,以方便数据的存储以及找回密码",
-    pre_invite:"您已经使用",
-    post_invite:"成功注册，现在请先进行用户名的添加以及密码的修改",
+    del_comment  : "您真的要删除这条评论吗？（此操作无法恢复）",
 
-    "pre_active":"邮件地址",
-    "post_active":"已经激活成功，您可以方便的使用该邮件地址进行数据的存储了",
-
-    pre_delemail: "确认删除",
-    post_delemail: "的绑定",
-    del_comment: "确认要删除该条评论",
-
-    reclip_null:"该tag下还没有数据",
-    imageUp_fail:"您上传的图片格式无效",
-    faceUp_success:"头像设置成功",
-    passwd_success:"密码修改成功",
-    setRule_success:"邮箱规则设置成功",
-    rename_success:"恭喜您,命名成功"
+    reclip_null  : "该标签下暂时还没有数据",
+    imageUp_fail : "您上传的文件不是图片文件",
+    faceUp_success  : "您的头像已更新",
+    passwd_success  : "您的密码已修改",
+    setRule_success : "您已成功更新邮箱规则",
+    rename_success  : "您的用户名已经修改"
   };
 
   util.getMessage = function(key){
@@ -277,46 +275,46 @@ App.util = (function(){
 
 
   var ERROR = {
-    login_success : "登录成功",
-    auth_success : "更改密码成功",
-    collect_success : "收藏成功",
-    comment_success : "评论成功",
-    recomment_success : "转发成功",
+    login_success : "您已成功登录",
+    auth_success : "您的密码已更改",
+    collect_success : "您已成功收藏",
+    comment_success : "您的评论已发表",
+    recomment_success : "您的转发已完成",
 
     user:{
       not_exist: "用户不存在"
     },
     auth: {
       not_exist: "用户不存在",
-      not_match: "句柄不合法",
-      not_login: "用户为登录"
+      not_match: "您的登录信息有误，请退出再重新登录",
+      not_login: "您尚未登录"
     },
     name:{
-      is_null: "用户名为空",
-      invalidate: "用户名不符合校验规则（只能是英文、数字和点的组合，长度是5-20）",
+      is_null: "用户名尚未填写",
+      invalidate: "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
       exist: "用户名已存在",
       not_exist: "用户名不存在"
     },
     pass:{
-      is_null: "密码为空",
-      not_match: "密码不匹配"
+      is_null: "密码尚未填写",
+      not_match: "密码输入不一致"
     },
     confirm:{
-      is_null: "确认密码为空",
+      is_null: "密码尚未填写",
       password_diff: "密码输入不一致"
     },
     email:{
       is_Exist: "邮件地址已经存在",
-      email_exists: "邮件已存在",
-      invalidate: "邮箱不合法",
-      is_null: "邮件地址不能为空",
-      no_uname: "你还没有设置用户名"
+      email_exists: "邮件地址已经登记",
+      invalidate: "邮件地址格式有误",
+      is_null: "邮件地址尚未填写",
+      no_uname: "在添加邮件之前请先设置用户名"
     },
     accept:{
-      fail:"您的注册链接已经失效,您可以先进行注册,然后再添加该邮箱地址到你的帐号"
+      fail:"因为间隔时间太长，此注册链接已经失效。您可直接注册，再到设置界面添加您的邮箱地址。"
     },
     active:{
-      fail: "您的激活链接已经失效,可以在信息设置界面重新进行邮件地址添加。"
+      fail: "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
     },
     recommend:{
       not_exist: "推荐不存在"
@@ -330,12 +328,12 @@ App.util = (function(){
       is_empty: "摘录不能为空"
     },
     follow:{
-      all: "你追了该用户的全部"
+      all: "你追了该用户的全部标签"
     },
     error:{
-      "link 已作废": "连接已作废",
-      "link doesnt exist": "连接不存在",
-      "link invalidate": "连接不合法"
+      "link 已作废": "此链接已过期",
+      "link doesnt exist": "此链接无效",
+      "link invalidate": "此链接格式有误"
     }
   };
 
