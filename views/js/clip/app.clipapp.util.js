@@ -268,8 +268,8 @@ App.util = (function(){
   };
 
   util.getMessage = function(key){
-    console.log(key);
-    console.log(MESSAGE[key]);
+    // console.log(key);
+    // console.log(MESSAGE[key]);
     return MESSAGE[key] ? MESSAGE[key] : key;
   };
 
@@ -328,7 +328,7 @@ App.util = (function(){
       is_empty: "摘录不能为空"
     },
     follow:{
-      all: "你追了该用户的全部标签"
+      all: "您已经追了该用户的全部标签"
     },
     error:{
       "link 已作废": "此链接已过期",
