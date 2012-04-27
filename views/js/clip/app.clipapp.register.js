@@ -79,7 +79,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.register:success", 'invite', response);
       },
       error:function(model,error){
-	App.vent.trigger("app.clipapp.message:confirm", "invite_fail");
+	App.vent.trigger("app.clipapp.message:chinese", error);
       }
     });
   });

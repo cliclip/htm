@@ -148,7 +148,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if(!message){
 	App.vent.trigger("app.clipapp.useredit:@ruleupdate",params);
       }else{
-	App.ClipApp.EmailAdd.showActive(message+"    邮件不合法!");
+	App.vent.trigger("app.clipapp.message:alert", message+"不是合法的邮件地址"); // 更适合直接在输入框显示而不是弹出框
       }
     },
     blurAction:function(e){
@@ -498,7 +498,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   	success: function(model, res){
 	  UserEdit.showPassEdit(params.id);
 	  App.vent.trigger("app.clipapp.message:confirm", "passwd_success");
-	  document.cookie = "token="+res;
+	  document.cookie = "token="+res.token;
   	},
   	error:function(model, res){
 	  UserEdit.showPassEdit(params.id,model,App.util.getErrorMessage(res));

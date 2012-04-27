@@ -198,10 +198,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var url = "";
     if(!uid) uid = _uid;
     if(tag == '*') {
-      url = P+"/user/"+uid+"/follow";
+      tag = "all";
     }else{
-      url = P+"/user/"+uid+"/follow/"+tag;
+      tag = [tag];
     }
+    url = P+"/user/"+uid+"/follow";
     var bubbModel = new BubbModel({id: uid});
     bubbModel.fetch({
       type:'POST',
