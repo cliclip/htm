@@ -21,3 +21,6 @@ script(type="text/template",id="recommend-view-template")
       li.btn_group.clearfix
         input.verify(type="button",value="确定",id="submit")
         input.cancel(type="button",value="取消",id="cancel")
+
+script(type="text/template",id="namelist-view-template")
+  |<li class="name-li" id="<%=name%>_<%=id%>" title="<%=face%>"><%=name%></li>
