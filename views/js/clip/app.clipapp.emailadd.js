@@ -83,7 +83,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
-	EmailAdd.close();
+	// EmailAdd.close(); emailadd和message:confirm公用同一个region
       },
       error:function(model, res){
 	EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(res));
