@@ -42,7 +42,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
       App.ClipApp.Bubb.showUserTags(this.model.id);
     },
     stopAction: function(){
-      App.vent.trigger("app.clipapp.bubb:unfollow",this.model.id,'*');
+      App.vent.trigger("app.clipapp.bubb:unfollow",'*',this.model.id);
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
     },
