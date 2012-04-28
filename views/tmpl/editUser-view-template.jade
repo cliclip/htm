@@ -95,10 +95,13 @@ script(type="text/template",id="emailAdd-view-template")
         添加邮件
       ul.pop_body
         li.input_text.
-          <input type="text" id="email_address" value="<%=email%>" />
-        li.alert#alert
-          <%= typeof error != "undefined" && error ? error.email : "" %>
-        br
+          <% if( typeof error != "undefined"){ %>
+            <input class="error" type="text" id="email_address" value="<%=email%>">
+            <br>
+            <span class="error"><%= error.email%></span>
+          <% } else {%>
+            <input type="text" id="email_address" value="<%=email%>" />
+          <% } %>
         li.btn_group.clearfix
           input.verify(type="button",value="确定",id="emailadd_commit")
           input.cancel(type="button",value="取消",id="emailadd_cancel")
