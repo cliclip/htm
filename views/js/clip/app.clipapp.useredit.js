@@ -384,6 +384,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       type: "POST",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
+	$("#confirm_face").hide();
 	face_flag = true;
       },
       error:function(model,res){
