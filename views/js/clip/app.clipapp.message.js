@@ -27,7 +27,6 @@ App.ClipApp.Message = (function(App, Backbone, $){
     },
     MessageSure: function(){
       App.setpopRegion.close();
-      console.log("确认删除");
       App.vent.trigger("app.clipapp.message:sure");
     },
     Messageclose: function(){
