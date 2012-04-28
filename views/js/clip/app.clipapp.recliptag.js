@@ -76,12 +76,12 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       type: "GET",
       url: P+"/user/"+user+"/clip/tag/"+tag,
       success: function(model, res){
-	if(res.count == null){
+	if(!res.count){
 	  // 现在只是公用该事件，事件名称有待改进
 	  App.vent.trigger("app.clipapp.message:confirm","reclip_null");
 	}else{
 	  // 有count表示可以收到数据
-	  model.set({user:user,tag:tag});
+	  model.set({user:user,tag:tag,count:res.count});
 	  var view = new ReclipTagView({model : model});
 	  App.popRegion.show(view);
 	  $('#obj_tag').tagsInput({
