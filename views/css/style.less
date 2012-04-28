@@ -298,6 +298,7 @@
 				left:25px;
 				z-index:10;
 				list-style:none;
+				display:none;
 				li{
 					height:42px;
 					margin-bottom:3px;
@@ -870,6 +871,9 @@ section.follow_frame{
 		.button_frame{
 			float:right;
 			margin-top:10px;
+			iframe {
+				display:none;	
+			}
 			button{
 				border:0 none;
 				width:80px;
@@ -892,6 +896,7 @@ section.follow_frame{
 				bottom:-50px;
 				left:-120px;
 				.sprites(-30px,-365px);
+				display:none;
 				input.text{
 					width:225px;
 					height:12px;
@@ -912,6 +917,10 @@ section.follow_frame{
 					float: left;
 				}
 			}
+			.url_text{
+
+			}
+
 			.upload_img{
 				.sprites(-590px,-522px);
 			}
@@ -1264,6 +1273,12 @@ section.edit_frame{
 				background:#efefef;
 				border:none;
 			}
+			iframe{
+				display:none;
+			}
+			button.verify{
+				display:none;
+			}
 		}
 	}
 	.middle{
@@ -1387,6 +1402,15 @@ section.edit_frame{
 					color:#fff;
 					.sprites(-340px,-570px);
 				}
+				input#new_pass{
+					display:none;
+				}
+				input#con_pass{
+					display:none;
+				}
+				li.alert{
+					display:none;
+				}
 			}
 			li.btn_line{margin-bottom:20px;}
 		}
@@ -1418,6 +1442,11 @@ section.edit_frame{
       width: 240px;
       height: 320px;
       border: none;
+}
+#editor {
+	width:100%;
+	height:100%;
+	border:0px;
 }
 
 // ie6 fix masker
