@@ -40,7 +40,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["id"] = this.model.get("user");
       params["tag"] = this.model.get("tag");
-      App.vent.trigger("app.clipapp.reclip_tag:@submit", params);
+      App.vent.trigger("app.clipapp.reclip_tag:@submit", params,this.model.get("count"));
     },
     cancel : function(e){
       e.preventDefault();
@@ -99,11 +99,18 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.reclip_tag:@submit", function(params){
+  App.vent.bind("app.clipapp.reclip_tag:@submit", function(params,count){
     var model = new ReclipTagModel(params);
     model.save({}, {
       type: "POST",
       success: function(model, res){
+	if(res.reclip_tag == count){
+	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag_success");
+	} else if(res.reclip_tag == 0){
+	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag_fail");
+	}else{
+	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag",res.reclip_tag);
+	}
 	ReclipTag.close();
       },
       error:function(model, res){
