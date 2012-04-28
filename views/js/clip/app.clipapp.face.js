@@ -37,11 +37,13 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
 
     followAction: function(){
+      App.vent.trigger("app.clipapp.followerlist:refresh");
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
     },
     stopAction: function(){
+      App.vent.trigger("app.clipapp.followerlist:refresh");
       App.vent.trigger("app.clipapp.bubb:unfollow",'*',this.model.id);
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
