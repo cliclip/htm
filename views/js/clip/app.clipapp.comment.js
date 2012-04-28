@@ -31,22 +31,18 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).val() );
     },
     maintagAction:function(e){
-      var id = e.target.id;
-      var style = $("#"+id).attr("class");
-      if(style != "size48 orange_48"){
-	$("#"+id).attr("class","size48 orange_48");
-	tag_list.push($("#"+id).html());
-	//console.dir(tag_list);
-	if($("#comm_text").val() == "" || $("#comm_text").val() == defaultComm){
-	  $("#comm_text").val($("#"+id).html());
-	}else{
-	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).html()));
-	}
-      }else if(style == "size48 orange_48"){
-	$("#"+id).attr("class","size48 white_48");
-	tag_list = _.without(tag_list,$("#"+id).html());
-	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).html()));
-	//console.dir(tag_list);
+      // 取得评论框中的文本并转为数组，去除掉数组中的默认值和空值。
+      var arr_text = _.compact(_.without($("#comm_text").val().split(","),defaultComm));
+      var tag = $(e.currentTarget).text(); //取得当前点击的tag
+      $(e.currentTarget).toggleClass("white_48"); //tag颜色的切换
+      $(e.currentTarget).toggleClass("orange_48");
+      if($(e.currentTarget).hasClass("orange_48")){
+	tag_list.push(tag); //把变色的tag值push进一个数组，reclip时需要。
+	$("#comm_text").val((_.union(arr_text,tag)).join(",")); //把点击的tag加入到评论文本框
+      }else{
+	// 与上面相反。
+	tag_list = _.without(tag_list,tag);
+	$("#comm_text").val((_.without(arr_text,tag)).join(","));
       }
     },
 

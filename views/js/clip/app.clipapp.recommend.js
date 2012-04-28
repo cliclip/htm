@@ -69,7 +69,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       }
     },
     nameBlur:function(){
-     // this.$("#name_listDiv").empty();
+      setTimeout(function(){
+	this.$("#name_listDiv").empty();
+      },200);
     },
     MouseOver:function(evt){
 
@@ -103,7 +105,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       $(e.currentTarget).val() );
     },
     textBlur:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaulText :
+      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultText :
       $(e.currentTarget).val() );
     },
     cancelAction:function(e){
