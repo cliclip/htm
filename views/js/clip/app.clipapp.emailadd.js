@@ -40,7 +40,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       }
     },
     cleanError:function(){
-      $("#alert").hide();
+      $("span.error").hide();
+      $("input").removeClass("error");
     }
   });
 
@@ -83,7 +84,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
-	EmailAdd.close();
+	// EmailAdd.close(); emailadd和message:confirm公用同一个region
       },
       error:function(model, res){
 	EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(res));
@@ -95,7 +96,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     EmailAdd.showEmailAdd(uid);
   });
   App.vent.bind("app.clipapp.emailadd:@error",function(model,error){
-    EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(error));
+    EmailAdd.showEmailAdd(null,model,App.ClipApp.Message.getError(error));
   });
   App.vent.bind("app.clipapp.emailadd:@close",function(){
     EmailAdd.close();

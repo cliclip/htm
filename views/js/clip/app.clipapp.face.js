@@ -36,12 +36,14 @@ App.ClipApp.Face = (function(App, Backbone, $){
       $(e.currentTarget).children(".user_i").hide();
     },
     followAction: function(){
+      App.vent.trigger("app.clipapp.followerlist:refresh");
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);
       // 能否触发去修改bubbs中的tag和follow的事件而不是直接showUserTags
     },
     stopAction: function(){
+      App.vent.trigger("app.clipapp.followerlist:refresh");
       App.vent.trigger("app.clipapp.bubb:unfollow",'*',this.model.id);
       App.vent.trigger("app.clipapp.face:show",this.model.id);
       App.ClipApp.Bubb.showUserTags(this.model.id);

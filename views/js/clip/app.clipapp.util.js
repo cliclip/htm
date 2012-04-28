@@ -338,17 +338,17 @@ App.util = (function(){
   };
 
   util.getErrorMessage = function(errorCode){
-    var error = "";
     if(typeof(errorCode)=="string"){
-      error = ERROR[errorCode];
+      var error = ERROR[errorCode];
       return error ? error : errorCode;
     } else if(typeof(errorCode)=="object"){
+      var error = {};
       for (key in errorCode){
 	if(ERROR[key]){
-	  error += ERROR[key][errorCode[key]];
+	  error[key] = ERROR[key][errorCode[key]];
 	}
       }
-      return error;
+      return _.isEmpty(error) ? errorCode : error;
     }else{
       return errorCode;
     }
