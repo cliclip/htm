@@ -40,7 +40,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       }
     },
     cleanError:function(){
-      $("#alert").hide();
+      $("span.error").hide();
+      $("input").removeClass("error");
     }
   });
 
@@ -95,7 +96,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     EmailAdd.showEmailAdd(uid);
   });
   App.vent.bind("app.clipapp.emailadd:@error",function(model,error){
-    EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(error));
+    EmailAdd.showEmailAdd(null,model,App.ClipApp.Message.getError(error));
   });
   App.vent.bind("app.clipapp.emailadd:@close",function(){
     EmailAdd.close();
