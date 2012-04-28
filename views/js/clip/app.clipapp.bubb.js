@@ -77,6 +77,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     followUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "followTag", tag);
+      App.vent.trigger("app.clipapp.followerlist:refresh"); //刷新右边follower列表
       if(last && last.follows){
 	if(_.isEmpty(last.follows)){
 	  App.vent.trigger("app.clipapp.face:show",_uid);
@@ -102,6 +103,13 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     last = tags;
   });
 
+  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow){
+    _uid = uid;
+    self = false;
+    if(App.util.getMyUid() == uid) self = true;
+    App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
+  });
+
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     // console.log("open %s", tag + "  " +_uid);
     // 更新bubb显示
@@ -121,6 +129,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
+      App.vent.trigger("app.clipapp.followerlist:refresh"); // 刷新右边follower列表
       // 若之后已停，则需刷新头像为追
       if(last && last.follows){
 	last.follows = _.without(last.follows,tag);
