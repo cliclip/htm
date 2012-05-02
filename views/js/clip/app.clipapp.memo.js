@@ -132,6 +132,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var model = new App.Model.DetailModel(data);
       model.save({}, {
 	success: function(model, res){
+	  App.vent.trigger("app.clipapp.bubb:refresh",App.util.getMyUid(),null,data.tag);
 	  ClipMemo.close();
 	},
 	error:function(model,res){

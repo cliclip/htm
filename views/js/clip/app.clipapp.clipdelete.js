@@ -1,11 +1,6 @@
 // app.delete.js
 App.ClipApp.ClipDelete = (function(App, Backbone, $){
   var ClipDelete = {};
-  var DeleteModel = App.Model.extend({
-    url: function(){
-      return P+"/clip/"+this.id;
-    }
-  });
   var DeleteView = App.ItemView.extend({
     tagName : "div",
     className : "delete-view",
@@ -24,7 +19,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
    });
 
    ClipDelete.show = function(cid){
-     var model = new DeleteModel({id:cid});
+     var model = new App.Model.DetailModel({id:cid});
      var view = new DeleteView({model : model});
      App.popRegion.show(view);
    };
@@ -36,6 +31,8 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
      deleteModel.destroy({
        success: function(model, res){
 	 App.vent.trigger("app.clipapp.cliplist:remove",deleteModel.id);
+	 //在删clip时不能根据删除clip的tag来refresh   bubbs。所以重新load
+ 	 App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
 	 ClipDelete.close();
 	 if(App.viewRegion){ // 从detail来，需要关闭viewRegion
 	   App.viewRegion.close();

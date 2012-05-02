@@ -103,11 +103,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     last = tags;
   });
 
-  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow){
+  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
     _uid = uid;
     self = false;
     if(App.util.getMyUid() == uid) self = true;
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
+    if(follow){
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
+    }else if(new_tags){
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(_.union(last.tags,new_tags), follow, null, self));
+    }
   });
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
