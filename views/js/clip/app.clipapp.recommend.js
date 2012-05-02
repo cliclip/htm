@@ -23,13 +23,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "input #name"          :  "nameListAction",
       "click #name"          :  "nameListAction",
       "blur #name"           :  "nameBlur",
-      "mouseover #name_list" :  "MouseOver",
-      "mouseout #name_list"  :  "MouseOut",
+      "mouseover .name-li"   :  "MouseOver",
+      "mouseout .name-li"    :  "MouseOut",
+      "mouseenter .name-li"   :  "mouseHand",
       "focus #recommend_text":  "clearAction",
       "blur  #recommend_text":  "textBlur",
       "click #submit"        :  "recommendAction",
-      "click #cancel"        : "cancelAction",
-      "click .close_w"       : "cancelAction"
+      "click #cancel"        :  "cancelAction",
+      "click .close_w"       :  "cancelAction"
     },
     getUserAction:function(evt){
       var id=evt.target.id;
@@ -73,11 +74,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	this.$("#name_listDiv").empty();
       },200);
     },
-    MouseOver:function(evt){
-
+    MouseOver:function(e){
+      $(e.currentTarget).css("background-color","#888");
     },
-    MouseOut:function(evt){
-
+    MouseOut:function(e){
+       $(e.currentTarget).css("background-color","");
+    },
+    mouseHand:function(e){
+      e.currentTarget.style.cursor="pointer";
     },
     recommendAction:function(e){
       e.preventDefault();

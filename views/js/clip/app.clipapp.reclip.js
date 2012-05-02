@@ -91,7 +91,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
       },
       error:function(model, res){
-	console.info(res);
+	App.vent.trigger("app.clipapp.message:chinese",res);
       }
     });
   }
