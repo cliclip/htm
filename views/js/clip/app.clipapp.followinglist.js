@@ -69,9 +69,9 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     FollowingList.showUserFollowing(uid);
     var my = App.util.getMyUid();
     if(my == uid){
-      App.vent.trigger("app.clipapp.routing:myfollowinglist:show");
+      App.vent.trigger("app.clipapp.routing:myfollowing");
     }else{
-      App.vent.trigger("app.clipapp.routing:userfollowinglist:show", uid);
+      App.vent.trigger("app.clipapp.routing:userfollowing", uid);
     }
   });
 

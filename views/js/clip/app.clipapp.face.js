@@ -61,10 +61,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
     var url = "";
     if(uid == App.util.getMyUid()){
       url = P + "/my/info";
-      App.vent.trigger("app.clipapp.routing:mycliplist:show");
+      App.vent.trigger("app.clipapp.routing:myshow");
     }else{
       url = P + "/user/"+ uid + "/info";
-      App.vent.trigger("app.clipapp.routing:usercliplist:show", uid);
+      App.vent.trigger("app.clipapp.routing:usershow", uid);
     }
     var user=new UserModel();
     user.fetch({url:url});

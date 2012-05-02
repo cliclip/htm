@@ -61,28 +61,42 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click .set_username" : "setName"
+      "click .set_username" : "setName",
+      "focus .edit_username": "cleanError"
     },
     setName: function(e){
-      var IdValue = $(e.currentTarget).val();
-      var that = this;
-      if(IdValue == "设置用户名"){
+      e.preventDefault();
+      var uid = this.model.id;
+      if(!$(e.currentTarget).hasClass("set_ok")){
 	$("#set-name").empty();
-	var username = '<input type="text" id="username"/>';
-	$("#set-name").append(username);
-	$(".set_username").val("确定");
-      }else{
-	var params = {id:this.model.id,name:$("#username").val().trim()};
-	App.vent.trigger("app.clipapp.useredit:@savename",params);
       }
-      $('#username').unbind("keydown");
-      $('#username').keydown(function(e){
-	if(e.keyCode==13){
-	  $('.set_username').click();
+      $(".set_username").addClass("set_ok").val("确定");
+      $(".edit_username").show();
+      $(".set_ok").unbind("click");
+      $(".set_ok").click(function(){
+	var params = {id:uid,name:$(".edit_username").val().trim()};
+	if(!params.name || params.name == ""){
+	  $(".edit_username").addClass("error");
+	  $("#set-name").append('<span class="error">用户名为空</span>');
+	}else if(! (/^[a-zA-Z0-9.]{5,20}$/.test(params.name))){
+	  $(".edit_username").addClass("error");
+	  $("#set-name").append('<span class="error">非法用户名</span>');
+	}else{
+	  App.vent.trigger("app.clipapp.useredit.rename:@ok", params);
 	}
       });
+      $('.edit_username').unbind("keydown");
+      $('.edit_username').keydown(function(e){
+      if(e.keyCode==13){
+	$('.set_username').click();
+      }
+    });
+    },
+    cleanError: function(){
+      $(".edit_username").removeClass("error");
+      $("span.error").remove();
     }
-  });
+});
 
   var EmailView = App.ItemView.extend({
     tagName: "div",
@@ -117,7 +131,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "blur #copy-to" : "blurAction",
       "keydown #send" : "setTO",
       "blur #send" : "blurAction"
-
     },
     setCC:function(e){
       var key = e.keyCode;
@@ -309,23 +322,29 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showPassEdit(uid);
   };
 
-  UserEdit.showFace = function(uid){
+  UserEdit.showFace = function(uid, model, error){
     var faceModel = new App.Model.MyInfoModel({id:uid});
-    UserEdit.faceRegion = new App.Region({
-      el:".left_bar"
-    });
-    faceModel.fetch({
-      success:function(){
+    UserEdit.faceRegion = new App.Region({el:".left_bar"});
+    if(model){
+      faceModel.set(faceModel(model.toJSON()));
+      if(error) faceModel.set({error: error});
+      var faceView= new FaceView({model: faceModel});
+      UserEdit.faceRegion.show(faceView);
+      faceLoad(originalFace,uid);//修改头像
+    }else{
+      faceModel.fetch({
+	success:function(){
 	//console.info("originalFace:" + editModel.get("face"));
-	var originalFace = faceModel.get("face");
-	faceModel.onChange(function(faceModel){
-	  var faceView = new FaceView({model: faceModel});
-	  UserEdit.faceRegion.show(faceView);
-	});
-	faceLoad(originalFace,uid);//修改头像
-      },
-      error:function(){}
-    });
+	  var originalFace = faceModel.get("face");
+	  faceModel.onChange(function(faceModel){
+	    var faceView = new FaceView({model: faceModel});
+	    UserEdit.faceRegion.show(faceView);
+	  });
+	  faceLoad(originalFace,uid);//修改头像
+	},
+	error:function(){}
+      });
+    }
   };
 
   UserEdit.onUploadImgChange = function(sender){
@@ -441,7 +460,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showPassEdit(uid,model,error);
   });
 
-  App.vent.bind("app.clipapp.useredit:@savename",function(params){
+  App.vent.bind("app.clipapp.useredit.rename:@ok",function(params){
     var nameModel = new NameModel(params);
     nameModel.save({} ,{
       type: "PUT",
@@ -450,6 +469,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.useredit:@showface",params.id);
       },
       error:function(model,res){
+	// 出现了错误
+	// App.vent.trigger("app.clipapp.useredit.rename:@error", App.util.getErrorMessage(res));
 	App.vent.trigger("app.clipapp.message:confirm",App.util.getErrorMessage(res));
       }
     });
@@ -495,6 +516,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  UserEdit.showPassEdit(params.id,model,App.util.getErrorMessage(res));
   	}
       });
+  });
+
+  App.vent.bind("app.clipapp.useredit:rename", function(){
+    $(".edit_username").focus(); // 先让输入框聚焦
+    $(".set_username").click(); // 触发设置用户名的动作
+  });
+
+  App.vent.trigger("app.clipapp.useredit.rename:@error", function(message){
+
   });
 
   App.bind("initialize:after", function(){

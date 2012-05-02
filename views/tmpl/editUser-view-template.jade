@@ -12,13 +12,13 @@ script(type="text/template",id="faceEdit-view-template")
   .edit_head
     .head_img.
       <img id="myface" src="<%=App.util.face_url(face)%>"/>
-    .user_name
+    .user_name.
       <% if(name && name!=""){%>
-      span.name.
-        <%=name%>
-      <%}else{%>
+      <span class="name"><%=name%></span>
+      <% }else{%>
       <div id="set-name">您还没有用户名</div>
-      <input type="button" class="set_username" value="设置用户名"/>    
+      <input type="text" class="edit_username" style="display:none;">
+      <input type="button" class="set_username" value="设置用户名"/>
       <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face",style="display:none;",mce_style="display:none;")
@@ -86,6 +86,7 @@ script(type="text/template",id="passEdit-view-template")
       input.btn_blue(type="submit",value="导出摘录")
     li
       input.btn_gray(type="submit",value="删除账户")
+
 script(type="text/template",id="emailAdd-view-template")
   div.masker_layer
   section.small_pop
