@@ -61,7 +61,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click .set_username" : "setName"
+      "click .set_username" : "setName",
+      "click #confirm_face" : "submitFace"
     },
     setName: function(e){
       var IdValue = $(e.currentTarget).val();
@@ -81,6 +82,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  $('.set_username').click();
 	}
       });
+    },
+    submitFace:function(){
+      $("#confirm_face").hide();
     }
   });
 
@@ -330,7 +334,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.onUploadImgChange = function(sender){
-    // console.info("imagechange");
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
@@ -383,8 +386,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       url: P+"/user/"+ facemodel.id+"/face",
       type: "POST",
       success:function(model,res){
-	// App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
-	$("#confirm_face").hide();
+	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
 	face_flag = true;
       },
       error:function(model,res){

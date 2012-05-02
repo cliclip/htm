@@ -311,10 +311,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       clip.reprint_count = clip.reprint_count ? clip.reprint_count+1 : 1;
     }
     model.set({clip:clip});
-    App.listRegion.show(clipListView);
-    var that = clipListView;
-    that.bindTo(that.collection, "add", that.addChildView, that);
-    that.bindTo(that.collection, "remove", that.removeItemView, that);
+    model.set({"change":true});
+    model.unset("change",{silent:true});
+    //App.listRegion.show(clipListView);
+    //var that = clipListView;
+    //that.bindTo(that.collection, "add", that.addChildView, that);
+    //that.bindTo(that.collection, "remove", that.removeItemView, that);
   });
 
   App.vent.bind("app.clipapp.cliplist:edit", function(content,model_id){
@@ -322,11 +324,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var model = collection.get(model_id);
     var clip = model.get("clip");
     clip.content = App.util.getPreview(content, 100);
+    console.info(model);
     model.set({clip:clip});
-    App.listRegion.show(clipListView);
-    var that = clipListView;
-    that.bindTo(that.collection, "add", that.addChildView, that);
-    that.bindTo(that.collection, "remove", that.removeItemView, that);
+    model.set({"change":true});
+    model.unset("change",{silent:true});
+    //App.listRegion.show(clipListView);
+    //var that = clipListView;
+    //that.bindTo(that.collection, "add", that.addChildView, that);
+    //that.bindTo(that.collection, "remove", that.removeItemView, that);
   });
 
   return ClipList;
