@@ -142,6 +142,7 @@
 		margin:14px 25px;
 		float:left;
 		.sprites(-40px, -15px);
+		cursor:pointer;	
 		a{
 			display:block;
 			width:145px;
@@ -156,7 +157,10 @@
 		right:20px;
 		bottom:20px;
 		color:#fff;
-		a{color:#fff;}
+		a{
+			color:#fff;
+			cursor:pointer;
+		}
 	}
 	.my_info{
 		width:71px;
@@ -166,6 +170,7 @@
 		bottom:20px;
 		color:#fff;
 		a{color:#fff;}
+		cursor: pointer;
 		.sprites(-515px,-100px);
 		.my_head{
 			width:43px;
@@ -297,6 +302,7 @@
 				left:25px;
 				z-index:10;
 				list-style:none;
+				display:none;
 				li{
 					height:42px;
 					margin-bottom:3px;
@@ -400,11 +406,11 @@
 .user_info{
 	width:240px;
 	padding-top:15px;
-
 	.user_head{
 		width:240px;
 		height:240px;
 		position: relative;
+		cursor: pointer;
 		.user_i{
 			width:25px;
 			height:25px;
@@ -445,6 +451,7 @@
 				font-size:24px;
 				color: #818181;
 				font-weight:blod;
+				cursor: pointer;
 			}
 		}
 		dd{
@@ -453,6 +460,9 @@
 			padding:0 0 5px;
 			border-bottom:1px solid #bababa;
 			margin-bottom:5px;
+			.icon_block{
+				cursor: pointer;
+			}
 		}
 		.guest{
 			width:43px;
@@ -871,6 +881,9 @@ section.follow_frame{
 		.button_frame{
 			float:right;
 			margin-top:10px;
+			iframe {
+				display:none;	
+			}
 			button{
 				border:0 none;
 				width:80px;
@@ -893,6 +906,7 @@ section.follow_frame{
 				bottom:-50px;
 				left:-120px;
 				.sprites(-30px,-365px);
+				display:none;
 				input.text{
 					width:225px;
 					height:12px;
@@ -913,6 +927,10 @@ section.follow_frame{
 					float: left;
 				}
 			}
+			.url_text{
+
+			}
+
 			.upload_img{
 				.sprites(-590px,-522px);
 			}
@@ -1265,6 +1283,12 @@ section.edit_frame{
 				background:#efefef;
 				border:none;
 			}
+			iframe{
+				display:none;
+			}
+			button.verify{
+				display:none;
+			}
 		}
 	}
 	.middle{
@@ -1388,6 +1412,15 @@ section.edit_frame{
 					color:#fff;
 					.sprites(-340px,-570px);
 				}
+				input#new_pass{
+					display:none;
+				}
+				input#con_pass{
+					display:none;
+				}
+				li.alert{
+					display:none;
+				}
 			}
 			li.btn_line{margin-bottom:20px;}
 		}
@@ -1419,6 +1452,11 @@ section.edit_frame{
       width: 240px;
       height: 320px;
       border: none;
+}
+#editor {
+	width:100%;
+	height:100%;
+	border:0px;
 }
 
 // ie6 fix masker
