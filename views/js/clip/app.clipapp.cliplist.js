@@ -8,7 +8,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
-      clip :{}
+      user :{},
+      content:{},
+      reprint_count:"",
+      reply_count:""
     }
   });
 
@@ -21,10 +24,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
 	if(!resp[i].clip){
-	  var clip = resp[i];
-	  resp[i] = {clip: clip};
-	  resp[i].id = clip.user.id+":"+clip.id;
+	  //console.info(resp[i]);
+	  //var clip = resp[i];
+	  //resp[i] = {clip: clip};
+	  resp[i].clipid = resp[i].id;
+	  resp[i].id = resp[i].user.id+":"+resp[i].id;
 	}else{
+	  resp[i].clipid = resp[i].clip.id;
+	  //console.info(resp[i]);
+	  resp[i].user = resp[i].clip.user;
+	  resp[i].content = resp[i].clip.content;
+	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
+	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
+	  delete resp[i].clip;
 	  if(resp[i].recommend){
 	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
 	  }else{
@@ -66,8 +78,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
     show_detail: function(){
-      var clip = this.model.get("clip");
-      var clipid = clip.user.id+":"+clip.id;
+      //var clip = this.model.get("clip");
+      //var clipid = clip.user.id+":"+clip.id;
+      var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
       App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id);
     },
 /*
@@ -94,8 +107,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var clip = this.model.get("clip");
-      var cid = clip.user.id+":"+clip.id;
+      var cid = this.model.get("user").id + ":" + this.model.get("clipid");
+      //var clip = this.model.get("clip");
+      //var cid = clip.user.id+":"+clip.id;
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", cid,this.model.id);break;
@@ -268,15 +282,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var id = uid+":"+addmodel.id;
     var model = new ClipPreviewModel();
     var clip = {};
-    clip.id = addmodel.id;
-    clip.tag = addmodel.get("tag");
-    clip.note = addmodel.get("note");
-    clip.public = addmodel.get("public");
-    clip.user = {id : uid};
-    clip.content = App.util.getPreview(addmodel.get("content"), 100);
+    var clipid = addmodel.id;
+    var tag = addmodel.get("tag");
+    var note = addmodel.get("note");
+    var _public = addmodel.get("public");
+    var user = {id : uid};
+    var content = App.util.getPreview(addmodel.get("content"), 100);
     //clip本身的id为自己的id，model的id为uid:cid
-    model.set({clip:clip,id:id});
-    model.set({recommend:""});
+    model.set({"public":_public,"content":content,"id":id,"clipid":clipid,"tag":tag,"note":note,"user":user,"recommend":""});
+    //model.set({recommend:""});
 
     var fn = clipListView.appendHtml;
     clipListView.appendHtml = function(collectionView, itemView){
@@ -305,29 +319,36 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var model=App.listRegion.currentView.collection.get(args.model_id);
     var clip=model.get("clip");
     if(args.type == "comment"){
-      if(args.pid == 0)
-	clip.reply_count = clip.reply_count ? clip.reply_count+1 : 1;
+      if(args.pid == 0){
+	var reply_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
+	model.set({"reply_count":reply_count});
+      }
     }
     if(args.type == "reclip"){
-      clip.reprint_count = clip.reprint_count ? clip.reprint_count+1 : 1;
+      var reprint_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
+      model.set({"reprint_count":reprint_count});
     }
-    model.set({clip:clip});
-    App.listRegion.show(clipListView);
-    var that = clipListView;
-    that.bindTo(that.collection, "add", that.addChildView, that);
-    that.bindTo(that.collection, "remove", that.removeItemView, that);
+    //model.set({"change":true});
+    //model.unset("change",{silent:true});
+    //App.listRegion.show(clipListView);
+    //var that = clipListView;
+    //that.bindTo(that.collection, "add", that.addChildView, that);
+    //that.bindTo(that.collection, "remove", that.removeItemView, that);
   });
 
   App.vent.bind("app.clipapp.cliplist:edit", function(content,model_id){
     var collection = clipListView.collection;
     var model = collection.get(model_id);
-    var clip = model.get("clip");
-    clip.content = App.util.getPreview(content, 100);
-    model.set({clip:clip});
-    App.listRegion.show(clipListView);
-    var that = clipListView;
-    that.bindTo(that.collection, "add", that.addChildView, that);
-    that.bindTo(that.collection, "remove", that.removeItemView, that);
+    //var clip = model.get("clip");
+    var newcontent = App.util.getPreview(content, 100);
+    console.info(model);
+    model.set({content:newcontent});
+    //model.set({"change":true});
+    //model.unset("change",{silent:true});
+    //App.listRegion.show(clipListView);
+    //var that = clipListView;
+    //that.bindTo(that.collection, "add", that.addChildView, that);
+    //that.bindTo(that.collection, "remove", that.removeItemView, that);
   });
 
   return ClipList;

@@ -264,7 +264,11 @@ App.util = (function(){
     faceUp_success  : "您的头像已更新",
     passwd_success  : "您的密码已修改",
     setRule_success : "您已成功更新邮箱规则",
-    rename_success  : "您的用户名已经修改"
+    rename_success  : "您的用户名已经修改",
+    reclip_tag_success : "恭喜您，转载成功！",
+    reclip_tag_fail    : "您已经转拥有这些载录了！",
+    pre_reclip_tag   : "您实际转载了" ,
+    post_reclip_tag  : "条载录，其余摘录已经拥有了"
   };
 
   util.getMessage = function(key){
@@ -330,6 +334,7 @@ App.util = (function(){
       not_exist: "推荐不存在"
     },
     clip:{
+      has_recliped: "您已经拥有这条载录了",
       not_exist: "clip不存在"
     },
     content:{

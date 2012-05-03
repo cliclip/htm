@@ -77,7 +77,6 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:nextpage",function(){
     if(App.listRegion.currentView.$el[0].className=="following-view"&&options.fetch_flag){
-    //if(options.fetch_flag){
       options.start += App.ClipApp.Url.page;
       options.end += App.ClipApp.Url.page;
       options.url = options.base_url + "/" +options.start + ".." + options.end;
@@ -93,6 +92,6 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       options.collection.fetch(options);
     }
   });
-
   return FollowingList;
+
 })(App,Backbone,jQuery);

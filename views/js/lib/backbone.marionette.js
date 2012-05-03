@@ -78,6 +78,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       if (this.collection){
         this.bindTo(this.collection, "reset", this.render, this);
       }
+      if(this.model){
+	this.bindTo(this.model, "change", this.render,this);
+      }
     },
 
     // Serialize the model or collection for the view. If a model is

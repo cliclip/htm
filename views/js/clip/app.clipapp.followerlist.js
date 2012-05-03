@@ -77,6 +77,14 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       App.vent.trigger("app.clipapp.routing:userfollower", uid);
     }
   });
+  App.vent.bind("app.clipapp.followerlist:refresh",function(){
+    if(App.listRegion.currentView.className =='follow-item'){
+      var uid= App.util.getMyUid();
+      var id = App.ClipApp.Face.getUserId();
+      if(uid) App.vent.trigger("app.clipapp.followerlist:show", id);
+      else App.vent.trigger("app.clipapp:login");
+    }
+  });
 
   App.vent.bind("app.clipapp:nextpage",function(){
     if(App.listRegion.currentView.$el[0].className=="follow-item"&&options.fetch_flag){

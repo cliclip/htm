@@ -21,10 +21,10 @@ script(type="text/template",id="faceEdit-view-template")
       <input type="button" class="set_username" value="设置用户名"/>
       <%}%>
   .head_link
-    iframe(name="post_frame_face",id="post_frame_face",style="display:none;",mce_style="display:none;")
+    iframe(name="post_frame_face",id="post_frame_face")
     |<form method="POST" action="<%=App.util.getFace_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
     .btn_frame
-      button.verify(type="submit",id="confirm_face",style="display:none") 确定
+      button.verify(type="submit",id="confirm_face") 确定
       .button_frame
         span
           button.upload(type="button")	
@@ -68,10 +68,10 @@ script(type="text/template",id="ruleEdit-view-template")
 script(type="text/template",id="passEdit-view-template")
   h3.edit_password 修改密码
   ul.input_list
-    li.valid
+    li
       |<input type="text" id="new" value="<%=newpass%>"/>
       input(type="password",id="pass",name="newpass",style="display:none;")
-    li.valid
+    li
       |<input type="text" id="con" value="<%=confirm%>"/>
       input(type="password",id="confirm",name="confirm",style="display:none;")
     li

@@ -73,7 +73,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     events: {
       "click .set_username" : "setName",
       "error": "showError",
-      "focus #name": "cleanError"
+      "focus #name": "cleanError",
+      "click #confirm_face" : "submitFace"
     },
     setName: function(e){
       e.preventDefault();
@@ -112,6 +113,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  $('.set_username').click();
 	}
       });
+    },
+    submitFace:function(){
+      $("#confirm_face").hide();
     }
 });
 
@@ -236,6 +240,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var faceView = new FaceView({model: faceModel});
 	  UserEdit.faceRegion.show(faceView);
 	});
+	//originalFace 在保存头像时删除不用再次请求，此参数现在没用了
 	faceLoad(originalFace,uid);//修改头像
       },
       error:function(){}
@@ -295,8 +300,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       url: P+"/user/"+ facemodel.id+"/face",
       type: "POST",
       success:function(model,res){
-	// App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
-	$("#confirm_face").hide();
+	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
 	face_flag = true;
       },
       error:function(model,res){
@@ -315,13 +319,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var currentFace = returnObj[1][0];
 	  if(currentFace){
 	    var facemodel = new App.Model.MyInfoModel({id:uid});
-	    if(originalFace && originalFace!=currentFace){
+	    saveFace(facemodel,{face:currentFace});
+	    /*if(originalFace && originalFace!=currentFace){
 	      removeFace(facemodel,originalFace,function(){ //删除原始头像
 		saveFace(facemodel,{face:currentFace}); //保存新上传的头像
 	      });
 	    }else {
 	      saveFace(facemodel,{face:currentFace});
-	    }
+	    }*/
 	  }
 	}
       }
