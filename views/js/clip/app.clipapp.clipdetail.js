@@ -159,20 +159,19 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val( text == "" ? COMM_TEXT : text);
     },
-    maintagAction:function(e){;
+    maintagAction:function(e){
       var id = e.target.id;
-      // 可以在css中添加两个class，点击过后在两个class之间切换
-      var color = $("#"+id).css("backgroundColor");
-      if(color != "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","red");
+      $(e.currentTarget).toggleClass("original"); //tag颜色的切换
+      $(e.currentTarget).toggleClass("selected");
+      if($(e.currentTarget).hasClass("selected")){
+	// 表示需要将其值加入到 comm_text中去
 	this.tag_list.push($("#"+id).val());
 	if($("#comm_text").val() == "" || $("#comm_text").val() == COMM_TEXT){
 	  $("#comm_text").val($("#"+id).val());
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
 	}
-      }else if(color == "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","");
+      }else if($(e.currentTarget).hasClass("original")){
 	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
       }
@@ -188,22 +187,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	if(text == "" || text == COMM_TEXT)return;
 	var params = {cid: cid, text: text, pid: pid};
 	App.vent.trigger("app.clipapp.clipdetail:save_addComm", params);
-	if($("#reclip").attr("checked")){ // console.log("同时收");
-	  // 没有重构 可否在detail中就收了该clip
-	  var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
-	  App.vent.trigger("app.clipapp.reclip:sync",this.model,params1);
+	if($("#reclip_box").attr("checked")){
+	  var params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
+	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
 	}
       }
     },
     cancel : function(){
-      // 需要将选中状态进行重置，同时将this.tag_list重置
-      $("#comm_text").val(COMM_TEXT);
-      this.tag_list.forEach(function(e){
-	var id = $("input[value="+e+"]").attr("id");
-	$("#"+id).css("backgroundColor","");
-      });
-      this.tag_list = [];
-      App.vent.trigger("app.clipapp.clipdetail:cancel_addComm", this.model.id);
+      App.vent.trigger("app.clipapp.clipdetail:@cancel_addComm",this.model.id);
     }
   });
 
@@ -272,7 +263,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp.clipdetail:cancel_addComm", function(cid){
+  App.vent.bind("app.clipapp.clipdetail:@cancel_addComm", function(cid){
     if(ClipDetail.replyCommRegion){
       ClipDetail.replyCommRegion.close();
       showAddComm(cid);
