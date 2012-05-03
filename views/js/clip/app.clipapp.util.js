@@ -114,7 +114,7 @@ App.util = (function(){
     // 取得ubb中常用的标签之后留下的内容
     // 去掉所有的ubb标签中的内容，只留下文本内容
     var reg1 = /\[img\].*\[\/img\]?/;
-    var reg = /\[\/?[^].*?\]/gi;
+    var reg = /\[\/?[^\]].*?\]/gi;
     // 去除img标签
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
@@ -292,7 +292,7 @@ App.util = (function(){
     name:{
       is_null: "用户名尚未填写",
       invalidate: "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
-      exist: "用户名已存在",
+      exist:"此用户名已经存在",
       not_exist: "用户名不存在"
     },
     pass:{
@@ -305,10 +305,20 @@ App.util = (function(){
     },
     email:{
       is_Exist: "邮件地址已经存在",
-      email_exists: "邮件地址已经登记",
+      you_exist: "您已经添加过该邮件地址",
+      other_exist:"您所添加的邮件地址已经在系统中了",
       invalidate: "邮件地址格式有误",
       is_null: "邮件地址尚未填写",
       no_uname: "在添加邮件之前请先设置用户名"
+    },
+    to:{
+      invalidate: "收件人中含有不合法的邮件地址"
+    },
+    cc:{
+      invalidate: "抄送人中含有不合法的邮件地址"
+    },
+    rule:{
+      is_null: "您还没有添加邮件规则"
     },
     accept:{
       fail:"因为间隔时间太长，此注册链接已经失效。您可直接注册，再到设置界面添加您的邮箱地址。"

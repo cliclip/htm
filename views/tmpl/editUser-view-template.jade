@@ -12,12 +12,12 @@ script(type="text/template",id="faceEdit-view-template")
   .edit_head
     .head_img.
       <img id="myface" src="<%=App.util.face_url(face)%>"/>
-    .user_name.
+    .user_name
       <% if(name && name!=""){%>
       <span class="name"><%=name%></span>
       <% }else{%>
       <div id="set-name">您还没有用户名</div>
-      <input type="text" class="edit_username" style="display:none;">
+      <input type="text" class="edit_name" name="name" id="name" style="display:none;">
       <input type="button" class="set_username" value="设置用户名"/>
       <%}%>
   .head_link
@@ -50,34 +50,30 @@ script(type="text/template",id="ruleEdit-view-template")
     ul.mail_list
       h3
         span.open_mailcheck
-          | <input type="checkbox" id="open_rule" <% if(enable){ %> checked="checked" <%}%> />
+          |<input type="checkbox" id="open_rule" name="enable" <% if(enable){ %> checked="checked" <%}%> />
           label(for="open_rule")|打开邮箱识别
         |邮箱识别
       li
         label 标题必须有
-        |<input type="text" class="text_input" id="title" value="<%=title%>"/>
+        |<input type="text" class="text_input" name="title" id="title" value="<%=title%>"/>
       li
         label 必须抄送给
-        |<input type="text" class="text_input" id="copy-to" value="<%=cc?cc.join(';'):''%>" />
+        |<input type="text" class="text_input" name="cc" id="cc" value="<%=cc?cc.join(';'):''%>" />
       li
         label 必须发给
-        |<input type="text" class="text_input" id="send" value="<%=to?to.join(';'):''%>" />
+        |<input type="text" class="text_input" name="to" id="to" value="<%=to?to.join(';'):''%>" />
       li
         input.btn_blue(type="submit",id="update_rule",value="更新邮件规则")
 
 script(type="text/template",id="passEdit-view-template")
   h3.edit_password 修改密码
   ul.input_list
-    li
+    li.valid
       |<input type="text" id="new" value="<%=newpass%>"/>
-      input(type="password",id="new_pass",style="display:none;")
-      li.alert#pass(style="display:none")	
-        <%= typeof error != "undefined"&& error.pass ? error.pass: "" %>
-    li
+      input(type="password",id="pass",name="newpass",style="display:none;")
+    li.valid
       |<input type="text" id="con" value="<%=confirm%>"/>
-      input(type="password",id="con_pass",style="display:none;")
-      li.alert#confirm(style="display:none")
-        <%= typeof error != "undefined"&& error.confirm ? error.confirm: "" %>
+      input(type="password",id="confirm",name="confirm",style="display:none;")
     li
       input.btn_blue(type="submit",id="pass_confirm",value="更改")
   h3.danger 高危操作
@@ -95,14 +91,8 @@ script(type="text/template",id="emailAdd-view-template")
       h2
         添加邮件
       ul.pop_body
-        li.input_text.
-          <% if( typeof error != "undefined"){ %>
-            <input class="error" type="text" id="email_address" value="<%=email%>">
-            <br>
-            <span class="error"><%= error.email%></span>
-          <% } else {%>
-            <input type="text" id="email_address" value="<%=email%>" />
-          <% } %>
-        li.btn_group.clearfix
-          input.verify(type="button",value="确定",id="emailadd_commit")
-          input.cancel(type="button",value="取消",id="emailadd_cancel")
+          li.input_text.
+            <input type="text" name="email" id="email" value="<%=email%>" />
+          li.btn_group.clearfix
+            input.verify(type="button",value="确定",id="emailadd_commit")
+            input.cancel(type="button",value="取消",id="emailadd_cancel")

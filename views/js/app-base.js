@@ -63,7 +63,20 @@ App.Collection = Backbone.Collection.extend({
   }
 });
 
-App.ItemView = Backbone.Marionette.ItemView;
+App.ItemView = Backbone.Marionette.ItemView.extend({
+  showError:function(error){
+    error = App.ClipApp.Message.getError(error);
+    for(var key in error){
+      this.$("#"+key).addClass("error");
+      this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
+    }
+  },
+  cleanError:function(e){
+    var id = e.currentTarget.id;
+    this.$("#"+id).siblings("span.error").remove();
+    this.$("#"+id).removeClass("error");
+  }
+});
 App.Region = Backbone.Marionette.Region;
 App.TemplateCache = Backbone.Marionette.TemplateCache;
 App.CollectionView = Backbone.Marionette.CollectionView;
