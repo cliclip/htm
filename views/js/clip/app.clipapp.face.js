@@ -81,13 +81,18 @@ App.ClipApp.Face = (function(App, Backbone, $){
   Face.showUser = function(uid){
     user_id = uid;
     if(uid){
-      getUser(uid, function(user){
-	App.ClipApp.Bubb._getUserTags(uid,function(tag,follow){
-	  user.set({relation:follow});
-	  var faceView = new FaceView({model: user});
-	  App.faceRegion.show(faceView);
+      if(App.util.getMyUid() != uid){
+	getUser(uid, function(user){
+	  App.ClipApp.Bubb._getUserTags(uid,function(tag,follow){
+	    user.set({relation:follow});
+	    var faceView = new FaceView({model: user});
+	    App.faceRegion.show(faceView);
+	  });
 	});
-      });
+      }else{
+	var faceView = new FaceView({model: App.ClipApp.Me.me});
+	App.faceRegion.show(faceView);
+      }
     }else{
       App.faceRegion.close();
     }
