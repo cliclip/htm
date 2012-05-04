@@ -66,12 +66,13 @@ App.ClipApp.Face = (function(App, Backbone, $){
     var url = "";
     if(uid == App.util.getMyUid()){
       // url中带上随机数 防止ie的缓存导致不能向服务器发出请求
+      url = P + "/my/info";
       var now = new Date();
       url = P + "/my/info" + "?now=" + now.getTime();
-      App.vent.trigger("app.clipapp.routing:mycliplist:show");
+      App.vent.trigger("app.clipapp.routing:myshow");
     }else{
       url = P + "/user/"+ uid + "/info";
-      App.vent.trigger("app.clipapp.routing:usercliplist:show", uid);
+      App.vent.trigger("app.clipapp.routing:usershow", uid);
     }
     var user=new UserModel();
     user.fetch({url:url});

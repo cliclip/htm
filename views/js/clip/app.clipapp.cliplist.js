@@ -160,7 +160,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var data = {user: 2, "public": true};
     if(tag) data.tag = [tag];
     options = {base_url: url, type: "POST", data:data};
-    App.vent.trigger("app.clipapp.routing:siteshow:show", tag);
     getClips();
   };
 
@@ -173,9 +172,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     getClips();
     //修改地址栏的内容
     if(uid == App.util.getMyUid()){
-      App.vent.trigger("app.clipapp.routing:mycliplist:show", tag);
+      tag != undefined ? App.vent.trigger("app.clipapp.routing:mytag_show", tag) : App.vent.trigger("app.clipapp.routing:myshow");
     }else{
-      App.vent.trigger("app.clipapp.routing:usercliplist:show", uid, tag);
+      tag != undefined ? App.vent.trigger("app.clipapp.routing:usertag_show", uid, tag) : App.vent.trigger("app.clipapp.routing:usershow", uid);
     }
   };
 
@@ -188,6 +187,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type: "POST", data: data};
     getClips();
+    App.vent.trigger("app.clipapp.routing:sitequery", word);
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
@@ -198,6 +198,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type:"POST", data:data};
     getClips();
+    App.vent.trigger("app.clipapp.routing:myquery", word);
   };
 
   ClipList.showUserInterest = function(uid, tag){
@@ -208,7 +209,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     options ={base_url: url, type: "GET",start:0,end:App.ClipApp.Url.page};
     getClips();
     //修改地址栏的内容
-    App.vent.trigger("app.clipapp.routing:interest:show", tag);
+    tag	? App.vent.trigger("app.clipapp.routing:interest_tag", tag): App.vent.trigger("app.clipapp.routing:interest");
   };
 
   ClipList.showUserRecommend = function(uid, tag){
@@ -219,7 +220,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     options ={base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page};
     getClips();
     //修改地址栏的内容
-    App.vent.trigger("app.clipapp.routing:recommend:show", tag);
+    tag ? App.vent.trigger("app.clipapp.routing:recommend_tag", tag) : App.vent.trigger("app.clipapp.routing:recommend");
   };
 
   function getClips(){
