@@ -6,6 +6,16 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     defaults:{
       email:""
     },
+    validate:function(attrs){
+      var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
+      if(!attrs.email || attrs.email == undefined){
+	return {email:"is_null"};
+      }else if(!email_pattern.test(attrs.email)){
+	return {email:"invalidate"};
+      }else{
+	return null;
+      }
+    },
     url:function(){
       return P+"/user/"+this.id+"/email";
     }
@@ -19,43 +29,49 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       "click #emailadd_commit":"EmailAddcommit",
       "click #emailadd_cancel":"EmailAddclose",
       "click .close_w"        :"EmailAddclose",
-      "focus .input_text"     :"cleanError"
+      "focus #email"          :"cleanError",
+      "error" : "showError"
     },
     EmailAddclose: function(){
       App.vent.trigger("app.clipapp.emailadd:@close");
     },
     EmailAddcommit: function(){
-      var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
-      var address = $("#email_address").val().trim();
-      this.model.set({email:address});
-      if(!address){
-	App.vent.trigger("app.clipapp.emailadd:@error",this.model,{email:"is_null"});
-	return false;
-      }else if(!email_pattern.test(address)){
-	App.vent.trigger("app.clipapp.emailadd:@error",this.model,{email:"invalidate"});
-	return false;
-      }else{
-	App.vent.trigger("app.clipapp.emailadd:@ok",this.model);
-	return true;
+      var view = this;
+      var data = {};
+      _.each(this.$(":input").serializeArray(), function(obj){
+	 data[obj.name] = obj.value;
+      });
+      this.model.set(data,{
+	error:function(model, error){
+	  view.showError(error);
+	}
+      });
+      if(this.model.isValid()){
+	this.model.save({},{
+	  type:"POST",
+	  success: function(model, res){
+	    App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
+	  },
+	  error:function(model, res){
+	    if(res.email == "no_uname")
+	      App.vent.trigger("app.clipapp.message:chinese", res);
+	    else{
+	      view.showError(res);
+	    }
+	  }
+	});
       }
-    },
-    cleanError:function(){
-      $("span.error").hide();
-      $("input").removeClass("error");
     }
   });
 
-  EmailAdd.showEmailAdd = function(uid,model,error){
+  EmailAdd.showEmailAdd = function(uid){
     var emailAddModel = new EmailAddModel({id:uid});
-    if (model) emailAddModel.set(model.toJSON());
-    if (error) emailAddModel.set("error", error);
     var emailAddView = new EmailAddView({model : emailAddModel});
     App.setpopRegion.show(emailAddView);
-    if(error){
-      $("#alert").show();
-    }else{
-      $("#alert").hide();
-    }
+  };
+
+  EmailAdd.close = function(){
+    App.setpopRegion.close();
   };
 
 
@@ -75,29 +91,11 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     });
   });
 
-  EmailAdd.close = function(){
-    App.setpopRegion.close();
-  };
-
-  App.vent.bind("app.clipapp.emailadd:@ok",function(model){
-    model.save({},{
-      type: "POST",
-      success: function(model, res){
-	App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
-	// EmailAdd.close(); emailadd和message:confirm公用同一个region
-      },
-      error:function(model, res){
-	EmailAdd.showEmailAdd(null,model,App.util.getErrorMessage(res));
-      }
-    });
-  });
-
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     EmailAdd.showEmailAdd(uid);
   });
-  App.vent.bind("app.clipapp.emailadd:@error",function(model,error){
-    EmailAdd.showEmailAdd(null,model,App.ClipApp.Message.getError(error));
-  });
+
+  // 操作完成直接关闭 view
   App.vent.bind("app.clipapp.emailadd:@close",function(){
     EmailAdd.close();
   });

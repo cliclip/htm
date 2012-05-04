@@ -21,7 +21,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
-    App.vent.trigger("app.clipapp.routing:query:show", word);
   };
 
   ClipApp.register = function(){
@@ -85,7 +84,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
-    App.vent.trigger("app.clipapp.routing:myquery:show", word);
   };
 
   ClipApp.myInterest = function(tag){

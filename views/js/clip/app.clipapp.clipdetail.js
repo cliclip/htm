@@ -87,7 +87,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       if($("#reply_Comm_showDiv"))  // 首先在被点击的评论下添加 评论框的div
 	$("#reply_Comm_showDiv").remove(); // 保证detail页面只有一个评论回复框
       $("#"+pid).append('<div id="reply_Comm_showDiv"></div>');
-      App.vent.trigger("app.clipapp.clipdetail:show_reply", cid, pid);
+      App.vent.trigger("app.clipapp.clipdetail:@show_reply", cid, pid);
     },
     del_comment : function(e){
       e.preventDefault();
@@ -159,20 +159,18 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val( text == "" ? COMM_TEXT : text);
     },
-    maintagAction:function(e){;
+    maintagAction:function(e){
       var id = e.target.id;
-      // 可以在css中添加两个class，点击过后在两个class之间切换
-      var color = $("#"+id).css("backgroundColor");
-      if(color != "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","red");
+      $(e.currentTarget).toggleClass("original");
+      $(e.currentTarget).toggleClass("selected");
+      if($(e.currentTarget).hasClass("selected")){ //将其值加入到comm_text中去
 	this.tag_list.push($("#"+id).val());
 	if($("#comm_text").val() == "" || $("#comm_text").val() == COMM_TEXT){
 	  $("#comm_text").val($("#"+id).val());
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
 	}
-      }else if(color == "rgb(255, 0, 0)"){
-	$("#"+id).css("backgroundColor","");
+      }else if($(e.currentTarget).hasClass("original")){
 	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
       }
@@ -188,22 +186,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	if(text == "" || text == COMM_TEXT)return;
 	var params = {cid: cid, text: text, pid: pid};
 	App.vent.trigger("app.clipapp.clipdetail:save_addComm", params);
-	if($("#reclip").attr("checked")){ // console.log("同时收");
-	  // 没有重构 可否在detail中就收了该clip
-	  var params1 = {clip:{tag:this.tag_list,note:[{text:text}]}};
-	  App.vent.trigger("app.clipapp.reclip:sync",this.model,params1);
+	if($("#reclip").attr("checked")){
+	  var params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
+	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
 	}
       }
     },
     cancel : function(){
-      // 需要将选中状态进行重置，同时将this.tag_list重置
-      $("#comm_text").val(COMM_TEXT);
-      this.tag_list.forEach(function(e){
-	var id = $("input[value="+e+"]").attr("id");
-	$("#"+id).css("backgroundColor","");
-      });
-      this.tag_list = [];
-      App.vent.trigger("app.clipapp.clipdetail:cancel_addComm", this.model.id);
+      App.vent.trigger("app.clipapp.clipdetail:@cancel_addComm",this.model.id);
     }
   });
 
@@ -211,6 +201,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
+    var top = App.util.getScrollTop();
+    $(".big_pop").css("top", top+15+"px");
   };
 
   // 获取comment内容，需要对得到的数据进行显示
@@ -258,8 +250,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     mid = null;
   };
 
-  App.vent.bind("app.clipapp.clipdetail:show_reply", function(cid, pid){
-    ClipDetail.addCommRegion.close();
+  App.vent.bind("app.clipapp.clipdetail:@show_reply", function(cid, pid){
+    ClipDetail.addCommRegion.close(); // 已经关闭了最下边的评论框
     if(!App.ClipApp.Me.me.get("id")){
       App.vent.trigger("app.clipapp:login");
     }else{
@@ -272,7 +264,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp.clipdetail:cancel_addComm", function(cid){
+  App.vent.bind("app.clipapp.clipdetail:@cancel_addComm", function(cid){
     if(ClipDetail.replyCommRegion){
       ClipDetail.replyCommRegion.close();
       showAddComm(cid);

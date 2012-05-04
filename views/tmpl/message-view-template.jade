@@ -3,12 +3,17 @@ script(type="text/template",id="message-view-template")
   section.small_pop
     h2
       消息提示
-    ul.pop_body
-      |<%=message%>
-      br
-      br
-      li.btn_group.clearfix
-        input.verify(type="button",value="确定",id="sure")
+    ul.pop_body.
+      <% if (typeof message == "object") { for(key in message){%>
+      <%= message[key]%>
+      <% }}else{ %>
+      <%=message%>
+      <%}%>
+      <br>
+      <br>
+      <li class="btn_group clearfix">
+        <input class=verify type="button" value="确定" id="sure"/>
+      </li>
 
 script(type="text/template",id="warning-view-template")
   div.masker_layer

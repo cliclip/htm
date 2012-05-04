@@ -37,6 +37,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       $("#pass").unbind("keydown");
       if(e.keyCode==13){ // 响应回车事件
 	$('.login_btn').click();
+	Login.close();
       }
     },
     loginAction : function(e){
@@ -112,9 +113,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.login:success", function(res){
     document.cookie = "token="+res.token;
     // 用户登录成功 页面跳转
+    Login.close();
     Backbone.history.navigate("my",true);
     //location.reload();
-    Login.close();
+    console.info("页面跳转");
   });
 
   App.vent.bind("app.clipapp.login:error", function(model, error){
