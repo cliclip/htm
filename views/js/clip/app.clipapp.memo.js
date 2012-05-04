@@ -84,7 +84,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	_(ns).each(function(n){ text += n+" "; });
     }
     var tag_main = _(_(App.util.getBubbs()).map(function(e){
-      return { tag:e, checked:(_.indexOf(tags,e) != -1) };
+    return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
     var tag_obj = _.difference(tags,App.util.getBubbs());
     return {id:id,note:text,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
@@ -96,6 +96,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var memoModel = new MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
+    $(".small_pop").css("top", App.util.getPopTop("small"));
     $('#obj_tag').tagsInput({
       //autocomplete_url:'test/fake_json_endpoint.html'
     });

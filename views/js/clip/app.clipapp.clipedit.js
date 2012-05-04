@@ -111,6 +111,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     editModel.onChange(function(editModel){
       var editView = new EditView({model: editModel});
       App.viewRegion.show(editView);
+      $(".big_pop").css("top", App.util.getPopTop("big"));
       App.ClipApp.Editor.init();
       var html = editModel.toJSON().content;
       App.ClipApp.Editor.setContent("editor", html);

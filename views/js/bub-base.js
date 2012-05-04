@@ -78,10 +78,19 @@ $(function() {
 	  document.onmouseup = mouseUp;
 	  document.onmousemove = mouseMove;
 	  document.ondblclick = dbClick;
-	  document.addEventListener('touchstart', touchStart, false);
-	  document.addEventListener('touchmove', touchMove, false);
-	  document.addEventListener('touchend', touchEnd, false);
-	  window.addEventListener('deviceorientation', orientation, false);
+	  if(document.addEventListener){
+	    document.addEventListener('touchstart', touchStart, false);
+	    document.addEventListener('touchmove', touchMove, false);
+	    document.addEventListener('touchend', touchEnd, false);
+	    window.addEventListener('deviceorientation', orientation, false);
+	  }else{
+	    //兼容ie9之前的版本
+	    document.attachEvent('touchstart', touchStart, false);
+	    document.attachEvent('touchmove', touchMove, false);
+	    document.attachEvent('touchend', touchEnd, false);
+	    window.attachEvent('deviceorientation', orientation, false);
+	  }
+
 	},
 	chkMouse: function() {
 	  // mouse press
@@ -504,16 +513,16 @@ $(function() {
 	  var self = options.self;
 	  delete options.self;
 	  _.chain(options).values().flatten().uniq().each(function(e){
-	    var size = (options.bubs && options.bubs.indexOf(e)!=-1) ? 64 : 48;
+	    var size = (options.bubs&&_.indexOf(options.bubs,e)!=-1) ? 64 : 48;
 	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
 	    var ball = new BallModel({
 	      "text": e,
 	      "self": self,
 	      "size": size,
 	      "body": body,
-	      "current": ( options.default && options.default == e ),
-	      "sink": ( options.sink && options.sink.indexOf(e) !=  -1 ),
-	      "follow": ( options.follows && options.follows.indexOf(e)!=-1 ),
+	      "current": ( options.current && options.current == e ),
+	      "sink": ( options.sink && _.indexOf(options.sink,e) !=  -1 ),
+	      "follow": ( options.follows &&_.indexOf(options.follows,e)!=-1 ),
 	      "hover": false
 	    });
 	    var view = new BallView({ model : ball });

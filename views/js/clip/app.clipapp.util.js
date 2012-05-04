@@ -2,8 +2,8 @@ App.util = (function(){
   var util = {};
   var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
-    var cookie = document.cookie;
-    return cookie ? cookie.split("=")[1].split(":")[0] : null;
+    var cookie = document.cookie ? document.cookie.split("=")[1]:null;
+    return cookie ? cookie.split(":")[0] : null;
   };
 
   // main_tag 部分从这取,
@@ -22,6 +22,14 @@ App.util = (function(){
 
   util.getFace_upUrl = function(){
     return P+"/user/" + util.getMyUid() + "/upload_face";
+  };
+
+  util.getPopTop = function(clss){
+    var top = 0;
+    var scroll = document.documentElement.scrollTop + document.body.scrollTop;
+    if(clss == "big") top = 100;
+    if(clss == "small") top = 150;
+    return scroll + top + "px";
   };
 
   //clip列表时取得img 的 url 为裁剪后的图片
@@ -114,7 +122,7 @@ App.util = (function(){
     // 取得ubb中常用的标签之后留下的内容
     // 去掉所有的ubb标签中的内容，只留下文本内容
     var reg1 = /\[img\].*\[\/img\]?/;
-    var reg = /\[\/?[^\]].*?\]/gi;
+    var reg = /\[\/?[^\]].*?\]/gi;  //\[\/?[^].*?\]/gi;
     // 去除img标签
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
@@ -331,6 +339,7 @@ App.util = (function(){
       fail: "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
     },
     recommend:{
+      is_null: "请添加用户",
       not_exist: "推荐不存在"
     },
     clip:{

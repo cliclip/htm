@@ -97,7 +97,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     if (changeTags(last, tags, old_self, self)) {
       iframe_call('bubbles', "resetTags", tags);
     } else if (changeDefault(last, tags)) {
-      iframe_call('bubbles', "openTag", tags.default);
+      iframe_call('bubbles', "openTag", tags.current);
     }
     old_self = self;
     last = tags;
@@ -244,11 +244,17 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   // call functions inside iframe
 
   function iframe_call(ifname, fname, fargs){
-    var ifwin = document.getElementById(ifname).contentDocument.defaultView;
-    if(ifwin[fname]){
-      // console.log("iframe_call(", ifname, fname, fargs, ")");
+    var _iframe =  document.getElementById(ifname);
+    var ifwin = _iframe.contentDocument.parentWindow ? _iframe.contentDocument.parentWindow :_iframe.contentDocument.defaultView;
+    if(ifwin && ifwin[fname]){
+      //console.info(ifwin);
+      //console.log(ifwin[fname]);
+      //console.log("iframe_call(", ifname, fname, fargs, ")");
+      //console.log(typeof fargs.bubs);
+      //console.dir(fargs);
       ifwin[fname](fargs);
-    } else { // waiting for iframe load
+    }else { // waiting for iframe load
+      // console.info("waiting for iframe reload");
       setTimeout(function(){ iframe_call(ifname, fname, fargs); }, 100);
     }
   }
@@ -265,7 +271,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       sink: _.intersection(sink, tags),
       self: self
     };
-    if(tag) opt.default = tag;
+    if(tag) opt.current = tag;
     return opt;
   }
 
@@ -311,8 +317,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   function changeDefault(tags1, tags2){
-    if(tags1 && tags1.default && tags2 && tags2.default){
-      return tags1.default != tags2.default;
+    if(tags1 && tags1.current && tags2 && tags2.current){
+      return tags1.current != tags2.current;
     } else {
       return true;
     }

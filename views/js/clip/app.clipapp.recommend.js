@@ -40,7 +40,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       this.$("#name").val(name);
       $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
       $("#imgId").css("display","block");
-      this.model.set({uid:uid});
+      this.model.set({uid:uid},{silent:true});
       this.$("#name_listDiv").empty();
     },
     nameListAction:function(evt){
@@ -66,7 +66,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	    this.$("#name_listDiv").empty();
 	  }
 	});
-	this.model.set({uid:uid});
+	this.model.set({uid:uid},{silent:true});
       }
     },
     nameBlur:function(){
@@ -140,6 +140,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     if (error) recommModel.set({"error":error});
     var recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
+    $(".small_pop").css("top", App.util.getPopTop("small"));
     if(error){
       $("#alert").show();
     }else{

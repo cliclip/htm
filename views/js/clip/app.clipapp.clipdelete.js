@@ -27,6 +27,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
      var model = new DeleteModel({id:cid});
      var view = new DeleteView({model : model});
      App.popRegion.show(view);
+     $(".small_pop").css("top", App.util.getPopTop("small"));
    };
 
    ClipDelete.close = function(){
