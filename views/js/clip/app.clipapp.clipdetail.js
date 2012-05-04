@@ -87,7 +87,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       if($("#reply_Comm_showDiv"))  // 首先在被点击的评论下添加 评论框的div
 	$("#reply_Comm_showDiv").remove(); // 保证detail页面只有一个评论回复框
       $("#"+pid).append('<div id="reply_Comm_showDiv"></div>');
-      App.vent.trigger("app.clipapp.clipdetail:show_reply", cid, pid);
+      App.vent.trigger("app.clipapp.clipdetail:@show_reply", cid, pid);
     },
     del_comment : function(e){
       e.preventDefault();
@@ -161,10 +161,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     maintagAction:function(e){
       var id = e.target.id;
-      $(e.currentTarget).toggleClass("original"); //tag颜色的切换
+      $(e.currentTarget).toggleClass("original");
       $(e.currentTarget).toggleClass("selected");
-      if($(e.currentTarget).hasClass("selected")){
-	// 表示需要将其值加入到 comm_text中去
+      if($(e.currentTarget).hasClass("selected")){ //将其值加入到comm_text中去
 	this.tag_list.push($("#"+id).val());
 	if($("#comm_text").val() == "" || $("#comm_text").val() == COMM_TEXT){
 	  $("#comm_text").val($("#"+id).val());
@@ -187,7 +186,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	if(text == "" || text == COMM_TEXT)return;
 	var params = {cid: cid, text: text, pid: pid};
 	App.vent.trigger("app.clipapp.clipdetail:save_addComm", params);
-	if($("#reclip_box").attr("checked")){
+	if($("#reclip").attr("checked")){
 	  var params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
 	}
@@ -202,6 +201,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
+    var top = App.util.getScrollTop();
+    $(".big_pop").css("top", top+15+"px");
   };
 
   // 获取comment内容，需要对得到的数据进行显示
@@ -249,8 +250,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     mid = null;
   };
 
-  App.vent.bind("app.clipapp.clipdetail:show_reply", function(cid, pid){
-    ClipDetail.addCommRegion.close();
+  App.vent.bind("app.clipapp.clipdetail:@show_reply", function(cid, pid){
+    ClipDetail.addCommRegion.close(); // 已经关闭了最下边的评论框
     if(!App.ClipApp.Me.me.get("id")){
       App.vent.trigger("app.clipapp:login");
     }else{
