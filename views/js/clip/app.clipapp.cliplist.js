@@ -37,11 +37,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
 	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
 	  delete resp[i].clip;
-	  if(resp[i].recommend){
+	 // if(resp[i].recommend){
 	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
-	  }else{
-	    resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
-	  }
+	 // }else{
+	   // resp[i].id = resp[i]
+	   // .user.id+":"+resp[i].id;
+	  //}
 	}
       }
       return resp;
@@ -114,14 +115,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", cid,this.model.id);break;
 	case 'refresh'://转
-	App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
+	  App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", cid,this.model.id);break;
 	case 'note'://注
-	App.vent.trigger("app.clipapp:clipmemo", cid);break;
-	case 'change':{//改
+	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
+	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
-	}
 	case 'del'://删
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
@@ -173,7 +173,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(uid == App.util.getMyUid()){
       tag ? App.vent.trigger("app.clipapp.routing:mytag_show", tag) : App.vent.trigger("app.clipapp.routing:myshow");
     }else{
-      tag  ? App.vent.trigger("app.clipapp.routing:usertag_show", uid, tag) : App.vent.trigger("app.clipapp.routing:usershow", uid);
+      tag ? App.vent.trigger("app.clipapp.routing:usertag_show", uid, tag) : App.vent.trigger("app.clipapp.routing:usershow", uid);
     }
   };
 
