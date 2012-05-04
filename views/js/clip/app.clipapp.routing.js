@@ -40,6 +40,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
   //输入内容搜索，返回显示结果需要更新hash
   App.vent.bind("app.clipapp.routing:sitequery",function(word){
+    if($.browser.safari){word = encodeURI(word);}
     App.Routing.showRoute("query",word);
   });
   App.vent.bind("app.clipapp.routing:siteshow", function(tag){
@@ -50,6 +51,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
     App.Routing.showRoute("user", uid);
   });
   App.vent.bind("app.clipapp.routing:usertag_show", function(uid, tag){
+    if($.browser.safari){tag = encodeURI(tag);}
     App.Routing.showRoute("user", uid, "tag", tag);
   });
   App.vent.bind("app.clipapp.routing:userfollowing",function(uid){
@@ -63,9 +65,11 @@ App.Routing.ClipRouting = (function(App, Backbone){
     App.Routing.showRoute("my");
   });
   App.vent.bind("app.clipapp.routing:myquery",function(word){
+    if($.browser.safari){word = encodeURI(word);}
     App.Routing.showRoute("my/query",word);
   });
   App.vent.bind("app.clipapp.routing:mytag_show",function(tag){
+    if($.browser.safari){tag = encodeURI(tag);}
     App.Routing.showRoute("my", "tag", tag);
   });
   App.vent.bind("app.clipapp.routing:myfollowing",function(){
@@ -78,12 +82,14 @@ App.Routing.ClipRouting = (function(App, Backbone){
     App.Routing.showRoute("my/interest");
   });
   App.vent.bind("app.clipapp.routing:interest_tag",function(tag){
+    if($.browser.safari){tag = encodeURI(tag);}
     App.Routing.showRoute("my/interest", "tag", tag);
   });
   App.vent.bind("app.clipapp.routing:recommend", function(){
     App.Routing.showRoute("my/recommend");
   });
   App.vent.bind("app.clipapp.routing:recommend_tag",function(tag){
+    if($.browser.safari){tag = encodeURI(tag);}
     App.Routing.showRoute("my/recommend", "tag", tag);
   });
 

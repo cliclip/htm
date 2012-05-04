@@ -3,6 +3,7 @@
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
   ClipApp.getMyUid = getMyUid;
+
   function getMyUid(){
     var id = null;
     if(document.cookie){
@@ -31,14 +32,14 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteTags();
     ClipApp.ClipList.showSiteClips();
-    App.vent.trigger("app.clipapp.register:invite", key);
+    ClipApp.Register.invite(key);
   };
 
   ClipApp.active = function(key){ // 接受用户的邮件添加激活或者是合并激活
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteTags();
     ClipApp.ClipList.showSiteClips();
-    App.vent.trigger("app.clipapp.emailadd:active", key);
+    ClipApp.EmailAdd.active(key);
   };
 
   ClipApp.findpasswd = function(){
@@ -76,6 +77,7 @@ App.ClipApp = (function(App, Backbone, $){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
+    console.log("myShow :: tag = " + tag);
     ClipApp.ClipList.showUserClips(uid, tag);
   };
 
@@ -200,6 +202,7 @@ App.ClipApp = (function(App, Backbone, $){
       if(!uid){
 	ClipApp.ClipList.showSiteClips(tag);
       }else {
+	console.log("cliplist.refresh :: tag = " + tag);
 	ClipApp.ClipList.showUserClips(uid, tag);
       }
     }
