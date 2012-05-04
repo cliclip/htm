@@ -10,7 +10,11 @@ App.ClipApp.Me = (function(App, Backbone, $){
       face:"",
       token:""
     },
-    url: P+"/my/info"
+    url:function(){
+      //参数为了防止ie缓存导致的不能向服务器发送请求的问题
+      var now = new Date();
+      return P+"/my/info" +"?now="+ now.getTime();
+    }
   });
 
   var View = App.ItemView.extend({
@@ -79,20 +83,21 @@ App.ClipApp.Me = (function(App, Backbone, $){
     if(!App.util.getMyUid()){
       var meView = new View();
       App.mineRegion.show(meView);
-      //console.info("用户未登录");
+      console.info("用户未登录");
     }
+    console.info(Me,"show");
     Me.me.onChange(function(meModel){
-      // console.info("onChange :: "+Me.me.get("id"));
+      console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
 	model: meModel
       });
       App.mineRegion.show(meView);
-      //console.info("用户已登录");
     });
   };
 
   App.vent.bind("app.clipapp.login:success", function(){
     Me.me.fetch();
+    Me.me.change();
     Me.show();
   });
 
@@ -109,13 +114,14 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },1000);
   });
 
-
   App.addInitializer(function(){
     Me.me = new App.Model.MyInfoModel();
     Me.me.fetch();
+    console.info("addInitializer");
   });
 
   App.bind("initialize:after", function(){
+    console.info("initilize：after");
     Me.show();
   });
 

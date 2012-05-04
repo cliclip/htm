@@ -1,6 +1,6 @@
 App.ClipApp.Editor = (function(App, Backbone, $){
   var Editor = {};
-  var isIE=(navigator.appName.indexOf("Microsoft")!=-1)?true:false;
+  var isIE = (navigator.appName.indexOf("Microsoft")!=-1)?true:false;
   Editor.init = function(){
     var ifrm=document.getElementById("editor");
     ifrm.contentWindow.document.designMode = "On";

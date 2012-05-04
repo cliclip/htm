@@ -65,7 +65,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
   var getUser=function(uid,callback){
     var url = "";
     if(uid == App.util.getMyUid()){
-      url = P + "/my/info";
+      // url中带上随机数 防止ie的缓存导致不能向服务器发出请求
+      var now = new Date();
+      url = P + "/my/info" + "?now=" + now.getTime();
       App.vent.trigger("app.clipapp.routing:mycliplist:show");
     }else{
       url = P + "/user/"+ uid + "/info";

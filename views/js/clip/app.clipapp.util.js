@@ -2,8 +2,8 @@ App.util = (function(){
   var util = {};
   var P = App.ClipApp.Url.base;
   util.getMyUid = function(){
-    var cookie = document.cookie;
-    return cookie ? cookie.split("=")[1].split(":")[0] : null;
+    var cookie = document.cookie ? document.cookie.split("=")[1]:null;
+    return cookie ? cookie.split(":")[0] : null;
   };
 
   // main_tag 部分从这取,
@@ -114,7 +114,7 @@ App.util = (function(){
     // 取得ubb中常用的标签之后留下的内容
     // 去掉所有的ubb标签中的内容，只留下文本内容
     var reg1 = /\[img\].*\[\/img\]?/;
-    var reg = /\[\/?[^].*?\]/gi;
+    var reg = /\[\/?[^\]].*?\]/gi;  //\[\/?[^].*?\]/gi;
     // 去除img标签
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
