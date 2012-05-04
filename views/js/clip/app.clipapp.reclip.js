@@ -73,6 +73,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     var model = new ReclipModel({id:cid});
     var reclipView = new ReclipView({model : model});
     App.popRegion.show(reclipView);
+    $(".small_pop").css("top", App.util.getPopTop("small"));
     $('#obj_tag').tagsInput({
       //autocomplete_url:'test/fake_json_endpoint.html'
     });

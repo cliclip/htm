@@ -96,6 +96,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var memoModel = new MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
+    $(".small_pop").css("top", App.util.getPopTop("small"));
     $('#obj_tag').tagsInput({
       //autocomplete_url:'test/fake_json_endpoint.html'
     });

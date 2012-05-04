@@ -24,8 +24,12 @@ App.util = (function(){
     return P+"/user/" + util.getMyUid() + "/upload_face";
   };
 
-  util.getScrollTop = function(){
-    return document.documentElement.scrollTop + document.body.scrollTop;;
+  util.getPopTop = function(clss){
+    var top = 0;
+    var scroll = document.documentElement.scrollTop + document.body.scrollTop;
+    if(clss == "big") top = 100;
+    if(clss == "small") top = 150;
+    return scroll + top + "px";
   };
 
   //clip列表时取得img 的 url 为裁剪后的图片
@@ -335,6 +339,7 @@ App.util = (function(){
       fail: "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
     },
     recommend:{
+      is_null: "请添加用户",
       not_exist: "推荐不存在"
     },
     clip:{
