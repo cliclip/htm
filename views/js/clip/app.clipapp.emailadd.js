@@ -70,12 +70,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     App.setpopRegion.show(emailAddView);
   };
 
-  EmailAdd.close = function(){
-    App.setpopRegion.close();
-  };
-
-
-  App.vent.bind("app.clipapp.emailadd:active", function(key){
+  EmailAdd.active = function(key){
     var model = new App.Model();
     model.save({},{
       url: App.ClipApp.Url.base+"/active/"+key,
@@ -89,7 +84,11 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.message:chinese", error);
       }
     });
-  });
+  };
+
+  EmailAdd.close = function(){
+    App.setpopRegion.close();
+  };
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     EmailAdd.showEmailAdd(uid);

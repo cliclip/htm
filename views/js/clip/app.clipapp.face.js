@@ -69,11 +69,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
       url = P + "/my/info";
       var now = new Date();
       url = P + "/my/info" + "?now=" + now.getTime();
-      App.vent.trigger("app.clipapp.routing:myshow");
     }else{
       url = P + "/user/"+ uid + "/info";
-     // App.vent.trigger("app.clipapp.routing:usershow", uid);
-      //会导致点击face 的追按钮时，会发生地址跳转
     }
     var user=new UserModel();
     user.fetch({url:url});
