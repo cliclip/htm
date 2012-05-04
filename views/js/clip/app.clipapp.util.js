@@ -24,6 +24,10 @@ App.util = (function(){
     return P+"/user/" + util.getMyUid() + "/upload_face";
   };
 
+  util.getScrollTop = function(){
+    return document.documentElement.scrollTop + document.body.scrollTop;;
+  };
+
   //clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;

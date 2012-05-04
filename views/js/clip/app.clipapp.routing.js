@@ -80,6 +80,9 @@ App.Routing.ClipRouting = (function(App, Backbone){
   App.vent.bind("app.clipapp.routing:interest_tag",function(tag){
     App.Routing.showRoute("my/interest", "tag", tag);
   });
+  App.vent.bind("app.clipapp.routing:recommend", function(){
+    App.Routing.showRoute("my/recommend");
+  });
   App.vent.bind("app.clipapp.routing:recommend_tag",function(tag){
     App.Routing.showRoute("my/recommend", "tag", tag);
   });

@@ -345,10 +345,10 @@
 }
 
 #view {
-	z-index: 10;
-	.masker_layer {
+      z-index: 10;
+      .masker_layer {
 		z-index: 2;
-	}		
+      }		
 }
 #pop{
 	z-index: 20;
@@ -870,7 +870,7 @@ section.follow_frame{
 	width:595px;
 	position: absolute;
 	left:50%;
-	top:10%;
+	top:100px;
 	margin-left:-297px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	.pop_title{
@@ -1489,17 +1489,12 @@ html {
   _background:url() fixed;
 }
 html body {
+  position:relative;
   _margin:0; height:100%;
 }
 
 html .masker_layer{
   _position: absolute;
   _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
-  _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
-}
-
-html .big_pop{
-  _position: absolute;
-  _left: ~"expression(dovumentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
   _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
 }
