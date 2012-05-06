@@ -24,7 +24,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
   //var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
   var sink = ["讨厌"];
-
+  Bubb.myObjTag = [];
   // private
   var _uid  = null;
   var last = null;
@@ -195,6 +195,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
+      if(uid == App.util.getMyUid()){
+	Bubb.myObjTag  = _.difference( bubb.tag,App.util.getBubbs());
+      }
       callback(bubb.tag, bubb.follow);
     });
   }

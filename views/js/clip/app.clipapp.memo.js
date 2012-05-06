@@ -97,7 +97,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
     $('#obj_tag').tagsInput({
-      //autocomplete_url:'test/fake_json_endpoint.html'
+      //autocomplete_url: App.ClipApp.Bubb.myObjTag
+      autocomplete_url:'test/fake_json_endpoint.html'
+    });
+    $( "#obj_tag_addTag" ).autocomplete({
+      source: App.ClipApp.Bubb.myObjTag
     });
   }
 
