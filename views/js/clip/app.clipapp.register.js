@@ -46,6 +46,21 @@ App.ClipApp.Register = (function(App, Backbone, $){
     }
   });
 
+  Register.invite = function(key){
+    var model = new App.Model.RegisterModel();
+    model.save({},{
+      url : App.ClipApp.Url.base+"/invite/"+key,
+      type: "POST",
+      success:function(model,response){
+	console.log(response);
+	App.vent.trigger("app.clipapp.register:success", 'invite', response);
+      },
+      error:function(model,error){
+	App.vent.trigger("app.clipapp.message:chinese", error);
+      }
+    });
+  };
+
   Register.close = function(){
     App.popRegion.close();
     // window.location.href='javascript:history.go(-1);'; // 返回注册前的页面
@@ -67,21 +82,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.register:error",function(model, error){
     Register.show(model, error);
-  });
-
-  App.vent.bind("app.clipapp.register:invite", function(key){
-    var model = new App.Model.RegisterModel();
-    model.save({},{
-      url : App.ClipApp.Url.base+"/invite/"+key,
-      type: "POST",
-      success:function(model,response){
-	console.log(response);
-	App.vent.trigger("app.clipapp.register:success", 'invite', response);
-      },
-      error:function(model,error){
-	App.vent.trigger("app.clipapp.message:chinese", error);
-      }
-    });
   });
 
   // Test

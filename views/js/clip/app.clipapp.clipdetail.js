@@ -201,8 +201,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    var top = App.util.getScrollTop();
-    $(".big_pop").css("top", top+15+"px");
+    $(".big_pop").css("top",App.util.getPopTop("big"));
   };
 
   // 获取comment内容，需要对得到的数据进行显示

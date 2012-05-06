@@ -37,11 +37,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
 	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
 	  delete resp[i].clip;
-	  if(resp[i].recommend){
+	 // if(resp[i].recommend){
 	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
-	  }else{
-	    resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
-	  }
+	 // }else{
+	   // resp[i].id = resp[i]
+	   // .user.id+":"+resp[i].id;
+	  //}
 	}
       }
       return resp;
@@ -169,11 +170,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type:"POST", data: data};
     getClips();
-    //修改地址栏的内容
     if(uid == App.util.getMyUid()){
-      tag != undefined ? App.vent.trigger("app.clipapp.routing:mytag_show", tag) : App.vent.trigger("app.clipapp.routing:myshow");
+      tag ? App.vent.trigger("app.clipapp.routing:mytag_show", tag) : App.vent.trigger("app.clipapp.routing:myshow");
     }else{
-      tag != undefined ? App.vent.trigger("app.clipapp.routing:usertag_show", uid, tag) : App.vent.trigger("app.clipapp.routing:usershow", uid);
+      tag ? App.vent.trigger("app.clipapp.routing:usertag_show", uid, tag) : App.vent.trigger("app.clipapp.routing:usershow", uid);
     }
   };
 
@@ -186,6 +186,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type: "POST", data: data};
     getClips();
+    // 将url设定和动作绑定在一起
     App.vent.trigger("app.clipapp.routing:sitequery", word);
   };
 
@@ -207,7 +208,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     options ={base_url: url, type: "GET",start:0,end:App.ClipApp.Url.page};
     getClips();
-    //修改地址栏的内容
     tag	? App.vent.trigger("app.clipapp.routing:interest_tag", tag): App.vent.trigger("app.clipapp.routing:interest");
   };
 
@@ -218,7 +218,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     options ={base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page};
     getClips();
-    //修改地址栏的内容
     tag ? App.vent.trigger("app.clipapp.routing:recommend_tag", tag) : App.vent.trigger("app.clipapp.routing:recommend");
   };
 

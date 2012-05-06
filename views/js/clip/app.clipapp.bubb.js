@@ -120,7 +120,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     iframe_call('bubbles', "openTag", tag);
     //设为false也可直接刷新 但是提交上去的数据是乱码
     var url = mkUrl(tag);
-    App.Routing.ClipRouting.router.navigate(url, false);
     App.vent.trigger("app.clipapp:cliplist.refresh", _uid, url, tag);
   });
 
