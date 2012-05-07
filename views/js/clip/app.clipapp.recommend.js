@@ -12,17 +12,29 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   var RecommModel = App.Model.extend({
     url: function(){
       return App.ClipApp.Url.base+"/user/"+this.id+"/recomm";
+    },
+    validate: function(attrs){
+      if(attrs.name == "" || !attrs.name){
+	return {recomm_name: "is_null"};
+      }
+      if(attrs.id == "" || !attrs.id){
+	return {recomm_name: "not_exist"};
+      }
+      return null;
     }
   });
+
   var RecommView = App.ItemView.extend({
     tagName:"div",
     className:"",
     template:"#recommend-view-template",
+    tmpmodel:"",
     events:{
-      "click .list"          :  "getUserAction",
-      "input #name"          :  "nameListAction",
-      "click #name"          :  "nameListAction",
-      "blur #name"           :  "nameBlur",
+      "click .list" : "getUserAction",
+      "input #recomm_name": "nameListAction",
+      "click #recomm_name": "nameListAction",
+      "focus #recomm_name": "cleanError",
+      "blur #recomm_name" : "nameBlur",
       "mouseover .name-li"   :  "MouseOver",
       "mouseout .name-li"    :  "MouseOut",
       "mouseenter .name-li"   :  "mouseHand",
@@ -34,43 +46,50 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     getUserAction:function(evt){
       var id=evt.target.id;
-      var uid = id.split("_")[1];
       var name=document.getElementById(id).innerHTML;
       $("#imgId").css("display","none");
-      this.$("#name").val(name);
+      this.$("#recomm_name").val(name);
       $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
       $("#imgId").css("display","block");
-      this.model.set({uid:uid},{silent:true});
-      this.$("#name_listDiv").empty();
     },
     nameListAction:function(evt){
       $("#alert").css("display","none");
       $("#imgId").css("display","none");
-      var str = this.$("#name").val().trim();
-      var clip_owner = this.model.id.split(":")[0];//clip的拥有者
+      var str = this.$("#recomm_name").val().trim();
+      var clip_owner = this.model.get("clipid").split(":")[0];//clip的拥有者
       var params = {q:str};
       //查询friend
       App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
-      //和查询出的结果进行匹配，查询结果包含输入的name则取得name的uid，并显示头像
-      var uid="";
-      var div=$(".action-info");
-      if(div.length != 0){
-	$("#imgId").css("display","none");
-	_.each(div,function(e){
-	  var li = e.children;
-	  if($("#name").val() == $(li[0]).text()){
-	    this.$("#name").val($(li[0]).text());
-	    $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
-	    $("#imgId").css("display","block");
-	    uid=li[0].id.split("_")[1];
-	    this.$("#name_listDiv").empty();
-	  }
-	});
-	this.model.set({uid:uid},{silent:true});
-      }
     },
     nameBlur:function(){
+      var view = this;
+      var clipid = this.model.get("clipid");
       setTimeout(function(){
+	var data = {};
+	_.each(this.$(":input").serializeArray(), function(obj){
+	  data[obj.name] = obj.value;
+	});
+	var div=$(".action-info");
+	if(div.length != 0){
+	  $("#imgId").css("display","none");
+	  _.each(div,function(e){
+	    var li = e.children;
+	    if(this.$("#recomm_name").val() == $(li[0]).text()){
+	      this.$("#recomm_name").val($(li[0]).text());
+	      $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
+	      $("#imgId").css("display","block");
+	      data.id=li[0].id.split("_")[1];
+	      this.$("#name_listDiv").empty();
+	    }
+	  });
+	}
+	// 先根据 data[name]找到uid，在进行model的新建和name的set
+	view.tmpmodel = new RecommModel({clipid:clipid});
+	view.tmpmodel.set(data, {
+	  error: function(model, error){
+	    view.showError(error);
+	  }
+	});
 	this.$("#name_listDiv").empty();
       },200);
     },
@@ -84,24 +103,24 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       e.currentTarget.style.cursor="pointer";
     },
     recommendAction:function(e){
+      // 在点击转确定按钮时，model.id model.name都已经设置成功
       e.preventDefault();
-      var clipid = "";
+      var clipid = this.model.get("clipid");
       var text=$("#recommend_text").val().trim();
-      //recommended只需要uid
-      var params = {id:this.model.get("uid"),text:text,clipid : this.model.id};
-      //reclip需要clipid
-      var params1 = {id:this.model.id,clip:{note:[{text:text}]}};
-      if(this.model.get("uid")){
-	App.vent.trigger("app.clipapp.recommend:@submit", params);
-	if($("#reclip_box").attr("checked")){
-	  App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
+      //recommend 需要的参数
+      this.tmpmodel.save({text: text},{
+	type:"POST",
+	success:function(model,res){
+	  Recommend.close();
+	},
+	error:function(model,res){
+	  App.vent.trigger("app.clipapp.recommend:@error", model, res);
 	}
-      }else{
-	if($("#name").val().trim() == ""){
-	  App.vent.trigger("app.clipapp.recommend:@error",this.model,{"user":"请添加用户"});
-	}else{
-	  App.vent.trigger("app.clipapp.recommend:@error",this.model,{"user":"用户不存在"});
-	}
+      });
+      //reclip 需要的参数
+      if($("#reclip_box").attr("checked")){
+	var params1 = {id : clipid, clip : {note : [{text : text}]}};
+	App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
       }
     },
     clearAction:function(e){
@@ -135,17 +154,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   Recommend.show = function(cid,model_id,model,error){
     mid = model_id;
-    var recommModel = new RecommModel({id:cid});
+    var recommModel = new RecommModel({clipid:cid});
     if (model) recommModel.set(model.toJSON());
     if (error) recommModel.set({"error":error});
     var recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
-    if(error){
-      $("#alert").show();
-    }else{
-      $("#alert").hide();
-    }
   };
 
   Recommend.close = function(){
@@ -170,18 +184,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     });
   });
 
-  App.vent.bind("app.clipapp.recommend:@submit",function(params){
-    var model = new RecommModel(params);
-    model.save({},{
-      type:"POST",
-      success:function(model,res){
-	Recommend.close();
-      },
-      error:function(model,res){
-	App.vent.trigger("app.clipapp.recommend:@error", model, res);
-      }
-    });
-  });
   App.vent.bind("app.clipapp.recommend:@close",function(){
     Recommend.close();
   });
