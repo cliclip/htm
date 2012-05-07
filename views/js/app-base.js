@@ -130,4 +130,52 @@ App.bind("initialize:after", function(){
       App.Routing.ClipRouting.router.navigate("", true);
     }
   });
+
+  var fixed = function(paddingTop){
+    $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
+   // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
+    //var y = $(".user_detail").height() ? $(".user_detail").height() + 5 :0;
+    var y = $(".user_detail").height()+5;
+    $("#bubb").addClass("fixed").css({"margin-top":y+"px", "top": paddingTop});
+  };
+
+  var remove_fixed = function(paddingTop){
+    $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
+    $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
+  };
+
+  var time_gap = true;
+  var paddingTop = 0 + "px";
+  remove_fixed(paddingTop);
+  $(window).scroll(function() {
+    var st = $(window).scrollTop();
+    //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
+    //var gap = document.getElementById("user_info").style.paddingTop;
+    //console.info(gap);
+    var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
+    var mt = $(".clearfix").offset().top + shifting;
+    //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
+    if(st>0){
+      $(".return_top").show();
+    }else{
+      $(".return_top").hide();
+    }
+    if(st > mt ){
+      //console.info("锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      fixed(paddingTop);
+    } else {
+      //console.info("解除锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      remove_fixed(paddingTop);
+    }
+    var wh = window.innerHeight;
+    var lt = $(".loader").offset().top;
+    if(st + wh > lt && time_gap==true ){
+      time_gap = false;
+      App.vent.trigger("app.clipapp:nextpage");
+      setTimeout(function(){
+	time_gap = true;
+      },200);
+    }
+  });
+
 });

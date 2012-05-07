@@ -248,16 +248,20 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.onUploadImgChange = function(sender){
+    console.info("on upload image change");
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
     }else{
-      if( sender.files && sender.files[0] ){
+      if( sender.files && sender.files[0]){
 	$("#confirm_face").show();
 	var img = new Image();
-	img.src = App.util.get_img_src(sender.files[0]);
+	img.src = App.util.get_img_src(sender);
+	console.info(img.src);
 	img.onload=function(){
+	  console.info('image loading..............');
 	  if(img.complete){
+	    console.info('image load complete');
 	    $("#myface").attr("src",img.src);
 	    var _height,_width,_top, _left;
 	    //var preview = $("#myface");
@@ -275,7 +279,19 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    $("#myface").css({"height":_height,"width":_width,"margin-top":_top,"margin-left":_left});
 	  }
 	};
+	//$("#myface").attr("src",img.src);
 	return true;
+      }else if(sender.value){
+	var img = new Image();
+	img.src = App.util.get_img_src(sender);
+	// console.dir(img);
+	document.getElementById("head_img").innerHTML= "<div id='head'></div>";
+	$("#head").css({"height":100,"width":100});
+	var obj = document.getElementById("head");
+	obj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='image',src=\"" + App.util.get_img_src(sender) + "\")";
+	$("#head").ready(function(){
+	  console.dir(obj.offsetWidth);
+	});
       }
       return false;
     }

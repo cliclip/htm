@@ -1,7 +1,13 @@
 //app.clipapp.followerlist.js
 App.ClipApp.FollowerList=(function(App, Backbone, $){
   var precliplength=0;
-  var options = {};
+  var collection = {};
+  var start = 1;
+  var end = App.ClipApp.Url.page;
+  var url = "";
+  var base_url = "";
+  var new_page;
+  var collection_length;
   var FollowerModel=App.Model.extend({
     defaults:{
       uid:"",
@@ -37,28 +43,22 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
 
   FollowerList.showUserFollower=function(uid){
     var flag=false;
-    var collection=new FollowerList({id:uid});
-    options.collection=collection;
-    //if(!options.start &&! options.end){
-      options.start = 1;
-      options.end = App.ClipApp.Url.page;
-    //}
-    options.add = false;
-    options.base_url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
-    options.url=options.base_url+"/"+options.start+".."+options.end;
-    options.collection.fetch(options);
-    options.collection.onReset(function(followerlist){
+    collection=new FollowerList({id:uid});
+    start = 1;
+    end = App.ClipApp.Url.page;
+    base_url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
+    url=base_url+"/"+start+".."+end;
+    collection.fetch({url:url});
+    collection.onReset(function(followerlist){
       if(!_.isEmpty(followerlist.toJSON())) flag=true;
-      options.collection_length = options.collection.length;
-      options.fetch_flag = options.collection.length==App.ClipApp.Url.page ? true :false;
+      collection_length = collection.length;
+      new_page = collection.length==App.ClipApp.Url.page ? true :false;
       var followerlistView = new FollowerListView({collection:followerlist});
       $("#list").css({height:"auto"});
       App.listRegion.show(followerlistView);
       //console.info(App.listRegion.currentView.$el[0].className);
       if(flag) $(".empty_user").css("display","none");
       App.vent.trigger("app.clipapp:showpage");
-      //App.util.list_scroll(options);
-      //App.vent.trigger("app.clipapp.page:next",options);
     });
   };
 
@@ -87,21 +87,23 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:nextpage",function(){
-    if(App.listRegion.currentView.$el[0].className=="follow-item"&&options.fetch_flag){
-    //if(options.fetch_flag){
-      options.start += App.ClipApp.Url.page;
-      options.end += App.ClipApp.Url.page;
-      options.url = options.base_url + "/" +options.start + ".." + options.end;
-      options.add = true;
-      options.error = function(){ options.fetch_flag = false; };
-      options.success = function(){
-	if(options.collection.length-options.collection_length>=App.ClipApp.Url.page){
-	  options.collection_length = options.collection.length;
-	}else{
-	  options.fetch_flag = false;
+    if(!App.listRegion.currentView)return;
+    if(App.listRegion.currentView.$el[0].className=="follow-item"&&new_page){
+      start += App.ClipApp.Url.page;
+      end += App.ClipApp.Url.page;
+      url = base_url + "/" + start + ".." + end;
+      collection.fetch({
+	url:url,
+	add:true,
+	error :function(){ new_page = false; },
+	success :function(){
+	  if(collection.length-collection_length>=App.ClipApp.Url.page){
+	    collection_length = collection.length;
+	  }else{
+	    new_page = false;
+	  }
 	}
-      };
-      options.collection.fetch(options);
+      });
     }
   });
 

@@ -38,6 +38,7 @@ App.util = (function(){
 
   util.face_url = function(imageid,size){
     var pattern = /^[0-9]:[a-z0-9]{32}/;
+   // return "file:///D:/Images/图片/孙燕姿/p_large_8ASw_431000028afc2d11[1].jpg";
     if(imageid == ""){
       return "img/f.jpg";
     }else if(imageid&& pattern.test(imageid)){
@@ -179,7 +180,7 @@ App.util = (function(){
   };
 
   App.vent.bind("app.clipapp:showpage",function(length){
-    var paddingTop = 0 + "px";
+/*    var paddingTop = 0 + "px";
     $(window).unbind("scroll");
     util.remove_fixed(paddingTop);
     $(window).scroll(function() {
@@ -187,10 +188,18 @@ App.util = (function(){
       //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
       var shifting =$(".user_head").height() ? $(".user_head").height()+15 :0;
       var mt = $(".clearfix").offset().top + shifting;
+      //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
       //if($("#list").height()<=$(".left").height())return;
+      if(st>0){
+	$(".return_top").show();
+      }else{
+	$(".return_top").hide();
+      }
       if(st > mt ){
+	//console.info("锁定气泡组件",st,mt);
 	util.fixed(paddingTop);
       } else {
+	//console.info("解除锁定气泡组件",st,mt);
 	util.remove_fixed(paddingTop);
       }
       // loader while scroll down to the page end
@@ -200,6 +209,7 @@ App.util = (function(){
 	App.vent.trigger("app.clipapp:nextpage");
       }
     });
+*/
   });
 
   util.fixed = function(paddingTop){
@@ -208,22 +218,25 @@ App.util = (function(){
     //var y = $(".user_detail").height() ? $(".user_detail").height() + 5 :0;
     var y = $(".user_detail").height()+5;
     $("#bubb").addClass("fixed").css({"margin-top":y+"px", "top": paddingTop});
-    $(".return_top").show();
   };
 
   util.remove_fixed = function(paddingTop){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
     $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
-    $(".return_top").hide();
   };
 
   //解决关于本地预览图片的浏览器兼容问题
-  util.get_img_src = function(source){
+  util.get_img_src = function(sender){
     //chrome
     if (window.webkitURL && window.webkitURL.createObjectURL) {
-      return window.webkitURL.createObjectURL(source);
-    }else if(window.URL.createObjectURL) {
-      return window.URL.createObjectURL(source);
+      return window.webkitURL.createObjectURL(sender.files[0]);
+    }else if(window.URL && window.URL.createObjectURL) {
+      //firefox
+      return window.URL.createObjectURL(sender.files[0]);
+    }else if (window.navigator.userAgent.indexOf("MSIE")>=1){
+      sender.select();
+      sender.blur();
+      return document.selection.createRange().text;
     }else{
       alert("the problem of compatible");
       return window.URL.createObjectURL(source);
