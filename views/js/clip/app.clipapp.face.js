@@ -52,13 +52,13 @@ App.ClipApp.Face = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.bubb:refresh",this.model.id,[]);
     },
     userList: function(e){
-      App.vent.trigger("app.clipapp.face:@listshow", user_id);
+      App.vent.trigger("app.clipapp:usershow", user_id);
     },
     following: function(){
-      App.vent.trigger("app.clipapp.followinglist:show", user_id);
+      App.vent.trigger("app.clipapp:showfollowing", user_id);
     },
     follower: function(){
-      App.vent.trigger("app.clipapp.followerlist:show", user_id);
+      App.vent.trigger("app.clipapp:showfollower", user_id);
     }
   });
 
@@ -110,10 +110,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.face:reset", function(uid){
     Face.showUser(uid);
   });
-  App.vent.bind("app.clipapp.face:@listshow", function(uid){
-    App.ClipApp.ClipList.showUserClips(uid);
-  });
-
 
   return Face;
 })(App, Backbone, jQuery);

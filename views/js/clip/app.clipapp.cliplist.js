@@ -170,11 +170,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type:"POST", data: data};
     getClips();
-    if(uid == App.util.getMyUid()){
-      tag ? App.vent.trigger("app.clipapp.routing:mytag_show", tag) : App.vent.trigger("app.clipapp.routing:myshow");
-    }else{
-      tag ? App.vent.trigger("app.clipapp.routing:usertag_show", uid, tag) : App.vent.trigger("app.clipapp.routing:usershow", uid);
-    }
   };
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
@@ -186,8 +181,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type: "POST", data: data};
     getClips();
-    // 将url设定和动作绑定在一起
-    App.vent.trigger("app.clipapp.routing:sitequery", word);
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
@@ -198,7 +191,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     options = {base_url: url, type:"POST", data:data};
     getClips();
-    App.vent.trigger("app.clipapp.routing:myquery", word);
   };
 
   ClipList.showUserInterest = function(uid, tag){
@@ -208,7 +200,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     options ={base_url: url, type: "GET",start:0,end:App.ClipApp.Url.page};
     getClips();
-    tag	? App.vent.trigger("app.clipapp.routing:interest_tag", tag): App.vent.trigger("app.clipapp.routing:interest");
   };
 
   ClipList.showUserRecommend = function(uid, tag){
@@ -218,7 +209,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     url = App.ClipApp.Url.base + url;
     options ={base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page};
     getClips();
-    tag ? App.vent.trigger("app.clipapp.routing:recommend_tag", tag) : App.vent.trigger("app.clipapp.routing:recommend");
   };
 
   function getClips(){
@@ -340,6 +330,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     //var clip = model.get("clip");
     var newcontent = App.util.getPreview(content, 100);
     console.info(model);
+    console.log(model_id);
     model.set({content:newcontent});
     //model.set({"change":true});
     //model.unset("change",{silent:true});
