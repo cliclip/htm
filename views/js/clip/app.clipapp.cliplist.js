@@ -45,11 +45,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
 	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
 	  delete resp[i].clip;
-	  if(resp[i].recommend){
+	 // if(resp[i].recommend){
 	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
-	  }else{
-	    resp[i].id = resp[i].clip.user.id+":"+resp[i].clip.id;
-	  }
+	 // }else{
+	   // resp[i].id = resp[i]
+	   // .user.id+":"+resp[i].id;
+	  //}
 	}
       }
       return resp;
@@ -105,11 +106,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip", cid,this.model.id);break;
 	case 'refresh'://转
-	App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
+	  App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment", cid,this.model.id);break;
 	case 'note'://注
-	App.vent.trigger("app.clipapp:clipmemo", cid);break;
+	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change'://改
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del'://删
@@ -159,12 +160,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
-    //修改地址栏的内容
-    if(uid == App.util.getMyUid()){
-      tag != undefined ? App.vent.trigger("app.clipapp.routing:mytag_show", tag) : App.vent.trigger("app.clipapp.routing:myshow");
-    }else{
-      tag != undefined ? App.vent.trigger("app.clipapp.routing:usertag_show", uid, tag) : App.vent.trigger("app.clipapp.routing:usershow", uid);
-    }
   };
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
@@ -175,7 +170,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
-    App.vent.trigger("app.clipapp.routing:sitequery", word);
   };
 
   ClipList.showUserQuery = function(uid, word, tag){
@@ -185,7 +179,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
-    App.vent.trigger("app.clipapp.routing:myquery", word);
   };
 
   ClipList.showUserInterest = function(uid, tag){
@@ -196,8 +189,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     data = null;
     type = "GET";
     init_page();
-    //修改地址栏的内容
-    tag	? App.vent.trigger("app.clipapp.routing:interest_tag", tag): App.vent.trigger("app.clipapp.routing:interest");
   };
 
   ClipList.showUserRecommend = function(uid, tag){
@@ -209,8 +200,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     type = "GET";
     //options ={base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page};
     init_page();
-    //修改地址栏的内容
-    tag ? App.vent.trigger("app.clipapp.routing:recommend_tag", tag) : App.vent.trigger("app.clipapp.routing:recommend");
   };
 
   function init_page(){
@@ -329,7 +318,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var collection = clipListView.collection;
     var model = collection.get(model_id);
     var newcontent = App.util.getPreview(content, 100);
-    //console.info(model);
     model.set({content:newcontent});
   });
 

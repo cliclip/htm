@@ -21,7 +21,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
     query : function(){
       var word = this.$(".text").val();
       this.$(".text").val("");
-      App.vent.trigger("app.clipapp.query:query",word);
+      App.vent.trigger("app.clipapp:query", word, null);
     },
     inputAction: function(){
       $(".text").unbind("keydown");
@@ -43,12 +43,6 @@ App.ClipApp.Query = (function(App,Backbone,$){
 
   App.bind("initialize:after", function(){
     Query.show();
-  });
-
-
-  App.vent.bind("app.clipapp.query:query",function(word){
-    // 如此便限定了，当用户登录之后只可以查询自己的
-    App.vent.trigger("app.clipapp:query", word, null);
   });
 
   return Query;

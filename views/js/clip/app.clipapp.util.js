@@ -24,8 +24,12 @@ App.util = (function(){
     return P+"/user/" + util.getMyUid() + "/upload_face";
   };
 
-  util.getScrollTop = function(){
-    return document.documentElement.scrollTop + document.body.scrollTop;;
+  util.getPopTop = function(clss){
+    var top = 0;
+    var scroll = document.documentElement.scrollTop + document.body.scrollTop;
+    if(clss == "big") top = 100;
+    if(clss == "small") top = 150;
+    return scroll + top + "px";
   };
 
   //clip列表时取得img 的 url 为裁剪后的图片
@@ -51,60 +55,6 @@ App.util = (function(){
     }else return imageid;
   };
 
-  /*
-  // 拿到的html参数是字符串
-  util.HtmlToContent = function(html){
-    // var src = /<img\s* (src=\"?)([\w\-:\/\.]+)?\"?\s*.*\/?>/;
-    // var src = /<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg]))[\'|\"].*?[\/]?>/;
-    var src = /<[img|IMG].*?src=[\'|\"]([\w\-:\/\.]+)?\"?\s*.*\/?>/;
-    var rg = /<img[^>]+\/>|<img[^>]+>/;
-    var link = /http:\/\//;
-    var pre = /<pre.*?>/;
-    var content = [];
-    // 此处的html只包含简单的p标签和span标签 [可是还存在像;nbsp这类内容]
-    // <b></b>也没有处理过滤
-    while(html != ""){
-      html = html.replace(/<[\s|\/]*p.*?>/ig,"");
-      html = html.replace(/<[\s|\/]*span.*?>/ig,"");
-      // html = html.replace(/<[\s|\/]*b.*?>/ig,"");
-      if(pre.test(html)){
-	// 取得pre标签结束的位置 [TODO]
-	var i = html.indexOf('</pre>') == -1 ? html.indexOf('</ pre>') : html.indexOf('</pre>');
-	var ss = html.replace(pre,"").substring(0,i);
-	content.push({code: ss});
-	html = html.replace(ss, "").replace(/<\/pre>/,"");
-      }else if(rg.test(html)){
-	var i = html.indexOf('<img');
-	if(i == 0){
-	  var match = html.match(src);
-	  if(match.length >= 2){
-	    if(link.test(match[1])){
-	      content.push({image: match[1]});
-	    }else{// 本地上传图片
-	      var ids = match[1].split('/');
-	      var imgid = ids[3]+":"+ids[5];
-	      content.push({image:imgid});
-	    }
-	  }
-	  html = html.replace(rg,"");
-	}else{
-	  var text = html.substring(0,i);
-	  text = text.replace(/(^\s*)|(\s*$)/g,"");// .replace(/<br*?>/,"");
-	  // 先保留<br />标签
-	  content.push({text:text});
-	  html = html.substring(i,html.length);
-	}
-      }else{
-	var text = html.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
-	if(text != "")
-	  content.push({text:text});
-	html = html.replace(/(^\s*)|(\s*$)/g,"").replace(/<br*?>/,"");
-	html = html.replace(text, "");
-      }
-    }
-    return content;
-  };*/
-
   util.getPreview = function(content, length){
     var data = {};
     var reg = /\[img\].*?\[\/img\]/;
@@ -124,7 +74,7 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return content;
+    return App.ClipApp.Filter.ubbToHtml(content);
   };
 
   function _trim(content, length){
@@ -310,6 +260,10 @@ App.util = (function(){
       not_match: "您的登录信息有误，请退出再重新登录",
       not_login: "您尚未登录"
     },
+    recomm_name:{
+      is_null: "请添加用户",
+      not_exist: "您添加的用户不存在"
+    },
     name:{
       is_null: "用户名尚未填写",
       invalidate: "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
@@ -346,9 +300,6 @@ App.util = (function(){
     },
     active:{
       fail: "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
-    },
-    recommend:{
-      not_exist: "推荐不存在"
     },
     clip:{
       has_recliped: "您已经拥有这条载录了",

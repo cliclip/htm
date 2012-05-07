@@ -109,7 +109,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.cliplist:add", model);
     if(model.get("tag")){
       var uid = App.util.getMyUid();
-      App.vent.trigger("app.clipapp.bubb:showUserTags", uid);
+      //只刷新bubbs，而不重新load
+      App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
+      //App.vent.trigger("app.clipapp.bubb:showUserTags", uid);
     }
   });
 

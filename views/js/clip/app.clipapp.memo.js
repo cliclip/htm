@@ -96,8 +96,13 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var memoModel = new MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
+    $(".small_pop").css("top", App.util.getPopTop("small"));
     $('#obj_tag').tagsInput({
-      //autocomplete_url:'test/fake_json_endpoint.html'
+      //autocomplete_url: App.ClipApp.Bubb.myObjTag
+      autocomplete_url:'test/fake_json_endpoint.html'
+    });
+    $( "#obj_tag_addTag" ).autocomplete({
+      source: App.ClipApp.Bubb.myObjTag
     });
   }
 
@@ -132,6 +137,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var model = new App.Model.DetailModel(data);
       model.save({}, {
 	success: function(model, res){
+	  App.vent.trigger("app.clipapp.bubb:refresh",App.util.getMyUid(),null,data.tag);
 	  ClipMemo.close();
 	},
 	error:function(model,res){

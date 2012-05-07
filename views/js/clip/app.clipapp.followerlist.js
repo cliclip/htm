@@ -33,11 +33,11 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     },
     followingOpen:function(evt){
       var uid = App.ClipApp.Face.getUserId();
-      App.vent.trigger("app.clipapp.followinglist:show", uid);
+      App.vent.trigger("app.clipapp:showfollowing", uid);
     },
     followerOpen:function(evt){
       var uid = App.ClipApp.Face.getUserId();
-      App.vent.trigger("app.clipapp.followerlist:show",uid);
+      App.vent.trigger("app.clipapp.showfollower",uid);
     }
   });
 
@@ -68,20 +68,13 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   App.vent.bind("app.clipapp.followerlist:close",function(){
     FollowerList.close();
   });
-  App.vent.bind("app.clipapp.followerlist:show",function(uid){
-    FollowerList.showUserFollower(uid);
-    var my = App.util.getMyUid();
-    if(uid == my){
-      App.vent.trigger("app.clipapp.routing:myfollower");
-    }else{
-      App.vent.trigger("app.clipapp.routing:userfollower", uid);
-    }
-  });
+  
+  // 作用不明
   App.vent.bind("app.clipapp.followerlist:refresh",function(){
     if(App.listRegion.currentView.className =='follow-item'){
       var uid= App.util.getMyUid();
       var id = App.ClipApp.Face.getUserId();
-      if(uid) App.vent.trigger("app.clipapp.followerlist:show", id);
+      if(uid)App.vent.trigger("app.clipapp.showfollower",uid);
       else App.vent.trigger("app.clipapp:login");
     }
   });

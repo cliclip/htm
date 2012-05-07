@@ -76,6 +76,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     var model = new App.Model.CommentModel({cid: cid});
     var view = new CommentView({model : model});
     App.popRegion.show(view);
+    $(".small_pop").css("top", App.util.getPopTop("small"));
     var tag_list = [];
   };
 

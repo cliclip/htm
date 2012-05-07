@@ -24,7 +24,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
   //var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
   var sink = ["讨厌"];
-
+  Bubb.myObjTag = [];
   // private
   var _uid  = null;
   var last = null;
@@ -103,11 +103,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     last = tags;
   });
 
-  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow){
+  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
     _uid = uid;
     self = false;
     if(App.util.getMyUid() == uid) self = true;
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
+    if(follow){
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
+    }else if(new_tags){
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(_.union(last.tags,new_tags), follow, null, self));
+    }
   });
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
@@ -116,7 +120,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     iframe_call('bubbles', "openTag", tag);
     //设为false也可直接刷新 但是提交上去的数据是乱码
     var url = mkUrl(tag);
-    App.Routing.ClipRouting.router.navigate(url, false);
+    Backbone.history.navigate(url, false);
     App.vent.trigger("app.clipapp:cliplist.refresh", _uid, url, tag);
   });
 
@@ -191,6 +195,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
+      if(uid == App.util.getMyUid()){
+	Bubb.myObjTag  = _.difference( bubb.tag,App.util.getBubbs());
+      }
       callback(bubb.tag, bubb.follow);
     });
   }
@@ -285,9 +292,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	return url += "/tag/"+tag;
       }else{
 	if(url.indexOf("my/interest") >= 0)
-	  return "/my/interest/"+tag;
+	  return "/my/interest/tag/"+tag;
 	else if(url.indexOf("my/recommend") >= 0)
-	  return "/my/recommend/"+tag;
+	  return "/my/recommend/tag/"+tag;
 	else if(url.indexOf("my") >= 0)
 	  return "/my/tag/"+tag;
 	else

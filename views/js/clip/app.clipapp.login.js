@@ -100,8 +100,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       if(error.name){
 	$("#name").val(model.get("name"));
 	$("#name").select();
-      }
-      if(!error.name&&error.pass){
+      }else if(error.pass){
 	$("#pass").select();
       }
     }

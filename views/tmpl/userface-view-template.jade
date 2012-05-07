@@ -4,7 +4,7 @@ script(type='text/template',id='userface-view-template')
       <a class="user_list">
         <img class="face-image" id="big_face"  src="<%=App.util.face_url(face)%>"/>
       </a>
-      <% if(App.util.getMyUid() !=id){ %>
+      <% if(id&&App.util.getMyUid() !=id){ %>
       <% if(_.isEmpty(relation)){ %>
       <b class="user_i" style="display:none;"><i class="stop" /></b>
       <% }else{ %>

@@ -52,13 +52,13 @@ App.ClipApp.Face = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.bubb:refresh",this.model.id,[]);
     },
     userList: function(e){
-      App.vent.trigger("app.clipapp.face:@listshow", user_id);
+      App.vent.trigger("app.clipapp:usershow", user_id);
     },
     following: function(){
-      App.vent.trigger("app.clipapp.followinglist:show", user_id);
+      App.vent.trigger("app.clipapp:showfollowing", user_id);
     },
     follower: function(){
-      App.vent.trigger("app.clipapp.followerlist:show", user_id);
+      App.vent.trigger("app.clipapp:showfollower", user_id);
     }
   });
 
@@ -69,10 +69,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
       url = P + "/my/info";
       var now = new Date();
       url = P + "/my/info" + "?now=" + now.getTime();
-      App.vent.trigger("app.clipapp.routing:myshow");
     }else{
       url = P + "/user/"+ uid + "/info";
-      App.vent.trigger("app.clipapp.routing:usershow", uid);
     }
     var user=new UserModel();
     user.fetch({url:url});
@@ -84,13 +82,18 @@ App.ClipApp.Face = (function(App, Backbone, $){
   Face.showUser = function(uid){
     user_id = uid;
     if(uid){
-      getUser(uid, function(user){
-	App.ClipApp.Bubb._getUserTags(uid,function(tag,follow){
-	  user.set({relation:follow});
-	  var faceView = new FaceView({model: user});
-	  App.faceRegion.show(faceView);
+      if(App.util.getMyUid() != uid){
+	getUser(uid, function(user){
+	  App.ClipApp.Bubb._getUserTags(uid,function(tag,follow){
+	    user.set({relation:follow});
+	    var faceView = new FaceView({model: user});
+	    App.faceRegion.show(faceView);
+	  });
 	});
-      });
+      }else{
+	var faceView = new FaceView({model: App.ClipApp.Me.me});
+	App.faceRegion.show(faceView);
+      }
     }else{
       App.faceRegion.close();
     }
@@ -107,10 +110,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.face:reset", function(uid){
     Face.showUser(uid);
   });
-  App.vent.bind("app.clipapp.face:@listshow", function(uid){
-    App.ClipApp.ClipList.showUserClips(uid);
-  });
-
 
   return Face;
 })(App, Backbone, jQuery);
