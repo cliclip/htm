@@ -8,9 +8,7 @@ script(type="text/template",id="recommend-view-template")
         div.container
           div.user_small_head#user_image
             img(id="imgId")
-          input(type="text",id="name")
-      li.alert#alert
-        <%= typeof error != "undefined"&& error.user ? error.user: "" %>
+          input(type="text",id="recomm_name",name="name")
       div.name_list#name_listDiv
       li.input_textarea
         |<textarea id="recommend_text">说点啥吧～</textarea>

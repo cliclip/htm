@@ -34,7 +34,7 @@
 	z-index:20;
 	background-color:#fff;	
 	list-style:none;
-	}
+}
 
 // 页面整体布局 layout.less
 .layout{
@@ -359,7 +359,7 @@
 #setpop{
 	z-index: 3;
 	position:relative;
-	top:-500px;
+	top: -500px;
 }
 
 
@@ -838,8 +838,15 @@ section.follow_frame{
 		li.input_textarea textarea{width:270px;height:72px;border:1px solid #ccc;margin-bottom:0;}
 		li.select_user input{width:220px;height:32px;float:left;margin-left:10px;border-style:none;}
 		li.select_user div.container{border:1px solid #ccc;width:278px;height:40px;}
+		li.select_user div.container input.error{
+			border:1px solid #f00;
+			margin-left: 48px;
+			margin-top: -40px;
+		}
+		li.select_user div.container span.error{
+			       position:absolute;z-index:1000;width: auto;margin-top:0.2px;margin-left:100px;max-width:500px;background:#EDF5FA none repeat scroll 0% 50%;border:3px solid #CEF3FF;padding:9px;text-align:left;min-height:1em;-moz-border-radius:5px;font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+		}
 		li.input_checkbox input{float: left;width:auto!important;height:auto!important;}
-		li.alert{vertical-align: middle;}
 		.tag_box{
 			height:48px;
 			min-width: 288px;
@@ -1443,9 +1450,6 @@ section.edit_frame{
 					display:none;
 				}
 				input#con_pass{
-					display:none;
-				}
-				li.alert{
 					display:none;
 				}
 			}
