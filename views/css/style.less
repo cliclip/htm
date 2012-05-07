@@ -344,12 +344,14 @@
 	}
 }
 
+// clipdetail等
 #view {
       z-index: 10;
       .masker_layer {
 		z-index: 2;
       }		
 }
+// clipdetail上边的
 #pop{
 	z-index: 20;
 	.masker_layer{
@@ -358,8 +360,9 @@
 }
 #setpop{
 	z-index: 3;
-	position:relative;
-	top: -500px;
+	.masker_layer{
+		z-index:10;
+	}
 }
 
 

@@ -12,10 +12,12 @@ script(type="text/template",id="recommend-view-template")
       div.name_list#name_listDiv
       li.input_textarea
         |<textarea id="recommend_text">说点啥吧～</textarea>
+      <% if(!App.util.self(clipid.split(":")[0])) {%>
       li.input_checkbox
         label
           input(type="checkbox",id="reclip_box")
           | 同时收
+      <%}%>
       li.btn_group.clearfix
         input.verify(type="button",value="确定",id="submit")
         input.cancel(type="button",value="取消",id="cancel")

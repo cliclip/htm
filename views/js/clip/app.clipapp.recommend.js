@@ -114,7 +114,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  Recommend.close();
 	},
 	error:function(model,res){
-	  App.vent.trigger("app.clipapp.recommend:@error", model, res);
+	  view.showError(res);
 	}
       });
       //reclip 需要的参数
@@ -152,11 +152,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   var Recommend = {};
   var mid,defaultText = "说点啥吧～";
 
-  Recommend.show = function(cid,model_id,model,error){
+  Recommend.show = function(cid,model_id){
     mid = model_id;
     var recommModel = new RecommModel({clipid:cid});
-    if (model) recommModel.set(model.toJSON());
-    if (error) recommModel.set({"error":error});
     var recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
@@ -188,9 +186,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     Recommend.close();
   });
 
-  App.vent.bind("app.clipapp.recommend:@error",function(model,err){
-    Recommend.show(null, null, model, err);
-  });
 
   return Recommend;
 

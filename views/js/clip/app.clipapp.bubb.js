@@ -120,6 +120,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     iframe_call('bubbles', "openTag", tag);
     //设为false也可直接刷新 但是提交上去的数据是乱码
     var url = mkUrl(tag);
+    Backbone.history.navigate(url, false);
     App.vent.trigger("app.clipapp:cliplist.refresh", _uid, url, tag);
   });
 
@@ -291,9 +292,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	return url += "/tag/"+tag;
       }else{
 	if(url.indexOf("my/interest") >= 0)
-	  return "/my/interest/"+tag;
+	  return "/my/interest/tag/"+tag;
 	else if(url.indexOf("my/recommend") >= 0)
-	  return "/my/recommend/"+tag;
+	  return "/my/recommend/tag/"+tag;
 	else if(url.indexOf("my") >= 0)
 	  return "/my/tag/"+tag;
 	else

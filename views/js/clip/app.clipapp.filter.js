@@ -168,7 +168,23 @@ App.ClipApp.Filter = (function(App, Backbone, $){
 
   // 对与pre和code类的标签此处是作为文本内容进行处理的
   function _htmlToUbb(html){
-    var text = html;
+    // 首先判断当前的html中有无直接是url地址的文本，有的话将其换城[url=][/url]
+    var re=/(http:\/\/)?[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*/gi;
+    var arry2=[];
+
+    var text=html;
+    var arry1 = re.exec(html);
+    while(arry1){
+      arry2.push(arry1[0]);
+      text=text.replace(arry1[0],'######');
+      arry1 = re.exec(html);
+    }
+    var subos='';
+    for(var i=0;i<arry2.length;i++){
+      subos='<a href="'+arry2[i]+'">'+arry2[i]+'</a>';
+      text=text.replace('######',subos);
+    }
+
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
     // output - asdf (http://pinetechlabs.com/)"
