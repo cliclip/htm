@@ -55,6 +55,10 @@ App.util = (function(){
     }else return imageid;
   };
 
+  util.contentToHtml = function(content){
+   return App.ClipApp.Filter.ubbToHtml(content);
+  };
+
   util.getPreview = function(content, length){
     var data = {};
     var reg = /\[img\].*?\[\/img\]/;

@@ -43,7 +43,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
-    save: function(){
+    save: function(e){
+      e.preventDefault();
+      $(e.currentTarget).disabled = true;
       // var img_list = [];
       // clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       clip.content = App.ClipApp.Editor.getContent("editor");
@@ -51,6 +53,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model
 	  App.vent.trigger("app.clipapp.clipadd:@success", model);
+	  $(e.currentTarget).disabled = true;
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
 	  App.vent.trigger("app.clipapp.clipadd:@error");

@@ -50,11 +50,10 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
         var uid = id.split("_")[1];
         var name=document.getElementById(id).innerHTML;
         $("#imgId").css("display","none");
-        this.$("#name").val(name);
+        this.$("#recomm_name").val(name);
         $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
         $("#imgId").css("display","block");
         this.model.set({uid:uid},{silent:true});
-        this.$("#name_listDiv").empty();
       }
     },
     nameListAction:function(evt){
@@ -84,9 +83,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	      $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
 	      $("#imgId").css("display","block");
 	      data.id=li[0].id.split("_")[1];
-	      this.$("#name_listDiv").empty();
 	    }
 	  });
+	  this.$("#name_listDiv").empty();
 	}
 	// 先根据 data[name]找到uid，在进行model的新建和name的set
 	view.tmpmodel = new RecommModel({clipid:clipid});
@@ -110,19 +109,22 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     recommendAction:function(e){
       // 在点击转确定按钮时，model.id model.name都已经设置成功
       e.preventDefault();
-      var clipid = this.model.get("clipid");
-      var text=$("#recommend_text").val().trim();
-      //recommend 需要的参数
-      this.tmpmodel.save({text: text},{
-	type:"POST",
-	success:function(model,res){
-	  Recommend.close();
-	},
-	error:function(model,res){
-	  view.showError(res);
-	}
-      });
-      //reclip 需要的参数
+      var view = this;
+      setTimeout(function(){
+	var clipid = view.model.get("clipid");
+	var text=$("#recommend_text").val().trim();
+	//recommend 需要的参数
+	view.tmpmodel.save({text: text},{
+	  type:"POST",
+	  success:function(model,res){
+	    Recommend.close();
+	  },
+	  error:function(model,res){
+	    view.showError(res);
+	  }
+	});
+      }, 200);
+	//reclip 需要的参数
       if($("#reclip_box").attr("checked")){
 	var params1 = {id : clipid, clip : {note : [{text : text}]}};
 	App.vent.trigger("app.clipapp.reclip:sync", params1,mid);

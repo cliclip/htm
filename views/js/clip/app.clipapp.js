@@ -81,7 +81,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    console.log(uid + "++myShow");
     App.vent.trigger("app.clipapp.routing:myshow", tag);
   };
 
@@ -214,7 +213,8 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }else{
-      location.href="#my";
+      // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
+      // location.href="#my";
       ClipApp.ClipAdd.show();
     }
   });

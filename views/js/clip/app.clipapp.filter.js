@@ -1,6 +1,8 @@
 App.ClipApp.Filter = (function(App, Backbone, $){
   var Filter = {};
   // filter facility
+
+  // 代替了filterPastetext的过滤方法
   Filter.filter = function (html) {
     // console.log(html);
     if (isWord(html)) {
@@ -35,8 +37,8 @@ App.ClipApp.Filter = (function(App, Backbone, $){
     // Remove comments
     str = str.replace(/<!--[\s\S]*?-->/ig, "");
     // Remove scripts (e.g., msoShowComment), XML tag, VML content, MS Office namespaced tags, and a few other tags
-    str = str.replace(/<(!|script[^>]*>.*?<\/script(?=[>\s])|\/?(\?xml(:\w+)?|xml|meta|link|style|\w:\w+)(?=[\s\/>]))[^>]*>/gi, "");
     // keep img
+    str = str.replace(/<(!|script[^>]*>.*?<\/script(?=[>\s])|\/?(\?xml(:\w+)?|xml|meta|link|style|\w:\w+)(?=[\s\/>]))[^>]*>/gi, "");
     // str = str.replace(/<(!|script[^>]*>.*?<\/script(?=[>\s])|\/?(\?xml(:\w+)?|xml|img|meta|link|style|\w:\w+)(?=[\s\/>]))[^>]*>/gi,"");
     //convert word headers to strong
     str = str.replace(/<p [^>]*class="?MsoHeading"?[^>]*>(.*?)<\/p>/gi, "<p><strong>$1</strong></p>");
@@ -157,7 +159,7 @@ App.ClipApp.Filter = (function(App, Backbone, $){
     str = str.replace(/<\/?(input|iframe|div)[^>]*>/ig, "");
     // keep img
     // str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|img|input|iframe|div)[^>]*>/ig, "");
-    str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
+    str = str.replace(/<\/?(table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
     //remove bad attributes
     do {
       len = str.length;
@@ -168,22 +170,15 @@ App.ClipApp.Filter = (function(App, Backbone, $){
 
   // 对与pre和code类的标签此处是作为文本内容进行处理的
   function _htmlToUbb(html){
-    // 首先判断当前的html中有无直接是url地址的文本，有的话将其换城[url=][/url]
-    var re=/(http:\/\/)?[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*/gi;
-    var arry2=[];
-
-    var text=html;
-    var arry1 = re.exec(html);
-    while(arry1){
-      arry2.push(arry1[0]);
-      text=text.replace(arry1[0],'######');
-      arry1 = re.exec(html);
-    }
-    var subos='';
-    for(var i=0;i<arry2.length;i++){
-      subos='<a href="'+arry2[i]+'">'+arry2[i]+'</a>';
-      text=text.replace('######',subos);
-    }
+    var text = html;
+    // 先将不是html的网址转换成 a 标签
+    var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
+    text = text.replace(re,function(a,b,c){
+      if(/<a href="([^"]+)"[^>]*>\s*([^<]+)<\/a>/i.test(text))
+	return a; // 对于本身已经是<a>标签的直接返回a本身
+      else
+	return '<a href="http://'+c+'">'+a+'</a>';
+    });
 
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
@@ -315,3 +310,35 @@ function decode(m, n) {
 return Filter;
 
 })(App, Backbone, jQuery);
+
+							   /*
+  var filterPasteText = function(str){
+    str = str.replace(/\r\n|\n|\r/ig, "");
+    //remove html body form
+    str = str.replace(/<\/?(html|body|form)(?=[\s\/>])[^>]*>/ig, "");
+    //remove doctype
+    str = str.replace(/<(!DOCTYPE)(\n|.)*?>/ig, "");
+    // Word comments like conditional comments etc
+    str = str.replace(/<!--[\s\S]*?-->/ig, "");
+    //remove xml tags
+    str = str.replace(/<(\/?(\?xml(:\w+)?|xml|\w+:\w+)(?=[\s\/>]))[^>]*>/gi,"");
+    //remove head
+    str = str.replace(/<head[^>]*>(\n|.)*?<\/head>/ig, "");
+    //remove <xxx />
+    str = str.replace(/<(script|style|link|title|meta|textarea|option|select|iframe|hr)(\n|.)*?\/>/ig, "");
+    //remove empty span
+    str = str.replace(/<span[^>]*?><\/span>/ig, "");
+    //remove <xxx>...</xxx>
+    str = str.replace(/<(head|script|style|textarea|button|select|option|iframe)[^>]*>(\n|.)*?<\/\1>/ig, "");
+    //remove table and <a> tag,<input> tag (this can help filter unclosed tag)
+    str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
+    //remove table and <a> tag, <img> tag,<input> tag (this can help filter unclosed tag)
+    // str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|img|input|iframe|div)[^>]*>/ig, "");
+    //remove bad attributes
+    do {
+      len = str.length;
+      str = str.replace(/(<[a-z][^>]*\s)(?:id|name|language|type|class|on\w+|\w+:\w+)=(?:"[^"]*"|\w+)\s?/gi, "$1");
+    } while (len != str.length);
+    return str;
+  };
+ */
