@@ -171,6 +171,7 @@ App.ClipApp.Filter = (function(App, Backbone, $){
   // 对与pre和code类的标签此处是作为文本内容进行处理的
   function _htmlToUbb(html){
     var text = html;
+    /*
     // 先将不是html的网址转换成 a 标签
     var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
     text = text.replace(re,function(a,b,c){
@@ -179,7 +180,7 @@ App.ClipApp.Filter = (function(App, Backbone, $){
       else
 	return '<a href="http://'+c+'">'+a+'</a>';
     });
-
+    */ //并不完善需没办法正确处理超链接图片
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
     // output - asdf (http://pinetechlabs.com/)"
