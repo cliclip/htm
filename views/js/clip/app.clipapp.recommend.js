@@ -54,7 +54,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
         $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
         $("#imgId").css("display","block");
         this.model.set({uid:uid},{silent:true});
-        this.$("#name_listDiv").empty();
       }
     },
     nameListAction:function(evt){
@@ -84,9 +83,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	      $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
 	      $("#imgId").css("display","block");
 	      data.id=li[0].id.split("_")[1];
-	      this.$("#name_listDiv").empty();
 	    }
 	  });
+	  this.$("#name_listDiv").empty();
 	}
 	// 先根据 data[name]找到uid，在进行model的新建和name的set
 	view.tmpmodel = new RecommModel({clipid:clipid});
