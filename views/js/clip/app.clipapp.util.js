@@ -11,6 +11,10 @@ App.util = (function(){
     return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
   };
 
+  util.getObjTags = function(){
+    return ["音乐", "小说", "电影", "港台", "cool", "funny", "牛叉", "技术", "好用"];
+  };
+
   // 判断当前的用户和传过来的参数是否是同一人
   util.self = function(uid){
     return util.getMyUid() == uid || App.ClipApp.Me.me.get("name") == uid;
