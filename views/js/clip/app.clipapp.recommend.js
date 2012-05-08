@@ -127,12 +127,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	    view.showError(res);
 	  }
 	});
-      }, 200);
 	//reclip 需要的参数
-      if($("#reclip_box").attr("checked")){
-	var params1 = {id : clipid, clip : {note : [{text : text}]}};
-	App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
-      }
+	if($("#reclip_box").attr("checked")){
+	  var params1 = {id : clipid, clip : {note : [{text : text}]}};
+	  App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
+	}
+      }, 200);
     },
     clearAction:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultText ? "" :
