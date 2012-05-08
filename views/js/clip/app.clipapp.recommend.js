@@ -105,19 +105,22 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     recommendAction:function(e){
       // 在点击转确定按钮时，model.id model.name都已经设置成功
       e.preventDefault();
-      var clipid = this.model.get("clipid");
-      var text=$("#recommend_text").val().trim();
-      //recommend 需要的参数
-      this.tmpmodel.save({text: text},{
-	type:"POST",
-	success:function(model,res){
-	  Recommend.close();
-	},
-	error:function(model,res){
-	  view.showError(res);
-	}
-      });
-      //reclip 需要的参数
+      var view = this;
+      setTimeout(function(){
+	var clipid = view.model.get("clipid");
+	var text=$("#recommend_text").val().trim();
+	//recommend 需要的参数
+	view.tmpmodel.save({text: text},{
+	  type:"POST",
+	  success:function(model,res){
+	    Recommend.close();
+	  },
+	  error:function(model,res){
+	    view.showError(res);
+	  }
+	});
+      }, 200);
+	//reclip 需要的参数
       if($("#reclip_box").attr("checked")){
 	var params1 = {id : clipid, clip : {note : [{text : text}]}};
 	App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
