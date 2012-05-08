@@ -1,0 +1,4 @@
+script(type='text/template',id='taglist-view-template')
+  ul.taglist.
+    <% for(var i=0;i<taglist.length;i++){ %>
+    <li class="li-list" id="tag_<%=i%>"><%=taglist[i]%></li><% } %>
