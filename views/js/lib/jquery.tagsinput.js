@@ -202,7 +202,8 @@
 				real_input: '#'+id,
 				holder: '#'+id+'_tagsinput',
 				input_wrapper: '#'+id+'_addTag',
-				fake_input: '#'+id+'_tag'
+				fake_input: '#'+id+'_tag',
+				taglist   :  '#taglistDiv'
 			},settings);
 
 			delimiter[id] = data.delimiter;
@@ -217,7 +218,7 @@
 			var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
 
 			if (settings.interactive) {
-				markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" />';
+				markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" /><div class="taglistDiv" style="display:none;" ></div>';
 			}
 
 			markup = markup + '</div><div class="tags_clear"></div></div>';
@@ -251,13 +252,18 @@
 
 			  $(data.fake_input).bind('blur',data,function(event) {
 			    setTimeout(function(){
-			      App.vent.trigger("app.clipapp.taglist:close");						    },200);
+			      $(".taglistDiv").hide();
+			    },200);
 			  });
 
 			  App.vent.bind("app.clipapp.taglist:gettag",function(tag){
 			    $("#"+id).addTag(tag,{focus:false,unique:(settings.unique)});
 			  });
 
+			  $(data.fake_input).bind('focus',data,function(event) {
+			    if( $(".taglistDiv").children().children().length != 0)
+			         $(".taglistDiv").show();
+			  });
 
 
 
@@ -307,19 +313,19 @@
 						});
 
 				}
-				// if user types a comma, create a new tag
-				$(data.fake_input).bind('keypress',data,function(event) {
-					if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
-					  App.vent.trigger("app.clipapp.taglist:close");							    event.preventDefault();
-						if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
-							$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
-					  	$(event.data.fake_input).resetAutosize(settings);
-						return false;
-					} else if (event.data.autosize) {
-			            $(event.data.fake_input).doAutosize(settings);
+// if user types a comma, create a new tag
+$(data.fake_input).bind('keypress',data,function(event) {
+  if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
+    if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
+        $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+	$(event.data.fake_input).resetAutosize(settings);
+	  $("#taglistDiv").hide();
+	  return false;
+  } else if (event.data.autosize) {
+    $(event.data.fake_input).doAutosize(settings);
 
-          			}
-				});
+  }
+    });
 				//Delete last tag on backspace
 				data.removeWithBackspace && $(data.fake_input).bind('keydown', function(event)
 				{
