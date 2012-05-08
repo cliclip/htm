@@ -241,8 +241,12 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:query", function(word, tag){
     var userid = ClipApp.Face.getUserId();
+    var now_href = window.location.href;
+    //console.info(now_href);
     var myid = getMyUid();
-    if(myid == userid && myid!=null){
+    //if(myid == userid && myid!=null){
+    if(/my/.test(now_href)){
+      //console.info("myquery");
       ClipApp.myQuery(word, tag);
     }else{
       ClipApp.siteQuery(word, tag);

@@ -41,13 +41,14 @@ App.Routing.ClipRouting = (function(App, Backbone){
   //输入内容搜索，返回显示结果需要更新hash
   App.vent.bind("app.clipapp.routing:query",function(word){
     if($.browser.safari){word = encodeURI(word);}
-    if(!App.util.getMyUid()){
-      App.Routing.showRoute("query",word);
-    }else{
+    var now_href = window.location.href;
+    if(/my/.test(now_href)){
       App.Routing.showRoute("my/query",word);
+    }else{
+      App.Routing.showRoute("query",word);
     }
   });
-			     
+
   App.vent.bind("app.clipapp.routing:siteshow", function(tag){
     if($.browser.safari){tag = encodeURI(tag);}
     App.Routing.showRoute("tag", tag);

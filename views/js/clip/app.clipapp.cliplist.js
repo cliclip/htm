@@ -76,8 +76,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	});
       });
       this.bind("item:rendered",function(itemView){
-	var $newElems = itemView.$el.css({ opacity: 1 });
-	$(".clip_item").css({width:"320px"});
+	var $newElems = itemView.$el.css({ opacity: 0 });
 	$newElems.imagesLoaded(function(){
 	  $newElems.animate({ opacity: 1 });
 	  $("#list").masonry("reload");
@@ -146,9 +145,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
     ClipList.flag_show_user = true;
-    //var url = App.ClipApp.Url.base+"/user/2/query";
     base_url = App.ClipApp.Url.base+"/query";
-    //var data = {user: 2, "public": true};
     //console.info(Date.parse('May 1, 2012'));
     data = {"public":true, "startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
@@ -201,7 +198,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     base_url = App.ClipApp.Url.base + base_url;
     data = null;
     type = "GET";
-    //options ={base_url: url, type:"GET",start:0,end:App.ClipApp.Url.page};
     init_page();
   };
 
