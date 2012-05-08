@@ -202,8 +202,7 @@
 				real_input: '#'+id,
 				holder: '#'+id+'_tagsinput',
 				input_wrapper: '#'+id+'_addTag',
-				fake_input: '#'+id+'_tag',
-				taglist   :  '#taglistDiv'
+				fake_input: '#'+id+'_tag'
 			},settings);
 
 			delimiter[id] = data.delimiter;
@@ -243,6 +242,11 @@
 			  $(data.fake_input).bind('input',data,function(event) {
 			    var str = $(data.fake_input).val().trim();
 			    App.vent.trigger("app.tagsinput:taglist",str);
+			    if( $(".taglistDiv").children().children().length != 0){
+			      $(".taglistDiv").show();
+			    }else{
+			      $(".taglistDiv").hide();
+			    }
 			  });
 
 			  $(data.fake_input).bind('click',data,function(event) {
@@ -261,8 +265,11 @@
 			  });
 
 			  $(data.fake_input).bind('focus',data,function(event) {
-			    if( $(".taglistDiv").children().children().length != 0)
-			         $(".taglistDiv").show();
+			    if( $(".taglistDiv").children().children().length != 0){
+			      $(".taglistDiv").show();
+			    }else{
+			      $(".taglistDiv").hide();
+			    }
 			  });
 
 

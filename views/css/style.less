@@ -28,12 +28,33 @@
 	cursor: pointer;
 }
 .name_list{
+	display:none;
 	position: absolute;
-	left:100px;
-	width:200px;
+	left:25px;
+        border:1px solid #999999;	
+	width:278px;
 	z-index:20;
 	background-color:#fff;	
-	list-style:none;
+	.action-info{
+		cursor: pointer;
+	        display: block;
+		.user_list_head{
+			width:30px;
+			height:30px;
+			img{
+				width:30px;
+				height:30px;
+			}
+		}
+		.name-li{
+			font-size  : 18px;
+			height: 22px;
+			line-height: 22px;
+			padding: 0 0 0 2px;
+			width: 89px;
+		}			
+
+	}
 }
 
 // 页面整体布局 layout.less

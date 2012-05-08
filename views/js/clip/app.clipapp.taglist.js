@@ -56,7 +56,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   };
 
   App.vent.bind("app.clipapp.bubb:mytag",function(tags){
-    TagList.myTag  = _.difference(tags,App.util.getBubbs());
+    TagList.myTag  = _.difference(_.union(tags,App.util.getObjTags()),App.util.getBubbs());
   });
 
   App.vent.bind("app.clipapp.taglist:show",function(region,tags,str){
@@ -73,7 +73,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
        var tagModel =  new TagListModel({id:App.util.getMyUid()});
        tagModel.fetch();
        tagModel.onChange(function(model){
-	 TagList.myTag = _.difference(model.get("tag"),App.util.getBubbs());
+       TagList.myTag = _.difference(_.union(model.get("tag"),App.util.getObjTags()),App.util.getBubbs());
        });
     }
   });
