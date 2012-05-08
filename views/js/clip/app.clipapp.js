@@ -247,7 +247,7 @@ App.ClipApp = (function(App, Backbone, $){
     }else{
       ClipApp.siteQuery(word, tag);
     }
-    App.vent.trigger("app.clipapp.routing:query", word);
+    //App.vent.trigger("app.clipapp.routing:query", word);
   });
 
  // setTimeout(function(){

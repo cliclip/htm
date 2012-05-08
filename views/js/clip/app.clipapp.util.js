@@ -36,7 +36,7 @@ App.util = (function(){
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
     if(image_url && pattern.test(image_url)){
-      return image_url + "/300";
+      return image_url + "/270";
     }else return image_url;
   };
 

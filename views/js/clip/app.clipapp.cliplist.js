@@ -174,7 +174,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   ClipList.showUserQuery = function(uid, word, tag){
     ClipList.flag_show_user = false;
-    base_url = App.ClipApp.Url.base + url + "/user/"+uid+"/query";
+    base_url = App.ClipApp.Url.base + "/user/"+uid+"/query";
     data = {text: word, user: uid};
     if(tag) data.tag = [tag];
     type = "POST";
