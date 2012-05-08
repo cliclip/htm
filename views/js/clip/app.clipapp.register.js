@@ -75,7 +75,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.register:success", function(key, res){
-    document.cookie = "token="+res.token;
+    var data = new Date();
+    data.setTime(data.getTime() + 7*24*60*60*1000);
+    document.cookie = "token="+res.token+";expires=" + data.toGMTString();
+    //document.cookie = "token="+res.token;
     Register.close();
     App.vent.trigger("app.clipapp.gotosetup:show", key, res.email);
   });
