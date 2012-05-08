@@ -97,13 +97,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
-    $('#obj_tag').tagsInput({
-      //autocomplete_url: App.ClipApp.Bubb.myObjTag
-      autocomplete_url:'test/fake_json_endpoint.html'
-    });
-    $( "#obj_tag_addTag" ).autocomplete({
-      source: App.ClipApp.Bubb.myObjTag
-    });
+    $('#obj_tag').tagsInput({});
   }
 
   // 此处只有区分 update 和 add
@@ -131,13 +125,21 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     App.popRegion.close();
   };
 
+  App.vent.bind("app.tagsinput:taglist",function(str){
+    var tagListRegion = new App.Region({el:"#taglistDiv"});
+    var obj_tag = _.compact($("#obj_tag").val().split(","));
+    App.vent.trigger("app.clipapp.taglist:show",tagListRegion,obj_tag,str);
+  });
+
   // 触发更新clip中的注的事件
   App.vent.bind("app.clipapp.memo:@ok", function(data){
     if(memoType == "update"){
       var model = new App.Model.DetailModel(data);
       model.save({}, {
 	success: function(model, res){
-	  App.vent.trigger("app.clipapp.bubb:refresh",App.util.getMyUid(),null,data.tag);
+	  App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
+	  //注时可能删除tag  不能只refresh
+	  //App.vent.trigger("app.clipapp.bubb:refresh",App.util.getMyUid(),null,data.tag);
 	  ClipMemo.close();
 	},
 	error:function(model,res){

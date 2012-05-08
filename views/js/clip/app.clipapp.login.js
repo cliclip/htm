@@ -52,7 +52,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	  App.vent.trigger("app.clipapp.login:success", res);
   	},
   	error:function(model, res){
-  	  App.vent.trigger("app.clipapp.login:error", model, res);
+  	  App.vent.trigger("app.clipapp.login:@error", model, res);
   	}
       });
     },
@@ -69,13 +69,13 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.register:success","register_success",response);
 	},
 	error:function(model,error){
-	  App.vent.trigger("app.clipapp.login:error",model, error);
+	  App.vent.trigger("app.clipapp.login:@error",model, error);
 	}
       });
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.login:cancel");
+      App.vent.trigger("app.clipapp.login:@cancel");
     },
     clearAction:function(evt){
       if($("#name").val() == "用户名/Email"){ //this.model.get("name")
@@ -111,7 +111,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.login:success", function(res){
-    document.cookie = "token="+res.token;
+    var data = new Date();
+    data.setTime(data.getTime() + 7*24*60*60*1000);
+    document.cookie = "token="+res.token+";expires=" + data.toGMTString();
+    //document.cookie = "token="+res.token;
     // 用户登录成功 页面跳转
     Login.close();
     Backbone.history.navigate("my",true);
@@ -119,11 +122,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
     console.info("页面跳转");
   });
 
-  App.vent.bind("app.clipapp.login:error", function(model, error){
+  App.vent.bind("app.clipapp.login:@error", function(model, error){
     Login.show(model, App.util.getErrorMessage(error));
   });
 
-  App.vent.bind("app.clipapp.login:cancel", function(){
+  App.vent.bind("app.clipapp.login:@cancel", function(){
     Login.close();
   });
 
