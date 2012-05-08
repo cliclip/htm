@@ -10,10 +10,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     validate:function(attrs){
       var error = {};
       if(!attrs.newpass){
-	error["pass"] = "is_null";
+	error["newpass"] = "is_null";
       }
       if(!attrs.confirm){
-	error["confirm"] = "is_null";
+	error["conpass"] = "is_null";
       }
       if(attrs.newpass && attrs.confirm && attrs.newpass != attrs.confirm){
 	error["confirm"] = "password_diff";

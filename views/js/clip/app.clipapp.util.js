@@ -274,12 +274,16 @@ App.util = (function(){
       exist:"此用户名已经存在",
       not_exist: "用户名不存在"
     },
+    newpass:{
+      is_null: "密码尚未填写"
+    },
     pass:{
-      is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
+    conpass:{
+      is_null: "密码尚未填写"
+    },
     confirm:{
-      is_null: "密码尚未填写",
       password_diff: "密码输入不一致"
     },
     email:{
