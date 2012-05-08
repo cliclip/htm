@@ -156,8 +156,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   // site == user2 网站首首页
   ClipList.showSiteClips = function(tag){
     ClipList.flag_show_user = true;
-    var url = App.ClipApp.Url.base+"/user/2/query";
-    var data = {user: 2, "public": true};
+    //var url = App.ClipApp.Url.base+"/user/2/query";
+    var url = App.ClipApp.Url.base+"/query";
+    //var data = {user: 2, "public": true};
+    //console.info(Date.parse('May 1, 2012'));
+    var data = {"public":true, "startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     options = {base_url: url, type: "POST", data:data};
     getClips();

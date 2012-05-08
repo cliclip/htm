@@ -34,14 +34,16 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     getUserAction:function(evt){
       var id=evt.target.id;
-      var uid = id.split("_")[1];
-      var name=document.getElementById(id).innerHTML;
-      $("#imgId").css("display","none");
-      this.$("#name").val(name);
-      $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
-      $("#imgId").css("display","block");
-      this.model.set({uid:uid},{silent:true});
-      this.$("#name_listDiv").empty();
+      if (id) {    //点击在两条数据中间处取不到id  会报错。
+        var uid = id.split("_")[1];
+        var name=document.getElementById(id).innerHTML;
+        $("#imgId").css("display","none");
+        this.$("#name").val(name);
+        $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
+        $("#imgId").css("display","block");
+        this.model.set({uid:uid},{silent:true});
+        this.$("#name_listDiv").empty();
+      }
     },
     nameListAction:function(evt){
       $("#alert").css("display","none");

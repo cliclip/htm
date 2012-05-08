@@ -119,11 +119,11 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.addInitializer(function(){
     Me.me = new App.Model.MyInfoModel();
     Me.me.fetch();
-    console.info("addInitializer");
+    //console.info("addInitializer");
   });
 
   App.bind("initialize:after", function(){
-    console.info("initilize：after");
+    //console.info("initilize：after");
     Me.show();
   });
 

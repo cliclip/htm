@@ -239,6 +239,28 @@
 					$(event.data.fake_input).focus();
 				});
 
+			  $(data.fake_input).bind('input',data,function(event) {
+			    var str = $(data.fake_input).val().trim();
+			    App.vent.trigger("app.tagsinput:taglist",str);
+			  });
+
+			  $(data.fake_input).bind('click',data,function(event) {
+			    var str = $(data.fake_input).val().trim();
+			    App.vent.trigger("app.tagsinput:taglist",str);
+			  });
+
+			  $(data.fake_input).bind('blur',data,function(event) {
+			    setTimeout(function(){
+			      App.vent.trigger("app.clipapp.taglist:close");						    },200);
+			  });
+
+			  App.vent.bind("app.clipapp.taglist:gettag",function(tag){
+			    $("#"+id).addTag(tag,{focus:false,unique:(settings.unique)});
+			  });
+
+
+
+
 				$(data.fake_input).bind('focus',data,function(event) {
 					if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) {
 						$(event.data.fake_input).val('');
@@ -275,6 +297,7 @@
 							var d = $(this).attr('data-default');
 							if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) {
 								if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
+
 									$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
 							} else {
 								$(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
@@ -287,7 +310,7 @@
 				// if user types a comma, create a new tag
 				$(data.fake_input).bind('keypress',data,function(event) {
 					if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
-					    event.preventDefault();
+					  App.vent.trigger("app.clipapp.taglist:close");							    event.preventDefault();
 						if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
 							$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
 					  	$(event.data.fake_input).resetAutosize(settings);
