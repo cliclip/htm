@@ -50,7 +50,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
         var uid = id.split("_")[1];
         var name=document.getElementById(id).innerHTML;
         $("#imgId").css("display","none");
-        this.$("#name").val(name);
+        this.$("#recomm_name").val(name);
         $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
         $("#imgId").css("display","block");
         this.model.set({uid:uid},{silent:true});
