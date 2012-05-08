@@ -30,31 +30,29 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     tmpmodel:"",
     events:{
-      "click .list" : "getUserAction",
+      "click .user" : "getUserAction",
       "input #recomm_name": "nameListAction",
       "click #recomm_name": "nameListAction",
       "focus #recomm_name": "cleanError",
+      "focus #recomm_name": "nameListShow",
       "blur #recomm_name" : "nameBlur",
-      "mouseover .name-li"   :  "MouseOver",
-      "mouseout .name-li"    :  "MouseOut",
-      "mouseenter .name-li"   :  "mouseHand",
+      "mouseover .user"   :  "MouseOver",
+      "mouseout .user"    :  "MouseOut",
       "focus #recommend_text":  "clearAction",
       "blur  #recommend_text":  "textBlur",
       "click #submit"        :  "recommendAction",
       "click #cancel"        :  "cancelAction",
       "click .close_w"       :  "cancelAction"
     },
-    getUserAction:function(evt){
-      var id=evt.target.id;
-      if (id) {    //点击在两条数据中间处取不到id  会报错。
-        var uid = id.split("_")[1];
-        var name=document.getElementById(id).innerHTML;
-        $("#imgId").css("display","none");
-        this.$("#recomm_name").val(name);
-        $("#imgId").attr("src",App.util.face_url(document.getElementById(id).title));
-        $("#imgId").css("display","block");
-        this.model.set({uid:uid},{silent:true});
-      }
+    getUserAction:function(e){
+      $("#imgId").css("display","none");
+      var face = $(e.currentTarget)[0].children[0].children[0].src;
+      var name = $($(e.currentTarget)[0].children[1]).text();
+      var uid =  $(e.currentTarget)[0].children[1].id.split("_")[1];
+      this.$("#recomm_name").val(name);
+      $("#imgId").attr("src",face);
+      $("#imgId").css("display","block");
+      this.model.set({uid:uid},{silent:true});
     },
     nameListAction:function(evt){
       $("#alert").css("display","none");
@@ -65,6 +63,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       //查询friend
       App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
     },
+
     nameBlur:function(){
       var view = this;
       var clipid = this.model.get("clipid");
@@ -78,14 +77,14 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  $("#imgId").css("display","none");
 	  _.each(div,function(e){
 	    var li = e.children;
-	    if(this.$("#recomm_name").val() == $(li[0]).text()){
-	      this.$("#recomm_name").val($(li[0]).text());
-	      $("#imgId").attr("src",App.util.face_url($(li[0]).attr("title")));
+	    if(this.$("#recomm_name").val() == $(li[1]).text()){
+	      this.$("#recomm_name").val($(li[1]).text());
+	      $("#imgId").attr("src",li[0].children[0].src);
 	      $("#imgId").css("display","block");
-	      data.id=li[0].id.split("_")[1];
+	      data.id=li[1].id.split("_")[1];
 	    }
 	  });
-	  this.$("#name_listDiv").empty();
+	  $(".name_list").hide();
 	}
 	// 先根据 data[name]找到uid，在进行model的新建和name的set
 	view.tmpmodel = new RecommModel({clipid:clipid});
@@ -94,17 +93,22 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	    view.showError(error);
 	  }
 	});
-	//this.$("#name_listDiv").empty();
+	$(".name_list").hide();
       },200);
+    },
+    nameListShow:function(e){
+      var div=$(".action-info");
+      if(div.length != 0){
+	$(".name_list").show();
+      }else{
+	$(".name_list").hide();
+      }
     },
     MouseOver:function(e){
       $(e.currentTarget).css("background-color","#888");
     },
     MouseOut:function(e){
        $(e.currentTarget).css("background-color","");
-    },
-    mouseHand:function(e){
-      e.currentTarget.style.cursor="pointer";
     },
     recommendAction:function(e){
       // 在点击转确定按钮时，model.id model.name都已经设置成功
@@ -172,7 +176,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     mid = null;
   };
 
-
   App.vent.bind("app.clipapp.recommend:@lookup",function(params,owner_id){
     var collection = new NameList({});
     collection.fetch({data:params});
@@ -186,6 +189,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	el:"#name_listDiv"
       });
       Recommend.nameListRegion.show(namelistView);
+      var div=$(".action-info");
+      if(div.length != 0){
+	$(".name_list").show();
+      }else{
+	$(".name_list").hide();
+      }
     });
   });
 
