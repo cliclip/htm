@@ -81,7 +81,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    console.log(uid + "++myShow");
     App.vent.trigger("app.clipapp.routing:myshow", tag);
   };
 

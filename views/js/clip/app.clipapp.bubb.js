@@ -21,8 +21,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // constants
 
-  var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
-  //var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
+  // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
+  var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
   var sink = ["讨厌"];
   Bubb.myObjTag = [];
   // private

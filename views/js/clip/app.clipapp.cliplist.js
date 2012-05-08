@@ -84,18 +84,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
       App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id);
     },
-/*
-    commentAction: function(){
-      var clip = this.model.get("clip");
-      var clipid = clip.user.id+":"+clip.id;
-      App.vent.trigger("app.clipapp:comment",clipid);
-    },
-    reclipAction: function(){
-      var clip = this.model.get("clip");
-      var clipid = clip.user.id+":"+clip.id;
-      App.vent.trigger("app.clipapp:reclip",clipid);
-    },
-*/
     mouseEnter: function(e){
       $(e.currentTarget).children(".master").children("#opt").show();
     },
