@@ -81,7 +81,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    App.vent.trigger("app.clipapp.routing:myshow", tag);
+    App.vent.trigger("app.clipapp.routing:usershow",uid, tag);
   };
 
   ClipApp.myQuery = function(word, tag){
@@ -130,11 +130,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:usershow", function(uid){
     ClipApp.ClipList.showUserClips(uid);
-    if(App.util.self(uid)){
-      App.vent.trigger("app.clipapp.routing:myshow");
-    }else{
-      App.vent.trigger("app.clipapp.routing:usershow", uid);
-    }
+    App.vent.trigger("app.clipapp.routing:usershow", uid);
   });
 
   App.vent.bind("app.clipapp:showfollowing", function(uid){
