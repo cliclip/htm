@@ -94,7 +94,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	    view.showError(error);
 	  }
 	});
-	this.$("#name_listDiv").empty();
+	//this.$("#name_listDiv").empty();
       },200);
     },
     MouseOver:function(e){
