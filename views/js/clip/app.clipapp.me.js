@@ -85,11 +85,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
     if(!App.util.getMyUid()){
       var meView = new View();
       App.mineRegion.show(meView);
-      console.info("用户未登录");
     }
-    console.info(Me,"show");
     Me.me.onChange(function(meModel){
-      console.info("onChange :: "+Me.me.get("id"));
+      //console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
 	model: meModel
       });
@@ -99,31 +97,22 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.login:success", function(){
     Me.me.fetch();
-    Me.me.change();
-    Me.show();
   });
 
   App.vent.bind("app.clipapp.register:success", function(){
     Me.me.fetch();
-    Me.show();
   });
 
   App.vent.bind("app.clipapp.face:reset", function(){
     Me.me.fetch();
-    //解决小头像上传头像到服务器后还是显示原头像的奇怪问题
-    setTimeout(function(){
-      Me.show();
-    },1000);
   });
 
   App.addInitializer(function(){
     Me.me = new App.Model.MyInfoModel();
     Me.me.fetch();
-    console.info("addInitializer");
   });
 
   App.bind("initialize:after", function(){
-    console.info("initilize：after");
     Me.show();
   });
 
