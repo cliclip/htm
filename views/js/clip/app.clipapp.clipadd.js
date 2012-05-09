@@ -44,8 +44,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     save: function(e){
+      this.$(".verify").attr("disabled",true);
       e.preventDefault();
-      $(e.currentTarget).disabled = true;
       // var img_list = [];
       // clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       clip.content = App.ClipApp.Editor.getContent("editor");
@@ -53,9 +53,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model
 	  App.vent.trigger("app.clipapp.clipadd:@success", model);
-	  $(e.currentTarget).disabled = true;
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
+	  this.$(".verify").attr("disabled",false);
 	  App.vent.trigger("app.clipapp.clipadd:@error");
 	}
       });
@@ -118,8 +118,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   }
 
   App.vent.bind("app.clipapp.clipadd:@success", function(model){
-    ClipAdd.close(); // 关闭clipadd,同步list的数据
-    // 首先判断当前用户所在的位置[]
+    ClipAdd.close(); // 关闭clipadd,同步list的数据 // 首先判断当前用户所在的位置[]
     var url = Backbone.history.fragment;
     var tag = model.get("tag");
     if(sync(url, tag)){
