@@ -28,12 +28,10 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     tagName:"div",
     className:"",
     template:"#recommend-view-template",
-    tmpmodel:"",
     events:{
       "click .user" : "getUserAction",
       "input #recomm_name": "nameListAction",
       "click #recomm_name": "nameListAction",
-      "focus #recomm_name": "cleanError",
       "focus #recomm_name": "nameListShow",
       "blur #recomm_name" : "nameBlur",
       "mouseover .user"   :  "MouseOver",
@@ -43,6 +41,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "click #submit"        :  "recommendAction",
       "click #cancel"        :  "cancelAction",
       "click .close_w"       :  "cancelAction"
+    },
+    initialize:function(){
+      this.tmpmodel= new RecommModel();
     },
     getUserAction:function(e){
       $("#imgId").css("display","none");
@@ -68,7 +69,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var view = this;
       var clipid = this.model.get("clipid");
       setTimeout(function(){
-	var data = {};
+	var data = {clipid : clipid};
 	_.each(this.$(":input").serializeArray(), function(obj){
 	  data[obj.name] = obj.value;
 	});
@@ -87,7 +88,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  $(".name_list").hide();
 	}
 	// 先根据 data[name]找到uid，在进行model的新建和name的set
-	view.tmpmodel = new RecommModel({clipid:clipid});
 	view.tmpmodel.set(data, {
 	  error: function(model, error){
 	    view.showError(error);
@@ -97,6 +97,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       },200);
     },
     nameListShow:function(e){
+      this.cleanError(e);
       var div=$(".action-info");
       if(div.length != 0){
 	$(".name_list").show();
@@ -132,7 +133,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  var params1 = {id : clipid, clip : {note : [{text : text}]}};
 	  App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	}
-      }, 200);
+      }, 300);
     },
     clearAction:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultText ? "" :
