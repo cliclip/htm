@@ -22,7 +22,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
       if (id)
         var tag=document.getElementById(id).innerHTML;
         App.vent.trigger("app.clipapp.taglist:gettag",tag);
-        App.vent.trigger("app.clipapp.taglist:@close");
+        App.vent.trigger("app.clipapp.taglist:close");
     },
     MouseOver:function(e){
       $(e.currentTarget).css("background-color","#888");
@@ -37,10 +37,10 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   TagList.myTag = App.util.getObjTags();
   TagList.show = function(tags,str){
     TagList.tagListRegion = new App.Region({el:".taglistDiv"});
-    var len = str.length;
     var obj_tags = [];
     var obj_tag = _.difference(TagList.myTag,tags);
     if(str){
+      var len = str.length;
       _(obj_tag).each(function(tag){
 	if(tag.substring(0,len) == str){
 	  obj_tags.push(tag);
@@ -63,7 +63,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     TagList.show(obj_tag,str);
   });
 
-  App.vent.bind("app.clipapp.taglist:@close",function(){
+  App.vent.bind("app.clipapp.taglist:close",function(){
     if(TagList.tagListRegion){
       TagList.tagListRegion.close();
     }
