@@ -66,59 +66,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  var FaceView = App.ItemView.extend({
-    tagName: "div",
-    className: "faceEdit",
-    template: "#faceEdit-view-template",
-    events: {
-      "click .set_username" : "setName",
-      "error": "showError",
-      "focus #name": "cleanError",
-      "click #confirm_face" : "submitFace"
-    },
-    setName: function(e){
-      e.preventDefault();
-      var view = this;
-      var uid = this.model.id;
-      if(!$(e.currentTarget).hasClass("set_ok")){$("#set-name").empty();}
-      $(".set_username").addClass("set_ok").val("确定");
-      $(".set_ok").unbind("click");
-      $("#name").show();
-      $(".set_ok").click(function(){
-	var nameModel = new NameModel({id: uid});
-	var data = {};
-	_.each(this.$(":input").serializeArray(), function(obj){
-	  data[obj.name] = obj.value;
-	});
-	nameModel.set(data, {
-	  error: function(model, error){
-	    view.showError(error);
-	  }
-	});
-	if(nameModel.isValid()){
-	  nameModel.save({} ,{
-	    success:function(model,res){
-	      App.vent.trigger("app.clipapp.message:confirm","rename_success");
-	      App.vent.trigger("app.clipapp.useredit:@showface",uid);
-	    },
-	    error:function(model,res){
-	      view.showError(res);
-	    }
-	  });
-	};
-      });
-      $('#name').unbind("keydown");
-      $('#name').keydown(function(e){
-	if(e.keyCode==13){
-	  $('.set_username').click();
-	}
-      });
-    },
-    submitFace:function(){
-      $("#confirm_face").hide();
-    }
-});
-
   var EmailView = App.ItemView.extend({
     tagName: "div",
     className: "emailEdit",
@@ -229,6 +176,60 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showPassEdit(uid);
   };
 
+
+  var FaceView = App.ItemView.extend({
+    tagName: "div",
+    className: "faceEdit",
+    template: "#faceEdit-view-template",
+    events: {
+      "click .set_username" : "setName",
+      "error": "showError",
+      "focus #name": "cleanError",
+      "click #confirm_face" : "submitFace"
+    },
+    setName: function(e){
+      e.preventDefault();
+      var view = this;
+      var uid = this.model.id;
+      if(!$(e.currentTarget).hasClass("set_ok")){$("#set-name").empty();}
+      $(".set_username").addClass("set_ok").val("确定");
+      $(".set_ok").unbind("click");
+      $("#name").show();
+      $(".set_ok").click(function(){
+	var nameModel = new NameModel({id: uid});
+	var data = {};
+	_.each(this.$(":input").serializeArray(), function(obj){
+	  data[obj.name] = obj.value;
+	});
+	nameModel.set(data, {
+	  error: function(model, error){
+	    view.showError(error);
+	  }
+	});
+	if(nameModel.isValid()){
+	  nameModel.save({} ,{
+	    success:function(model,res){
+	      App.vent.trigger("app.clipapp.message:confirm","rename_success");
+	      App.vent.trigger("app.clipapp.useredit:@showface",uid);
+	    },
+	    error:function(model,res){
+	      view.showError(res);
+	    }
+	  });
+	};
+      });
+      $('#name').unbind("keydown");
+      $('#name').keydown(function(e){
+	if(e.keyCode==13){
+	  $('.set_username').click();
+	}
+      });
+    },
+    submitFace:function(){
+      $("#confirm_face").hide();
+    }
+  });
+
   UserEdit.showFace = function(uid){
     var faceModel = new App.Model.MyInfoModel({id:uid});
     UserEdit.faceRegion = new App.Region({el:".left_bar"});
@@ -241,6 +242,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  UserEdit.faceRegion.show(faceView);
 	});
 	//originalFace 在保存头像时删除不用再次请求，此参数现在没用了
+	//绑定图片的load事件
 	faceLoad(originalFace,uid);//修改头像
       },
       error:function(){}
@@ -253,45 +255,33 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
     }else{
+      $("#confirm_face").show();
       if( sender.files && sender.files[0]){
-	$("#confirm_face").show();
 	var img = new Image();
 	img.src = App.util.get_img_src(sender);
 	console.info(img.src);
 	img.onload=function(){
-	  console.info('image loading..............');
 	  if(img.complete){
 	    console.info('image load complete');
 	    $("#myface").attr("src",img.src);
-	    var _height,_width,_top, _left;
-	    //var preview = $("#myface");
-	    if(img.width<img.height){
-	      _width = 240;
-	      _height = img.height*240/img.width;
-	      _top ="-" + (_height-240)/2+"px";
-	      _left = 0 + "px";
-	    }else{
-	      _height = 240;
-	      _width =  img.width*240/img.height;
-	      _left = "-" + (_width-240)/2+"px";
-	      _top = 0 + "px";
-	    }
-	    $("#myface").css({"height":_height,"width":_width,"margin-top":_top,"margin-left":_left});
+	    var style = resize_img(img.width,img.height);
+	    $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
 	  }
 	};
 	//$("#myface").attr("src",img.src);
 	return true;
       }else if(sender.value){
-	var img = new Image();
-	img.src = App.util.get_img_src(sender);
-	// console.dir(img);
+	var src = App.util.get_img_src(sender);
 	document.getElementById("head_img").innerHTML= "<div id='head'></div>";
-	$("#head").css({"height":100,"width":100});
 	var obj = document.getElementById("head");
-	obj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='image',src=\"" + App.util.get_img_src(sender) + "\")";
-	$("#head").ready(function(){
-	  console.dir(obj.offsetWidth);
-	});
+	var obj1 =  document.getElementById("preview_size_fake");
+	obj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\"" + src + "\")";
+	obj1.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='image',src=\"" + src + "\")";
+	setTimeout(function(){
+	  set_preview_size(obj, obj1.offsetWidth, obj1.offsetHeight);
+	},200);
+	$("#preview_size_fake").ready(function(){});
+	return true;
       }
       return false;
     }
@@ -328,7 +318,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   function faceLoad(originalFace,uid){
     $("#post_frame_face").unbind("load");
     $("#post_frame_face").load(function(){ // 加载图片
-      var returnVal = this.contentDocument.documentElement.textContent;
+      console.log("face load........................");
+      if(window.navigator.userAgent.indexOf("MSIE")>=1){
+	var returnVal = this.contentWindow.document.documentElement.innerText;
+      }else{
+	var returnVal = this.contentDocument.documentElement.textContent;
+      }
+      console.dir(returnVal);
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
 	if(returnObj[0] == 0){
@@ -347,6 +343,31 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	}
       }
     });
+  }
+
+  function set_preview_size( objPre, originalWidth, originalHeight ){
+    var style = resize_img(originalWidth, originalHeight);
+    objPre.style.width = style.width + 'px';
+    objPre.style.height = style.height + 'px';
+    objPre.style.marginTop = style.top + 'px';
+    objPre.style.marginLeft = style.left + 'px';
+  }
+
+  function resize_img( width, height ){
+    var _width,_height,_top,_left;
+    if(width<height){
+      _width = 240;
+      _height = height*240/width;
+      _top =(240-_height)/2;
+      _left = 0 ;
+    }else{
+      _height = 240;
+      _width = width*240/height;
+      _left = (240-_width)/2;
+      _top = 0 ;
+    }
+    //console.info(_width,_height,_top,_left );
+    return { width:_width, height:_height, top:_top, left:_left };
   }
 
   UserEdit.close = function(){
