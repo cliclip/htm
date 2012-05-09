@@ -242,7 +242,7 @@
 	 });
 
 	 App.vent.bind("app.clipapp.taglist:gettag",function(tag){
-	   $("#"+id).addTag(tag,{focus:false,unique:(settings.unique)});
+	   $(data.real_input).addTag(tag,{focus:false,unique:(settings.unique)});
 	 });
 
 	 $(data.fake_input).bind('focus',data,function(event) {
@@ -301,7 +301,8 @@
 	 $(data.fake_input).bind('keypress',data,function(event) {
 	   if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
 	     if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
-               $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});}
+               $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+	     }
 	     $(event.data.fake_input).resetAutosize(settings);
 	     App.vent.trigger("app.tagsinput:taglist");
 	     return false;

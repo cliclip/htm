@@ -22,9 +22,12 @@ App.ClipApp.TagList=(function(App,Backbone,$){
       if (id)
         var tag=document.getElementById(id).innerHTML;
         App.vent.trigger("app.clipapp.taglist:gettag",tag);
-        App.vent.trigger("app.clipapp.taglist:close");
     },
     MouseOver:function(e){
+      var div = $(".taglistDiv").children().children();
+      _(div).each(function(e){
+	$(e).css("background-color","");
+      });
       $(e.currentTarget).css("background-color","#888");
     },
     MouseOut:function(e){
