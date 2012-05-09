@@ -94,14 +94,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       }
     });
   }
-
-  App.vent.bind("app.tagsinput:taglist",function(str){
-    var tagListRegion = new App.Region({el:"#taglistDiv"});
-    var obj_tag = _.compact($("#obj_tag").val().split(","));
-    App.vent.trigger("app.clipapp.taglist:show",tagListRegion,obj_tag,str);
-  });
-
-
+			
   App.vent.bind("app.clipapp.reclip:@submit", function(params,mid){
     reclipSave(params,mid);
     Reclip.close();

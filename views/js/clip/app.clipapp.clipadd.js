@@ -128,6 +128,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var uid = App.util.getMyUid();
       // 进行bubb的同步
       App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
+      App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
     }
   });
 
