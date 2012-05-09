@@ -55,11 +55,20 @@ App.Routing.ClipRouting = (function(App, Backbone){
   });
 
   App.vent.bind("app.clipapp.routing:usershow", function(uid, tag){
-    if(tag){
-      if($.browser.safari){tag = encodeURI(tag);}
-      App.Routing.showRoute("user", uid, "tag", tag);
+    if(App.util.self(uid)){
+      if(tag){
+	if($.browser.safari){tag = encodeURI(tag);}
+	App.Routing.showRoute("my", "tag", tag);
+      }else{
+	App.Routing.showRoute("my");
+      }
     }else{
-      App.Routing.showRoute("user", uid);
+      if(tag){
+	if($.browser.safari){tag = encodeURI(tag);}
+	App.Routing.showRoute("user", uid, "tag", tag);
+      }else{
+	App.Routing.showRoute("user", uid);
+      }
     }
   });
 
@@ -80,15 +89,6 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
   App.vent.bind("app.clipapp.routing:myquery",function(word){
     if($.browser.safari){word = encodeURI(word);}
-  });
-
-  App.vent.bind("app.clipapp.routing:myshow",function(tag){
-    if(tag){
-      if($.browser.safari){tag = encodeURI(tag);}
-      App.Routing.showRoute("my", "tag", tag);
-    }else{
-      App.Routing.showRoute("my");
-    }
   });
 
   App.vent.bind("app.clipapp.routing:interest",function(tag){

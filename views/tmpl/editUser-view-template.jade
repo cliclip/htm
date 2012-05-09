@@ -71,10 +71,10 @@ script(type="text/template",id="passEdit-view-template")
   h3.edit_password 修改密码
   ul.input_list
     li
-      |<input type="text" id="new" value="<%=newpass%>"/>
+      |<input type="text" id="newpass" value="<%=newpass%>"/>
       input(type="password",id="pass",name="newpass",style="display:none;")
     li
-      |<input type="text" id="con" value="<%=confirm%>"/>
+      |<input type="text" id="conpass" value="<%=confirm%>"/>
       input(type="password",id="confirm",name="confirm",style="display:none;")
     li
       input.btn_blue(type="submit",id="pass_confirm",value="更改")

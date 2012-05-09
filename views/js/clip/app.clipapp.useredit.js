@@ -10,10 +10,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     validate:function(attrs){
       var error = {};
       if(!attrs.newpass){
-	error["pass"] = "is_null";
+	error["newpass"] = "is_null";
       }
       if(!attrs.confirm){
-	error["confirm"] = "is_null";
+	error["conpass"] = "is_null";
       }
       if(attrs.newpass && attrs.confirm && attrs.newpass != attrs.confirm){
 	error["confirm"] = "password_diff";
@@ -95,8 +95,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#passEdit-view-template",
     events: {
       "click #pass_confirm[type=submit]" : "passUpdate",
-      "focus #con" : "focusAction",
-      "focus #new" : "focusAction",
+      "focus #conpass" : "focusAction",
+      "focus #newpass" : "focusAction",
       "error": "showError", // 虽然是有这样绑定但是，不能直接调用trigger触发
       "focus #pass" : "cleanError",
       "focus #confirm": "cleanError",
@@ -106,19 +106,20 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     focusAction:function(e){
       var id = e.currentTarget.id;
       $(e.currentTarget).hide();
-      if(id == "new")
+      if(id == "newpass")
 	$(e.currentTarget).siblings("#pass").show().focus();
-      if(id == "con")
+      if(id == "conpass")
 	$(e.currentTarget).siblings("#confirm").show().focus();
+      this.cleanError(e);
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
       if(id=="pass" && $("#"+id).val()==""){
 	$("#"+id).hide();
-	$("#new").show();
+	$("#newpass").show();
       }else if(id=="confirm" && $("#"+id).val()==""){
 	$("#"+id).hide();
-	$("#con").show();
+	$("#conpass").show();
       }
     },
     passUpdate:function(){

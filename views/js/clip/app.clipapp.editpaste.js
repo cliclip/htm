@@ -41,7 +41,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   };
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
-    //console.info(data);
     var objEditor = document.getElementById(editorId);
     if(isIE){
       objEditor.contentWindow.document.execCommand('Paste', false, data);
@@ -186,37 +185,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     });
     return str;
   };
-/*
-  var filterPasteText = function(str){
-    str = str.replace(/\r\n|\n|\r/ig, "");
-    //remove html body form
-    str = str.replace(/<\/?(html|body|form)(?=[\s\/>])[^>]*>/ig, "");
-    //remove doctype
-    str = str.replace(/<(!DOCTYPE)(\n|.)*?>/ig, "");
-    // Word comments like conditional comments etc
-    str = str.replace(/<!--[\s\S]*?-->/ig, "");
-    //remove xml tags
-    str = str.replace(/<(\/?(\?xml(:\w+)?|xml|\w+:\w+)(?=[\s\/>]))[^>]*>/gi,"");
-    //remove head
-    str = str.replace(/<head[^>]*>(\n|.)*?<\/head>/ig, "");
-    //remove <xxx />
-    str = str.replace(/<(script|style|link|title|meta|textarea|option|select|iframe|hr)(\n|.)*?\/>/ig, "");
-    //remove empty span
-    str = str.replace(/<span[^>]*?><\/span>/ig, "");
-    //remove <xxx>...</xxx>
-    str = str.replace(/<(head|script|style|textarea|button|select|option|iframe)[^>]*>(\n|.)*?<\/\1>/ig, "");
-    //remove table and <a> tag,<input> tag (this can help filter unclosed tag)
-    str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
-    //remove table and <a> tag, <img> tag,<input> tag (this can help filter unclosed tag)
-    // str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|img|input|iframe|div)[^>]*>/ig, "");
-    //remove bad attributes
-    do {
-      len = str.length;
-      str = str.replace(/(<[a-z][^>]*\s)(?:id|name|language|type|class|on\w+|\w+:\w+)=(?:"[^"]*"|\w+)\s?/gi, "$1");
-    } while (len != str.length);
-    return str;
-  };
- */
   var isWordDocument = function(strValue){
     var re=new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
       return re.test(strValue);

@@ -113,7 +113,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.viewRegion.show(editView);
       $(".big_pop").css("top", App.util.getPopTop("big"));
       App.ClipApp.Editor.init();
-      var html = editModel.toJSON().content;
+      // 保证了api层接受的数据和返回的数据都是ubb格式的
+      var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.setContent("editor", html);
     });
   };

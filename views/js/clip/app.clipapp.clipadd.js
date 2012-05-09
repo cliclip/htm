@@ -43,7 +43,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
-    save: function(){
+    save: function(e){
+      this.$(".verify").attr("disabled",true);
+      e.preventDefault();
       // var img_list = [];
       // clip.content = App.ClipApp.Editor.getContent("editor",img_list);
       clip.content = App.ClipApp.Editor.getContent("editor");
@@ -53,6 +55,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.clipadd:@success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
+	  this.$(".verify").attr("disabled",false);
 	  App.vent.trigger("app.clipapp.clipadd:@error");
 	}
       });
@@ -104,9 +107,23 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     clip.public = data.public;
   });
 
+  function sync(url, tag){
+    if(url == "my")
+      return true;
+    if(url.indexOf("my") != -1 && url.indexOf("tag")!= -1){
+      var curr = url.split("/").reverse()[0];
+      if(tag.toString().indexOf(curr) != -1){return true;}
+    }
+    return false;
+  }
+
   App.vent.bind("app.clipapp.clipadd:@success", function(model){
-    ClipAdd.close(); // 关闭clipadd,同步list的数据
-    App.vent.trigger("app.clipapp.cliplist:add", model);
+    ClipAdd.close(); // 关闭clipadd,同步list的数据 // 首先判断当前用户所在的位置[]
+    var url = Backbone.history.fragment;
+    var tag = model.get("tag");
+    if(sync(url, tag)){
+      App.vent.trigger("app.clipapp.cliplist:add", model);
+    }
     if(model.get("tag")){
       var uid = App.util.getMyUid();
       //只刷新bubbs，而不重新load

@@ -9,7 +9,7 @@ script(type="text/template",id="recommend-view-template")
           div.user_small_head#user_image
             img(id="imgId")
           input(type="text",id="recomm_name",name="name")
-      div.ul-list#name_listDiv
+      div.name_list#name_listDiv
       li.input_textarea
         |<textarea id="recommend_text">说点啥吧～</textarea>
       <% if(!App.util.self(clipid.split(":")[0])) {%>
@@ -23,4 +23,5 @@ script(type="text/template",id="recommend-view-template")
         input.cancel(type="button",value="取消",id="cancel")
 
 script(type="text/template",id="namelist-view-template")
-  |<li class="name-li" id="<%=name%>_<%=id%>" title="<%=face%>"><%=name%></li>
+  | <span class="user_list_head"><img src="<%=App.util.face_url(face)%>"></img></span>&nbsp;&nbsp;
+  | <span class="name-li" id="<%=name%>_<%=id%>" title="<%=face%>"><%=name%></span>

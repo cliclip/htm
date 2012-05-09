@@ -81,8 +81,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    console.log(uid + "++myShow");
-    App.vent.trigger("app.clipapp.routing:myshow", tag);
+    App.vent.trigger("app.clipapp.routing:usershow",uid, tag);
   };
 
   ClipApp.myQuery = function(word, tag){
@@ -131,11 +130,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:usershow", function(uid){
     ClipApp.ClipList.showUserClips(uid);
-    if(App.util.self(uid)){
-      App.vent.trigger("app.clipapp.routing:myshow");
-    }else{
-      App.vent.trigger("app.clipapp.routing:usershow", uid);
-    }
+    App.vent.trigger("app.clipapp.routing:usershow", uid);
   });
 
   App.vent.bind("app.clipapp:showfollowing", function(uid){
@@ -214,7 +209,8 @@ App.ClipApp = (function(App, Backbone, $){
     if(!uid){
       ClipApp.Login.show();
     }else{
-      location.href="#my";
+      // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
+      // location.href="#my";
       ClipApp.ClipAdd.show();
     }
   });

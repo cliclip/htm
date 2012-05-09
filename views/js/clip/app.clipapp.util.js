@@ -11,9 +11,13 @@ App.util = (function(){
     return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
   };
 
+  util.getObjTags = function(){
+    return ["音乐", "小说", "电影", "港台", "cool", "funny", "牛叉", "技术", "好用"];
+  };
+
   // 判断当前的用户和传过来的参数是否是同一人
   util.self = function(uid){
-    return util.getMyUid() == uid;
+    return util.getMyUid() == uid || App.ClipApp.Me.me.get("name") == uid;
   };
 
   util.getImg_upUrl = function(){
@@ -53,6 +57,10 @@ App.util = (function(){
 	return P + "/user/" + ids[0]+ "/image/" + ids[1];
       }
     }else return imageid;
+  };
+
+  util.contentToHtml = function(content){
+   return App.ClipApp.Filter.ubbToHtml(content);
   };
 
   util.getPreview = function(content, length){
@@ -261,12 +269,16 @@ App.util = (function(){
       exist:"此用户名已经存在",
       not_exist: "用户名不存在"
     },
+    newpass:{
+      is_null: "密码尚未填写"
+    },
     pass:{
-      is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
+    conpass:{
+      is_null: "密码尚未填写"
+    },
     confirm:{
-      is_null: "密码尚未填写",
       password_diff: "密码输入不一致"
     },
     email:{
