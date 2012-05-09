@@ -125,12 +125,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.tagsinput:taglist",function(str){
-    var tagListRegion = new App.Region({el:"#taglistDiv"});
-    var obj_tag = _.compact($("#obj_tag").val().split(","));
-    App.vent.trigger("app.clipapp.taglist:show",tagListRegion,obj_tag,str);
-  });
-
   // 触发更新clip中的注的事件
   App.vent.bind("app.clipapp.memo:@ok", function(data){
     if(memoType == "update"){

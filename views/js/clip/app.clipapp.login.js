@@ -114,12 +114,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var data = new Date();
     data.setTime(data.getTime() + 7*24*60*60*1000);
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
-    //document.cookie = "token="+res.token;
     // 用户登录成功 页面跳转
     Login.close();
     Backbone.history.navigate("my",true);
     //location.reload();
-    console.info("页面跳转");
+    //console.info("页面跳转");
   });
 
   App.vent.bind("app.clipapp.login:@error", function(model, error){
