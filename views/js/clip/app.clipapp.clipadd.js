@@ -118,17 +118,16 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   }
 
   App.vent.bind("app.clipapp.clipadd:@success", function(model){
-    ClipAdd.close(); // 关闭clipadd,同步list的数据 // 首先判断当前用户所在的位置[]
+    ClipAdd.close();
     var url = Backbone.history.fragment;
     var tag = model.get("tag");
-    if(sync(url, tag)){
+    if(sync(url, tag)){ // 首先判断当前用户所在的位置[]
       App.vent.trigger("app.clipapp.cliplist:add", model);
     }
-    if(model.get("tag")){
+    if(model.get("tag").lenght > 0){
       var uid = App.util.getMyUid();
-      //只刷新bubbs，而不重新load
+      // 进行bubb的同步
       App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
-      //App.vent.trigger("app.clipapp.bubb:showUserTags", uid);
     }
   });
 

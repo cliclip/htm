@@ -50,23 +50,16 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserTags = function(uid, tag){
     _uid = uid;
-    self = false;
-    var token = document.cookie.split("=")[1];
     getUserTags(uid, function(tags, follows){
-      if(token && token.split(":")[0] == uid){
-	self = true;
-      }
+      self = App.util.self(uid);
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
 
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
-    self = false;
-    var token = document.cookie.split("=")[1];
     getUserBubs(uid, function(tags, follows){
-      if(token && token.split(":")[0] == uid)
-	self = true;
+      self = App.util.self(uid);
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
@@ -104,8 +97,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
     _uid = uid;
-    self = false;
-    if(App.util.getMyUid() == uid) self = true;
+    self = App.util.self(uid);
     if(follow){
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
     }else if(new_tags){
@@ -113,16 +105,22 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   });
 
+  // 只有delete在调用
+  App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
+    Bubb.showUserTags(uid);
+  });
+
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     // console.log("open %s", tag + "  " +_uid);
     // 更新bubb显示
     iframe_call('bubbles', "openTag", tag);
-    //设为false也可直接刷新 但是提交上去的数据是乱码
     var url = mkUrl(tag);
+    //高版本的marionette 设为false也可直接刷新 但是提交上去的数据是乱码
     Backbone.history.navigate(url, false);
     App.vent.trigger("app.clipapp:cliplist.refresh", _uid, url, tag);
   });
 
+  // 需要外包一层事件触发，和bubb实际操作连接
   // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
   App.vent.bind("app.clipapp.bubb:follow", function(tag){
     App.vent.trigger("app.clipapp:follow", _uid, tag);
@@ -132,7 +130,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
-      App.vent.trigger("app.clipapp.followerlist:refresh"); // 刷新右边follower列表
+      // 刷新右边follower列表
+      App.vent.trigger("app.clipapp.followerlist:refresh");
       // 若之后已停，则需刷新头像为追
       if(last && last.follows){
 	last.follows = _.without(last.follows,tag);
@@ -147,15 +146,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
     App.vent.trigger("app.clipapp:reclip_tag",  _uid, tag);
   });
-
-  // init
-  App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
-    Bubb.showUserTags(uid);
-  });
-
-  App.addInitializer(function(){
-  });
-
+		      
   // ---- implements
 
   // service api

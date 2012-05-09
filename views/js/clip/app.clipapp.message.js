@@ -53,6 +53,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
       var view = new MessageView({model : messageModel});
     }
     App.setpopRegion.show(view);
+    $(".small_pop").css("top", App.util.getPopTop("small"));
   };
 
   Message.close = function(){

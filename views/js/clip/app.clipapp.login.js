@@ -3,10 +3,17 @@
 App.ClipApp.Login = (function(App, Backbone, $){
 
   var Login = {};
-
+  var NAME = "用户名/Email";
   var LoginModel = App.Model.extend({
-    defaults: {
-      name : "用户名/Email", pass : ""
+    validate: function(attrs){
+      var err = {};
+      if(attrs.name == "" || attrs.name == NAME){
+	err.name = "is_null";
+      }
+      if(attrs.pass == ""){
+	err.pass = "is_null";
+      }
+      return _.isEmpty(err) ? null : err;
     }
   });
 
@@ -15,95 +22,92 @@ App.ClipApp.Login = (function(App, Backbone, $){
     className : "login-view",
     template : "#login-view-template",
     events : {
+      "blur #name"               : "blurName",
+      "blur #pass"               : "blurPass",
       "focus #name"              : "clearAction",
-      "blur #name"               : "blurAction",
-      "keydown #name"            : "name_keydown",
-      "keydown #pass"            : "pass_keydown",
+      "focus #pass"              : "cleanError",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
       "click .reg_btn"           : "registerAction"
     },
     initialize:function(){
+      this.tmpmodel = new LoginModel();
     },
-    name_keydown:function(e){
-      $("#name").unbind("keydown");
-      if(e.keyCode==13){ // 响应回车事件
-	setTimeout(function(){
-	  $('#pass').focus();
-	},100);
-      }
+    blurName: function(e){
+      var that = this;
+      // console.log("blurName");
+      // this.model.set({name:$("#name").val()},{
+      this.tmpmodel.set({name:$("#name").val()},{
+	error:function(model, error){
+	  if($("#name").val() == "")
+	    $("#name").val(NAME);
+	  that.showError(error);
+	}
+      });
     },
-    pass_keydown:function(e){
-      $("#pass").unbind("keydown");
-      if(e.keyCode==13){ // 响应回车事件
-	$('.login_btn').click();
-	Login.close();
+    blurPass: function(e){
+      var that = this;
+      // this.model.set({pass:$("#pass").val()},{
+      this.tmpmodel.set({pass:$("#pass").val()},{
+	error:function(model, error){
+	  that.showError(error);
+	}
+      });
+    },
+    clearAction: function(e){
+      if(this.$("#name").val() == NAME){
+	this.$("#name").val("");
       }
+      this.cleanError(e);
     },
     loginAction : function(e){
       var that = this;
-      var name = $("#name").val();
-      var pass = $("#pass").val();
       e.preventDefault();
-      this.model.save({name: name, pass: pass},{
+      // this.model.save({},{
+      this.tmpmodel.save({},{
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
   	  App.vent.trigger("app.clipapp.login:success", res);
   	},
   	error:function(model, res){
-  	  App.vent.trigger("app.clipapp.login:@error", model, res);
+	  that.showError(res);
   	}
       });
     },
     registerAction:function(e){
+      var that = this;
       e.preventDefault();
-      var data = {
-	name : $("#name").val(),
-	pass : $("#pass").val()
-      };
-      this.model.save(data,{
+      this.model.save({},{
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){
 	  App.vent.trigger("app.clipapp.register:success","register_success",response);
 	},
 	error:function(model,error){
-	  App.vent.trigger("app.clipapp.login:@error",model, error);
+	  that.showError(error);
 	}
       });
     },
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.login:@cancel");
-    },
-    clearAction:function(evt){
-      if($("#name").val() == "用户名/Email"){ //this.model.get("name")
-	$("#name").val("");
-      }
-    },
-    blurAction:function(evt){
-      if($("#name").val() == ""){
-	$("#name").val(this.model.get("name"));
-      }
     }
   });
 
-  Login.show = function(model, error){
+  Login.show = function(){
     var loginModel = new LoginModel();
-    if (model) loginModel.set(model.toJSON());
-    if (error) loginModel.set("error", error);
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
     $("#name").focus();
-    if(error){
+    /*if(error){
       if(error.name){
 	$("#name").val(model.get("name"));
 	$("#name").select();
       }else if(error.pass){
 	$("#pass").select();
       }
-    }
+    }*/
   };
 
   Login.close = function(){
