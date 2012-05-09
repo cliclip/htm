@@ -44,7 +44,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     save: function(e){
-      this.$(".verify").attr("disabled",true);
+      var target = $(e.currentTarget);
+      target.attr("disabled",true);
       e.preventDefault();
       // var img_list = [];
       // clip.content = App.ClipApp.Editor.getContent("editor",img_list);
@@ -55,7 +56,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.clipadd:@success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
-	  this.$(".verify").attr("disabled",false);
+	  target.attr("disabled",false);
 	  App.vent.trigger("app.clipapp.clipadd:@error");
 	}
       });
@@ -137,7 +138,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.clipadd:@error", function(){
-    console.info("addClip error"); // 触发统一的错误事件
+    // console.info("addClip error"); // 触发统一的错误事件
   });
 
   return ClipAdd;

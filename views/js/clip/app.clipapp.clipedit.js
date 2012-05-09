@@ -55,7 +55,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     remarkClip:function(){
       App.vent.trigger("app.clipapp:clipmemo", this.model.id);
     },
-    saveUpdate: function(){
+    saveUpdate: function(e){
+      var target = $(e.currentTarget);
+      target.attr("disabled",true);
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
       //content = App.ClipApp.Editor.getContent("editor",img_list);
@@ -65,6 +67,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
 	},
 	error:function(model,res){  // 出现错误，触发统一事件
+	  target.attr("disabled", false);
 	  App.vent.trigger("app.clipapp.clipedit:@error", cid);
 	}
       });

@@ -35,9 +35,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     blurName: function(e){
       var that = this;
-      // console.log("blurName");
       // this.model.set({name:$("#name").val()},{
-      this.tmpmodel.set({name:$("#name").val()},{
+      this.tmpmodel.set({name:$("#name").val()}, {
 	error:function(model, error){
 	  if($("#name").val() == "")
 	    $("#name").val(NAME);
@@ -64,7 +63,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       var that = this;
       e.preventDefault();
       // this.model.save({},{
-      this.tmpmodel.save({},{
+      this.tmpmodel.save({}, {
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
@@ -100,14 +99,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
     $("#name").focus();
-    /*if(error){
-      if(error.name){
-	$("#name").val(model.get("name"));
-	$("#name").select();
-      }else if(error.pass){
-	$("#pass").select();
-      }
-    }*/
   };
 
   Login.close = function(){
