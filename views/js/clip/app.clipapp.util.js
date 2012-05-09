@@ -195,7 +195,6 @@ App.util = (function(){
       }else{
 	var returnVal = this.contentDocument.documentElement.textContent;
       }
-      console.dir(returnVal);
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
 	if(returnObj[0] == 0){

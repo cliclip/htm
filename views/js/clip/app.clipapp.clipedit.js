@@ -115,6 +115,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
       var html = App.util.contentToHtml(editModel.toJSON().content);
+      console.info("setContent.............");
       App.ClipApp.Editor.setContent("editor", html);
     });
   };

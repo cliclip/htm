@@ -83,6 +83,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(img_src){
+	console.info("after submit",img_src);
 	//img_list.push(img_src);
 	App.ClipApp.Editor.insertImage("editor", {url: img_src});
       });

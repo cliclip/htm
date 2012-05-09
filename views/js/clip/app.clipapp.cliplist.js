@@ -3,16 +3,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipList = {};
   var clipListView = {};
-  var collection = {};
-  var start = 1;
-  var end = App.ClipApp.Url.page;
-  var url = "";
-  var base_url = "";
-  var data = "";
-  var type = "";
-//  var contentType;
-  var collection_length;
-  var new_page;
+  var collection = {},start = 1,end = App.ClipApp.Url.page;
+  var url = "",base_url = "",data = "",type = "",collection_length,new_page;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
