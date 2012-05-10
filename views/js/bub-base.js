@@ -230,6 +230,7 @@ $(function() {
       open: function(){
 	// this.model.set("current", true);
 	// game.open(this.$(".bub span").text());
+	// window.scrollTo(0,0);
 	fire("open", this.$(".bub span").text());
       },
       follow: function(){

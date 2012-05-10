@@ -49,8 +49,7 @@ App.util = (function(){
   };
 
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]:[a-z0-9]{32}/;
-   // return "file:///D:/Images/图片/孙燕姿/p_large_8ASw_431000028afc2d11[1].jpg";
+    var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face_/;
     if(imageid == ""){
       return "img/f.jpg";
     }else if(imageid&& pattern.test(imageid)){
