@@ -46,7 +46,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	$("#comm_text").val((_.without(arr_text,tag)).join(","));
       }
     },
-
     comment : function(e){
       e.preventDefault();
       var that = this;

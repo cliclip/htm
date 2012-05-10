@@ -33,7 +33,7 @@ script(type="text/template",id="detail-view-template")
       section.pop_inner
         article.content
           <%= App.util.contentToHtml(content)%>
-        <%= App.util.generatePastTime(time)%>
+        <%= App.util.generatePastTime(updateTime)%>
         dl.comments.clearfix
         div.input_textarea
 

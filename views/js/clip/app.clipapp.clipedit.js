@@ -2,16 +2,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
 
-  App.Model.EditModel = App.Model.extend({
-    url : function(){
-      return App.util.unique_url(P+"/clip/"+this.id);
-    },
-    parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
-      resp.id = resp.user+":"+resp.id;
-      return resp;
-    }
-  });
-
   var edit_view = "";
   var EditView = App.ItemView.extend({
     tagName: "div",
@@ -55,7 +45,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     remarkClip:function(){
       App.vent.trigger("app.clipapp:clipmemo", this.model.id);
     },
-    saveUpdate: function(){
+    saveUpdate: function(e){
+      var target = $(e.currentTarget);
+      target.attr("disabled",true);
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
       //content = App.ClipApp.Editor.getContent("editor",img_list);
@@ -65,6 +57,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
 	},
 	error:function(model,res){  // 出现错误，触发统一事件
+	  target.attr("disabled", false);
 	  App.vent.trigger("app.clipapp.clipedit:@error", cid);
 	}
       });
@@ -106,7 +99,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   };
 
   ClipEdit.show = function(clipid){
-    var editModel = new App.Model.EditModel({id: clipid});
+    var editModel = new App.Model.DetailModel({id: clipid});
     editModel.fetch(); // fetch来的model中的content已经是html了
     editModel.onChange(function(editModel){
       var editView = new EditView({model: editModel});
@@ -115,7 +108,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
       var html = App.util.contentToHtml(editModel.toJSON().content);
-      console.info("setContent.............");
+      // console.info("setContent.............");
       App.ClipApp.Editor.setContent("editor", html);
     });
   };
