@@ -14,8 +14,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },
     url:function(){
       //参数为了防止ie缓存导致的不能向服务器发送请求的问题
-      var now = new Date();
-      return P+"/my/info" +"?now="+ now.getTime();
+      return App.util.unique_url(P+"/my/info");
     }
   });
 

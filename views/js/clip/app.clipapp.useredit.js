@@ -45,10 +45,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var EmailEditModel = App.Model.extend({
     url:function(){
+      var now = new Date();
       if(this.get("address")){
-	return P+"/user/"+this.id+"/email/"+this.get("address");
+	return App.util.unique_url(P+"/user/"+this.id+"/email/"+this.get("address"));
       }else{
-	return P+"/user/"+this.id+"/email";
+	return App.util.unique_url(P+"/user/"+this.id+"/email");
       }
     }
   });
@@ -251,7 +252,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.onUploadImgChange = function(sender){
-    console.info("on upload image change");
     if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
@@ -260,10 +260,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if( sender.files && sender.files[0]){
 	var img = new Image();
 	img.src = App.util.get_img_src(sender);
-	console.info(img.src);
 	img.onload=function(){
 	  if(img.complete){
-	    console.info('image load complete');
 	    $("#myface").attr("src",img.src);
 	    var style = resize_img(img.width,img.height);
 	    $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
@@ -319,13 +317,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   function faceLoad(originalFace,uid){
     $("#post_frame_face").unbind("load");
     $("#post_frame_face").load(function(){ // 加载图片
-      console.log("face load........................");
       if(window.navigator.userAgent.indexOf("MSIE")>=1){
 	var returnVal = this.contentWindow.document.documentElement.innerText;
       }else{
 	var returnVal = this.contentDocument.documentElement.textContent;
       }
-      console.dir(returnVal);
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
 	if(returnObj[0] == 0){

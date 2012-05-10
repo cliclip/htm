@@ -190,7 +190,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
-    var url = P+"/user/"+uid+"/meta/0..19";
+    var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..19");
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
@@ -237,7 +237,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     if(tag == '*') {
       url = P+"/user/"+uid+"/follow";
     }else{
-      url  = P+"/user/"+uid+"/follow/"+tag;
+      //encodeURIComponent() 函数可把字符串作为 URI 组件进行编码。
+      //该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： - _ . ! ~ * ' ( ) 。其他字符（比如 ：;/?:@&=+$,# 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。此方法会编码URI中的特殊字符
+      url  = P+"/user/"+uid+"/follow/"+encodeURIComponent(tag);
     }
     var bubbModel = new BubbModel({id: uid});
     bubbModel.destroy({
@@ -283,21 +285,22 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // 需要区分 my/interest、 my/recommend、和 my
   function mkUrl(tag){
+    var encode_tag = encodeURIComponent(tag);
     var url = Backbone.history.fragment;
     var i = url.indexOf("/tag");
     if(_uid){
       if(i >= 0){
 	url = url.substr(0, i);
-	return url += "/tag/"+tag;
+	return url += "/tag/"+encode_tag;
       }else{
 	if(url.indexOf("my/interest") >= 0)
-	  return "/my/interest/tag/"+tag;
+	  return "/my/interest/tag/"+encode_tag;
 	else if(url.indexOf("my/recommend") >= 0)
-	  return "/my/recommend/tag/"+tag;
+	  return "/my/recommend/tag/"+encode_tag;
 	else if(url.indexOf("my") >= 0)
-	  return "/my/tag/"+tag;
+	  return "/my/tag/"+encode_tag;
 	else
-	  return "/user/"+_uid+"/tag/"+tag;
+	  return "/user/"+_uid+"/tag/"+encode_tag;
       }
     }else{
       return "/tag/"+tag;

@@ -4,7 +4,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 
   App.Model.EditModel = App.Model.extend({
     url : function(){
-      return P+"/clip/"+this.id;
+      return App.util.unique_url(P+"/clip/"+this.id);
     },
     parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
       resp.id = resp.user+":"+resp.id;
