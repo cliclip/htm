@@ -114,7 +114,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       return true;
     if(url.indexOf("my") != -1 && url.indexOf("tag")!= -1){
       var curr = url.split("/").reverse()[0];
-      if(tag.toString().indexOf(curr) != -1){return true;}
+      if(tag && tag.toString().indexOf(curr) != -1){return true;}
     }
     return false;
   }
@@ -126,7 +126,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     if(sync(url, tag)){ // 首先判断当前用户所在的位置[]
       App.vent.trigger("app.clipapp.cliplist:add", model);
     }
-    if(model.get("tag").lenght > 0){
+    if(tag && tag.lenght > 0){
       var uid = App.util.getMyUid();
       // 进行bubb的同步
       App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
