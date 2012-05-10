@@ -172,16 +172,17 @@ App.ClipApp.Filter = (function(App, Backbone, $){
   function _htmlToUbb(html){
     var text = html;
     // 先将不是html的网址转换成 a 标签
-    // var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
-    var re = /(http:\/\/[^<]+)(?=<)/g;
+    var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
     text = text.replace(re,function(a,b,c){
       var reg = new RegExp("(=\"|='|=)(?="+a+")");
-      if(reg.test(text)){
+      if(reg.test(text) || b != "http://"){
+	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转
 	return a;
       }else{
 	return '<a href="http://'+c+'">'+a+'</a>';
       }
     });
+    console.log(text);
     //并不完善需没办法正确处理超链接图片
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
