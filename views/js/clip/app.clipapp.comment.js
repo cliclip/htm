@@ -3,10 +3,11 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
     url:function(){
+      var now  = new Date();
       if(this.id){
-	return P+"/clip/"+this.get("cid")+"/comment/"+this.id; // 删除
+	return App.util.unique_url(P+"/clip/"+this.get("cid")+"/comment/"+this.id);
       }else{
-	return P+"/clip/"+this.get("cid")+"/comment"; // 回复 或者 显示
+	return App.util.unique_url(P+"/clip/"+this.get("cid")+"/comment");
       }
     }
   });

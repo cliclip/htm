@@ -44,7 +44,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     start = 1;
     end = App.ClipApp.Url.page;
     base_url = App.ClipApp.Url.base+"/user/"+uid+"/following";
-    url=base_url+"/"+start+".."+end;
+    url=App.util.unique_url(base_url+"/"+start+".."+end);
     collection.fetch({url:url});
     collection.onReset(function(followinglist){
       if(!_.isEmpty(followinglist.toJSON())) flag=true;
@@ -72,7 +72,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     if(App.listRegion.currentView.$el[0].className=="following-view"&&new_page){
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
-      url = base_url + "/" + start + ".." + end;
+      url = App.util.unique_url(base_url + "/" + start + ".." + end);
       collection.fetch({
 	url:url,
 	add:true,

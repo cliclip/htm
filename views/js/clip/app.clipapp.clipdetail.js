@@ -4,7 +4,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
-      return P+"/clip/"+this.id;
+      return App.util.unique_url(P+"/clip/"+this.id);
     },
     // 跟cliplist一致，使得model.id = "uid:id"
     parse: function(resp){

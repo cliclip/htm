@@ -35,11 +35,15 @@ App.util = (function(){
     if(clss == "small") top = 150;
     return scroll + top + "px";
   };
-
+  util.unique_url = function(url){
+    var now = new Date();
+    return url + "?now=" + now.getTime();
+  };
   //clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
-    if(image_url && pattern.test(image_url)){
+    var pattern1 = /http:\/\//;
+    if(image_url && pattern.test(image_url)&&!pattern1.test(image_url)){
       return image_url + "/270";
     }else return image_url;
   };

@@ -176,7 +176,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserInterest = function(uid, tag){
     ClipList.flag_show_user = true;
     base_url = "/user/" + uid + "/interest";
-    if(tag) base_url += "/tag/" + tag;
+    if(tag) base_url += "/tag/" + encodeURIComponent(tag);
     base_url = App.ClipApp.Url.base + base_url;
     data = null;
     type = "GET";
@@ -186,7 +186,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserRecommend = function(uid, tag){
     ClipList.flag_show_user = true;
     base_url = "/user/"+uid+"/recomm";
-    if(tag) base_url += "/tag/"+tag;
+    if(tag) base_url += "/tag/"+encodeURIComponent(tag);
     base_url = App.ClipApp.Url.base + base_url;
     data = null;
     type = "GET";
@@ -198,7 +198,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection = clips;
     start = 1;
     end = App.ClipApp.Url.page;
-    url = base_url + "/" + start+".."+ end;
+    url = App.util.unique_url(base_url + "/" + start+".."+ end);
     if(data){
       data = JSON.stringify(data);
       var contentType = "application/json; charset=utf-8";
@@ -229,7 +229,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
-      url = base_url + "/" + start + ".." + end;
+      url = App.util.unique_url(base_url + "/" + start + ".." + end);
       var contentType = "application/json; charset=utf-8";
       if(!data){
 	contentType = null;
@@ -265,8 +265,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var content = App.util.getPreview(addmodel.get("content"), 100);
     //clip本身的id为自己的id，model的id为uid:cid
     model.set({"public":_public,"content":content,"id":id,"clipid":clipid,"tag":tag,"note":note,"user":user,"recommend":""});
-    //model.set({recommend:""});
-
     var fn = clipListView.appendHtml;
     clipListView.appendHtml = function(collectionView, itemView){
       collectionView.$el.prepend(itemView.el);
