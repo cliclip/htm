@@ -170,7 +170,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var id = e.target.id;
       $(e.currentTarget).toggleClass("original");
       $(e.currentTarget).toggleClass("selected");
-      if($(e.currentTarget).hasClass("selected")){ //将其值加入到comm_text中去
+      if($(e.currentTarget).hasClass("selected")){
+	//将其值加入到comm_text中去
 	this.tag_list.push($("#"+id).val());
 	if($("#comm_text").val() == "" || $("#comm_text").val() == COMM_TEXT){
 	  $("#comm_text").val($("#"+id).val());
@@ -190,7 +191,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	var cid = this.model.get("cid");
 	var pid = this.model.get("pid") ? this.model.get("pid") : 0;
 	var text = ($("#comm_text").val()).replace(/[\s]/g, "");
-	if(text == "" || text == COMM_TEXT)return;
+	if(text == "" || text == COMM_TEXT){$("#comm_text").focus(); return;}
 	var params = {cid: cid, text: text, pid: pid};
 	App.vent.trigger("app.clipapp.clipdetail:save_addComm", params);
 	if($("#reclip").attr("checked")){

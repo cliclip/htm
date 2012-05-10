@@ -169,20 +169,6 @@ App.util = (function(){
     });
 */
   });
-
-  util.fixed = function(paddingTop){
-    $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
-   // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
-    //var y = $(".user_detail").height() ? $(".user_detail").height() + 5 :0;
-    var y = $(".user_detail").height()+5;
-    $("#bubb").addClass("fixed").css({"margin-top":y+"px", "top": paddingTop});
-  };
-
-  util.remove_fixed = function(paddingTop){
-    $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
-    $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
-  };
-
   //解决关于本地预览图片的浏览器兼容问题
   util.get_img_src = function(sender){
     //chrome
@@ -196,7 +182,7 @@ App.util = (function(){
       sender.blur();
       return document.selection.createRange().text;
     }else{
-      alert("the problem of compatible");
+      alert("the problem of compatible..........");
       return window.URL.createObjectURL(source);
     }
   };
@@ -204,7 +190,11 @@ App.util = (function(){
   util.get_imgid = function(frameid,callback){
     $("#" + frameid).unbind("load");
     $("#" + frameid).load(function(){ // 加载图片
-      var returnVal = this.contentDocument.documentElement.textContent;
+      if(window.navigator.userAgent.indexOf("MSIE")>=1){
+	var returnVal = this.contentWindow.document.documentElement.innerText;
+      }else{
+	var returnVal = this.contentDocument.documentElement.textContent;
+      }
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
 	if(returnObj[0] == 0){
@@ -282,6 +272,7 @@ App.util = (function(){
       is_null: "密码尚未填写"
     },
     pass:{
+      is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
     conpass:{

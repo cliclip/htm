@@ -32,18 +32,20 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     });
 */
     if(isIE){
-      var data = objEditor.contentWindow.document.body.innerText;
+      var data = objEditor.contentWindow.document.body.innerHTML;
     }else{
       var data = objEditor.contentWindow.document.body.innerHTML;;
     }
-    // console.log(data);
     return App.ClipApp.Filter.htmlToUbb(data);
   };
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
     var objEditor = document.getElementById(editorId);
     if(isIE){
-      objEditor.contentWindow.document.execCommand('Paste', false, data);
+      objEditor.contentWindow.focus();
+      var editor = objEditor.contentWindow.document.selection.createRange();
+      editor.pasteHTML(data);
+      //objEditor.contentWindow.document.execCommand('Paste', false, data);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, data);
     }
@@ -57,7 +59,10 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       //img = "<img id="+data.id +" class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
       img = "<img src="+data.url+" style='max-width:475px;max-height:490px;' />";
     if(isIE){ // TODO
-      objEditor.contentWindow.document.execCommand("Paste", false, img);
+      objEditor.contentWindow.focus();
+      var editor = objEditor.contentWindow.document.selection.createRange();
+      editor.pasteHTML(img);
+      //objEditor.contentWindow.document.execCommand("Paste", false, img);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, img);
     }

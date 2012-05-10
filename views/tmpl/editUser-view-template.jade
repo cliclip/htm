@@ -11,7 +11,7 @@ script(type="text/template",id="editUser-view-template")
 script(type="text/template",id="faceEdit-view-template")
   .edit_head
     .head_img#head_img.
-      <img id="myface" src="<%=App.util.face_url(face)%>"/>
+      <img id="myface" src="<%=App.util.face_url(face)%>" />
     .user_name
       <% if(name && name!=""){%>
       <span class="name"><%=name%></span>
@@ -30,6 +30,8 @@ script(type="text/template",id="faceEdit-view-template")
           button.upload(type="button")	
             |上传本地图像
           |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
+  .preview.
+    <img id="preview_size_fake" />
 
 script(type="text/template",id="emailEdit-view-template")
   .mail_verify.fir

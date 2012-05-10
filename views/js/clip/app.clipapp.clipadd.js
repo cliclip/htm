@@ -44,7 +44,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
     save: function(e){
-      this.$(".verify").attr("disabled",true);
+      var target = $(e.currentTarget);
+      target.attr("disabled",true);
       e.preventDefault();
       // var img_list = [];
       // clip.content = App.ClipApp.Editor.getContent("editor",img_list);
@@ -55,7 +56,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.clipadd:@success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
-	  this.$(".verify").attr("disabled",false);
+	  target.attr("disabled",false);
 	  App.vent.trigger("app.clipapp.clipadd:@error");
 	}
       });
@@ -83,6 +84,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(img_src){
+	console.info("after submit",img_src);
 	//img_list.push(img_src);
 	App.ClipApp.Editor.insertImage("editor", {url: img_src});
       });
@@ -112,24 +114,23 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       return true;
     if(url.indexOf("my") != -1 && url.indexOf("tag")!= -1){
       var curr = url.split("/").reverse()[0];
-      if(tag.toString().indexOf(curr) != -1){return true;}
+      if(tag && tag.toString().indexOf(curr) != -1){return true;}
     }
     return false;
   }
 
   App.vent.bind("app.clipapp.clipadd:@success", function(model){
-    ClipAdd.close(); // 关闭clipadd,同步list的数据 // 首先判断当前用户所在的位置[]
+    ClipAdd.close();
     var url = Backbone.history.fragment;
     var tag = model.get("tag");
-    if(sync(url, tag)){
+    if(sync(url, tag)){ // 首先判断当前用户所在的位置[]
       App.vent.trigger("app.clipapp.cliplist:add", model);
     }
-    if(model.get("tag")){
+    if(tag && tag.lenght > 0){
       var uid = App.util.getMyUid();
-      //只刷新bubbs，而不重新load
+      // 进行bubb的同步
       App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
       App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
-      //App.vent.trigger("app.clipapp.bubb:showUserTags", uid);
     }
   });
 
@@ -138,7 +139,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.clipadd:@error", function(){
-    console.info("addClip error"); // 触发统一的错误事件
+    // console.info("addClip error"); // 触发统一的错误事件
   });
 
   return ClipAdd;
