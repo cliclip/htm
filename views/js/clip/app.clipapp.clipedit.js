@@ -2,16 +2,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
 
-  App.Model.EditModel = App.Model.extend({
-    url : function(){
-      return P+"/clip/"+this.id;
-    },
-    parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
-      resp.id = resp.user+":"+resp.id;
-      return resp;
-    }
-  });
-
   var edit_view = "";
   var EditView = App.ItemView.extend({
     tagName: "div",
@@ -109,7 +99,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   };
 
   ClipEdit.show = function(clipid){
-    var editModel = new App.Model.EditModel({id: clipid});
+    var editModel = new App.Model.DetailModel({id: clipid});
     editModel.fetch(); // fetch来的model中的content已经是html了
     editModel.onChange(function(editModel){
       var editView = new EditView({model: editModel});
@@ -118,7 +108,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
       var html = App.util.contentToHtml(editModel.toJSON().content);
-      console.info("setContent.............");
+      // console.info("setContent.............");
       App.ClipApp.Editor.setContent("editor", html);
     });
   };

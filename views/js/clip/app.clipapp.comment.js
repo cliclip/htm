@@ -4,9 +4,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   App.Model.CommentModel = App.Model.extend({
     url:function(){
       if(this.id){
-	return P+"/clip/"+this.get("cid")+"/comment/"+this.id;
+	return P+"/clip/"+this.get("cid")+"/comment/"+this.id; // 删除
       }else{
-	return P+"/clip/"+this.get("cid")+"/comment";
+	return P+"/clip/"+this.get("cid")+"/comment"; // 回复 或者 显示
       }
     }
   });

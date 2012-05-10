@@ -182,7 +182,7 @@ App.ClipApp.Filter = (function(App, Backbone, $){
 	return '<a href="http://'+c+'">'+a+'</a>';
       }
     });
-    console.log(text);
+    // console.log(text);
     //并不完善需没办法正确处理超链接图片
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"

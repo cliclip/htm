@@ -264,10 +264,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.clipdetail:@show_reply", function(cid, pid){
-    ClipDetail.addCommRegion.close(); // 已经关闭了最下边的评论框
     if(!App.ClipApp.Me.me.get("id")){
       App.vent.trigger("app.clipapp:login");
     }else{
+      ClipDetail.addCommRegion.close(); // 关闭最下边的评论框区域
       var model = new App.Model.CommentModel({cid : cid, pid: pid});
       var replyView = new AddCommView({model: model});
       ClipDetail.replyCommRegion = new App.Region({

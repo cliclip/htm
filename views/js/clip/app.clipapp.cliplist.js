@@ -290,6 +290,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   });
 
+  // 评论总数以及转载总数的同步
   App.vent.bind("app.clipapp.cliplist:refresh",function(args){
     var model=App.listRegion.currentView.collection.get(args.model_id);
     var clip=model.get("clip");
