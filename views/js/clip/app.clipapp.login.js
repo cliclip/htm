@@ -77,7 +77,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     registerAction:function(e){
       var that = this;
       e.preventDefault();
-      this.model.save({},{
+      this.tmpmodel.save({},{
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){

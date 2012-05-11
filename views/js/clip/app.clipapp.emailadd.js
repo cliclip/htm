@@ -17,7 +17,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       }
     },
     url:function(){
-      return P+"/user/"+this.id+"/email";
+      var my = App.util.getMyUid();
+      return P+"/user/"+my+"/email";
     }
   });
 
@@ -47,7 +48,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	}
       });
       if(this.model.isValid()){
-	this.model.save({},{
+	this.model.save(data,{
 	  type:"POST",
 	  success: function(model, res){
 	    App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
@@ -65,7 +66,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   });
 
   EmailAdd.showEmailAdd = function(uid){
-    var emailAddModel = new EmailAddModel({id:uid});
+    var emailAddModel = new EmailAddModel();
     var emailAddView = new EmailAddView({model : emailAddModel});
     App.setpopRegion.show(emailAddView);
   };

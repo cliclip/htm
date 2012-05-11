@@ -69,6 +69,8 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
     for(var key in error){
       this.$("#"+key).addClass("error");
       this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
+      if(key.indexOf("pass") != -1)
+	this.$("#"+key).val("");
     }
   },
   cleanError:function(e){

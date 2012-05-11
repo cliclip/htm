@@ -5,26 +5,28 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
   var RuleModel = App.Model.extend({
     defaults:{
       title:"",
-      to:[],
-      cc:[],
-      enable:""
+      to: "",
+      cc: "",
+      enable: ""
     },
     url:function(){
-      return App.util.unique_url(P+"/user/"+this.id+"/rule");
+      var my = App.util.getMyUid();
+      return App.util.unique_url(P+"/user/"+my+"/rule");
     },
     validate: function(attrs){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
       var error = {};
-      if(!attrs.title&&_.isEmpty(attrs.to)&&_.isEmpty(attrs.cc)&&!attrs.rule){
+      // 如果没有attrs.rule, 则在fetch时候不会触发onChange事件
+      if(!attrs.title && !attrs.to&& !attrs.cc && !attrs.rule){
 	error.rule = "is_null";
       }else{
-	for(var i=0; i<attrs.to.length; i++){
+	for(var i=0; attrs.to && i<attrs.to.length; i++){
 	  if(!email_pattern.test(attrs.to[i])){
 	    error.to = "invalidate";
 	    i = attrs.to.length;
 	  }
 	}
-	for(i =0; i< attrs.cc.length; i++){
+	for(i =0; attrs.cc && i< attrs.cc.length; i++){
 	  if(!email_pattern.test(attrs.cc[i])){
 	    error.cc = "invalidate";
 	    i = attrs.cc.length;
@@ -43,13 +45,15 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     events: {
       "click #update_rule[type=submit]" : "ruleUpdate",
       "keydown #cc" : "setCC",
-      "blur #cc" : "blurAction",
       "keydown #to" : "setTO",
+      "blur #cc" : "blurAction", // 直接进行to和cc的set,及时进行数据校验
       "blur #to" : "blurAction",
       "focus #to": "cleanError",
       "focus #cc": "cleanError",
-      "focus #title": "cleanError",
       "error": "showError"
+    },
+    initialize:function(){
+      this.tmpmodel = new RuleModel();
     },
     setCC:function(e){
       var key = e.keyCode;
@@ -68,14 +72,16 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       var uid = this.model.id;
       var data = {};
       _.each(this.$(":input").serializeArray(), function(obj){
-	if(obj.name == "to" || obj.name == "cc")
+	if(obj.name == "to" || obj.name == "cc"){
 	  obj.value = _.compact(obj.value.trim().split(";"));
-	data[obj.name] = obj.value;
+	  data[obj.name] = obj.value.length == 0 ? undefined : obj.value;
+	}else{
+	  data[obj.name] = obj.value == "" ? undefined : obj.value;
+	}
       });
       if(!data.enable) data.enable = false;
       else data.enable = true;
-      var ruleModel = new RuleModel({id:uid});
-      ruleModel.set(data,{
+      this.tmpmodel.set(data,{
 	error:function(model, error){
 	  if(error.rule == "is_null"){
 	    App.vent.trigger("app.clipapp.message:chinese", error);
@@ -84,20 +90,20 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	  }
 	}
       });
-      if(ruleModel.isValid()){
-	ruleModel.save({},{
-	  type: "POST",
+      if(this.tmpmodel.isValid()){
+	this.tmpmodel.save({},{
 	  success: function(model, res){
   	    App.vent.trigger("app.clipapp.ruleedit:@showrule", model.id);
 	    App.vent.trigger("app.clipapp.message:confirm", "setRule_success");
 	  },
 	  error:function(model, res){
-	     view.showError(res);
+	    view.showError(res);
 	  }
 	});
       }
     },
     blurAction:function(e){
+      var view = this;
       var id = e.currentTarget.id;
       var str = $("#"+id).val().trim();
       if(str){
@@ -105,7 +111,22 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	_.each(str.split(";"),function(a){
 	  arr.push(a.trim());
 	});
-	$("#"+id).val(_.compact(arr).join(";")+";");
+	var value = _.compact(arr).join(";");
+	$("#"+id).val(value+";");
+	arr = arr.length == 0 ? undefined : arr;
+	if(id == "to"){
+	  this.tmpmodel.set({to: arr},{
+	    error: function(model, error){
+	      view.showError(error);
+	    }
+	  });
+	}else{
+	  this.tmpmodel.set({cc: arr},{
+	    error: function(model, error){
+	      view.showError(error);
+	    }
+	  });
+	}
       }
     }
   });
@@ -128,8 +149,8 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     }
   }
 
-  RuleEdit.show = function(uid){
-    var ruleModel = new RuleModel({id:uid});
+  RuleEdit.show = function(){
+    var ruleModel = new RuleModel();
     RuleEdit.ruleRegion = new App.Region({el:"#rule"});
     ruleModel.fetch();
     ruleModel.onChange(function(ruleModel){

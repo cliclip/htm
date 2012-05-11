@@ -3,6 +3,7 @@
 App.ClipApp.Recommend = (function(App,Backbone,$){
 
   // 用来列出可以转给那些用户
+  var P = App.ClipApp.Url.base;
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
     model : NameListModel,
@@ -11,7 +12,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   var RecommModel = App.Model.extend({
     url: function(){
-      return App.ClipApp.Url.base+"/user/"+this.id+"/recomm";
+      return P+"/user/"+this.id+"/recomm";
     },
     validate: function(attrs){
       if(attrs.name == "" || !attrs.name){
@@ -52,20 +53,18 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var name = $($(e.currentTarget)[0].children[1]).text();
       var uid =  $(e.currentTarget)[0].children[1].id.split("_")[1];
       this.$("#recomm_name").val(name);
-      $("#imgId").attr("src",face);
-      $("#imgId").css("display","block");
-      this.model.set({uid:uid},{silent:true});
+      this.$("#imgId").attr("src",face);
+      this.$("#imgId").css("display","block");
+      // this.model.set({uid:uid},{silent:true});
     },
     nameListAction:function(evt){
-      $("#alert").css("display","none");
-      $("#imgId").css("display","none");
+      this.$("#imgId").css("display","none");
       var str = this.$("#recomm_name").val().trim();
       var clip_owner = this.model.get("clipid").split(":")[0];//clip的拥有者
       var params = {q:str};
       //查询friend
       App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
     },
-
     nameBlur:function(){
       var view = this;
       var clipid = this.model.get("clipid");
@@ -80,13 +79,13 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  _.each(div,function(e){
 	    var li = e.children;
 	    if(this.$("#recomm_name").val() == $(li[1]).text()){
-	      this.$("#recomm_name").val($(li[1]).text());
-	      $("#imgId").attr("src",li[0].children[0].src);
-	      $("#imgId").css("display","block");
 	      data.id=li[1].id.split("_")[1];
+	      this.$("#recomm_name").val($(li[1]).text());
+	      this.$("#imgId").attr("src",li[0].children[0].src);
+	      this.$("#imgId").css("display","block");
 	    }
 	  });
-	  $(".list").remove();
+	  this.$(".list").remove();
 	}
 	// 先根据 data[name]找到uid，在进行model的新建和name的set
 	view.tmpmodel.set(data, {
@@ -98,7 +97,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       },200);
     },
     selectAction:function(event){
-      if(event.keyCode == 40){
+      if(event.keyCode == 40){ // UP
 	var flag = true;
 	var div = $("#name_listDiv").children().children().children();
 	for(var i=0;i<div.length/2;i++){
@@ -113,7 +112,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  $(div[1]).css("background-color","#888");
 	  $("#recomm_name").val($(div[1]).text());
 	}
-      }else if(event.keyCode == 38){
+      }else if(event.keyCode == 38){ // DOWN
 	var flag = true;
 	var div = $("#name_listDiv").children().children().children();
 	for(var i=0;i<div.length/2;i++){
@@ -128,7 +127,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  $(div[div.length-1]).css("background-color","#888");
 	  $("#recomm_name").val($(div[length-1]).text());
 	}
-      }else if(event.keyCode == 13){
+      }else if(event.keyCode == 13){ // enter
 	var div = $("#name_listDiv").children().children().children();
 	for(var i=0;i<div.length/2;i++){
 	  if($(div[2*i+1]).css("background-color") == "rgb(136, 136, 136)"){
@@ -162,6 +161,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
 	var text=$("#recommend_text").val().trim();
+	text = text == defaultText ? undefined : text;
 	//recommend 需要的参数
 	view.tmpmodel.save({text: text},{
 	  type:"POST",
@@ -222,7 +222,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   };
 
   App.vent.bind("app.clipapp.recommend:@lookup",function(params,owner_id){
-    var collection = new NameList({});
+    var collection = new NameList();
     collection.fetch({data:params});
     collection.onReset(function(list){
       var ownmodel=list.get(owner_id);//过滤掉clip的所有者
