@@ -57,9 +57,10 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       var params = {cid:this.model.get("cid"),text: text, pid: 0};
       // console.dir(that.tag_list);
       var params1 = {id:this.model.get("cid"),clip:{tag:tag_list,note:[{text:text}]}};
-      App.vent.trigger("app.clipapp.comment:@submit", params);
       if($("#reclip_box").attr("checked")){
-	App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
+	App.vent.trigger("app.clipapp.comment:@submit", params,params1);
+      }else{
+	App.vent.trigger("app.clipapp.comment:@submit", params);
       }
     },
     cancel : function(e){
@@ -85,11 +86,14 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     mid = null;
   };
 
-  App.vent.bind("app.clipapp.comment:@submit", function(params){
+  App.vent.bind("app.clipapp.comment:@submit", function(params,params1){
     var model = new App.Model.CommentModel(params);
     model.save({},{
       type: "POST",
       success: function(model, res){
+	if(params1){
+	  App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
+	}
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
 	Comment.close();
       },

@@ -225,6 +225,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:nextpage",function(){
+    // console.info("nextpage");
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       start += App.ClipApp.Url.page;
@@ -299,7 +300,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
     if(args.type == "reclip"){
-      var reprint_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
+      var reprint_count = model.get("reprint_count") ? model.get("reprint_count")+1 : 1;
       model.set({"reprint_count":reprint_count});
     }
   });
