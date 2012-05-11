@@ -148,12 +148,14 @@ App.bind("initialize:after", function(){
   var paddingTop = 0 + "px";
   remove_fixed(paddingTop);
   $(window).scroll(function() {
+    remove_fixed(paddingTop);
     var st = $(window).scrollTop();
     //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
     //var gap = document.getElementById("user_info").style.paddingTop;
     //console.info(gap);
     var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
     var mt = $(".clearfix").offset().top + shifting;
+    //console.info(shifting);
     //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
     if(st>0){
       $(".return_top").show();
@@ -161,16 +163,18 @@ App.bind("initialize:after", function(){
       $(".return_top").hide();
     }
     if(st > mt ){
-      //console.info("锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      //console.log("锁定气泡组件",st,mt);
       fixed(paddingTop);
     } else {
-      //console.info("解除锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      //console.log("解除锁定气泡组件",st,mt);
       remove_fixed(paddingTop);
     }
-    var wh = window.innerHeight;
+    var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
     var lt = $(".loader").offset().top;
+    console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
     if(st + wh > lt && time_gap==true ){
       time_gap = false;
+      //console.info("trigger nextpge");
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){
 	time_gap = true;
