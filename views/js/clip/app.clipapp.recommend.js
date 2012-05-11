@@ -1,7 +1,6 @@
 //app.Recommapp.js
 
 App.ClipApp.Recommend = (function(App,Backbone,$){
-
   // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
@@ -100,41 +99,39 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     selectAction:function(event){
       if(event.keyCode == 40){
 	var flag = true;
-	var div = $("#name_listDiv").children().children().children();
-	for(var i=0;i<div.length/2;i++){
-	  if(flag && $(div[2*i+1]).css("background-color") == "rgb(136, 136, 136)"){
-	    $(div[2*i+1]).css("background-color","");
-	    $(div[2*(i+1)+1]).css("background-color","#888");
-	    $("#recomm_name").val($(div[2*(i+1)+1]).text());
+	var div = $("#name_listDiv").children().children();
+	for(var i=0;i<div.length;i++){
+	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	    $(div[i]).css("background-color","");
+	    $(div[i+1]).css("background-color","#888");
+	    $("#recomm_name").val($(div[i+1]).text().trim());
 	    flag = false;
 	  }
 	}
 	if(flag){
-	  $(div[1]).css("background-color","#888");
-	  $("#recomm_name").val($(div[1]).text());
+	  $(div[0]).css("background-color","#888");
+	  $("#recomm_name").val($(div[0]).text().trim());
 	}
       }else if(event.keyCode == 38){
 	var flag = true;
-	var div = $("#name_listDiv").children().children().children();
-	for(var i=0;i<div.length/2;i++){
-	  if(flag && $(div[2*i+1]).css("background-color") == "rgb(136, 136, 136)"){
-	    $(div[2*i+1]).css("background-color","");
-	    $(div[2*i-1]).css("background-color","#888");
-	    $("#recomm_name").val($(div[2*i-1]).text());
+	var div = $("#name_listDiv").children().children();
+	for(var i=0;i<div.length;i++){
+	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	    $(div[i]).css("background-color","");
+	    $(div[i-1]).css("background-color","#888");
+	    $("#recomm_name").val($(div[i-1]).text().trim());
 	    flag = false;
 	  }
 	}
 	if(flag){
 	  $(div[div.length-1]).css("background-color","#888");
-	  $("#recomm_name").val($(div[length-1]).text());
+	  $("#recomm_name").val($(div[length-1]).text().trim());
 	}
       }else if(event.keyCode == 13){
-	var div = $("#name_listDiv").children().children().children();
-	for(var i=0;i<div.length/2;i++){
-	  if($(div[2*i+1]).css("background-color") == "rgb(136, 136, 136)"){
-	    $("#recomm_name").val($(div[2*i+1]).text());
-	    $("#imgId").attr("src",div[2*i].children[0].src);
-	    $("#imgId").css("display","block");
+	var div = $("#name_listDiv").children().children();
+	for(var i=0;i<div.length;i++){
+	  if($(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	    $("#recomm_name").val($(div[i]).text().trim());
 	    $("#recommend_text").focus();
 	  }
 	}
@@ -150,6 +147,13 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       }
     },
     MouseOver:function(e){
+      var div = $("#name_listDiv").children().children();
+      for(var i=0;i<div.length;i++){
+	if($(div[i]).css("background-color") ==
+	"rgb(136, 136, 136)"){
+	  $(div[i]).css("background-color","");
+	}
+      }
       $(e.currentTarget).css("background-color","#888");
     },
     MouseOut:function(e){
