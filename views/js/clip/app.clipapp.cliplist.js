@@ -225,6 +225,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:nextpage",function(){
+    // console.info("nextpage");
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       start += App.ClipApp.Url.page;
