@@ -261,7 +261,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	var img = new Image();
 	img.src = App.util.get_img_src(sender);
 	img.onload=function(){
-	  if(img.complete){
+	  if(img.complete ||img.readyState=="complete"||img.readyState=="loaded"){
+	    console.info("complete");
 	    $("#myface").attr("src",img.src);
 	    var style = resize_img(img.width,img.height);
 	    $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});

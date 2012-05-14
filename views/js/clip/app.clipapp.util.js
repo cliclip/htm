@@ -189,6 +189,18 @@ App.util = (function(){
       return window.URL.createObjectURL(source);
     }
   };
+  util.img_load = function(img){
+    if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){
+      $("#_" + img.id).hide();
+      $("#"+img.id).show();
+    }
+  };
+
+  util.img_error = function(img){
+    img.alt='图片加载失败';
+    $("#_" + img.id).hide();
+    $("#" + img.id).show();
+  };
 
   util.get_imgid = function(frameid,callback){
     $("#" + frameid).unbind("load");

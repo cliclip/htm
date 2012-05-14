@@ -16,9 +16,25 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     render : function(){
       this.$el.attr("src", "bub.html");
       return this;
+    },
+    initialize: function(){
+      //$("#bubb iframe").css({frameborder:"no",border:"0"});
+      set_border();
     }
   });
-
+  function set_border(){
+    console.log("setborder");
+    if(document.getElementById("bubbles")){
+      //document.getElementById("bubbles").setAttribute("frameborder", "no", 0);
+      //document.getElementById("bubbles").setAttribute("border", "0", 0);
+      console.log("setborder success");
+    }else {
+      setTimeout(function(){
+	console.log("setborder........");
+	set_border();
+      },200);
+    }
+  }
   // constants
 
   // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
@@ -146,7 +162,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
     App.vent.trigger("app.clipapp:reclip_tag",  _uid, tag);
   });
-		      
+
   // ---- implements
 
   // service api

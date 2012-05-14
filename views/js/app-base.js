@@ -143,9 +143,18 @@ App.bind("initialize:after", function(){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
     $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
   };
+  function Reload(flag){
+    $("#list").masonry("reload");
+    if(flag){
+      setTimeout(function(){
+	Reload();
+      },1000);
+    }
+  }
 
   var time_gap = true;
   var paddingTop = 0 + "px";
+  //Reload(true);
   remove_fixed(paddingTop);
   $(window).scroll(function() {
     remove_fixed(paddingTop);
@@ -171,7 +180,7 @@ App.bind("initialize:after", function(){
     }
     var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
     var lt = $(".loader").offset().top;
-    console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+    //console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
     if(st + wh > lt && time_gap==true ){
       time_gap = false;
       //console.info("trigger nextpge");

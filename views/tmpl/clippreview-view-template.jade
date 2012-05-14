@@ -14,8 +14,9 @@ script(type="text/template",id="clippreview-view-template")
       <%}%>
     header#header
       <% if(content && content.image) {%>
+      | <img class="img_fake" id="_img_<%=id.replace(/:/g,'_')%>" src="img/waiting.jpg"/>
       div.article_photo
-        | <img src="<%=App.util.url(content.image)%>" alt="抱歉，此图片不存在"/>
+        | <img id="img_<%=id.replace(/:/g,'_')%>" src="<%=App.util.url(content.image)%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)"/>
       <% }if(content && content.text){%>
       <%if(!content.image){ %>
       div.article_con(style="font-size: 16px;line-height: 2.0")

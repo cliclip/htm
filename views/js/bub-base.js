@@ -1,6 +1,10 @@
 $(function() {
 
     // user interactive
+    var WIDTH = window.innerWidth || document.documentElement.clientWidth ;
+    var HEIGHT =  window.innerHeight || document.documentElement.clientHeight ;
+    var screenX = window.screenX || window.screenLeft;
+    var screenY = window.screenY || window.screenTop;
 
     var ui = (function(){
 
@@ -70,7 +74,7 @@ $(function() {
 
       // BROWSER WINDOW
 
-      var stage = [window.screenX, window.screenY, window.innerWidth, window.innerHeight];
+      var stage = [screenX, screenY, WIDTH, HEIGHT];
 
       return {
 	init: function(){
@@ -127,19 +131,19 @@ $(function() {
 	},
 	chkStage: function() {
 	  try{
-  	    if (stage[0] != window.screenX || stage[1] != window.screenY) {
-	      var deltaX = (window.screenX - stage[0]);
-	      var deltaY = (window.screenY - stage[1]);
-	      stage[0] = window.screenX;
-	      stage[1] = window.screenY;
+  	    if (stage[0] != screenX || stage[1] != screenY) {
+	      var deltaX = (screenX - stage[0]);
+	      var deltaY = (screenY - stage[1]);
+	      stage[0] = screenX;
+	      stage[1] = screenY;
 	      if (Math.abs(deltaX) < 2560 && Math.abs(deltaY) < 1600) {
 		// windows minimize is using move, WQXGA
 		game.shake(deltaX << 6, deltaY << 6); // * 64 as delta
 	      }
 	    }
-	    if (stage[2] != window.innerWidth || stage[3] != window.innerHeight) {
-	      stage[2] = window.innerWidth;
-	      stage[3] = window.innerHeight;
+	    if (stage[2] != WIDTH || stage[3] != HEIGHT) {
+	      stage[2] = WIDTH;
+	      stage[3] = HEIGHT;
 	      game.resize(stage[2], stage[3]);
 	    }
 	  } catch(e){}
@@ -397,15 +401,15 @@ $(function() {
 	  ui.init();
 	  worldAABB = new b2AABB();
 	  worldAABB.minVertex.Set( - wall_thickness, - wall_thickness);
-	  worldAABB.maxVertex.Set(window.innerWidth + wall_thickness, window.innerHeight + wall_thickness);
+	  worldAABB.maxVertex.Set(WIDTH + wall_thickness, HEIGHT + wall_thickness);
 	  world = new b2World(worldAABB, new b2Vec2(0, 0), true);
-	  setWalls(window.innerWidth, window.innerHeight, wall_thickness);
+	  setWalls(WIDTH, HEIGHT, wall_thickness);
 	  setInterval(loop, 1000 / 40);
 	},
 	random : function(){
 	  _(balls).each(function(ball){
 	    var body = ball.get("body");
-	    var r = ran(window.innerWidth, wall_thickness);
+	    var r = ran(WIDTH, wall_thickness);
 	    body.m_position.x = r.x;
 	    body.m_position.y = r.y;
 	    body.m_linearVelocity.x = r.sx;
@@ -515,7 +519,7 @@ $(function() {
 	  delete options.self;
 	  _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs&&_.indexOf(options.bubs,e)!=-1) ? 64 : 48;
-	    var body = setBall(size + 10, window.innerWidth, wall_thickness);
+	    var body = setBall(size + 10, WIDTH, wall_thickness);
 	    var ball = new BallModel({
 	      "text": e,
 	      "self": self,
