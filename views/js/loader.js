@@ -42,7 +42,7 @@
   // clean selected
   function cleanSelection(){
     if (win.getSelection) {  // all browsers, except ie < 9
-      var sel = win.getSelection ();                                        
+      var sel = win.getSelection ();
       sel.removeAllRanges();
     } else if (doc.selection.createRange) { // ie
       doc.selection.createRange();
@@ -53,7 +53,7 @@
   // **** view layer
 
   var popupIframe = doc.createElement("iframe");
-  popupIframe.src = '//192.168.1.10:2000/marklet/clipper.html?r=' + Math.random() * 99999999;
+  popupIframe.src = 'http://192.168.1.3:2000/clipper.html?r='+Math.random()*9999999;
   popupIframe.scrolling = "no";
   popupIframe.frameborder = "0";
   popupIframe.allowTransparency = true;
@@ -61,48 +61,89 @@
 
   var savedScrollTop = 0;
 
+  var socket = null;
+
   function openUI(hash, html, info){
     if (console) console.log(" openUI ", hash, html, info);
-		savedScrollTop = win.pageYOffset;
-		doc.body.appendChild(popupIframe);
-		win.scroll(0, 0);
+    savedScrollTop = win.pageYOffset;
+    win.scroll(0, 0);
+    socket = new easyXDM.Socket({
+      remote: 'http://192.168.1.3:2000/clipper.html?r='+Math.random()*9999999,
+      container: popupIframe,
+      swf: 'http://192.168.1.3:2000/img/easyxdm.swf',
+      swfNoThrottle: true,
+      onMessage: function(message, origin){
+	console.log(arguments);
+	var command = message[0];
+	var params = message[1];
+	switch(command){
+	  case 'setModel' : // for ui to set model after change
+            win[hash].val.model = params;
+	    break;
+	  case 'close' : // for ui to clean itself after using
+            closeUI();
+            cleanSelection();
+	    break;
+        }
+      }
+    });
+    doc.body.appendChild(popupIframe);
+    socket.postMessage(["ping"]);
   }
 
   function closeUI(){
-  	win.scroll(0, savedScrollTop);
-  	doc.body.removeChild(popupIframe);
-  }
-
-  function makeEl(tag) {
-    var el = false;
-    for (var n in tag) if (tag[n].hasOwnProperty) {
-      el = doc.createElement(n);
-      for (var v in tag[n]) if (tag[n][v].hasOwnProperty && typeof tag[n][v] === "string") el[v] = tag[n][v];
-      break;
-    }
-    return el;
+    socket.destroy();
+    win.scroll(0, savedScrollTop);
+    doc.body.removeChild(popupIframe);
   }
 
   // **** main entry
-
-  (function(){
+  function main(){
     var hash = pageHash();
     win[hash] = win[hash] || {
-      val : {
-        model : ""
-      },
-      fun : {
-        setModel : function(model){ // for ui to set model after change
-          win[hash].val.model = model;
-        },
-        close : function(){ // for ui to clean itself after using
-          closeUI();
-          cleanSelection();
-        }
-      }
+      val : { model : "" }
     };
     var sel = getSelection();
     openUI(hash, sel ? win[hash].val.model + sel : getPage(), getInfo());
+  }
+
+  // load dependency
+  (function(){
+    var isLoaded = false, head = document.getElementsByTagName('head')[0];
+    // after load entry
+    function scriptOnLoad(){
+      if (isLoaded || typeof easyXDM === "undefined" || typeof JSON === "undefined") {
+	return;
+      }
+      isLoaded = true;
+      main();
+    }
+    // load easyXDM
+    if (typeof easyXDM === "undefined" || !easyXDM) {
+      var s1 = document.createElement("script");
+      s1.type = "text/javascript";
+      s1.src = "http://192.168.1.3:2000/js/lib/easyXDM.debug.js";
+      s1.onreadystatechange = function(){
+	if (this.readyState === "complete" || this.readyState === "loaded") {
+	  scriptOnLoad();
+	}
+      };
+      s1.onload = scriptOnLoad;
+      head.appendChild(s1);
+    }
+    // load JSON if needed
+    if (typeof JSON === "undefined" || !JSON) {
+      var s2 = document.createElement("script");
+      s2.type = "text/javascript";
+      s2.src = "http://192.168.1.3:2000/js/lib/json2.js";
+      s2.onreadystatechange = function(){
+	 if (this.readyState === "complete" || this.readyState === "loaded") {
+	   scriptOnLoad();
+	 }
+      };
+      s2.onload = scriptOnLoad;
+      head.appendChild(s2);
+    }
   })();
 
 })(window, document, navigator, {});
