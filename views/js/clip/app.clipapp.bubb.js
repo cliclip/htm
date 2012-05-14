@@ -50,23 +50,16 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserTags = function(uid, tag){
     _uid = uid;
-    self = false;
-    var token = document.cookie.split("=")[1];
     getUserTags(uid, function(tags, follows){
-      if(token && token.split(":")[0] == uid){
-	self = true;
-      }
+      self = App.util.self(uid);
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
 
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
-    self = false;
-    var token = document.cookie.split("=")[1];
     getUserBubs(uid, function(tags, follows){
-      if(token && token.split(":")[0] == uid)
-	self = true;
+      self = App.util.self(uid);
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
@@ -104,8 +97,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
     _uid = uid;
-    self = false;
-    if(App.util.getMyUid() == uid) self = true;
+    self = App.util.self(uid);
     if(follow){
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
     }else if(new_tags){
@@ -113,16 +105,22 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   });
 
+  // 只有delete在调用
+  App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
+    Bubb.showUserTags(uid);
+  });
+
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     // console.log("open %s", tag + "  " +_uid);
     // 更新bubb显示
     iframe_call('bubbles', "openTag", tag);
-    //设为false也可直接刷新 但是提交上去的数据是乱码
     var url = mkUrl(tag);
+    //高版本的marionette 设为false也可直接刷新 但是提交上去的数据是乱码
     Backbone.history.navigate(url, false);
     App.vent.trigger("app.clipapp:cliplist.refresh", _uid, url, tag);
   });
 
+  // 需要外包一层事件触发，和bubb实际操作连接
   // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
   App.vent.bind("app.clipapp.bubb:follow", function(tag){
     App.vent.trigger("app.clipapp:follow", _uid, tag);
@@ -132,7 +130,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       iframe_call('bubbles', "unfollowTag", tag);
-      App.vent.trigger("app.clipapp.followerlist:refresh"); // 刷新右边follower列表
+      // 刷新右边follower列表
+      App.vent.trigger("app.clipapp.followerlist:refresh");
       // 若之后已停，则需刷新头像为追
       if(last && last.follows){
 	last.follows = _.without(last.follows,tag);
@@ -147,15 +146,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
     App.vent.trigger("app.clipapp:reclip_tag",  _uid, tag);
   });
-
-  // init
-  App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
-    Bubb.showUserTags(uid);
-  });
-
-  App.addInitializer(function(){
-  });
-
+		      
   // ---- implements
 
   // service api
@@ -190,7 +181,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
-    var url = P+"/user/"+uid+"/meta/0..19";
+    var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..19");
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
@@ -237,7 +228,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     if(tag == '*') {
       url = P+"/user/"+uid+"/follow";
     }else{
-      url  = P+"/user/"+uid+"/follow/"+tag;
+      //encodeURIComponent() 函数可把字符串作为 URI 组件进行编码。
+      //该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： - _ . ! ~ * ' ( ) 。其他字符（比如 ：;/?:@&=+$,# 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。此方法会编码URI中的特殊字符
+      url  = P+"/user/"+uid+"/follow/"+encodeURIComponent(tag);
     }
     var bubbModel = new BubbModel({id: uid});
     bubbModel.destroy({
@@ -283,21 +276,22 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // 需要区分 my/interest、 my/recommend、和 my
   function mkUrl(tag){
+    var encode_tag = encodeURIComponent(tag);
     var url = Backbone.history.fragment;
     var i = url.indexOf("/tag");
     if(_uid){
       if(i >= 0){
 	url = url.substr(0, i);
-	return url += "/tag/"+tag;
+	return url += "/tag/"+encode_tag;
       }else{
 	if(url.indexOf("my/interest") >= 0)
-	  return "/my/interest/tag/"+tag;
+	  return "/my/interest/tag/"+encode_tag;
 	else if(url.indexOf("my/recommend") >= 0)
-	  return "/my/recommend/tag/"+tag;
+	  return "/my/recommend/tag/"+encode_tag;
 	else if(url.indexOf("my") >= 0)
-	  return "/my/tag/"+tag;
+	  return "/my/tag/"+encode_tag;
 	else
-	  return "/user/"+_uid+"/tag/"+tag;
+	  return "/user/"+_uid+"/tag/"+encode_tag;
       }
     }else{
       return "/tag/"+tag;

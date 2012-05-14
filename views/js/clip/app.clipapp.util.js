@@ -35,18 +35,21 @@ App.util = (function(){
     if(clss == "small") top = 150;
     return scroll + top + "px";
   };
-
+  util.unique_url = function(url){
+    var now = new Date();
+    return url + "?now=" + now.getTime();
+  };
   //clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
-    if(image_url && pattern.test(image_url)){
+    var pattern1 = /http:\/\//;
+    if(image_url && pattern.test(image_url)&&!pattern1.test(image_url)){
       return image_url + "/270";
     }else return image_url;
   };
 
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]:[a-z0-9]{32}/;
-   // return "file:///D:/Images/图片/孙燕姿/p_large_8ASw_431000028afc2d11[1].jpg";
+    var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face_/;
     if(imageid == ""){
       return "img/f.jpg";
     }else if(imageid&& pattern.test(imageid)){
@@ -169,20 +172,6 @@ App.util = (function(){
     });
 */
   });
-
-  util.fixed = function(paddingTop){
-    $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
-   // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
-    //var y = $(".user_detail").height() ? $(".user_detail").height() + 5 :0;
-    var y = $(".user_detail").height()+5;
-    $("#bubb").addClass("fixed").css({"margin-top":y+"px", "top": paddingTop});
-  };
-
-  util.remove_fixed = function(paddingTop){
-    $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
-    $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
-  };
-
   //解决关于本地预览图片的浏览器兼容问题
   util.get_img_src = function(sender){
     //chrome
@@ -196,7 +185,7 @@ App.util = (function(){
       sender.blur();
       return document.selection.createRange().text;
     }else{
-      alert("the problem of compatible");
+      alert("the problem of compatible..........");
       return window.URL.createObjectURL(source);
     }
   };
@@ -204,7 +193,11 @@ App.util = (function(){
   util.get_imgid = function(frameid,callback){
     $("#" + frameid).unbind("load");
     $("#" + frameid).load(function(){ // 加载图片
-      var returnVal = this.contentDocument.documentElement.textContent;
+      if(window.navigator.userAgent.indexOf("MSIE")>=1){
+	var returnVal = this.contentWindow.document.documentElement.innerText;
+      }else{
+	var returnVal = this.contentDocument.documentElement.textContent;
+      }
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
 	if(returnObj[0] == 0){
@@ -282,6 +275,7 @@ App.util = (function(){
       is_null: "密码尚未填写"
     },
     pass:{
+      is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
     conpass:{

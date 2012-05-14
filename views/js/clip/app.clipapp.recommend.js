@@ -1,7 +1,6 @@
 //app.Recommapp.js
 
 App.ClipApp.Recommend = (function(App,Backbone,$){
-
   // 用来列出可以转给那些用户
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
@@ -30,12 +29,13 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     events:{
       "click .user" : "getUserAction",
-      "input #recomm_name": "nameListAction",
-      "click #recomm_name": "nameListAction",
-      "focus #recomm_name": "nameListShow",
-      "blur #recomm_name" : "nameBlur",
-      "mouseover .user"   :  "MouseOver",
-      "mouseout .user"    :  "MouseOut",
+      "input #recomm_name"   : "nameListAction",
+      "click #recomm_name"   : "nameListAction",
+      "focus #recomm_name"   : "nameListShow",
+      "blur #recomm_name"    : "nameBlur",
+      "keypress #recomm_name": "selectAction",
+      "mouseover .user"      :  "MouseOver",
+      "mouseout .user"       :  "MouseOut",
       "focus #recommend_text":  "clearAction",
       "blur  #recommend_text":  "textBlur",
       "click #submit"        :  "recommendAction",
@@ -85,7 +85,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	      data.id=li[1].id.split("_")[1];
 	    }
 	  });
-	  $(".name_list").hide();
+	  $(".list").remove();
 	}
 	// 先根据 data[name]找到uid，在进行model的新建和name的set
 	view.tmpmodel.set(data, {
@@ -95,6 +95,47 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	});
 	$(".name_list").hide();
       },200);
+    },
+    selectAction:function(event){
+      if(event.keyCode == 40){
+	var flag = true;
+	var div = $("#name_listDiv").children().children();
+	for(var i=0;i<div.length;i++){
+	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	    $(div[i]).css("background-color","");
+	    $(div[i+1]).css("background-color","#888");
+	    $("#recomm_name").val($(div[i+1]).text().trim());
+	    flag = false;
+	  }
+	}
+	if(flag){
+	  $(div[0]).css("background-color","#888");
+	  $("#recomm_name").val($(div[0]).text().trim());
+	}
+      }else if(event.keyCode == 38){
+	var flag = true;
+	var div = $("#name_listDiv").children().children();
+	for(var i=0;i<div.length;i++){
+	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	    $(div[i]).css("background-color","");
+	    $(div[i-1]).css("background-color","#888");
+	    $("#recomm_name").val($(div[i-1]).text().trim());
+	    flag = false;
+	  }
+	}
+	if(flag){
+	  $(div[div.length-1]).css("background-color","#888");
+	  $("#recomm_name").val($(div[length-1]).text().trim());
+	}
+      }else if(event.keyCode == 13){
+	var div = $("#name_listDiv").children().children();
+	for(var i=0;i<div.length;i++){
+	  if($(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	    $("#recomm_name").val($(div[i]).text().trim());
+	    $("#recommend_text").focus();
+	  }
+	}
+	}
     },
     nameListShow:function(e){
       this.cleanError(e);
@@ -106,6 +147,13 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       }
     },
     MouseOver:function(e){
+      var div = $("#name_listDiv").children().children();
+      for(var i=0;i<div.length;i++){
+	if($(div[i]).css("background-color") ==
+	"rgb(136, 136, 136)"){
+	  $(div[i]).css("background-color","");
+	}
+      }
       $(e.currentTarget).css("background-color","#888");
     },
     MouseOut:function(e){

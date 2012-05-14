@@ -10,7 +10,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       enable:""
     },
     url:function(){
-      return P+"/user/"+this.id+"/rule";
+      return App.util.unique_url(P+"/user/"+this.id+"/rule");
     },
     validate: function(attrs){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;

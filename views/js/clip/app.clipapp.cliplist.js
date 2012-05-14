@@ -3,16 +3,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipList = {};
   var clipListView = {};
-  var collection = {};
-  var start = 1;
-  var end = App.ClipApp.Url.page;
-  var url = "";
-  var base_url = "";
-  var data = "";
-  var type = "";
-//  var contentType;
-  var collection_length;
-  var new_page;
+  var collection = {},start = 1,end = App.ClipApp.Url.page;
+  var url = "",base_url = "",data = "",type = "",collection_length,new_page;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -184,7 +176,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserInterest = function(uid, tag){
     ClipList.flag_show_user = true;
     base_url = "/user/" + uid + "/interest";
-    if(tag) base_url += "/tag/" + tag;
+    if(tag) base_url += "/tag/" + encodeURIComponent(tag);
     base_url = App.ClipApp.Url.base + base_url;
     data = null;
     type = "GET";
@@ -194,7 +186,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserRecommend = function(uid, tag){
     ClipList.flag_show_user = true;
     base_url = "/user/"+uid+"/recomm";
-    if(tag) base_url += "/tag/"+tag;
+    if(tag) base_url += "/tag/"+encodeURIComponent(tag);
     base_url = App.ClipApp.Url.base + base_url;
     data = null;
     type = "GET";
@@ -206,7 +198,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection = clips;
     start = 1;
     end = App.ClipApp.Url.page;
-    url = base_url + "/" + start+".."+ end;
+    url = App.util.unique_url(base_url + "/" + start+".."+ end);
     if(data){
       data = JSON.stringify(data);
       var contentType = "application/json; charset=utf-8";
@@ -233,11 +225,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:nextpage",function(){
+    // console.info("nextpage");
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
-      url = base_url + "/" + start + ".." + end;
+      url = App.util.unique_url(base_url + "/" + start + ".." + end);
       var contentType = "application/json; charset=utf-8";
       if(!data){
 	contentType = null;
@@ -273,8 +266,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var content = App.util.getPreview(addmodel.get("content"), 100);
     //clip本身的id为自己的id，model的id为uid:cid
     model.set({"public":_public,"content":content,"id":id,"clipid":clipid,"tag":tag,"note":note,"user":user,"recommend":""});
-    //model.set({recommend:""});
-
     var fn = clipListView.appendHtml;
     clipListView.appendHtml = function(collectionView, itemView){
       collectionView.$el.prepend(itemView.el);
@@ -298,6 +289,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   });
 
+  // 评论总数以及转载总数的同步
   App.vent.bind("app.clipapp.cliplist:refresh",function(args){
     var model=App.listRegion.currentView.collection.get(args.model_id);
     var clip=model.get("clip");
@@ -308,7 +300,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
     if(args.type == "reclip"){
-      var reprint_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
+      var reprint_count = model.get("reprint_count") ? model.get("reprint_count")+1 : 1;
       model.set({"reprint_count":reprint_count});
     }
   });

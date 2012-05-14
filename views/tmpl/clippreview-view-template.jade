@@ -5,7 +5,7 @@ script(type="text/template",id="clippreview-view-template")
     hgroup.clearfix.
       <a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
         <div class="user_info_small">
-          <img src="<%=App.util.face_url(recommend.user.face,50)%>" title="<%=recommend.user.name%>"/>
+          <img src="<%=App.util.face_url(recommend.user.face,50)%>" title="<%=recommend.user.name%>" onerror="this.src='img/f.jpg'"/>
         </div>
       </a>&nbsp;&nbsp;
       <div class="user_text">
@@ -15,7 +15,7 @@ script(type="text/template",id="clippreview-view-template")
     header#header
       <% if(content && content.image) {%>
       div.article_photo
-        | <img src="<%=App.util.url(content.image)%>" />
+        | <img src="<%=App.util.url(content.image)%>" alt="抱歉，此图片不存在"/>
       <% }if(content && content.text){%>
       <%if(!content.image){ %>
       div.article_con(style="font-size: 16px;line-height: 2.0")

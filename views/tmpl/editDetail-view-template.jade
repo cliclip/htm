@@ -17,7 +17,7 @@ script(type="text/template",id="editDetail-view-template")
             button.link_img 链接图片
             span.url_text.img_upload_span
               input.text#img_upload_url(type="text")
-              input.btn(type="submit",value="确定")
+              input.btn(type="button",value="确定")
           span
             button.format 整理格式
           span.close_w
@@ -25,7 +25,8 @@ script(type="text/template",id="editDetail-view-template")
     div.pop_left
     div.pop_right
       section.pop_inner
-        form#editForm(metod="post")
+        //- css 中设置iframe无边框在ie8- 中不起作用
+        form#editForm(metod="post",frameborder="no",border="0" )
           article.content.content2
             iframe#editor
           div.btn_group.clearfix

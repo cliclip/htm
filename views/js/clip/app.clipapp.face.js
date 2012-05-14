@@ -13,7 +13,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
       follower:"",
       face:""
     },
-    url: P+"/user/"+ this.id + "/info"
+    url:function(){
+      return App.util.unique_url(P+"/user/"+ this.id + "/info");
+    }
   });
 
   var FaceView = App.ItemView.extend({
@@ -39,16 +41,12 @@ App.ClipApp.Face = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.followerlist:refresh");
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
       //App.vent.trigger("app.clipapp.face:show",this.model.id);
-      //App.vent.trigger("app.clipapp.bubb:showUserTags",this.model.id);
-      // 能否触发去修改bubbs中的tag和follow的事件而不是直接showUserTags
       App.vent.trigger("app.clipapp.bubb:refresh",this.model.id,['*']);
-      //refresh 只刷新bubbs 而
     },
     stopAction: function(){
       App.vent.trigger("app.clipapp.followerlist:refresh");
       App.vent.trigger("app.clipapp.bubb:unfollow",'*',this.model.id);
       //App.vent.trigger("app.clipapp.face:show",this.model.id);
-      //App.vent.trigger("app.clipapp.bubb:showUserTags",this.model.id);
       App.vent.trigger("app.clipapp.bubb:refresh",this.model.id,[]);
     },
     userList: function(e){
@@ -67,13 +65,11 @@ App.ClipApp.Face = (function(App, Backbone, $){
     if(uid == App.util.getMyUid()){
       // url中带上随机数 防止ie的缓存导致不能向服务器发出请求
       url = P + "/my/info";
-      var now = new Date();
-      url = P + "/my/info" + "?now=" + now.getTime();
     }else{
       url = P + "/user/"+ uid + "/info";
     }
     var user=new UserModel();
-    user.fetch({url:url});
+    user.fetch({url:App.util.unique_url(url)});
     user.onChange(function(user){
       callback(user);
     });

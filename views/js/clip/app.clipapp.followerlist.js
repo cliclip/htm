@@ -47,7 +47,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     start = 1;
     end = App.ClipApp.Url.page;
     base_url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
-    url=base_url+"/"+start+".."+end;
+    url=App.util.unique_url(base_url+"/"+start+".."+end);
     collection.fetch({url:url});
     collection.onReset(function(followerlist){
       if(!_.isEmpty(followerlist.toJSON())) flag=true;
@@ -68,13 +68,13 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   App.vent.bind("app.clipapp.followerlist:close",function(){
     FollowerList.close();
   });
-  
-  // 作用不明
+
+  // 更新“谁追我”列表
   App.vent.bind("app.clipapp.followerlist:refresh",function(){
     if(App.listRegion.currentView.className =='follow-item'){
       var uid= App.util.getMyUid();
       var id = App.ClipApp.Face.getUserId();
-      if(uid)App.vent.trigger("app.clipapp.showfollower",uid);
+      if(uid) FollowerList.showUserFollower(id);
       else App.vent.trigger("app.clipapp:login");
     }
   });
@@ -84,7 +84,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     if(App.listRegion.currentView.$el[0].className=="follow-item"&&new_page){
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
-      url = base_url + "/" + start + ".." + end;
+      url = App.util.unique_url(base_url + "/" + start + ".." + end);
       collection.fetch({
 	url:url,
 	add:true,
