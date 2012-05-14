@@ -17,7 +17,7 @@ script(type="text/template",id="addClip-view-template")
             button.link_img 链接图片
             span.url_text.img_upload_span
               input.text#img_upload_url(type="text")
-              input.btn(type="submit",value="确定")
+              input.btn(type="submit",value="确定",style="background:#585858;")
           span
             button.format 整理格式
           span.close_w
@@ -26,7 +26,8 @@ script(type="text/template",id="addClip-view-template")
     div.pop_right
       section.pop_inner
         article.content.content2
-          iframe#editor
+          //- css 中设置iframe无边框在ie8- 中不起作用
+          iframe#editor(frameborder="no",border="0")
         div.btn_group.clearfix
           input.verify(type="submit",title="保存",value="确定")
           input.cancel(type="reset",title="放弃",value="取消")

@@ -17,7 +17,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       }
     },
     url:function(){
-      return P+"/user/"+this.id+"/email";
+      var my = App.util.getMyUid();
+      return P+"/user/"+my+"/email";
     }
   });
 
@@ -37,17 +38,10 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     },
     EmailAddcommit: function(){
       var view = this;
-      var data = {};
-      _.each(this.$(":input").serializeArray(), function(obj){
-	 data[obj.name] = obj.value;
-      });
-      this.model.set(data,{
-	error:function(model, error){
-	  view.showError(error);
-	}
-      });
+      var data = view.getInput();
+      view.setModel(this.model, data);
       if(this.model.isValid()){
-	this.model.save({},{
+	this.model.save(data,{
 	  type:"POST",
 	  success: function(model, res){
 	    App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
@@ -65,7 +59,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   });
 
   EmailAdd.showEmailAdd = function(uid){
-    var emailAddModel = new EmailAddModel({id:uid});
+    var emailAddModel = new EmailAddModel();
     var emailAddView = new EmailAddView({model : emailAddModel});
     App.setpopRegion.show(emailAddView);
   };

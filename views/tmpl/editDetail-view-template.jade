@@ -25,7 +25,8 @@ script(type="text/template",id="editDetail-view-template")
     div.pop_left
     div.pop_right
       section.pop_inner
-        form#editForm(metod="post")
+        //- css 中设置iframe无边框在ie8- 中不起作用
+        form#editForm(metod="post",frameborder="no",border="0" )
           article.content.content2
             iframe#editor
           div.btn_group.clearfix

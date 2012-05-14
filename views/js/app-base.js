@@ -67,14 +67,31 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
   showError:function(error){
     error = App.ClipApp.Message.getError(error);
     for(var key in error){
-      this.$("#"+key).addClass("error");
-      this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
+      this.$("input[name="+key+"]").addClass("error");
+      this.$("input[name="+key+"]").after("<span class='error'>"+error[key]+"</span>");
+      if(this.$("input[name="+key+"]").attr("type") == "password")
+	this.$("input[name="+key+"]").val("");
     }
   },
   cleanError:function(e){
-    var id = e.currentTarget.id;
-    this.$("#"+id).siblings("span.error").remove();
-    this.$("#"+id).removeClass("error");
+    var name = e.currentTarget.name;
+    this.$("[input[name="+name+"]").siblings("span.error").remove();
+    this.$("[input[name="+name+"]").removeClass("error");
+  },
+  getInput:function(){
+    var data = {};
+    _.each(this.$(":input").serializeArray(), function(obj){
+      data[obj.name] = obj.value == "" ? undefined : obj.value;
+    });
+    return data;
+  },
+  setModel:function(model, data){
+    var view = this;
+    model.set(data, {
+      error: function(model, error){
+	view.showError(error);
+      }
+    });
   }
 });
 App.Region = Backbone.Marionette.Region;
@@ -148,12 +165,14 @@ App.bind("initialize:after", function(){
   var paddingTop = 0 + "px";
   remove_fixed(paddingTop);
   $(window).scroll(function() {
+    remove_fixed(paddingTop);
     var st = $(window).scrollTop();
     //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
     //var gap = document.getElementById("user_info").style.paddingTop;
     //console.info(gap);
     var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
     var mt = $(".clearfix").offset().top + shifting;
+    //console.info(shifting);
     //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
     if(st>0){
       $(".return_top").show();
@@ -161,16 +180,18 @@ App.bind("initialize:after", function(){
       $(".return_top").hide();
     }
     if(st > mt ){
-      //console.info("锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      //console.log("锁定气泡组件",st,mt);
       fixed(paddingTop);
     } else {
-      //console.info("解除锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      //console.log("解除锁定气泡组件",st,mt);
       remove_fixed(paddingTop);
     }
-    var wh = window.innerHeight;
+    var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
     var lt = $(".loader").offset().top;
+    // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
     if(st + wh > lt && time_gap==true ){
       time_gap = false;
+      //console.info("trigger nextpge");
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){
 	time_gap = true;

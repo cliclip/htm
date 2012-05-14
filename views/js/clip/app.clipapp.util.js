@@ -6,6 +6,13 @@ App.util = (function(){
     return cookie ? cookie.split(":")[0] : null;
   };
 
+  util.getMyFace = function(){
+    return {
+      name: App.ClipApp.Me.me.get("name"),
+      face: App.ClipApp.Me.me.get("face")
+    };
+  };
+
   // main_tag 部分从这取,
   util.getBubbs = function(){
     return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
@@ -49,8 +56,7 @@ App.util = (function(){
   };
 
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]:[a-z0-9]{32}/;
-   // return "file:///D:/Images/图片/孙燕姿/p_large_8ASw_431000028afc2d11[1].jpg";
+    var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face_/;
     if(imageid == ""){
       return "img/f.jpg";
     }else if(imageid&& pattern.test(imageid)){
@@ -279,10 +285,8 @@ App.util = (function(){
       is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
-    conpass:{
-      is_null: "密码尚未填写"
-    },
     confirm:{
+      is_null: "密码尚未填写",
       password_diff: "密码输入不一致"
     },
     email:{
@@ -309,7 +313,8 @@ App.util = (function(){
       fail: "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
     },
     clip:{
-      has_recliped: "您已经拥有这条载录了",
+      has_this_clip: "您已经有该条摘录了",
+      has_recliped: "您已经转载过该条载录了",
       not_exist: "clip不存在"
     },
     content:{

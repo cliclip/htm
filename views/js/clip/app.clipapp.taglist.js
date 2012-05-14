@@ -8,6 +8,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
       taglist : []
     }
   });
+
   var TagListView=App.ItemView.extend({
     tagName:"div",
     className:"taglist-view",
@@ -19,9 +20,8 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     },
     getTagAction:function(e){
       var id=e.target.id;
-      if (id)
-        var tag=document.getElementById(id).innerHTML;
-        App.vent.trigger("app.clipapp.taglist:gettag",tag);
+      var tag=document.getElementById(id).innerHTML;
+      App.vent.trigger("app.clipapp.taglist:gettag",tag);
     },
     MouseOver:function(e){
       var div = $(".taglistDiv").children().children();
@@ -31,7 +31,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
       $(e.currentTarget).css("background-color","#888");
     },
     MouseOut:function(e){
-       $(e.currentTarget).css("background-color","");
+      $(e.currentTarget).css("background-color","");
     }
   });
 
