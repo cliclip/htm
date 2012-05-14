@@ -1,8 +1,8 @@
 App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
-
   var edit_view = "";
+
   var EditView = App.ItemView.extend({
     tagName: "div",
     className: "editDetail-view",
@@ -51,7 +51,10 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
       //content = App.ClipApp.Editor.getContent("editor",img_list);
-      this.model.save({content: content},{
+      var editModel = new EditModel({content:content});
+      editModel.save({},{ // 不用this.mode因为this.model中有 录线图
+	type:'PUT',
+	url: P+"/clip/"+cid,
 	success:function(model,res){
 	  var content = model.get("content");
 	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
@@ -90,19 +93,19 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       });
     }
   };
-
+/*
   ClipEdit.autoResize1= function() { // 作用？
     try {
       document.all["mainFrame"].style.height =
 	mainFrame.document.body.scrollHeight;
     }catch(e){}
   };
-
+*/
   ClipEdit.show = function(clipid){
-    var editModel = new App.Model.DetailModel({id: clipid});
-    editModel.fetch(); // fetch来的model中的content已经是html了
-    editModel.onChange(function(editModel){
-      var editView = new EditView({model: editModel});
+    var model = new App.Model.DetailModel({id: clipid});
+    model.fetch();
+    model.onChange(function(editModel){
+      var editView = new EditView({model: model});
       App.viewRegion.show(editView);
       $(".big_pop").css("top", App.util.getPopTop("big"));
       App.ClipApp.Editor.init();
@@ -120,6 +123,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.clipedit:@success", function(content,cid){
     ClipEdit.close();
     App.vent.trigger("app.clipapp.cliplist:edit", content,cid);
+    App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
   });
 
   App.vent.bind("app.clipapp.clipedit:@cancel", function(){

@@ -22,7 +22,6 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
 
    App.vent.bind("app.clipapp.gotosetup:show", function(key, email){
      var message = App.ClipApp.Message.getMessage(key, email);
-     console.log("message");
      GotoSetup.show(message);
    });
 
