@@ -307,7 +307,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
     if(args.type == "reclip"){
-      var reprint_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
+      var reprint_count = model.get("reprint_count") ? model.get("reprint_count")+1 : 1;
       model.set({"reprint_count":reprint_count});
     }
   });
