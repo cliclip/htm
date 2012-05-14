@@ -3,7 +3,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   var P = App.ClipApp.Url.base;
   var Me = {};
-  App.Model.MyInfoModel = App.Model.extend({
+  var MyInfoModel = App.Model.extend({
     defaults:{
       id:"",
       name:"",
@@ -107,7 +107,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   App.addInitializer(function(){
-    Me.me = new App.Model.MyInfoModel();
+    Me.me = new MyInfoModel();
     Me.me.fetch();
   });
 

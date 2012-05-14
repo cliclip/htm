@@ -38,8 +38,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       e.preventDefault();
       var data = loadData(this.$el);
       // clip在update时需要clip的id
-      data["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.memo:@ok", data);
+      // data["id"] = this.model.id;
+      App.vent.trigger("app.clipapp.memo:@ok", data, this.model.id);
     },
     cancelClick:function(e){
       e.preventDefault();
@@ -48,6 +48,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
   function loadData(el){
+    var _data = {};
     var main_tag = [];
 
     for(var i=0;i<6;i++){
@@ -62,7 +63,9 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     if($.trim($("#organize_text", el).val())!=defaultNote){//过滤defaultNote默认值
       text = $.trim($("#organize_text", el).val());
     }
-    var _data = {note:[{text:text}],tag:tag_list};
+    if(text != "") _data.note = [{text: text}];
+    if(tag_list.length > 0) _data.tag = tag_list;
+
     if($("#memo_private", el).attr("checked")){
       _data["public"] = "false";
     }else{
@@ -126,10 +129,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   // 触发更新clip中的注的事件
-  App.vent.bind("app.clipapp.memo:@ok", function(data){
+  App.vent.bind("app.clipapp.memo:@ok", function(data, cid){
     if(memoType == "update"){
-      var model = new App.Model.DetailModel(data);
+      var model = new MemoModel(data);
       model.save({}, {
+	type:'PUT',
+	url: P+"/clip/"+cid,
 	success: function(model, res){
 	  App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
 	  //注时可能删除tag  不能只refresh

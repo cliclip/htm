@@ -28,10 +28,11 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
    ClipDelete.close = function(){
      App.popRegion.close();
    };
+
    App.vent.bind("app.clipapp.clipdelete:@ok",function(deleteModel){
      deleteModel.destroy({
        success: function(model, res){
-	 App.vent.trigger("app.clipapp.cliplist:remove",deleteModel.id);
+	 App.vent.trigger("app.clipapp.cliplist:remove",model.id);
 	 //在删clip时不能根据删除clip的tag来refresh   bubbs。所以重新load
  	 App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
 	 ClipDelete.close();
@@ -48,7 +49,8 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
      ClipDelete.close();
    });
    App.vent.bind("app.clipapp.clipdelete:@error", function(model, error){
-     ClipDelete.show();
+     // ClipDelete.show();
+     //	删除出错
    });
 
   // TEST
