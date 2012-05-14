@@ -38,15 +38,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     },
     EmailAddcommit: function(){
       var view = this;
-      var data = {};
-      _.each(this.$(":input").serializeArray(), function(obj){
-	 data[obj.name] = obj.value;
-      });
-      this.model.set(data,{
-	error:function(model, error){
-	  view.showError(error);
-	}
-      });
+      var data = view.getInput();
+      view.setModel(this.model, data);
       if(this.model.isValid()){
 	this.model.save(data,{
 	  type:"POST",

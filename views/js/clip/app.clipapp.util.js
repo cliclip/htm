@@ -285,10 +285,8 @@ App.util = (function(){
       is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
-    conpass:{
-      is_null: "密码尚未填写"
-    },
-    confirm_pass:{
+    confirm:{
+      is_null: "密码尚未填写",
       password_diff: "密码输入不一致"
     },
     email:{

@@ -70,20 +70,14 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     ruleUpdate: function(){
       var view = this;
       var uid = this.model.id;
-      var data = {};
-      _.each(this.$(":input").serializeArray(), function(obj){
-	if(obj.name == "to" || obj.name == "cc"){
-	  obj.value = _.compact(obj.value.trim().split(";"));
-	  data[obj.name] = obj.value.length == 0 ? undefined : obj.value;
-	}else{
-	  data[obj.name] = obj.value == "" ? undefined : obj.value;
-	}
-      });
+      var data = view.getInput();
       if(!data.enable) data.enable = false;
       else data.enable = true;
+      if(data.to) data.to =  _.compact(data.to.trim().split(";"));
+      if(data.cc) data.cc =  _.compact(data.cc.trim().split(";"));
       this.tmpmodel.set(data,{
 	error:function(model, error){
-	  if(error.rule == "is_null"){
+	  if(error.rule == "is_null"){ // 因为有特殊逻辑所以要单独set
 	    App.vent.trigger("app.clipapp.message:chinese", error);
 	  }else{
 	    view.showError(error);
@@ -105,28 +99,21 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     blurAction:function(e){
       var view = this;
       var id = e.currentTarget.id;
-      var str = $("#"+id).val().trim();
+      var name = e.currentTarget.name;
+      // 可以统一取单独set
+      var data = view.getInput();
+      var str = null;
+      if(data[id]){
+	str = _.compact(data[id].trim().split(";"));
+      }
       if(str){
-	var arr = [];
-	_.each(str.split(";"),function(a){
-	  arr.push(a.trim());
-	});
-	var value = _.compact(arr).join(";");
-	$("#"+id).val(value+";");
-	arr = arr.length == 0 ? undefined : arr;
-	if(id == "to"){
-	  this.tmpmodel.set({to: arr},{
-	    error: function(model, error){
-	      view.showError(error);
-	    }
-	  });
-	}else{
-	  this.tmpmodel.set({cc: arr},{
-	    error: function(model, error){
-	      view.showError(error);
-	    }
-	  });
-	}
+	var value = _.compact(str).join(";");
+	$("input[name="+name+"]").val(value+";");
+	str = str.length == 0 ? undefined : str;
+	if(id == "to")
+	  view.setModel(this.tmpmodel, {to: str});
+	if(id == "cc")
+	  view.setModel(this.tmpmodel, {cc: str});
       }
     }
   });

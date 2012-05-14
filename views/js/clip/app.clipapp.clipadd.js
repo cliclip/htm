@@ -84,8 +84,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(img_src){
-	console.info("after submit",img_src);
-	//img_list.push(img_src);
+	// console.info("after submit",img_src);
+	// img_list.push(img_src);
 	App.ClipApp.Editor.insertImage("editor", {url: img_src});
       });
     }
@@ -113,7 +113,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     if(url == "my")
       return true;
     if(url.indexOf("my") != -1 && url.indexOf("tag")!= -1){
-      var curr = url.split("/").reverse()[0];
+      var curr = url.split("/").reverse()[0]; // 取得当前tag
       if(tag && tag.toString().indexOf(curr) != -1){return true;}
     }
     return false;
@@ -126,9 +126,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     if(sync(url, tag)){ // 首先判断当前用户所在的位置[]
       App.vent.trigger("app.clipapp.cliplist:add", model);
     }
-    if(tag && tag.lenght > 0){
+    if(tag && tag.lenght > 0){ // 进行bubb的同步
       var uid = App.util.getMyUid();
-      // 进行bubb的同步
       App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
       App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
     }

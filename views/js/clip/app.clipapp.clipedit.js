@@ -93,14 +93,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       });
     }
   };
-
+/*
   ClipEdit.autoResize1= function() { // 作用？
     try {
       document.all["mainFrame"].style.height =
 	mainFrame.document.body.scrollHeight;
     }catch(e){}
   };
-
+*/
   ClipEdit.show = function(clipid){
     var model = new App.Model.DetailModel({id: clipid});
     model.fetch();

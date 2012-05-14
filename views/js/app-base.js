@@ -67,16 +67,31 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
   showError:function(error){
     error = App.ClipApp.Message.getError(error);
     for(var key in error){
-      this.$("#"+key).addClass("error");
-      this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
-      if(key.indexOf("pass") != -1)
-	this.$("#"+key).val("");
+      this.$("input[name="+key+"]").addClass("error");
+      this.$("input[name="+key+"]").after("<span class='error'>"+error[key]+"</span>");
+      if(this.$("input[name="+key+"]").attr("type") == "password")
+	this.$("input[name="+key+"]").val("");
     }
   },
   cleanError:function(e){
-    var id = e.currentTarget.id;
-    this.$("#"+id).siblings("span.error").remove();
-    this.$("#"+id).removeClass("error");
+    var name = e.currentTarget.name;
+    this.$("[input[name="+name+"]").siblings("span.error").remove();
+    this.$("[input[name="+name+"]").removeClass("error");
+  },
+  getInput:function(){
+    var data = {};
+    _.each(this.$(":input").serializeArray(), function(obj){
+      data[obj.name] = obj.value == "" ? undefined : obj.value;
+    });
+    return data;
+  },
+  setModel:function(model, data){
+    var view = this;
+    model.set(data, {
+      error: function(model, error){
+	view.showError(error);
+      }
+    });
   }
 });
 App.Region = Backbone.Marionette.Region;
@@ -173,7 +188,7 @@ App.bind("initialize:after", function(){
     }
     var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
     var lt = $(".loader").offset().top;
-    console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+    // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
     if(st + wh > lt && time_gap==true ){
       time_gap = false;
       //console.info("trigger nextpge");

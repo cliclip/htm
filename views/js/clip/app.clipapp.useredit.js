@@ -21,10 +21,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	error["newpass"] = "is_null";
       }
       if(!attrs.confirm){
-	error["conpass"] = "is_null";
+	error["confirm"] = "is_null";
       }
       if(attrs.newpass && attrs.confirm && attrs.newpass != attrs.confirm){
-	error["confirm_pass"] = "password_diff";
+	error["confirm"] = "password_diff";
       }
       if(_.isEmpty(error)) return null;
       else return error;
@@ -105,8 +105,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "error": "showError", // 虽然是有这样绑定但是，不能直接调用trigger触发
       "focus #pass" : "cleanError",
       "blur #pass" : "blurAction",
-      "focus #confirm_pass": "cleanError",
-      "blur #confirm_pass" : "blurAction"
+      "focus #confirm": "cleanError",
+      "blur #confirm" : "blurAction"
     },
     focusAction:function(e){
       var id = e.currentTarget.id;
@@ -114,12 +114,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if(id == "newpass")
 	$(e.currentTarget).siblings("#pass").show().focus();
       if(id == "conpass")
-	$(e.currentTarget).siblings("#confirm_pass").show().focus();
+	$(e.currentTarget).siblings("#confirm").show().focus();
       this.cleanError(e);
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
-      if(id=="pass" && $("#"+id).val()==""){
+      if(id == "pass" && $("#"+id).val() == ""){
 	$("#"+id).hide();
 	$("#newpass").show();
       }else if(id=="confirm" && $("#"+id).val()==""){
@@ -130,16 +130,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     passUpdate:function(){
       var view = this;
       var uid = this.model.id;
-      var data = {};
-      _.each(this.$(":input").serializeArray(), function(obj){
-	data[obj.name] = obj.value;
-      });
+      var data = view.getInput();
       var passModel = new PassEditModel({id:uid});
-      passModel.set(data,{
-	error: function(model, error){
-	  view.showError(error);
-	}
-      });
+      view.setModel(passModel, data);
       if(passModel.isValid()){
 	passModel.save({},{
 	  type: 'PUT',
@@ -204,15 +197,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $("#name").show();
       $(".set_ok").click(function(){
 	var nameModel = new NameModel();
-	var data = {};
-	_.each(this.$(":input").serializeArray(), function(obj){
-	  data[obj.name] = obj.value;
-	});
-	nameModel.set(data, {
-	  error: function(model, error){
-	    view.showError(error);
-	  }
-	});
+	var data = view.getInput();
+	view.setModel(nameModel, data);
 	if(nameModel.isValid()){
 	  nameModel.save({} ,{
 	    success:function(model,res){
