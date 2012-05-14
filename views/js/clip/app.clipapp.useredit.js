@@ -3,9 +3,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var face_flag = false;
   var EditModel = App.Model.extend({});
+
+  var FaceModel = App.Model.extend({
+    url:function(){
+      var my = App.util.getMyUid();
+      return P+"/user/"+my+"/face";
+    }
+  });
   var PassEditModel = App.Model.extend({
     url:function(){
-      return P+"/user/"+this.id+"/passwd";
+      var my = App.util.getMyUid();
+      return P+"/user/" + my + "/passwd";
     },
     validate:function(attrs){
       var error = {};
@@ -13,7 +21,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	error["newpass"] = "is_null";
       }
       if(!attrs.confirm){
-	error["conpass"] = "is_null";
+	error["confirm"] = "is_null";
       }
       if(attrs.newpass && attrs.confirm && attrs.newpass != attrs.confirm){
 	error["confirm"] = "password_diff";
@@ -26,8 +34,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
   var NameModel = App.Model.extend({
-    defaults:{
-      id:""
+    url:function(){
+      var my = App.util.getMyUid();
+      return  P + "/user/" + my + "/name";
     },
     validate:function(attrs){
       if(!attrs.name || attrs.name == ""){
@@ -37,20 +46,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }else{
 	return null;
       }
-    },
-    url:function(){
-     return  P + "/user/" + this.id + "/name";
     }
   });
 
   var EmailEditModel = App.Model.extend({
     url:function(){
-      var now = new Date();
+      var my = App.util.getMyUid();
       if(this.get("address")){
-	return App.util.unique_url(P+"/user/"+this.id+"/email/"+this.get("address"));
-      }else{
-	return App.util.unique_url(P+"/user/"+this.id+"/email");
+	return P+"/user/"+ my +"/email/"+this.get("address");
       }
+      return App.util.unique_url(P+"/user/"+ my +"/email");
     }
   });
 
@@ -82,10 +87,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       e.preventDefault();
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       var address = e.currentTarget.id;
-      var params = {id:this.model.id,address:address};
       App.vent.trigger("app.clipapp.message:alert", "delemail", address);
       App.vent.bind("app.clipapp.message:sure",function(){
-	App.vent.trigger("app.clipapp.useredit:@emaildel",params);
+	App.vent.trigger("app.clipapp.useredit:@emaildel",address);
       });
     }
   });
@@ -100,8 +104,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "focus #newpass" : "focusAction",
       "error": "showError", // 虽然是有这样绑定但是，不能直接调用trigger触发
       "focus #pass" : "cleanError",
-      "focus #confirm": "cleanError",
       "blur #pass" : "blurAction",
+      "focus #confirm": "cleanError",
       "blur #confirm" : "blurAction"
     },
     focusAction:function(e){
@@ -115,7 +119,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     blurAction:function(e){
       var id = e.currentTarget.id;
-      if(id=="pass" && $("#"+id).val()==""){
+      if(id == "pass" && $("#"+id).val() == ""){
 	$("#"+id).hide();
 	$("#newpass").show();
       }else if(id=="confirm" && $("#"+id).val()==""){
@@ -126,20 +130,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     passUpdate:function(){
       var view = this;
       var uid = this.model.id;
-      var data = {};
-      _.each(this.$(":input").serializeArray(), function(obj){
-	data[obj.name] = obj.value;
-      });
-      var passModel = new PassEditModel({id: uid});
-      passModel.set(data,{
-	error: function(model, error){
-	  view.showError(error);
-	}
-      });
+      var data = view.getInput();
+      var passModel = new PassEditModel({id:uid});
+      view.setModel(passModel, data);
       if(passModel.isValid()){
 	passModel.save({},{
+	  type: 'PUT',
   	  success: function(model, res){
-	    UserEdit.showPassEdit(uid);
+	    UserEdit.showPassEdit();
 	    App.vent.trigger("app.clipapp.message:confirm", "passwd_success");
 	    document.cookie = "token="+res.token;
   	  },
@@ -151,8 +149,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showEmail = function(uid){
-    var emailModel = new EmailEditModel({id:uid});
+  UserEdit.showEmail = function(){
+    var emailModel = new EmailEditModel();
     UserEdit.emailRegion = new App.Region({el:"#email"});
     emailModel.fetch();
     emailModel.onChange(function(emailModel){
@@ -161,21 +159,21 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     });
   };
 
-  UserEdit.showPassEdit = function(uid){
-    var passModel = new PassEditModel({id:uid});
+  UserEdit.showPassEdit = function(){
+    var passModel = new PassEditModel();
     var passView = new PassView({model: passModel});
     UserEdit.passeditRegion = new App.Region({el:".right_bar"});
     UserEdit.passeditRegion.show(passView);
   };
 
-  UserEdit.showUserEdit = function(uid){
-    var editModel = new EditModel({id:uid});
+  UserEdit.showUserEdit = function(){
+    var editModel = new EditModel();
     var editView = new EditView({model: editModel});
     App.mysetRegion.show(editView);
-    UserEdit.showFace(uid);
-    UserEdit.showEmail(uid);
-    App.ClipApp.RuleEdit.show(uid);
-    UserEdit.showPassEdit(uid);
+    UserEdit.showFace();
+    UserEdit.showEmail();
+    App.ClipApp.RuleEdit.show();
+    UserEdit.showPassEdit();
   };
 
 
@@ -198,16 +196,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $(".set_ok").unbind("click");
       $("#name").show();
       $(".set_ok").click(function(){
-	var nameModel = new NameModel({id: uid});
-	var data = {};
-	_.each(this.$(":input").serializeArray(), function(obj){
-	  data[obj.name] = obj.value;
-	});
-	nameModel.set(data, {
-	  error: function(model, error){
-	    view.showError(error);
-	  }
-	});
+	var nameModel = new NameModel();
+	var data = view.getInput();
+	view.setModel(nameModel, data);
 	if(nameModel.isValid()){
 	  nameModel.save({} ,{
 	    success:function(model,res){
@@ -232,23 +223,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showFace = function(uid){
-    var faceModel = new App.Model.MyInfoModel({id:uid});
+  UserEdit.showFace = function(){
+    var face = App.util.getMyFace();
+    var uid = App.util.getMyUid();
+    var faceModel = new FaceModel(face);
     UserEdit.faceRegion = new App.Region({el:".left_bar"});
-    faceModel.fetch({
-      success:function(){
-	//console.info("originalFace:" + editModel.get("face"));
-	var originalFace = faceModel.get("face");
-	faceModel.onChange(function(faceModel){
-	  var faceView = new FaceView({model: faceModel});
-	  UserEdit.faceRegion.show(faceView);
-	});
-	//originalFace 在保存头像时删除不用再次请求，此参数现在没用了
-	//绑定图片的load事件
-	faceLoad(originalFace,uid);//修改头像
-      },
-      error:function(){}
-    });
+    var faceView = new FaceView({model: faceModel});
+    UserEdit.faceRegion.show(faceView);
+    faceLoad(face.face,uid);//修改头像
   };
 
   UserEdit.onUploadImgChange = function(sender){
@@ -299,7 +281,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     });
   };
-
+/*
   function saveFace(facemodel,params){
     facemodel.save(params,{
       url: P+"/user/"+ facemodel.id+"/face",
@@ -313,7 +295,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     });
   };
-
+*/
   function faceLoad(originalFace,uid){
     $("#post_frame_face").unbind("load");
     $("#post_frame_face").load(function(){ // 加载图片
@@ -327,8 +309,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	if(returnObj[0] == 0){
 	  var currentFace = returnObj[1][0];
 	  if(currentFace){
-	    var facemodel = new App.Model.MyInfoModel({id:uid});
-	    saveFace(facemodel,{face:currentFace});
+	    var facemodel = new FaceModel({face:currentFace});
+	    facemodel.save({},{
+	      success:function(model,res){
+		App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
+		face_flag = true;
+	      },
+	      error:function(model,res){
+		//console.info("error!!!!!!!!!!");
+	      }
+	    });
 	    /*if(originalFace && originalFace!=currentFace){
 	      removeFace(facemodel,originalFace,function(){ //删除原始头像
 		saveFace(facemodel,{face:currentFace}); //保存新上传的头像
@@ -387,14 +377,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showFace(uid);
   });
 
-  App.vent.bind("app.clipapp.useredit:@emaildel",function(params){
-    var delModel = new EmailEditModel(params);
-    delModel.destroy({
+  App.vent.bind("app.clipapp.useredit:@emaildel",function(address){
+    var delModel = new EmailEditModel({id:1, address:address});
+    delModel.destroy({ // destroy要求model必须要有id
       success: function(model, res){
-	UserEdit.showEmail(params.id);
+	UserEdit.showEmail();
       },
       error: function(model, res){
-	console.info(res);
+	// console.info(res);
       }
     });
   });
