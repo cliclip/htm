@@ -28,7 +28,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "focus #pass"              : "cleanError",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
-      "click .reg_btn"           : "registerAction"
+      "click .reg_btn"           : "registerAction",
+      "click .weibo"             : "openWeibo"
     },
     initialize:function(){
       this.tmpmodel = new LoginModel();
@@ -91,6 +92,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.login:@cancel");
+    },
+    openWeibo : function(){
+      window.open("http://clickdang.com:5000/oauth/req/weibo");
     }
   });
 
@@ -122,6 +126,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.login:@cancel", function(){
     Login.close();
+  });
+
+  App.vent.bind("oauth:added", function(oauth){
+    console.info("22222222222");
   });
 
  // TEST
