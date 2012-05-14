@@ -109,28 +109,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     clip.public = data.public;
   });
 
-  function sync(url, tag){
-    if(url == "my")
-      return true;
-    if(url.indexOf("my") != -1 && url.indexOf("tag")!= -1){
-      var curr = url.split("/").reverse()[0]; // 取得当前tag
-      if(tag && tag.toString().indexOf(curr) != -1){return true;}
-    }
-    return false;
-  }
-
   App.vent.bind("app.clipapp.clipadd:@success", function(model){
     ClipAdd.close();
-    var url = Backbone.history.fragment;
-    var tag = model.get("tag");
-    if(sync(url, tag)){ // 首先判断当前用户所在的位置[]
-      App.vent.trigger("app.clipapp.cliplist:add", model);
-    }
-    if(tag && tag.lenght > 0){ // 进行bubb的同步
-      var uid = App.util.getMyUid();
-      App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
-      App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
-    }
+    var uid = App.util.getMyUid();
+    Backbone.history.navigate("/my", false); // 添加成功，回到用户主页
+    App.vent.trigger("app.clipapp.cliplist:add", model);
+    App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
+    App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
   });
 
   App.vent.bind("app.clipapp.clipadd:@cancel", function(){

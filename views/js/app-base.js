@@ -67,16 +67,16 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
   showError:function(error){
     error = App.ClipApp.Message.getError(error);
     for(var key in error){
-      this.$("input[name="+key+"]").addClass("error");
-      this.$("input[name="+key+"]").after("<span class='error'>"+error[key]+"</span>");
-      if(this.$("input[name="+key+"]").attr("type") == "password")
-	this.$("input[name="+key+"]").val("");
+      this.$("#"+key).addClass("error");
+      this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
+      if(this.$("#"+key).attr("type") == "password")
+	this.$("#"+key).val("");
     }
   },
   cleanError:function(e){
-    var name = e.currentTarget.name;
-    this.$("[input[name="+name+"]").siblings("span.error").remove();
-    this.$("[input[name="+name+"]").removeClass("error");
+    var id = e.currentTarget.id;
+    this.$("#"+id).siblings("span.error").remove();
+    this.$("#"+id).removeClass("error");
   },
   getInput:function(){
     var data = {};

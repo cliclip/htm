@@ -51,14 +51,13 @@
   }
 
   // **** view layer
-
   var popupIframe = doc.createElement("iframe");
-  popupIframe.src = 'http://192.168.1.3:2000/clipper.html?r='+Math.random()*9999999;
+  popupIframe.id = "editor";
+  popupIframe.src = '//192.168.1.3:5000/clipper.html?r=' + Math.random() * 99999999;
   popupIframe.scrolling = "no";
   popupIframe.frameborder = "0";
   popupIframe.allowTransparency = true;
   popupIframe.setAttribute("style", "position:fixed; left:0px; top:0px; width:100%; height:100%; border:0px; z-index:99999999; _position:absolute; _left:expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top:expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);");
-
   var savedScrollTop = 0;
 
   var socket = null;
@@ -95,6 +94,23 @@
     socket.destroy();
     win.scroll(0, savedScrollTop);
     doc.body.removeChild(popupIframe);
+    doc.body.appendChild(popupIframe);
+    win.scroll(0, 0);
+  }
+
+  function closeUI(){
+    win.scroll(0, savedScrollTop);
+    doc.body.removeChild(popupIframe);
+  }
+
+  function makeEl(tag) {
+    var el = false;
+    for (var n in tag) if (tag[n].hasOwnProperty) {
+      el = doc.createElement(n);
+      for (var v in tag[n]) if (tag[n][v].hasOwnProperty && typeof tag[n][v] === "string") el[v] = tag[n][v];
+      break;
+    }
+    return el;
   }
 
   // **** main entry

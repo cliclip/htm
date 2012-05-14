@@ -1,9 +1,9 @@
-App.ClipApp.Filter = (function(App, Backbone, $){
-  var Filter = {};
+App.ClipApp.Convert = (function(App, Backbone, $){
+  var Convert = {};
   // filter facility
 
   // 代替了filterPastetext的过滤方法
-  Filter.filter = function (html) {
+  Convert.filter = function (html) {
     // console.log(html);
     if (isWord(html)) {
       html = cleanWord(html);
@@ -18,8 +18,8 @@ App.ClipApp.Filter = (function(App, Backbone, $){
     return html;
   };
 
-  Filter.htmlToUbb = _htmlToUbb;
-  Filter.ubbToHtml = _ubbToHtml;
+  Convert.htmlToUbb = _htmlToUbb;
+  Convert.ubbToHtml = _ubbToHtml;
 
   function isWord(strValue) {
     var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
@@ -312,7 +312,7 @@ function decode(m, n) {
   }
   return (code === undefined || code === NaN) ? '&' + n + ';' : String.fromCharCode(code);
 }
-return Filter;
+return Convert;
 
 })(App, Backbone, jQuery);
 
