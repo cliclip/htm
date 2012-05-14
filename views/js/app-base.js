@@ -171,7 +171,7 @@ App.bind("initialize:after", function(){
     }
     var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
     var lt = $(".loader").offset().top;
-    console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+    // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
     if(st + wh > lt && time_gap==true ){
       time_gap = false;
       //console.info("trigger nextpge");
