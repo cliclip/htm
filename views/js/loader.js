@@ -21,7 +21,7 @@
   // get selection content html
   function getSelection(){
     if (win.getSelection) { // all browsers, except ie < 9
-      var sel = win.getSelection();
+      var sel = win.getSelection() || document.selection;
       var html = "";
       for (var i=0;i<sel.rangeCount;i++){
         var d = doc.createElement("span");

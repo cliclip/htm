@@ -24,7 +24,6 @@ $(function() {
     });
 
     App.vent.bind("app.clipapp.clipper:cancel", function(){
-      socket.postMessage(JSON.stringify(["log", r[1]]));
       socket.postMessage(JSON.stringify(["cancel"]));
     });
 
