@@ -97,7 +97,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
   });
 
   Login.show = function(){
-    console.log("loginView :: show");
     var loginModel = new LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);

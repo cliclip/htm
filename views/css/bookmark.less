@@ -17,11 +17,12 @@
 
 // clipdetail等
 #view {
-      masker_layer{display:none;}
+      .masker_layer{z-index:2}
       z-index: 10;
 }
 // clipdetail上边的
 #pop{
+	.masker_layer{z-index:12}
 	z-index: 20;
 }
 .btn_group{
@@ -30,7 +31,17 @@
 	.cancel{width:90px;height:37px;.sprites(-340px,-431px);margin-right:15px;}
 	.cliper{display:block;width:90px;height:37px;.sprites(-340px,-431px);margin-right:15px;}
 }
-
+.masker_layer{
+	width: 100%; //1000px;
+	height: 100%; //1000px;
+	position: fixed; //absolute;
+	_position: absolute;
+	background:#000;
+	opacity: 0.5;
+	filter:alpha(opacity=50);
+	top:0;
+	left:0;
+}
 .small_pop{
 	z-index:20;
 	width:330px;
@@ -286,6 +297,11 @@
 
 html {
   _background:url() fixed;
+}
+.masker_layer{
+    _position: absolute;
+    _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
+    _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
 }
 .mask{
     _position: absolute;
