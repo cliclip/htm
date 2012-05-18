@@ -65,7 +65,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  this.$el.find("p").addClass("text");
 	}else{
 	  this.$el.find("p").addClass("no_img_text");
-	  this.$el.find(".biezhen").remove();
+	  this.$el.find("span.biezhen").remove();
 	}
 	var $newElems = itemView.$el;
 	flag = true;
