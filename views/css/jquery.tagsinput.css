@@ -1,71 +1,10 @@
-div.tagsinput {
-    border:1px solid #CCC;
-    background: #FFF; 
-    padding:5px;
-    width:270px; 
-    height:25px; 
-    overflow-y: auto;}
-div.tagsinput span.tag { 
-    border: 1px solid #a5d24a; -moz-border-radius:2px; -webkit-border-radius:2px; 
-    display: block; 
-    float: left; 
-    padding: 5px; 
-    text-decoration:none; 
-    background: #cde69c; 
-    color: #638421; 
-    margin-right: 5px; 
-    margin-bottom:5px;
-    font-family: helvetica;  
-    font-size:17px;
-}
-div.tagsinput span.tag a { 
-    font-weight: bold; 
-    color: #82ad2b; 
-    text-decoration:none; 
-    font-size: 25px;  
-} 
-div.tagsinput input { 
-    width:80px; 
-    margin:0px;
-    font-family: helvetica;
-    font-size: 13px;
-    border:1px solid transparent; 
-    padding:5px;
-    background: transparent;
-    color: #000; 
-    outline:0px;  
-    margin-right:5px; 
-    margin-bottom:5px;
-}
-div.tagsinput div { 
-    display:block; 
-    float: left; 
-} 
-.taglistDiv {
-    position:absolute;
-    z-index:20;
-    border:1px solid #999999;
-    width:90px;
-    background-color:#FFFFFF;
-}
-div.taglistDiv span {
-    cursor: pointer;
-    display: block;
-    height: 22px;
-    line-height: 22px;
-    padding: 0 0 0 2px;
-    width: 89px;
-}
-.tags_clear {
-    clear: both;
-    width: 100%;
-    height: 0px;
-}
-.not_valid {
-    background: #FBD8DB !important; 
-    color: #90111A !important;
-}
-#obj_tag {
-    width:270px; 
-    height:25px;
-}
+div.tagsinput { border:1px solid #CCC; background: #FFF; padding:5px; width:270px; height:25px; overflow-y: auto;}
+div.tagsinput span.tag { border: 1px solid #a5d24a; -moz-border-radius:2px; -webkit-border-radius:2px; display: block; float: left; padding: 5px; text-decoration:none; background: #cde69c; color: #638421; margin-right: 5px; margin-bottom:5px;font-family: helvetica;  font-size:17px;}
+div.tagsinput span.tag a { font-weight: bold; color: #82ad2b; text-decoration:none; font-size: 25px;  } 
+div.tagsinput input { width:80px; height:25px; margin:0px; font-family: helvetica; font-size: 13px; border:1px solid transparent; padding:5px; background: transparent; color: #000; outline:0px;  margin-right:5px; margin-bottom:5px; }
+div.tagsinput div { display:block; float: left; } 
+.taglistDiv {position:absolute;z-index:20;border:1px solid #999999;width:90px;background-color:#FFFFFF;}
+div.taglistDiv span {cursor: pointer;display: block;height: 22px;line-height: 22px;padding: 0 0 0 2px;width: 89px;}
+.tags_clear { clear: both; width: 100%; height: 0px; }
+.not_valid {background: #FBD8DB !important; color: #90111A !important;}
+#obj_tag {width:270px; height:25px;}

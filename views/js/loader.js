@@ -67,11 +67,13 @@
       swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
       swfNoThrottle: true,
       onLoad: function(e){ // hack, style set
-	var iframe = e.originalTarget;
-	var height = document.body.scrollHeight;
-	var width = document.body.scrollWidth;
+	var iframe = e.target;
+	var height = document.body.clientHeight;
+	var width = document.body.clientWidth;
+	console.log(height);
+	console.log(width);
 	iframe.setAttribute("scrolling", "no");
-	iframe.setAttribute("frameborder", "0");
+	iframe.setAttribute("frameBorder", "0");
 	iframe.setAttribute("allowTransparency", "true");
 	// width:100%;height:100%设定为absolute设置没用
 	iframe.setAttribute("style", "border:0px; z-index:99999999;width:"+width+"px; height:"+height+"px; position:absolute; _position:absolute; left:0px; top:0px; _left:expression(documentElement.scrollLeft+documentElement.clientWidth-this.offsetWidth); _top: expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight);");

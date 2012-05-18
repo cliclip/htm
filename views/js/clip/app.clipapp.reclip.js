@@ -54,8 +54,9 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	main_tag.push($("#main_tag_"+i,el).html().trim());
       }
     };
-    var tag = _.without($("#obj_tag",el).val().split(","),"");
-    tag = _.union(tag, main_tag);
+    var obj_tag = _.without($("#obj_tag",el).val().split(","),"");
+    obj_tag = _(obj_tag).map(function(e){return e.toLocaleLowerCase();});
+    var tag = _.union(obj_tag, main_tag);
     if($("#checkbox",el).attr("checked")){
       var params = {clip:{note: [{text:text}],tag:tag,"public":"false"}};
     }else{
@@ -94,7 +95,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       }
     });
   }
-			
+
   App.vent.bind("app.clipapp.reclip:@submit", function(params,mid){
     reclipSave(params,mid);
     Reclip.close();

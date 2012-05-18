@@ -20,8 +20,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     events: {
       "click .operate" : "Operate",
       "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
-      "click .close_w":"Close",
-      "dblclick .content":"editDetail"
+      "click .close_w": "Close",
+      "click .user_head": "Close",
+      "dblclick .content": "editDetail"
     },
     Operate: function(e){
       e.preventDefault();
@@ -42,7 +43,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     },
-    Close: function(){
+    Close: function(e){
       App.vent.trigger("app.clipapp.clipdetail:@close");
     },
     editDetail:function(e){

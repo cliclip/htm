@@ -146,7 +146,7 @@ App.ClipApp = (function(App, Backbone, $){
   //reclip 用户一个clip
   App.vent.bind("app.clipapp:reclip", function(clipid,model_id){
     var uid = getMyUid();
-    if(!uid) ClipApp.Login.show();
+    if(!uid) ClipApp.Login.show("app.clipapp:reclip");
     else ClipApp.Reclip.show(clipid,model_id);
   });
 

@@ -125,8 +125,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     ClipAdd.close();
     var uid = App.util.getMyUid();
     if(Backbone.history){
-      Backbone.history.navigate("/my", false); // 添加成功，回到用户主页
-      App.vent.trigger("app.clipapp.cliplist:add", model);
+      Backbone.history.navigate("/my", true); // 添加成功，回到用户主页
+      // App.vent.trigger("app.clipapp.cliplist:add", model);
       App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
       App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
     }
