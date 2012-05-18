@@ -5,6 +5,7 @@ script(type="text/template",id="addClip-view-template")
       div.pop_left
         i.note
       div.pop_right
+        | 增
         div.button_frame
           iframe(name="post_frame",id="post_frame")
           |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
@@ -21,7 +22,6 @@ script(type="text/template",id="addClip-view-template")
           span
             button.format 整理格式
           span.close_w
-        | 增
     div.pop_left
     div.pop_right
       section.pop_inner
@@ -29,5 +29,7 @@ script(type="text/template",id="addClip-view-template")
           //- css 中设置iframe无边框在ie8- 中不起作用
           iframe#editor(frameborder="no",border="0")
         div.btn_group.clearfix
-          input.verify(type="submit",title="保存",value="确定")
-          input.cancel(type="reset",title="放弃",value="取消")
+          input.verify(type="button",id="save",title="保存",value="保存")
+          input.cancel(type="button",id="cancel",title="取消",value="取消")
+          input.cliper(type="button",id="ok",title="确定",value="确定")
+          input.cliper(type="button",id="empty",title="清空",value="清空")

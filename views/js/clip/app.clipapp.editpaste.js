@@ -36,7 +36,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }else{
       var data = objEditor.contentWindow.document.body.innerHTML;;
     }
-    return App.ClipApp.Filter.htmlToUbb(data);
+    return App.ClipApp.Convert.htmlToUbb(data);
   };
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
@@ -199,7 +199,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       originalText=filterPasteWord(originalText);
     }
     // 之前是调用的filterPasteText
-    return App.ClipApp.Filter.filter(originalText);
+    return App.ClipApp.Convert.filter(originalText);
   };
   var block = function(e){
     e.preventDefault();

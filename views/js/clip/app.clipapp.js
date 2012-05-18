@@ -194,9 +194,9 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:clipmemo", function(cid){
     var uid = getMyUid();
     if(!uid){
-      ClipApp.Login.show();
+      App.ClipApp.Login.show();
     }else{
-      ClipApp.ClipMemo.show(cid);
+      App.ClipApp.ClipMemo.show(cid);
     }
   });
 
@@ -210,7 +210,6 @@ App.ClipApp = (function(App, Backbone, $){
       ClipApp.Login.show();
     }else{
       // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
-      // location.href="#my";
       ClipApp.ClipAdd.show();
     }
   });

@@ -21,14 +21,16 @@
   // get selection content html
   function getSelection(){
     if (win.getSelection) { // all browsers, except ie < 9
-      var sel = win.getSelection();
+      var sel = win.getSelection() || document.selection;
       var html = "";
       for (var i=0;i<sel.rangeCount;i++){
         var d = doc.createElement("span");
         var r = sel.getRangeAt(i);
+	var fragment = r.extractContents();
+	d.appendChild(fragment);
+	// r.surroundContents(d);
         var parent_element = r.commonAncestorContainer;
         var prev_html = parent_element.innerHTML;
-        r.surroundContents(d);
         html += d.innerHTML;
         parent_element.innerHTML = prev_html;
       }
@@ -42,8 +44,8 @@
   // clean selected
   function cleanSelection(){
     if (win.getSelection) {  // all browsers, except ie < 9
-      var sel = win.getSelection ();                                        
-      sel.removeAllRanges();
+      var sel = win.getSelection ();
+      // sel.removeAllRanges();
     } else if (doc.selection.createRange) { // ie
       doc.selection.createRange();
       doc.selection.empty();
@@ -51,59 +53,114 @@
   }
 
   // **** view layer
-
-  var popupIframe = doc.createElement("iframe");
-  popupIframe.src = '//192.168.1.10:2000/marklet/clipper.html?r=' + Math.random() * 99999999;
-  popupIframe.scrolling = "no";
-  popupIframe.frameborder = "0";
-  popupIframe.allowTransparency = true;
-  popupIframe.setAttribute("style", "position:fixed; left:0px; top:0px; width:100%; height:100%; border:0px; z-index:99999999; _position:absolute; _left:expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top:expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);");
-
-  var savedScrollTop = 0;
+  var socket = null;
 
   function openUI(hash, html, info){
-    if (console) console.log(" openUI ", hash, html, info);
-		savedScrollTop = win.pageYOffset;
-		doc.body.appendChild(popupIframe);
-		win.scroll(0, 0);
+    // if (console) console.log(" openUI ", hash, html, info);
+    if(win[hash].val.show) return;
+    win[hash].val.show = true;
+    savedScrollTop = win.pageYOffset;
+    win.scroll(0, 0);
+    socket = new easyXDM.Socket({
+      remote: 'http://192.168.1.3:5000/clipper.html?r='+Math.random()*9999999,
+      container: doc.body,
+      swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
+      swfNoThrottle: true,
+      onLoad: function(e){ // hack, style set
+	var iframe = e.originalTarget;
+	var height = document.body.scrollHeight;
+	var width = document.body.scrollWidth;
+	iframe.setAttribute("scrolling", "no");
+	iframe.setAttribute("frameborder", "0");
+	iframe.setAttribute("allowTransparency", "true");
+	// width:100%;height:100%设定为absolute设置没用
+	iframe.setAttribute("style", "border:0px; z-index:99999999;width:"+width+"px; height:"+height+"px; position:absolute; _position:absolute; left:0px; top:0px; _left:expression(documentElement.scrollLeft+documentElement.clientWidth-this.offsetWidth); _top: expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight);");
+      },
+      onMessage: function(message, origin){
+        var r = JSON.parse(message);
+	switch(r[0]){
+          case 'ok': // ok 将选中的内容设置在win.val中
+            // 点了确定,在model后边加上所选内容
+            win[hash].val.model += r[1];
+	    closeUI(hash);
+	    break;
+	  case 'cancel': // 回滚
+	    closeUI(hash);
+	    break;
+	  case 'close':
+	    win[hash].val.model = "";
+	    closeUI(hash);
+	    // cleanSelection(); 是否调用没有影响
+	    break;
+	  case 'log':
+	    console.log("log %j",win[hash].val.model);
+	    break;
+        }
+      }
+    });
+    win.scroll(0, 0);
+    socket.postMessage(JSON.stringify(["init",win[hash].val.model+html]));
   }
 
-  function closeUI(){
-  	win.scroll(0, savedScrollTop);
-  	doc.body.removeChild(popupIframe);
+  function closeUI(hash){
+    if(!win[hash].val.show) return;
+    win[hash].val.show = false;
+    socket.destroy();
+    win.scroll(0, savedScrollTop);
   }
 
-  function makeEl(tag) {
-    var el = false;
-    for (var n in tag) if (tag[n].hasOwnProperty) {
-      el = doc.createElement(n);
-      for (var v in tag[n]) if (tag[n][v].hasOwnProperty && typeof tag[n][v] === "string") el[v] = tag[n][v];
-      break;
-    }
-    return el;
-  }
 
   // **** main entry
-
-  (function(){
+  function main(){
     var hash = pageHash();
     win[hash] = win[hash] || {
       val : {
-        model : ""
-      },
-      fun : {
-        setModel : function(model){ // for ui to set model after change
-          win[hash].val.model = model;
-        },
-        close : function(){ // for ui to clean itself after using
-          closeUI();
-          cleanSelection();
-        }
+	model : "",
+	show : false,
+	savedScrollTop : 0
       }
     };
     var sel = getSelection();
     openUI(hash, sel ? win[hash].val.model + sel : getPage(), getInfo());
-  })();
+  }
+
+  // load dependency
+  (function(){
+     // after load entry
+     function scriptOnLoad(){
+       if (isLoaded || typeof easyXDM === "undefined" || typeof JSON === "undefined") {	return;}
+       isLoaded = true;
+       main();
+     }
+     var isLoaded = false, head = document.getElementsByTagName('head')[0];
+     // load easyXDM
+     if (typeof easyXDM === "undefined" || !easyXDM) {
+       var s1 = document.createElement("script");
+       s1.type = "text/javascript";
+       s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.debug.js";
+       s1.onreadystatechange = function(){
+	 if (this.readyState === "complete" || this.readyState === "loaded") {
+	   scriptOnLoad();
+	 }
+       };
+       s1.onload = scriptOnLoad;
+       head.appendChild(s1);
+     }
+     // load JSON if needed
+     if (typeof JSON === "undefined" || !JSON) {
+       var s2 = document.createElement("script");
+       s2.type = "text/javascript";
+       s2.src = "http://192.168.1.3:5000/js/lib/json2.js";
+       s2.onreadystatechange = function(){
+	 if (this.readyState === "complete" || this.readyState === "loaded") {
+	   scriptOnLoad();
+	 }
+       };
+       s2.onload = scriptOnLoad;
+       head.appendChild(s2);
+     }
+     scriptOnLoad(); // try invoke directly
+   })();
 
 })(window, document, navigator, {});
 

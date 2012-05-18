@@ -19,9 +19,38 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       //"change #formUpload":"image_change", // 改成了直接在jade中绑定
       "blur #img_upload_url":"hide_extImg", // extImg输入框失焦就隐藏
       "click .pop_left":"remark_clip",
-      "click .verify":"save",
-      "click .cancel":"abandon",
-      "click .close_w":"abandon"
+      "click .close_w":"abandon",
+      "click #ok": "okcliper",
+      "click #cancel": "cancelcliper",
+      "click #save": "savecliper",
+      "click #empty":"emptycliper"
+    },
+    okcliper:function(){
+      App.vent.trigger("app.clipapp.clipper:ok");
+    },
+    cancelcliper:function(){
+      App.vent.trigger("app.clipapp.clipper:cancel");
+      App.vent.trigger("app.clipapp.clipadd:@cancel");
+    },
+    savecliper:function(e){
+      var target = $(e.currentTarget);
+      target.attr("disabled",true);
+      e.preventDefault();
+      clip.content = App.ClipApp.Editor.getContent("editor");
+      this.model.save(clip,{
+      	success:function(model,res){ // 返回值res为clipid:clipid
+	  model.id = res.clipid; // 将clip本身的id设置给model
+	  App.vent.trigger("app.clipapp.clipper:save");
+	  App.vent.trigger("app.clipapp.clipadd:@success", model);
+	},
+	error:function(model,error){  // 出现错误，触发统一事件
+	  target.attr("disabled",false);
+	  App.vent.trigger("app.clipapp.clipadd:@error");
+	}
+      });
+    },
+    emptycliper:function(){
+      App.vent.trigger("app.clipapp.clipper:empty");
     },
     initialize:function(){
       clip = {};
@@ -43,25 +72,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url});
     },
-    save: function(e){
-      var target = $(e.currentTarget);
-      target.attr("disabled",true);
-      e.preventDefault();
-      // var img_list = [];
-      // clip.content = App.ClipApp.Editor.getContent("editor",img_list);
-      clip.content = App.ClipApp.Editor.getContent("editor");
-      this.model.save(clip,{
-      	success:function(model,res){ // 返回值res为clipid:clipid
-	  model.id = res.clipid; // 将clip本身的id设置给model
-	  App.vent.trigger("app.clipapp.clipadd:@success", model);
-	},
-	error:function(model,error){  // 出现错误，触发统一事件
-	  target.attr("disabled",false);
-	  App.vent.trigger("app.clipapp.clipadd:@error");
-	}
-      });
-    },
     abandon: function(){
+      App.vent.trigger("app.clipapp.clipper:cancel");
       App.vent.trigger("app.clipapp.clipadd:@cancel");
     },
     remark_clip: function(){ // 此全局变量就是为了clip的注操作
@@ -109,25 +121,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     clip.public = data.public;
   });
 
-  function sync(url, tag){
-    if(url == "my")
-      return true;
-    if(url.indexOf("my") != -1 && url.indexOf("tag")!= -1){
-      var curr = url.split("/").reverse()[0]; // 取得当前tag
-      if(tag && tag.toString().indexOf(curr) != -1){return true;}
-    }
-    return false;
-  }
-
   App.vent.bind("app.clipapp.clipadd:@success", function(model){
     ClipAdd.close();
-    var url = Backbone.history.fragment;
-    var tag = model.get("tag");
-    if(sync(url, tag)){ // 首先判断当前用户所在的位置[]
+    var uid = App.util.getMyUid();
+    if(Backbone.history){
+      Backbone.history.navigate("/my", false); // 添加成功，回到用户主页
       App.vent.trigger("app.clipapp.cliplist:add", model);
-    }
-    if(tag && tag.lenght > 0){ // 进行bubb的同步
-      var uid = App.util.getMyUid();
       App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
       App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
     }

@@ -21,7 +21,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	error["newpass"] = "is_null";
       }
       if(!attrs.confirm){
-	error["confirm"] = "is_null";
+	error["conpass"] = "is_null";
       }
       if(attrs.newpass && attrs.confirm && attrs.newpass != attrs.confirm){
 	error["confirm"] = "password_diff";
@@ -102,7 +102,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #pass_confirm[type=submit]" : "passUpdate",
       "focus #conpass" : "focusAction",
       "focus #newpass" : "focusAction",
-      "error": "showError", // 虽然是有这样绑定但是，不能直接调用trigger触发
       "focus #pass" : "cleanError",
       "blur #pass" : "blurAction",
       "focus #confirm": "cleanError",

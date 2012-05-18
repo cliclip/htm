@@ -70,7 +70,7 @@ App.util = (function(){
   };
 
   util.contentToHtml = function(content){
-   return App.ClipApp.Filter.ubbToHtml(content);
+   return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   util.getPreview = function(content, length){
@@ -92,7 +92,7 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return App.ClipApp.Filter.ubbToHtml(content);
+    return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   function _trim(content, length){
@@ -284,8 +284,10 @@ App.util = (function(){
       is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
+    conpass:{
+      is_null:"密码尚未填写"
+    },
     confirm:{
-      is_null: "密码尚未填写",
       password_diff: "密码输入不一致"
     },
     email:{
@@ -338,9 +340,8 @@ App.util = (function(){
     } else if(typeof(errorCode)=="object"){
       var error = {};
       for (key in errorCode){
-	if(ERROR[key]){
-	  error[key] = ERROR[key][errorCode[key]];
-	}
+	// console.log("errorCode["+key+"] :: %j " + errorCode[key]);
+	error[key] = ERROR[key] ? ERROR[key][errorCode[key]] : errorCode[key];;
       }
       return _.isEmpty(error) ? errorCode : error;
     }else{

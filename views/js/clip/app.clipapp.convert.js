@@ -1,9 +1,9 @@
-App.ClipApp.Filter = (function(App, Backbone, $){
-  var Filter = {};
+App.ClipApp.Convert = (function(App, Backbone, $){
+  var Convert = {};
   // filter facility
 
   // 代替了filterPastetext的过滤方法
-  Filter.filter = function (html) {
+  Convert.filter = function (html) {
     // console.log(html);
     if (isWord(html)) {
       html = cleanWord(html);
@@ -18,8 +18,8 @@ App.ClipApp.Filter = (function(App, Backbone, $){
     return html;
   };
 
-  Filter.htmlToUbb = _htmlToUbb;
-  Filter.ubbToHtml = _ubbToHtml;
+  Convert.htmlToUbb = _htmlToUbb;
+  Convert.ubbToHtml = _ubbToHtml;
 
   function isWord(strValue) {
     var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
@@ -174,7 +174,8 @@ App.ClipApp.Filter = (function(App, Backbone, $){
     // 先将不是html的网址转换成 a 标签
     var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
     text = text.replace(re,function(a,b,c){
-      var reg = new RegExp("(=\"|='|=)(?="+a+")");
+      // 使用a来拼正则表达式,报错
+      var reg = new RegExp("(=\"|='|=)(?=http://)");
       if(reg.test(text) || b != "http://"){
 	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转
 	return a;
@@ -312,7 +313,7 @@ function decode(m, n) {
   }
   return (code === undefined || code === NaN) ? '&' + n + ';' : String.fromCharCode(code);
 }
-return Filter;
+return Convert;
 
 })(App, Backbone, jQuery);
 
