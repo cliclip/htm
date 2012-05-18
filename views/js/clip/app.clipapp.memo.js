@@ -80,14 +80,14 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var tags = clip.tag?clip.tag:[];
     var note = clip.note?clip.note:"";
     var text = "";
-    //console.info(tags);
+    tags = _(tags).map(function(e){return e.toLocaleLowerCase();});
     if(!_.isEmpty(note)){
       var ns = _(note).select(function(e){return e.text; })
 	.map(function(e){ return e.text; });
 	_(ns).each(function(n){ text += n+" "; });
     }
     var tag_main = _(_(App.util.getBubbs()).map(function(e){
-    return { tag:e, checked:(_.indexOf(tags,e) != -1) };
+      return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
     var tag_obj = _.difference(tags,App.util.getBubbs());
     return {id:id,note:text,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
@@ -112,6 +112,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       detailModel.fetch({
 	success:function(model,res){
 	  var data = getData(model.toJSON());// 从detail中取得的model
+	  console.log(data);
 	  showMemo(data);
 	},
 	error:function(model,res){}

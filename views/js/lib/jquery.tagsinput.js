@@ -16,50 +16,50 @@
 
 (function($) {
 
-   var delimiter = new Array();
-   var tags_callbacks = new Array();
-   $.fn.doAutosize = function(o){
-     var minWidth = $(this).data('minwidth'),
-     maxWidth = $(this).data('maxwidth'),
-     val = '',
-     input = $(this),
-     testSubject = $('#'+$(this).data('tester_id'));
+  var delimiter = new Array();
+  var tags_callbacks = new Array();
+  $.fn.doAutosize = function(o){
+    var minWidth = $(this).data('minwidth'),
+    maxWidth = $(this).data('maxwidth'),
+    val = '',
+    input = $(this),
+    testSubject = $('#'+$(this).data('tester_id'));
 
-     if (val === (val = input.val())) {return;}
+    if (val === (val = input.val())) {return;}
 
-     // Enter new content into testSubject
-     var escaped = val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-     testSubject.html(escaped);
-     // Calculate new width + whether to change
-     var testerWidth = testSubject.width(),
-     newWidth = (testerWidth + o.comfortZone) >= minWidth ? testerWidth + o.comfortZone : minWidth,
-     currentWidth = input.width(),
-     isValidWidthChange = (newWidth < currentWidth && newWidth >= minWidth)
-			    || (newWidth > minWidth && newWidth < maxWidth);
+    // Enter new content into testSubject
+    var escaped = val.replace(/&/g, '&amp;').replace(/\s/g,' ').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    testSubject.html(escaped);
+    // Calculate new width + whether to change
+    var testerWidth = testSubject.width(),
+    newWidth = (testerWidth + o.comfortZone) >= minWidth ? testerWidth + o.comfortZone : minWidth,
+    currentWidth = input.width(),
+    isValidWidthChange = (newWidth < currentWidth && newWidth >= minWidth)
+			   || (newWidth > minWidth && newWidth < maxWidth);
 
-     // Animate width
-     if (isValidWidthChange) {
+    // Animate width
+    if (isValidWidthChange) {
        input.width(newWidth);
      }
   };
   $.fn.resetAutosize = function(options){
     // alert(JSON.stringify(options));
     var minWidth =  $(this).data('minwidth') || options.minInputWidth || $(this).width(),
-        maxWidth = $(this).data('maxwidth') || options.maxInputWidth || ($(this).closest('.tagsinput').width() - options.inputPadding),
-        val = '',
-        input = $(this),
-        testSubject = $('<tester/>').css({
-            position: 'absolute',
-            top: -9999,
-            left: -9999,
-            width: 'auto',
-            fontSize: input.css('fontSize'),
-            fontFamily: input.css('fontFamily'),
-            fontWeight: input.css('fontWeight'),
-            letterSpacing: input.css('letterSpacing'),
-            whiteSpace: 'nowrap'
-        }),
-        testerId = $(this).attr('id')+'_autosize_tester';
+    maxWidth = $(this).data('maxwidth') || options.maxInputWidth || ($(this).closest('.tagsinput').width() - options.inputPadding),
+    val = '',
+    input = $(this),
+    testSubject = $('<tester/>').css({
+      position: 'absolute',
+      top: -9999,
+      left: -9999,
+      width: 'auto',
+      fontSize: input.css('fontSize'),
+      fontFamily: input.css('fontFamily'),
+      fontWeight: input.css('fontWeight'),
+      letterSpacing: input.css('letterSpacing'),
+      whiteSpace: 'nowrap'
+    }),
+    testerId = $(this).attr('id')+'_autosize_tester';
     if(! $('#'+testerId).length > 0){
       testSubject.attr('id', testerId);
       testSubject.appendTo('body');
@@ -71,90 +71,92 @@
     input.css('width', minWidth);
   };
 
-   $.fn.addTag = function(value,options) {
-     options = jQuery.extend({focus:false,callback:true},options);
-     this.each(function() {
-       var id = $(this).attr('id');
-       var tagslist = $(this).val().split(delimiter[id]);
-       if (tagslist[0] == '') {
-	 tagslist = new Array();
-       }
-       value = jQuery.trim(value);
-       if (options.unique) {
-	 var skipTag = $(tagslist).tagExist(value);
-	 if(skipTag == true) {
-	   //Marks fake input as not_valid to let styling it
-    	   $('#'+id+'_tag').addClass('not_valid');
-    	 }
-       } else {
-	 var skipTag = false;
-       }
-       if (value !='' && skipTag != true) {
-         $('<span>').addClass('tag').append(
-	   $('<span>').text(value).append('&nbsp;&nbsp;'),
-           $('<a>', {
-               href  : '#',
-               title : 'Removing tag',
-               text  : 'x'
-             }).click(function () {
-	       return $('#' + id).removeTag(escape(value));
-	     })).insertBefore('#' + id + '_addTag');
-	 tagslist.push(value);
-	 $('#'+id+'_tag').val('');
-	 if (options.focus) {
-	   $('#'+id+'_tag').focus();
-	 } else {
-	   $('#'+id+'_tag').blur();
-	 }
-	 $.fn.tagsInput.updateTagsField(this,tagslist);
-	 if (options.callback && tags_callbacks[id] && tags_callbacks[id]['onAddTag']) {
-	   var f = tags_callbacks[id]['onAddTag'];
-	   f.call(this, value);
-	 }
-	 if(tags_callbacks[id] && tags_callbacks[id]['onChange']){
-	   var i = tagslist.length;
-	   var f = tags_callbacks[id]['onChange'];
-	   f.call(this, $(this), tagslist[i-1]);
-	 }
-       }
-     });
-     return false;
-   };
+  $.fn.addTag = function(value,options) {
+    options = jQuery.extend({focus:false,callback:true},options);
+    this.each(function() {
+      var id = $(this).attr('id');
+      var tagslist = $(this).val().split(delimiter[id]);
+      if (tagslist[0] == '') {
+	tagslist = new Array();
+      }
+      value = jQuery.trim(value.toLocaleLowerCase());
+      // console.log("value :: " + value);
+      if (options.unique) {
+	var skipTag = $(tagslist).tagExist(value);
+	if(skipTag == true) {
+	  //Marks fake input as not_valid to let styling it
+    	  $('#'+id+'_tag').addClass('not_valid');
+    	}
+      } else {
+	var skipTag = false;
+      }
+      if (value !='' && skipTag != true) {
+        $('<span>').addClass('tag').append(
+	  $('<span>').text(value).append('&nbsp;&nbsp;'),
+          $('<a>', {
+              href  : '#',
+              title : 'Removing tag',
+              text  : 'x'
+	  }).click(function () {
+	    return $('#' + id).removeTag(escape(value));
+	  })
+	).insertBefore('#' + id + '_addTag');
+	tagslist.push(value);
+	$('#'+id+'_tag').val('');
+	if (options.focus) {
+	  $('#'+id+'_tag').focus();
+	} else {
+	  $('#'+id+'_tag').blur();
+	}
+	$.fn.tagsInput.updateTagsField(this,tagslist);
+	if (options.callback && tags_callbacks[id] && tags_callbacks[id]['onAddTag']) {
+	  var f = tags_callbacks[id]['onAddTag'];
+	  f.call(this, value);
+	}
+	if(tags_callbacks[id] && tags_callbacks[id]['onChange']){
+	  var i = tagslist.length;
+	  var f = tags_callbacks[id]['onChange'];
+	  f.call(this, $(this), tagslist[i-1]);
+	}
+      }
+    });
+    return false;
+  };
 
-   $.fn.removeTag = function(value) {
-     value = unescape(value);
-     this.each(function() {
-       var id = $(this).attr('id');
-       var old = $(this).val().split(delimiter[id]);
-       $('#'+id+'_tagsinput .tag').remove();
-       str = '';
-       for (i=0; i< old.length; i++) {
-       if (old[i]!=value) {
-       str = str + delimiter[id] +old[i];
-     }
-   }
+  $.fn.removeTag = function(value) {
+    value = unescape(value);
+    this.each(function() {
+      var id = $(this).attr('id');
+      var old = $(this).val().split(delimiter[id]);
+      $('#'+id+'_tagsinput .tag').remove();
+      str = '';
+      for (i=0; i< old.length; i++) {
+	if (old[i]!=value) {
+	  str = str + delimiter[id] +old[i];
+	}
+      }
 
-   $.fn.tagsInput.importTags(this,str);
-   if (tags_callbacks[id] && tags_callbacks[id]['onRemoveTag']) {
-     var f = tags_callbacks[id]['onRemoveTag'];
-     f.call(this, value);
-   }
-   });
-   return false;
-   };
+      $.fn.tagsInput.importTags(this,str);
+      if (tags_callbacks[id] && tags_callbacks[id]['onRemoveTag']) {
+	var f = tags_callbacks[id]['onRemoveTag'];
+	f.call(this, value);
+      }
+    });
+    return false;
+  };
 
-   $.fn.tagExist = function(val) {
-     return (jQuery.inArray(val, $(this)) >= 0); //true when tag exists, false when not
-   };
+  $.fn.tagExist = function(val) {
+    return (jQuery.inArray(val, $(this)) >= 0); //true when tag exists, false when not
+  };
 
-   // clear all existing tags and import new ones from a string
-   $.fn.importTags = function(str) {
-     id = $(this).attr('id');
-     $('#'+id+'_tagsinput .tag').remove();
-     $.fn.tagsInput.importTags(this,str);
-   }
+  // clear all existing tags and import new ones from a string
+  $.fn.importTags = function(str) {
+    id = $(this).attr('id');
+    $('#'+id+'_tagsinput .tag').remove();
+    $.fn.tagsInput.importTags(this,str);
+  };
 
-   $.fn.tagsInput = function(options) {
+  $.fn.tagsInput = function(options) {
     var settings = jQuery.extend({
       interactive:true,
       defaultText:'add a tag',
@@ -172,144 +174,140 @@
       inputPadding: 6*2
     },options);
 
-     this.each(function() {
-       if (settings.hide) {
-	 $(this).hide();
-       }
-       var id = $(this).attr('id');
+    this.each(function() {
+      if (settings.hide) {$(this).hide();}
+      var id = $(this).attr('id');
 
-       var data = jQuery.extend({
-	 pid:id,
-	 real_input: '#'+id,
-	 holder: '#'+id+'_tagsinput',
-	 input_wrapper: '#'+id+'_addTag',
-	 fake_input: '#'+id+'_tag'
-       },settings);
-       delimiter[id] = data.delimiter;
+      var data = jQuery.extend({
+	pid:id,
+	real_input: '#'+id,
+	holder: '#'+id+'_tagsinput',
+	input_wrapper: '#'+id+'_addTag',
+	fake_input: '#'+id+'_tag'
+      },settings);
+      delimiter[id] = data.delimiter;
 
-       if (settings.onAddTag || settings.onRemoveTag || settings.onChange) {
-	 tags_callbacks[id] = new Array();
-	   tags_callbacks[id]['onAddTag'] = settings.onAddTag;
-	   tags_callbacks[id]['onRemoveTag'] = settings.onRemoveTag;
-	   tags_callbacks[id]['onChange'] = settings.onChange;
-       }
+      if (settings.onAddTag || settings.onRemoveTag || settings.onChange) {
+	tags_callbacks[id] = new Array();
+	tags_callbacks[id]['onAddTag'] = settings.onAddTag;
+	tags_callbacks[id]['onRemoveTag'] = settings.onRemoveTag;
+	tags_callbacks[id]['onChange'] = settings.onChange;
+      }
 
-       var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
+      var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
 
-       if (settings.interactive) {
-	 markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" /><div class="taglistDiv" style="display:none;" ></div>';
-       }
+      if (settings.interactive) {
+	markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" /><div class="taglistDiv" style="display:none;" ></div>';
+      }
 
-       markup = markup + '</div><div class="tags_clear"></div></div>';
+      markup = markup + '</div><div class="tags_clear"></div></div>';
 
-       $(markup).insertAfter(this);
+      $(markup).insertAfter(this);
 
-       $(data.holder).css('width',settings.width);
-       $(data.holder).css('height',settings.height);
+      $(data.holder).css('width',settings.width);
+      $(data.holder).css('height',settings.height);
 
-       if ($(data.real_input).val()!='') {
-	 $.fn.tagsInput.importTags($(data.real_input),$(data.real_input).val());
-       }
-       if (settings.interactive) {
-	 $(data.fake_input).val($(data.fake_input).attr('data-default'));
-	 $(data.fake_input).css('color',settings.placeholderColor);
-	 $(data.fake_input).resetAutosize(settings);
+      if ($(data.real_input).val()!='') {
+	$.fn.tagsInput.importTags($(data.real_input),$(data.real_input).val());
+      }
+      if (settings.interactive) {
+	$(data.fake_input).val($(data.fake_input).attr('data-default'));
+	$(data.fake_input).css('color',settings.placeholderColor);
+	$(data.fake_input).resetAutosize(settings);
 
-	 $(data.holder).bind('click',data,function(event) {
-	   $(event.data.fake_input).focus();
-	 });
+	$(data.holder).bind('click',data,function(event) {
+	  $(event.data.fake_input).focus();
+	});
 
-	 $(data.fake_input).bind('input',data,function(event) {
-	   var str = $(data.fake_input).val().trim();
-	   App.vent.trigger("app.tagsinput:taglist",str);
-	   if( $(".taglistDiv").children().children().length != 0){
-	     $(".taglistDiv").show();
-	   }else{
-	     $(".taglistDiv").hide();
-	   }
-	 });
+	$(data.fake_input).bind('input',data,function(event) {
+	  var str = $(data.fake_input).val().trim();
+	  App.vent.trigger("app.tagsinput:taglist",str);
+	  if( $(".taglistDiv").children().children().length != 0){
+	    $(".taglistDiv").show();
+	  }else{
+	    $(".taglistDiv").hide();
+	  }
+	});
 
-	 $(data.fake_input).bind('click',data,function(event) {
-	   var str = $(data.fake_input).val().trim();
-	   App.vent.trigger("app.tagsinput:taglist",str);
-	 });
+	$(data.fake_input).bind('click',data,function(event) {
+	  var str = $(data.fake_input).val().trim();
+	  App.vent.trigger("app.tagsinput:taglist",str);
+	});
 
-	 $(data.fake_input).bind('blur',data,function(event) {
-	   setTimeout(function(){
-	     App.vent.trigger("app.clipapp.taglist:close");
-	     $(".taglistDiv").hide();
-	   },200);
-	 });
+	$(data.fake_input).bind('blur',data,function(event) {
+	  setTimeout(function(){
+	    App.vent.trigger("app.clipapp.taglist:close");
+	    $(".taglistDiv").hide();
+	  },200);
+	});
 
-	 App.vent.bind("app.clipapp.taglist:gettag",function(tag){
-	   $(data.real_input).addTag(tag,{focus:false,unique:(settings.unique)});
-	 });
+	App.vent.bind("app.clipapp.taglist:gettag",function(tag){
+	  $(data.real_input).addTag(tag,{focus:false,unique:(settings.unique)});
+	});
 
-	 $(data.fake_input).bind('focus',data,function(event) {
-	   if( $(".taglistDiv").children().children().length != 0){
-	     $(".taglistDiv").show();
-	   }else{
-	     $(".taglistDiv").hide();
-	   }
-	 });
+	$(data.fake_input).bind('focus',data,function(event) {
+	  if( $(".taglistDiv").children().children().length != 0){
+	    $(".taglistDiv").show();
+	  }else{
+	    $(".taglistDiv").hide();
+	  }
+	});
 
+	$(data.fake_input).bind('focus',data,function(event) {
+	  if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) {
+	    $(event.data.fake_input).val('');
+	  }
+	  $(event.data.fake_input).css('color','#000000');
+	});
 
+	if (settings.autocomplete_url != undefined) {
+	  autocomplete_options = {source: settings.autocomplete_url};
+	  for (attrname in settings.autocomplete) {
+	    autocomplete_options[attrname] = settings.autocomplete[attrname];
+	  }
 
-	 $(data.fake_input).bind('focus',data,function(event) {
-	   if ($(event.data.fake_input).val()==$(event.data.fake_input).attr('data-default')) {
-	     $(event.data.fake_input).val('');
-	   }
-	   $(event.data.fake_input).css('color','#000000');
-	 });
-
-	 if (settings.autocomplete_url != undefined) {
-	   autocomplete_options = {source: settings.autocomplete_url};
-	   for (attrname in settings.autocomplete) {
-	     autocomplete_options[attrname] = settings.autocomplete[attrname];
-	   }
-
-	   if (jQuery.Autocompleter !== undefined) {
-	     $(data.fake_input).autocomplete(settings.autocomplete_url, settings.autocomplete);
-	     $(data.fake_input).bind('result',data,function(event,data,formatted) {
-	       if (data) {
-		 $('#'+id).addTag(data[0] + "",{focus:true,unique:(settings.unique)});
-	       }
-	     });
-	   } else if (jQuery.ui.autocomplete !== undefined) {
-	     $(data.fake_input).autocomplete(autocomplete_options);
-	     $(data.fake_input).bind('autocompleteselect',data,function(event,ui) {
-	       $(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
-		 return false;
-	       });
-	   }
-	 } else {
-	   // if a user tabs out of the field, create a new tag
-	   // this is only available if autocomplete is not used.
-	   $(data.fake_input).bind('blur',data,function(event) {
-	     var d = $(this).attr('data-default');
-	     if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) {
-	       if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
-		 $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});}
-	       } else {
-		 $(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
-		 $(event.data.fake_input).css('color',settings.placeholderColor);
-	       }
-	       return false;
-	     });
-	 }
-	 // if user types a comma, create a new tag
-	 $(data.fake_input).bind('keypress',data,function(event) {
-	   if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
-	     if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
-               $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
-	     }
-	     $(event.data.fake_input).resetAutosize(settings);
-	     App.vent.trigger("app.tagsinput:taglist");
-	     return false;
-	   } else if (event.data.autosize) {
-	     $(event.data.fake_input).doAutosize(settings);
-	   }
-	 });
+	  if (jQuery.Autocompleter !== undefined) {
+	    $(data.fake_input).autocomplete(settings.autocomplete_url, settings.autocomplete);
+	    $(data.fake_input).bind('result',data,function(event,data,formatted) {
+	      if (data) {
+		$('#'+id).addTag(data[0] + "",{focus:true,unique:(settings.unique)});
+	      }
+	    });
+	  } else if (jQuery.ui.autocomplete !== undefined) {
+	    $(data.fake_input).autocomplete(autocomplete_options);
+	    $(data.fake_input).bind('autocompleteselect',data,function(event,ui) {
+	      $(event.data.real_input).addTag(ui.item.value,{focus:true,unique:(settings.unique)});
+	      return false;
+	    });
+	  }
+	} else {
+	  // if a user tabs out of the field, create a new tag
+	  // this is only available if autocomplete is not used.
+	  $(data.fake_input).bind('blur',data,function(event) {
+	    var d = $(this).attr('data-default');
+	    if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) {
+	      if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
+		$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});}
+	    } else {
+	      $(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
+	      $(event.data.fake_input).css('color',settings.placeholderColor);
+	    }
+	    return false;
+	  });
+	}
+	// if user types a comma, create a new tag
+	$(data.fake_input).bind('keypress',data,function(event) {
+	  if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
+	    if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
+              $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+	    }
+	    $(event.data.fake_input).resetAutosize(settings);
+	    App.vent.trigger("app.tagsinput:taglist");
+	    return false;
+	  } else if (event.data.autosize) {
+	    $(event.data.fake_input).doAutosize(settings);
+	  }
+	});
 	 //Delete last tag on backspace
 	 data.removeWithBackspace && $(data.fake_input).bind('keydown', function(event){
 	 if(event.keyCode == 8 && $(this).val() == ''){
@@ -319,7 +317,7 @@
 	   last_tag = last_tag.replace(/[\s]+x$/, '');
 	   $('#' + id).removeTag(escape(last_tag));
 	   $(this).trigger('focus');
-	 }else if(event.keyCode == 38){
+	 }else if(event.keyCode == 38){ // Down
 	   var flag = true;
 	   var div = $(".taglistDiv").children().children();
 	   for(var i=0;i<div.length;i++){
@@ -334,7 +332,7 @@
 	     $(div[div.length-1]).css("background-color","#888");
 	     $(data.fake_input).val($(div[length-1]).text());
 	   }
-	 }else if(event.keyCode == 40){
+	 }else if(event.keyCode == 40){ // UP
 	   var flag = true;
 	   var div = $(".taglistDiv").children().children();
 	   for(var i=0;i<div.length;i++){

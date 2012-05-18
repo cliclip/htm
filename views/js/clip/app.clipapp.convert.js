@@ -4,17 +4,10 @@ App.ClipApp.Convert = (function(App, Backbone, $){
 
   // 代替了filterPastetext的过滤方法
   Convert.filter = function (html) {
-    // console.log(html);
-    if (isWord(html)) {
-      html = cleanWord(html);
-      // console.log(html);
-    }
+    if (isWord(html)) {html = cleanWord(html);}
     html = cleanHtml(html);
-    // console.log(html);
     html = _htmlToUbb(html); // 过滤
-    // console.log(html);
     html = _ubbToHtml(html); // 显示
-    // console.log(html);
     return html;
   };
 
@@ -208,7 +201,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\n{2,}/ig, "<\/p><p>");
     text = text.replace(/\n/ig, "<\/br>");
-    text = "<p>"+text+"</p>";
+    // text = "<p>"+text+"</p>"; // 去掉P标签
     return text;
   }
 

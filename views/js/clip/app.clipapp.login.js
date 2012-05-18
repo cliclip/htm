@@ -67,7 +67,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	type: "POST",
   	success: function(model, res){
 	  App.vent.trigger("app.clipapp.clipper:login");
-  	  App.vent.trigger("app.clipapp.login:@success", res);
+  	  App.vent.trigger("app.clipapp.login:success", res); // fetch Me.me
   	},
   	error:function(model, res){
 	  that.showError(res);
@@ -107,7 +107,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.login:@success", function(res){
+  App.vent.bind("app.clipapp.login:success", function(res){
     var data = new Date();
     data.setTime(data.getTime() + 7*24*60*60*1000);
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
