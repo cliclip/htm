@@ -15,6 +15,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     className : "bubb-view",
     render : function(){
       this.$el.attr("frameborder", "0",0);
+      this.$el.attr("scrolling", "no");
       this.$el.attr("src", "bub.html");
       return this;
     }
