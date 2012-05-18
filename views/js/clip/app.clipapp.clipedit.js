@@ -2,7 +2,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var edit_view = "";
-
+  var EditModel = App.Model.extend({});
   var EditView = App.ItemView.extend({
     tagName: "div",
     className: "editDetail-view",

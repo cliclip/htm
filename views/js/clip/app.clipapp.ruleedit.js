@@ -73,8 +73,8 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       var data = view.getInput();
       if(!data.enable) data.enable = false;
       else data.enable = true;
-      if(data.to) data.to =  _.compact(data.to.trim().split(";"));
-      if(data.cc) data.cc =  _.compact(data.cc.trim().split(";"));
+      if(data.to) data.to =  _.compact($.trim(data.to).split(";"));
+      if(data.cc) data.cc =  _.compact($.trim(data.cc).split(";"));
       this.tmpmodel.set(data,{
 	error:function(model, error){
 	  if(error.rule == "is_null"){ // 因为有特殊逻辑所以要单独set
@@ -104,7 +104,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       var data = view.getInput();
       var str = null;
       if(data[id]){
-	str = _.compact(data[id].trim().split(";"));
+	str = _.compact($.trim(data[id]).split(";"));
       }
       if(str){
 	var value = _.compact(str).join(";");
@@ -120,14 +120,14 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 
   function dealEmail(e){
     var key = e.keyCode;
-    var str = ($(e.currentTarget).val()).trim();
+    var str = $.trim($(e.currentTarget).val());
     //按键为 tab 空格 , ; 时处理输入框中的字符串
     if((key==9||key==32||key==188||key==59)){
       if(str){
 	// 以;把字符串分为数组，取出没个email的前后空格。
 	var arr = [];
 	_.each(str.split(";"),function(a){
-	  arr.push(a.trim());
+	  arr.push($.trim(a));
 	});
 	//在取出无用数据后（空字符串等），再放回输入框
 	$(e.currentTarget).val(_.compact(arr).join(";")+";");

@@ -240,20 +240,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }else{
       $("#confirm_face").show();
       if( sender.files && sender.files[0]){
-	var img = new Image();
-	img.src = App.util.get_img_src(sender);
-	img.onload=function(){
-	  if(img.complete ||img.readyState=="complete"||img.readyState=="loaded"){
-	    console.info("complete");
-	    $("#myface").attr("src",img.src);
-	    var style = resize_img(img.width,img.height);
-	    $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
-	  }
-	};
+	preview_face(sender);// ie之外其他浏览器预览头像
 	//$("#myface").attr("src",img.src);
 	return true;
-      }else if(sender.value){
-	var src = App.util.get_img_src(sender);
+      }else if(sender.value && window.navigator.userAgent.indexOf("MSIE")>=1){
+	sender.select();
+	sender.blur();
+	var src = document.selection.createRange().text;
 	document.getElementById("head_img").innerHTML= "<div id='head'></div>";
 	var obj = document.getElementById("head");
 	var obj1 =  document.getElementById("preview_size_fake");
@@ -332,6 +325,22 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     });
   }
+//ie 之外的其他浏览器本地预览头像
+  function preview_face(sender){
+      var reader = new FileReader();
+      reader.onload = function(evt){
+	var img = new Image();
+	img.src = evt.target.result;
+	img.onload=function(){
+	  if(img.complete ||img.readyState=="complete"||img.readyState=="loaded"){
+	    $("#myface").attr("src",img.src);
+	    var style = resize_img(img.width,img.height);
+	    $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
+	  }
+	};
+      };
+      reader.readAsDataURL(sender.files[0]);
+  };
 
   function set_preview_size( objPre, originalWidth, originalHeight ){
     var style = resize_img(originalWidth, originalHeight);

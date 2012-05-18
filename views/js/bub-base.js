@@ -234,8 +234,8 @@ $(function() {
       open: function(){
 	// this.model.set("current", true);
 	// game.open(this.$(".bub span").text());
-	// window.scrollTo(0,0);
 	fire("open", this.$(".bub span").text());
+	parent.document.getElementById("return_top").click();
       },
       follow: function(){
 	// this.model.set("follow", true);

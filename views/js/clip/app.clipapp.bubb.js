@@ -14,27 +14,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     tagName : "iframe",
     className : "bubb-view",
     render : function(){
+      this.$el.attr("frameborder", "0",0);
       this.$el.attr("src", "bub.html");
       return this;
-    },
-    initialize: function(){
-      //$("#bubb iframe").css({frameborder:"no",border:"0"});
-      set_border();
     }
   });
-  function set_border(){
-    console.log("setborder");
-    if(document.getElementById("bubbles")){
-      //document.getElementById("bubbles").setAttribute("frameborder", "no", 0);
-      //document.getElementById("bubbles").setAttribute("border", "0", 0);
-      console.log("setborder success");
-    }else {
-      setTimeout(function(){
-	console.log("setborder........");
-	set_border();
-      },200);
-    }
-  }
   // constants
 
   // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
@@ -260,7 +244,14 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function iframe_call(ifname, fname, fargs){
     var _iframe =  document.getElementById(ifname);
-    var ifwin = _iframe.contentDocument.parentWindow ? _iframe.contentDocument.parentWindow :_iframe.contentDocument.defaultView;
+    var ifwin;
+    if(!_iframe.contentDocument){//ie6 7
+         ifwin = document.frames[ifname].document.parentWindow;;
+    }else if(_iframe.contentDocument.parentWindow){//ie8
+      ifwin = _iframe.contentDocument.parentWindow;
+    }else{//其他主流浏览器
+      ifwin = _iframe.contentDocument.defaultView;
+    }
     if(ifwin && ifwin[fname]){
       // console.info("ifwin :: "+ifwin);
       // console.log(ifwin[fname]);
@@ -269,7 +260,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       // console.dir(fargs);
       ifwin[fname](fargs);
     }else { // waiting for iframe load
-      // console.info("waiting for iframe reload");
+      //console.info("waiting for iframe reload");
       setTimeout(function(){ iframe_call(ifname, fname, fargs); }, 100);
     }
   }

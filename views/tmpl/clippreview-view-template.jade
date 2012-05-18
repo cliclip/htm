@@ -18,14 +18,12 @@ script(type="text/template",id="clippreview-view-template")
       div.article_photo
         | <img id="img_<%=id.replace(/:/g,'_')%>" src="<%=App.util.url(content.image)%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)"/>
       <% }if(content && content.text){%>
-      <%if(!content.image){ %>
-      div.article_con(style="font-size: 16px;line-height: 2.0")
-        br
-        | <%= content.text %>
-      <%}else{%>
       div.article_con
+        <%if(!content.image){ %>
+        br
+        <%}%>
         | <%= content.text %>
-      <%}}%>
+      <%}%>
     footer.master
       div.metas.icons_frame
         span.icon_block
@@ -54,9 +52,7 @@ script(type="text/template",id="clippreview-view-template")
           <i class="refresh operate" title="转" id="<%=user.id%>:<%=id%>"></i>
           <i class="comment operate" title="评" id="<%=user.id%>:<%=id%>"></i>          
         <% } %>
-    <%if(content && content.image){ %>
     span.biezhen
-    <%}%>
     b.comer_topleft
     b.comer_topright
     b.comer_bottomleft

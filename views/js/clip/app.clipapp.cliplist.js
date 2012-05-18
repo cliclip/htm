@@ -61,13 +61,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	});
       });
       this.bind("item:rendered",function(itemView){
-	var $newElems = itemView.$el.css({ opacity: 1 });
+	if(this.model.get("content").image){
+	  this.$el.find("p").addClass("text");
+	}else{
+	  this.$el.find("p").addClass("no_img_text");
+	  this.$el.find(".biezhen").remove();
+	}
+	var $newElems = itemView.$el;
 	flag = true;
 	$newElems.imagesLoaded(function(){
-	  $newElems.animate({ opacity: 1 });
 	  $("#list").masonry("reload");
-	  setTimeout(function(){
-	  },2000);
 	});
       });
     },
@@ -111,17 +114,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     className: "preview-view",
     itemView: ClipPreviewView,
     initialize: function(){
-      function Reload(){
-	console.info("reload");
-	$("#list").masonry("reload");
-	if(flag){
-	  setTimeout(function(){
-	    Reload();
-	  },1000);
-	}
-      }
-
-      //Reload();
       /*
       this.bind("collection:rendered",function(itemView){
       	var $container = $('#list');

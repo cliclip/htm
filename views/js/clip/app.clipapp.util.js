@@ -179,25 +179,12 @@ App.util = (function(){
     });
 */
   });
-  //解决关于本地预览图片的浏览器兼容问题
-  util.get_img_src = function(sender){
-    //chrome
-    if (window.webkitURL && window.webkitURL.createObjectURL) {
-      return window.webkitURL.createObjectURL(sender.files[0]);
-    }else if(window.URL && window.URL.createObjectURL) {
-      //firefox
-      return window.URL.createObjectURL(sender.files[0]);
-    }else if (window.navigator.userAgent.indexOf("MSIE")>=1){
-      sender.select();
-      sender.blur();
-      return document.selection.createRange().text;
-    }else{
-      alert("the problem of compatible..........");
-      return window.URL.createObjectURL(source);
-    }
-  };
   util.img_load = function(img){
     if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){
+      //console.info(img.width);
+      if(img.width>270){
+	//img.width=270;
+      }
       $("#_" + img.id).hide();
       $("#"+img.id).show();
     }
