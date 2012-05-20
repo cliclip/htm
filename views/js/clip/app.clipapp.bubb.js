@@ -64,7 +64,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
-  Bubb.followUsreBubs = function(uid, tag){
+  Bubb.followUserBubs = function(uid, tag){
     if(!uid) _uid = 2;
     followUserTag(uid, tag, function(){
       // 更新bubb显示

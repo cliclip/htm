@@ -70,8 +70,6 @@
 	var iframe = e.target;
 	var height = document.body.clientHeight;
 	var width = document.body.clientWidth;
-	console.log(height);
-	console.log(width);
 	iframe.setAttribute("scrolling", "no");
 	iframe.setAttribute("frameBorder", "0");
 	iframe.setAttribute("allowTransparency", "true");

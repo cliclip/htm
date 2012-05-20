@@ -114,8 +114,6 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:login", function(){
-    // var uid = getMyUid();
-    // ClipApp.Login.show(uid);
     ClipApp.Login.show();
   });
 
@@ -146,14 +144,19 @@ App.ClipApp = (function(App, Backbone, $){
   //reclip 用户一个clip
   App.vent.bind("app.clipapp:reclip", function(clipid,model_id){
     var uid = getMyUid();
-    if(!uid) ClipApp.Login.show("app.clipapp:reclip");
+    // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
+    if(!uid) ClipApp.Login.show(function(){
+      App.ClipApp.Reclip.show(clipid,model_id);
+    });
     else ClipApp.Reclip.show(clipid,model_id);
   });
 
   //对 user's tag下的clip的reclip
   App.vent.bind("app.clipapp:reclip_tag", function(user,tag){
     var uid = getMyUid();
-    if(!uid) ClipApp.Login.show();
+    if(!uid) ClipApp.Login.show(function(){
+      App.ClipApp.ReclipTag.show(user, tag);
+    });
     else ClipApp.ReclipTag.show(user,tag);
   });
 
@@ -161,17 +164,21 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:follow", function(uid, tag){
     var me = getMyUid();
     if(!me){
-      ClipApp.Login.show();
+      ClipApp.Login.show(function(){
+	App.ClipApp.Bubb.followUserBubs(uid, tag);
+      });
     }else{
       if(!uid) uid = ClipApp.Face.getUserId();
-      ClipApp.Bubb.followUsreBubs(uid, tag);
+      ClipApp.Bubb.followUserBubs(uid, tag);
     }
   });
 
   App.vent.bind("app.clipapp:recommend", function(cid,model_id){
     var uid = getMyUid();
     if(!uid){
-      ClipApp.Login.show();
+      ClipApp.Login.show(function(){
+	App.ClipApp.Recommend.show(cid, model_id);
+      });
     }else{
       ClipApp.Recommend.show(cid,model_id);
     }
@@ -180,7 +187,9 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:comment", function(cid,model_id){
     var uid = getMyUid();
     if(!uid){
-      ClipApp.Login.show();
+      ClipApp.Login.show(function(){
+	App.ClipApp.Comment.show(cid, model_id);
+      });
     }else{
       ClipApp.Comment.show(cid,model_id);
     }
@@ -192,12 +201,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:clipmemo", function(cid){
-    var uid = getMyUid();
-    if(!uid){
-      App.ClipApp.Login.show();
-    }else{
       App.ClipApp.ClipMemo.show(cid);
-    }
   });
 
   App.vent.bind("app.clipapp:clipedit", function(clipid){
@@ -207,7 +211,9 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:clipadd", function(){
     var uid = getMyUid(); // 当前登录用户
     if(!uid){
-      ClipApp.Login.show();
+      ClipApp.Login.show(function(){
+	App.ClipApp.ClipAdd.show();
+      });
     }else{
       // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
       ClipApp.ClipAdd.show();
@@ -237,21 +243,13 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:query", function(word, tag){
     var userid = ClipApp.Face.getUserId();
     var now_href = window.location.href;
-    //console.info(now_href);
     var myid = getMyUid();
-    //if(myid == userid && myid!=null){
     if(/my/.test(now_href)){
-      //console.info("myquery");
       ClipApp.myQuery(word, tag);
     }else{
       ClipApp.siteQuery(word, tag);
     }
-    //App.vent.trigger("app.clipapp.routing:query", word);
   });
-
- // setTimeout(function(){
-   // App.vent.trigger("app.clipapp:clipdetail", "1:1");
- // }, 500);
 
   return ClipApp;
 })(App, Backbone, jQuery);
