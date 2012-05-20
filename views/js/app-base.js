@@ -139,7 +139,7 @@ App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
   }
- 
+
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
    // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});

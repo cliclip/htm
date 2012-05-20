@@ -11,7 +11,10 @@ $(function() {
             App.ClipApp.ClipAdd.show();
             App.ClipApp.Editor.setContent("editor", r[1]);
           }else{
-            App.ClipApp.Login.show();
+            App.ClipApp.Login.show(function(){
+	      App.ClipApp.ClipAdd.show();
+	      App.ClipApp.Editor.setContent("editor", r[1]);
+	    });
 	  }
           break;
         }

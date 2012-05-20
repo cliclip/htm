@@ -4,6 +4,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
   var Login = {};
   var NAME = "用户名/Email";
+  var fun = "";  // 用于记录用户登录前应该触发的事件
   var LoginModel = App.Model.extend({
     validate: function(attrs){
       var err = {};
@@ -96,7 +97,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
   });
 
-  Login.show = function(){
+  Login.show = function(callback){
+    fun = callback;
     var loginModel = new LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
@@ -113,7 +115,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
     // 用户登录成功 页面跳转
     Login.close();
-    if(Backbone.history){
+    if(typeof fun == "function"){
+      fun();
+    }else if(Backbone.history){
       Backbone.history.navigate("my",true);
     }
   });

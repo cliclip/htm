@@ -271,6 +271,9 @@ App.util = (function(){
       is_null: "请添加用户",
       not_exist: "您添加的用户不存在"
     },
+    recomm_text:{
+      is_null:"请您先设置推荐备注"
+    },
     name:{
       is_null: "用户名尚未填写",
       invalidate: "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
