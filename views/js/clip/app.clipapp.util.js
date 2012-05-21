@@ -185,14 +185,14 @@ App.util = (function(){
       setTimeout(function(){
 	$(".fake_"+img.id).hide();
 	$("."+img.id).show();
-      },100);
+      },0);
     }
   };
 
   util.img_error = function(img){
     img.alt='图片加载失败';
-    $("#_" + img.id).hide();
-    $("#" + img.id).show();
+    $(".fake_" + img.id).hide();
+    $("." + img.id).show();
   };
 
   util.get_imgid = function(frameid,callback){
