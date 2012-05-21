@@ -219,10 +219,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       });
     },
     submitFace:function(event){
-      event.preventDefault();
       $("#confirm_face").hide();
-      console.info(face_remote_flag);
       if(face_remote_flag){
+	event.preventDefault();
 	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
 	face_remote_flag = false;
 	face_change_flag = true;
@@ -245,7 +244,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
     }else{
-      if(sender.files && sender.files[0]){
+      if(sender.files && sender.files[0]&&(navigator.userAgent.indexOf("Firefox")>0||(window.google && window.chrome))){
 	$("#confirm_face").show();
 	preview_face(sender);// ff chrome 之外其他浏览器预览头像
 	//$("#myface").attr("src",img.src);
