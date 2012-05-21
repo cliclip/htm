@@ -14,17 +14,17 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       "click #bind_ok"           : "bindOk",
       "click #user_hava"         : "toggleClass",
       "click #user_not"          : "toggleClass",
-      "blur #bind_name"               : "blurName",
-      "blur #bind_pass"               : "blurPass",
-      "focus #bind_name"              : "cleanError",
-      "focus #bind_pass"              : "cleanError"
+      "blur #name"          : "blurName",
+      "blur #pass"          : "blurPass",
+      "focus #name"         : "cleanError",
+      "focus #pass"         : "cleanError"
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
     },
     blurName: function(e){
       var that = this;
-      this.tmpmodel.set({name:$("#bind_name").val()}, {
+      this.tmpmodel.set({name:$("#name").val()}, {
 	error:function(model, error){
 	  that.showError(error);
 	}
@@ -32,7 +32,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     blurPass: function(e){
       var that = this;
-      this.tmpmodel.set({pass:$("#bind_pass").val()},{
+      this.tmpmodel.set({pass:$("#pass").val()},{
 	error:function(model, error){
 	  that.showError(error);
 	}
@@ -134,7 +134,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 
  // TEST
 
-// App.bind("initialize:after", function(){ UserBind.show(); });
+ App.bind("initialize:after", function(){ UserBind.show(); });
 
  return UserBind;
 })(App, Backbone, jQuery);
