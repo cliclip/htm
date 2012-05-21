@@ -240,21 +240,22 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(r, '\n');
   }
 
-    // Replace <br> and <br/> with a single newline
+  // Replace <br> and <br/> with a single newline
   text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
     text = text
-      // Remove all remaining tags.
+    // Remove all remaining tags.
     .replace(/(<([^>]+)>)/ig, "")
-      // Trim rightmost whitespaces for all lines
-    .replace(/([^\n\S]+)\n/g, "\n").replace(/([^\n\S]+)$/, "")
-      // Make sure there are never more than two
+    // Trim rightmost whitespaces for all lines
+    .replace(/([^\n\S]+)\n/g, "\n")
+    // .replace(/([^\n\S]+)$/, "")
+    // Make sure there are never more than two
     // consecutive linebreaks.
     .replace(/\n{2,}/g, "\n\n")
-      // Remove newlines at the beginning of the text.
+    // Remove newlines at the beginning of the text.
     .replace(/^\n+/, "")
-      // Remove newlines at the end of the text.
+    // Remove newlines at the end of the text.
     .replace(/\n+$/, "")
-      // Decode HTML entities.
+    // Decode HTML entities.
     .replace(/&([^;]+);/g, decode);
     return text;
   }

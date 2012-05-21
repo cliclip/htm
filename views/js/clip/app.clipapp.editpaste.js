@@ -291,7 +291,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
        if (or){
 	 setRange(getSel(w),or);
        }
-       // console.log(newData);
        newData=filterPasteData(newData);
        // console.log(newData);
        divTemp.innerHTML=newData;
