@@ -9,7 +9,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     template: "#editDetail-view-template",
     events: {
       "click .link_img":"show_extImg",
-      "click .img_upload_span .btn":"up_extImg",
+      "click .img_upload_span .btn_img":"up_extImg",
       "blur #img_upload_url":"hide_extImg",
       // "change #formUpload":"image_change", // 改成了直接在jade中绑定
       "click .format":"upFormat",

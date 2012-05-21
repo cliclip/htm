@@ -15,7 +15,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     template: "#addClip-view-template",
     events: {
       "click .link_img":"extImg",
-      "click .btn":"up_extImg", // 确定上传
+      "click .btn_img":"up_extImg", // 确定上传
       //"change #formUpload":"image_change", // 改成了直接在jade中绑定
       "blur #img_upload_url":"hide_extImg", // extImg输入框失焦就隐藏
       "click .pop_left":"remark_clip",

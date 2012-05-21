@@ -30,7 +30,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     events:{
       "click .user" : "getUserAction",
-      "input #recomm_name"   : "nameListAction",
+      "keyup #recomm_name"   : "nameListAction",
       "click #recomm_name"   : "nameListAction",
       "focus #recomm_name"   : "nameListShow",
       "blur #recomm_name"    : "nameBlur",
@@ -58,10 +58,11 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     nameListAction:function(evt){
       this.$("#imgId").css("display","none");
-      var str = this.$("#recomm_name").val().trim();
+      var str = $.trim(this.$("#recomm_name").val());
       var clip_owner = this.model.get("clipid").split(":")[0];//clip的拥有者
       var params = {q:str};
       //查询friend
+      console.log(str);
       App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
     },
     nameBlur:function(){
@@ -103,13 +104,13 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
 	    $(div[i]).css("background-color","");
 	    $(div[i+1]).css("background-color","#888");
-	    $("#recomm_name").val($(div[i+1]).text().trim());
+	    $("#recomm_name").val($.trim($(div[i+1]).text()));
 	    flag = false;
 	  }
 	}
 	if(flag){
 	  $(div[0]).css("background-color","#888");
-	  $("#recomm_name").val($(div[0]).text().trim());
+	  $("#recomm_name").val($.trim($(div[0]).text()));
 	}
       }else if(event.keyCode == 38){ // DOWN
 	var flag = true;
@@ -118,19 +119,19 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
 	    $(div[i]).css("background-color","");
 	    $(div[i-1]).css("background-color","#888");
-	    $("#recomm_name").val($(div[i-1]).text().trim());
+	    $("#recomm_name").val($.trim($(div[i-1]).text()));
 	    flag = false;
 	  }
 	}
 	if(flag){
 	  $(div[div.length-1]).css("background-color","#888");
-	  $("#recomm_name").val($(div[length-1]).text().trim());
+	  $("#recomm_name").val($.trim($(div[length-1]).text()));
 	}
       }else if(event.keyCode == 13){
 	var div = $("#name_listDiv").children().children();
 	for(var i=0;i<div.length;i++){
 	  if($(div[i]).css("background-color") == "rgb(136, 136, 136)"){
-	    $("#recomm_name").val($(div[i]).text().trim());
+	    $("#recomm_name").val($.trim($(div[i]).text()));
 	    $("#recommend_text").focus();
 	  }
 	}
@@ -164,7 +165,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var view = this;
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
-	var text=$("#recommend_text").val().trim();
+	var text=$.trim($("#recommend_text").val());
 	text = text == defaultText ? undefined : text;
 	//recommend 需要的参数
 	view.tmpmodel.save({text: text},{
