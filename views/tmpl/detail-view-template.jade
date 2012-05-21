@@ -7,14 +7,14 @@ script(type="text/template",id="detail-view-template")
           |录线图
       div.pop_right.
         <% if(!App.util.self(user)) {%>
-          <i class="comment operate" title="评"></i>
-          <i class="refresh operate" title="转"></i>
-          <i class="biezhen operate" title="收"></i>
+          <i class="comment operate" title="评论"></i>
+          <i class="refresh operate" title="转发"></i>
+          <i class="biezhen operate" title="收录"></i>
         <% }else {%>
-          <i class="del operate" title="删"></i>
-          <i class="change operate" title="改"></i>
-          <i class="note operate" title="注"></i>
-          <i class="refresh operate" title="转"></i>	   
+          <i class="del operate" title="删除"></i>
+          <i class="change operate" title="修改"></i>
+          <i class="note operate" title="标注"></i>
+          <i class="refresh operate" title="转发"></i>	   
         <% } %>
         <span class="close_w"></span>
     div.pop_left
@@ -74,7 +74,7 @@ script(type="text/template",id="addcomm-view-template")
   .input_checkbox
     span
       input(type="checkbox",id="reclip")
-      |  同时收
+      |  同时收录
   <% } %>
   div.btn_group.clearfix
     input.verify(type="button",value="评论")

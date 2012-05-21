@@ -44,13 +44,13 @@ script(type="text/template",id="clippreview-view-template")
         <%}%>
       div.action#opt(style="display:none;").
         <% if( App.util.self(user.id) ) {%>
-          <i class="note operate" title="注" id="<%=user.id%>:<%=id%>"></i>
-          <i class="change operate" title="改" id="<%=user.id%>:<%=id%>"></i>
-          <i class="del operate" title="删" id="<%=user.id%>:<%=id%>"></i>
+          <i class="note operate" title="标注" id="<%=user.id%>:<%=id%>"></i>
+          <i class="change operate" title="修改" id="<%=user.id%>:<%=id%>"></i>
+          <i class="del operate" title="删除" id="<%=user.id%>:<%=id%>"></i>
         <% } else {%>
-          <i class="biezhen operate" title="收" id="<%=user.id%>:<%=id%>"></i>
-          <i class="refresh operate" title="转" id="<%=user.id%>:<%=id%>"></i>
-          <i class="comment operate" title="评" id="<%=user.id%>:<%=id%>"></i>
+          <i class="biezhen operate" title="收录" id="<%=user.id%>:<%=id%>"></i>
+          <i class="refresh operate" title="转发" id="<%=user.id%>:<%=id%>"></i>
+          <i class="comment operate" title="评论" id="<%=user.id%>:<%=id%>"></i>          
         <% } %>
     span.biezhen
     b.comer_topleft
