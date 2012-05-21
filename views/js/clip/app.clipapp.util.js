@@ -38,7 +38,7 @@ App.util = (function(){
   util.getPopTop = function(clss){
     var top = 0;
     var scroll = document.documentElement.scrollTop + document.body.scrollTop;
-    if(clss == "big") top = 100;
+    if(clss == "big") top = 10;
     if(clss == "small") top = 150;
     return scroll + top + "px";
   };
@@ -70,7 +70,7 @@ App.util = (function(){
   };
 
   util.contentToHtml = function(content){
-   return App.ClipApp.Filter.ubbToHtml(content);
+   return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   util.getPreview = function(content, length){
@@ -92,7 +92,7 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return App.ClipApp.Filter.ubbToHtml(content);
+    return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   function _trim(content, length){
@@ -179,22 +179,20 @@ App.util = (function(){
     });
 */
   });
-  //解决关于本地预览图片的浏览器兼容问题
-  util.get_img_src = function(sender){
-    //chrome
-    if (window.webkitURL && window.webkitURL.createObjectURL) {
-      return window.webkitURL.createObjectURL(sender.files[0]);
-    }else if(window.URL && window.URL.createObjectURL) {
-      //firefox
-      return window.URL.createObjectURL(sender.files[0]);
-    }else if (window.navigator.userAgent.indexOf("MSIE")>=1){
-      sender.select();
-      sender.blur();
-      return document.selection.createRange().text;
-    }else{
-      alert("the problem of compatible..........");
-      return window.URL.createObjectURL(source);
+  util.img_load = function(img){
+    img.onload = null;
+    if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){
+      setTimeout(function(){
+	$(".fake_"+img.id).hide();
+	$("."+img.id).show();
+      },100);
     }
+  };
+
+  util.img_error = function(img){
+    img.alt='图片加载失败';
+    $("#_" + img.id).hide();
+    $("#" + img.id).show();
   };
 
   util.get_imgid = function(frameid,callback){
@@ -272,6 +270,9 @@ App.util = (function(){
       is_null: "请添加用户",
       not_exist: "您添加的用户不存在"
     },
+    recomm_text:{
+      is_null:"请您先设置推荐备注"
+    },
     name:{
       is_null: "用户名尚未填写",
       invalidate: "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
@@ -285,8 +286,10 @@ App.util = (function(){
       is_null: "密码尚未填写",
       not_match: "密码输入不一致"
     },
+    conpass:{
+      is_null:"密码尚未填写"
+    },
     confirm:{
-      is_null: "密码尚未填写",
       password_diff: "密码输入不一致"
     },
     email:{
@@ -339,9 +342,8 @@ App.util = (function(){
     } else if(typeof(errorCode)=="object"){
       var error = {};
       for (key in errorCode){
-	if(ERROR[key]){
-	  error[key] = ERROR[key][errorCode[key]];
-	}
+	// console.log("errorCode["+key+"] :: %j " + errorCode[key]);
+	error[key] = ERROR[key] ? ERROR[key][errorCode[key]] : errorCode[key];;
       }
       return _.isEmpty(error) ? errorCode : error;
     }else{

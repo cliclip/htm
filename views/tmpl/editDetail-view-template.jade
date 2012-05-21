@@ -17,18 +17,19 @@ script(type="text/template",id="editDetail-view-template")
             button.link_img 链接图片
             span.url_text.img_upload_span
               input.text#img_upload_url(type="text")
-              input.btn(type="button",value="确定")
+              input.btn_img(type="buttn",value="确定")
           span
             button.format 整理格式
           span.close_w
-        | 改
+            |&nbsp&nbsp&nbsp&nbsp&nbsp
+        | 修改
     div.pop_left
     div.pop_right
       section.pop_inner
         //- css 中设置iframe无边框在ie8- 中不起作用
-        form#editForm(metod="post",frameborder="no",border="0" )
+        form#editForm(metod="post")
           article.content.content2
-            iframe#editor
+            iframe#editor(frameborder="no",border="0")
           div.btn_group.clearfix
             input#editClip_Save.verify(type="button",title="保存",value="确定")
             input#editClip_Abandon.cancel(type="reset",title="放弃",value="取消")

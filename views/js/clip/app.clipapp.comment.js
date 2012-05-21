@@ -10,10 +10,13 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       }
     }
   });
+  App.Model.CommModel = App.Model.extend(); //和api层进行交互
+
   var CommentView = App.ItemView.extend({
     tagName : "div",
     className : "comment-view",
     template : "#comment-view-template",
+    tag_list: [],
     events : {
       "focus #comm_text" :"foucsAction",
       "blur #comm_text"  :"blurAction",
@@ -37,30 +40,28 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).toggleClass("white_48"); //tag颜色的切换
       $(e.currentTarget).toggleClass("orange_48");
       if($(e.currentTarget).hasClass("orange_48")){
-	tag_list.push(tag); //把变色的tag值push进一个数组，reclip时需要。
+	this.tag_list.push(tag); //把变色的tag值push进一个数组，reclip时需要。
 	$("#comm_text").val((_.union(arr_text,tag)).join(",")); //把点击的tag加入到评论文本框
       }else{
 	// 与上面相反。
-	tag_list = _.without(tag_list,tag);
+	this.tag_list = _.without(this.tag_list,tag);
 	$("#comm_text").val((_.without(arr_text,tag)).join(","));
       }
     },
     comment : function(e){
       e.preventDefault();
       var that = this;
-      var text = $("#comm_text").val().trim();
+      var text = $.trim($("#comm_text").val());
       if(text == "" || text == defaultComm){
 	$("#comm_text").focus();
 	return;
       }
-      var params = {cid:this.model.get("cid"),text: text, pid: 0};
-      // console.dir(that.tag_list);
-      var params1 = {id:this.model.get("cid"),clip:{tag:tag_list,note:[{text:text}]}};
+      var params = {text: text, pid: 0};
+      var params1 = null;
       if($("#reclip_box").attr("checked")){
-	App.vent.trigger("app.clipapp.comment:@submit", params,params1);
-      }else{
-	App.vent.trigger("app.clipapp.comment:@submit", params);
+	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};
       }
+      App.vent.trigger("app.clipapp.comment:@submit", params,params1);
     },
     cancel : function(e){
       e.preventDefault();
@@ -69,15 +70,15 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   });
 
   var Comment = {};
-  var mid,tag_list = [],defaultComm = "说点什么吧~";//mid为model_id
+  var mid,clipid,defaultComm = "说点什么吧~";//mid为model_id
 
   Comment.show = function(cid,model_id){
     mid = model_id;
+    clipid = cid;
     var model = new App.Model.CommentModel({cid: cid});
     var view = new CommentView({model : model});
     App.popRegion.show(view);
     $(".small_pop").css("top", App.util.getPopTop("small"));
-    var tag_list = [];
   };
 
   Comment.close = function(){
@@ -86,9 +87,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.comment:@submit", function(params,params1){
-    var model = new App.Model.CommentModel(params);
+    var model = new App.Model.CommModel(params);
     model.save({},{
-      type: "POST",
+      url: P+"/clip/"+clipid+"/comment",
       success: function(model, res){
 	if(params1){
 	  App.vent.trigger("app.clipapp.reclip:sync", params1,mid);

@@ -2,6 +2,7 @@
 App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipList = {};
+  var flag = false;
   var clipListView = {};
   var collection = {},start = 1,end = App.ClipApp.Url.page;
   var url = "",base_url = "",data = "",type = "",collection_length,new_page;
@@ -24,9 +25,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
 	if(!resp[i].clip){
-	  //console.info(resp[i]);
-	  //var clip = resp[i];
-	  //resp[i] = {clip: clip};
 	  resp[i].clipid = resp[i].id;
 	  resp[i].id = resp[i].user.id+":"+resp[i].id;
 	}else{
@@ -37,12 +35,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
 	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
 	  delete resp[i].clip;
-	 // if(resp[i].recommend){
-	    resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
-	 // }else{
-	   // resp[i].id = resp[i]
-	   // .user.id+":"+resp[i].id;
-	  //}
+	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
 	}
       }
       return resp;
@@ -68,9 +61,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	});
       });
       this.bind("item:rendered",function(itemView){
-	var $newElems = itemView.$el.css({ opacity: 0 });
+	if(this.model.get("content").image){
+	  this.$el.find("p").addClass("text");
+	}else{
+	  this.$el.find("p").addClass("no_img_text");
+	  this.$el.find("span.biezhen").remove();
+	}
+	var $newElems = itemView.$el;
+	flag = true;
 	$newElems.imagesLoaded(function(){
-	  $newElems.animate({ opacity: 1 });
 	  $("#list").masonry("reload");
 	});
       });

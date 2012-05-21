@@ -1,6 +1,7 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
   var mid,checked,tag_list,COMM_TEXT = "说点什么吧~";
+
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -20,8 +21,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     events: {
       "click .operate" : "Operate",
       "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
-      "click .close_w":"Close",
-      "dblclick .content":"editDetail"
+      "click .close_w": "Close",
+      "click .user_head": "Close",
+      "dblclick .content": "editDetail"
     },
     Operate: function(e){
       e.preventDefault();
@@ -33,7 +35,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment':
-	  App.vent.trigger("app.clipapp.clipdetail:comment", cid,mid);break;
+	  App.vent.trigger("app.clipapp.clipdetail:@comment", cid,mid);break;
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change':
@@ -42,7 +44,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     },
-    Close: function(){
+    Close: function(e){
       App.vent.trigger("app.clipapp.clipdetail:@close");
     },
     editDetail:function(e){
@@ -194,12 +196,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	var pid = this.model.get("pid") ? this.model.get("pid") : 0;
 	var text = ($("#comm_text").val()).replace(/[\s]/g, "");
 	if(text == "" || text == COMM_TEXT){$("#comm_text").focus(); return;}
-	var params = {cid: cid, text: text, pid: pid};
+	var params = {clipid: cid, text: text, pid: pid};
+	var params1 = null;
 	if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量
-	  checked = true;
-	  tag_list = this.tag_list;
+	  params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
 	}
-	App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params);
+	App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, params1);
       }
     },
     cancel : function(){
@@ -286,31 +288,23 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp.clipdetail:@save_addComm", function(data){
-    var model = new App.Model.CommentModel(data);
-    model.save(data,{
+  App.vent.bind("app.clipapp.clipdetail:@save_addComm", function(params, params1){
+    var model = new App.Model.CommModel();
+    model.save({pid:params.pid, text:params.text},{
+      url : P+"/clip/"+params.clipid+"/comment",
       success:function(comment,response){
-	if(checked){ // 避免comment和reclip同时去写clip数据
-	  var params1 = {
-	    id:data.cid,clip:{tag:tag_list,note:[{text:data.text}]}
-	  };
+	if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
 	}
-	showComment(data.cid);
-	showAddComm(data.cid);
-	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:data.pid,model_id:mid});
-	// 触发preview中对回复条数的同步
-	// var listmodel=App.listRegion.currentView.collection.get(id);
-	// var modifyclip=listmodel.get("clip");
-	// modifyclip.reply_count = modifyclip.reply_count ? modifyclip.reply_count+1 : 1;
-	// listmodel.set({clip:modifyclip});
-	// App.vent.trigger("app.clipapp.cliplist:showlist");
+	showComment(params.clipid);
+	showAddComm(params.clipid);
+	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
       },
       error:function(comment,response){}
     });
   });
 
-  App.vent.bind("app.clipapp.clipdetail:comment", function(cid){
+  App.vent.bind("app.clipapp.clipdetail:@comment", function(cid){
     // 当点击clipdetail的评时
     if(App.ClipApp.Me.me.get("id")){
       if(ClipDetail.replyCommRegion)

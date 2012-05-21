@@ -67,16 +67,16 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
   showError:function(error){
     error = App.ClipApp.Message.getError(error);
     for(var key in error){
-      this.$("input[name="+key+"]").addClass("error");
-      this.$("input[name="+key+"]").after("<span class='error'>"+error[key]+"</span>");
-      if(this.$("input[name="+key+"]").attr("type") == "password")
-	this.$("input[name="+key+"]").val("");
+      this.$("#"+key).addClass("error");
+      this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
+      if(this.$("#"+key).attr("type") == "password")
+	this.$("#"+key).val("");
     }
   },
   cleanError:function(e){
-    var name = e.currentTarget.name;
-    this.$("[input[name="+name+"]").siblings("span.error").remove();
-    this.$("[input[name="+name+"]").removeClass("error");
+    var id = e.currentTarget.id;
+    this.$("#"+id).siblings("span.error").remove();
+    this.$("#"+id).removeClass("error");
   },
   getInput:function(){
     var data = {};
@@ -139,14 +139,6 @@ App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
   }
-  // 不确定是否合适，目前只能写在这里
-  $(".logo").bind("click", function(){
-    if(App.ClipApp.getMyUid()){
-      App.Routing.ClipRouting.router.navigate("my", true);
-    }else{
-      App.Routing.ClipRouting.router.navigate("", true);
-    }
-  });
 
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
@@ -160,9 +152,18 @@ App.bind("initialize:after", function(){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
     $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
   };
+  function Reload(flag){
+    $("#list").masonry("reload");
+    if(flag){
+      setTimeout(function(){
+	Reload();
+      },1000);
+    }
+  }
 
   var time_gap = true;
   var paddingTop = 0 + "px";
+  //Reload(true);
   remove_fixed(paddingTop);
   $(window).scroll(function() {
     remove_fixed(paddingTop);
@@ -195,7 +196,7 @@ App.bind("initialize:after", function(){
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){
 	time_gap = true;
-      },200);
+      },500);
     }
   });
 

@@ -4,6 +4,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
   var Login = {};
   var NAME = "用户名/Email";
+  var fun = "";  // 用于记录用户登录前应该触发的事件
   App.Model.LoginModel = App.Model.extend({
     validate: function(attrs){
       var err = {};
@@ -63,12 +64,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
     loginAction : function(e){
       var that = this;
       e.preventDefault();
-      // this.model.save({},{
       this.tmpmodel.save({}, {
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
-  	  App.vent.trigger("app.clipapp.login:success", res);
+	  App.vent.trigger("app.clipapp.clipper:login");
+  	  App.vent.trigger("app.clipapp.login:success", res); // fetch Me.me
   	},
   	error:function(model, res){
 	  that.showError(res);
@@ -83,6 +84,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	type: "POST",
 	success:function(model,response){
 	  App.vent.trigger("app.clipapp.register:success","register_success",response);
+	  App.vent.trigger("app.clipapp.clipper:register");
 	},
 	error:function(model,error){
 	  that.showError(error);
@@ -91,6 +93,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
+      App.vent.trigger("app.clipapp.clipper:cancel");
       App.vent.trigger("app.clipapp.login:@cancel");
     },
     openWeibo : function(e){
@@ -166,7 +169,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
   }
 
-  Login.show = function(){
+  Login.show = function(callback){
+    fun = callback;
     var loginModel = new App.Model.LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
@@ -183,9 +187,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
     // 用户登录成功 页面跳转
     Login.close();
-    Backbone.history.navigate("my",true);
-    //location.reload();
-    //console.info("页面跳转");
+    if(typeof fun == "function"){
+      fun();
+    }else if(Backbone.history){
+      Backbone.history.navigate("my",true);
+    }
   });
 
   App.vent.bind("app.clipapp.login:@error", function(model, error){
