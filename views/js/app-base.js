@@ -69,12 +69,29 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
     for(var key in error){
       this.$("#"+key).addClass("error");
       this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
+      if(this.$("#"+key).attr("type") == "password")
+	this.$("#"+key).val("");
     }
   },
   cleanError:function(e){
     var id = e.currentTarget.id;
     this.$("#"+id).siblings("span.error").remove();
     this.$("#"+id).removeClass("error");
+  },
+  getInput:function(){
+    var data = {};
+    _.each(this.$(":input").serializeArray(), function(obj){
+      data[obj.name] = obj.value == "" ? undefined : obj.value;
+    });
+    return data;
+  },
+  setModel:function(model, data){
+    var view = this;
+    model.set(data, {
+      error: function(model, error){
+	view.showError(error);
+      }
+    });
   }
 });
 App.Region = Backbone.Marionette.Region;
@@ -122,14 +139,6 @@ App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
   }
-  // 不确定是否合适，目前只能写在这里
-  $(".logo").bind("click", function(){
-    if(App.ClipApp.getMyUid()){
-      App.Routing.ClipRouting.router.navigate("my", true);
-    }else{
-      App.Routing.ClipRouting.router.navigate("", true);
-    }
-  });
 
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
@@ -143,17 +152,28 @@ App.bind("initialize:after", function(){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
     $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
   };
+  function Reload(flag){
+    $("#list").masonry("reload");
+    if(flag){
+      setTimeout(function(){
+	Reload();
+      },1000);
+    }
+  }
 
   var time_gap = true;
   var paddingTop = 0 + "px";
+  //Reload(true);
   remove_fixed(paddingTop);
   $(window).scroll(function() {
+    remove_fixed(paddingTop);
     var st = $(window).scrollTop();
     //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
     //var gap = document.getElementById("user_info").style.paddingTop;
     //console.info(gap);
     var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
     var mt = $(".clearfix").offset().top + shifting;
+    //console.info(shifting);
     //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
     if(st>0){
       $(".return_top").show();
@@ -161,20 +181,22 @@ App.bind("initialize:after", function(){
       $(".return_top").hide();
     }
     if(st > mt ){
-      //console.info("锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      //console.log("锁定气泡组件",st,mt);
       fixed(paddingTop);
     } else {
-      //console.info("解除锁定气泡组件",st,mt,$(".user_detail").offset().top);
+      //console.log("解除锁定气泡组件",st,mt);
       remove_fixed(paddingTop);
     }
-    var wh = window.innerHeight;
+    var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
     var lt = $(".loader").offset().top;
+    // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
     if(st + wh > lt && time_gap==true ){
       time_gap = false;
+      //console.info("trigger nextpge");
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){
 	time_gap = true;
-      },200);
+      },500);
     }
   });
 

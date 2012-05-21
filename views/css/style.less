@@ -4,16 +4,38 @@
 	background-position: @x @y;
 	display: block;
 }
-.box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #ccc) {
+.box-shadow (@x: 0px, @y: 0px, @blur: 1px, @color: #ccc) {
   box-shadow: @arguments;
   -moz-box-shadow: @arguments;
   -webkit-box-shadow: @arguments;
+  //position:relative;
+  //behavior: url(css/pie.htc);
 }
+.min-height (@height){
+	min-height:@height;	
+	_height:auto!important;
+	_height: height; // 看到有这样来写 IE7 hack 的，可以用 * 但不能用 +
+}
+.min-width (@width){
+	min-width:@width;	
+	_width:auto!important;
+	_width: width;
+}
+
 .border-radius (@radius) {
-  border-radius: @radius;
   -moz-border-radius: @radius;
   -webkit-border-radius: @radius;
+  border-radius: @radius;
+  //position:relative;
+  behavior: url(css/pie.htc);
 }
+
+.border-radius-input (@radius) {
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
+}
+
 .align-left{float:left;}
 .align-right{float:right;}
 
@@ -76,7 +98,7 @@
 		margin-left:240px;
 		background:#d9d9d9 url(../img/top_shadow.jpg) repeat-x left top;
 		.left_shadow{
-			min-height:600px;
+			.min-height(600px);
 			padding:30px 0px 0 25px;
 			background:url(../img/left_shadow.jpg) repeat-y left top;
 			position:relative;
@@ -505,9 +527,7 @@ article.clip{
 	margin-right: 30px;
 	margin-bottom:35px;
 	position:relative;
-	min-height:307px;	
-	_height:auto!important;
-	_height: 307px; // 看到有这样来写 IE7 hack 的，可以用 * 但不能用 +
+	.min-height(307px);	
 	float:left; // 为制作方便加上，采用程序布局时，会取消
 	background:white;
 	hgroup{
@@ -536,19 +556,32 @@ article.clip{
 		padding:15px;
 		margin-bottom:60px;
 		cursor: pointer;
-		min-height:246px;
+		.min-height(220px);
+		img.img_fake{
+			height:220px;
+			width:270px;
+			}
 		.article_photo{
-			width:300px;
+			width:270px;
 			margin-bottom: 20px;
 			img{
+				display:none;
 				max-width:270px;
 			}
 		}
 		.article_con{
-			max-width:270px;
+			width:270px;
 			font-size:14px;
 			line-height:1.7;
 			color:#808080;
+			p.text{
+				font-size:14px;
+				line-height:1.7;
+			}
+			p.no_img_text{
+				font-size:16px;
+				line-height:2.0;
+			}
 		}
 	}
 	footer{
@@ -814,6 +847,7 @@ section.follow_frame{
 	}
 	.verify{width:165px;height:37px;.sprites(-340px,-431px);margin-right:15px;}
 	.cancel{width:90px;height:37px;.sprites(-340px,-476px);}
+        .cliper{display:none;}
 }
 .masker_layer{
 	width: 100%; //1000px;
@@ -853,6 +887,8 @@ section.follow_frame{
 		li.input_text input.error{width:270px;height:25px;border:1px solid #f00;margin-bottom:0;}
                 li.input_text span.error{position:absolute;z-index:1000;width: auto;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:1px;text-align:center;padding:5px;min-height:1em;-moz-border-radius:5px;font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;margin-left:-130px}
 		li.input_textarea textarea{width:270px;height:72px;border:1px solid #ccc;margin-bottom:0;}
+		li.input_textarea textarea.error{width:270px;height:72px;border:1px solid #f00;margin-bottom:0;}
+		li.input_textarea span.error{position:absolute;z-index:1000;width: auto;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:1px;text-align:center;padding:5px;min-height:1em;-moz-border-radius:5px;font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;margin-left:-134px;margin-top:46px;}
 		li.select_user input{width:220px;height:32px;float:left;margin-left:10px;border-style:none;}
 		li.select_user div.container{border:1px solid #ccc;width:278px;height:40px;}
 		li.select_user div.container input.error{
@@ -861,7 +897,20 @@ section.follow_frame{
 			margin-top: -40px;
 		}
 		li.select_user div.container span.error{
-			       position:absolute;z-index:1000;width: auto;margin-top:0.2px;margin-left:100px;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:9px;text-align:center;min-height:1em;-moz-border-radius:5px;font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+		       position:absolute;
+		       z-index:1000;
+		       width: auto;
+		       margin-top:0.2px;
+		       margin-left:100px;
+		       max-width:500px;
+		       min-width:110px;
+		       background:#EEFF00 none repeat scroll 0% 50%;
+		       border:3px solid #EEFF00;
+		       padding:9px;
+		       text-align:center;
+		       min-height:1em;
+		       -moz-border-radius:5px;
+		       font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
 		}
 		li.input_checkbox input{float: left;width:auto!important;height:auto!important;}
 		.tag_box{
@@ -891,7 +940,6 @@ section.follow_frame{
 		.sprites(-589px,-342px);
 	}
 }
-
 .big_pop{
 	z-index:2;
 	width:595px;
@@ -925,6 +973,7 @@ section.follow_frame{
             		span.close_w {
 		  	    top: -30px;
 		 	}
+
 			span.url_text{
 				width:280px;
 				height:28px;
@@ -941,8 +990,12 @@ section.follow_frame{
 					border:none;
 					float: left;
 				}
-				input.btn{
-					width:45px;
+				input.btn_img{
+					.border-radius-input(4px);
+					cursor: pointer;
+					font-size: 13px;
+					text-align: center;
+					width:40px;
 					height:20px;
 					line-height:20px;
 					border:1px solid #494949;
@@ -1030,13 +1083,14 @@ section.follow_frame{
 			height:500px;
 			padding:4px;
 			border:1px solid #ccc;
-			overflow-y:scroll;
+			overflow-x:hidden;
+			overflow-y:auto;
 			margin-bottom:20px;
 			img{max-width:475px;}
-		}
+		}/*
 		.content2{
 			overflow: hidden;
-		}	 
+		}*/	 
 		dl.comments{
 			margin-bottom:20px;
 			.user_head{
@@ -1194,12 +1248,26 @@ section.follow_frame{
 					float:right;
 					margin-bottom:15px;
 				}
+				input:focus{
+				}
 				input.error{
 					height:26px;
 					border:1px solid #f00;
 				}
 				span.error{
-					position:absolute;z-index:1000;width: auto;margin-left:180px;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:6px;text-align:center;min-height:1em;-moz-border-radius:5px;font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+					position:absolute;
+					z-index:1000;
+					width: auto;
+					margin-left:180px;
+					max-width:500px;
+					min-width:110px;
+					background:#EEFF00 none repeat scroll 0% 50%;
+					border:3px solid #EEFF00;
+					padding:6px;
+					text-align:center;
+					min-height:1em;
+					-moz-border-radius:5px;
+					font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
 				}
 			}
 			p{
@@ -1251,7 +1319,7 @@ section.follow_frame{
 }
 section.edit_frame{
 	width:1000px;
-	min-height: 460px;
+	.min-height(460px);
 	padding:30px 0;
 	margin:0 auto;
 	position: relative;
@@ -1383,7 +1451,10 @@ section.edit_frame{
 					display: block;
 					width:105px;
 					float:right;
-					label{display: inline;padding-left:5px;}
+					label{
+						display: inline;
+						//padding-left:5px;
+					}
 				}
 			}
 			li{
@@ -1398,7 +1469,7 @@ section.edit_frame{
 				}
 				input.text_input{
 					width:190px;
-					background:#efefef;
+					background-color:#efefef;
 					border:none;
 				}
 				input.error{
@@ -1453,7 +1524,7 @@ section.edit_frame{
 				input{
 					margin:0 auto;
 					color: #333;
-					background:#efefef;
+					background-color:#efefef;
 					border:none;
 				}
  				input.error{
@@ -1514,6 +1585,7 @@ section.edit_frame{
       height: 320px;
       border: none;
 }
+
 #editor {
 	width:100%;
 	height:100%;

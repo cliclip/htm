@@ -6,6 +6,13 @@ App.util = (function(){
     return cookie ? cookie.split(":")[0] : null;
   };
 
+  util.getMyFace = function(){
+    return {
+      name: App.ClipApp.Me.me.get("name"),
+      face: App.ClipApp.Me.me.get("face")
+    };
+  };
+
   // main_tag 部分从这取,
   util.getBubbs = function(){
     return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
@@ -31,7 +38,7 @@ App.util = (function(){
   util.getPopTop = function(clss){
     var top = 0;
     var scroll = document.documentElement.scrollTop + document.body.scrollTop;
-    if(clss == "big") top = 100;
+    if(clss == "big") top = 10;
     if(clss == "small") top = 150;
     return scroll + top + "px";
   };
@@ -49,8 +56,7 @@ App.util = (function(){
   };
 
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]:[a-z0-9]{32}/;
-   // return "file:///D:/Images/图片/孙燕姿/p_large_8ASw_431000028afc2d11[1].jpg";
+    var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face_/;
     if(imageid == ""){
       return "img/f.jpg";
     }else if(imageid&& pattern.test(imageid)){
@@ -64,7 +70,7 @@ App.util = (function(){
   };
 
   util.contentToHtml = function(content){
-   return App.ClipApp.Filter.ubbToHtml(content);
+   return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   util.getPreview = function(content, length){
@@ -86,7 +92,7 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return App.ClipApp.Filter.ubbToHtml(content);
+    return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   function _trim(content, length){
@@ -173,22 +179,20 @@ App.util = (function(){
     });
 */
   });
-  //解决关于本地预览图片的浏览器兼容问题
-  util.get_img_src = function(sender){
-    //chrome
-    if (window.webkitURL && window.webkitURL.createObjectURL) {
-      return window.webkitURL.createObjectURL(sender.files[0]);
-    }else if(window.URL && window.URL.createObjectURL) {
-      //firefox
-      return window.URL.createObjectURL(sender.files[0]);
-    }else if (window.navigator.userAgent.indexOf("MSIE")>=1){
-      sender.select();
-      sender.blur();
-      return document.selection.createRange().text;
-    }else{
-      alert("the problem of compatible..........");
-      return window.URL.createObjectURL(source);
+  util.img_load = function(img){
+    img.onload = null;
+    if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){
+      setTimeout(function(){
+	$(".fake_"+img.id).hide();
+	$("."+img.id).show();
+      },100);
     }
+  };
+
+  util.img_error = function(img){
+    img.alt='图片加载失败';
+    $("#_" + img.id).hide();
+    $("#" + img.id).show();
   };
 
   util.get_imgid = function(frameid,callback){
@@ -266,6 +270,9 @@ App.util = (function(){
       is_null: "请添加用户",
       not_exist: "您添加的用户不存在"
     },
+    recomm_text:{
+      is_null:"请您先设置推荐备注"
+    },
     name:{
       is_null: "用户名尚未填写",
       invalidate: "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
@@ -280,7 +287,7 @@ App.util = (function(){
       not_match: "密码输入不一致"
     },
     conpass:{
-      is_null: "密码尚未填写"
+      is_null:"密码尚未填写"
     },
     confirm:{
       password_diff: "密码输入不一致"
@@ -309,7 +316,8 @@ App.util = (function(){
       fail: "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
     },
     clip:{
-      has_recliped: "您已经拥有这条载录了",
+      has_this_clip: "您已经有该条摘录了",
+      has_recliped: "您已经转载过该条载录了",
       not_exist: "clip不存在"
     },
     content:{
@@ -334,9 +342,8 @@ App.util = (function(){
     } else if(typeof(errorCode)=="object"){
       var error = {};
       for (key in errorCode){
-	if(ERROR[key]){
-	  error[key] = ERROR[key][errorCode[key]];
-	}
+	// console.log("errorCode["+key+"] :: %j " + errorCode[key]);
+	error[key] = ERROR[key] ? ERROR[key][errorCode[key]] : errorCode[key];;
       }
       return _.isEmpty(error) ? errorCode : error;
     }else{

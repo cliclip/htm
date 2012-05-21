@@ -14,11 +14,12 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     tagName : "iframe",
     className : "bubb-view",
     render : function(){
+      this.$el.attr("frameborder", "0",0);
+      this.$el.attr("scrolling", "no");
       this.$el.attr("src", "bub.html");
       return this;
     }
   });
-
   // constants
 
   // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
@@ -64,7 +65,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
-  Bubb.followUsreBubs = function(uid, tag){
+  Bubb.followUserBubs = function(uid, tag){
     if(!uid) _uid = 2;
     followUserTag(uid, tag, function(){
       // 更新bubb显示
@@ -86,12 +87,12 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       var bubbView = new BubbView();
       App.bubbRegion.show(bubbView);
     }
-    if (changeTags(last, tags, old_self, self)) {
+    if (changeTags(last, tags, old_self)) {
       iframe_call('bubbles', "resetTags", tags);
     } else if (changeDefault(last, tags)) {
       iframe_call('bubbles', "openTag", tags.current);
     }
-    old_self = self;
+    old_self = _uid;
     last = tags;
   });
 
@@ -146,7 +147,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
     App.vent.trigger("app.clipapp:reclip_tag",  _uid, tag);
   });
-		      
+
   // ---- implements
 
   // service api
@@ -244,16 +245,23 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function iframe_call(ifname, fname, fargs){
     var _iframe =  document.getElementById(ifname);
-    var ifwin = _iframe.contentDocument.parentWindow ? _iframe.contentDocument.parentWindow :_iframe.contentDocument.defaultView;
+    var ifwin;
+    if(!_iframe.contentDocument){//ie6 7
+         ifwin = document.frames[ifname].document.parentWindow;;
+    }else if(_iframe.contentDocument.parentWindow){//ie8
+      ifwin = _iframe.contentDocument.parentWindow;
+    }else{//其他主流浏览器
+      ifwin = _iframe.contentDocument.defaultView;
+    }
     if(ifwin && ifwin[fname]){
-      //console.info(ifwin);
-      //console.log(ifwin[fname]);
-      //console.log("iframe_call(", ifname, fname, fargs, ")");
-      //console.log(typeof fargs.bubs);
-      //console.dir(fargs);
+      // console.info("ifwin :: "+ifwin);
+      // console.log(ifwin[fname]);
+      // console.log("iframe_call(", ifname, fname, fargs, ")");
+      // console.log(typeof fargs.bubs);
+      // console.dir(fargs);
       ifwin[fname](fargs);
     }else { // waiting for iframe load
-      // console.info("waiting for iframe reload");
+      //console.info("waiting for iframe reload");
       setTimeout(function(){ iframe_call(ifname, fname, fargs); }, 100);
     }
   }
@@ -298,9 +306,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   };
 
-  function changeTags(tags1, tags2, old_self, self){
-    if(old_self != self){
-      // 若 self 已经变化，则 tag 不能重用
+  function changeTags(tags1, tags2, old_self){
+    if(old_self != _uid){ // 若 self 已经变化，则 tag 不能重用
       return true;
     }
     if(_.isEmpty(tags2.follows)){

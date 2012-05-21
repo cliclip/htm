@@ -46,8 +46,10 @@ label {
   color: @grayDark;
 }
 
-// Inputs, Textareas, Selects
-input,
+// Inputs, Textareas, Selects   input[type="text"]本未设定type ie圆角设定与ie 透明效果冲突，为其加入type="text"
+input[type="text"],
+input[type="password"],
+input[type="textarea"],
 textarea,
 select,
 .uneditable-input {
@@ -60,7 +62,7 @@ select,
   line-height: @baseLineHeight;
   color: @gray;
   border: 1px solid #ccc;
-  .border-radius(3px);
+  .border-radius-input(3px);
 }
 .uneditable-textarea {
   width: auto;

@@ -1,0 +1,40 @@
+html
+  head
+    meta(http-equiv="Content-Type",content="text/html; charset=utf-8")
+    meta(http-equiv="X-UA-Compatible",content="chrome=1")
+    meta(name="viewport",content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0")
+    link(rel="shortcut icon",href="images/favicon.ico")
+    link(rel="apple-touch-icon",href="images/apple-touch-icon.png")
+    link(rel="apple-touch-icon",sizes="72x72",href="images/apple-touch-icon-72x72.png")
+    link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
+    //- pack :: css
+    link(rel="stylesheet",href="css/clipper.css")
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js")
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js")
+    script(src="/js/bookmark.js") // 引用文件
+    script(src="/js/lib/json2.js")
+    script(src="/js/lib/easyXDM.debug.js")
+    script(src="js/clipper.js")  // vent事件以及socket消息发送
+    style
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      .mask {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        opacity: 0.7;
+        filter:alpha(opacity=20);
+        background:#000;
+      }
+  body
+    div.mask
+    div#main
+      div#pop
+      div#small-pop
+      div#view
+    include tmpl/addclip-view-template.jade
+    include tmpl/login-view-template.jade
+    include tmpl/clipmemo-view-template.jade
+    include tmpl/taglist-view-template.jade

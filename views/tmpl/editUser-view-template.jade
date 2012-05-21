@@ -22,14 +22,17 @@ script(type="text/template",id="faceEdit-view-template")
       <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face")
-    |<form method="POST" action="<%=App.util.getFace_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
-    .btn_frame
-      button.verify(type="submit",id="confirm_face") 确定
-      .button_frame
-        span
-          button.upload(type="button")	
-            |上传本地图像
-          |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
+    | <form method="POST" id="face_form" action="<%=App.util.getFace_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
+    | <div class="btn_frame">
+    | <button class="verify" type="submit" id="confirm_face">确定</button>
+    | <div class="button_frame">
+    | <span>
+    | <button class="upload">上传本地图像</button>
+    | <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
+    | </span>
+    | </div>
+    | </div>
+    | </form>
   .preview.
     <img id="preview_size_fake" />
 
