@@ -196,7 +196,7 @@ App.bind("initialize:after", function(){
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){
 	time_gap = true;
-      },200);
+      },500);
     }
   });
 

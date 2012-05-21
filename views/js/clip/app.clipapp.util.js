@@ -180,13 +180,12 @@ App.util = (function(){
 */
   });
   util.img_load = function(img){
+    img.onload = null;
     if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){
-      //console.info(img.width);
-      if(img.width>270){
-	//img.width=270;
-      }
-      $("#_" + img.id).hide();
-      $("#"+img.id).show();
+      setTimeout(function(){
+	$(".fake_"+img.id).hide();
+	$("."+img.id).show();
+      },100);
     }
   };
 
