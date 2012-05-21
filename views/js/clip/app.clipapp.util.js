@@ -38,7 +38,7 @@ App.util = (function(){
   util.getPopTop = function(clss){
     var top = 0;
     var scroll = document.documentElement.scrollTop + document.body.scrollTop;
-    if(clss == "big") top = 100;
+    if(clss == "big") top = 10;
     if(clss == "small") top = 150;
     return scroll + top + "px";
   };
