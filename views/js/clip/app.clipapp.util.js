@@ -38,7 +38,7 @@ App.util = (function(){
   util.getPopTop = function(clss){
     var top = 0;
     var scroll = document.documentElement.scrollTop + document.body.scrollTop;
-    if(clss == "big") top = 100;
+    if(clss == "big") top = 10;
     if(clss == "small") top = 150;
     return scroll + top + "px";
   };
@@ -180,13 +180,12 @@ App.util = (function(){
 */
   });
   util.img_load = function(img){
+    img.onload = null;
     if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){
-      //console.info(img.width);
-      if(img.width>270){
-	//img.width=270;
-      }
-      $("#_" + img.id).hide();
-      $("#"+img.id).show();
+      setTimeout(function(){
+	$(".fake_"+img.id).hide();
+	$("."+img.id).show();
+      },100);
     }
   };
 

@@ -51,7 +51,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     comment : function(e){
       e.preventDefault();
       var that = this;
-      var text = $("#comm_text").val().trim();
+      var text = $.trim($("#comm_text").val());
       if(text == "" || text == defaultComm){
 	$("#comm_text").focus();
 	return;
