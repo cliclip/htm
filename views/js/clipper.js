@@ -45,6 +45,9 @@ $(function() {
       socket.postMessage(JSON.stringify(["close"]));
     });
 
+    App.vent.bind("app.clipapp.clipper:log", function(data){
+      socket.postMessage(JSON.stringify(["log", data]));
+    });
     App.vent.bind("app.clipapp.clipper:register", function(){
       socket.postMessage(JSON.stringify(["close"]));
     });
