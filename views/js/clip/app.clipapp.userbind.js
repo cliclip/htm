@@ -70,8 +70,10 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     toggleClass : function(e){
       if(e.currentTarget.id == "user_hava"){
 	$("#user_not").removeClass("tab");
+	$("#bind_ok").val("立即绑定");
       }else if(e.currentTarget.id == "user_not"){
 	$("#user_hava").removeClass("tab");
+	$("#bind_ok").val("立即注册");
       }
       $(e.currentTarget).addClass("tab");
     },
@@ -134,7 +136,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 
  // TEST
 
- App.bind("initialize:after", function(){ UserBind.show(); });
+// App.bind("initialize:after", function(){ UserBind.show(); });
 
  return UserBind;
 })(App, Backbone, jQuery);

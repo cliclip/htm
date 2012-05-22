@@ -1,21 +1,23 @@
 script(type="text/template",id="bind-view-template")
   div.masker_layer
   section.bind_window
-    p|新浪微博账号登陆成功，请绑定您的点易账号
+    div.bind_header
+      新浪微博账号登陆成功，请绑定您的点易账号
     span.close_w
-    ul.tab_frame
-      li.tab#user_hava.tab 我有点易账号
-      li#user_not 注册点易账号
-    div.user_bind
-      div.logo_bg
-      fieldset
-        legend|用户登陆
-        form(action="",method="")
-          li
-            input(type="text",name="name",id="name")
-            label.username
-          li
-            input(type="password",name="pass",id="pass")
-            label.password
-      div.btn_frame.clearfix
-        input.reg_btn(type="button",id="bind_ok",value="立即绑定")
+    div.bind_body
+      ul.tab_frame
+        li(id="user_hava",class="tab") 我有点易账号
+        li(id="user_not",class="") 注册点易账号
+      div.user_bind
+        div.logo_bg
+        fieldset
+          legend|用户登陆
+          form(action="",method="")
+            li
+              input(type="text",name="name",id="name")
+              label.username
+            li
+              input(type="password",name="pass",id="pass")
+              label.password
+        div.btn_frame.bind_ok
+          input.reg_btn(type="button",id="bind_ok",value="立即绑定")

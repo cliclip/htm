@@ -43,7 +43,7 @@ script(type="text/template",id="emailEdit-view-template")
         button.add_mailbind.align-right(type="button",id="email_add",)
           span
           |增加邮箱绑定 	
-        |邮箱识别
+        |邮箱绑定
       |<% if(email){ for(i=0;i<email.length;i++) { if(email[i]){ %>
       |<li class="mail_line">
       |<span class="email_address" id="<%=email[i]%>"></span>
