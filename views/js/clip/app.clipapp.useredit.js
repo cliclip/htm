@@ -1,7 +1,8 @@
 App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
-  var face_flag = false;
+  var face_change_flag = false;
+  var face_remote_flag = false;
   var EditModel = App.Model.extend({});
 
   var FaceModel = App.Model.extend({
@@ -218,8 +219,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	}
       });
     },
-    submitFace:function(){
+    submitFace:function(event){
       $("#confirm_face").hide();
+      if(face_remote_flag){
+	event.preventDefault();
+	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
+	face_remote_flag = false;
+	face_change_flag = true;
+      }
     }
   });
 
@@ -238,12 +245,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
     }else{
-      $("#confirm_face").show();
-      if( sender.files && sender.files[0]){
-	preview_face(sender);// ie之外其他浏览器预览头像
+      if(sender.files && sender.files[0]&&(navigator.userAgent.indexOf("Firefox")>0||(window.google && window.chrome))){
+	$("#confirm_face").show();
+	preview_face(sender);// ff chrome 之外其他浏览器预览头像
 	//$("#myface").attr("src",img.src);
 	return true;
       }else if(sender.value && window.navigator.userAgent.indexOf("MSIE")>=1){
+	$("#confirm_face").show();
 	sender.select();
 	sender.blur();
 	var src = document.selection.createRange().text;
@@ -257,6 +265,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	},200);
 	$("#preview_size_fake").ready(function(){});
 	return true;
+      }else {
+	face_remote_flag = true;
+	$("#face_form").submit();
       }
       return false;
     }
@@ -282,7 +293,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       type: "POST",
       success:function(model,res){
 	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
-	face_flag = true;
+	face_change_flag = true;
       },
       error:function(model,res){
 	//console.info("error!!!!!!!!!!");
@@ -306,8 +317,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    var facemodel = new FaceModel({face:currentFace});
 	    facemodel.save({},{
 	      success:function(model,res){
-		App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
-		face_flag = true;
+		if(face_remote_flag){
+		  $("#myface").attr("src",App.util.face_url(returnObj[1][0]),240);
+		  $("#confirm_face").show();
+		}else{
+		  App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
+		  face_change_flag = true;
+		}
 	      },
 	      error:function(model,res){
 		//console.info("error!!!!!!!!!!");
@@ -325,7 +341,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     });
   }
-//ie 之外的其他浏览器本地预览头像
+//ff chrome 之外的其他浏览器本地预览头像
   function preview_face(sender){
       var reader = new FileReader();
       reader.onload = function(evt){
@@ -368,9 +384,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   }
 
   UserEdit.close = function(){
-    if(face_flag){
+    if(face_change_flag){
       App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
-      face_flag = false;
+      face_change_flag = false;
     }
     App.mysetRegion.close();
   };
