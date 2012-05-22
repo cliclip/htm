@@ -182,7 +182,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click .set_username" : "setName",
+      "click .edit_name" : "setName",
       "error": "showError",
       "focus #name": "cleanError",
       "click #confirm_face" : "submitFace"
@@ -192,7 +192,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var view = this;
       var uid = this.model.id;
       if(!$(e.currentTarget).hasClass("set_ok")){$("#set-name").empty();}
-      $(".set_username").addClass("set_ok").val("确定");
+      $(".edit_name").addClass("set_ok").val("确定");
       $(".set_ok").unbind("click");
       $("#name").show();
       $(".set_ok").click(function(){
@@ -214,7 +214,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $('#name').unbind("keydown");
       $('#name').keydown(function(e){
 	if(e.keyCode==13){
-	  $('.set_username').click();
+	  $('.edit_name').click();
 	}
       });
     },
@@ -415,8 +415,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.useredit:rename", function(){
-    $(".set_username").click(); // 触发设置用户名的动作
-    $(".edit_name").focus(); // 先让输入框聚焦
+    $(".edit_name").click(); // 触发设置用户名的动作
+    $(".set_username").focus(); // 先让输入框聚焦
   });
 
   App.bind("initialize:after", function(){

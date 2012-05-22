@@ -16,9 +16,9 @@ script(type="text/template",id="faceEdit-view-template")
       <% if(name && name!=""){%>
       <span class="name"><%=name%></span>
       <% }else{%>
-      <div id="set-name">您还没有用户名</div>
-      <input type="text" class="edit_name" name="name" id="name" style="display:none;">
-      <input type="button" class="set_username" value="设置用户名"/>
+      <span id="set-name" class="name">您还没有用户名</span>
+      <input type="text" class="set_username" name="name" id="name" style="display:none;">
+      <input type="button" class="edit_name" value="设置用户名"/>
       <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face")
