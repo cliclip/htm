@@ -7,7 +7,10 @@ App.ClipApp = (function(App, Backbone, $){
   function getMyUid(){
     var id = null;
     if(document.cookie){
-      id =  document.cookie.split("=")[1].split(":")[0];
+      var token =  document.cookie.split("=")[1];
+      if(token){
+	id = token.split(":")[0];
+      }
     }
     return id;
   };

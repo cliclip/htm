@@ -111,10 +111,19 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     focusAction:function(e){
       var id = e.currentTarget.id;
       $(e.currentTarget).hide();
-      if(id == "newpass")
-	$(e.currentTarget).siblings("#pass").show().focus();
-      if(id == "conpass")
-	$(e.currentTarget).siblings("#confirm").show().focus();
+      if(id == "newpass"){
+	$(e.currentTarget).siblings("#pass").show();
+	//STRANGE ie若不延时,输入框无法输入内容，需要再次点击输入框才可输入内容
+	setTimeout(function(){
+	  $(e.currentTarget).siblings("#pass").focus();
+	},10);
+      }
+      if(id == "conpass"){
+	$(e.currentTarget).siblings("#confirm").show();
+	setTimeout(function(){
+	  $(e.currentTarget).siblings("#confirm").focus();
+	},10);
+      }
       this.cleanError(e);
     },
     blurAction:function(e){
@@ -201,9 +210,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	view.setModel(nameModel, data);
 	if(nameModel.isValid()){
 	  nameModel.save({} ,{
+	    type: 'PUT',
 	    success:function(model,res){
 	      App.vent.trigger("app.clipapp.message:confirm","rename_success");
-	      App.vent.trigger("app.clipapp.useredit:@showface",uid);
+	      App.vent.trigger("app.clipapp.useredit:@showface");
 	    },
 	    error:function(model,res){
 	      view.showError(res);
@@ -229,14 +239,26 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showFace = function(){
+  UserEdit.showFace = function(flag){
     var face = App.util.getMyFace();
     var uid = App.util.getMyUid();
     var faceModel = new FaceModel(face);
-    UserEdit.faceRegion = new App.Region({el:".left_bar"});
-    var faceView = new FaceView({model: faceModel});
-    UserEdit.faceRegion.show(faceView);
-    faceLoad(face.face,uid);//修改头像
+    if(flag){
+      faceModel.fetch({
+	url:App.util.unique_url(P+"/my/info")
+      });
+      faceModel.onChange(function(faceModel){
+	UserEdit.faceRegion = new App.Region({el:".left_bar"});
+	var faceView = new FaceView({model: faceModel});
+	UserEdit.faceRegion.show(faceView);
+	faceLoad(face.face,uid);//修改头像
+      });
+    }else{
+      UserEdit.faceRegion = new App.Region({el:".left_bar"});
+      var faceView = new FaceView({model: faceModel});
+      UserEdit.faceRegion.show(faceView);
+      faceLoad(face.face,uid);//修改头像
+    }
   };
 
   UserEdit.onUploadImgChange = function(sender){
@@ -398,8 +420,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showUserEdit (uid);
   });
 
-  App.vent.bind("app.clipapp.useredit:@showface",function(uid){
-    UserEdit.showFace(uid);
+  App.vent.bind("app.clipapp.useredit:@showface",function(){
+    //设置用户名后需要重新显示faceview
+    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
+    UserEdit.showFace(true);
   });
 
   App.vent.bind("app.clipapp.useredit:@emaildel",function(address){
