@@ -172,6 +172,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showFace();
     UserEdit.showEmail();
     App.ClipApp.RuleEdit.show();
+    App.ClipApp.WeiboEdit.show();
     UserEdit.showPassEdit();
   };
 
