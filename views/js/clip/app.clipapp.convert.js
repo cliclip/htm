@@ -201,11 +201,11 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\[b\](.*?)\[\/b\]/ig, "<b>$1</b>");
     text = text.replace(/\[i\](.*?)\[\/i\]/ig, "<i>$1</i>");
     text = text.replace(/\[u\](.*?)\[\/u\]/ig, "<u>$1</u>");
-    text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\"/>");
-    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\"/>");
-    text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\n{2,}/ig, "<\/p><p>");
     text = text.replace(/\n/ig, "<\/br>");
+    text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
+    text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\"/>");
+    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\"/>");
     return text;
   }
 
