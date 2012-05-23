@@ -51,13 +51,13 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 
   function loadData(el){
     var text = "";
-    if($("#reclip_text", el).val().trim()!=defaultNote){//过滤defaultNote默认值
-      text = $("#reclip_text", el).val().trim();
+    if($.trim($("#reclip_text", el).val())!=defaultNote){//过滤defaultNote默认值
+      text = $.trim($("#reclip_text", el).val());
     }
     var main_tag = [];
     for(var i=0;i<6;i++){
       if($("#main_tag_"+i,el).attr("class") == "size48 orange_48"){
-	main_tag.push($("#main_tag_"+i,el).html().trim());
+	main_tag.push($.trim($("#main_tag_"+i,el).html()));
       }
     };
     var tag = _.without($("#obj_tag",el).val().split(","),"");
@@ -71,6 +71,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   }
 
   ReclipTag.show = function(user, tag){
+    //console.log("user :: " +user+ " tag :: " + tag);
     if(!user) user = 2; // 系统用户
     var model = new ReclipTagModel(); //此model只用于取数据
     model.fetch({
@@ -91,7 +92,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	}
       },
       error:function(model, res){
-	console.info(res);
+	//console.info(res);
       }
     });
   };
@@ -115,7 +116,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	ReclipTag.close();
       },
       error:function(model, res){
-	console.info(res);
+	//console.info(res);
       }
     });
   });
