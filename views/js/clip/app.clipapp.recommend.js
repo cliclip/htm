@@ -59,7 +59,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var clip_owner = this.model.get("clipid").split(":")[0];//clip的拥有者
       var params = {q:str};
       //查询friend
-      console.log(str);
       App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
     },
     nameBlur:function(){
