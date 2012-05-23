@@ -4,7 +4,15 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 
   var UserBind = {};
 
-  App.Model.UserBindModel = App.Model.extend({});
+  App.Model.UserBindModel = App.Model.extend({
+    url:function(){
+    var my = App.util.getMyUid();
+    if(this.get("oauth_id")){
+      return P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id");
+    }
+      return P+"/user/"+ my +"/provider/"+this.get("provider");
+    }
+  });
   var UserBindView = App.ItemView.extend({
     tagName : "div",
     className : "bind-view",
@@ -14,17 +22,17 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       "click #bind_ok"           : "bindOk",
       "click #user_hava"         : "toggleClass",
       "click #user_not"          : "toggleClass",
-      "blur #bind_name"               : "blurName",
-      "blur #bind_pass"               : "blurPass",
-      "focus #bind_name"              : "cleanError",
-      "focus #bind_pass"              : "cleanError"
+      "blur #name"          : "blurName",
+      "blur #pass"          : "blurPass",
+      "focus #name"         : "cleanError",
+      "focus #pass"         : "cleanError"
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
     },
     blurName: function(e){
       var that = this;
-      this.tmpmodel.set({name:$("#bind_name").val()}, {
+      this.tmpmodel.set({name:$("#name").val()}, {
 	error:function(model, error){
 	  that.showError(error);
 	}
@@ -32,7 +40,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     blurPass: function(e){
       var that = this;
-      this.tmpmodel.set({pass:$("#bind_pass").val()},{
+      this.tmpmodel.set({pass:$("#pass").val()},{
 	error:function(model, error){
 	  that.showError(error);
 	}
@@ -70,8 +78,10 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     toggleClass : function(e){
       if(e.currentTarget.id == "user_hava"){
 	$("#user_not").removeClass("tab");
+	$("#bind_ok").val("立即绑定");
       }else if(e.currentTarget.id == "user_not"){
 	$("#user_hava").removeClass("tab");
+	$("#bind_ok").val("立即注册");
       }
       $(e.currentTarget).addClass("tab");
     },
@@ -94,22 +104,21 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     bindOauth = null;
   };
 
-  function saveOauth(uid){
-    if(bindOauth){
-      var model = new App.Model.UserBindModel(bindOauth);
+  function saveOauth(oauth,callback){
+    if(oauth){
+      var model = new App.Model.UserBindModel(oauth);
       model.save({},{
-	url : App.ClipApp.Url.base+"/user/"+uid+"/oauth_info",
 	type: "POST",
 	success:function(model,res){
-	  Backbone.history.navigate("my",true);
-	  UserBind.close();
+	  callback(null,res);
 	},
 	error:function(model,error){
 	  //that.showError(error);
+	  callback(error,null);
 	}
       });
     }
-  }
+  };
 
   App.vent.bind("app.clipapp.userbind:show",function(oauth){
     UserBind.show();
@@ -117,11 +126,22 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     //console.info(bindOauth);
   });
 
+  App.vent.bind("app.clipapp.userbind:bind",function(oauth){
+    saveOauth(oauth,function(err,reply){
+      if(reply){
+	App.vent.trigger("app.clipapp.userbind:ok");
+      }
+    });
+  });
+
   App.vent.bind("app.clipapp.userbind:@success", function(res){
-    var data = new Date();
-    data.setTime(data.getTime() + 7*24*60*60*1000);
-    document.cookie = "token="+res.token+";expires=" + data.toGMTString();
-    saveOauth(res.token.split(":")[0]);
+      var data = new Date();
+      data.setTime(data.getTime() + 7*24*60*60*1000);
+      document.cookie = "token="+res.token+";expires=" + data.toGMTString();
+      Backbone.history.navigate("my",true);
+      saveOauth(bindOauth,function(err,reply){
+	UserBind.close();
+      });
   });
 
   App.vent.bind("app.clipapp.userbind:@error", function(model, error){

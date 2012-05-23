@@ -5,6 +5,7 @@ script(type="text/template",id="editUser-view-template")
       span.close_w
       div(class="left_bar")
       div(class="middle",id="email")
+      div(class="middle",id="weibo")
       div(class="middle",id="rule")
       div(class="right_bar")
 
@@ -16,9 +17,9 @@ script(type="text/template",id="faceEdit-view-template")
       <% if(name && name!=""){%>
       <span class="name"><%=name%></span>
       <% }else{%>
-      <div id="set-name">您还没有用户名</div>
-      <input type="text" class="edit_name" name="name" id="name" style="display:none;">
-      <input type="button" class="set_username" value="设置用户名"/>
+      <span id="set-name" class="name">您还没有用户名</span>
+      <input type="text" class="set_username" name="name" id="name" style="display:none;">
+      <input type="button" class="edit_name" value="设置用户名"/>
       <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face")
@@ -43,7 +44,7 @@ script(type="text/template",id="emailEdit-view-template")
         button.add_mailbind.align-right(type="button",id="email_add",)
           span
           |增加邮箱绑定 	
-        |邮箱识别
+        |邮箱绑定
       |<% if(email){ for(i=0;i<email.length;i++) { if(email[i]){ %>
       |<li class="mail_line">
       |<span class="email_address" id="<%=email[i]%>"></span>
@@ -101,3 +102,20 @@ script(type="text/template",id="emailAdd-view-template")
           li.btn_group.clearfix
             input.verify(type="button",value="确定",id="emailadd_commit")
             input.cancel(type="button",value="取消",id="emailadd_cancel")
+
+
+script(type="text/template",id="weiboEdit-view-template")
+  .mail_verify.fir
+    ul.mail_list
+      h3
+        button.add_mailbind.align-right(type="button",id="info_add",)
+          span
+          |增加微博邮箱 	
+        |微博绑定
+      |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
+      |<li class="mail_line">
+      |<a href="<%=info[i].url%>" target="_blank"><apan class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
+      |<span class="info_name" id="<%=info[i].name%>_<%=info[i].uid%>"></span>
+      |<a href="<%=info[i].url%>" target="_blank"><%=info[i].name%></a>
+      |</li><% }} }%>
+
