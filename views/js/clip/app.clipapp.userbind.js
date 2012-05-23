@@ -50,13 +50,12 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       e.preventDefault();
       var that = this;
       var str = $(".tab").text().trim();
-      console.info(str);
       if(str == "我有点易账号"){
 	this.tmpmodel.save({}, {
 	  url: App.ClipApp.Url.base+"/login",
 	  type: "POST",
   	  success: function(model, res){
-  	    App.vent.trigger("app.clipapp.userbind:@success", res);
+  	    App.vent.trigger("app.clipapp.userbind:success", res);
   	  },
   	  error:function(model, res){
 	    that.showError(res);
@@ -67,7 +66,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	  url : App.ClipApp.Url.base+"/register",
 	  type: "POST",
 	  success:function(model,res){
-	    App.vent.trigger("app.clipapp.userbind:@success",res);
+	    App.vent.trigger("app.clipapp.userbind:success",res);
 	  },
 	  error:function(model,error){
 	    that.showError(error);
@@ -91,7 +90,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     }
   });
 
-  var bindOauth ;
+  var bindOauth ,fun; //fun 用于记录用户登录前应该触发的事件
 
   UserBind.show = function(){
     var model = new App.Model.UserBindModel();
@@ -102,6 +101,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   UserBind.close = function(){
     App.popRegion.close();
     bindOauth = null;
+    fun = null;
   };
 
   function saveOauth(oauth,callback){
@@ -120,9 +120,10 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.userbind:show",function(oauth){
+  App.vent.bind("app.clipapp.userbind:show",function(oauth,f){
     UserBind.show();
     bindOauth = oauth;
+    fun = f;
     //console.info(bindOauth);
   });
 
@@ -134,13 +135,19 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     });
   });
 
-  App.vent.bind("app.clipapp.userbind:@success", function(res){
+  App.vent.bind("app.clipapp.userbind:success", function(res){
       var data = new Date();
       data.setTime(data.getTime() + 7*24*60*60*1000);
       document.cookie = "token="+res.token+";expires=" + data.toGMTString();
-      Backbone.history.navigate("my",true);
       saveOauth(bindOauth,function(err,reply){
-	UserBind.close();
+	if(reply){
+	  if(typeof fun == "function"){
+	    fun();
+	  }else if(Backbone.history){
+	    Backbone.history.navigate("my",true);
+	  }
+	  UserBind.close();
+	}
       });
   });
 

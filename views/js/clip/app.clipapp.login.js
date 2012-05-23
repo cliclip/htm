@@ -122,7 +122,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 		  if(res){
 		    App.vent.trigger("app.clipapp.login:success", res);
 		  }else{
-		    App.vent.trigger("app.clipapp.userbind:show",r[1]);
+		    App.vent.trigger("app.clipapp.userbind:show",r[1],fun);
 		  }
 		});
 		closeUI();
