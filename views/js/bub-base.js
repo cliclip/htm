@@ -403,7 +403,7 @@ $(function() {
 	  worldAABB.minVertex.Set( - wall_thickness, - wall_thickness);
 	  worldAABB.maxVertex.Set(WIDTH + wall_thickness, HEIGHT + wall_thickness);
 	  world = new b2World(worldAABB, new b2Vec2(0, 0), true);
-	  setWalls(WIDTH, HEIGHT, wall_thickness);
+	  setWalls(WIDTH, HEIGHT, wall_thickness+50);
 	  setInterval(loop, 1000 / 40);
 	},
 	random : function(){
@@ -426,7 +426,7 @@ $(function() {
 	},
 	resize : function(width, height){
 	  // console.log("resize(%s,%s)", width, height);
-	  setWalls(width, height, wall_thickness);
+	  setWalls(width, height, wall_thickness+50);
 	},
 	roll : function(beta, gamma){
 	  /*

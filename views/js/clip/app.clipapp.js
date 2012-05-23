@@ -113,8 +113,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.UserEdit.showUserEdit(uid);
   };
 
-  App.vent.bind("app.clipapp:login", function(){
-    ClipApp.Login.show();
+  App.vent.bind("app.clipapp:login", function(callback){
+    ClipApp.Login.show(callback);
   });
 
   App.vent.bind("app.clipapp:register", function(){
