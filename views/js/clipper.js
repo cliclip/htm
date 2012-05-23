@@ -7,8 +7,8 @@ $(function() {
       r = JSON.parse(message);
       switch(r[0]){
 	case 'init' : // for caller to set content // TODO
-          // 去除掉网页中的script代码，会对safair以及google产生影响
-	  // r[1] = App.ClipApp.Convert.filter(r[1]);
+          // 先通过cleanHtml toUbb toHtml的转换在显示在editor上
+	  r[1] = App.ClipApp.Convert.filter(r[1]);
           if(App.util.getMyUid()){
             App.ClipApp.ClipAdd.show();
             App.ClipApp.Editor.setContent("editor", r[1]);
