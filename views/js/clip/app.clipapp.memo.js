@@ -82,9 +82,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var text = "";
     tags = _(tags).map(function(e){return e.toLocaleLowerCase();});
     if(!_.isEmpty(note)){
-      var ns = _(note).select(function(e){return e.text; })
-	.map(function(e){ return e.text; });
+      var _ns = _(note).select(function(e){return e.text; });
+      if(!_.isEmpty(_ns)){
+	var ns = _(_ns).map(function(e){ return e.text; });
 	_(ns).each(function(n){ text += n+" "; });
+      }
     }
     var tag_main = _(_(App.util.getBubbs()).map(function(e){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
@@ -112,7 +114,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       detailModel.fetch({
 	success:function(model,res){
 	  var data = getData(model.toJSON());// 从detail中取得的model
-	  console.log(data);
+	  //console.log(data);
 	  showMemo(data);
 	},
 	error:function(model,res){}
@@ -157,7 +159,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   });
 
   App.vent.bind("app.clipapp.memo:@error",function(model,error){
-    console.info(error);
+    //console.info(error);
   });
 
   // TEST
