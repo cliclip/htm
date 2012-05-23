@@ -71,7 +71,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   }
 
   ReclipTag.show = function(user, tag){
-    console.log("user :: " +user+ " tag :: " + tag);
+    if(!user) user = 2; // 系统用户
     var model = new ReclipTagModel(); //此model只用于取数据
     model.fetch({
       type: "GET",
@@ -91,7 +91,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	}
       },
       error:function(model, res){
-	  console.info(res);
+	console.info(res);
       }
     });
   };
