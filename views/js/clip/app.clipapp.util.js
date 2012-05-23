@@ -69,8 +69,9 @@ App.util = (function(){
     }else return imageid;
   };
 
+  // 将content内容转换为，可用于显示的html
   util.contentToHtml = function(content){
-   return App.ClipApp.Convert.ubbToHtml(content);
+    return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   util.getPreview = function(content, length){
@@ -78,12 +79,12 @@ App.util = (function(){
     var reg = /\[img\].*?\[\/img\]/;
     var img = content.match(reg);
     if(img) data.image = img[0].replace('[img]',"").replace('[/img]',"");
-    var text = _getContentText(content);
-    data.text = _trim(text, length);
+    var text = getContentText(content);
+    data.text = trim(text, length);
     return data;
   };
 
-  function _getContentText (content){
+  function getContentText (content){
     // 取得ubb中常用的标签之后留下的内容
     // 去掉所有的ubb标签中的内容，只留下文本内容
     var reg1 = /\[img\].*\[\/img\]?/;
@@ -92,10 +93,10 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return App.ClipApp.Convert.ubbToHtml(content);
+    return App.ClipApp.Convert.ubbToHtml(content, true);
   };
 
-  function _trim(content, length){
+  function trim(content, length){
     var r = undefined;
     if (!content) return r;
     if (_.isString(content) && content.length){
@@ -229,6 +230,8 @@ App.util = (function(){
     post_active  : "邮件地址。您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。",
     pre_delemail : "您真的要删除",
     post_delemail: "邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
+    pre_deloauth : "您真的要删除",
+    post_deloauth: "微博账号吗？删除后，您将无法使用此微博账号进行登录，也无法接收来自此微博账号的收藏。",
 
     del_comment  : "您真的要删除这条评论吗？（此操作无法恢复）",
 

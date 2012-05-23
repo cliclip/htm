@@ -97,10 +97,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.login:@cancel");
     },
     openWeibo : function(e){
-      //window.open("http://clickdang.com:5000/oauth/req/weibo");
-      var params = Math.random()*9999999;
+      App.vent.trigger("app.clipapp.login:@cancel");
       socket = new easyXDM.Socket({
-	remote: 'http://clickdang.com:5000/oauth/req/weibo?r='+params,
+	remote: 'http://clickdang.com:5000/oauth/req/weibo?r='+Math.random()*9999999,
 	container: document.body,
 	swf: 'http://192.168.1.3:10000/img/easyxdm.swf',
 	swfNoThrottle: true,
@@ -119,23 +118,25 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	  switch(r[0]){
 	    case 'oauth' : // for ui to set model after change
 	      setTimeout(function(){
-		closeUI();
-		cleanSelection();
-		App.vent.trigger("app.clipapp.login:@cancel");
 		checkUser({uid:r[1].info.uid,provider:r[1].provider},function(err,res){
 		  if(res){
 		    App.vent.trigger("app.clipapp.login:success", res);
 		  }else{
-		    App.vent.trigger("app.clipapp.userbind:show",r[1]);
+		    App.vent.trigger("app.clipapp.userbind:show",r[1],fun);
 		  }
 		});
+		closeUI();
+		cleanSelection();
 		//console.info(r[1]);
 	      }, 1000);
 	      break;
+	    case 'close' :
+              closeUI();
+	      cleanSelection();
           }
 	}
       });
-      socket.postMessage(JSON.stringify(["ping",params]));
+      socket.postMessage(JSON.stringify(["ping"]));
     }
   });
 

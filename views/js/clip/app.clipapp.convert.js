@@ -6,8 +6,13 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   Convert.filter = function (html) {
     if (isWord(html)) {html = cleanWord(html);}
     html = cleanHtml(html);
-    html = _htmlToUbb(html); // 过滤
+    html = _htmlToUbb(html, true); // 过滤，将encodeHtml解码
     html = _ubbToHtml(html); // 显示
+    return html;
+  };
+
+  Convert.toUbb = function(html){
+    html = _htmlToUbb(html, false);
     return html;
   };
 
@@ -162,7 +167,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   }
 
   // 对与pre和code类的标签此处是作为文本内容进行处理的
-  function _htmlToUbb(html){
+  function _htmlToUbb(html, flag){
     var text = html;
     // 先将不是html的网址转换成 a 标签
     var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
@@ -187,7 +192,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // input - <img src="http://what.url.jpg" />'
     // output - [http://what.url.jpg]'
     text = text.replace(/<\s*img[^>]*src=['"](.*?)['"][^>]*>/ig, "[img]$1[/img]");
-    text = toText(text);
+    text = toText(text, flag);
     return text;
   }
 
@@ -201,7 +206,6 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\n{2,}/ig, "<\/p><p>");
     text = text.replace(/\n/ig, "<\/br>");
-    // text = "<p>"+text+"</p>"; // 去掉P标签
     return text;
   }
 
@@ -217,7 +221,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   var SingleLineTags = ['li', 'del', 'ins', 'fieldset', 'legend', 'tr', 'th', 'caption', 'thead', 'tbody', 'tfoot'];
 
   // 去掉 html 的所有标签，获取 html 内容的 text 格式
-  function toText(html) {
+  function toText(html, flag) {
     var text = html
       // Remove line breaks
     .replace(/(?:\n|\r\n|\r)/ig, " ")
@@ -230,18 +234,18 @@ App.ClipApp.Convert = (function(App, Backbone, $){
       // Remove !DOCTYPE
     .replace(/<!DOCTYPE.*?>/ig, "");
 
-  for (i = 0; i < DoubleLineTags.length; i++) {
-    var r = RegExp('</?\\s*' + DoubleLineTags[i] + '[^>]*>', 'ig');
-    text = text.replace(r, '\n\n');
-  }
+    for (i = 0; i < DoubleLineTags.length; i++) {
+      var r = RegExp('</?\\s*' + DoubleLineTags[i] + '[^>]*>', 'ig');
+      text = text.replace(r, '\n\n');
+    }
 
-  for (i = 0; i < SingleLineTags.length; i++) {
-    var r = RegExp('<\\s*' + SingleLineTags[i] + '[^>]*>', 'ig');
-    text = text.replace(r, '\n');
-  }
+    for (i = 0; i < SingleLineTags.length; i++) {
+      var r = RegExp('<\\s*' + SingleLineTags[i] + '[^>]*>', 'ig');
+      text = text.replace(r, '\n');
+    }
 
-  // Replace <br> and <br/> with a single newline
-  text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
+    // Replace <br> and <br/> with a single newline
+    text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
     text = text
     // Remove all remaining tags.
     .replace(/(<([^>]+)>)/ig, "")
@@ -254,9 +258,9 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // Remove newlines at the beginning of the text.
     .replace(/^\n+/, "")
     // Remove newlines at the end of the text.
-    .replace(/\n+$/, "")
+    .replace(/\n+$/, "");
+    text = flag ? text.replace(/&([^;]+);/g, decode) : text;
     // Decode HTML entities.
-    .replace(/&([^;]+);/g, decode);
     return text;
   }
 

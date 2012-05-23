@@ -90,7 +90,7 @@
 	    // cleanSelection(); 是否调用没有影响
 	    break;
 	  case 'log':
-	    console.log("log %j",win[hash].val.model);
+	    console.log("log ==== %j",r[1]);
 	    break;
         }
       }
