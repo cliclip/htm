@@ -58,16 +58,34 @@ App.ClipApp.Me = (function(App, Backbone, $){
       $(".my").css({"z-index":2});
       $(".at_me").css({"z-index":1});
       $(".expert").css({"z-index":0});
+      if(!(/my/.test(window.location.hash))){
+        Backbone.history.navigate("my",true);
+	App.vent.trigger("app.clipapp.face:reset",this.model.id);
+      }else{
+	Backbone.history.navigate("my",true);
+      }
     },
     switch_at_me:function(){
       $(".my").css({"z-index":1});
       $(".at_me").css({"z-index":1});
       $(".expert").css({"z-index":0});
+      if(!(/my/.test(window.location.hash))){
+        Backbone.history.navigate("my/recommend",true);
+	App.vent.trigger("app.clipapp.face:reset",this.model.id);
+      }else{
+	Backbone.history.navigate("my/recommend",true);
+      }
     },
     switch_expert:function(){
       $(".my").css({"z-index":0});
       $(".at_me").css({"z-index":0});
       $(".expert").css({"z-index":0});
+      if(!(/my/.test(window.location.hash))){
+        Backbone.history.navigate("my/interest",true);
+	App.vent.trigger("app.clipapp.face:reset",this.model.id);
+      }else{
+	Backbone.history.navigate("my/interest",true);
+      }
     }
     /*
     mouseEnter: function(e){
