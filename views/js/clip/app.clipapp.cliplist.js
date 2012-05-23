@@ -70,7 +70,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	var $newElems = itemView.$el;
 	flag = true;
 	$newElems.imagesLoaded(function(){
-	  $("#list").masonry("reload");
+	  //STRANGE若不加延时则所有clip无图片时不产生动态布局效果,无图此段代码也会运行
+	  setTimeout(function(){
+	    $("#list").masonry("reload");
+	  },0);
 	});
       });
     },
@@ -128,7 +131,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  //$("#list").masonry("reload");
 	},0);
       });
-       */
+      */
     }
   });
 
@@ -224,7 +227,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:nextpage",function(){
-    // console.info("nextpage");
+    //console.info("nextpage");
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       start += App.ClipApp.Url.page;
@@ -250,6 +253,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
       });
     }
+    console.info(collection);
   });
 
   App.vent.bind("app.clipapp.cliplist:add",function(addmodel){

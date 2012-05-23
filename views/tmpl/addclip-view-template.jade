@@ -5,7 +5,7 @@ script(type="text/template",id="addClip-view-template")
       div.pop_left
         i.note
       div.pop_right
-        | 增
+
         div.button_frame
           iframe(name="post_frame",id="post_frame")
           |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
@@ -23,6 +23,7 @@ script(type="text/template",id="addClip-view-template")
             button.format 整理格式
           span.close_w
             |&nbsp&nbsp&nbsp&nbsp&nbsp
+        | 增加
     div.pop_left
     div.pop_right
       section.pop_inner
