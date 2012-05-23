@@ -113,7 +113,7 @@ script(type="text/template",id="weiboEdit-view-template")
           |增加微博绑定 	
         |微博绑定
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
-      |<li class="mail_line">
+      |<li class="oauth_li">
       |<a href="<%=info[i].url%>" target="_blank"><apan class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
       |<span class="info_name" id="<%=info[i].name%>_<%=info[i].uid%>"></span>
       |<a href="<%=info[i].url%>" target="_blank"><%=info[i].name%></a>
