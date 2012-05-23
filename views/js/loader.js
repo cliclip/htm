@@ -13,6 +13,7 @@
     return nav.userAgent;
   }
 
+  // return doc.getElementsByTagName('body').item(0).getAttribute('innerHTML');
   // get page content html
   function getPage(){
     return doc.body.innerHTML;
