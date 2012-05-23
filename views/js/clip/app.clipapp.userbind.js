@@ -127,6 +127,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     //console.info(bindOauth);
   });
 
+  //bind 设置里面增加微博绑定
   App.vent.bind("app.clipapp.userbind:bind",function(oauth){
     saveOauth(oauth,function(err,reply){
       if(reply){
@@ -140,6 +141,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       data.setTime(data.getTime() + 7*24*60*60*1000);
       document.cookie = "token="+res.token+";expires=" + data.toGMTString();
       saveOauth(bindOauth,function(err,reply){
+	App.vent.trigger("app.clipapp.userbind:bindok");
 	if(reply){
 	  if(typeof fun == "function"){
 	    fun();

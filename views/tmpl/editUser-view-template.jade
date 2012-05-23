@@ -4,9 +4,9 @@ script(type="text/template",id="editUser-view-template")
     section.edit_frame
       span.close_w
       div(class="left_bar")
+      div(class="middle",id="rule")
       div(class="middle",id="email")
       div(class="middle",id="weibo")
-      div(class="middle",id="rule")
       div(class="right_bar")
 
 script(type="text/template",id="faceEdit-view-template")
@@ -52,7 +52,7 @@ script(type="text/template",id="emailEdit-view-template")
       |</li><% }} }%>
   
 script(type="text/template",id="ruleEdit-view-template")
-  .mail_verify.sec
+  .mail_verify.fir
     ul.mail_list
       h3
         span.open_mailcheck
@@ -105,12 +105,12 @@ script(type="text/template",id="emailAdd-view-template")
 
 
 script(type="text/template",id="weiboEdit-view-template")
-  .mail_verify.fir
+  .mail_verify.sec
     ul.mail_list
       h3
         button.add_mailbind.align-right(type="button",id="info_add",)
           span
-          |增加微博邮箱 	
+          |增加微博绑定 	
         |微博绑定
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="mail_line">

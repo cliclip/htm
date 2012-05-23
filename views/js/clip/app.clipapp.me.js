@@ -94,7 +94,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp.userbind:success", function(){
+  App.vent.bind("app.clipapp.userbind:bindok", function(){
     Me.me.fetch();
   });
 
