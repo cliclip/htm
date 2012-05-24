@@ -1,7 +1,7 @@
 $(function() {
   var r ;
   var socket = new easyXDM.Socket({
-    swf: 'http://clickdang.com/img/easyxdm.swf',
+    swf: 'http://clickdang.com:4000/img/easyxdm.swf',
     swfNoThrottle: true,
     onMessage: function(message, origin){
       r = JSON.parse(message);
@@ -46,6 +46,6 @@ $(function() {
     App.vent.bind("app.clipapp.clipper:log", function(data){
       socket.postMessage(JSON.stringify(["log", data]));
     });
-    
+
     // setTimeout(function(){ socket.postMessage(["empty"]); },20000);
 });
