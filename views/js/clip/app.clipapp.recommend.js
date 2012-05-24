@@ -28,7 +28,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     events:{
       "click .user" : "getUserAction",
-      "keyup #recomm_name"   : "nameListAction",
+      "input #recomm_name"   : "nameListAction",
       "click #recomm_name"   : "nameListAction",
       "focus #recomm_name"   : "nameListShow",
       "blur #recomm_name"    : "nameBlur",
@@ -88,7 +88,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	}
 	$(".name_list").hide();
       },200);
-  },
+    },
     selectAction:function(event){
       if(event.keyCode == 40){ // UP
 	var flag = true;
@@ -120,15 +120,15 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  $(div[div.length-1]).css("background-color","#888");
 	  $("#recomm_name").val($.trim($(div[length-1]).text()));
 	}
-      }else if(event.keyCode == 13){
+      }else if(event.keyCode == 13){ // enter
 	var div = $("#name_listDiv").children().children();
 	for(var i=0;i<div.length;i++){
 	  if($(div[i]).css("background-color") == "rgb(136, 136, 136)"){
 	    $("#recomm_name").val($.trim($(div[i]).text()));
-	    $("#recommend_text").focus();
+	    $("#recomm_text").focus();
 	  }
 	}
-	}
+      }
     },
     nameListShow:function(e){
       this.cleanError(e);

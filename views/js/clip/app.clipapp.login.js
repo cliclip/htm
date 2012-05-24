@@ -68,7 +68,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
-	  App.vent.trigger("app.clipapp.clipper:login");
   	  App.vent.trigger("app.clipapp.login:success", res); // fetch Me.me
   	},
   	error:function(model, res){
@@ -83,8 +82,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){
-	  App.vent.trigger("app.clipapp.register:success","register_success",response);
-	  App.vent.trigger("app.clipapp.clipper:register");
+	  if(typeof fun != "function"){
+	    App.vent.trigger("app.clipapp.register:success","register_success",response);
+	  }else{
+	    App.vent.trigger("app.clipapp.login:success", response);
+	  }
 	},
 	error:function(model,error){
 	  that.showError(error);
