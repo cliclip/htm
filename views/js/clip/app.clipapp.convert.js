@@ -6,13 +6,13 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   Convert.filter = function (html) {
     if (isWord(html)) {html = cleanWord(html);}
     html = cleanHtml(html);
-    html = _htmlToUbb(html, true); // 过滤，将encodeHtml解码
+    html = _htmlToUbb(html); // 过滤，将encodeHtml解码
     html = _ubbToHtml(html); // 显示
     return html;
   };
 
   Convert.toUbb = function(html){
-    html = _htmlToUbb(html, false);
+    html = _htmlToUbb(html);
     return html;
   };
 
@@ -147,15 +147,15 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     str = str.replace(/<(\/?(\?xml(:\w+)?|xml|\w+:\w+)(?=[\s\/>]))[^>]*>/gi, "");
     //remove head
     str = str.replace(/<head[^>]*>(\n|.)*?<\/head>/ig, "");
+    //remove <xxx>...</xxx>
+    str = str.replace(/<(head|script|style|textarea|button|select|option|iframe)[^>]*>(\n|.)*?<\/\1>/ig, "");
     //remove <xxx />
     str = str.replace(/<(script|style|link|title|meta|textarea|option|select|iframe|hr)(\n|.)*?\/>/ig, "");
     //remove empty span
     str = str.replace(/<span[^>]*?><\/span>/ig, "");
-    //remove <xxx>...</xxx>
-    str = str.replace(/<(head|script|style|textarea|button|select|option|iframe)[^>]*>(\n|.)*?<\/\1>/ig, "");
     //remove table and <a> tag,<input> tag (this can help filter unclosed tag)
     str = str.replace(/<\/?(input|iframe|div)[^>]*>/ig, "");
-    // keep img
+    // keep img&a
     // str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|img|input|iframe|div)[^>]*>/ig, "");
     str = str.replace(/<\/?(table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
     //remove bad attributes
@@ -167,7 +167,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   }
 
   // 对与pre和code类的标签此处是作为文本内容进行处理的
-  function _htmlToUbb(html, flag){
+  function _htmlToUbb(html){
     var text = html;
     // 先将不是html的网址转换成 a 标签
     var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
@@ -192,7 +192,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // input - <img src="http://what.url.jpg" />'
     // output - [http://what.url.jpg]'
     text = text.replace(/<\s*img[^>]*src=['"](.*?)['"][^>]*>/ig, "[img]$1[/img]");
-    text = toText(text, flag);
+    text = toText(text);
     return text;
   }
 
@@ -201,11 +201,11 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\[b\](.*?)\[\/b\]/ig, "<b>$1</b>");
     text = text.replace(/\[i\](.*?)\[\/i\]/ig, "<i>$1</i>");
     text = text.replace(/\[u\](.*?)\[\/u\]/ig, "<u>$1</u>");
-    text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\"/>");
-    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\"/>");
-    text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\n{2,}/ig, "<\/p><p>");
     text = text.replace(/\n/ig, "<\/br>");
+    text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
+    text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\"/>");
+    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\"/>");
     return text;
   }
 
@@ -221,7 +221,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   var SingleLineTags = ['li', 'del', 'ins', 'fieldset', 'legend', 'tr', 'th', 'caption', 'thead', 'tbody', 'tfoot'];
 
   // 去掉 html 的所有标签，获取 html 内容的 text 格式
-  function toText(html, flag) {
+  function toText(html) {
     var text = html
       // Remove line breaks
     .replace(/(?:\n|\r\n|\r)/ig, " ")
@@ -258,8 +258,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // Remove newlines at the beginning of the text.
     .replace(/^\n+/, "")
     // Remove newlines at the end of the text.
-    .replace(/\n+$/, "");
-    text = flag ? text.replace(/&([^;]+);/g, decode) : text;
+    .replace(/\n+$/, "")
+    .replace(/&([^;]+);/g, decode);
     // Decode HTML entities.
     return text;
   }

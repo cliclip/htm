@@ -59,13 +59,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var obj_tag = $("#obj_tag", el).val().split(",");
     var tag_list = _.union(main_tag,obj_tag);
     tag_list = _.compact(tag_list); // 去除掉数组中的空值
+    _data.tag = tag_list;
     var text = "";
     if($.trim($("#organize_text", el).val())!=defaultNote){//过滤defaultNote默认值
       text = $.trim($("#organize_text", el).val());
     }
-    if(text != "") _data.note = [{text: text}];
-    if(tag_list.length > 0) _data.tag = tag_list;
-
+    _data.note = [{text: text}];
     if($("#memo_private", el).attr("checked")){
       _data["public"] = "false";
     }else{

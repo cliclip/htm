@@ -27,6 +27,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "blur #pass"               : "blurPass",
       "focus #name"              : "clearAction",
       "focus #pass"              : "cleanError",
+      "keydown #pass"            : "keydownAction",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
       "click .reg_btn"           : "registerAction",
@@ -68,7 +69,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
-	  App.vent.trigger("app.clipapp.clipper:login");
   	  App.vent.trigger("app.clipapp.login:success", res); // fetch Me.me
   	},
   	error:function(model, res){
@@ -76,6 +76,13 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	}
       });
     },
+    keydownAction : function(e){
+      $('#pass').unbind("keydown");
+      if(e.keyCode==13){
+	$("#pass").blur();
+	$('.login_btn').click();
+      }
+     },
     registerAction:function(e){
       var that = this;
       e.preventDefault();
@@ -83,8 +90,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){
-	  App.vent.trigger("app.clipapp.register:success","register_success",response);
-	  App.vent.trigger("app.clipapp.clipper:register");
+	  if(typeof fun != "function"){
+	    App.vent.trigger("app.clipapp.register:success","register_success",response);
+	  }else{
+	    App.vent.trigger("app.clipapp.login:success", response);
+	  }
 	},
 	error:function(model,error){
 	  that.showError(error);
@@ -99,9 +109,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
     openWeibo : function(e){
       App.vent.trigger("app.clipapp.login:@cancel");
       socket = new easyXDM.Socket({
-	remote: 'http://clickdang.com:5000/oauth/req/weibo?r='+Math.random()*9999999,
+	remote: 'http://clickdang.com/oauth/req/weibo?r='+Math.random()*9999999,
+	//remote: 'http://192.168.1.3:10000/oauth/req/weibo?r='+Math.random()*9999999,
 	container: document.body,
-	swf: 'http://192.168.1.3:10000/img/easyxdm.swf',
+	swf: 'http://clickdang.com/img/easyxdm.swf',
 	swfNoThrottle: true,
 	onLoad: function(e){ // hack, style set
 	  var iframe = e.target;
