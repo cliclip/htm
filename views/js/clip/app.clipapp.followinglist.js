@@ -69,7 +69,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:nextpage",function(){
     if(!App.listRegion.currentView)return;
-    if(App.listRegion.currentView.$el[0].className=="following-view"&&new_page){
+    if(App.listRegion.currentView.$el[0].className=="following-item"&&new_page){
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
       url = App.util.unique_url(base_url + "/" + start + ".." + end);
