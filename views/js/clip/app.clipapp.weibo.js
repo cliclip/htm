@@ -14,9 +14,9 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
     },
     WeiboAdd:function(e){
       socket = new easyXDM.Socket({
-	remote: 'http://clickdang.com:5000/oauth/req/weibo?forcelogin=true&r='+Math.random()*9999999,
+	remote: 'http://clickdang.com/oauth/req/weibo?forcelogin=true&r='+Math.random()*9999999,
 	container: document.body,
-	swf: 'http://192.168.1.3:10000/img/easyxdm.swf',
+	swf: 'http://clickdang.com/img/easyxdm.swf',
 	swfNoThrottle: true,
 	onLoad: function(e){ // hack, style set
 	  var iframe = e.target;
@@ -47,8 +47,8 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
     WeiboCut:function(e){
       e.preventDefault();
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
-      var name = e.currentTarget.id.split("_")[0];
-      var uid = e.currentTarget.id.split("_")[1];
+      var uid = e.currentTarget.id;
+      var name = $("#name_"+uid).text().trim();
       App.vent.trigger("app.clipapp.message:alert", "deloauth", name);
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.vent.trigger("app.clipapp.weibo:@weibodel",uid);

@@ -2,12 +2,13 @@ script(type="text/template",id="bind-view-template")
   div.masker_layer
   section.bind_window
     div.bind_header
-      新浪微博账号登陆成功，请绑定您的点易账号
+      您已登录新浪微博，但尚未将此微博绑定给任何帐户。
     span.close_w
+    |<div class="info"><a href="<%=info.url%>" target="_blank"><img src="<%=info.face%>"></img><br><%=info.name%></a></div>
     div.bind_body
       ul.tab_frame
-        li(id="user_hava",class="tab") 我有点易账号
-        li(id="user_not",class="") 注册点易账号
+        li(id="user_hava",class="tab") 绑定已有帐户
+        li(id="user_not",class="") 注册新帐户
       div.user_bind
         div.logo_bg
         fieldset
