@@ -1,7 +1,7 @@
 $(function() {
   var r ;
   var socket = new easyXDM.Socket({
-    swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
+    swf: 'http://clickdang.com/img/easyxdm.swf',
     swfNoThrottle: true,
     onMessage: function(message, origin){
       r = JSON.parse(message);
@@ -43,16 +43,9 @@ $(function() {
       socket.postMessage(JSON.stringify(["close"]));
     });
 
-    App.vent.bind("app.clipapp.clipper:login", function(){
-      socket.postMessage(JSON.stringify(["close"]));
-    });
-
     App.vent.bind("app.clipapp.clipper:log", function(data){
       socket.postMessage(JSON.stringify(["log", data]));
     });
-    App.vent.bind("app.clipapp.clipper:register", function(){
-      socket.postMessage(JSON.stringify(["close"]));
-    });
-
+    
     // setTimeout(function(){ socket.postMessage(["empty"]); },20000);
 });

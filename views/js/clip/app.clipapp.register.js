@@ -28,7 +28,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
       this.model.save(data,{
 	success:function(model,response){
 	  // 转到用户登录页面
-	  console.log(response);
 	  App.vent.trigger("app.clipapp.register:success","register_success",response);
 	},
 	error:function(model,error){
@@ -74,7 +73,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     App.popRegion.show(registerView);
   };
 
-  App.vent.bind("app.clipapp.register:success", function(key, res){
+  App.vent.bind("app.clipapp.register:success", function(key, res, fun){
     var data = new Date();
     data.setTime(data.getTime() + 7*24*60*60*1000);
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();

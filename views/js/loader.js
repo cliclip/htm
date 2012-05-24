@@ -63,9 +63,9 @@
     savedScrollTop = win.pageYOffset;
     win.scroll(0, 0);
     socket = new easyXDM.Socket({
-      remote: 'http://192.168.1.3:5000/clipper.html?r='+Math.random()*9999999,
+      remote: 'http://clickdang.com/clipper.html?r='+Math.random()*9999999,
       container: doc.body,
-      swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
+      swf: 'http://clickdang.com/img/easyxdm.swf',
       swfNoThrottle: true,
       onLoad: function(e){ // hack, style set
 	var iframe = e.target;
@@ -135,7 +135,7 @@
      if (typeof easyXDM === "undefined" || !easyXDM) {
        var s1 = document.createElement("script");
        s1.type = "text/javascript";
-       s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.debug.js";
+       s1.src = "http://clickdang.com/js/lib/easyXDM.debug.js";
        s1.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
 	   scriptOnLoad();
@@ -148,7 +148,7 @@
      if (typeof JSON === "undefined" || !JSON) {
        var s2 = document.createElement("script");
        s2.type = "text/javascript";
-       s2.src = "http://192.168.1.3:5000/js/lib/json2.js";
+       s2.src = "http://clickdang.com/js/lib/json2.js";
        s2.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
 	   scriptOnLoad();
