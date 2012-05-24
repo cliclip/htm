@@ -32,7 +32,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "click #recomm_name"   : "nameListAction",
       "focus #recomm_name"   : "nameListShow",
       "blur #recomm_name"    : "nameBlur",
-      "keypress #recomm_name": "selectAction",
+      "keydown #recomm_name": "selectAction",
       "mouseover .user"      :  "MouseOver",
       "mouseout .user"       :  "MouseOut",
       "focus #recomm_text":  "clearAction",
@@ -90,7 +90,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       },200);
     },
     selectAction:function(event){
-      if(event.keyCode == 40){ // UP
+      if(event.keyCode == 40){ // DOWN
 	var flag = true;
 	var div = $("#name_listDiv").children().children();
 	for(var i=0;i<div.length;i++){
@@ -105,7 +105,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  $(div[0]).css("background-color","#888");
 	  $("#recomm_name").val($.trim($(div[0]).text()));
 	}
-      }else if(event.keyCode == 38){ // DOWN
+      }else if(event.keyCode == 38){ // UP
 	var flag = true;
 	var div = $("#name_listDiv").children().children();
 	for(var i=0;i<div.length;i++){
@@ -126,6 +126,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  if($(div[i]).css("background-color") == "rgb(136, 136, 136)"){
 	    $("#recomm_name").val($.trim($(div[i]).text()));
 	    $("#recomm_text").focus();
+	    return false;
 	  }
 	}
       }
