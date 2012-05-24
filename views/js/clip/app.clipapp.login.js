@@ -99,9 +99,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
     openWeibo : function(e){
       App.vent.trigger("app.clipapp.login:@cancel");
       socket = new easyXDM.Socket({
-	remote: 'http://clickdang.com:5000/oauth/req/weibo?r='+Math.random()*9999999,
+	remote: 'http://clickdang.com/oauth/req/weibo?r='+Math.random()*9999999,
+	//remote: 'http://192.168.1.3:10000/oauth/req/weibo?r='+Math.random()*9999999,
 	container: document.body,
-	swf: 'http://192.168.1.3:10000/img/easyxdm.swf',
+	swf: 'http://clickdang.com/img/easyxdm.swf',
 	swfNoThrottle: true,
 	onLoad: function(e){ // hack, style set
 	  var iframe = e.target;

@@ -49,8 +49,9 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     bindOk:function(e){
       e.preventDefault();
       var that = this;
-      var str = $(".tab").text().trim();
-      if(str == "我有点易账号"){
+      var str = $(e.currentTarget).val().trim();
+      console.info(str);
+      if(str == "立即绑定"){
 	this.tmpmodel.save({}, {
 	  url: App.ClipApp.Url.base+"/login",
 	  type: "POST",
@@ -61,7 +62,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	    that.showError(res);
   	  }
 	});
-      }else{
+      }else if(str == "立即注册"){
 	this.tmpmodel.save({},{
 	  url : App.ClipApp.Url.base+"/register",
 	  type: "POST",
