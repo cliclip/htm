@@ -27,6 +27,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "blur #pass"               : "blurPass",
       "focus #name"              : "clearAction",
       "focus #pass"              : "cleanError",
+      "keydown #pass"            : "keydownAction",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
       "click .reg_btn"           : "registerAction",
@@ -75,6 +76,13 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	}
       });
     },
+    keydownAction : function(e){
+      $('#pass').unbind("keydown");
+      if(e.keyCode==13){
+	$("#pass").blur();
+	$('.login_btn').click();
+      }
+     },
     registerAction:function(e){
       var that = this;
       e.preventDefault();

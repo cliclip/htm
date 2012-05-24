@@ -225,6 +225,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $('#name').unbind("keydown");
       $('#name').keydown(function(e){
 	if(e.keyCode==13){
+	  $("#name").blur();
 	  $('.edit_name').click();
 	}
       });
