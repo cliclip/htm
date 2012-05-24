@@ -16,6 +16,7 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.siteShow = function(tag){
+    //alert("siteShow     " + document.URL + "    " + window.location.href);
     ClipApp.Face.showUser();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
@@ -80,6 +81,12 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.myShow = function(tag){
+   /* var now_url = window.location.href;
+    alert("myShow    " + document.URL +"   "+document.location+ "  "+window.location.href);
+    setTimeout(function(){
+      alert("myShow    " + document.URL +"   "+document.location+ "  "+window.location.href);
+    },200);
+   */
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);

@@ -215,7 +215,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       $('#list').masonry({
 	itemSelector : '.clip',
 	columnWidth : 330,
-	isAnimated: false
+	isAnimated: false,
+	animationOptions: {
+	  duration: 750,
+	  easing: 'linear',
+	  queue: false
+	}
       });
       $("#list").css({height:"0px"});
       App.listRegion.show(clipListView);

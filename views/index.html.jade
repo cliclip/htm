@@ -32,7 +32,9 @@ html
     script(src="js/app.js")
     //- kick start
     script $(function(){ App.start(); });
-
+    //if lt IE 8
+      script(type="text/javascript")
+        window.location.hash = window.location.hash;    
     //- ie png fix
     //if lt IE 7
       script(src="js/lib/png.js")

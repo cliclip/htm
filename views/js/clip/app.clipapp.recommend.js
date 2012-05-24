@@ -3,6 +3,7 @@
 App.ClipApp.Recommend = (function(App,Backbone,$){
   // 用来列出可以转给那些用户
   var P = App.ClipApp.Url.base;
+  var that;
   var uid = null; // 被推荐用户的id标识
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
@@ -28,7 +29,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     template:"#recommend-view-template",
     events:{
       "click .user" : "getUserAction",
-      "keyup #recomm_name"   : "nameListAction",
+      "input #recomm_name"   : "nameListAction",
       "click #recomm_name"   : "nameListAction",
       "focus #recomm_name"   : "nameListShow",
       "blur #recomm_name"    : "nameBlur",
@@ -42,6 +43,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "click .close_w"       :  "cancelAction"
     },
     initialize:function(){
+      that = this;
       this.tmpmodel= new RecommModel();
     },
     getUserAction:function(e){
@@ -217,6 +219,18 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     var recommView=new RecommView({model:recommModel});
     App.popRegion.show(recommView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
+    //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
+    if(/msie/i.test(navigator.userAgent)){
+      function nameListAction(evt){
+	that.$("#imgId").css("display","none");
+	var str = $.trim(that.$("#recomm_name").val());
+	var clip_owner = that.model.get("clipid").split(":")[0];//clip的拥有者
+	var params = {q:str};
+	//查询friend
+	App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
+      }
+      document.getElementById('recomm_name').onpropertychange=nameListAction;
+    }
   };
 
   Recommend.close = function(){
@@ -248,6 +262,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   App.vent.bind("app.clipapp.recommend:@close",function(){
     Recommend.close();
+  });
+
+  App.bind("initialize:after", function(){
   });
 
 
