@@ -49,7 +49,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     bindOk:function(e){
       e.preventDefault();
       var that = this;
-      var str = $(e.currentTarget).val().trim();
+      var str = $.trim($(e.currentTarget).val());
       console.info(str);
       if(str == "立即绑定"){
 	this.tmpmodel.save({}, {

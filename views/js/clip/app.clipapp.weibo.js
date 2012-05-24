@@ -48,7 +48,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
       e.preventDefault();
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       var uid = e.currentTarget.id;
-      var name = $("#name_"+uid).text().trim();
+      var name = $.trim($("#name_"+uid).text());
       App.vent.trigger("app.clipapp.message:alert", "deloauth", name);
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.vent.trigger("app.clipapp.weibo:@weibodel",uid);

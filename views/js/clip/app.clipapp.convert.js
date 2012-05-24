@@ -44,7 +44,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     str = str.replace(/(lang)\s*=\s*([\'\"]?)[\w-]+\2/ig, "");
     // Examine all styles: delete junk, transform some, and keep the rest
     str = str.replace(/(<[a-z][^>]*)\sstyle="([^"]*)"/gi, function(str, tag, style) {
-      var n = [],s = style.trim().replace(/&quot;/gi, "'").split(";");
+      var n = [],s = $.trim(style).replace(/&quot;/gi, "'").split(";");
       // Examine each style definition within the tag's style attribute
       for (var i = 0; i < s.length; i++) {
         v = s[i];
