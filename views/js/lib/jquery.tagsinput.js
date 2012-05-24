@@ -218,7 +218,7 @@
 	$(data.holder).bind('click',data,function(event) {
 	    $(event.data.fake_input).focus();
 	});
-	if(false)//  /msie/i.test(navigator.userAgent)){
+	if(false){//  /msie/i.test(navigator.userAgent)){
 	  $(data.fake_input).bind('propertychange',data,function(event) {
 	    //console.dir(event);
 	    var str = $.trim($(data.fake_input).val());
