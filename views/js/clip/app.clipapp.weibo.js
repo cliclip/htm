@@ -44,7 +44,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 	      cleanSelection();
 	      break;
 	    case 'error' :
-	      clsoeUI();
+	      closeUI();
 	      cleanSelection();
 	      App.vent.trigger("app.clipapp.message:chinese","微博绑定失败");
 	      break;

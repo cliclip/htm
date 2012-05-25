@@ -146,7 +146,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	      cleanSelection();
 	      break;
 	    case 'error' :
-	      clsoeUI();
+	      closeUI();
 	      cleanSelection();
 	      App.vent.trigger("app.clipapp.message:chinese","微博登录失败");
 	      break;
