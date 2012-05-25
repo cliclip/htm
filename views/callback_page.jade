@@ -16,6 +16,8 @@ script
   });
   if (oauth == close){
      socket.postMessage(JSON.stringify(["close"]));
+  } else if(oauth == error) {
+     socket.postMessage(JSON.stringify(["error"]));
   } else {
     socket.postMessage(JSON.stringify(["oauth",oauth]));
   }

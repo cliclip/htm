@@ -145,6 +145,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
               closeUI();
 	      cleanSelection();
 	      break;
+	    case 'error' :
+	      clsoeUI();
+	      cleanSelection();
+	      App.vent.trigger("app.clipapp.message:chinese","微博登录失败");
+	      break;
           }
 	}
       });
