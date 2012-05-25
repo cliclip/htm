@@ -24,7 +24,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	if(!resp[i].clip){
+	if(!resp[i].clip){ // 表示是别人推荐的clip
 	  resp[i].clipid = resp[i].id;
 	  resp[i].id = resp[i].user.id+":"+resp[i].id;
 	}else{
