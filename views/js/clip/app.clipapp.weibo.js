@@ -39,6 +39,10 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 		cleanSelection();
 	      }, 1000);
 	      break;
+	    case 'close' :
+              closeUI();
+	      cleanSelection();
+	      break;
           }
 	}
       });

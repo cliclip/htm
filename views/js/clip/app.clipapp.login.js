@@ -144,6 +144,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	    case 'close' :
               closeUI();
 	      cleanSelection();
+	      break;
           }
 	}
       });
