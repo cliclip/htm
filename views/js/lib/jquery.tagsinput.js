@@ -92,15 +92,20 @@
       }
       if (value !='' && skipTag != true) {
         $('<span>').addClass('tag').append(
-	  $('<span>').text(value).append('&nbsp;&nbsp;'),
-          $('<a>', {
+	  $('<span>').text(value),
+	  $('<a>', {
               href  : '#',
               title : 'Removing tag',
-              text  : 'x'
+              text  : ' x'
 	  }).click(function () {
 	    return $('#' + id).removeTag(escape(value));
 	  })
-	).insertBefore('#' + id + '_addTag');
+	).mouseover(function(e){
+	  $($(e.currentTarget)[0].children[1]).show();
+	}).mouseout(function(e){
+	  $($(e.currentTarget)[0].children[1]).hide();
+	})
+	.insertBefore('#' + id + '_addTag');
 	tagslist.push(value);
 	$('#'+id+'_tag').val('');
 	if (options.focus) {
