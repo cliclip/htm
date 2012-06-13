@@ -14,13 +14,13 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   var RecommModel = App.Model.extend({
     url:function(){
       return P+"/user/"+uid+"/recomm";
-    },
-    validate: function(attrs){ // 需要往model里边set的数据只有text和clipid
+    }
+    /*validate: function(attrs){ // 需要往model里边set的数据只有text和clipid
       if(!attrs.text || attrs.text == "" || attrs.text == defaultText){
 	return {recomm_text: "is_null"};
       }
       return null;
-    }
+    }*/
   });
 
   var RecommView = App.ItemView.extend({
@@ -162,18 +162,17 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
 	var data = view.getInput();
+	if(data.text == defaultText){data.text = "";}
 	view.setModel(view.tmpmodel, {text: data.text, clipid: clipid});
 	//recommend 需要的参数
-	if(view.tmpmodel.isValid()){
-	  view.tmpmodel.save({},{
-	    success:function(model,res){
-	      Recommend.close();
-	    },
-	    error:function(model,res){
-	      view.showError(res);
-	    }
-	  });
-	}
+	view.tmpmodel.save({},{
+	  success:function(model,res){
+	    Recommend.close();
+	  },
+	  error:function(model,res){
+	    view.showError(res);
+	  }
+	});
 	//reclip 需要的参数
 	if($("#reclip_box").attr("checked")){
 	  var params1 = {id : clipid, clip : {note : [{text : data.text}]}};
