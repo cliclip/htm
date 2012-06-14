@@ -37,8 +37,13 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       objEditor.contentWindow.focus();
       var range = objEditor.contentWindow.document.selection.createRange();
       range.pasteHTML(data);
+      range.moveStart("character", 0);
+      range.collapse(true);
+      range.select();
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, data);
+      var range = objEditor.contentWindow.getSelection().getRangeAt(0);
+      range.setStartBefore(objEditor);
     }
   };
 
