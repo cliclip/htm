@@ -111,7 +111,7 @@ App.util = (function(){
 
   util.isImage = function(id){
     var sender = document.getElementById(id);
-    if (!sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+    if (!sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i)){
       return false;
     }else{
       return true;

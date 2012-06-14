@@ -264,7 +264,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.onUploadImgChange = function(sender){
-    if( !sender.value.match(/.jpg|.gif|.png|.bmp/i)){
+    if( !sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i)){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
       return false;
     }else{

@@ -62,9 +62,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
       this.bind("item:rendered",function(itemView){
 	if(this.model.get("content").image){
-	  this.$el.find("p").addClass("text");
 	}else{
-	  this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
 	}
 	var $newElems = itemView.$el;
@@ -211,15 +209,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       collection.fetch({url:url,type:type});
     }
     collection.onReset(function(clips){
+      //console.info(clips);
       collection_length = collection.length;
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
       clipListView = new ClipListView({collection:clips});
       $('#list').masonry({
 	itemSelector : '.clip',
 	columnWidth : 330,
-	isAnimated: false,
+	isAnimated: false,//动态效果导致：overflow:hidden  cliplist 边被裁掉
 	animationOptions: {
-	  duration: 750,
+	  duration: 800,
 	  easing: 'linear',
 	  queue: false
 	}
@@ -229,6 +228,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:showpage");
       if(collection && collection.length==0){
 	$("#list").append("抱歉，没有找到相应的信息...");
+      }else{
+/*
+	var l=$(".preview-view");
+	if(l){
+	  //alert("qqqqqqqqqq");
+	  var $boxe = $('<div class="box">aaaaaaaaaa</div>');
+	  $('#list').append( $boxe ).masonry( 'appended', $boxe);
+	  //setTimeout(function(){
+	    //动态效果导致：overflow:hidden  cliplist 边被裁掉
+	    //$("#list").css({overflow:"visible"});
+	  //},2000);
+	}
+*/
       }
     });
   };
