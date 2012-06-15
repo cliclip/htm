@@ -49,7 +49,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       range.collapse(true);
       sel.removeAllRanges();
       sel.addRange(range);
-      // el.focus();
+      el.body.focus();
     };
   };
 
