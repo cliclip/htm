@@ -3,7 +3,7 @@ script(type="text/template",id="clippreview-view-template")
   div.clip_item
     <% if(recommend){ %>
     hgroup.clearfix.
-      <a href="/#user/<%=recommend.user.id%>" class="recommened",id="recommend_<%=recommend.user.id%>">
+      <a href="/#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
         <div class="user_info_small">
           <img src="<%=App.util.face_url(recommend.user.face,50)%>" title="<%=recommend.user.name%>" onerror="this.src='img/f.jpg'"/>
         </div>

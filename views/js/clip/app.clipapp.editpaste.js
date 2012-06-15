@@ -43,7 +43,8 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, data);
       var range = objEditor.contentWindow.getSelection().getRangeAt(0);
-      range.setStartBefore(objEditor);
+      range.setStart(range.startContainer, 0);
+      range.collapse(true);
     }
   };
 
@@ -57,7 +58,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       objEditor.contentWindow.focus();
       var editor = objEditor.contentWindow.document.selection.createRange();
       editor.pasteHTML(img);
-      //objEditor.contentWindow.document.execCommand("Paste", false, img);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, img);
     }

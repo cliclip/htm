@@ -6,8 +6,6 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   Convert.filter = function (html) {
     if (isWord(html)) {html = cleanWord(html);}
     html = cleanHtml(html);
-    html = _htmlToUbb(html); // 过滤，将encodeHtml解码
-    html = _ubbToHtml(html); // 显示
     return html;
   };
 
@@ -187,7 +185,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
     // output - asdf (http://pinetechlabs.com/)"
 
-      text = text.replace(/<\s*a[^>]*href=['"](.*?)['"][^>]*>([\s\S]*?)<\/\s*a\s*>/ig, "[url=$1]$2[/url]");
+    text = text.replace(/<\s*a[^>]*href=['"](.*?)['"][^>]*>([\s\S]*?)<\/\s*a\s*>/ig, "[url=$1]$2[/url]");
     // Format image tags properly.'
     // input - <img src="http://what.url.jpg" />'
     // output - [http://what.url.jpg]'
@@ -206,6 +204,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\"/>");
     text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\"/>");
+    text = "<p>" + text + "</p>";
     return text;
   }
 
