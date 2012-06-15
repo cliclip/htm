@@ -45,7 +45,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       var range = objEditor.contentWindow.getSelection().getRangeAt(0);
       range.setStart(range.startContainer, 0);
       range.collapse(true);
-      range.selectNodex();
     }
   };
 

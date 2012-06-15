@@ -51,7 +51,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
       url : App.ClipApp.Url.base+"/invite/"+key,
       type: "POST",
       success:function(model,response){
-	console.log(response);
 	App.vent.trigger("app.clipapp.register:success", 'invite', response);
       },
       error:function(model,error){

@@ -221,6 +221,8 @@ App.util = (function(){
   };
 
   var MESSAGE = {
+    recomm : "您的clip已经转发成功",
+
     register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
     pre_invite   : "您已通过发往",
     post_invite  : "邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",

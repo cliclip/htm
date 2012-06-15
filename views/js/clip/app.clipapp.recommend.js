@@ -15,12 +15,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     url:function(){
       return P+"/user/"+uid+"/recomm";
     }
-    /*validate: function(attrs){ // 需要往model里边set的数据只有text和clipid
-      if(!attrs.text || attrs.text == "" || attrs.text == defaultText){
-	return {recomm_text: "is_null"};
-      }
-      return null;
-    }*/
   });
 
   var RecommView = App.ItemView.extend({
@@ -168,6 +162,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	view.tmpmodel.save({},{
 	  success:function(model,res){
 	    Recommend.close();
+	    App.vent.trigger("app.clipapp.message:confirm","recomm");
 	  },
 	  error:function(model,res){
 	    view.showError(res);
