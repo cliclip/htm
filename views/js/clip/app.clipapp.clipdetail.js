@@ -49,9 +49,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     editDetail:function(e){
       e.preventDefault();
-      if(App.util.self(this.model.get("user"))){
-	var cid = this.model.id;
-	App.vent.trigger("app.clipapp:clipedit", cid);
+      var self = App.util.getMyUid();
+      if(!self){
+	App.vent.trigger("app.clipapp:login");
+      }else{
+	if(self == this.model.get("user")){
+	  var cid = this.model.id;
+	  App.vent.trigger("app.clipapp:clipedit", cid);
+	}
       }
     }
   });

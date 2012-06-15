@@ -146,8 +146,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showSiteClips = function(tag){
     ClipList.flag_show_user = true;
     base_url = App.ClipApp.Url.base+"/query";
-    //console.info(Date.parse('May 1, 2012'));
-    data = {"public":true, "startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
+    // 起始时间设置为，endTime前推一个月
+    var date = (new Date()).getTime();
+    data = {"public":true, "startTime":date-86400000*30,"endTime":date+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
@@ -156,7 +157,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserClips = function(uid, tag){
     ClipList.flag_show_user = false;
     base_url = App.ClipApp.Url.base+"/user/"+uid+"/query";
-    data = {user: uid};
+    data = {user: uid,"startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
@@ -166,7 +167,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showSiteQuery = function(word, tag){
     ClipList.flag_show_user = true;
     base_url = App.ClipApp.Url.base + "/query";
-    data = {text: word};
+    var date = (new Date()).getTime();
+    data = {text: word, "startTime":date-86400000*30,"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
@@ -175,7 +177,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserQuery = function(uid, word, tag){
     ClipList.flag_show_user = false;
     base_url = App.ClipApp.Url.base + "/user/"+uid+"/query";
-    data = {text: word, user: uid};
+    data = {text: word, user: uid, "startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();

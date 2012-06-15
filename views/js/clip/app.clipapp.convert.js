@@ -6,8 +6,6 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   Convert.filter = function (html) {
     if (isWord(html)) {html = cleanWord(html);}
     html = cleanHtml(html);
-    html = _htmlToUbb(html); // 过滤，将encodeHtml解码
-    html = _ubbToHtml(html); // 显示
     return html;
   };
 
@@ -171,9 +169,9 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     var text = html;
     // 先将不是html的网址转换成 a 标签
     var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
+    var reg = /(="|='|=)(?=http:\/\/)/;
     text = text.replace(re,function(a,b,c){
       // 使用a来拼正则表达式,报错
-      var reg = new RegExp("(=\"|='|=)(?=http://)");
       if(reg.test(text) || b != "http://"){
 	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转
 	return a;
@@ -187,7 +185,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
     // output - asdf (http://pinetechlabs.com/)"
 
-      text = text.replace(/<\s*a[^>]*href=['"](.*?)['"][^>]*>([\s\S]*?)<\/\s*a\s*>/ig, "[url=$1]$2[/url]");
+    text = text.replace(/<\s*a[^>]*href=['"](.*?)['"][^>]*>([\s\S]*?)<\/\s*a\s*>/ig, "[url=$1]$2[/url]");
     // Format image tags properly.'
     // input - <img src="http://what.url.jpg" />'
     // output - [http://what.url.jpg]'
@@ -206,6 +204,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\"/>");
     text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\"/>");
+    text = "<p>" + text + "</p>";
     return text;
   }
 
@@ -234,6 +233,40 @@ App.ClipApp.Convert = (function(App, Backbone, $){
       // Remove !DOCTYPE
     .replace(/<!DOCTYPE.*?>/ig, "");
 
+    text = text.replace(/<\/?\s*p[^>]*>/gi, '\n\n');
+    text = text.replace(/<\/?\\s*h[1-6][^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*dl[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*dt[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*dd[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*ol[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*ul[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*dir[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*address[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*blockquote[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*center[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*div[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*hr[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*pre[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*form[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*textarea[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\\s*table[^>]*>/ig, '\n\n');
+
+    /*var SingleLineTags = ['li', 'del', 'ins', 'fieldset', 'legend', 'tr', 'th', 'caption', 'thead', 'tbody', 'tfoot'];*/
+    text = text.replace(/<\\s*li[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*del[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*ins[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*fieldset[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*legend[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*tr[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*th[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*caption[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*thead[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*tbody[^>]*>/ig, '\n');
+    text = text.replace(/<\\s*tfoot[^>]*>/ig, '\n');
+
+    // Replace <br> and <br/> with a single newline
+    text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
+    /*
     for (i = 0; i < DoubleLineTags.length; i++) {
       var r = RegExp('</?\\s*' + DoubleLineTags[i] + '[^>]*>', 'ig');
       text = text.replace(r, '\n\n');
@@ -243,7 +276,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
       var r = RegExp('<\\s*' + SingleLineTags[i] + '[^>]*>', 'ig');
       text = text.replace(r, '\n');
     }
-
+    */
     // Replace <br> and <br/> with a single newline
     text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
     text = text

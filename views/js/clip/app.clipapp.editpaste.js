@@ -4,7 +4,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   Editor.init = function(){
     var ifrm=document.getElementById("editor");
     ifrm.contentWindow.document.designMode = "On";
-    ifrm.contentWindow.document.write("<body style=\"font-size:70%;font-family:Verdana,Arial,sans-serif;margin:0;min-height:20px\"></body>");
+    ifrm.contentWindow.document.write("<body style=\"font-size:13px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
     if(isIE){
       ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){
@@ -37,8 +37,14 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       objEditor.contentWindow.focus();
       var range = objEditor.contentWindow.document.selection.createRange();
       range.pasteHTML(data);
+      range.moveStart("character", 0);
+      range.collapse(true);
+      range.select();
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, data);
+      var range = objEditor.contentWindow.getSelection().getRangeAt(0);
+      range.setStart(range.startContainer, 0);
+      range.collapse(true);
     }
   };
 
@@ -47,13 +53,11 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId);
     var img = "";
     if(data.url)
-      //img = "<img id="+data.id +" class='new' "+" src="+data.url+" style='max-width:475px;max-height:490px;' />";
       img = "<img src="+data.url+" style='max-width:475px;max-height:490px;' />";
     if(isIE){ // TODO
       objEditor.contentWindow.focus();
       var editor = objEditor.contentWindow.document.selection.createRange();
       editor.pasteHTML(img);
-      //objEditor.contentWindow.document.execCommand("Paste", false, img);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, img);
     }
