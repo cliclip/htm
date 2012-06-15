@@ -271,9 +271,9 @@ $(function() {
       function Circle(radius, x, y, sx, sy) {
 	var circle = new b2CircleDef();
 	circle.radius = radius;
-	circle.density = 0.5; // 密度
+	circle.density = 0.3; // 密度
 	circle.friction = 0.01; // 摩擦系数
-	circle.restitution = 0.2; // 弹力
+	circle.restitution = 0.1; // 弹力
 	var b2body = new b2BodyDef();
 	b2body.AddShape(circle);
 	// b2body.userData = { element: element };
