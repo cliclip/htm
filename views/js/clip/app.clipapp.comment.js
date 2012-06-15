@@ -50,6 +50,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     },
     comment : function(e){
       e.preventDefault();
+      $(e.currentTarget).attr("disabled",true);
       var that = this;
       var text = $.trim($("#comm_text").val());
       if(text == "" || text == defaultComm){

@@ -189,6 +189,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     comment : function(e){
       e.preventDefault();
+      $(e.currentTarget).attr("disabled",true);
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = ($("#comm_text").val()).replace(/[\s]/g, "");

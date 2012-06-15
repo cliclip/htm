@@ -36,6 +36,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
     okClick:function(e){
       e.preventDefault();
+      $(e.currentTarget).attr("disabled",true);
       var data = loadData(this.$el);
       // clip在update时需要clip的id
       // data["id"] = this.model.id;

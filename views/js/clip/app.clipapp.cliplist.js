@@ -3,6 +3,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   var ClipList = {};
   var flag = false;
+  var clips_exist = true;
+  var hide_clips = [];
   var clipListView = {};
   var collection = {},start = 1,end = App.ClipApp.Url.page;
   var url = "",base_url = "",data = "",type = "",collection_length,new_page;
@@ -12,7 +14,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       user :{},
       content:{},
       reprint_count:"",
-      reply_count:""
+      reply_count:"",
+      hide:false
     }
   });
 
@@ -29,13 +32,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].id = resp[i].user.id+":"+resp[i].id;
 	}else{
 	  resp[i].clipid = resp[i].clip.id;
-	  //console.info(resp[i]);
 	  resp[i].user = resp[i].clip.user;
 	  resp[i].content = resp[i].clip.content;
 	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
 	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
 	  delete resp[i].clip;
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
+	}
+	if(resp[i].hide){
+	  hide_clips.push(resp[i].id);
 	}
       }
       return resp;
@@ -54,6 +59,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "mouseleave .clip_item": "mouseLeave"
     },
     initialize: function(){
+      var that = this;
       var $container = $('#list');
       $container.imagesLoaded( function(){
 	$container.masonry({
@@ -62,7 +68,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
       this.bind("item:rendered",function(itemView){
 	if(this.model.get("content").image){
+	  this.$el.find("p").addClass("text");
 	}else{
+          this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
 	}
 	var $newElems = itemView.$el;
@@ -192,7 +200,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     type = "GET";
     init_page();
   };
-
+  function collection_filter(collection,hide_list){
+    collection_length -= hide_list.length;
+    for(var i=0;i<hide_list.length;i++){
+      collection.remove(collection.get(hide_list[i]));
+    }
+  };
   function init_page(){
     var clips = new ClipPreviewList();
     collection = clips;
@@ -207,9 +220,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       collection.fetch({url:url,type:type});
     }
     collection.onReset(function(clips){
-      //console.info(clips);
-      collection_length = collection.length;
+      if(clips&&clips.length==0){
+	clips_exist = false;
+      }
+      collection_length = clips.length;
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
+      collection_filter(clips,hide_clips);
       clipListView = new ClipListView({collection:clips});
       $('#list').masonry({
 	itemSelector : '.clip',
@@ -224,28 +240,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       $("#list").css({height:"0px"});
       App.listRegion.show(clipListView);
       App.vent.trigger("app.clipapp:showpage");
-      if(collection && collection.length==0){
+      if(collection.length<10){
+	App.vent.trigger("app.clipapp:nextpage");
+      }
+      if(!clips_exist){
 	$("#list").append("抱歉，没有找到相应的信息...");
       }else{
-/*
-	var l=$(".preview-view");
-	if(l){
-	  //alert("qqqqqqqqqq");
-	  var $boxe = $('<div class="box">aaaaaaaaaa</div>');
-	  $('#list').append( $boxe ).masonry( 'appended', $boxe);
-	  //setTimeout(function(){
-	    //动态效果导致：overflow:hidden  cliplist 边被裁掉
-	    //$("#list").css({overflow:"visible"});
-	  //},2000);
-	}
-*/
       }
     });
   };
 
   App.vent.bind("app.clipapp:nextpage",function(){
-    //console.info("nextpage");
     if(!App.listRegion.currentView)return;
+    console.info("nextpage",new_page);
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
@@ -270,7 +277,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
       });
     }
-    console.info(collection);
   });
 
   App.vent.bind("app.clipapp.cliplist:add",function(addmodel){
@@ -303,7 +309,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     $("#list").masonry("reload");
     start--;
     collection_length--;
-    //console.info(collection_length);
     if(collection_length == 0){
       App.vent.trigger("app.clipapp:nextpage");
     }

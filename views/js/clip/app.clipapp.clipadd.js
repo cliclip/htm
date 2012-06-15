@@ -33,8 +33,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipadd:@cancel");
     },
     savecliper:function(e){
-      var target = $(e.currentTarget);
-      target.attr("disabled",true);
+      $(e.currentTarget).attr("disabled",true);
       e.preventDefault();
       clip.content = App.ClipApp.Editor.getContent("editor");
       this.model.save(clip,{

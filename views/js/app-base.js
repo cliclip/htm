@@ -189,8 +189,13 @@ App.bind("initialize:after", function(){
     }
     var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
     var lt = $(".loader").offset().top;
+    var obj = $("#list .clip");
+    if(obj && obj.last()&& obj.last()[0]){
+      var last_top = $("#list .clip").last()[0].offsetTop;
+    }
     // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
-    if(st + wh > lt && time_gap==true ){
+
+    if((st + wh - 500 > last_top || st + wh > lt)&& time_gap==true ){
       time_gap = false;
       //console.info("trigger nextpge");
       App.vent.trigger("app.clipapp:nextpage");
@@ -198,6 +203,7 @@ App.bind("initialize:after", function(){
 	time_gap = true;
       },500);
     }
+
   });
 
 });

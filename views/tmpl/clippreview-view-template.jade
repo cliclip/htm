@@ -18,13 +18,12 @@ script(type="text/template",id="clippreview-view-template")
       div.article_photo
         | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.url(content.image)%>"/>
       <% }if(content && content.text){%>
-      <%if(!content.image){ %>
-      div.article_con.no_img
+      div.article_con
+        <%if(!content.image){ %>
+        br
+        <%}%>
         | <%= content.text %>
-      <%}else{%>
-      div.article_con.with_img
-        | <%= content.text %>
-      <%}}%>
+      <%}%>
     footer.master
       div.metas.icons_frame
         span.icon_block
