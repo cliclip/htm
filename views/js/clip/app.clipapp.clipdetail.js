@@ -264,12 +264,20 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   ClipDetail.show = function(cid,model_id){   // 此处的cid等于detailModel.id
     mid = model_id;
     var clip = new App.Model.DetailModel({id: cid});
-    clip.fetch();
-    clip.onChange(function(detailModel){
-      showDetail(detailModel);
-      showComment(cid);
-      showAddComm(cid);
-    });
+    if(clip){
+      if((App.util.getMyUid() && clip.user == App.util.getMyUid()) ||clip.public != "false"){
+	clip.fetch();
+	clip.onChange(function(detailModel){
+	  showDetail(detailModel);
+	  showComment(cid);
+	  showAddComm(cid);
+	});
+      }else{
+	App.vent.trigger("app.clipapp.message:chinese","作者没有公开此摘录！");
+      }
+    }else{
+      	App.vent.trigger("app.clipapp.message:chinese","此摘录已经删除！");
+    }
   };
 
   ClipDetail.close = function(){

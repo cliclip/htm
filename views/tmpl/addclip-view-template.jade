@@ -30,7 +30,7 @@ script(type="text/template",id="addClip-view-template")
           //- css 中设置iframe无边框在ie8- 中不起作用
           iframe#editor(frameborder="no",border="0")
         div.btn_group.clearfix
-          input.verify(type="button",id="save",title="保存",value="保存")
+          input.verify(type="button",id="save",title="确定",value="确定")
           input.cancel(type="button",id="cancel",title="取消",value="取消")
-          input.cliper(type="button",id="ok",title="确定",value="确定")
-          input.cliper(type="button",id="empty",title="清空",value="清空")
+          input.cliper.ok(type="button",id="ok",title="返回",value="返回")
+          input.cliper.empty(type="button",id="empty",title="清空",value="清空")
