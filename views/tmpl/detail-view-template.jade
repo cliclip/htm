@@ -32,6 +32,7 @@ script(type="text/template",id="detail-view-template")
     div.pop_right
       section.pop_inner
         article.content
+          |&nbsp</br> 
           <%= App.util.contentToHtml(content)%>
         <%= App.util.generatePastTime(updateTime)%>
         dl.comments.clearfix
