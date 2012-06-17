@@ -30,22 +30,24 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var last = null;
   var old_self = null;
   var self = true;
-
+  var homepage = false;
   // exports
 
   Bubb.showSiteTags = function(tag){
     _uid = null;
     self = false;
+    homepage = true;
     getSiteTags(function(tags, follows){
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
+    App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
     });
   };
 
   Bubb.showSiteBubs = function(tag){
     _uid = null;
     self = false;
+    homepage = true;
     getSiteBubs(function(tags, follows){
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
+    App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
     });
   };
 
@@ -72,7 +74,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       iframe_call('bubbles', "followTag", tag);
       App.vent.trigger("app.clipapp.followerlist:refresh"); //刷新右边follower列表
       if(last && last.follows){
-	if(_.isEmpty(last.follows)){
+	if(_.isEmpty(last.follows) || tag == "*"){
 	  App.vent.trigger("app.clipapp.face:show",_uid);
 	}
 	last.follows.push(tag);
@@ -267,10 +269,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // utils 因为追了所有没有办法只停追一个
-  function mkTag(tags, followss, tag, self){
+  function mkTag(tags, follows, tag, self, homepage){
     // DEBUG PURPOSE
-    var follows = _.without(followss,'*');
-    tags = _.union(bubs, sink, tags, follows);
+    tags = _.without(_.union(bubs, sink, tags, follows),"*");
     var opt = {
       tags: tags,
       follows: follows,
@@ -278,6 +279,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       sink: _.intersection(sink, tags),
       self: self
     };
+    if(homepage) opt.homepage = homepage;
     if(tag) opt.current = tag;
     return opt;
   }
@@ -310,14 +312,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     if(old_self != _uid){ // 若 self 已经变化，则 tag 不能重用
       return true;
     }
-    if(_.isEmpty(tags2.follows)){
+    if(_.isEmpty(tags2.follows) || tags2.follows[0]=="*"){
       // 若 follows 为空，意味着追（[*]被过滤为[]）或停（[]），则 tag 不能重用
       return true;
     }
     if(tags1 && tags1.tags && tags2 && tags2.tags){
       // 若 tag1 和 tag2 的 tags 没有不同，则可以重用
       return _.difference(tags1.tags, tags2.tags).length != 0;
-    } else {
+    }
+    else {
       // 否则，不能重用
       return true;
     }
