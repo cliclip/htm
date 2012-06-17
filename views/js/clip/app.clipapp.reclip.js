@@ -31,8 +31,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultNote :
       $(e.currentTarget).val() );
     },
-    submit:function(evt){
-      evt.preventDefault();
+    submit:function(e){
+      e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
       var params = loadData(this.$el);
       params["id"] = this.model.id;
