@@ -323,7 +323,9 @@ App.util = (function(){
     clip:{
       has_this_clip: "您已经有该条摘录了",
       has_recliped: "您已经转载过该条载录了",
-      not_exist: "clip不存在"
+      not_exist: "摘录不存在",
+      deleted: "此条摘录已经被删除！",
+      no_public: "作者没有公开此条摘录！"
     },
     content:{
       is_null: "摘录不存在",
