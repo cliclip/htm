@@ -65,11 +65,15 @@ App.ClipApp.Login = (function(App, Backbone, $){
     loginAction : function(e){
       var that = this;
       e.preventDefault();
+      var remember = false;
+      if($("#remember").attr("checked")){
+	remember = true;
+      }
       this.tmpmodel.save({}, {
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
-  	  App.vent.trigger("app.clipapp.login:success", res); // fetch Me.me
+  	  App.vent.trigger("app.clipapp.login:success", res, remember); // fetch Me.me
   	},
   	error:function(model, res){
 	  that.showError(res);
@@ -86,6 +90,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
     registerAction:function(e){
       var that = this;
       e.preventDefault();
+      var remember = false;
+      if($("#remember").attr("checked")){
+	remember = true;
+      }
       this.tmpmodel.save({},{
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
@@ -93,7 +101,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	  if(typeof fun != "function"){
 	    App.vent.trigger("app.clipapp.register:success","register_success",response);
 	  }else{
-	    App.vent.trigger("app.clipapp.login:success", response);
+	    App.vent.trigger("app.clipapp.login:success", response, remember);
 	  }
 	},
 	error:function(model,error){
@@ -199,10 +207,14 @@ App.ClipApp.Login = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.login:success", function(res){
-    var data = new Date();
-    data.setTime(data.getTime() + 7*24*60*60*1000);
-    document.cookie = "token="+res.token+";expires=" + data.toGMTString();
+  App.vent.bind("app.clipapp.login:success", function(res, remember){
+    if(remember){
+      var data = new Date();
+      data.setTime(data.getTime() + 30*24*60*60*1000);
+      document.cookie = "token="+res.token+";expires=" + data.toGMTString();
+    }else{
+      document.cookie = "token="+res.token;
+    }
     // 用户登录成功 页面跳转
     Login.close();
     if(typeof fun == "function"){
