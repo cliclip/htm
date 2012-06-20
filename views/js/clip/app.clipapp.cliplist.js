@@ -86,9 +86,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     show_detail: function(){
       //var clip = this.model.get("clip");
       //var clipid = clip.user.id+":"+clip.id;
-      //console.info(this.model);
+      var rid = this.model.get("recommend").rid;
       var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
-      App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id);
+      App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id,rid);
     },
     mouseEnter: function(e){
       $(e.currentTarget).children(".master").children("#opt").show();

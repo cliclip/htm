@@ -205,9 +205,9 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:clipdetail", function(clipid,model_id){
+  App.vent.bind("app.clipapp:clipdetail", function(clipid,model_id,rid){
     //model_id为model的id，用来当detail的model改变时，改变list的model的数据
-    ClipApp.ClipDetail.show(clipid,model_id);
+    ClipApp.ClipDetail.show(clipid,model_id,rid);
   });
 
   App.vent.bind("app.clipapp:clipmemo", function(cid){

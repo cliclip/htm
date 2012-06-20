@@ -5,7 +5,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
-      return App.util.unique_url(P+"/clip/"+this.id);
+      return App.util.unique_url(P+"/clip/"+this.id)+"&rid="+this.get("rid");
     },
     // 跟cliplist一致，使得model.id = "uid:id"
     parse: function(resp){
@@ -261,9 +261,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  ClipDetail.show = function(cid,model_id){   // 此处的cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id,rid){   // 此处的cid等于detailModel.id
     mid = model_id;
-    var clip = new App.Model.DetailModel({id: cid});
+    var clip = new App.Model.DetailModel({id: cid, rid:rid});
     clip.fetch({
       success:function(res,model){
         clip.onChange(function(detailModel){
