@@ -54,6 +54,9 @@ App.ClipApp.Message = (function(App, Backbone, $){
     }
     App.setpopRegion.show(view);
     $(".small_pop").css("top", App.util.getPopTop("small"));
+    setTimeout(function(){
+      Message.close();
+    },3000);
   };
 
   Message.close = function(){

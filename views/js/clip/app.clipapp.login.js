@@ -115,6 +115,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.login:@cancel");
     },
     openWeibo : function(e){
+      var remember = false;
+      if($("#remember").attr("checked")){
+	remember = true;
+      }
       App.vent.trigger("app.clipapp.login:@cancel");
       socket = new easyXDM.Socket({
 	remote: 'http://clickdang.com/oauth/req/weibo?r='+Math.random()*9999999,
@@ -139,9 +143,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	      setTimeout(function(){
 		checkUser({uid:r[1].info.uid,provider:r[1].provider},function(err,res){
 		  if(res){
-		    App.vent.trigger("app.clipapp.login:success", res);
+		    App.vent.trigger("app.clipapp.login:success", res, remember);
 		  }else{
-		    App.vent.trigger("app.clipapp.userbind:show",r[1],fun);
+		    App.vent.trigger("app.clipapp.userbind:show",r[1], fun, remember);
 		  }
 		});
 		closeUI();
@@ -217,10 +221,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
     // 用户登录成功 页面跳转
     Login.close();
+    Backbone.history.navigate("my",true);
     if(typeof fun == "function"){
       fun();
-    }else if(Backbone.history){
-      Backbone.history.navigate("my",true);
     }
   });
 

@@ -91,7 +91,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     }
   });
 
-  var bindOauth ,fun; //fun 用于记录用户登录前应该触发的事件
+  var bindOauth ,fun, remember = false;//fun 用于记录用户登录前应该触发的事件
 
   UserBind.show = function(info){
     var model = new App.Model.UserBindModel({info:info});
@@ -121,10 +121,11 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.userbind:show",function(oauth,f){
+  App.vent.bind("app.clipapp.userbind:show",function(oauth,f,remem){
     UserBind.show(oauth.info);
     bindOauth = oauth;
     fun = f;
+    remember = remem;
     //console.info(bindOauth);
   });
 
@@ -138,20 +139,23 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.userbind:success", function(res){
+    if(remember){
       var data = new Date();
-      data.setTime(data.getTime() + 7*24*60*60*1000);
+      data.setTime(data.getTime() + 30*24*60*60*1000);
       document.cookie = "token="+res.token+";expires=" + data.toGMTString();
-      saveOauth(bindOauth,function(err,reply){
-	App.vent.trigger("app.clipapp.userbind:bindok");
-	if(reply){
-	  if(typeof fun == "function"){
-	    fun();
-	  }else if(Backbone.history){
-	    Backbone.history.navigate("my",true);
-	  }
-	  UserBind.close();
+    }else{
+      document.cookie = "token="+res.token;
+    }
+    saveOauth(bindOauth,function(err,reply){
+      App.vent.trigger("app.clipapp.userbind:bindok");
+      Backbone.history.navigate("my",true);
+      if(reply){
+	if(typeof fun == "function"){
+	  fun();
 	}
-      });
+	UserBind.close();
+      }
+    });
   });
 
   App.vent.bind("app.clipapp.userbind:@error", function(model, error){
