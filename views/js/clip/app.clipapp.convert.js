@@ -142,7 +142,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // Word comments like conditional comments etc
     str = str.replace(/<!--[\s\S]*?-->/ig, "");
     //remove xml tags
-    str = str.replace(/<(\/?(\?xml(:\w+)?|xml|\w+:\w+)(?=[\s\/>]))[^>]*>/gi, "");
+    str = str.replace(/<(\/?(\?xml(:\w+)?|xml|\w+:\w+)(?=[\s\/>]))[^>]*>/gi,"");
     //remove head
     str = str.replace(/<head[^>]*>(\n|.)*?<\/head>/ig, "");
     //remove <xxx>...</xxx>
@@ -152,10 +152,11 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     //remove empty span
     str = str.replace(/<span[^>]*?><\/span>/ig, "");
     //remove table and <a> tag,<input> tag (this can help filter unclosed tag)
-    str = str.replace(/<\/?(input|iframe|div)[^>]*>/ig, "");
-    // keep img&a
+    // str = str.replace(/<\/?(input|iframe|div)[^>]*>/ig, "");
+    str = str.replace(/<\/?(input|iframe)[^>]*>/ig, "");
+    // keep img&a 需要在后边将div转换为\n
     // str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|img|input|iframe|div)[^>]*>/ig, "");
-    str = str.replace(/<\/?(table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
+    str = str.replace(/<\/?(table|tr|td|tbody|thead|th|input|iframe)[^>]*>/ig, "");
     //remove bad attributes
     do {
       len = str.length;
@@ -168,7 +169,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   function _htmlToUbb(html){
     var text = html;
     // 先将不是html的网址转换成 a 标签
-    var re=/(http:\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
+    // 此转换方法不对，如果网址后面直接再跟内容则不能正常识别
+    var re=/^((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
     var reg = /(="|='|=)(?=http:\/\/)/;
     text = text.replace(re,function(a,b,c){
       // 使用a来拼正则表达式,报错
@@ -232,51 +234,49 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     .replace(/<!--.*?-->/mig, "")
       // Remove !DOCTYPE
     .replace(/<!DOCTYPE.*?>/ig, "");
-
     text = text.replace(/<\/?\s*p[^>]*>/gi, '\n\n');
-    text = text.replace(/<\/?\\s*h[1-6][^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*dl[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*dt[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*dd[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*ol[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*ul[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*dir[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*address[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*blockquote[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*center[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*div[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*hr[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*pre[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*form[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*textarea[^>]*>/ig, '\n\n');
-    text = text.replace(/<\/?\\s*table[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*h[1-6][^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*dl[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*dt[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*dd[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*ol[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*ul[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*dir[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*address[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*blockquote[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*center[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*div[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*hr[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*pre[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*form[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*textarea[^>]*>/ig, '\n\n');
+    text = text.replace(/<\/?\s*table[^>]*>/ig, '\n\n');
 
     /*var SingleLineTags = ['li', 'del', 'ins', 'fieldset', 'legend', 'tr', 'th', 'caption', 'thead', 'tbody', 'tfoot'];*/
-    text = text.replace(/<\\s*li[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*del[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*ins[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*fieldset[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*legend[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*tr[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*th[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*caption[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*thead[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*tbody[^>]*>/ig, '\n');
-    text = text.replace(/<\\s*tfoot[^>]*>/ig, '\n');
-
+    text = text.replace(/<\s*li[^>]*>/ig, '\n');
+    text = text.replace(/<\s*del[^>]*>/ig, '\n');
+    text = text.replace(/<\s*ins[^>]*>/ig, '\n');
+    text = text.replace(/<\s*fieldset[^>]*>/ig, '\n');
+    text = text.replace(/<\s*legend[^>]*>/ig, '\n');
+    text = text.replace(/<\s*tr[^>]*>/ig, '\n');
+    text = text.replace(/<\s*th[^>]*>/ig, '\n');
+    text = text.replace(/<\s*caption[^>]*>/ig, '\n');
+    text = text.replace(/<\s*thead[^>]*>/ig, '\n');
+    text = text.replace(/<\s*tbody[^>]*>/ig, '\n');
+    text = text.replace(/<\s*tfoot[^>]*>/ig, '\n');
     // Replace <br> and <br/> with a single newline
     text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
     /*
     for (i = 0; i < DoubleLineTags.length; i++) {
-      var r = RegExp('</?\\s*' + DoubleLineTags[i] + '[^>]*>', 'ig');
+      var r = RegExp('</?\\s*div[^>]*>', 'ig');
+      console.log("r :: " + r);
       text = text.replace(r, '\n\n');
     }
-
     for (i = 0; i < SingleLineTags.length; i++) {
       var r = RegExp('<\\s*' + SingleLineTags[i] + '[^>]*>', 'ig');
+      console.log("r :: " + r);
       text = text.replace(r, '\n');
-    }
-    */
+    }*/
     // Replace <br> and <br/> with a single newline
     text = text.replace(/<\s*br[^>]*\/?\s*>/ig, '\n');
     text = text

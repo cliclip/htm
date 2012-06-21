@@ -35,6 +35,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
       var params = loadData(this.$el);
+      params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
       App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
     },
@@ -70,9 +71,9 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var mid, defaultNote = "备注一下吧~";
 
-  Reclip.show = function(cid,model_id){
+  Reclip.show = function(cid,model_id,rid){
     mid = model_id;
-    var model = new ReclipModel({id:cid});
+    var model = new ReclipModel({id:cid,rid:rid});
     var reclipView = new ReclipView({model : model});
     App.popRegion.show(reclipView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
