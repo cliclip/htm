@@ -29,7 +29,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
-      var rid = this.model.get("recommend").rid;
+      var rid = this.model.get("rid");
       switch(opt){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", cid,mid,rid);break;
