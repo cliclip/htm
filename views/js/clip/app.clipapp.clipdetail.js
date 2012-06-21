@@ -29,9 +29,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
+      var rid = this.model.get("recommend").rid;
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", cid,mid);break;
+	  App.vent.trigger("app.clipapp:reclip", cid,mid,rid);break;
 	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment':
@@ -266,7 +267,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var clip = new App.Model.DetailModel({id: cid, rid:rid});
     clip.fetch({
       success:function(res,model){
-        clip.onChange(function(detailModel){
+	clip.onChange(function(detailModel){
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);
