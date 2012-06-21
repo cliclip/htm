@@ -113,6 +113,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	}else{
 	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag",res.reclip_tag);
 	}
+	App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("clip").tag);
 	ReclipTag.close();
       },
       error:function(model, res){

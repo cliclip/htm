@@ -163,7 +163,8 @@ $(function() {
 	  "sink":   false,
 	  "body":    null,
 	  "hover":   false,
-	  "follow":  false
+	  "follow":  false,
+	  "homepage": false
 	};
       }
     });
@@ -516,7 +517,9 @@ $(function() {
 	  mouseOver = null;
 	  mouseJoint = null;
 	  var self = options.self;
+	  var homepage = options.homepage;
 	  delete options.self;
+	  delete options.homepage;
 	  _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs&&_.indexOf(options.bubs,e)!=-1) ? 64 : 48;
 	    var body = setBall(size + 10, WIDTH, wall_thickness);
@@ -528,7 +531,8 @@ $(function() {
 	      "current": ( options.current && options.current == e ),
 	      "sink": ( options.sink && _.indexOf(options.sink,e) !=  -1 ),
 	      "follow": ( options.follows &&_.indexOf(options.follows,e)!=-1 ),
-	      "hover": false
+	      "hover": false,
+	      "homepage":homepage
 	    });
 	    var view = new BallView({ model : ball });
 	    $("#bubbles").append(view.render().el);
@@ -564,6 +568,9 @@ $(function() {
 
     // exports
     window.resetTags = function(options){
+      if(options.follows == "*"){
+	options.follows = options.tags;
+      }
       game.reset(options);
     };
     window.openTag = function(tag){

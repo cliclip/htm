@@ -51,6 +51,9 @@ App.ClipApp.Message = (function(App, Backbone, $){
       var view = new WarningView({model: messageModel});
     }else{
       var view = new MessageView({model : messageModel});
+      setTimeout(function(){
+	Message.close();
+      },3000);
     }
     App.setpopRegion.show(view);
     $(".small_pop").css("top", App.util.getPopTop("small"));

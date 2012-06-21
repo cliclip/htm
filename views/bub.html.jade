@@ -127,7 +127,7 @@ html
 
     script(type="text/template",id="ball-shadow-template")
       <div class="shadow s<%=size+60%>">
-      <% if(!self){%>
+      <% if(!self && !homepage){%>
       <span>
       <% if (follow) {%>
       <a href="#" class="unfollow">停</a>

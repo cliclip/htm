@@ -5,7 +5,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
-      return App.util.unique_url(P+"/clip/"+this.id);
+      return App.util.unique_url(P+"/clip/"+this.id)+"&rid="+this.get("rid");
     },
     // 跟cliplist一致，使得model.id = "uid:id"
     parse: function(resp){
@@ -29,9 +29,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
+      var rid = this.model.get("recommend").rid;
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", cid,mid);break;
+	  App.vent.trigger("app.clipapp:reclip", cid,mid,rid);break;
 	case 'refresh':
 	  App.vent.trigger("app.clipapp:recommend", cid);break;
 	case 'comment':
@@ -261,23 +262,21 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  ClipDetail.show = function(cid,model_id){   // 此处的cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id,rid){   // 此处的cid等于detailModel.id
     mid = model_id;
-    var clip = new App.Model.DetailModel({id: cid});
-    if(clip){
-      if((App.util.getMyUid() && clip.user == App.util.getMyUid()) ||clip.public != "false"){
-	clip.fetch();
+    var clip = new App.Model.DetailModel({id: cid, rid:rid});
+    clip.fetch({
+      success:function(res,model){
 	clip.onChange(function(detailModel){
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);
 	});
-      }else{
-	App.vent.trigger("app.clipapp.message:chinese","作者没有公开此摘录！");
+      },
+      error:function(res,error){
+	 App.vent.trigger("app.clipapp.message:chinese",error);
       }
-    }else{
-      	App.vent.trigger("app.clipapp.message:chinese","此摘录已经删除！");
-    }
+    });
   };
 
   ClipDetail.close = function(){

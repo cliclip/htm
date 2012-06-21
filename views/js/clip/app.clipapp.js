@@ -152,13 +152,13 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   //reclip 用户一个clip
-  App.vent.bind("app.clipapp:reclip", function(clipid,model_id){
+  App.vent.bind("app.clipapp:reclip", function(clipid,model_id, rid){
     var uid = getMyUid();
     // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
     if(!uid) ClipApp.Login.show(function(){
-      App.ClipApp.Reclip.show(clipid,model_id);
+      App.ClipApp.Reclip.show(clipid,model_id, rid);
     });
-    else ClipApp.Reclip.show(clipid,model_id);
+      else ClipApp.Reclip.show(clipid,model_id, rid);
   });
 
   //对 user's tag下的clip的reclip
@@ -205,9 +205,9 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:clipdetail", function(clipid,model_id){
+  App.vent.bind("app.clipapp:clipdetail", function(clipid,model_id,rid){
     //model_id为model的id，用来当detail的model改变时，改变list的model的数据
-    ClipApp.ClipDetail.show(clipid,model_id);
+    ClipApp.ClipDetail.show(clipid,model_id,rid);
   });
 
   App.vent.bind("app.clipapp:clipmemo", function(cid){
