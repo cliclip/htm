@@ -1,4 +1,4 @@
-// app.js
+// app-base.js
 
 App = new Backbone.Marionette.Application();
 
@@ -135,11 +135,18 @@ App.addRegions({
   searchRegion:".search"
 });
 
+if(typeof console !="object"){
+  var console = {
+    log:function(){},
+    info:function(){},
+    dir:function(){}
+  };
+}
+
 App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
   }
-
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
    // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
@@ -197,7 +204,6 @@ App.bind("initialize:after", function(){
 
     if((st + wh - 500 > last_top || st + wh > lt)&& time_gap==true ){
       time_gap = false;
-      //console.info("trigger nextpge");
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){
 	time_gap = true;

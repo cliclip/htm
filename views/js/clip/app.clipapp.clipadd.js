@@ -124,7 +124,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     ClipAdd.close();
     var uid = App.util.getMyUid();
     if(Backbone.history){
-      console.log(Backbone.history.fragment);
+      //console.log(Backbone.history.fragment);
       if(Backbone.history.fragment == "my"){
 	App.vent.trigger("app.clipapp.cliplist:add", model);
       }else{

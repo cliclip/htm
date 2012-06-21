@@ -242,7 +242,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
       $("#list").css({height:"0px"});
       App.listRegion.show(clipListView);
-      App.vent.trigger("app.clipapp:showpage");
+      //App.vent.trigger("app.clipapp:showpage");
       if(collection.length<10){
 	App.vent.trigger("app.clipapp:nextpage");
       }
@@ -255,7 +255,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:nextpage",function(){
     if(!App.listRegion.currentView)return;
-    console.info("nextpage",new_page);
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
