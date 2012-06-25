@@ -105,7 +105,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //var cid = clip.user.id+":"+clip.id;
       switch(opt){
 	case 'biezhen'://收
-	App.vent.trigger("app.clipapp:reclip", cid,this.model.id, rid);break;
+	  App.vent.trigger("app.clipapp:reclip", cid,this.model.id, rid);break;
 	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
 	case 'comment'://评
