@@ -208,6 +208,9 @@
 		a{color:#fff;}
 		cursor: pointer;
 		.sprites(-515px,-100px);
+		#show_mysetup{
+			display:none;
+		}
 		.my_head{
 			width:43px;
 			height:43px;
@@ -959,6 +962,9 @@ section.follow_frame{
 	top:100px;
 	margin-left:-370px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
+	i{
+		cursor: pointer;
+	}
 	.pop_title{
 		height:45px;
 		line-height:45px;
@@ -1090,6 +1096,29 @@ section.follow_frame{
 			color:#cb5331;
 		}
 		.content{
+			p{
+
+    				font-size: 16px;
+				line-height: 1.7;
+				margin: 0 0 9px;
+			}
+			width:650px;
+			min-height:200px;
+			max-height:500px;
+			padding:4px;
+			border:1px solid #ccc;
+			overflow-x:hidden;
+			overflow-y:auto;
+			margin-bottom:20px;
+			img{max-width:645px;}
+		}
+		.content_new{
+			p{
+
+    				font-size: 16px;
+				line-height: 1.7;
+				margin: 0 0 9px;
+			}
 			width:650px;
 			height:500px;
 			padding:4px;
@@ -1098,10 +1127,8 @@ section.follow_frame{
 			overflow-y:auto;
 			margin-bottom:20px;
 			img{max-width:645px;}
-		}/*
-		.content2{
 			overflow: hidden;
-		}*/	 
+		}	 
 		dl.comments{
 			margin-bottom:20px;
 			.user_head{
@@ -1122,6 +1149,12 @@ section.follow_frame{
 				margin-left:43px;
 				overflow: hidden;
 				color:#909090;
+				span.comment_text{
+				}
+				span.comment_time{
+					font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+				        color:#000
+				}
 			}
                         dd.del_comm{
 				margin-left:0px;
@@ -1238,6 +1271,7 @@ section.follow_frame{
 				display: none;
 			}
 			form{
+				margin:0 0 0 0;
 				label.username{
 					width:70px;
 					height:37px;
@@ -1257,7 +1291,7 @@ section.follow_frame{
 					width:200px;
 					.sprites(-340px,-520px);
 					float:right;
-					margin-bottom:15px;
+					margin-bottom:0px;
 				}
 				input#remember{float: left;width:auto!important;height:auto!important;}
 				input:focus{
@@ -1292,6 +1326,8 @@ section.follow_frame{
 	
 }
 .btn_frame{
+	margin-left:30px;
+	margin-top:-10px;
 	input{float:left;border:none;font-size:16px;}
 	button{
 		float:left;

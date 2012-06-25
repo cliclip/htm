@@ -128,22 +128,24 @@ App.util = (function(){
   subTimes = function(Ftime,Ttime){
     var dtime = (Ttime.getTime() - Ftime.getTime())/1000;
     var returnVal = "";
-    if(dtime<60){//second
-      returnVal = dtime + "秒前";
+    if(dtime<5){
+       returnVal = "刚刚";
+    }else if(dtime<60){//second
+      returnVal = Math.round(dtime)+ "秒前";
     }else if(dtime>=60 && dtime<60*60){//minute
       returnVal = Math.round(dtime/60) + "分钟前";
     }else if(dtime>=60*60 && dtime<60*60*24){//hour
       returnVal = Math.round(dtime/(60*60)) + "小时前";
     }else if(dtime>=60*60*24 && dtime<60*60*24*7){//day
-      returnVal = Math.round(dtime/(60*60*24)) + "天";
+      returnVal = Math.round(dtime/(60*60*24)) + "天前";
     }else if(dtime>=60*60*24*7 && dtime<60*60*24*30){//week
-      returnVal = Math.round(dtime/(60*60*24*7)) + "周";
+      returnVal = Math.round(dtime/(60*60*24*7)) + "周前";
     }else if(dtime>=60*60*24*30 && dtime<60*60*24*30*6){//month
-      returnVal = Math.round(dtime/(60*60*24*7*4)) + "月";
+      returnVal = Math.round(dtime/(60*60*24*7*4)) + "月前";
     }else if(dtime>=60*60*24*30*6 && dtime<60*60*24*30*6*12){//half year
-      returnVal = "半年";
+      returnVal = "半年前";
     }else if(dtime>=60*60*24*30*6*12){//year
-      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + "年";
+      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + "年前";
     }
     return returnVal;
   };
