@@ -73,7 +73,9 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   });
 
   App.vent.bind("app.clipapp.taglist:taglistRefresh",function(tags){
-    TagList.myTag  = _.difference(_.union(tags,TagList.myTag),App.util.getBubbs());
+    if(tags){
+      TagList.myTag  = _.difference(_.union(tags,TagList.myTag),App.util.getBubbs());
+    }
   });
 
   App.bind("initialize:after", function(){
