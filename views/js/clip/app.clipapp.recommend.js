@@ -131,6 +131,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       }
     },
     nameListShow:function(e){
+      uid = null;
       this.cleanError(e);
       var div=$(".action-info");
       if(div.length != 0){
@@ -155,7 +156,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     recommendAction:function(e){
       // 在点击转确定按钮时，model.id model.name都已经设置成功
       e.preventDefault();
-      $(e.currentTarget).attr("disabled",true);
       var view = this;
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
