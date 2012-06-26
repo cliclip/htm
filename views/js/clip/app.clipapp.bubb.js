@@ -306,7 +306,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	  return "/user/"+_uid+"/tag/"+encode_tag;
       }
     }else{
-      return "/tag/"+tag;
+      return "/tag/"+encode_tag;
     }
   };
 
