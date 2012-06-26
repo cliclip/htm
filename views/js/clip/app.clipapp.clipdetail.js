@@ -195,11 +195,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     comment : function(e){
       e.preventDefault();
-      $(e.currentTarget).attr("disabled",true);
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = ($("#comm_text").val()).replace(/[\s]/g, "");
       if(text == "" || text == COMM_TEXT){$("#comm_text").focus(); return;}
+      $(e.currentTarget).attr("disabled",true);
       var params = {clipid: cid, text: text, pid: pid};
       var params1 = null;
       if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量

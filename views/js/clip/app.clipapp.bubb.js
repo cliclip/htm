@@ -23,6 +23,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   // constants
 
   // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
+  // 与显示无关，只是用来确定泡泡的大小而已
   var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
   var sink = ["讨厌"];
   // private
@@ -271,7 +272,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   // utils 因为追了所有没有办法只停追一个
   function mkTag(tags, follows, tag, self, homepage){
     // DEBUG PURPOSE
-    tags = _.without(_.union(bubs, sink, tags, follows),"*");
+    // tags = _.without(_.union(bubs, sink, tags, follows),"*");
+    tags = _.without(_.union(tags, follows),"*");
     var opt = {
       tags: tags,
       follows: follows,
@@ -304,7 +306,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	  return "/user/"+_uid+"/tag/"+encode_tag;
       }
     }else{
-      return "/tag/"+tag;
+      return "/tag/"+encode_tag;
     }
   };
 

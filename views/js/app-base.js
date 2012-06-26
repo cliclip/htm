@@ -1,4 +1,4 @@
-// app.js
+// app-base.js
 
 App = new Backbone.Marionette.Application();
 
@@ -135,11 +135,18 @@ App.addRegions({
   searchRegion:".search"
 });
 
+if(typeof console !="object"){
+  var console = {
+    log:function(){},
+    info:function(){},
+    dir:function(){}
+  };
+}
+
 App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
   }
-
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
    // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
@@ -152,18 +159,8 @@ App.bind("initialize:after", function(){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
     $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
   };
-  function Reload(flag){
-    $("#list").masonry("reload");
-    if(flag){
-      setTimeout(function(){
-	Reload();
-      },1000);
-    }
-  }
-
   var time_gap = true;
   var paddingTop = 0 + "px";
-  //Reload(true);
   remove_fixed(paddingTop);
   $(window).scroll(function() {
     remove_fixed(paddingTop);
@@ -177,8 +174,10 @@ App.bind("initialize:after", function(){
     //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
     if(st>0){
       $(".return_top").show();
+      $("#add_right").show();
     }else{
       $(".return_top").hide();
+      $("#add_right").hide();
     }
     if(st > mt ){
       //console.log("锁定气泡组件",st,mt);
@@ -197,7 +196,6 @@ App.bind("initialize:after", function(){
 
     if((st + wh - 500 > last_top || st + wh > lt)&& time_gap==true ){
       time_gap = false;
-      //console.info("trigger nextpge");
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){
 	time_gap = true;

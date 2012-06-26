@@ -3,6 +3,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   var P = App.ClipApp.Url.base;
   var Me = {};
+  var flag = false;
   var MyInfoModel = App.Model.extend({
     defaults:{
       id:"",
@@ -26,7 +27,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "click #login_button": "loginAction",
       "click #register_button": "registerAction",
       "click .my_info":"showMysetup",
-      // "mouseout .my_info":"closeMysetup",
+      "mouseout .my_info":"closeMysetup",
+      "mouseover #show_mysetup":"keepOpenMysetup",
+      "mouseout #show_mysetup":"closeMysetupMust",
       "click #logout": "logoutAction",
       "click #mysetup": "mysetupAction",
       // "mouseenter .navigate": "mouseEnter",
@@ -38,10 +41,22 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },
     showMysetup: function(){
       $("#show_mysetup").toggle(); // css("display","block");
-    },/*
+    },
+    keepOpenMysetup: function(){
+      flag = true;
+      $("#show_mysetup").show();
+    },
     closeMysetup: function(){
+      setTimeout(function(){
+	if(!flag){
+	  $("#show_mysetup").css("display","none");
+	}
+      },200);
+    },
+    closeMysetupMust: function(){
+      flag = false;
       $("#show_mysetup").css("display","none");
-    },*/
+    },
     loginAction: function(){
       App.vent.trigger("app.clipapp:login");
     },

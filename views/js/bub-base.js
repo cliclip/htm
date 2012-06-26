@@ -94,7 +94,6 @@ $(function() {
 	    document.attachEvent('touchend', touchEnd, false);
 	    window.attachEvent('deviceorientation', orientation, false);
 	  }
-
 	},
 	chkMouse: function() {
 	  // mouse press
@@ -236,7 +235,7 @@ $(function() {
 	// this.model.set("current", true);
 	// game.open(this.$(".bub span").text());
 	fire("open", this.$(".bub span").text());
-	parent.document.getElementById("return_top").click();
+	parent.window.location.href="javascript:scroll(0,100)";
       },
       follow: function(){
 	// this.model.set("follow", true);
@@ -278,7 +277,8 @@ $(function() {
 	var b2body = new b2BodyDef();
 	b2body.AddShape(circle);
 	// b2body.userData = { element: element };
-	b2body.position.Set(x, y);
+	// b2body.position.Set(x, y);
+	b2body.position.Set(x, 300);
 	b2body.linearVelocity.Set(sx, sy);
 	return b2body;
       }

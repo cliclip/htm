@@ -221,9 +221,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
     // 用户登录成功 页面跳转
     Login.close();
-    Backbone.history.navigate("my",true);
     if(typeof fun == "function"){
       fun();
+    }else{
+      Backbone.history.navigate("my",true);
     }
   });
 

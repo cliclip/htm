@@ -106,6 +106,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
+    $(".big_pop").css("top", App.util.getPopTop("big"));
     App.ClipApp.Editor.init();
   };
 
@@ -124,7 +125,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     ClipAdd.close();
     var uid = App.util.getMyUid();
     if(Backbone.history){
-      console.log(Backbone.history.fragment);
+      //console.log(Backbone.history.fragment);
       if(Backbone.history.fragment == "my"){
 	App.vent.trigger("app.clipapp.cliplist:add", model);
       }else{

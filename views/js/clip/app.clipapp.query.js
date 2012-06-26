@@ -1,5 +1,6 @@
 App.ClipApp.Query = (function(App,Backbone,$){
   var Query = {};
+  var flag = false;
   var QueryModel = App.Model.extend({});
   var QueryView = App.ItemView.extend({
     tagName: "div",
@@ -7,6 +8,9 @@ App.ClipApp.Query = (function(App,Backbone,$){
     events:{
       "click .add": "addClip",
       "click .more": "showMore",
+      "mouseout .more":"closeMysetup",
+      "mouseover ul.options":"keepOpenMysetup",
+      "mouseout ul.options":"closeMysetupMust",
       "click .search_btn" : "query",
       "click .text":"inputAction"
     },
@@ -16,7 +20,22 @@ App.ClipApp.Query = (function(App,Backbone,$){
       App.vent.trigger("app.clipapp:clipadd");
     },
     showMore:function(){
-      $(".options").toggle();
+      $("ul.options").toggle();
+    },
+    keepOpenMysetup: function(){
+      flag = true;
+      $("ul.options").show();
+    },
+    closeMysetup: function(){
+      setTimeout(function(){
+	if(!flag){
+	  $("ul.options").css("display","none");
+	}
+      },200);
+    },
+    closeMysetupMust: function(){
+      flag = false;
+      $("ul.options").css("display","none");
     },
     query : function(){
       var word = this.$(".text").val();
