@@ -2,13 +2,13 @@ script(type="text/template",id="findpass-view-template")
   div.masker_layer
   section.small_pop
     span.close_w
-    h2.pop_title 找回密码
+    h2.pop_title <%=_i18n('findpass.title')%>
     ul.pop_body
       li.alert#alert
         <%= typeof error != "undefined"&& error.address ? error.address: "" %>
-      h3 邮箱地址
+      h3 <%=_i18n('findpass.email')%>
       li.input_text.clearfix
         input(type="text",id="address")
-      li.btn_group.clearfix
-        input.verify(type="button",value="确定",id="submit")
-        input.cancel(type="button",value="取消",id="cancel")
+      li.btn_group.clearfix.
+        <input type="button" class="verify" value="<%=_i18n('findpass.ok')%>" id="submit" />
+        <input type="button" class="cancel" value="<%=_i18n('findpass.cancel')%>" id="cancel" />

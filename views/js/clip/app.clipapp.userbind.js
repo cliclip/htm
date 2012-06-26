@@ -20,7 +20,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     events : {
       "click .close_w"           : "cancel",
       "click #bind_ok"           : "bindOk",
-      "click #user_hava"         : "toggleClass",
+      "click #user_have"         : "toggleClass",
       "click #user_not"          : "toggleClass",
       "blur #name"          : "blurName",
       "blur #pass"          : "blurPass",
@@ -34,7 +34,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       var that = this;
       this.tmpmodel.set({name:$("#name").val()}, {
 	error:function(model, error){
-	  that.showError(error);
+	  that.showError('bind',error);
 	}
       });
     },
@@ -42,16 +42,15 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       var that = this;
       this.tmpmodel.set({pass:$("#pass").val()},{
 	error:function(model, error){
-	  that.showError(error);
+	  that.showError('bind',error);
 	}
       });
     },
     bindOk:function(e){
       e.preventDefault();
       var that = this;
-      var str = $.trim($(e.currentTarget).val());
-      console.info(str);
-      if(str == "立即绑定"){
+      var id = $('.tab')[0].id;
+      if(id == "user_have"){
 	this.tmpmodel.save({}, {
 	  url: App.ClipApp.Url.base+"/login",
 	  type: "POST",
@@ -59,10 +58,10 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   	    App.vent.trigger("app.clipapp.userbind:success", res);
   	  },
   	  error:function(model, res){
-	    that.showError(res);
+	    that.showError('bind',res);
   	  }
 	});
-      }else if(str == "立即注册"){
+      }else if(id == "user_not"){
 	this.tmpmodel.save({},{
 	  url : App.ClipApp.Url.base+"/register",
 	  type: "POST",
@@ -70,18 +69,18 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	    App.vent.trigger("app.clipapp.userbind:success",res);
 	  },
 	  error:function(model,error){
-	    that.showError(error);
+	    that.showError('bind',error);
 	  }
 	});
       }
     },
     toggleClass : function(e){
-      if(e.currentTarget.id == "user_hava"){
+      if(e.currentTarget.id == "user_have"){
 	$("#user_not").removeClass("tab");
-	$("#bind_ok").val("立即绑定");
+	$("#bind_ok").val(_i18n('bind.bind_ok'));
       }else if(e.currentTarget.id == "user_not"){
-	$("#user_hava").removeClass("tab");
-	$("#bind_ok").val("立即注册");
+	$("#user_have").removeClass("tab");
+	$("#bind_ok").val(_i18n('bind.register_ok'));
       }
       $(e.currentTarget).addClass("tab");
     },
@@ -168,7 +167,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 
  // TEST
 
- //App.bind("initialize:after", function(){ UserBind.show(); });
+  //App.bind("initialize:after", function(){ UserBind.show({face:"",name:""}); });
 
  return UserBind;
 })(App, Backbone, jQuery);

@@ -24,11 +24,11 @@ script(type='text/template',id='userface-view-template')
             //-i.icon_biezhen
             div.
               <a class="following" href="javascript:scroll(0,100)">
-                我追谁(<%=following%>)
+                <%=_i18n('userface.following')%>(<%=following%>)
               </a> 
           span.icon_block
             //-i.icon_quote
             div.
               <a class="follower" href="javascript:scroll(0,100)">
-                谁追我(<%=follower%>)
+                <%=_i18n('userface.follow')%>(<%=follower%>)
               </a>

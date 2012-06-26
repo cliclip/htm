@@ -39,7 +39,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     EmailAddcommit: function(){
       var view = this;
       var data = view.getInput();
-      view.setModel(this.model, data);
+      view.setModel('emailAdd',this.model, data);
       if(this.model.isValid()){
 	this.model.save(data,{
 	  type:"POST",
@@ -50,7 +50,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	    if(res.email == "no_uname")
 	      App.vent.trigger("app.clipapp.message:chinese", res);
 	    else{
-	      view.showError(res);
+	      view.showError('emailAdd',res);
 	    }
 	  }
 	});

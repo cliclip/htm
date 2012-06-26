@@ -9,20 +9,20 @@ script(type="text/template",id="editDetail-view-template")
           iframe(name="post_frame",id="post_frame")
           |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
           |<span class="file">
-          |<button class="upload_img" id="localImg">上传图片</button>
+          |<button class="upload_img" id="localImg"><%=_i18n('editDetail.upload')%></button>
           |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipEdit.image_change(this)"/>
           |</span>
           |</form>
           span
-            button.link_img 链接图片
+            button.link_img <%=_i18n('editDetail.link')%>
             span.url_text.img_upload_span
               input.text#img_upload_url(type="text")
-              input.btn_img(type="buttn",value="确定")
+              | <input type="buttn" class="btn_img" value="<%=_i18n('editDetail.ok')%>" />
           span
-            button.format 整理格式
+            button.format <%=_i18n('editDetail.clear')%>
           span.close_w
             |&nbsp&nbsp&nbsp&nbsp&nbsp
-        | 修改
+        | <%=_i18n('editDetail.update')%>
     div.pop_left
     div.pop_right
       section.pop_inner
@@ -30,6 +30,6 @@ script(type="text/template",id="editDetail-view-template")
         form#editForm(metod="post")
           article.content.content2
             iframe#editor(frameborder="no",border="0")
-          div.btn_group.clearfix
-            input#editClip_Save.verify(type="button",title="保存",value="确定")
-            input#editClip_Abandon.cancel(type="reset",title="放弃",value="取消")
+          div.btn_group.clearfix.
+            <input id="editClip_Save" class="verify" type="button" title="<%=_i18n('editDetail.ok_title')%>" value="<%=_i18n('editDetail.ok')%>" />
+            <input id="editClip_Abandon" class="cancel" type="reset" title="<%=_i18n('editDetail.cancel_title')%>" value="<%=_i18n('editDetail.cancel')%>" />

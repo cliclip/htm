@@ -4,17 +4,17 @@ script(type="text/template",id="detail-view-template")
     h2.subject_edit
       div.pop_left
         span.breadcrumbs
-          |录线图
+          |<%=_i18n('detail.route')%>
       div.pop_right.
         <% if(!App.util.self(user)) {%>
-          <i class="comment operate" title="评论"></i>
-          <i class="refresh operate" title="转发"></i>
-          <i class="biezhen operate" title="收录"></i>
+          <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
+          <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>
+          <i class="biezhen operate" title="<%=_i18n('detail.reclip')%>"></i>
         <% }else {%>
-          <i class="del operate" title="删除"></i>
-          <i class="change operate" title="修改"></i>
-          <i class="note operate" title="标注"></i>
-          <i class="refresh operate" title="转发"></i>	   
+          <i class="del operate" title="<%=_i18n('detail.delete')%>"></i>
+          <i class="change operate" title="<%=_i18n('detail.update')%>"></i>
+          <i class="note operate" title="<%=_i18n('detail.memo')%>"></i>
+          <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>	   
         <% } %>
         <span class="close_w"></span>
     div.pop_left
@@ -45,7 +45,7 @@ script(type="text/template",id="showcomment-view-template")
     <a class="marking"><% if(has_child) {%> - <%}%></a>
     <%= text %><%= App.util.generatePastTime(date)%>
     <div id="reply_<%=id%>" style="display:none;">
-    <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
+    <a href="javascript:void(0)" class="reply_comment" id="<%= id %>"><%=_i18n('showcomment.reply')%></a>
     </div>
     </div>
   <% } else {%>
@@ -58,16 +58,16 @@ script(type="text/template",id="showcomment-view-template")
     <a class="marking"><% if(has_child) {%> - <%}%></a>
     <%= text %><%= App.util.generatePastTime(date)%>
     <div id="reply_<%=id%>" style="display:none;">
-    <a href="javascript:void(0)" class="reply_comment" id="<%= id %>">回复</a>
+    <a href="javascript:void(0)" class="reply_comment" id="<%= id %>"><%=_i18n('showcomment.reply')%></a>
     <% auth = App.util.getMyUid(); if(user.id == auth || auth == clip_owner){%>
-    <a href="javascript:void(0)" class="del_comment" id="<%= id %>">删除</a>
+    <a href="javascript:void(0)" class="del_comment" id="<%= id %>"><%=_i18n('showcomment.delete')%></a>
     <% } %>
     </div>
     </div>
   <%}%>
           
 script(type="text/template",id="addcomm-view-template")
-  |<textarea id="comm_text">说点什么吧~</textarea>
+  |<textarea id="comm_text"><%=_i18n('addcomm.defaultText')%></textarea>
   div
     <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
     <input type="button" class="main_tag original" id="maintag_<%=i%>" value="<%=main_tag[i]%>" /><% } %>
@@ -75,8 +75,8 @@ script(type="text/template",id="addcomm-view-template")
   .input_checkbox
     span
       input(type="checkbox",id="reclip")
-      |  同时收录
+      |  <%=_i18n('addcomm.reclip')%>
   <% } %>
-  div.btn_group.clearfix
-    input.verify(type="button",value="评论")
-    input.cancel(type="button",value="取消")
+  div.btn_group.clearfix.
+    <input type="button" class="verify" value="<%=_i18n('addcomm.commentOK')%>" />
+    <input type="button" class="cancel" value="cancel" />

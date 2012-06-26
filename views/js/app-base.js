@@ -64,11 +64,11 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView.extend({
-  showError:function(error){
-    error = App.ClipApp.Message.getError(error);
-    for(var key in error){
+  showError:function(tmpl,errorCode){
+    for(var key in errorCode){
+      var error = _i18n(tmpl+'.'+key+'.'+errorCode[key]);
       this.$("#"+key).addClass("error");
-      this.$("#"+key).after("<span class='error'>"+error[key]+"</span>");
+      this.$("#"+key).after("<span class='error'>"+error+"</span>");
       if(this.$("#"+key).attr("type") == "password")
 	this.$("#"+key).val("");
     }
@@ -85,11 +85,11 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
     });
     return data;
   },
-  setModel:function(model, data){
+  setModel:function(tmpl, model, data){
     var view = this;
     model.set(data, {
       error: function(model, error){
-	view.showError(error);
+	view.showError(tmpl,error);
       }
     });
   }

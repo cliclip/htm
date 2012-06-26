@@ -5,22 +5,22 @@ script(type="text/template",id="addClip-view-template")
       div.pop_left
         i.note
       div.pop_right
-        | 增加
+        | <%=_i18n('addClip.title')%>
         div.button_frame
           iframe(name="post_frame",id="post_frame")
           |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
           |<span class="file">
-          |<button class="upload_img" id="localImg">上传图片</button>
+          |<button class="upload_img" id="localImg"><%=_i18n('addClip.upload')%></button>
           |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipAdd.image_change(this)">
           |</span>
           |</form>
           span
-            button.link_img 链接图片
+            button.link_img <%=_i18n('addClip.link')%>
             span.url_text.img_upload_span
               input.text#img_upload_url(type="text")
-              input.btn_img(type="submit",value="确定")
+              | <input type="submit" class="btn_img" value="<%=_i18n('addClip.ok')%>" />
           span
-            button.format 整理格式
+            button.format <%=_i18n('addClip.clear')%>
           span.close_w
             |&nbsp&nbsp&nbsp&nbsp&nbsp
     div.pop_left
@@ -29,8 +29,8 @@ script(type="text/template",id="addClip-view-template")
         article.content.content2
           //- css 中设置iframe无边框在ie8- 中不起作用
           iframe#editor(frameborder="no",border="0")
-        div.btn_group.clearfix
-          input.verify(type="button",id="save",title="确定",value="确定")
-          input.cancel(type="button",id="cancel",title="取消",value="取消")
-          input.cliper.ok(type="button",id="ok",title="返回",value="返回")
-          input.cliper.empty(type="button",id="empty",title="清空",value="清空")
+        div.btn_group.clearfix.
+          <input type="button" class="verify" id="save" title="<%=_i18n('addClip.ok')%>" value="<%=_i18n('addClip.ok')%>" />
+          <input type="button" class="cancel" id="cancel" title="<%=_i18n('addClip.cancel')%>" value="<%=_i18n('addClip.cancel')%>" />
+          <input type="button" class="cliper ok" id="ok" title="<%=_i18n('addClip.back')%>" value="<%=_i18n('addClip.back')%>" />
+          <input type="button" class="cliper empty" id="empty" title="<%=_i18n('addClip.clean')%>" value="<%=_i18n('addClip.clean')%>" />

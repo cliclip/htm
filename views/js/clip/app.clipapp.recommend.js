@@ -62,7 +62,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       setTimeout(function(){
 	var data = view.getInput();
 	if(!data.name || data.name == ""){
-	  view.showError({"recomm_name":"is_null"});
+	  view.showError('recommend',{"recomm_name":"is_null"});
 	}else{
 	  var div=$(".action-info");
 	  if(div.length != 0){
@@ -79,7 +79,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	    this.$(".list").remove();
 	  }
 	  if(!uid){
-	    view.showError({"recomm_name":"not_exist"});
+	    view.showError('recommend',{"recomm_name":"not_exist"});
 	  }
 	}
 	$(".name_list").hide();
@@ -158,7 +158,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	var clipid = view.model.get("clipid");
 	var data = view.getInput();
 	if(data.text == defaultText){data.text = "";}
-	view.setModel(view.tmpmodel, {text: data.text, clipid: clipid});
+	view.setModel('recommend',view.tmpmodel, {text: data.text, clipid: clipid});
 	//recommend 需要的参数
 	view.tmpmodel.save({},{
 	  success:function(model,res){
@@ -166,7 +166,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	    App.vent.trigger("app.clipapp.message:confirm","recomm");
 	  },
 	  error:function(model,res){
-	    view.showError(res);
+	    view.showError('recommend',res);
 	  }
 	});
 	//reclip 需要的参数
@@ -186,7 +186,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultText :
       $(e.currentTarget).val() );
       var data = view.getInput();
-      view.setModel(view.tmpmodel, {text: data.text});
+      view.setModel('recommend',view.tmpmodel, {text: data.text});
     },
     cancelAction:function(e){
       App.vent.trigger("app.clipapp.recommend:@close");

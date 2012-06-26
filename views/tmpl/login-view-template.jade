@@ -5,7 +5,8 @@ script(type="text/template",id="login-view-template")
     div.login_left
       div.logo_bg
       fieldset
-        legend|用户登陆
+        legend.
+          <%=_i18n('login.title')%>
         form(action="",method="")
           li
             input(type="text",name="name",id="name")
@@ -16,11 +17,11 @@ script(type="text/template",id="login-view-template")
           li
             label
               input(type="checkbox",id="remember")
-              | 一月内自动登录
-        p|嫌麻烦？直接发邮件到1@cliclip.com也可注册 
+              | <%=_i18n('login.login_state')%>
+        p|<%=_i18n('login.register')%> 
          | <a class="weibo"  href="javascript:void(0)"><img src="img/16.png"></img></a>
-      div.btn_frame.clearfix
-        input.reg_btn(type="submit",value="注 册")
-        input.login_btn(type="submit",value="登 陆")
+      div.btn_frame.clearfix.
+        <input type="submit" class="reg_btn" value="<%=_i18n('login.register_ok')%>" />
+        <input type="submit" class="login_btn" value="<%=_i18n('login.login_ok')%>" />
     div.login_right
       .note_img

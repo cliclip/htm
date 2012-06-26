@@ -2,7 +2,7 @@ script(type="text/template",id="reclip-view-template")
   div.masker_layer
   section.small_pop
     span.close_w
-    h2.subject_put 收录
+    h2.subject_put <%=_i18n('reclip.title')%>
     ul.pop_body
       li.tag_box.
         <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
@@ -11,14 +11,14 @@ script(type="text/template",id="reclip-view-template")
         text.obj_tag(type="text",id="obj_tag")
       br
       li.input_textarea
-        |<textarea id="reclip_text">备注一下吧~</textarea>
+        |<textarea id="reclip_text"><%=_i18n('reclip.defaultNote')%></textarea>
       li.input_checkbox
         label
           input(type="checkbox",id="checkbox")
-          | 不公开
-      li.btn_group.clearfix
-        input.verify(type="button",value="确定",id="submit")
-        input.cancel(type="button",value="取消",id="cancel")
+          | <%=_i18n('reclip.private')%>
+      li.btn_group.clearfix.
+        <input type="button" class="verify" value="<%=_i18n('reclip.ok')%>" id="submit" />
+        <input type="button" class="cancel" value="<%=_i18n('reclip.cancel')%>" id="cancel" />
 
 
 script(type="text/template",id="reclipTag-view-template")
@@ -27,7 +27,7 @@ script(type="text/template",id="reclipTag-view-template")
     span.close_w
     h2.subject_put.
       <% if(count){ %>
-      您将收藏<%= count%>条数据
+      <%=_i18n('reclipTag.title', count)%>
       <% }  %>
     ul.pop_body
       li.tag_box.
@@ -37,11 +37,11 @@ script(type="text/template",id="reclipTag-view-template")
         text.obj_tag(type="text",id="obj_tag")
       br
       li.input_textarea
-        |<textarea id="reclip_text">备注一下吧~</textarea>
+        |<textarea id="reclip_text"><%=_i18n('reclipTag.defaultNote')%></textarea>
       li.input_checkbox
         label
           input(type="checkbox",id="checkbox")
-          | 不公开
-      li.btn_group.clearfix
-        input.verify(type="button",value="确定",id="submit")
-        input.cancel(type="button",value="取消",id="cancel")
+          | <%=_i18n('reclipTag.private')%>
+      li.btn_group.clearfix.
+        <input type="button" class="verify" value="<%=_i18n('reclipTag.ok')%>" id="submit" />
+        <input type="button" class="cancel" value="<%=_i18n('reclipTag.cancel')%>" id="cancel" />

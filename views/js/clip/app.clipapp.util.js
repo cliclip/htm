@@ -1,9 +1,26 @@
 App.util = (function(){
   var util = {};
   var P = App.ClipApp.Url.base;
+
+  util.getCookie = function(name){
+    var start = document.cookie.indexOf( name+"=" );
+    var len = start + name.length + 1;
+    if ( ( !start ) && ( name != document.cookie.substring( 0, name.length ) ) ) {
+      return null;
+    }
+    if ( start == -1 )
+      return null;
+    var end = document.cookie.indexOf( ';', len );
+    if ( end == -1 )
+      end = document.cookie.length;
+    return unescape(document.cookie.substring( len, end ));
+  };
+
   util.getMyUid = function(){
-    var cookie = document.cookie ? document.cookie.split("=")[1]:null;
-    return cookie ? cookie.split(":")[0] : null;
+    var uid = null;
+    var token = util.getCookie("token");
+    if (token) uid = token.split(":")[0];
+    return uid;
   };
 
   util.getMyFace = function(){
@@ -254,7 +271,6 @@ App.util = (function(){
     // console.log(MESSAGE[key]);
     return MESSAGE[key] ? MESSAGE[key] : key;
   };
-
 
   var ERROR = {
     login_success : "您已成功登录",

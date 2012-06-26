@@ -80,7 +80,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	  if(error.rule == "is_null"){ // 因为有特殊逻辑所以要单独set
 	    App.vent.trigger("app.clipapp.message:chinese", error);
 	  }else{
-	    view.showError(error);
+	    view.showError('ruleEdit',error);
 	  }
 	}
       });
@@ -91,7 +91,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	    App.vent.trigger("app.clipapp.message:confirm", "setRule_success");
 	  },
 	  error:function(model, res){
-	    view.showError(res);
+	    view.showError('ruleEdit',res);
 	  }
 	});
       }
@@ -111,9 +111,9 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	$("input[name="+name+"]").val(value+";");
 	str = str.length == 0 ? undefined : str;
 	if(id == "to")
-	  view.setModel(this.tmpmodel, {to: str});
+	  view.setModel('ruleEdit',this.tmpmodel, {to: str});
 	if(id == "cc")
-	  view.setModel(this.tmpmodel, {cc: str});
+	  view.setModel('ruleEdit',this.tmpmodel, {cc: str});
       }
     }
   });

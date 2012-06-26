@@ -43,7 +43,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	error:function(model, error){
 	  if($("#name").val() == "")
 	    $("#name").val(NAME);
-	  that.showError(error);
+	  that.showError('login',error);
 	}
       });
     },
@@ -52,7 +52,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       // this.model.set({pass:$("#pass").val()},{
       this.tmpmodel.set({pass:$("#pass").val()},{
 	error:function(model, error){
-	  that.showError(error);
+	  that.showError("login",error);
 	}
       });
     },
@@ -76,7 +76,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	  App.vent.trigger("app.clipapp.login:success", res, remember); // fetch Me.me
   	},
   	error:function(model, res){
-	  that.showError(res);
+	  that.showError('login',res);
   	}
       });
     },

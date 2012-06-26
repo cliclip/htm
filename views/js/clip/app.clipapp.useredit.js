@@ -141,7 +141,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var uid = this.model.id;
       var data = view.getInput();
       var passModel = new PassEditModel({id:uid});
-      view.setModel(passModel, data);
+      view.setModel('passEdit',passModel, data);
       if(passModel.isValid()){
 	passModel.save({},{
 	  type: 'PUT',
@@ -151,7 +151,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    document.cookie = "token="+res.token;
   	  },
   	  error:function(model, res){
-	    view.showError(res);
+	    view.showError('passEdit',res);
   	  }
 	});
       }
@@ -208,7 +208,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $(".set_ok").click(function(){
 	var nameModel = new NameModel();
 	var data = view.getInput();
-	view.setModel(nameModel, data);
+	view.setModel('faceEdit',nameModel, data);
 	if(nameModel.isValid()){
 	  nameModel.save({} ,{
 	    type: 'PUT',
@@ -217,7 +217,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	      App.vent.trigger("app.clipapp.useredit:@showface");
 	    },
 	    error:function(model,res){
-	      view.showError(res);
+	      view.showError('faceEdit',res);
 	    }
 	  });
 	};

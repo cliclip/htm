@@ -2,7 +2,7 @@ script(type="text/template",id="recommend-view-template")
   div.masker_layer
   section.small_pop
     span.close_w
-    h2.subject_forward 转发
+    h2.subject_forward <%=_i18n('recommend.title')%>
     ul.pop_body
       li.select_user.clearfix
         div.container
@@ -11,16 +11,16 @@ script(type="text/template",id="recommend-view-template")
           input(type="text",id="recomm_name",name="name")
       div.name_list#name_listDiv
       li.input_textarea
-        |<textarea id="recomm_text" name="text">说点啥吧～</textarea>
+        |<textarea id="recomm_text" name="text"><%=_i18n('recommend.defaultText')%></textarea>
       <% if(!App.util.self(clipid.split(":")[0])) {%>
       li.input_checkbox
         label
           input(type="checkbox",id="reclip_box")
-          | 同时收录
+          | <%=_i18n('recommend.reclip')%>
       <%}%>
-      li.btn_group.clearfix
-        input.verify(type="button",value="确定",id="submit")
-        input.cancel(type="button",value="取消",id="cancel")
+      li.btn_group.clearfix.
+        <input type="button" class="verify" value="<%=_i18n('recommend.ok')%>" id="submit" />
+        <input type="button" class="cancel" value="<%=_i18n('recommend.cancel')%>" id="cancel" />
 
 script(type="text/template",id="namelist-view-template")
   | <span class="user_list_head"><img src="<%=App.util.face_url(face)%>"></img></span>&nbsp;&nbsp;

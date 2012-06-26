@@ -17,18 +17,18 @@ script(type="text/template",id="faceEdit-view-template")
       <% if(name && name!=""){%>
       <span class="name"><%=name%></span>
       <% }else{%>
-      <span id="set-name" class="name">您还没有用户名</span>
+      <span id="set-name" class="name"><%=_i18n('faceEdit.no_name')%></span>
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
-      <input type="button" class="edit_name" value="设置用户名"/>
+      <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>"/>
       <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face")
     | <form method="POST" id="face_form" action="<%=App.util.getFace_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
     | <div class="btn_frame">
-    | <button class="verify" type="submit" id="confirm_face">确定</button>
+    | <button class="verify" type="submit" id="confirm_face"><%=_i18n('faceEdit.ok')%></button>
     | <div class="button_frame">
     | <span>
-    | <button class="upload">上传本地图像</button>
+    | <button class="upload"><%=_i18n('faceEdit.upload')%></button>
     | <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
     | </span>
     | </div>
@@ -43,8 +43,8 @@ script(type="text/template",id="emailEdit-view-template")
       h3
         button.add_mailbind.align-right(type="button",id="email_add",)
           span
-          |增加邮箱绑定 	
-        |邮箱绑定
+          |<%=_i18n('emailEdit.add')%> 	
+        |<%=_i18n('emailEdit.title')%>
       |<% if(email){ for(i=0;i<email.length;i++) { if(email[i]){ %>
       |<li class="mail_line">
       |<span class="email_address" id="<%=email[i]%>"></span>
@@ -57,22 +57,22 @@ script(type="text/template",id="ruleEdit-view-template")
       h3
         span.open_mailcheck
           |<input type="checkbox" id="open_rule" name="enable" <% if(enable){ %> checked="checked" <%}%> />
-          label(for="open_rule")|打开邮箱识别
-        |邮箱识别
+          label(for="open_rule")|<%=_i18n('ruleEdit.open_rule')%>
+        |<%=_i18n('ruleEdit.head')%>
       li
-        label 标题必须有
+        label <%=_i18n('ruleEdit.title')%>
         |<input type="text" class="text_input" name="title" id="title" value="<%=title%>"/>
       li
-        label 必须抄送给
+        label <%=_i18n('ruleEdit.cc_text')%>
         |<input type="text" class="text_input" name="cc" id="cc" value="<%=cc?cc.join(';'):''%>" />
       li
-        label 必须发给
+        label <%=_i18n('ruleEdit.to_text')%>
         |<input type="text" class="text_input" name="to" id="to" value="<%=to?to.join(';'):''%>" />
-      li
-        input.btn_blue(type="submit",id="update_rule",value="更新邮件规则")
+      li.
+        <input type="submit" class="btn_blue" id="update_rule" value="<%=_i18n('ruleEdit.update')%>" />
 
 script(type="text/template",id="passEdit-view-template")
-  h3.edit_password 修改密码
+  h3.edit_password <%=_i18n('passEdit.title')%>
   ul.input_list
     li
       |<input type="text" id="newpass" value="<%=newpass%>"/>
@@ -80,14 +80,14 @@ script(type="text/template",id="passEdit-view-template")
     li
       |<input type="text" id="conpass" value="<%=confirm%>"/>
       input(type="password",id="confirm",name="confirm",style="display:none;")
-    li
-      input.btn_blue(type="submit",id="pass_confirm",value="更改")
-  h3.danger 高危操作
+    li.
+      <input type="submit" class="btn_blue" id="pass_confirm" value="<%=_i18n('passEdit.update')%>" />
+  h3.danger <%=_i18n('passEdit.danger_operate')%>
   ul.input_list
-    li.btn_line
-      input.btn_blue(type="submit",value="导出摘录")
-    li
-      input.btn_gray(type="submit",value="删除账户")
+    li.btn_line.
+      <input type="submit" class="btn_blue" value="<%=_i18n('passEdit.export')%>" />
+    li.
+      <input type="submit" class="btn_gray" value="<%=_i18n('passEdit.delete')%>" />
 
 script(type="text/template",id="emailAdd-view-template")
   div.masker_layer
@@ -95,13 +95,13 @@ script(type="text/template",id="emailAdd-view-template")
     span.close_w
     .email_add
       h2
-        添加邮件
+        <%=_i18n('emailAdd.title')%>
       ul.pop_body
           li.input_text.
             <input type="text" name="email" id="email" value="<%=email%>" />
-          li.btn_group.clearfix
-            input.verify(type="button",value="确定",id="emailadd_commit")
-            input.cancel(type="button",value="取消",id="emailadd_cancel")
+          li.btn_group.clearfix.
+            <input type="button" class="verify" value="<%=_i18n('emailAdd.ok')%>" id="emailadd_commit" />
+            <input type="button" class="cancel" value="<%=_i18n('emailAdd.cancel')%>" id="emailadd_cancel" />
 
 
 script(type="text/template",id="weiboEdit-view-template")
@@ -110,8 +110,8 @@ script(type="text/template",id="weiboEdit-view-template")
       h3
         button.add_mailbind.align-right(type="button",id="info_add",)
           span
-          |增加微博绑定 	
-        |微博绑定
+          |<%=_i18n('weiboEdit.add')%> 	
+        |<%=_i18n('weiboEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="oauth_li">
       |<a href="<%=info[i].url%>" target="_blank"><apan class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
