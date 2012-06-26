@@ -312,6 +312,9 @@ App.versions = (function($){
 	  },
 	  email:{
 	    no_uname     : "在添加邮件之前请先设置用户名"
+	  },
+	  rule:{
+	    is_null: "您还没有添加邮件规则"
 	  }
 	},
 

@@ -64,6 +64,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.message:chinese", function(key){
+		  		  console.info(key);
     var chinese = null;
     if(typeof(key)=="string"){
       chinese = _i18n('message.'+key);
