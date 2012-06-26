@@ -184,8 +184,10 @@ App.bind("initialize:after", function(){
     //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
     if(st>0){
       $(".return_top").show();
+      $("#add_right").show();
     }else{
       $(".return_top").hide();
+      $("#add_right").hide();
     }
     if(st > mt ){
       //console.log("锁定气泡组件",st,mt);
