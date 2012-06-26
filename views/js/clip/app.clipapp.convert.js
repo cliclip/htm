@@ -170,7 +170,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     var text = html;
     // 先将不是html的网址转换成 a 标签
     // 此转换方法不对，如果网址后面直接再跟内容则不能正常识别
-    var re=/^((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
+    // var re=/^((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
+    var re=/((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"\s\u4E00-\u9FA5\uf900-\ufa2d])*)/g;
     var reg = /(="|='|=)(?=http:\/\/)/;
     text = text.replace(re,function(a,b,c){
       // 使用a来拼正则表达式,报错
@@ -181,12 +182,10 @@ App.ClipApp.Convert = (function(App, Backbone, $){
 	return '<a href="http://'+c+'">'+a+'</a>';
       }
     });
-    // console.log(text);
     //并不完善需没办法正确处理超链接图片
     // Format anchor tags properly.
     // input - <a class='ahref' href='http://pinetechlabs.com/' title='asdfqwer\"><b>asdf</b></a>"
     // output - asdf (http://pinetechlabs.com/)"
-
     text = text.replace(/<\s*a[^>]*href=['"](.*?)['"][^>]*>([\s\S]*?)<\/\s*a\s*>/ig, "[url=$1]$2[/url]");
     // Format image tags properly.'
     // input - <img src="http://what.url.jpg" />'

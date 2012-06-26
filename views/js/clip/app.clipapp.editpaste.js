@@ -5,6 +5,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var ifrm=document.getElementById("editor");
     ifrm.contentWindow.document.designMode = "On";
     ifrm.contentWindow.document.write("<body style=\"font-size:16px;line-height: 1.7;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
+    //ifrm.contentWindow.document.write("<body style=\"font-size:20px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
     if(isIE){
       ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){

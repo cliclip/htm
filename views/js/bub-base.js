@@ -94,7 +94,6 @@ $(function() {
 	    document.attachEvent('touchend', touchEnd, false);
 	    window.attachEvent('deviceorientation', orientation, false);
 	  }
-
 	},
 	chkMouse: function() {
 	  // mouse press
