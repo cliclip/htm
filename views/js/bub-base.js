@@ -277,7 +277,8 @@ $(function() {
 	var b2body = new b2BodyDef();
 	b2body.AddShape(circle);
 	// b2body.userData = { element: element };
-	b2body.position.Set(x, y);
+	// b2body.position.Set(x, y);
+	b2body.position.Set(x, 300);
 	b2body.linearVelocity.Set(sx, sy);
 	return b2body;
       }
