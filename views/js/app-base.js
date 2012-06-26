@@ -159,18 +159,8 @@ App.bind("initialize:after", function(){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
     $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
   };
-  function Reload(flag){
-    $("#list").masonry("reload");
-    if(flag){
-      setTimeout(function(){
-	Reload();
-      },1000);
-    }
-  }
-
   var time_gap = true;
   var paddingTop = 0 + "px";
-  //Reload(true);
   remove_fixed(paddingTop);
   $(window).scroll(function() {
     remove_fixed(paddingTop);

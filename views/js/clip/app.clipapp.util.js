@@ -149,7 +149,10 @@ App.util = (function(){
     }
     return returnVal;
   };
-
+  util.clip_add = function(){
+    App.vent.trigger("app.clipapp:clipadd");
+    return ;
+  };
   App.vent.bind("app.clipapp:showpage",function(length){
 /*    var paddingTop = 0 + "px";
     $(window).unbind("scroll");
