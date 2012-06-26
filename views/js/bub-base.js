@@ -277,8 +277,7 @@ $(function() {
 	var b2body = new b2BodyDef();
 	b2body.AddShape(circle);
 	// b2body.userData = { element: element };
-	// b2body.position.Set(x, y);
-	b2body.position.Set(x, 300);
+	b2body.position.Set(x, y);
 	b2body.linearVelocity.Set(sx, sy);
 	return b2body;
       }
@@ -298,17 +297,17 @@ $(function() {
 	return boxBd;
       }
 
-      function ran(width, height){
+      function ran(width, height, thick){
 	return {
 	  x : Math.random() * width,
-	  y : (Math.random() * - height) >> 1,
-	  sx : (Math.random() * 2 - 1) * width,
-	  sy : (Math.random() * 2 - 1) * height
+	  y : Math.random() * thick + height,
+	  sx : (Math.random() - 0.5) * width,
+	  sy : (Math.random() - 1.2) * height
 	};
       }
 
-      function setBall(size, width, height){
-	var r = ran(width, height);
+      function setBall(size, width, height, thick){
+	var r = ran(width, height, thick);
 	var body = world.CreateBody(Circle((size >> 1), r.x, r.y, r.sx, r.sy));
 	return body;
       }
@@ -410,7 +409,7 @@ $(function() {
 	random : function(){
 	  _(balls).each(function(ball){
 	    var body = ball.get("body");
-	    var r = ran(WIDTH, wall_thickness);
+	    var r = ran(WIDTH, HEIGHT, wall_thickness);
 	    body.m_position.x = r.x;
 	    body.m_position.y = r.y;
 	    body.m_linearVelocity.x = r.sx;
@@ -522,7 +521,7 @@ $(function() {
 	  delete options.homepage;
 	  _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs&&_.indexOf(options.bubs,e)!=-1) ? 64 : 48;
-	    var body = setBall(size + 10, WIDTH, wall_thickness);
+	    var body = setBall(size + 2, WIDTH, HEIGHT, wall_thickness);
 	    var ball = new BallModel({
 	      "text": e,
 	      "self": self,
