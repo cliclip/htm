@@ -29,7 +29,7 @@ html
       }
       body {
         overflow: hidden;
-        background-color: #d0d0d0;
+        //- background-color: #d0d0d0;
         font-family: arial, Helvetica, sans-serif;
         margin: 0px;
         padding: 0px;
@@ -55,7 +55,7 @@ html
           text-decoration: none;
         }
         .bub:hover {
-          font-size: 120%;
+          //- font-size: 120%;
         }
 
         a {
@@ -63,7 +63,7 @@ html
           text-decoration: none;
         }
         a:hover {
-          font-size: 120%;
+          //- font-size: 120%;
         }
 
         .s48 {
@@ -76,24 +76,25 @@ html
           width: 64px;
           height: 64px;
           line-height: 64px;
-          .tag_icon(0px, -304px);
+          .tag_icon(0px, -240px);
         }
 
         .iscurrent span {
-          font-size: 120%;
+          font-size: 150%;
+        }
+
+        .iscurrent.s48 {
+          .tag_icon(0px, -48px);
+        }
+        .iscurrent.s64 {
+          .tag_icon(0px, -304px);
         }
 
         .isfollow span {
           color: #fff;
         }
-        .isfollow.s48 {
-          .tag_icon(0px, -48px);
-        }
-        .isfollow.s64 {
-          .tag_icon(0px, -240px);
-        }
-
-        .issink {
+        
+        .issink, .iscurrent.issink, .isfollow.issink {
           .tag_icon(0px, -192px);
         }
         .issink span {
