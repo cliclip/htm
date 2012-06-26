@@ -106,6 +106,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
+    $(".big_pop").css("top", App.util.getPopTop("big"));
     App.ClipApp.Editor.init();
   };
 
