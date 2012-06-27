@@ -1,5 +1,6 @@
 App.versions = (function($){
   var versions = {};
+    versions.language = {zh:"中文",en:"English"};
     var i18n = {
       // 中文版
       zh : {
@@ -10,7 +11,8 @@ App.versions = (function($){
 	  set       : "设置",
 	  logout    : "登出",
 	  login     : "登 录",
-	  register  : "注 册"
+	  register  : "注 册",
+	  ok        : "确 定"
 	},
 
 	login : {
@@ -70,7 +72,7 @@ App.versions = (function($){
 	  export      : "导出摘录",
 	  delete      : "删除账户",
 	  is_null     : "密码尚未填写",
-	  not_match   : "密码输入不一致",
+	  not_match   : "两次密码输入不一致",
 	  auth_success: "您的密码已更改",
 	  newpass : {
 	    is_null:"密码尚未填写"
@@ -336,7 +338,8 @@ App.versions = (function($){
 	  set       : "set",
 	  logout    : "logout",
 	  login     : "login",
-	  register  : "register"
+	  register  : "register",
+	  ok        : "ok"
 	},
 
 	login : {
@@ -366,7 +369,7 @@ App.versions = (function($){
 	  no_name     : "you have not set the user name",
 	  set_name    : "set user name",
 	  ok          : "ok",
-	  upload      : "Upload local Avatar",
+	  upload      : "Upload Avatar",
 	  name : {
 	    is_null   : "user name is null",
 	    invalidate: "user name is invalidate(Can only be the length of a combination of 5-20 characters in English, digital and point)",
@@ -375,11 +378,11 @@ App.versions = (function($){
 	},
 
 	ruleEdit : {
-	  open_rule   : "open the mailbox identification",
-	  head        : "mailbox identification",
-	  title       : "title must be",
-	  cc_text     : "must be copied to",
-	  to_text     : "must be send to",
+	  open_rule   : "open identification",
+	  head        : "mailbox",
+	  title       : "title",
+	  cc_text     : "copied to",
+	  to_text     : "send to",
 	  update      : "update mail rules",
 	  cc : {
 	    invalidate: "Cc people with legitimate e-mail address"
@@ -390,13 +393,13 @@ App.versions = (function($){
 	},
 
 	passEdit : {
-	  title       : "修改密码",
-	  update      : "更 改",
-	  danger_operate : "高危操作",
-	  export      : "导出摘录",
-	  delete      : "删除账户",
-	  is_null     : "密码尚未填写",
-	  not_match   : "密码输入不一致",
+	  title       : "change password",
+	  update      : "Change",
+	  danger_operate : "High-risk operation",
+	  export      : "export clip",
+	  delete      : "Delete account",
+	  is_null     : "password is null",
+	  not_match   : "两次密码输入不一致",
 	  auth_success: "您的密码已更改",
 	  newpass : {
 	    is_null   :"密码尚未填写"
@@ -663,6 +666,7 @@ App.versions = (function($){
 	if(str[names[i]]) {
 	  str = str[names[i]];
 	}else{
+	  console.info(name+"  未定义!!!");
 	  str = names.pop();
 	}
       }
@@ -672,7 +676,7 @@ App.versions = (function($){
       }
       return str;
     };
-
+    versions.getLang = getLanguage;
     function getLanguage(){
       if (getCookieLang()) {
 	return getCookieLang();
@@ -685,7 +689,7 @@ App.versions = (function($){
 
     function setLanguage(lang){
       setCookieLang(lang);
-      trigger();
+      window.location.reload();
     }
 
     function getCookieLang(){
@@ -697,7 +701,11 @@ App.versions = (function($){
       data.setTime(data.getTime() + 30*24*60*60*1000);
       document.cookie = "language="+lang+";expires=" + data.toGMTString();
     }
-
+    App.vent.bind("app.clipapp.versions:change",function(lang){
+      if(getLanguage() != lang){
+	setLanguage(lang);
+      }
+    });
 
   return versions;
 })(jQuery);

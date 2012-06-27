@@ -26,7 +26,8 @@ App.util = (function(){
   util.getMyFace = function(){
     return {
       name: App.ClipApp.Me.me.get("name"),
-      face: App.ClipApp.Me.me.get("face")
+      face: App.ClipApp.Me.me.get("face"),
+      lang: App.ClipApp.Me.me.get("lang")
     };
   };
 

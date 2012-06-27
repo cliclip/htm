@@ -36,8 +36,8 @@ App.ClipApp.Me = (function(App, Backbone, $){
       // "mouseleave .navigate": "mouseLeave",
       "click .my": "switch_my",
       "click .at_me": "switch_at_me",
-      "click .expert": "switch_expert"
-
+      "click .expert": "switch_expert",
+      "click .change": "ChangeLang"
     },
     showMysetup: function(){
       $("#show_mysetup").toggle(); // css("display","block");
@@ -101,7 +101,12 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }else{
 	Backbone.history.navigate("my/interest",true);
       }
+    },
+    ChangeLang:function(e){
+      var lang = $(".language").val();
+      App.vent.trigger("app.clipapp.versions:change",lang);
     }
+
     /*
     mouseEnter: function(e){
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
@@ -123,6 +128,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
       var meView = new View({
 	model: meModel
       });
+      if(meModel.get("lang")){
+	App.vent.trigger("app.clipapp.versions:change",meModel.get("lang"));
+      }
       App.mineRegion.show(meView);
     });
   };

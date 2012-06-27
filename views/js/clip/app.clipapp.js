@@ -5,14 +5,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.getMyUid = getMyUid;
 
   function getMyUid(){
-    var id = null;
-    if(document.cookie){
-      var token =  document.cookie.split("=")[1];
-      if(token){
-	id = token.split(":")[0];
-      }
-    }
-    return id;
+    return App.util.getMyUid();
   };
 
   ClipApp.siteShow = function(tag){

@@ -24,7 +24,14 @@ script(type='text/template',id='me-view-template')
       <img class="face-image" id="smail_face" src="<%=App.util.face_url(face,50)%>"/>
   <% } else { %>
   div.in_site
-    a#register_button <%=_i18n('me.register')%> 
-    |
-    a#login_button <%=_i18n('me.login')%>
-  <% } %>
+    select.language.
+      <% var defaultLang = App.versions.getLang();
+         var langs = App.versions.language;
+         for(var lang in langs){ %>
+      <option value="<%=lang%>" <% if(defaultLang == lang){ %>selected="selected"<% } %> ><%=langs[lang]%></option><% } %>
+    | <input type="button" class="change" value="<%=_i18n('me.ok')%>" />
+    div.log
+      a#register_button <%=_i18n('me.register')%> 
+      |
+      a#login_button <%=_i18n('me.login')%>
+    <% } %>

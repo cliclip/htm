@@ -195,7 +195,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click .edit_name" : "setName",
       "error": "showError",
       "focus #name": "cleanError",
-      "click #confirm_face" : "submitFace"
+      "click #confirm_face" : "submitFace",
+      "click #lang_save"   :  "lang_save"
     },
     setName: function(e){
       e.preventDefault();
@@ -237,6 +238,26 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
 	face_remote_flag = false;
 	face_change_flag = true;
+      }
+    },
+    lang_save: function(){
+      var lang = $(".languages").val();
+      var uid = App.util.getMyUid();
+      console.info(this.model);
+      if(lang){
+	var model = new EditModel();
+	model.save({},{
+	  type:'PUT',
+	  url : App.util.unique_url(P+"/user/"+uid+"/lang/"+lang),
+	  success:function(model,res){
+	    console.info(model);
+	    App.vent.trigger("app.clipapp.versions:change",lang);
+	    //App.vent.trigger("app.clipapp.useredit:show",response);
+	  },
+	  error:function(model,error){
+	    App.vent.trigger("app.clipapp.message:chinese",error);
+	  }
+	});
       }
     }
   });

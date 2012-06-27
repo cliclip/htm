@@ -34,6 +34,12 @@ script(type="text/template",id="faceEdit-view-template")
     | </div>
     | </div>
     | </form>
+    select.languages.
+      <% var defaultLang = lang?lang:App.versions.getLang();
+         var langs = App.versions.language;
+         for(var lang in langs){ %>
+      <option value="<%=lang%>" <% if(defaultLang == lang){ %>selected="selected"<% } %> ><%=langs[lang]%></option><% } %>
+    | <input type="button" class="verify" id="lang_save" value="保存" />
   .preview.
     <img id="preview_size_fake" />
 
