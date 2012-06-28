@@ -42,6 +42,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     initialize:function(){
       that = this;
       this.tmpmodel= new RecommModel();
+      setTimeout(function(){
+	this.$("#recomm_name").focus();
+      },500);
     },
     getUserAction:function(e){
       $("#imgId").css("display","none");

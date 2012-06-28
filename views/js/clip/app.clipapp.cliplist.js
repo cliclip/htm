@@ -8,6 +8,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var clipListView = {};
   var collection = {},start = 1,end = App.ClipApp.Url.page;
   var url = "",base_url = "",data = "",type = "",collection_length,new_page;
+  var loading = false;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -86,6 +87,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     show_detail: function(){
       //var clip = this.model.get("clip");
       //var clipid = clip.user.id+":"+clip.id;
+      if(window.getSelection().toString()){//ie9 chrome ff 都有此对象
+	//console.info(window.getSelection().toString());
+	return;
+      }
       var rid = this.model.get("recommend").rid;
       var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
       App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id,rid);
@@ -255,8 +260,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp:nextpage",function(){
+    if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
+      loading = true;
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
       url = App.util.unique_url(base_url + "/" + start + ".." + end);
@@ -270,13 +277,19 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	contentType:contentType,
 	add:true,
 	data:data,
-	error :function(){ new_page = false; },
+	error :function(){
+	  new_page = false;
+	  loading = false;
+	},
 	success :function(){
 	  if(collection.length-collection_length>=App.ClipApp.Url.page){
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;
 	  }
+	  setTimeout(function(){
+	    loading = false;
+	  },500);
 	}
       });
     }

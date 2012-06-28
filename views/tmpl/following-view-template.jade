@@ -12,7 +12,7 @@ script(type="text/template",id="following-view-template")
       li.user
         div.head
           | <a href="#user/<%=id%>">
-          | <img src="<%=App.util.face_url(face)%>"/>
+          | <img src="<%=App.util.face_url(face,50)%>"/>
           | </a>
           p
             | <a href="#user/<%=id%>"><%=name%></a>
