@@ -34,6 +34,17 @@ script(type="text/template",id="faceEdit-view-template")
     | </div>
     | </div>
     | </form>
+  .language
+    h3
+      |界面语言
+    div.delang.
+      <% var defaultLang = App.versions.getLang();
+         var langs = App.versions.language;%>
+      <span class="<%=defaultLang%>"><%=langs[defaultLang]?langs[defaultLang]:langs['zh']%></span>    <span>▼</span>
+    div#show_language.
+      <%for(var lang in langs){ %>
+      <li class="lang-list" id="<%=lang%>"><%=langs[lang]%></li>
+      <% } %>
   .preview.
     <img id="preview_size_fake" />
 

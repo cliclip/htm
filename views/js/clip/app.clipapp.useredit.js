@@ -3,6 +3,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var face_change_flag = false;
   var face_remote_flag = false;
+  var flag = false;
   var EditModel = App.Model.extend({});
 
   var FaceModel = App.Model.extend({
@@ -195,7 +196,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click .edit_name" : "setName",
       "error": "showError",
       "focus #name": "cleanError",
-      "click #confirm_face" : "submitFace"
+      "click #confirm_face" : "submitFace",
+      "click .delang" : "showLanguage",
+      "mouseout .language": "closeLanguage",
+      "mouseover #show_language":"keepShowLanguage",
+      "mouseout #show_language": "closeLanguageMust",
+      "mouseover .lang-list": "MouseOver",
+      "mouseout  .lang-list": "MouseOut",
+      "click .lang-list" : "lang_save"
     },
     setName: function(e){
       e.preventDefault();
@@ -237,6 +245,68 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
 	face_remote_flag = false;
 	face_change_flag = true;
+      }
+    },
+    showLanguage: function(e){
+      $("#show_language").toggle();
+      var span = $(".delang").children()[1];
+      if($("#show_language").css("display") == 'block'){
+	$(span).text("▲");
+	var defaultLang = e.currentTarget.children[0].className;
+	$("#"+defaultLang).css("background-color","#D9D9D9");
+      }else{
+	$(span).text("▼");
+      }
+    },
+    keepShowLanguage: function(e){
+      flag = true;
+      var span = $(".delang").children()[1];
+      $(span).text("▲");
+      $("#show_language").show();
+    },
+    closeLanguage: function(e){
+      setTimeout(function(){
+	if(!flag){
+	  var span = $(".delang").children()[1];
+	  $(span).text("▼");
+	  $("#show_language").css("display","none");
+	}
+      },200);
+    },
+    closeLanguageMust: function(e){
+      flag = false;
+      var span = $(".delang").children()[1];
+      $(span).text("▼");
+      $("#show_language").css("display","none");
+    },
+    MouseOver:function(e){
+      var div = $("#show_language").children();
+      _(div).each(function(e){
+	$(e).css("background-color","");
+      });
+      $(e.currentTarget).css("background-color","#D9D9D9");
+    },
+    MouseOut:function(e){
+      $(e.currentTarget).css("background-color","");
+    },
+    lang_save: function(e){
+      var lang = e.currentTarget.id;
+      var uid = App.util.getMyUid();
+      console.info(lang);
+      if(lang){
+	var model = new EditModel();
+	model.save({},{
+	  type:'PUT',
+	  url : App.util.unique_url(P+"/user/"+uid+"/lang/"+lang),
+	  success:function(model,res){
+	    console.info(model);
+	    App.vent.trigger("app.clipapp.versions:change",lang);
+	    //App.vent.trigger("app.clipapp.useredit:show",response);
+	  },
+	  error:function(model,error){
+	    App.vent.trigger("app.clipapp.message:chinese",error);
+	  }
+	});
       }
     }
   });

@@ -24,7 +24,17 @@ script(type='text/template',id='me-view-template')
       <img class="face-image" id="smail_face" src="<%=App.util.face_url(face,50)%>"/>
   <% } else { %>
   div.in_site
-    a#register_button <%=_i18n('me.register')%> 
-    |
-    a#login_button <%=_i18n('me.login')%>
-  <% } %>
+    div.language
+      div.delang.
+        <% var defaultLang = App.versions.getLang();
+           var langs = App.versions.language;%>
+        <span class="<%=defaultLang%>"><%=langs[defaultLang]?langs[defaultLang]:langs['zh']%></span>    <span>▼</span>
+      div#show_language.
+        <%for(var lang in langs){ %>
+        <li class="lang-list" id="<%=lang%>"><%=langs[lang]%></li>
+        <% } %>
+    div.log
+      a#register_button <%=_i18n('me.register')%> 
+      |
+      a#login_button <%=_i18n('me.login')%>
+    <% } %>

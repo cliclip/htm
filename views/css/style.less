@@ -197,16 +197,53 @@
 		}
 	}
 	.in_site{
-		width:71px;
+		width:230px;
 		height:57px;
 		position: absolute;
-		right:20px;
+		right:0px;
 		bottom:20px;
 		color:#fff;
 		a{
 			color:#fff;
 			cursor:pointer;
 		}
+		.language{
+			float: right;	
+   			margin-top: -22px;
+			.delang{
+				//background: none repeat scroll 0 0 #FFFFFF;
+ 				color: #FFFFFF;
+				margin-right: 3px;
+    				line-height: 20px;
+				cursor: pointer;
+			}
+			#show_language{
+				display:none;
+				min-width:65px;
+				background: none repeat scroll 0 0 #8D8D8D;	
+				//.sprites(-440px,-140px);
+				position: absolute;
+				list-style:none;
+				right: 0;
+				z-index: 2;
+				cursor: pointer;
+				li{
+					height:24px;
+					padding-left:3px;
+					line-height:24px;
+					//font-size:17px;
+				}
+			}
+		}
+	}
+	.change{
+		width:50px;
+		height:25px;
+	}	
+	.log{
+		margin-left: 140px;
+    	    	width: 90px;
+		margin-top: 40px;
 	}
 	.my_info{
 		width:71px;
@@ -1111,6 +1148,7 @@ section.follow_frame{
 			color:#cb5331;
 		}
 		.content{
+			outline:none;
 			p{
 
     				font-size: 16px;
@@ -1135,7 +1173,7 @@ section.follow_frame{
 				margin: 0 0 9px;
 			}
 			width:650px;
-			height:530px;
+			height:470px;
 			padding:4px;
 			border:1px solid #ccc;
 			overflow-x:hidden;
@@ -1341,7 +1379,6 @@ section.follow_frame{
 	
 }
 .btn_frame{
-	margin-left:30px;
 	margin-top:-10px;
 	input{float:left;border:none;font-size:16px;}
 	button{
@@ -1464,10 +1501,11 @@ section.edit_frame{
 			}
 		}
 		.head_link{
-			height:70px;
+			height:16px;
 			padding:15px;
 			background:#fff;
 			.border-radius(20px);
+			margin-bottom:10px;
 			.link{
 				width:230px;
 				background:#efefef;
@@ -1478,6 +1516,48 @@ section.edit_frame{
 			}
 			button.verify{
 				display:none;
+			}
+		}
+		.language{
+			height:60px;
+			background:#fff;
+			padding:15px;
+			margin-bottom:10px;
+			.border-radius(20px);
+			h3{
+				height:30px;
+				line-height:30px;
+				margin-bottom:10px;
+				border-bottom:2px solid #ccc;
+			}
+			.delang{
+				height:27px;
+				width:160px;
+				//background: none repeat scroll 0 0 #D9D9D9;
+ 				color: #333333;
+    				font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    				//font-size: 19px;
+    				line-height: 27px;
+				cursor: pointer;
+			}
+			#show_language{
+				display:none;
+				width:160px;
+				background: none repeat scroll 0 0 #8D8D8D;	
+				//.sprites(-440px,-140px);
+				position: absolute;
+				list-style:none;
+				margin:0;
+				padding:5px 0;
+				z-index: 2;
+				cursor: pointer;
+				li{
+					height:24px;
+					padding-left:3px;
+					line-height:24px;
+					//font-size:17px;
+					margin:0 3px;
+				}
 			}
 		}
 		.preview{
