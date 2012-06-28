@@ -278,7 +278,9 @@ $(function() {
 	b2body.AddShape(circle);
 	// b2body.userData = { element: element };
 	b2body.position.Set(x, y);
+	b2body.allowSleep = true;
 	b2body.linearVelocity.Set(sx, sy);
+	b2body.angularDamping = 0.08;
 	return b2body;
       }
 
@@ -302,7 +304,7 @@ $(function() {
 	  x : Math.random() * width,
 	  y : Math.random() * thick + height,
 	  sx : (Math.random() - 0.5) * width,
-	  sy : (Math.random() - 1.2) * height
+	  sy : (Math.random() - 1) * height
 	};
       }
 
