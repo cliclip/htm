@@ -3,6 +3,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var face_change_flag = false;
   var face_remote_flag = false;
+  var flag = false;
   var EditModel = App.Model.extend({});
 
   var FaceModel = App.Model.extend({
@@ -196,7 +197,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "error": "showError",
       "focus #name": "cleanError",
       "click #confirm_face" : "submitFace",
-      "click #lang_save"   :  "lang_save"
+      "click .delang" : "showLanguage",
+      "mouseout .language": "closeLanguage",
+      "mouseover #show_language":"keepShowLanguage",
+      "mouseout #show_language": "closeLanguageMust",
+      "mouseover .lang-list": "MouseOver",
+      "mouseout  .lang-list": "MouseOut",
+      "click .lang-list" : "lang_save"
     },
     setName: function(e){
       e.preventDefault();
@@ -240,10 +247,52 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	face_change_flag = true;
       }
     },
-    lang_save: function(){
-      var lang = $(".languages").val();
+    showLanguage: function(e){
+      $("#show_language").toggle();
+      var span = $(".delang").children()[1];
+      if($("#show_language").css("display") == 'block'){
+	$(span).text("▲");
+	var defaultLang = e.currentTarget.children[0].className;
+	$("#"+defaultLang).css("background-color","#D9D9D9");
+      }else{
+	$(span).text("▼");
+      }
+    },
+    keepShowLanguage: function(e){
+      flag = true;
+      var span = $(".delang").children()[1];
+      $(span).text("▲");
+      $("#show_language").show();
+    },
+    closeLanguage: function(e){
+      setTimeout(function(){
+	if(!flag){
+	  var span = $(".delang").children()[1];
+	  $(span).text("▼");
+	  $("#show_language").css("display","none");
+	}
+      },200);
+    },
+    closeLanguageMust: function(e){
+      flag = false;
+      var span = $(".delang").children()[1];
+      $(span).text("▼");
+      $("#show_language").css("display","none");
+    },
+    MouseOver:function(e){
+      var div = $("#show_language").children();
+      _(div).each(function(e){
+	$(e).css("background-color","");
+      });
+      $(e.currentTarget).css("background-color","#D9D9D9");
+    },
+    MouseOut:function(e){
+      $(e.currentTarget).css("background-color","");
+    },
+    lang_save: function(e){
+      var lang = e.currentTarget.id;
       var uid = App.util.getMyUid();
-      console.info(this.model);
+      console.info(lang);
       if(lang){
 	var model = new EditModel();
 	model.save({},{

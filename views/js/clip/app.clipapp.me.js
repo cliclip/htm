@@ -37,7 +37,13 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "click .my": "switch_my",
       "click .at_me": "switch_at_me",
       "click .expert": "switch_expert",
-      "click .change": "ChangeLang"
+      "click .delang" : "showLanguage",
+      "mouseout .language": "closeLanguage",
+      "mouseover #show_language":"keepShowLanguage",
+      "mouseout #show_language": "closeLanguageMust",
+      "mouseover .lang-list": "MouseOver",
+      "mouseout  .lang-list": "MouseOut",
+      "click .lang-list" : "ChangeLang"
     },
     showMysetup: function(){
       $("#show_mysetup").toggle(); // css("display","block");
@@ -102,9 +108,51 @@ App.ClipApp.Me = (function(App, Backbone, $){
 	Backbone.history.navigate("my/interest",true);
       }
     },
+    showLanguage: function(e){
+      $("#show_language").toggle();
+      var span = $(".delang").children()[1];
+      if($("#show_language").css("display") == 'block'){
+	$(span).text("▲");
+	var defaultLang = e.currentTarget.children[0].className;
+	$("#"+defaultLang).css("background-color","#333");
+      }else{
+	$(span).text("▼");
+      }
+    },
+    keepShowLanguage: function(e){
+      flag = true;
+      var span = $(".delang").children()[1];
+      $(span).text("▲");
+      $("#show_language").show();
+    },
+    closeLanguage: function(e){
+      setTimeout(function(){
+	if(!flag){
+	  var span = $(".delang").children()[1];
+	  $(span).text("▼");
+	  $("#show_language").css("display","none");
+	}
+      },200);
+    },
+    closeLanguageMust: function(e){
+      flag = false;
+      var span = $(".delang").children()[1];
+      $(span).text("▼");
+      $("#show_language").css("display","none");
+    },
     ChangeLang:function(e){
-      var lang = $(".language").val();
+      var lang = e.currentTarget.id;
       App.vent.trigger("app.clipapp.versions:change",lang);
+    },
+    MouseOver:function(e){
+      var div = $("#show_language").children();
+      _(div).each(function(e){
+	$(e).css("background-color","");
+      });
+      $(e.currentTarget).css("background-color","#333");
+    },
+    MouseOut:function(e){
+      $(e.currentTarget).css("background-color","");
     }
 
     /*

@@ -661,7 +661,7 @@ App.versions = (function($){
       var args = Array.prototype.slice.call(arguments);
       var name = args.shift();
       var names = name.split('.');
-      var str = i18n[lang];
+      var str = i18n[lang]?i18n[lang]:i18n['zh'];
       for(var i =0;i<names.length;i++){
 	if(str[names[i]]) {
 	  str = str[names[i]];
