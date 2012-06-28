@@ -290,8 +290,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     // Remove newlines at the beginning of the text.
     .replace(/^\n+/, "")
     // Remove newlines at the end of the text.
-    .replace(/\n+$/, "")
-    .replace(/&([^;]+);/g, decode);
+    .replace(/\n+$/, "");
+    // .replace(/&([^;]+);/g, decode);
     // Decode HTML entities.
     return text;
   }
