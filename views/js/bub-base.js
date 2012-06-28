@@ -303,8 +303,8 @@ $(function() {
 	return {
 	  x : Math.random() * width,
 	  y : Math.random() * thick + height,
-	  sx : (Math.random() - 0.5) * width,
-	  sy : (Math.random() - 1) * height
+	  sx : (Math.random() - 0.5) * width >> 1,
+	  sy : (Math.random() - 1.2) * height >> 1
 	};
       }
 

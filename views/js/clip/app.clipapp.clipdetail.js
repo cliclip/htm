@@ -223,7 +223,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
     $(".big_pop").css("top",App.util.getPopTop("big"));
-     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
+    $(".content").focus();
+    // 取得更深层次的内容,有待改进 base属性 设置content    TODO
     var anchors = this.$(".content a");
     for(var i=0;i<anchors.length;i++){
       var anchor = anchors[i];
