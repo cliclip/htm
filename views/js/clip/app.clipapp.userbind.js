@@ -122,7 +122,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.userbind:show",function(oauth,f,remem){
-    UserBind.show(oauth.info);
+    UserBind.show(oauth);
     bindOauth = oauth;
     fun = f;
     remember = remem;
