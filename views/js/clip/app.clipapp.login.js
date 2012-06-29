@@ -31,7 +31,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
       "click .reg_btn"           : "registerAction",
-      "click .weibo"             : "openWeibo"
+      "click .weibo"             : "openWeibo",
+      "click .twitter"           : "openTwitter"
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
@@ -108,56 +109,15 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     openWeibo : function(e){
       App.vent.trigger("app.clipapp.login:@cancel");
-      socket = new easyXDM.Socket({
-	remote: 'http://clickdang.com/oauth/req/weibo?r='+Math.random()*9999999,
-	//remote: 'http://192.168.1.3:10000/oauth/req/weibo?r='+Math.random()*9999999,
-	container: document.body,
-	swf: 'http://clickdang.com/img/easyxdm.swf',
-	swfNoThrottle: true,
-	onLoad: function(e){ // hack, style set
-	  var iframe = e.target;
-          var height = document.body.clientHeight;
-          var width = document.body.clientWidth;
-          iframe.setAttribute("scrolling", "no");
-          iframe.setAttribute("frameBorder", "0");
-          iframe.setAttribute("allowTransparency", "true");
-          iframe.setAttribute("style", "border:0px; z-index:99999999;width:"+width+"px; height:"+height+"px; position:absolute; _position:absolute; left:0px; top:0px; _left:expression(documentElement.scrollLeft+documentElement.clientWidth-this.offsetWidth); _top: expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight);");
-      },
-	onMessage: function(message, origin){
-	  //console.log(arguments);
-	  var r = JSON.parse(message);
-	  switch(r[0]){
-	    case 'oauth' : // for ui to set model after change
-	      setTimeout(function(){
-		checkUser({uid:r[1].info.uid,provider:r[1].provider},function(err,res){
-		  if(res){
-		    App.vent.trigger("app.clipapp.login:success", res);
-		  }else{
-		    App.vent.trigger("app.clipapp.userbind:show",r[1],fun);
-		  }
-		});
-		closeUI();
-		cleanSelection();
-		//console.info(r[1]);
-	      }, 1000);
-	      break;
-	    case 'close' :
-              closeUI();
-	      cleanSelection();
-	      break;
-	    case 'error' :
-	      closeUI();
-	      cleanSelection();
-	      App.vent.trigger("app.clipapp.message:chinese","微博登录失败");
-	      break;
-          }
-	}
-      });
-      socket.postMessage(JSON.stringify(["ping"]));
+      window.location.href="/oauth/req/weibo";
+    },
+    openTwitter : function(e){
+      App.vent.trigger("app.clipapp.login:@cancel");
+      window.location.href="/oauth/req/twitter";
     }
   });
 
-  function checkUser(params,callback){
+   function checkUser(callback){ //weibo、twitter的信息与本系统进行验证
     var model = new App.Model.UserBindModel(params);
     model.save({},{
       url : App.ClipApp.Url.base+"/user/oauth_info",
@@ -169,7 +129,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	callback(null,null);
       }
     });
-  }
+  };
 
   function closeUI(){
     socket.destroy();

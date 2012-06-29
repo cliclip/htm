@@ -50,7 +50,6 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       e.preventDefault();
       var that = this;
       var str = $.trim($(e.currentTarget).val());
-      console.info(str);
       if(str == "立即绑定"){
 	this.tmpmodel.save({}, {
 	  url: App.ClipApp.Url.base+"/login",
@@ -87,14 +86,14 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.login:@cancel");
+      App.vent.trigger("app.clipapp.userbind:@cancel");
     }
   });
 
   var bindOauth ,fun; //fun 用于记录用户登录前应该触发的事件
 
-  UserBind.show = function(info){
-    var model = new App.Model.UserBindModel({info:info});
+  UserBind.show = function(auth){
+    var model = new App.Model.UserBindModel({info:auth.info,provider:auth.provider});
     var view = new UserBindView({model : model});
     App.popRegion.show(view);
   };
@@ -122,10 +121,10 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.userbind:show",function(oauth,f){
-    UserBind.show(oauth.info);
+    UserBind.show(oauth);
     bindOauth = oauth;
     fun = f;
-    //console.info(bindOauth);
+   // console.info(bindOauth);
   });
 
   //bind 设置里面增加微博绑定
@@ -159,7 +158,10 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.userbind:@cancel", function(){
-    UserBind.close();
+  if(Backbone.history){
+     Backbone.history.navigate("",true);
+   }
+   UserBind.close();
   });
 
  // TEST
