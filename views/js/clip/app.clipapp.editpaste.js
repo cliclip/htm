@@ -23,11 +23,11 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 
   Editor.getContent = function(editorId){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
-    if(isIE){
+    // if(isIE){
       var data = objEditor.contentWindow.document.body.innerHTML;
-    }else{
-      var data = objEditor.contentWindow.document.body.innerHTML;;
-    }
+    // }else{
+      // var data = objEditor.contentWindow.document.body.innerHTML;;
+    // }
     return App.ClipApp.Convert.toUbb(data); // 此处的内容会提交到api层去
   };
 
