@@ -60,6 +60,12 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
+
+  Bubb.showBubs = function(uid){ // 直接显示 六个主观tag即可
+    App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs, [], null, true));
+  };
+
+  /*
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
     getUserBubs(uid, function(tags, follows){
@@ -67,6 +73,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
+  */
 
   Bubb.followUserBubs = function(uid, tag){
     if(!uid) _uid = 2;

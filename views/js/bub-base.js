@@ -279,6 +279,8 @@ $(function() {
 	// b2body.userData = { element: element };
 	b2body.position.Set(x, y);
 	b2body.allowSleep = true;
+	// alert("位置 :: " + x + "  " + y);
+	// alert("速度 :: " + sx + "  " + sy);
 	b2body.linearVelocity.Set(sx, sy);
 	b2body.angularDamping = 0.08;
 	return b2body;
@@ -301,10 +303,12 @@ $(function() {
 
       function ran(width, height, thick){
 	return {
-	  x : Math.random() * width,
-	  y : Math.random() * thick + height,
-	  sx : (Math.random() - 0.5) * width >> 1,
-	  sy : (Math.random() - 1.2) * height >> 1
+	  // x、y 初始位置
+	  x : Math.random() * 0.9 * width,
+	  y : Math.random() * 100 + height,
+	  // sx、sy 初始速度
+	  sx : (Math.random() - 0.5) * width / 2,
+	  sy : (Math.random() - 1.2) * height / 2
 	};
       }
 

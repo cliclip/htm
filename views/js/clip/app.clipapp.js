@@ -90,15 +90,18 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myQuery = function(word, tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserBubs(uid, tag);
+    ClipApp.Bubb.showUserTags(uid, tag);
+    // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
     App.vent.trigger("app.clipapp.routing:query", word);
   };
 
+  // interest和recommend 只需要显示 主观tag就可以了
   ClipApp.myInterest = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserBubs(uid, tag);
+    ClipApp.Bubb.showBubs(uid);
+    // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.vent.trigger("app.clipapp.routing:interest", tag);
   };
@@ -106,7 +109,8 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myRecommend = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserBubs(uid, tag);
+    ClipApp.Bubb.showBubs(uid);
+    // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserRecommend(uid, tag);
     App.vent.trigger("app.clipapp.routing:recommend", tag);
   };
