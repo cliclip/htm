@@ -148,7 +148,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  type: 'PUT',
   	  success: function(model, res){
 	    UserEdit.showPassEdit();
-	    App.vent.trigger("app.clipapp.message:confirm", "passwd_success");
+	    App.vent.trigger("app.clipapp.message:success", "passwd_success");
 	    document.cookie = "token="+res.token;
   	  },
   	  error:function(model, res){
@@ -221,7 +221,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  nameModel.save({} ,{
 	    type: 'PUT',
 	    success:function(model,res){
-	      App.vent.trigger("app.clipapp.message:confirm","rename_success");
+	      App.vent.trigger("app.clipapp.message:success","rename_success");
 	      App.vent.trigger("app.clipapp.useredit:@showface");
 	    },
 	    error:function(model,res){
@@ -242,7 +242,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $("#confirm_face").hide();
       if(face_remote_flag){
 	event.preventDefault();
-	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
+	App.vent.trigger("app.clipapp.message:success","faceUp_success");
 	face_remote_flag = false;
 	face_change_flag = true;
       }
@@ -292,14 +292,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     lang_save: function(e){
       var lang = e.currentTarget.id;
       var uid = App.util.getMyUid();
-      console.info(lang);
       if(lang){
 	var model = new EditModel();
 	model.save({},{
 	  type:'PUT',
 	  url : App.util.unique_url(P+"/user/"+uid+"/lang/"+lang),
 	  success:function(model,res){
-	    console.info(model);
 	    App.vent.trigger("app.clipapp.versions:change",lang);
 	    //App.vent.trigger("app.clipapp.useredit:show",response);
 	  },
@@ -414,7 +412,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 		  $("#myface").attr("src",App.util.face_url(returnObj[1][0]),240);
 		  $("#confirm_face").show();
 		}else{
-		  App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
+		  App.vent.trigger("app.clipapp.message:success","faceUp_success");
 		  face_change_flag = true;
 		}
 	      },

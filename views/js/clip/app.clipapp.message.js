@@ -19,6 +19,12 @@ App.ClipApp.Message = (function(App, Backbone, $){
     }
   });
 
+  var SuccessView = App.ItemView.extend({
+    tagName: "div",
+    className: "success-view",
+    template: "#success-view-template"
+  });
+
   var WarningView = App.ItemView.extend({
     tagName: "div",
     className: "message-view",
@@ -49,11 +55,13 @@ App.ClipApp.Message = (function(App, Backbone, $){
     var messageModel = new MessageModel({message:message});
     if(type == "warning"){
       var view = new WarningView({model: messageModel});
-    }else{
+    }else if(type == "confirm"){
       var view = new MessageView({model : messageModel});
+    }else{
+      var view = new SuccessView({model : messageModel});
       setTimeout(function(){
 	Message.close();
-      },3000);
+      },500);
     }
     App.setpopRegion.show(view);
     $(".small_pop").css("top", App.util.getPopTop("small"));
@@ -63,8 +71,19 @@ App.ClipApp.Message = (function(App, Backbone, $){
     App.setpopRegion.close();
   };
 
+  App.vent.bind("app.clipapp.message:success", function(key){
+    var message = null;
+    if(typeof(key)=="string"){
+      message = _i18n('message.'+key);
+    }else if(typeof(key)=="object"){
+      for(var k in key){
+	message = _i18n('message'+'.'+k+'.'+key[k]);
+      }
+    }
+    Message.show("success", message);
+  });
+
   App.vent.bind("app.clipapp.message:chinese", function(key){
-		  		  console.info(key);
     var chinese = null;
     if(typeof(key)=="string"){
       chinese = _i18n('message.'+key);

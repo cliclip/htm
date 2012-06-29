@@ -169,7 +169,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	view.tmpmodel.save({},{
 	  success:function(model,res){
 	    Recommend.close();
-	    App.vent.trigger("app.clipapp.message:confirm","recomm");
+	    App.vent.trigger("app.clipapp.message:success","recomm");
 	  },
 	  error:function(model,res){
 	    view.showError('recommend',res);

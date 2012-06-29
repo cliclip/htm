@@ -15,6 +15,18 @@ script(type="text/template",id="message-view-template")
         <input class=verify type="button" value="<%=_i18n('message.ok')%>" id="sure"/>
       </li>
 
+
+script(type="text/template",id="success-view-template")
+  div.masker_layer
+  section.success
+    ul.pop_body.
+      <% if (typeof message == "object") { for(key in message){%>
+      <%= message[key]%>
+      <% }}else{ %>
+      <%=message%>
+      <%}%>
+
+
 script(type="text/template",id="warning-view-template")
   div.masker_layer
   section.small_pop

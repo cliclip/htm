@@ -88,7 +88,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	this.tmpmodel.save({},{
 	  success: function(model, res){
   	    App.vent.trigger("app.clipapp.ruleedit:@showrule", model.id);
-	    App.vent.trigger("app.clipapp.message:confirm", "setRule_success");
+	    App.vent.trigger("app.clipapp.message:success", "setRule_success");
 	  },
 	  error:function(model, res){
 	    view.showError('ruleEdit',res);
