@@ -259,6 +259,8 @@ App.util = (function(){
     post_delemail: "邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
     pre_deloauth : "您真的要删除",
     post_deloauth: "微博账号吗？删除后，您将无法使用此微博账号进行登录，也无法接收来自此微博账号的收藏。",
+    pre_deloauth_twitter : "您真的要删除",
+    post_deloauth_twitter: " twitter账号吗？删除后，您将无法使用此twitter账号进行登录，也无法接收来自此twitter账号的收藏。",
 
     del_comment  : "您真的要删除这条评论吗？（此操作无法恢复）",
 

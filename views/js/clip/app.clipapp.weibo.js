@@ -13,45 +13,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
       "click .info_name":"WeiboCut"
     },
     WeiboAdd:function(e){
-      socket = new easyXDM.Socket({
-	remote: 'http://clickdang.com/oauth/req/weibo?forcelogin=true&r='+Math.random()*9999999,
-	container: document.body,
-	swf: 'http://clickdang.com/img/easyxdm.swf',
-	swfNoThrottle: true,
-	onLoad: function(e){ // hack, style set
-	  var iframe = e.target;
-          var height = document.body.clientHeight;
-          var width = document.body.clientWidth;
-          iframe.setAttribute("scrolling", "no");
-          iframe.setAttribute("frameBorder", "0");
-          iframe.setAttribute("allowTransparency", "true");
-          iframe.setAttribute("style", "border:0px; z-index:99999999;width:"+width+"px; height:"+height+"px; position:absolute; _position:absolute; left:0px; top:0px; _left:expression(documentElement.scrollLeft+documentElement.clientWidth-this.offsetWidth); _top: expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight);");
-      },
-	onMessage: function(message, origin){
-	  //console.log(arguments);
-	  var r = JSON.parse(message);
-	  switch(r[0]){
-	    case 'oauth' : // for ui to set model after change
-	      setTimeout(function(){
-		//console.info(r[1]);
-		App.vent.trigger("app.clipapp.userbind:bind",r[1]);
-		closeUI();
-		cleanSelection();
-	      }, 1000);
-	      break;
-	    case 'close' :
-              closeUI();
-	      cleanSelection();
-	      break;
-	    case 'error' :
-	      closeUI();
-	      cleanSelection();
-	      App.vent.trigger("app.clipapp.message:chinese","微博绑定失败");
-	      break;
-          }
-	}
-      });
-      socket.postMessage(JSON.stringify(["ping"]));
+      window.location.href="/oauth/req/weibo?forcelogin=true";
     },
     WeiboCut:function(e){
       e.preventDefault();
@@ -64,20 +26,6 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
       });
     }
   });
-
-  function closeUI(){
-    socket.destroy();
-  }
-
-  function cleanSelection(){
-    if (window.getSelection) {  // all browsers, except ie < 9
-      var sel = window.getSelection ();
-      sel.removeAllRanges();
-    } else if (document.selection.createRange) { // ie
-      document.selection.createRange();
-      document.selection.empty();
-    }
-  }
 
   WeiboEdit.show = function(){
     var weiboModel = new App.Model.UserBindModel({provider:"weibo"});

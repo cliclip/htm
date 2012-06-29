@@ -87,14 +87,14 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.login:@cancel");
+      App.vent.trigger("app.clipapp.userbind:@cancel");
     }
   });
 
   var bindOauth ,fun, remember = false;//fun 用于记录用户登录前应该触发的事件
 
-  UserBind.show = function(info){
-    var model = new App.Model.UserBindModel({info:info});
+  UserBind.show = function(auth){
+    var model = new App.Model.UserBindModel({info:auth.info,provider:auth.provider});
     var view = new UserBindView({model : model});
     App.popRegion.show(view);
   };
@@ -163,7 +163,10 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.userbind:@cancel", function(){
-    UserBind.close();
+  if(Backbone.history){
+     Backbone.history.navigate("",true);
+   }
+   UserBind.close();
   });
 
  // TEST
