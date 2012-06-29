@@ -335,19 +335,21 @@
 			width:90px;
 			.sprites(-30px,-430px);
 			z-index:2;
-			a{color:#925d00;}
+			a{color:#925d00;text-decoration:none;outline:none}
 		}
 		.at_me{
 			width:90px;
 			.sprites(-120px, -430px);
 			left:70px;
 			z-index:1;
+			a{text-decoration:none;outline:none}
 		}
 		.expert{
 			width:90px;
 			.sprites(-210px,-430px);
 			left:140px;
 			z-index:0;
+			a{text-decoration:none;outline:none}
 		}
 	}
 	hgroup.user_head{
@@ -913,6 +915,23 @@ section.follow_frame{
 	.cancel{width:90px;height:37px;.sprites(-340px,-476px);}
         .cliper{display:none;}
 }
+.success-view{
+	.success{
+		z-index:20;
+		border:5px solid #f0f0f0;
+		position: fixed;
+		left:50%;
+		top:220px;
+		margin-left:-90px;
+		background:#fff;
+		min-width: 150px;
+		.pop_body{
+			padding:10px 25px;
+			margin:0;
+		}
+	}	
+}
+
 .masker_layer{
 	width: 100%; //1000px;
 	height: 100%; //1000px;
