@@ -118,6 +118,8 @@ App.util = (function(){
     var r = undefined;
     if (!content) return r;
     if (_.isString(content) && content.length){
+      // 先对content内容进行空格去除，在做截断
+      content = content.replace(/\s/g,"");
       if(content.length < length){
 	r = content;
       } else {
