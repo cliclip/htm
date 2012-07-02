@@ -75,6 +75,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     mid = model_id;
     var model = new ReclipModel({id:cid,rid:rid});
     var reclipView = new ReclipView({model : model});
+    // console.log(model);
     App.popRegion.show(reclipView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
     $('#obj_tag').tagsInput({});
@@ -90,6 +91,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     model.save({},{
       type: "POST",
       success: function(model, res){
+	App.vent.trigger("app.clipapp.message:success", "reclip");
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
 	App.vent.trigger("app.clipapp.taglist:taglistRefresh",params.clip.tag);
       },
@@ -112,8 +114,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     Reclip.close();
   });
 
-
-    // TEST
+   // TEST
    // App.bind("initialize:after", function(){ Reclip.show("1:1"); });
   return Reclip;
 })(App, Backbone, jQuery);
