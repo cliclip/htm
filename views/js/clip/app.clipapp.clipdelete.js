@@ -34,7 +34,9 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
        success: function(model, res){
 	 App.vent.trigger("app.clipapp.cliplist:remove",model.id);
 	 //在删clip时不能根据删除clip的tag来refresh   bubbs。所以重新load
- 	 App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
+	 if(/my/.test(window.location.hash)){
+	   App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());     
+	 }
 	 ClipDelete.close();
 	 if(App.viewRegion){ // 从detail来，需要关闭viewRegion
 	   App.viewRegion.close();

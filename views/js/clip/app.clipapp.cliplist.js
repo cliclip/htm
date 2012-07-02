@@ -67,6 +67,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  itemSelector : '.clip'
 	});
       });
+
       this.bind("item:rendered",function(itemView){
 	if(this.model.get("content").image){
 	  this.$el.find("p").addClass("text");
@@ -74,19 +75,24 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
           this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
 	}
-	var $newElems = itemView.$el;
 	flag = true;
+/*
+	if(document.all &&(navigator.appVersion.match(/7./i)=="7."||navigator.appVersion.match(/8./i)=="8.")){
+	  $("#list").masonry("reload");
+	  return;
+	}
+*/
+	var $newElems = itemView.$el;
 	$newElems.imagesLoaded(function(){
 	  //STRANGE若不加延时则所有clip无图片时不产生动态布局效果,无图此段代码也会运行
 	  setTimeout(function(){
 	    $("#list").masonry("reload");
 	  },0);
 	});
+
       });
     },
     show_detail: function(){
-      //var clip = this.model.get("clip");
-      //var clipid = clip.user.id+":"+clip.id;
       if(window.getSelection().toString()){//ie9 chrome ff 都有此对象
 	//console.info(window.getSelection().toString());
 	return;

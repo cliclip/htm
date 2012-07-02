@@ -141,6 +141,7 @@ if(typeof console !="object"){
     info:function(){},
     dir:function(){}
   };
+
 }
 
 App.bind("initialize:after", function(){

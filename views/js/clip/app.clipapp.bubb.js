@@ -14,7 +14,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     tagName : "iframe",
     className : "bubb-view",
     render : function(){
-      this.$el.attr("frameborder", "0",0);
+      this.$el.attr("frameborder", "0",0);//兼容属性大小写问题
       this.$el.attr("scrolling", "no");
       this.$el.attr("src", "bub.html");
       return this;
