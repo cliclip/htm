@@ -24,7 +24,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
-      $(e.currentTarget).toggleClass("blue_48");
+      $(e.currentTarget).toggleClass("orange_48");
     },
     noteFocus:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultNote ? "" :
@@ -53,7 +53,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var main_tag = [];
 
     for(var i=0;i<6;i++){
-      if($("#main_tag_"+i, el).attr("class") == "size48 blue_48"){
+      if($("#main_tag_"+i, el).attr("class") == "size48 orange_48"){
 	main_tag.push($.trim($("#main_tag_"+i, el).html()));
       }
     };

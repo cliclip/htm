@@ -47,6 +47,9 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.resetpasswd = function(link){
     ClipApp.ResetPass.show(link);
   };
+  ClipApp.oauth = function(){
+    ClipApp.Oauth.process();
+  };
 
   ClipApp.userShow = function(uid, tag){
     ClipApp.Face.showUser(uid);
