@@ -28,6 +28,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     foucsAction:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultComm ? "" :
       $(e.currentTarget).val() );
+      $("#submit").attr("disabled",false);
     },
     blurAction:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultComm :
