@@ -280,7 +280,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function mkTag(tags, follows, tag, self, homepage){
     // DEBUG PURPOSE
     // tags = _.without(_.union(bubs, sink, tags, follows),"*");
-    tags = _.without(_.union(tags, follows),"*");
+    tags = _.compact(_.without(_.union(tags, follows),"*"));
+    follows = follows === null ? [] : follows;
     var opt = {
       tags: tags,
       follows: follows,
