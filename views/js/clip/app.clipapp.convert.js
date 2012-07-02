@@ -6,6 +6,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   Convert.filter = function (html) {
     if (isWord(html)) {html = cleanWord(html);}
     html = cleanHtml(html);
+    html = _htmlToUbb(html);
+    html = _ubbToHtml(html);
     return html;
   };
 

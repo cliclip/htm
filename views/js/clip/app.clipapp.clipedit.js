@@ -2,6 +2,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var edit_view = "";
+  var old_content = "";
   var EditModel = App.Model.extend({});
   var EditView = App.ItemView.extend({
     tagName: "div",
@@ -20,6 +21,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       edit_view = this;
+
     },
     hide_extImg:function(){    //隐藏弹出的链接地址对话框
       setTimeout(function(){
@@ -50,6 +52,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       target.attr("disabled",true);
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+      if(content == old_content){
+	//alert("您并未做出任何更改");
+	target.attr("disabled", false);
+	return;
+      }
       var editModel = new EditModel({content:content});
       editModel.save({},{ // 不用this.mode因为this.model中有 录线图
 	type:'PUT',
@@ -104,6 +111,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     var model = new App.Model.DetailModel({id: clipid});
     model.fetch();
     model.onChange(function(editModel){
+      old_content = editModel.get("content");
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
       $(".big_pop").css("top", App.util.getPopTop("big"));
