@@ -71,13 +71,13 @@ App.ClipApp.Message = (function(App, Backbone, $){
     App.setpopRegion.close();
   };
 
-  App.vent.bind("app.clipapp.message:success", function(key){
+  App.vent.bind("app.clipapp.message:success", function(key, value){
     var message = null;
     if(typeof(key)=="string"){
-      message = _i18n('message.'+key);
+      message = _i18n('message.'+key, value);
     }else if(typeof(key)=="object"){
       for(var k in key){
-	message = _i18n('message'+'.'+k+'.'+key[k]);
+	message = _i18n('message'+'.'+k+'.'+key[k], value);
       }
     }
     Message.show("success", message);
