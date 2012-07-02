@@ -71,7 +71,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       type: "POST",
       success:function(model,response){
 	// 不只是弹出提示框这么简单
-	App.vent.trigger("app.clipapp.message:confirm", "active", response.email);
+	App.vent.trigger("app.clipapp.message:success", {active:"email"}, response.email);
       },
       error:function(model,error){
 	// 则显示该链接不能再点击
