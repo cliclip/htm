@@ -60,36 +60,22 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "mouseleave .clip_item": "mouseLeave"
     },
     initialize: function(){
-      var that = this;
       var $container = $('#list');
-      $container.imagesLoaded( function(){
-	$container.masonry({
-	  itemSelector : '.clip'
-	});
-      });
-
       this.bind("item:rendered",function(itemView){
 	if(this.model.get("content").image){
 	  this.$el.find("p").addClass("text");
+	  itemView.$el.imagesLoaded(function(){
+	    $container.masonry("reload");
+	  });
 	}else{
           this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
+	  //STRANGE若不加延时则所有clip无图片,在翻页时最后一个clip不产生动态布局效果
+	  setTimeout(function(){
+	    $container.masonry("reload");
+	  },0);
 	}
 	flag = true;
-/*
-	if(document.all &&(navigator.appVersion.match(/7./i)=="7."||navigator.appVersion.match(/8./i)=="8.")){
-	  $("#list").masonry("reload");
-	  return;
-	}
-*/
-	var $newElems = itemView.$el;
-	$newElems.imagesLoaded(function(){
-	  //STRANGE若不加延时则所有clip无图片时不产生动态布局效果,无图此段代码也会运行
-	  setTimeout(function(){
-	    $("#list").masonry("reload");
-	  },0);
-	});
-
       });
     },
     show_detail: function(){
@@ -134,24 +120,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",
-    itemView: ClipPreviewView,
-    initialize: function(){
-      /*
-      this.bind("collection:rendered",function(itemView){
-      	var $container = $('#list');
-	$container.imagesLoaded( function(){
-	  $container.masonry({
-	    itemSelector : '.clip'
-	  });
-	});
-	setTimeout(function(){ // STRANGE BEHAVIOUR
-	  //$("#list").masonry("appended", itemView.$el);
-	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-	  //$("#list").masonry("reload");
-	},0);
-      });
-      */
-    }
+    itemView: ClipPreviewView
   });
 
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
