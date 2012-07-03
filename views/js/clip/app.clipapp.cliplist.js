@@ -232,7 +232,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp:nextpage");
       }
       if(!clips_exist){
-	$("#list").append("抱歉，没有找到相应的信息...");
+	$("#list").append(_i18n('message.cliplist_null'));
       }else{
       }
     });

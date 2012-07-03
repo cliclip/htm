@@ -32,7 +32,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       else return error;
     },
     defaults: {
-      newpass : "请输入新密码", confirm : "确认密码"
+      //newpass : _i18n('message.newpass.prompt'),
+      //confirm : _i18n('message.conpass.prompt')
     }
   });
   var NameModel = App.Model.extend({
