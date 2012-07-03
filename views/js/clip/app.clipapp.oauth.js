@@ -5,7 +5,15 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
   Oauth.process=function(){
     checkUser(function(err,res){
       if(err){
-	 Backbone.history.navigate("",true);
+	App.vent.unbind("app.clipapp.message:sure");
+	App.vent.unbind("app.clipapp.message:cancel");
+	App.vent.trigger("app.clipapp.message:alert", "oauth_fail");
+	App.vent.bind("app.clipapp.message:sure",function(){
+	  window.location.href="/oauth/req/twitter?force_login=true";
+	});
+	App.vent.bind("app.clipapp.message:cancel",function(){
+	  Backbone.history.navigate("",true);
+	});
       }else if(res.token){
 	App.vent.trigger("app.clipapp.login:success", res);
       }else{
@@ -27,10 +35,5 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
     });
 
   };
-
-
-  // TEST
-  //App.bind("initialize:after", function(){ Login.show(); });
-
  return Oauth;
 })(App, Backbone, jQuery);
