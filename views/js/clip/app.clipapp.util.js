@@ -33,11 +33,21 @@ App.util = (function(){
 
   // main_tag 部分从这取,
   util.getBubbs = function(){
-    return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
+    var lang = App.versions.getLanguage(); // 用户语言设置
+    if(lang == "en"){
+      return ["Playful","Concert","Nice","Delicious","cool","Incisive"];
+    }{
+      return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
+    }
   };
 
   util.getObjTags = function(){
-    return ["音乐", "小说", "电影", "港台", "cool", "funny", "牛叉", "技术", "好用"];
+    var lang = App.versions.getLanguage(); // 用户语言设置
+    if(lang == "en"){
+      return ["Music","Novel","Film","Technology","handy"];
+    }else{
+      return ["音乐", "小说", "电影", "港台","牛叉", "技术", "好用"];
+    }
   };
 
   // 判断当前的用户和传过来的参数是否是同一人

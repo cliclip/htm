@@ -684,7 +684,7 @@ App.versions = (function($){
     };
 
     window._i18n = function(){
-      var lang = getLanguage();
+      var lang = versions.getLanguage();
       var args = Array.prototype.slice.call(arguments);
       var name = args.shift();
       var names = name.split('.');
@@ -703,24 +703,21 @@ App.versions = (function($){
       }
       return str;
     };
-    versions.getLang = getLanguage;
-    function getLanguage(){
-      if (getCookieLang()) {
-	return getCookieLang();
+
+    versions.getLanguage = function() {
+      var cookie_lang = App.util.getCookie("language");
+      if(cookie_lang){
+	return cookie_lang;
       } else if(window.navigator.language){
 	return window.navigator.language.split("-")[0];
       } else{
 	return "zh";
       }
-    }
+    };
 
     function setLanguage(lang){
       setCookieLang(lang);
       window.location.reload();
-    }
-
-    function getCookieLang(){
-      return App.util.getCookie("language");
     }
 
     function setCookieLang(lang){
@@ -728,8 +725,9 @@ App.versions = (function($){
       data.setTime(data.getTime() + 30*24*60*60*1000);
       document.cookie = "language="+lang+";expires=" + data.toGMTString();
     }
+		  
     App.vent.bind("app.clipapp.versions:change",function(lang){
-      if(getLanguage() != lang){
+      if(versions.getLanguage() != lang){
 	setLanguage(lang);
       }
     });
