@@ -277,14 +277,14 @@ App.versions = (function($){
 	  setRule_success: "您已成功更新邮箱规则",
 	  rename_success : "您的用户名已经修改",
 	  reclip_null    : "该标签下暂时还没有数据",
-	  reclip_tag_success : "恭喜您，转载成功！",
+	  reclip_tag_success : "恭喜您，收录成功！",
 	  reclip_tag_fail: "您已经转拥有这些载录了！",
-	  reclip_tag     : "您实际转载了 %s 条载录，其余摘录已经拥有了",
-	  comment        : "品论成功",
+	  reclip_tag     : "您实际收录了 %s 条载录，其余摘录已经拥有了",
+	  comment        : "评论成功",
 	  recomm         : "转发成功",
+	  reclip         : "收录成功",
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
-	  pre_active     : "您已激活 %s 邮件地址。您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。",
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
 	    has_recliped : "您已经转载过该条载录了",
@@ -309,7 +309,8 @@ App.versions = (function($){
 	    fail         :"因为间隔时间太长，此注册链接已经失效。您可直接注册，再到设置界面添加您的邮箱地址。"
 	  },
 	  active:{
-	    fail         : "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
+	    fail         : "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。",
+	    email        : "您已激活 %s 邮件地址。\n您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。"
 	  },
 	  email:{
 	    no_uname     : "在添加邮件之前请先设置用户名"
@@ -609,9 +610,9 @@ App.versions = (function($){
 	  setRule_success: "您已成功更新邮箱规则",
 	  rename_success : "您的用户名已经修改",
 	  reclip_null    : "该标签下暂时还没有数据",
-	  reclip_tag_success : "恭喜您，转载成功！",
-	  reclip_tag_fail: "您已经转拥有这些载录了！",
-	  reclip_tag     : "您实际转载了 %s 条载录，其余摘录已经拥有了",
+	  reclip_tag_success : "收录成功！",
+	  reclip_tag_fail: "您已经拥有这些载录了！",
+	  reclip_tag     : "您成功收录了 %s 条载录，其余摘录已经拥有了",
 	  recomm         : "您的clip已经转发成功",
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",

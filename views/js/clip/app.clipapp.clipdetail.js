@@ -34,7 +34,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'biezhen':
 	  App.vent.trigger("app.clipapp:reclip", cid,mid,rid);break;
 	case 'refresh':
-	  App.vent.trigger("app.clipapp:recommend", cid);break;
+	  App.vent.trigger("app.clipapp:recommend", cid, mid);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:@comment", cid);break;
 	case 'note':
@@ -223,13 +223,15 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
     $(".big_pop").css("top",App.util.getPopTop("big"));
-    $(".content").focus();
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
+    this.$(".content").focus();
     var anchors = this.$(".content a");
     for(var i=0;i<anchors.length;i++){
       var anchor = anchors[i];
       anchor.target="_blank";
     }
+    // this.$(".ke-focus").focus();
+    // this.$(".ke-focus").css("display","none");
   };
 
   // 获取comment内容，需要对得到的数据进行显示

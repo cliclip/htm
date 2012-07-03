@@ -152,13 +152,14 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   //reclip 用户一个clip
-  App.vent.bind("app.clipapp:reclip", function(clipid,model_id, rid){
+  App.vent.bind("app.clipapp:reclip", function(clipid, model_id, rid){
     var uid = getMyUid();
     // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
-    if(!uid) ClipApp.Login.show(function(){
-      App.ClipApp.Reclip.show(clipid,model_id, rid);
-    });
-      else ClipApp.Reclip.show(clipid,model_id, rid);
+    if(!uid)
+      ClipApp.Login.show(function(){
+	App.ClipApp.Reclip.show(clipid,model_id, rid);
+      });
+    else ClipApp.Reclip.show(clipid,model_id, rid);
   });
 
   //对 user's tag下的clip的reclip

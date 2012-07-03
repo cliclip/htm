@@ -53,7 +53,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var main_tag = [];
 
     for(var i=0;i<6;i++){
-      if($("#main_tag_"+i, el).attr("class") == "size48 blue_48"){
+      if($("#main_tag_"+i, el).attr("class") == "size48 orange_48"){
 	main_tag.push($.trim($("#main_tag_"+i, el).html()));
       }
     };
@@ -139,7 +139,9 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	type:'PUT',
 	url: P+"/clip/"+cid,
 	success: function(model, res){
-	  App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
+	  if(/my/.test(window.location.hash)){
+	    App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
+	  }
 	  //注时可能删除tag  不能只refresh
 	  //App.vent.trigger("app.clipapp.bubb:refresh",App.util.getMyUid(),null,data.tag);
 	  ClipMemo.close();

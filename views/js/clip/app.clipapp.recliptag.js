@@ -108,7 +108,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	if(res.reclip_tag == count){
-	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag_success");
+	  App.vent.trigger("app.clipapp.message:success","reclip_tag_success");
 	} else if(res.reclip_tag == 0){
 	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag_fail");
 	}else{

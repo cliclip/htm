@@ -14,7 +14,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     tagName : "iframe",
     className : "bubb-view",
     render : function(){
-      this.$el.attr("frameborder", "0",0);
+      this.$el.attr("frameborder", "0",0);//兼容属性大小写问题
       this.$el.attr("scrolling", "no");
       this.$el.attr("src", "bub.html");
       return this;
@@ -280,7 +280,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function mkTag(tags, follows, tag, self, homepage){
     // DEBUG PURPOSE
     // tags = _.without(_.union(bubs, sink, tags, follows),"*");
-    tags = _.without(_.union(tags, follows),"*");
+    tags = _.compact(_.without(_.union(tags, follows),"*"));
+    follows = follows === null ? [] : follows;
     var opt = {
       tags: tags,
       follows: follows,
