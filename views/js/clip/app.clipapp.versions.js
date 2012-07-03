@@ -236,7 +236,7 @@ App.versions = (function($){
 	},
 
 	bind : {
-	  header      : "您已登录新浪微博，但尚未将此微博绑定给任何帐户。",
+	 header   : "您已登录 %s 账户，但尚未将此帐号绑定给clickdang任何帐户。",
 	  bind        : "绑定已有帐户",
 	  register    : "注册新帐户",
 	  bind_ok     : "立即绑定",
@@ -324,7 +324,7 @@ App.versions = (function($){
 	  ok             : "确 定",
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
-	  deloauth       : "您真的要删除 %s 微博账号吗？删除后，您将无法使用此微博账号进行登录，也无法接收来自此微博账号的收藏。",
+	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
 	}
       },
@@ -333,265 +333,269 @@ App.versions = (function($){
 // english versions
       en : {
 	me : {
-	  mine      : "mine",
-	  recommend : "recommend",
-	  interest  : "interest",
-	  set       : "set",
-	  logout    : "logout",
-	  login     : "login",
-	  register  : "register",
-	  ok        : "ok"
+	  mine      : "My clips",
+	  recommend : "@Me",
+	  interest  : "Experts",
+	  set       : "Setting",
+	  logout    : "Sign out",
+	  login     : "Log in",
+	  register  : "Sign up",
+	  ok        : "OK"
 	},
 
 	login : {
-	  title         : "user login" ,
-	  login_ok      : "login",
-	  register_ok   : "register",
-	  login_state   : "Automatic login in a month",
-	  register      : "trouble？Direct send mail to 1 @cliclip.com can also be registered",
+	  title         : "User log in" ,
+	  login_ok      : "Log in",
+	  register_ok   : "Sign in",
+	  login_state   : "Sign in automatically in one month",
+	  register      : "For simpler,just sign up by sending email to 1@cliclip.com",
 	  name : {
-	    is_null     : "user name is null",
-	    not_exist   : "user name not exist",
-	    invalidate  : "user name is invalidate(Can only be the length of a combination of 5-20 characters in English, digital and point)",
-	    exist       : "this user name is exist"
+	    is_null     : "User name is not fill in",
+	    not_exist   : "This User name does not exist",
+	    invalidate  : "Wrong format of User name",
+	    exist       : "User name already exists"
 	  },
 	  pass : {
-	    is_null     : "password is null",
-	    not_match   : "password is not match"
+	    is_null     : "Password has not fill in",
+	    not_match   : "Password input not consistent"
 	  }
 	},
 
 	userface : {
-	  following   : "i follow who",
-	  follow      : "who follow i"
+	  following   : "Now following",
+	  follow      : "Followed by"
 	},
 
 	faceEdit : {
-	  no_name     : "you have not set the user name",
-	  set_name    : "set user name",
-	  ok          : "ok",
-	  upload      : "Upload Avatar",
+	  no_name     : "You have not User name",
+	  set_name    : "Set User name",
+	  ok          : "OK",
+	  upload      : "Upload local image",
 	  name : {
-	    is_null   : "user name is null",
-	    invalidate: "user name is invalidate(Can only be the length of a combination of 5-20 characters in English, digital and point)",
-	    exist     :"this user name is exist"
+	    is_null   : "User name has not yet to fill in",
+	    invalidate: "Wrong format of User name",
+	    exist     :"User name already exists"
 	  }
 	},
 
 	ruleEdit : {
-	  open_rule   : "open identification",
-	  head        : "mailbox",
-	  title       : "title",
-	  cc_text     : "copied to",
-	  to_text     : "send to",
-	  update      : "update mail rules",
+	  open_rule   : "Enable email clipping",
+	  head        : "Email clipping",
+	  title       : "The title must include",
+	  cc_text     : "Must Cc to",
+	  to_text     : "Must send to",
+	  update      : "Update setting of email connection",
 	  cc : {
-	    invalidate: "Cc people with legitimate e-mail address"
+	    invalidate: "Cc to unrecognized address"
 	  },
 	  to : {
-	    invalidate: "Contains legitimate e-mail address in the recipient"
+	    invalidate: "Send to unrecognized address"
 	  }
 	},
 
 	passEdit : {
-	  title       : "change password",
+	  title       : "Change new password",
 	  update      : "Change",
 	  danger_operate : "High-risk operation",
-	  export      : "export clip",
-	  delete      : "Delete account",
-	  is_null     : "password is null",
-	  not_match   : "两次密码输入不一致",
-	  auth_success: "您的密码已更改",
+	  export      : "Export clips",
+	  delete      : "Close your account",
+	  is_null     : "Password has not fill in",
+	  not_match   : "Password input not consistent",
+	  auth_success: "Your password has been changed",
 	  newpass : {
-	    is_null   :"密码尚未填写"
+	    is_null   :"Password has not fill in"
 	  },
 	  conpass:{
-	    is_null   :"密码尚未填写"
+	    is_null   :"Password has not fill in"
 	  },
 	  confirm:{
-	    password_diff: "密码输入不一致"
+	    password_diff: "Password input not consistent"
 	  }
 	},
 
 	emailEdit : {
-	  add         : "增加邮箱绑定",
-	  title       : "邮箱绑定"
+	  add         : "Add email connection",
+	  title       : "Connect with email"
 	},
 
 	emailAdd : {
-	  title       : "添加邮件",
-	  ok          : "确 定",
-	  cancel      : "取 消",
+	  title       : "Add email connection",
+	  ok          : "OK",
+	  cancel      : "Cancel",
 	  email : {
-	    is_Exist  : "邮件地址已经存在",
-	    you_exist : "您已经添加过该邮件地址",
-	    other_exist:"您所添加的邮件地址已经在系统中了",
-	    invalidate: "邮件地址格式有误",
-	    is_null   : "邮件地址尚未填写"
+	    is_Exist  : "Email address already exists",
+	    you_exist : "You have already add that email address",
+	    other_exist:"The email address you added has already been connected with other account in the system",
+	    invalidate: "Wrong format of email address",
+	    is_null   : "Email address has not fill in"
 	  }
 	},
 
 	weiboEdit : {
-	  title       : "微博绑定",
-	  add         : "增加微博绑定"
+	  title       : "Connect with weibo",
+	  add         : "Add weibo connection"
+	},
+	twitterEdit : {
+	  title       : "Connect with twitter",
+	  add         : "Add twitter connection"
 	},
 
 	clipmemo : {
-	  title       : "标注",
-	  memo        : "备注一下吧~",
-	  "private"   : "不公开",
-	  ok          : "确 定",
-	  cancel      : "取 消"
+	  title       : "Tag it",
+	  memo        : "Make a note",
+	  "private"   : "Private",
+	  ok          : "OK",
+	  cancel      : "Cancel"
 	},
 
 	editDetail : {
-	  upload      : "上传图片",
-	  link        : "链接图片",
-	  clear       : "整理格式",
-	  update      : "修 改",
-	  ok          : "确 定",
-	  ok_title    : "保 存",
-	  cancel      : "取 消",
-	  cancel_title: "放 弃"
+	  upload      : "Upload image",
+	  link        : "Link to web image",
+	  clear       : "Tidy format",
+	  update      : "Edit",
+	  ok          : "OK",
+	  ok_title    : "Save",
+	  cancel      : "Cancel",
+	  cancel_title: "Quit"
 	},
 
 	delete : {
-	  title       : "删除",
-	  h3          : "真的要删除吗？",
-	  p           : "删除后将无法恢复",
-	  ok          : "确 定",
-	  cancel      : "取 消"
+	  title       : "Delete",
+	  h3          : "You really mean to delete?",
+	  p           : "Can't restore any more after deleting",
+	  ok          : "OK",
+	  cancel      : "Cancel"
 	},
 
 	reclip : {
-	  title       : "收录",
-	  defaultNote : "备注一下吧~",
-	  "private"   : "不公开",
-	  ok          : "确 定",
-	  cancel      : "取 消"
+	  title       : "Reclip",
+	  defaultNote : "Make a note",
+	  "private"   : "Private",
+	  ok          : "OK",
+	  cancel      : "Cancel"
 	},
 
 	reclipTag : {
-	  title       : '您将收藏%d条数据',
-	  defaultNote : "备注一下吧~",
-	  "private"   : "不公开",
-	  ok          : "确 定",
-	  cancel      : "取 消"
+	  title       : 'You will reclip %d clips',
+	  defaultNote : "Make a note",
+	  "private"   : "Private",
+	  ok          : "OK",
+	  cancel      : "Cancel"
 	},
 
 	recommend :{
-	  title       : "转发",
-	  defaultText : "说点啥吧～",
-	  reclip      : "同时收录",
-	  ok          : "确 定",
-	  cancel      : "取 消",
-	  is_null     : "请添加用户",
-	  not_exist   : "您添加的用户不存在",
-	  is_null     :"请您先设置推荐备注",
+	  title       : "@",
+	  defaultText : "Say something",
+	  reclip      : "Reclip too",
+	  ok          : "OK",
+	  cancel      : "Cancel",
+	  is_null     : "Please add the receiver",
+	  not_exist   : "The receiver doesn't exist",
+	  is_null     :"Please add comments first",
 	  recomm_name : {
-	    is_null   : "请添加用户名",
-	    not_exist : "您添加的用户不存在"
+	    is_null   : "Please add the receiver",
+	    not_exist : "The receiver doesn't exist"
 	  },
 	  recomm_text : {
-	    is_null   :"请您先设置推荐备注"
+	    is_null   :"Please add comments first"
 	  }
 	},
 
 	comment : {
-	  title       : "评论",
-	  defaultText : "说点什么吧~",
-	  reclip      : "同时收录",
-	  ok          : "确 定",
-	  cancel      : "取 消"
+	  title       : "Comment",
+	  defaultText : "Say something",
+	  reclip      : "Reclip too",
+	  ok          : "OK",
+	  cancel      : "Cancel"
 	},
 
 	detail : {
-	  route       : "录线图",
-	  comment     : "评论",
-	  recommend   : "转发",
-	  reclip      : "收录",
-	  delete      : "删除",
-	  update      : "修改",
-	  memo        : "标注"
+	  route       : "Route map",
+	  comment     : "Comment",
+	  recommend   : "@",
+	  reclip      : "Reclip",
+	  delete      : "Delete",
+	  update      : "Edit",
+	  memo        : "Tag"
 	},
 
 	showcomment : {
-	  reply       : "回复",
-	  delete      : "删除"
+	  reply       : "Reply",
+	  delete      : "Delete"
 	},
 
 	addcomm : {
-	  defaultText : "说点什么吧~",
-	  reclip      : "同时收录",
-	  commentOK   : "评论",
-	  cancel      : "取消"
+	  defaultText : "Say something",
+	  reclip      : "Reclip too",
+	  commentOK   : "Comment",
+	  cancel      : "Cancel"
 	},
 
 	addClip : {
-	  title       : "增加",
-	  upload      : "上传图片",
-	  link        : "链接图片",
-	  ok          : "确 定",
-	  clear       : "整理格式",
-	  cancel      : "取 消",
-	  back        : "返 回",
-	  clean       : "清 空"
+	  title       : "Add",
+	  upload      : "Upload image",
+	  link        : "Link to web image",
+	  ok          : "OK",
+	  clear       : "Tidy format",
+	  cancel      : "Cancel",
+	  back        : "Back",
+	  clean       : "Clear"
 	},
 
 	clippreview : {
-	  reprint     : "转载",
-	  reply       : "回复",
-	  comment     : "评论",
-	  recommend   : "转发",
-	  reclip      : "收录",
-	  delete      : "删除",
-	  update      : "修改",
-	  memo        : "标注"
+	  reprint     : "Reclip",
+	  reply       : "Reply",
+	  comment     : "Comment",
+	  recommend   : "@",
+	  reclip      : "Reclip",
+	  delete      : "Delete",
+	  update      : "Edit",
+	  memo        : "Tag"
 	},
 
 	follower : {
-	  follower    : "追我的人",
-	  following   : "我追的人",
-	  p           : "还没有人追你哟",
-	  all         : "所有"
+	  follower    : "Followed by",
+	  following   : "Now following",
+	  p           : "Nobody follows you!",
+	  all         : "All"
 	},
 
 	following : {
-	  follower    : "追我的人",
-	  following   : "我追的人",
-	  p           : "你还没有追任何人哟",
-	  all         : "所有"
+	  follower    : "Followed by",
+	  following   : "Now following",
+	  p           : "Nobody follows you!",
+	  all         : "All"
 	},
 
 	bind : {
-	  header      : "您已登录新浪微博，但尚未将此微博绑定给任何帐户。",
-	  bind        : "绑定已有帐户",
-	  register    : "注册新帐户",
-	  bind_ok     : "立即绑定",
-	  register_ok : "立即注册"
+	  header      : "You have logged in %s ,while not connecting it with any Cliclip account",
+	  bind        : "Connect with current account",
+	  register    : "Sign up new account",
+	  bind_ok     : "Connect now",
+	  register_ok : "Sign up now"
 	},
 
 	findpass : {
-	  title       : "找回密码",
-	  email       : "邮箱地址",
-	  ok          : "确 定",
-	  cancel      : "取 消"
+	  title       : "Retrieve password",
+	  email       : "Email address",
+	  ok          : "OK",
+	  cancel      : "Cancel"
 	},
 
 	resetpass : {
-	  title       : "设置新密码",
-	  new_pass    : "新密码",
-	  ok          : "确定",
-	  reset       : "重置"
+	  title       : "Set new password",
+	  new_pass    : "New password",
+	  ok          : "OK",
+	  reset       : "Reset"
 	},
 
 	gotosetup : {
-	  ok          : "确 定"
+	  ok          : "OK"
 	},
 
 	message : {
-	  title         : "消息提示",
-	  ok            : "确 定",
+	  title         : "Notice",
+	  ok            : "OK",
 	  login_success : "您已成功登录",
 	  imageUp_fail  : "您上传的文件不是图片文件",
 	  is_null       : "摘录不存在",
