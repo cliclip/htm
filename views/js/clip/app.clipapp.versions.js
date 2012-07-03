@@ -8,8 +8,8 @@ App.versions = (function($){
 	  mine      : "我的",
 	  recommend : "@我",
 	  interest  : "砖家",
-	  set       : "设置",
-	  logout    : "登出",
+	  set       : "&nbsp&nbsp设置",
+	  logout    : "&nbsp&nbsp登出",
 	  login     : "登 录",
 	  register  : "注 册",
 	  ok        : "确 定"
@@ -50,6 +50,10 @@ App.versions = (function($){
 	  }
 	},
 
+	languageSet:{
+	  lang:"界面语言"
+	},
+
 	ruleEdit : {
 	  open_rule   : "打开邮箱识别",
 	  head        : "邮箱识别",
@@ -75,9 +79,11 @@ App.versions = (function($){
 	  not_match   : "两次密码输入不一致",
 	  auth_success: "您的密码已更改",
 	  newpass : {
+	    prompt:"请输入新密码",
 	    is_null:"密码尚未填写"
 	  },
 	  conpass:{
+	    prompt:"确认密码",
 	    is_null:"密码尚未填写"
 	  },
 	  confirm:{
@@ -262,6 +268,7 @@ App.versions = (function($){
 	},
 
 	gotosetup : {
+	  register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
 	  ok          : "确 定"
 	},
 
@@ -275,7 +282,6 @@ App.versions = (function($){
 	  is_empty      : "摘录不能为空",
 	  is_null       : "您还没有添加邮件规则",
 	  no_uname      : "在添加邮件之前请先设置用户名",
-	  register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
 	  faceUp_success : "您的头像已更新",
 	  passwd_success : "您的密码已修改",
 	  setRule_success: "您已成功更新邮箱规则",
@@ -289,6 +295,7 @@ App.versions = (function($){
 	  reclip         : "收录成功",
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
+
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
 	    has_recliped : "您已经转载过该条载录了",
@@ -367,7 +374,7 @@ App.versions = (function($){
 	},
 
 	userface : {
-	  following   : "Now following",
+	  following   : "Following",
 	  follow      : "Followed by"
 	},
 
@@ -375,7 +382,7 @@ App.versions = (function($){
 	  no_name     : "You have not User name",
 	  set_name    : "Set User name",
 	  ok          : "OK",
-	  upload      : "Upload local image",
+	  upload      : "Upload image",
 	  name : {
 	    is_null   : "User name has not yet to fill in",
 	    invalidate: "Wrong format of User name",
@@ -383,13 +390,17 @@ App.versions = (function($){
 	  }
 	},
 
+	languageSet:{
+	  lang:"Language Setting"
+	},
+
 	ruleEdit : {
-	  open_rule   : "Enable email clipping",
+	  open_rule   : "Enable clipping",
 	  head        : "Email clipping",
-	  title       : "The title must include",
+	  title       : "Title must include",
 	  cc_text     : "Must Cc to",
 	  to_text     : "Must send to",
-	  update      : "Update setting of email connection",
+	  update      : "Update setting",
 	  cc : {
 	    invalidate: "Cc to unrecognized address"
 	  },
@@ -408,9 +419,11 @@ App.versions = (function($){
 	  not_match   : "Password input not consistent",
 	  auth_success: "Your password has been changed",
 	  newpass : {
+	    prompt:"Please input new password",
 	    is_null   :"Password has not fill in"
 	  },
 	  conpass:{
+	    prompt:"Confirm password",
 	    is_null   :"Password has not fill in"
 	  },
 	  confirm:{
@@ -419,12 +432,12 @@ App.versions = (function($){
 	},
 
 	emailEdit : {
-	  add         : "Add email connection",
+	  add         : "Add connection",
 	  title       : "Connect with email"
 	},
 
 	emailAdd : {
-	  title       : "Add email connection",
+	  title       : "Add connection",
 	  ok          : "OK",
 	  cancel      : "Cancel",
 	  email : {
@@ -438,11 +451,11 @@ App.versions = (function($){
 
 	weiboEdit : {
 	  title       : "Connect with weibo",
-	  add         : "Add weibo connection"
+	  add         : "Add connection"
 	},
 	twitterEdit : {
 	  title       : "Connect with twitter",
-	  add         : "Add twitter connection"
+	  add         : "Add connection"
 	},
 
 	clipmemo : {
@@ -455,7 +468,7 @@ App.versions = (function($){
 
 	editDetail : {
 	  upload      : "Upload image",
-	  link        : "Link to web image",
+	  link        : "Web image",
 	  clear       : "Tidy format",
 	  update      : "Edit",
 	  ok          : "OK",
@@ -515,7 +528,7 @@ App.versions = (function($){
 	},
 
 	detail : {
-	  route       : "Route map",
+	  route       : "Map",
 	  comment     : "Comment",
 	  recommend   : "@",
 	  reclip      : "Reclip",
@@ -538,8 +551,8 @@ App.versions = (function($){
 
 	addClip : {
 	  title       : "Add",
-	  upload      : "Upload image",
-	  link        : "Link to web image",
+	  upload      : "&nbspUpload image",
+	  link        : "Web image",
 	  ok          : "OK",
 	  clear       : "Tidy format",
 	  cancel      : "Cancel",
@@ -560,14 +573,14 @@ App.versions = (function($){
 
 	follower : {
 	  follower    : "Followed by",
-	  following   : "Now following",
+	  following   : "Following",
 	  p           : "Nobody follows you!",
 	  all         : "All"
 	},
 
 	following : {
 	  follower    : "Followed by",
-	  following   : "Now following",
+	  following   : "Following",
 	  p           : "Nobody follows you!",
 	  all         : "All"
 	},
@@ -595,6 +608,7 @@ App.versions = (function($){
 	},
 
 	gotosetup : {
+	  register_success : "Congratulation! You just finished registration. We suggest you add the most used email address to clip conveniently by sending email",
 	  ok          : "OK"
 	},
 
@@ -608,7 +622,6 @@ App.versions = (function($){
 	  is_empty      : "Clip can't be empty",
 	  is_null       : "You haven't set the rule of email connection",
 	  no_uname      : "Please set User name before add email connection",
-	  register_success : "Congratulation! You just finished registration. We suggest you add the most used email address to clip conveniently by sending email",
 	  faceUp_success : "Your portrait has been updated",
 	  passwd_success : "Your password has been changed",
 	  setRule_success: "Your rule of email connection has been updated",
@@ -621,6 +634,7 @@ App.versions = (function($){
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
+	  cliplist_null:"Sorry，have not found appropriate clauses......",
 	  clip : {
 	    has_this_clip: "You have this clip already",
 	    has_recliped : "You reclip this clip already",
