@@ -83,9 +83,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       if(window.getSelection&&window.getSelection().toString()){//ie-9 chrome ff 都有此对象
 	//console.info(window.getSelection().toString());
 	return;
-      }
-      //ie-7 8 无getSelection()只有document.selection
-      if(document.selection.createRange().text){
+      }else if(document.selection&&document.selection.createRange().text){
+	//ie-7 8 无getSelection()只有document.selection
 	return;
       }
       var rid = this.model.get("recommend").rid;
