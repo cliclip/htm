@@ -52,11 +52,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       target.attr("disabled",true);
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
-      if(content == old_content){
+      /*if(content == old_content){
 	//alert("您并未做出任何更改");
 	target.attr("disabled", false);
 	return;
-      }
+      }*/
       var editModel = new EditModel({content:content});
       editModel.save({},{ // 不用this.mode因为this.model中有 录线图
 	type:'PUT',
