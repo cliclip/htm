@@ -80,8 +80,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
     show_detail: function(){
-      if(window.getSelection().toString()){//ie9 chrome ff 都有此对象
+      //部分ff浏览器 选中clip preview 中内容会触发鼠标单击事件打开详情页面
+      if(window.getSelection&&window.getSelection().toString()){//ie-9 chrome ff 都有此对象
 	//console.info(window.getSelection().toString());
+	return;
+      }else if(document.selection&&document.selection.createRange().text){
+	//ie-7 8 无getSelection()只有document.selection
 	return;
       }
       var rid = this.model.get("recommend").rid;
@@ -231,7 +235,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp:nextpage");
       }
       if(!clips_exist){
-	$("#list").append("抱歉，没有找到相应的信息...");
+	$("#list").append(_i18n('message.cliplist_null'));
       }else{
       }
     });

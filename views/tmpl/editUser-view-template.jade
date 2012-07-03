@@ -37,7 +37,7 @@ script(type="text/template",id="faceEdit-view-template")
     | </form>
   .language
     h3
-      |界面语言
+      | <%=_i18n('languageSet.lang')%>
     div.delang.
       <% var defaultLang = App.versions.getLang();
          var langs = App.versions.language;%>
@@ -87,10 +87,10 @@ script(type="text/template",id="passEdit-view-template")
   h3.edit_password <%=_i18n('passEdit.title')%>
   ul.input_list
     li
-      |<input type="text" id="newpass" value="<%=newpass%>"/>
+      |<input type="text" id="newpass" value="<%=_i18n('passEdit.newpass.prompt')%>"/>
       input(type="password",id="pass",name="newpass",style="display:none;")
     li
-      |<input type="text" id="conpass" value="<%=confirm%>"/>
+      |<input type="text" id="conpass" value="<%=_i18n('passEdit.conpass.prompt')%>"/>
       input(type="password",id="confirm",name="confirm",style="display:none;")
     li.
       <input type="submit" class="btn_blue" id="pass_confirm" value="<%=_i18n('passEdit.update')%>" />
