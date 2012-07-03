@@ -27,6 +27,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     events:{
       "click .user" : "getUserAction",
       "input #recomm_name"   : "nameListAction",
+      //ie-7 8 input事件相当于focus事件，在输入文字过程中不会重复触发
       "click #recomm_name"   : "nameListAction",
       "focus #recomm_name"   : "nameListShow",
       "blur #recomm_name"    : "nameBlur",
