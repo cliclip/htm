@@ -107,6 +107,10 @@ App.versions = (function($){
 	  title       : "微博绑定",
 	  add         : "增加微博绑定"
 	},
+	twitterEdit : {
+	  title       : "twitter绑定",
+	  add         : "增加twitter绑定"
+	},
 
 	clipmemo : {
 	  title       : "标注",
@@ -597,67 +601,67 @@ App.versions = (function($){
 	message : {
 	  title         : "Notice",
 	  ok            : "OK",
-	  login_success : "您已成功登录",
-	  imageUp_fail  : "您上传的文件不是图片文件",
-	  is_null       : "摘录不存在",
-	  not_array     : "摘录必须是数组",
-	  is_empty      : "摘录不能为空",
-	  is_null       : "您还没有添加邮件规则",
-	  no_uname      : "在添加邮件之前请先设置用户名",
-	  register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
-	  faceUp_success : "您的头像已更新",
-	  passwd_success : "您的密码已修改",
-	  setRule_success: "您已成功更新邮箱规则",
-	  rename_success : "您的用户名已经修改",
-	  reclip_null    : "该标签下暂时还没有数据",
-	  reclip_tag_success : "收录成功！",
-	  reclip_tag_fail: "您已经拥有这些载录了！",
-	  reclip_tag     : "您成功收录了 %s 条载录，其余摘录已经拥有了",
-	  recomm         : "您的clip已经转发成功",
-	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
-	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
-	  pre_active     : "您已激活 %s 邮件地址。您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。",
+	  login_success : "Log in successfully",
+	  imageUp_fail  : "The file you upload is NOT an image",
+	  is_null       : "Clip not exist",
+	  not_array     : "Clip must be array",
+	  is_empty      : "Clip can't be empty",
+	  is_null       : "You haven't set the rule of email connection",
+	  no_uname      : "Please set User name before add email connection",
+	  register_success : "Congratulation! You just finished registration. We suggest you add the most used email address to clip conveniently by sending email",
+	  faceUp_success : "Your portrait has been updated",
+	  passwd_success : "Your password has been changed",
+	  setRule_success: "Your rule of email connection has been updated",
+	  rename_success : "Your User name has been changed",
+	  reclip_null    : "No clip under thist tag",
+	  reclip_tag_success : "Congratulation for successful reclip",
+	  reclip_tag_fail: "You have these clips already",
+	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
+	  recomm         : "Your clip @ successfully",
+	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
+	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
+	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
 	  clip : {
-	    has_this_clip: "您已经有该条摘录了",
-	    has_recliped : "您已经转载过该条载录了",
-	    not_exist    : "摘录不存在",
-	    deleted      : "此条摘录已经被删除！",
-	    no_public    : "作者没有公开此条摘录！"
+	    has_this_clip: "You have this clip already",
+	    has_recliped : "You reclip this clip already",
+	    not_exist    : "This Clip doesn't  exist",
+	    deleted      : "This Clip has been deleted",
+	    no_public    : "This Clip is private"
 	  },
 	  content:{
-	    is_null      : "摘录不存在",
-	    not_array    : "摘录必须是数组",
-	    is_empty     : "摘录不能为空"
+	    is_null      : "This Content doesn't exist",
+	    not_array    : "Content must be array",
+	    is_empty     : "Content can't be empty"
 	  },
 	  follow:{
-	    all          : "您已经追了该用户的全部标签"
+	    all          : "You have already followed all tags of this user"
 	  },
 	  error:{
-	    "link 已作废": "此链接已过期",
-	    "link doesnt exist": "此链接无效",
-	    "link invalidate": "此链接格式有误"
+	    "link 已作废": "Overdue link",
+	    "link doesnt exist": "Invalid link",
+	    "link invalidate": "Wrong format link"
 	  },
 	  accept:{
-	    fail         :"因为间隔时间太长，此注册链接已经失效。您可直接注册，再到设置界面添加您的邮箱地址。"
+	    fail         :"Registration link was overdue for too long interval. You can sign in directly and add email address connection in Setting"
 	  },
 	  active:{
-	    fail         : "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
+	    fail         : "Registration link was overdue for too long interval. You can add again in Setting"
 	  },
 	  email:{
-	    no_uname     : "在添加邮件之前请先设置用户名"
+	    no_uname     : "Set your user name before adding mail address connection"
 	  },
 	  rule:{
-	    is_null: "您还没有添加邮件规则"
+	    is_null: "You haven’t set the rule of email connection"
 	  }
 	},
 
 	warning : {
-	  title          : "操作确认",
-	  ok             : "确 定",
-	  cancel         : "取 消",
-	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
-	  deloauth       : "您真的要删除 %s 微博账号吗？删除后，您将无法使用此微博账号进行登录，也无法接收来自此微博账号的收藏。",
-	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
+	  title          : "Confirm",
+	  ok             : "OK",
+	  cancel         : "Cancel",
+	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
+	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
+	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
 	}
       }
     };
