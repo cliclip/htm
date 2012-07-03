@@ -133,7 +133,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     base_url = App.ClipApp.Url.base+"/query";
     // 起始时间设置为，endTime前推一个月
     var date = (new Date()).getTime();
-    data = {"public":true, "startTime":date-86400000*30,"endTime":date+10000};
+    data = {"startTime":date-86400000*30,"endTime":date+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
