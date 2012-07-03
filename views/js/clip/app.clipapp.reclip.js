@@ -71,12 +71,13 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var mid, defaultNote = "备注一下吧~";
 
-  Reclip.show = function(cid,model_id,rid){
+  Reclip.show = function(cid,model_id,rid,pub){
     mid = model_id;
     var model = new ReclipModel({id:cid,rid:rid});
     var reclipView = new ReclipView({model : model});
     App.popRegion.show(reclipView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
+    if(pub == "false") $("#checkbox").attr("checked",true);
     $('#obj_tag').tagsInput({});
   };
 

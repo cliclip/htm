@@ -317,6 +317,9 @@ App.versions = (function($){
 	  },
 	  rule:{
 	    is_null: "您还没有添加邮件规则"
+	  },
+	  recommend:{
+	    no_pub      :"该条clip是私有数据,您暂时不能向外部推荐"
 	  }
 	},
 
