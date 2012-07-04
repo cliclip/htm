@@ -166,7 +166,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
 	var data = view.getInput();
-	if(data.text == defaultText){data.text = "";}
+	if(data.text == _i18n('recommend.defaultText')){data.text = "";}
 	view.setModel('recommend',view.tmpmodel, {text: data.text, clipid: clipid});
 	//recommend 需要的参数
 	view.tmpmodel.save({},{
@@ -187,12 +187,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     clearAction:function(e){
       this.cleanError(e);
-      $(e.currentTarget).val( $(e.currentTarget).val() == defaultText ? "" :
+      $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('recommend.defaultText') ? "" :
       $(e.currentTarget).val() );
     },
     textBlur:function(e){
       var view = this;
-      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultText :
+      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('recommend.defaultText') :
       $(e.currentTarget).val() );
       var data = view.getInput();
       view.setModel('recommend',view.tmpmodel, {text: data.text});
@@ -216,7 +216,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
 
   var Recommend = {};
-  var mid,defaultText = "说点啥吧～";
+  var mid;
 
   Recommend.show = function(cid,model_id,pub){
     var recommModel = new RecommModel({clipid:cid});
