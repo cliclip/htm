@@ -28,19 +28,20 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	if(!resp[i].clip){ // 表示是别人推荐的clip
+	if(!resp[i].clip){
 	  resp[i].clipid = resp[i].id;
 	  resp[i].id = resp[i].user.id+":"+resp[i].id;
-	}else{
+	}else{ // 表示是别人推荐的clip
 	  resp[i].clipid = resp[i].clip.id;
 	  resp[i].user = resp[i].clip.user;
 	  resp[i].content = resp[i].clip.content;
 	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
 	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
+	  resp[i]["public"] = resp[i].clip["public"];
 	  delete resp[i].clip;
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
 	}
-	if(resp[i].hide){
+	if(resp[i].hide){// 取interest数据的时候，该属性描述是否显示
 	  hide_clips.push(resp[i].id);
 	}
       }
@@ -60,35 +61,31 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       "mouseleave .clip_item": "mouseLeave"
     },
     initialize: function(){
-      var that = this;
       var $container = $('#list');
-      $container.imagesLoaded( function(){
-	$container.masonry({
-	  itemSelector : '.clip'
-	});
-      });
       this.bind("item:rendered",function(itemView){
 	if(this.model.get("content").image){
 	  this.$el.find("p").addClass("text");
+	  itemView.$el.imagesLoaded(function(){
+	    $container.masonry("reload");
+	  });
 	}else{
           this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
-	}
-	var $newElems = itemView.$el;
-	flag = true;
-	$newElems.imagesLoaded(function(){
-	  //STRANGE若不加延时则所有clip无图片时不产生动态布局效果,无图此段代码也会运行
+	  //STRANGE若不加延时则所有clip无图片,在翻页时最后一个clip不产生动态布局效果
 	  setTimeout(function(){
-	    $("#list").masonry("reload");
+	    $container.masonry("reload");
 	  },0);
-	});
+	}
+	flag = true;
       });
     },
     show_detail: function(){
-      //var clip = this.model.get("clip");
-      //var clipid = clip.user.id+":"+clip.id;
-      if(window.getSelection().toString()){//ie9 chrome ff 都有此对象
+      //部分ff浏览器 选中clip preview 中内容会触发鼠标单击事件打开详情页面
+      if(window.getSelection&&window.getSelection().toString()){//ie-9 chrome ff 都有此对象
 	//console.info(window.getSelection().toString());
+	return;
+      }else if(document.selection&&document.selection.createRange().text){
+	//ie-7 8 无getSelection()只有document.selection
 	return;
       }
       var rid = this.model.get("recommend").rid;
@@ -106,21 +103,23 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var cid = this.model.get("user").id + ":" + this.model.get("clipid");
       var rid = this.model.get("recommend").rid;
+      var pub = this.model.get("public");
+      var mid = this.model.id;
       //var clip = this.model.get("clip");
       //var cid = clip.user.id+":"+clip.id;
       switch(opt){
 	case 'biezhen'://收
-	  App.vent.trigger("app.clipapp:reclip", cid,this.model.id, rid);break;
+	  App.vent.trigger("app.clipapp:reclip",cid,mid,rid,pub);break;
 	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
+	  App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
 	case 'comment'://评
-	  App.vent.trigger("app.clipapp:comment", cid,this.model.id);break;
+	  App.vent.trigger("app.clipapp:comment",cid,mid);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
+	  App.vent.trigger("app.clipapp:clipmemo",cid);break;
 	case 'change'://改
-	  App.vent.trigger("app.clipapp:clipedit", cid);break;
+	  App.vent.trigger("app.clipapp:clipedit",cid);break;
 	case 'del'://删
-	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+	  App.vent.trigger("app.clipapp:clipdelete",cid);break;
       }
     }
   });
@@ -128,24 +127,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
     className: "preview-view",
-    itemView: ClipPreviewView,
-    initialize: function(){
-      /*
-      this.bind("collection:rendered",function(itemView){
-      	var $container = $('#list');
-	$container.imagesLoaded( function(){
-	  $container.masonry({
-	    itemSelector : '.clip'
-	  });
-	});
-	setTimeout(function(){ // STRANGE BEHAVIOUR
-	  //$("#list").masonry("appended", itemView.$el);
-	  //$('#list').prepend( itemView.$el ).masonry( 'reload' );
-	  //$("#list").masonry("reload");
-	},0);
-      });
-      */
-    }
+    itemView: ClipPreviewView
   });
 
   ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
@@ -155,7 +137,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     base_url = App.ClipApp.Url.base+"/query";
     // 起始时间设置为，endTime前推一个月
     var date = (new Date()).getTime();
-    data = {"public":true, "startTime":date-86400000*30,"endTime":date+10000};
+    data = {"startTime":date-86400000*30,"endTime":date+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
@@ -253,7 +235,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp:nextpage");
       }
       if(!clips_exist){
-	$("#list").append("抱歉，没有找到相应的信息...");
+	$("#list").append(_i18n('message.cliplist_null'));
       }else{
       }
     });

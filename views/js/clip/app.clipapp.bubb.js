@@ -14,7 +14,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     tagName : "iframe",
     className : "bubb-view",
     render : function(){
-      this.$el.attr("frameborder", "0",0);
+      this.$el.attr("frameborder", "0",0);//兼容属性大小写问题
       this.$el.attr("scrolling", "no");
       this.$el.attr("src", "bub.html");
       return this;
@@ -24,13 +24,21 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
   // 与显示无关，只是用来确定泡泡的大小而已
-  var bubs = ["好玩", "好听", "好看", "好吃", "酷", "精辟"];
-  var sink = ["讨厌"];
+  var bubs = {
+    zh: ["好玩", "好听", "好看", "好吃", "酷", "精辟"],
+    en: ["Playful","Concert","Nice","Delicious","cool","Incisive"]
+  };
+  var sink = {
+    zh: ["讨厌"],
+    en: ["Hate"]
+  };
+
   // private
   var _uid  = null;
   var last = null;
   var old_self = null;
   var self = true;
+  var lang = App.versions.getLanguage(); // 用户语言设置
   var homepage = false;
   // exports
 
@@ -48,7 +56,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     self = false;
     homepage = true;
     getSiteBubs(function(tags, follows){
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
     });
   };
 
@@ -62,7 +70,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
 
   Bubb.showBubs = function(uid){ // 直接显示 六个主观tag即可
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs, [], null, true));
+    App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs[lang], [], null, true));
   };
 
   /*
@@ -166,21 +174,26 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // API getSiteTags
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/0/meta/0..19
-    // var follows = ["动漫", "科技"];
-    // var tags = ["电影", "音乐", "美女", "穿越", "户外", "流行"];
-    var bubbModel = new BubbModel({id: "2"});
+    // 替换掉之前的取用户2的数据为，常量
+    var	siteTags = {
+      zh: ["好玩", "好听", "好看", "好吃", "酷", "精辟","讨厌","书籍","电影","旅游","资料"],
+      en: ["Playful","Concert","Nice","Delicious","cool","Incisive","Hate","Book","Film","tour","Data"]
+    };
+    callback(siteTags[lang],[]);
+
+    /*var bubbModel = new BubbModel({id: "2"});
     var url = P+"/user/"+bubbModel.id+"/meta/0..19";
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
       callback(bubb.tag, bubb.follow);
-    });
+    });*/
   }
 
   function getSiteBubs(callback){
     getSiteTags(function(tags, follows){
-      var tags2 = _.intersection(tags, bubs);
-      var follows2 = _.intersection(follows, bubs);
+      var tags2 = _.intersection(tags, bubs[lang]);
+      var follows2 = _.intersection(follows, bubs[lang]);
       callback(tags2, follows2);
     });
   }
@@ -203,13 +216,14 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   }
 
+  /*
   function getUserBubs(uid, callback){
     getUserTags(uid, function(tags, follows){
       var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
     });
-  }
+  }*/
 
   function followUserTag(uid, tag, callback){
     if(!uid) uid = _uid;
@@ -280,12 +294,13 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function mkTag(tags, follows, tag, self, homepage){
     // DEBUG PURPOSE
     // tags = _.without(_.union(bubs, sink, tags, follows),"*");
-    tags = _.without(_.union(tags, follows),"*");
+    tags = _.compact(_.without(_.union(tags, follows),"*"));
+    follows = follows === null ? [] : follows;
     var opt = {
       tags: tags,
       follows: follows,
-      bubs: _.intersection(bubs, tags),
-      sink: _.intersection(sink, tags),
+      bubs: _.intersection(bubs[lang], tags),
+      sink: _.intersection(sink[lang], tags),
       self: self
     };
     if(homepage) opt.homepage = homepage;

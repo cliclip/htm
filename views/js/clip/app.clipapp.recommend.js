@@ -27,6 +27,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     events:{
       "click .user" : "getUserAction",
       "input #recomm_name"   : "nameListAction",
+      //ie-7 8 input事件相当于focus事件，在输入文字过程中不会重复触发
       "click #recomm_name"   : "nameListAction",
       "focus #recomm_name"   : "nameListShow",
       "blur #recomm_name"    : "nameBlur",
@@ -136,6 +137,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     nameListShow:function(e){
       uid = null;
       this.cleanError(e);
+      $("#submit").attr("disabled",false);
       var div=$(".action-info");
       if(div.length != 0){
 	$(".name_list").show();
@@ -159,6 +161,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     recommendAction:function(e){
       // 在点击转确定按钮时，model.id model.name都已经设置成功
       e.preventDefault();
+      $(e.currentTarget).attr("disabled",true);
       var view = this;
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
@@ -215,23 +218,29 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   var Recommend = {};
   var mid,defaultText = "说点啥吧～";
 
-  Recommend.show = function(cid,model_id){
-    mid = model_id;
+  Recommend.show = function(cid,model_id,pub){
     var recommModel = new RecommModel({clipid:cid});
     var recommView=new RecommView({model:recommModel});
-    App.popRegion.show(recommView);
-    $(".small_pop").css("top", App.util.getPopTop("small"));
-    //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
-    if(/msie/i.test(navigator.userAgent)){
-      function nameListAction(evt){
-	that.$("#imgId").css("display","none");
-	var str = $.trim(that.$("#recomm_name").val());
-	var clip_owner = that.model.get("clipid").split(":")[0];//clip的拥有者
-	var params = {q:str};
-	//查询friend
-	App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
+    //clip的拥有者
+    var clip_owner = that.model.get("clipid").split(":")[0];
+    if(pub == "false" && !App.util.self(clip_owner)){
+      // 是非public并且不是clip_owner进行的操作
+      App.vent.trigger("app.clipapp.message:chinese", {recommend: "no_pub"});
+    }else{
+      mid = model_id;
+      App.popRegion.show(recommView);
+      $(".small_pop").css("top", App.util.getPopTop("small"));
+      //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
+      if(/msie/i.test(navigator.userAgent)){
+	function nameListAction(evt){
+	  that.$("#imgId").css("display","none");
+	  var str = $.trim(that.$("#recomm_name").val());
+	  var params = {q:str};
+	  //查询friend
+	  App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
+	}
+	document.getElementById('recomm_name').onpropertychange=nameListAction;
       }
-      document.getElementById('recomm_name').onpropertychange=nameListAction;
     }
   };
 

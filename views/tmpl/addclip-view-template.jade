@@ -5,7 +5,6 @@ script(type="text/template",id="addClip-view-template")
       div.pop_left
         i.note
       div.pop_right
-        | <%=_i18n('addClip.title')%>
         div.button_frame
           iframe(name="post_frame",id="post_frame")
           |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
@@ -22,7 +21,10 @@ script(type="text/template",id="addClip-view-template")
           span
             button.format <%=_i18n('addClip.clear')%>
           span.close_w
+            //- ie-7 若不加空格则右上角关闭按钮不显示
             |&nbsp&nbsp&nbsp&nbsp&nbsp
+        | <%=_i18n('addClip.title')%>
+        //- ie-7 文字若不放到此位置导致显示格式不正确
     div.pop_left
     div.pop_right
       section.pop_inner

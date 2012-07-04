@@ -31,6 +31,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultNote :
       $(e.currentTarget).val() );
     },
+					 
     submit:function(e){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
@@ -71,12 +72,13 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var mid, defaultNote = "备注一下吧~";
 
-  Reclip.show = function(cid,model_id,rid){
+  Reclip.show = function(cid,model_id,rid,pub){
     mid = model_id;
     var model = new ReclipModel({id:cid,rid:rid});
     var reclipView = new ReclipView({model : model});
     App.popRegion.show(reclipView);
     $(".small_pop").css("top", App.util.getPopTop("small"));
+    if(pub == "false") $("#checkbox").attr("checked",true);
     $('#obj_tag').tagsInput({});
   };
 
@@ -90,6 +92,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     model.save({},{
       type: "POST",
       success: function(model, res){
+	App.vent.trigger("app.clipapp.message:success", "reclip");
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
 	App.vent.trigger("app.clipapp.taglist:taglistRefresh",params.clip.tag);
       },
@@ -112,8 +115,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     Reclip.close();
   });
 
-
-    // TEST
+   // TEST
    // App.bind("initialize:after", function(){ Reclip.show("1:1"); });
   return Reclip;
 })(App, Backbone, jQuery);
