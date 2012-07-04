@@ -1,6 +1,5 @@
 App.ClipApp.ReclipTag = (function(App, Backbone, $){
   var ReclipTag = {};
-  var defaultNote = "备注一下吧~";
   var P = App.ClipApp.Url.base;
 
   var ReclipTagModel = App.Model.extend({
@@ -27,12 +26,12 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     },
 
     foucsAction:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == defaultNote ? "" :
+      $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('reclipTag.defaultNote') ? "" :
       $(e.currentTarget).val() );
     },
 
     blurAction:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultNote :
+      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('reclipTag.defaultNote') :
       $(e.currentTarget).val() );
     },
     submit:function(evt){
@@ -51,7 +50,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 
   function loadData(el){
     var text = "";
-    if($.trim($("#reclip_text", el).val())!=defaultNote){//过滤defaultNote默认值
+    if($.trim($("#reclip_text", el).val())!=_i18n('reclipTag.defaultNote')){//过滤defaultNote默认值
       text = $.trim($("#reclip_text", el).val());
     }
     var main_tag = [];
