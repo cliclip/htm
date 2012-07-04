@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid,checked,tag_list,COMM_TEXT = "说点什么吧~";
+  var mid,checked,tag_list;
 
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
@@ -171,11 +171,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     foucsAction:function(e){
       var text = $(e.currentTarget).val();
-      $(e.currentTarget).val(text == COMM_TEXT ? "" : text );
+      $(e.currentTarget).val(text == _i18n('comment.defaultText') ? "" : text );
     },
     blurAction:function(e){
       var text = $(e.currentTarget).val();
-      $(e.currentTarget).val( text == "" ? COMM_TEXT : text);
+      $(e.currentTarget).val( text == "" ? _i18n('comment.defaultText') : text);
     },
     maintagAction:function(e){
       var id = e.target.id;
@@ -184,7 +184,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       if($(e.currentTarget).hasClass("selected")){
 	//将其值加入到comm_text中去
 	this.tag_list.push($("#"+id).val());
-	if($("#comm_text").val() == "" || $("#comm_text").val() == COMM_TEXT){
+	if($("#comm_text").val() == "" || $("#comm_text").val() == _i18n('comment.defaultText')){
 	  $("#comm_text").val($("#"+id).val());
 	}else{
 	  $("#comm_text").val(_.union($("#comm_text").val().split(","),$("#"+id).val()));
@@ -199,7 +199,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = ($("#comm_text").val()).replace(/[\s]/g, "");
-      if(text == "" || text == COMM_TEXT){$("#comm_text").focus(); return;}
+      if(text == "" || text == _i18n('comment.defaultText')){$("#comm_text").focus(); return;}
       $(e.currentTarget).attr("disabled",true);
       var params = {clipid: cid, text: text, pid: pid};
       var params1 = null;

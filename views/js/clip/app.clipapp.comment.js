@@ -26,17 +26,17 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click .close_w"   :"cancel"
     },
     foucsAction:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == defaultComm ? "" :
+      $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('comment.defaultText') ? "" :
       $(e.currentTarget).val() );
       $("#submit").attr("disabled",false);
     },
     blurAction:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultComm :
+      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('comment.defaultText') :
       $(e.currentTarget).val() );
     },
     maintagAction:function(e){
       // 取得评论框中的文本并转为数组，去除掉数组中的默认值和空值。
-      var arr_text = _.compact(_.without($("#comm_text").val().split(","),defaultComm));
+      var arr_text = _.compact(_.without($("#comm_text").val().split(","),_i18n('comment.defaultText')));
       var tag = $(e.currentTarget).text(); //取得当前点击的tag
       $(e.currentTarget).toggleClass("white_48"); //tag颜色的切换
       $(e.currentTarget).toggleClass("orange_48");
@@ -54,7 +54,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).attr("disabled",true);
       var that = this;
       var text = $.trim($("#comm_text").val());
-      if(text == "" || text == defaultComm){
+      if(text == "" || text == _i18n('comment.defaultText')){
 	$("#comm_text").focus();
 	return;
       }
@@ -72,7 +72,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   });
 
   var Comment = {};
-  var mid,clipid,defaultComm = "说点什么吧~";//mid为model_id
+  var mid,clipid;//mid为model_id
 
   Comment.show = function(cid,model_id){
     mid = model_id;
