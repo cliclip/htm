@@ -30,11 +30,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
       var rid = this.model.get("rid");
+      var pub = this.model.get("public");
       switch(opt){
 	case 'biezhen':
-	  App.vent.trigger("app.clipapp:reclip", cid,mid,rid);break;
+	App.vent.trigger("app.clipapp:reclip", cid,mid,rid,pub);break;
 	case 'refresh':
-	  App.vent.trigger("app.clipapp:recommend", cid, mid);break;
+	App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:@comment", cid);break;
 	case 'note':

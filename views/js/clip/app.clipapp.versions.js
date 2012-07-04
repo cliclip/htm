@@ -295,7 +295,8 @@ App.versions = (function($){
 	  reclip         : "收录成功",
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
-
+	  pre_active:"您已激活%s邮件地址。您现在可以再登录时使用此邮件地址，并接受来自此邮件地址的收藏。",
+	  cliplist_null:"抱歉，没有找到相关的信息......",
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
 	    has_recliped : "您已经转载过该条载录了",
@@ -328,6 +329,9 @@ App.versions = (function($){
 	  },
 	  rule:{
 	    is_null: "您还没有添加邮件规则"
+	  },
+	  recommend:{
+	    no_pub      :"该条clip是私有数据,您暂时不能向外部推荐"
 	  }
 	},
 
@@ -380,7 +384,7 @@ App.versions = (function($){
 	},
 
 	faceEdit : {
-	  no_name     : "You have not User name",
+	  no_name     : "no user name",
 	  set_name    : "Set User name",
 	  ok          : "OK",
 	  upload      : "Upload image",
@@ -635,7 +639,7 @@ App.versions = (function($){
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
-	  cliplist_null:"Sorry，have not found appropriate clauses......",
+	  cliplist_null:"Sorry,have not found appropriate clauses......",
 	  clip : {
 	    has_this_clip: "You have this clip already",
 	    has_recliped : "You reclip this clip already",
@@ -683,7 +687,7 @@ App.versions = (function($){
     };
 
     window._i18n = function(){
-      var lang = getLanguage();
+      var lang = versions.getLanguage();
       var args = Array.prototype.slice.call(arguments);
       var name = args.shift();
       var names = name.split('.');
@@ -702,24 +706,21 @@ App.versions = (function($){
       }
       return str;
     };
-    versions.getLang = getLanguage;
-    function getLanguage(){
-      if (getCookieLang()) {
-	return getCookieLang();
+
+    versions.getLanguage = function() {
+      var cookie_lang = App.util.getCookie("language");
+      if(cookie_lang){
+	return cookie_lang;
       } else if(window.navigator.language){
 	return window.navigator.language.split("-")[0];
       } else{
 	return "zh";
       }
-    }
+    };
 
     function setLanguage(lang){
       setCookieLang(lang);
       window.location.reload();
-    }
-
-    function getCookieLang(){
-      return App.util.getCookie("language");
     }
 
     function setCookieLang(lang){
@@ -727,8 +728,9 @@ App.versions = (function($){
       data.setTime(data.getTime() + 30*24*60*60*1000);
       document.cookie = "language="+lang+";expires=" + data.toGMTString();
     }
+		  
     App.vent.bind("app.clipapp.versions:change",function(lang){
-      if(getLanguage() != lang){
+      if(versions.getLanguage() != lang){
 	setLanguage(lang);
       }
     });

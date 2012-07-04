@@ -218,23 +218,29 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   var Recommend = {};
   var mid;
 
-  Recommend.show = function(cid,model_id){
-    mid = model_id;
+  Recommend.show = function(cid,model_id,pub){
     var recommModel = new RecommModel({clipid:cid});
     var recommView=new RecommView({model:recommModel});
-    App.popRegion.show(recommView);
-    $(".small_pop").css("top", App.util.getPopTop("small"));
-    //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
-    if(/msie/i.test(navigator.userAgent)){
-      function nameListAction(evt){
-	that.$("#imgId").css("display","none");
-	var str = $.trim(that.$("#recomm_name").val());
-	var clip_owner = that.model.get("clipid").split(":")[0];//clip的拥有者
-	var params = {q:str};
-	//查询friend
-	App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
+    //clip的拥有者
+    var clip_owner = that.model.get("clipid").split(":")[0];
+    if(pub == "false" && !App.util.self(clip_owner)){
+      // 是非public并且不是clip_owner进行的操作
+      App.vent.trigger("app.clipapp.message:chinese", {recommend: "no_pub"});
+    }else{
+      mid = model_id;
+      App.popRegion.show(recommView);
+      $(".small_pop").css("top", App.util.getPopTop("small"));
+      //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
+      if(/msie/i.test(navigator.userAgent)){
+	function nameListAction(evt){
+	  that.$("#imgId").css("display","none");
+	  var str = $.trim(that.$("#recomm_name").val());
+	  var params = {q:str};
+	  //查询friend
+	  App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
+	}
+	document.getElementById('recomm_name').onpropertychange=nameListAction;
       }
-      document.getElementById('recomm_name').onpropertychange=nameListAction;
     }
   };
 

@@ -28,19 +28,20 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	if(!resp[i].clip){ // 表示是别人推荐的clip
+	if(!resp[i].clip){
 	  resp[i].clipid = resp[i].id;
 	  resp[i].id = resp[i].user.id+":"+resp[i].id;
-	}else{
+	}else{ // 表示是别人推荐的clip
 	  resp[i].clipid = resp[i].clip.id;
 	  resp[i].user = resp[i].clip.user;
 	  resp[i].content = resp[i].clip.content;
 	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
 	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
+	  resp[i]["public"] = resp[i].clip["public"];
 	  delete resp[i].clip;
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
 	}
-	if(resp[i].hide){
+	if(resp[i].hide){// 取interest数据的时候，该属性描述是否显示
 	  hide_clips.push(resp[i].id);
 	}
       }
@@ -102,21 +103,23 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var cid = this.model.get("user").id + ":" + this.model.get("clipid");
       var rid = this.model.get("recommend").rid;
+      var pub = this.model.get("public");
+      var mid = this.model.id;
       //var clip = this.model.get("clip");
       //var cid = clip.user.id+":"+clip.id;
       switch(opt){
 	case 'biezhen'://收
-	  App.vent.trigger("app.clipapp:reclip", cid,this.model.id, rid);break;
+	  App.vent.trigger("app.clipapp:reclip",cid,mid,rid,pub);break;
 	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend", cid,this.model.id);break;
+	  App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
 	case 'comment'://评
-	  App.vent.trigger("app.clipapp:comment", cid,this.model.id);break;
+	  App.vent.trigger("app.clipapp:comment",cid,mid);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
+	  App.vent.trigger("app.clipapp:clipmemo",cid);break;
 	case 'change'://改
-	  App.vent.trigger("app.clipapp:clipedit", cid);break;
+	  App.vent.trigger("app.clipapp:clipedit",cid);break;
 	case 'del'://删
-	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+	  App.vent.trigger("app.clipapp:clipdelete",cid);break;
       }
     }
   });
@@ -134,7 +137,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     base_url = App.ClipApp.Url.base+"/query";
     // 起始时间设置为，endTime前推一个月
     var date = (new Date()).getTime();
-    data = {"public":true, "startTime":date-86400000*30,"endTime":date+10000};
+    data = {"startTime":date-86400000*30,"endTime":date+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();

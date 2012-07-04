@@ -39,7 +39,7 @@ script(type="text/template",id="faceEdit-view-template")
     h3
       | <%=_i18n('languageSet.lang')%>
     div.delang.
-      <% var defaultLang = App.versions.getLang();
+      <% var defaultLang = App.versions.getLanguage();
          var langs = App.versions.language;%>
       <span class="<%=defaultLang%>"><%=langs[defaultLang]?langs[defaultLang]:langs['zh']%></span>    <span>▼</span>
     div#show_language.
