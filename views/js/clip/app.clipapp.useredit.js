@@ -212,7 +212,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var view = this;
       var uid = this.model.id;
       if(!$(e.currentTarget).hasClass("set_ok")){$("#set-name").empty();}
-      $(".edit_name").addClass("set_ok").val("确定");
+      $(".edit_name").addClass("set_ok").val(_i18n("faceEdit.ok"));
       $(".set_ok").unbind("click");
       $("#name").show();
       $(".set_ok").click(function(){
