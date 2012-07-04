@@ -23,12 +23,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     },
 
     foucsAction:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == defaultNote ? "" :
+      $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('reclip.defaultNote')  ? "" :
       $(e.currentTarget).val() );
     },
 
     blurAction:function(e){
-      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultNote :
+      $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('reclip.defaultNote') :
       $(e.currentTarget).val() );
     },
     submit:function(e){
@@ -47,7 +47,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 
   function loadData(el){
     var text = "";
-    if($.trim($("#reclip_text", el).val())!=defaultNote){//过滤defaultNote默认值
+    if($.trim($("#reclip_text", el).val())!=_i18n('reclip.defaultNote')){//过滤defaultNote默认值
       text = $.trim($("#reclip_text", el).val());
     }
     var main_tag = [];
@@ -69,7 +69,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 
 
   var Reclip = {};
-  var mid, defaultNote = "备注一下吧~";
+  var mid;
 
   Reclip.show = function(cid,model_id,rid){
     mid = model_id;
