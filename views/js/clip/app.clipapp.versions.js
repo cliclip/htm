@@ -343,6 +343,19 @@ App.versions = (function($){
 	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
 	  "oauth_fail"   : "认证失败，请重新认证!",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
+	},
+	util : {
+	  time:{
+	    moment:"刚刚",
+	    second:"秒前",
+	    minute:"分钟前",
+	    hour:"小时前",
+	    day:"天前",
+	    week:"周前",
+	    month:"月前",
+	    half_year:"半年前",
+	    year:"年前"
+	  }
 	}
       },
 
@@ -682,6 +695,19 @@ App.versions = (function($){
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
+	},
+		util : {
+	  time:{
+	    moment:"a moment ago",
+	    second:" second ago ",
+	    minute:" minute ago",
+	    hour:" hour ago",
+	    day:" day ago",
+	    week:" week ago",
+	    month:" month ago",
+	    half_year:" six month ago",
+	    year:" year ago"
+	  }
 	}
       }
     };
@@ -728,7 +754,7 @@ App.versions = (function($){
       data.setTime(data.getTime() + 30*24*60*60*1000);
       document.cookie = "language="+lang+";expires=" + data.toGMTString();
     }
-		  
+
     App.vent.bind("app.clipapp.versions:change",function(lang){
       if(versions.getLanguage() != lang){
 	setLanguage(lang);
