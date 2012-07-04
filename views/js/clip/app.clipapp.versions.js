@@ -16,18 +16,21 @@ App.versions = (function($){
 	},
 
 	login : {
+	  default_name  : "用户名/Email",
 	  title       : "用户登录" ,
 	  login_ok    : "登 录",
 	  register_ok : "注 册",
 	  login_state : "一月内自动登录",
 	  register    : "嫌麻烦？直接发邮件到1@cliclip.com也可注册",
 	  name : {
+	    name:"用户名",
 	    is_null    : "用户名尚未填写",
 	    not_exist   : "用户名不存在",
 	    invalidate  : "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
 	    exist       :"此用户名已经存在"
 	  },
 	  pass : {
+	    pass:"密码",
 	    is_null     : "密码尚未填写",
 	    not_match   : "密码输入不一致"
 	  }
@@ -374,18 +377,21 @@ App.versions = (function($){
 	},
 
 	login : {
+	  default_name  : "User name/Email",
 	  title         : "User log in" ,
 	  login_ok      : "Log in",
 	  register_ok   : "Sign in",
 	  login_state   : "Sign in automatically in one month",
 	  register      : "For simpler,just sign up by sending email to 1@cliclip.com",
 	  name : {
+	    name        : "user name",
 	    is_null     : "User name is not fill in",
 	    not_exist   : "This User name does not exist",
 	    invalidate  : "Wrong format of User name",
 	    exist       : "User name already exists"
 	  },
 	  pass : {
+	    pass        : "password",
 	    is_null     : "Password has not fill in",
 	    not_match   : "Password input not consistent"
 	  }

@@ -11,9 +11,11 @@ script(type="text/template",id="login-view-template")
           li
             input(type="text",name="name",id="name")
             label.username
+              | <%=_i18n('login.name.name')%>
           li
             input(type="password",name="pass",id="pass")
             label.password
+              | <%=_i18n('login.pass.pass')%>
           li
             label
               input(type="checkbox",id="remember")
