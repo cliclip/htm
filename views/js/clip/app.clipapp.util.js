@@ -35,7 +35,7 @@ App.util = (function(){
   util.getBubbs = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
     if(lang == "en"){
-      return ["Playful","Concert","Nice","Delicious","cool","Incisive"];
+      return ["playful","concert","nice","delicious","cool","incisive"];
     }{
       return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
     }
@@ -44,7 +44,7 @@ App.util = (function(){
   util.getObjTags = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
     if(lang == "en"){
-      return ["Music","Novel","Film","Technology","handy"];
+      return ["music","novel","film","technology","handy"];
     }else{
       return ["音乐", "小说", "电影", "港台","牛叉", "技术", "好用"];
     }
