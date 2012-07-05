@@ -142,6 +142,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	  if(/my/.test(window.location.hash)){
 	    App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
 	  }
+	  if(/my/.test(window.location.hash) && /tag/.test(window.location.hash)){
+	    var str = "#my/tag/";
+	    var tag = window.location.hash.split(str)[1];
+	    var flag = _.find(data.tag,function(t){return t == tag;});
+	    if(!flag)App.vent.trigger("app.clipapp.cliplist:remove",cid);
+	  }
 	  //注时可能删除tag  不能只refresh
 	  //App.vent.trigger("app.clipapp.bubb:refresh",App.util.getMyUid(),null,data.tag);
 	  ClipMemo.close();
