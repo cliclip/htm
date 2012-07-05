@@ -14,7 +14,7 @@ script(type="text/template",id="clippreview-view-template")
       <%}%>
     header#header
       <% if(content && content.image) {%>
-      | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/waiting.jpg"/>
+      | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/_wait.jpg"/>
       div.article_photo
         | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.url(content.image)%>"/>
       <% }if(content && content.text){%>

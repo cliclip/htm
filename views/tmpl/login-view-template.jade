@@ -11,14 +11,17 @@ script(type="text/template",id="login-view-template")
           li
             input(type="text",name="name",id="name")
             label.username
+              | <%=_i18n('login.name.name')%>
           li
             input(type="password",name="pass",id="pass")
             label.password
+              | <%=_i18n('login.pass.pass')%>
           li
             label
               input(type="checkbox",id="remember")
-              | <%=_i18n('login.login_state')%>
-        p|<%=_i18n('login.register')%> 
+              span.next_login
+                | <%=_i18n('login.login_state')%>
+        p|<%=_i18n('login.register')%> </br>
          | <a class="twitter"  href="javascript:void(0)"><img src="img/sign-in-with-twitter-l.png"></img></a>
          | <a class="weibo"  href="javascript:void(0)"><img src="img/16.png"></img></a>
       div.btn_frame.clearfix.

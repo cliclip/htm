@@ -35,7 +35,7 @@ App.util = (function(){
   util.getBubbs = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
     if(lang == "en"){
-      return ["Playful","Concert","Nice","Delicious","cool","Incisive"];
+      return ["playful","concert","nice","delicious","cool","incisive"];
     }{
       return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
     }
@@ -44,7 +44,7 @@ App.util = (function(){
   util.getObjTags = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
     if(lang == "en"){
-      return ["Music","Novel","Film","Technology","handy"];
+      return ["music","novel","film","technology","handy"];
     }else{
       return ["音乐", "小说", "电影", "港台","牛叉", "技术", "好用"];
     }
@@ -159,23 +159,23 @@ App.util = (function(){
     var dtime = (Ttime.getTime() - Ftime.getTime())/1000;
     var returnVal = "";
     if(dtime<5){
-       returnVal = "刚刚";
+       returnVal = _i18n('util.time.moment');
     }else if(dtime<60){//second
-      returnVal = Math.round(dtime)+ "秒前";
+      returnVal = Math.round(dtime)+ _i18n('util.time.second');
     }else if(dtime>=60 && dtime<60*60){//minute
-      returnVal = Math.round(dtime/60) + "分钟前";
+      returnVal = Math.round(dtime/60) + _i18n('util.time.minute');
     }else if(dtime>=60*60 && dtime<60*60*24){//hour
-      returnVal = Math.round(dtime/(60*60)) + "小时前";
+      returnVal = Math.round(dtime/(60*60)) + _i18n('util.time.hour');
     }else if(dtime>=60*60*24 && dtime<60*60*24*7){//day
-      returnVal = Math.round(dtime/(60*60*24)) + "天前";
+      returnVal = Math.round(dtime/(60*60*24)) + _i18n('util.time.day');
     }else if(dtime>=60*60*24*7 && dtime<60*60*24*30){//week
-      returnVal = Math.round(dtime/(60*60*24*7)) + "周前";
+      returnVal = Math.round(dtime/(60*60*24*7)) + _i18n('util.time.week');
     }else if(dtime>=60*60*24*30 && dtime<60*60*24*30*6){//month
-      returnVal = Math.round(dtime/(60*60*24*7*4)) + "月前";
+      returnVal = Math.round(dtime/(60*60*24*7*4)) + _i18n('util.time.month');
     }else if(dtime>=60*60*24*30*6 && dtime<60*60*24*30*6*12){//half year
-      returnVal = "半年前";
+      returnVal = _18n('util.time.half_year');
     }else if(dtime>=60*60*24*30*6*12){//year
-      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + "年前";
+      returnVal = Math.round(dtime/(60*60*24*30*6*12)) + _i18n('util.time.year');
     }
     return returnVal;
   };
@@ -226,7 +226,7 @@ App.util = (function(){
   };
 
   util.img_error = function(img){
-    img.alt='图片加载失败';
+    img.src='img/img_error.jpg';
     $(".fake_" + img.id).hide();
     $("." + img.id).show();
   };

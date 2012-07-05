@@ -8,6 +8,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   var base_url = "";
   var new_page;
   var collection_length;
+  var loading = false;
   var FollowerModel=App.Model.extend({
     defaults:{
       uid:"",
@@ -80,21 +81,29 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:nextpage",function(){
+    if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="follow-item"&&new_page){
+      loading = true;
       start += App.ClipApp.Url.page;
       end += App.ClipApp.Url.page;
       url = App.util.unique_url(base_url + "/" + start + ".." + end);
       collection.fetch({
 	url:url,
 	add:true,
-	error :function(){ new_page = false; },
+	error :function(){
+	  new_page = false;
+	  loading = false;
+	},
 	success :function(){
 	  if(collection.length-collection_length>=App.ClipApp.Url.page){
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;
 	  }
+	  setTimeout(function(){
+	    loading = false;
+	  },500);
 	}
       });
     }

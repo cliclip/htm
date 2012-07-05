@@ -96,7 +96,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   var ClipMemo = {};
-  var memoType,defaultNote = "备注一下吧~";
+  var memoType,defaultNote = _i18n('clipmemo.memo');
   function showMemo(data){
     var memoModel = new MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});

@@ -42,7 +42,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
       // 为.editContent-container下的p标签添加click事件
-      console.info("调整页面格式");
+      // console.info("调整页面格式");
     },
     remarkClip:function(){
       App.vent.trigger("app.clipapp:clipmemo", this.model.id);

@@ -222,8 +222,8 @@
 			#show_language{
 				display:none;
 				min-width:65px;
-				background: none repeat scroll 0 0 #8D8D8D;	
-				//.sprites(-440px,-140px);
+				background: none repeat scroll 0 0 #333;	
+			        //.sprites(-440px,-140px);
 				position: absolute;
 				list-style:none;
 				right: 0;
@@ -633,8 +633,8 @@ article.clip{
 		cursor: pointer;
 		.min-height(220px);
 		img.img_fake{
-			height:220px;
-			width:270px;
+			//height:220px;
+			//width:270px;
 			}
 		.article_photo{
 			width:270px;
@@ -1362,16 +1362,23 @@ section.follow_frame{
 			form{
 				margin:0 0 0 0;
 				label.username{
-					width:70px;
-					height:37px;
-					.sprites(-420px,-300px);
-					margin-bottom:20px;
+					width:100px;
+					height:35px;
+					//.sprites(-420px,-300px);
+					padding-top:7px;
+					color:wheat;
+					font-size:20px;
+					*margin-top:-15px;
 				}
-				li{list-style-type:none;margin:0;}
+				li{list-style-type:none;margin-left:-20px;}
 				label.password{
-					width:70px;
-					height:37px;
-					.sprites(-420px,-345px);
+					width:100px;
+					height:35px;
+					padding-top:7px;
+					//.sprites(-420px,-345px);
+					color:wheat;
+					font-size:20px;
+					*margin-top:-15px;
 				}
 				input{
 					color:#fff;
@@ -1389,11 +1396,12 @@ section.follow_frame{
 					height:26px;
 					border:1px solid #f00;
 				}
+				span.next_login{color:#fff;}
 				span.error{
 					position:absolute;
 					z-index:1000;
 					width: auto;
-					margin-left:180px;
+					margin-left:200px;
 					max-width:500px;
 					min-width:110px;
 					background:#EEFF00 none repeat scroll 0% 50%;

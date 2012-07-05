@@ -3,12 +3,11 @@
 App.ClipApp.Login = (function(App, Backbone, $){
 
   var Login = {};
-  var NAME = "用户名/Email";
   var fun = "";  // 用于记录用户登录前应该触发的事件
   App.Model.LoginModel = App.Model.extend({
     validate: function(attrs){
       var err = {};
-      if(attrs.name == "" || attrs.name == NAME){
+      if(attrs.name == "" || attrs.name == _i18n('login.default_name')){
 	err.name = "is_null";
       }
       if(attrs.pass == ""){
@@ -43,7 +42,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       this.tmpmodel.set({name:$("#name").val()}, {
 	error:function(model, error){
 	  if($("#name").val() == "")
-	    $("#name").val(NAME);
+	    $("#name").val(_i18n('login.default_name'));
 	  that.showError('login',error);
 	}
       });
@@ -58,7 +57,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       });
     },
     clearAction: function(e){
-      if(this.$("#name").val() == NAME){
+      if(this.$("#name").val() == _i18n('login.default_name')){
 	this.$("#name").val("");
       }
       this.cleanError(e);
