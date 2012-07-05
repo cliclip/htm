@@ -114,7 +114,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       if($("#show_language").css("display") == 'block'){
 	$(span).text("▲");
 	var defaultLang = e.currentTarget.children[0].className;
-	$("#"+defaultLang).css("background-color","#333");
+	$("#"+defaultLang).css("background-color","#D8D8D8");
       }else{
 	$(span).text("▼");
       }
@@ -149,7 +149,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       _(div).each(function(e){
 	$(e).css("background-color","");
       });
-      $(e.currentTarget).css("background-color","#333");
+      $(e.currentTarget).css("background-color","#D8D8D8");
     },
     MouseOut:function(e){
       $(e.currentTarget).css("background-color","");

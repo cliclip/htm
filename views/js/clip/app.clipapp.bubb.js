@@ -26,11 +26,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   // 与显示无关，只是用来确定泡泡的大小而已
   var bubs = {
     zh: ["好玩", "好听", "好看", "好吃", "酷", "精辟"],
-    en: ["Playful","Concert","Nice","Delicious","cool","Incisive"]
+    en: ["playful","concert","nice","delicious","cool","incisive"]
   };
   var sink = {
     zh: ["讨厌"],
-    en: ["Hate"]
+    en: ["hate"]
   };
 
   // private
@@ -177,7 +177,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // 替换掉之前的取用户2的数据为，常量
     var	siteTags = {
       zh: ["好玩", "好听", "好看", "好吃", "酷", "精辟","讨厌","书籍","电影","旅游","资料"],
-      en: ["Playful","Concert","Nice","Delicious","cool","Incisive","Hate","Book","Film","tour","Data"]
+      en: ["playful","concert","nice","delicious","cool","incisive","hate","book","film","tour","data"]
     };
     callback(siteTags[lang],[]);
 

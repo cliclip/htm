@@ -44,9 +44,6 @@ script(type="text/template",id="showcomment-view-template")
     <div class="comm_link" id="<%= id %>">
     <a class="marking"><% if(has_child) {%> - <%}%></a>
     <%= text %><%= App.util.generatePastTime(date)%>
-    <div id="reply_<%=id%>" style="display:none;">
-    <a href="javascript:void(0)" class="reply_comment" id="<%= id %>"><%=_i18n('showcomment.reply')%></a>
-    </div>
     </div>
   <% } else {%>
   div.user_head
