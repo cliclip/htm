@@ -31,7 +31,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     message_hide:function(){
       document.cookie = "first=false";
-      console.info(document.cookie);
+      //console.info(document.cookie);
       $(".message").hide();
     },
     cancelcliper:function(){
@@ -114,7 +114,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.viewRegion.show(addClipView);
     $(".big_pop").css("top", App.util.getPopTop("big"));
     App.ClipApp.Editor.init();
-    console.info(document.cookie);
+    //console.info(document.cookie);
     if(!/first=false/.test(document.cookie)){
       $(".message").show();
     }
