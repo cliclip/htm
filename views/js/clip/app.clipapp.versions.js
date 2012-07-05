@@ -292,6 +292,7 @@ App.versions = (function($){
 	  reclip_tag     : "您实际收录了 %s 条载录，其余摘录已经拥有了",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
+	  "account_hasbind" : "您的帐号之前已经绑定过，若要重新绑定，请先解绑",
 	  reclip         : "收录成功",
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
@@ -636,6 +637,7 @@ App.versions = (function($){
 	  reclip_tag_fail: "You have these clips already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  recomm         : "Your clip @ successfully",
+	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Cliclip twice",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
@@ -728,7 +730,7 @@ App.versions = (function($){
       data.setTime(data.getTime() + 30*24*60*60*1000);
       document.cookie = "language="+lang+";expires=" + data.toGMTString();
     }
-		  
+
     App.vent.bind("app.clipapp.versions:change",function(lang){
       if(versions.getLanguage() != lang){
 	setLanguage(lang);

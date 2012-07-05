@@ -4,7 +4,14 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
   var Oauth = {};
   Oauth.process=function(){
     checkUser(function(err,res){
-      if(err){
+      if(err&&err.hasbind_err){
+	App.vent.trigger("app.clipapp.message:confirm", "account_hasbind");
+	Backbone.history.navigate("my",true);
+      }else if(res.oauth){
+	App.vent.trigger("app.clipapp.userbind:show",res.oauth,"");
+      }else if(res.token){
+	App.vent.trigger("app.clipapp.login:success", res);
+      }else{
 	App.vent.unbind("app.clipapp.message:sure");
 	App.vent.unbind("app.clipapp.message:cancel");
 	App.vent.trigger("app.clipapp.message:alert", "oauth_fail");
@@ -14,10 +21,6 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	App.vent.bind("app.clipapp.message:cancel",function(){
 	  Backbone.history.navigate("",true);
 	});
-      }else if(res.token){
-	App.vent.trigger("app.clipapp.login:success", res);
-      }else{
-	App.vent.trigger("app.clipapp.userbind:show",res.oauth,"");
       }
     });
   };
@@ -30,7 +33,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	callback(null,res);
       },
       error:function(model,error){
-	callback("Error",null);
+	callback(error,null);
       }
     });
 
