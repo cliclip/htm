@@ -205,8 +205,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\n{2,}/ig, "<\/p><p>");
     text = text.replace(/\n/ig, "<\/br>");
     text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
-    text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\"/>");
-    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\"/>");
+    text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\" />");
+    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\" alt="+_i18n('message.img_alt') +" />");//详情页图片加载失败后的文字提示
     text = "<p>" + text + "</p>";
     return text;
   }

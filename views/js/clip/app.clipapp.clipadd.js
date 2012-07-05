@@ -19,6 +19,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       //"change #formUpload":"image_change", // 改成了直接在jade中绑定
       "blur #img_upload_url":"hide_extImg", // extImg输入框失焦就隐藏
       "click .pop_left":"remark_clip",
+      "click .message":"message_hide",
       "click .close_w":"abandon",
       "click #ok": "okcliper",
       "click #cancel": "cancelcliper",
@@ -27,6 +28,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     okcliper:function(){
       App.vent.trigger("app.clipapp.clipper:ok");
+    },
+    message_hide:function(){
+      document.cookie = "first=false";
+      console.info(document.cookie);
+      $(".message").hide();
     },
     cancelcliper:function(){
       App.vent.trigger("app.clipapp.clipper:cancel");
@@ -108,6 +114,10 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.viewRegion.show(addClipView);
     $(".big_pop").css("top", App.util.getPopTop("big"));
     App.ClipApp.Editor.init();
+    console.info(document.cookie);
+    if(!/first=false/.test(document.cookie)){
+      $(".message").show();
+    }
   };
 
   ClipAdd.close = function(){
