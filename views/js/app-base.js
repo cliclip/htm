@@ -195,7 +195,7 @@ App.bind("initialize:after", function(){
     }
     // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
 
-    if((st + wh - 500 > last_top || st + wh > lt)&& time_gap==true ){
+    if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
       time_gap = false;
       App.vent.trigger("app.clipapp:nextpage");
       setTimeout(function(){

@@ -25,6 +25,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     // if(isIE){
       var data = objEditor.contentWindow.document.body.innerHTML;
+    console.info(data);
     // }else{
       // var data = objEditor.contentWindow.document.body.innerHTML;;
     // }
