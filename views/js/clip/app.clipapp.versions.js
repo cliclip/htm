@@ -21,7 +21,7 @@ App.versions = (function($){
 	  login_ok    : "登 录",
 	  register_ok : "注 册",
 	  login_state : "一月内自动登录",
-	  register    : "嫌麻烦？直接发邮件到1@cliclip.com也可注册",
+	  register    : "嫌麻烦？直接发邮件到1@clickdang.com也可注册",
 	  name : {
 	    name:"用户名",
 	    is_null    : "用户名尚未填写",
@@ -126,7 +126,8 @@ App.versions = (function($){
 	  memo        : "备注一下吧~",
 	  "private"   : "不公开",
 	  ok          : "确 定",
-	  cancel      : "取 消"
+	  cancel      : "取 消",
+	  add_tag     : "添加标签"
 	},
 
 	editDetail : {
@@ -293,8 +294,8 @@ App.versions = (function($){
 	  rename_success : "您的用户名已经修改",
 	  reclip_null    : "该标签下暂时还没有数据",
 	  reclip_tag_success : "恭喜您，收录成功！",
-	  reclip_tag_fail: "您已经转拥有这些载录了！",
-	  reclip_tag     : "您实际收录了 %s 条载录，其余摘录已经拥有了",
+	  reclip_tag_fail: "您已经转拥有这些摘录了！",
+	  reclip_tag     : "您实际收录了 %s 条摘录，其余摘录已经拥有了",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
 	  "account_hasbind" : "您的帐号之前已经绑定过，若要重新绑定，请先解绑",
@@ -305,7 +306,7 @@ App.versions = (function($){
 	  cliplist_null:"抱歉，没有找到相关的信息......",
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
-	    has_recliped : "您已经转载过该条载录了",
+	    has_recliped : "您已经转载过该条摘录了",
 	    not_exist    : "摘录不存在",
 	    deleted      : "此条摘录已经被删除！",
 	    no_public    : "作者没有公开此条摘录！"
@@ -385,18 +386,18 @@ App.versions = (function($){
 	  login_ok      : "Login",
 	  register_ok   : "Join",
 	  login_state   : "Login automatically in one month",
-	  register      : "Join us by simply sending an email to 1@cliclip.com",
+	  register      : "Join us by simply sending an email to 1@clickdang.com",
 
 	  name : {
 	    name        : "user name",
 	    is_null     : "User name is not filled in",
-	    not_exist   : "This User name does not exist",
+	    not_exist   : "This user name does not exist",
 	    invalidate  : "Wrong format of User name",
 	    exist       : "User name already exists"
 	  },
 	  pass : {
 	    pass        : "password",
-	    is_null     : "Password has not filled in",
+	    is_null     : "Password is not filled in",
 	    not_match   : "Password input not consistent"
 	  }
 	},
@@ -438,21 +439,21 @@ App.versions = (function($){
 	},
 
 	passEdit : {
-	  title       : "Change new password",
+	  title       : "Change password",
 	  update      : "Change",
 	  danger_operate : "High-risk operation",
 	  export      : "Export clips",
 	  delete      : "Close your account",
-	  is_null     : "Password has not filled in",
+	  is_null     : "Password is not filled in",
 	  not_match   : "Password input not consistent",
 	  auth_success: "Your password has been changed",
 	  newpass : {
 	    prompt:"Please input new password",
-	    is_null   :"Password has not filled in"
+	    is_null   :"Password is not filled in"
 	  },
 	  conpass:{
 	    prompt:"Confirm password",
-	    is_null   :"Password has not filled in"
+	    is_null   :"Please enter the same password as above"
 	  },
 	  confirm:{
 	    password_diff: "Password input not consistent"
@@ -461,7 +462,7 @@ App.versions = (function($){
 
 	emailEdit : {
 	  add         : "Add connection",
-	  title       : "Connect with email"
+	  title       : "Connect with mailbox"
 	},
 
 	emailAdd : {
@@ -491,7 +492,8 @@ App.versions = (function($){
 	  memo        : "Make a note",
 	  "private"   : "Private",
 	  ok          : "OK",
-	  cancel      : "Cancel"
+	  cancel      : "Cancel",
+	  add_tag     : "add a tag"
 	},
 
 	editDetail : {
@@ -615,11 +617,11 @@ App.versions = (function($){
 	},
 
 	bind : {
-	  header      : "You have logged in %s ,while not connecting it with any Cliclip account",
+	  header      : "You have logged in %s ,while not connecting it with any Clickdang account",
 	  bind        : "Connect with current account",
-	  register    : "Sign up new account",
+	  register    : "Join new account",
 	  bind_ok     : "Connect now",
-	  register_ok : "Sign up now"
+	  register_ok : "Join now"
 	},
 
 	findpass : {
@@ -661,10 +663,10 @@ App.versions = (function($){
 	  reclip_tag_fail: "You have these clips already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  recomm         : "Your clip @ successfully",
-	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Cliclip twice",
+	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
-	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
+	  pre_active     : "You have activated the email address of %s in our system. Now you can Join with this email account and clip by sending email from this account",
 	  cliplist_null  : "Sorry, no results found",
 	  clip : {
 	    has_this_clip: "You have this clip already",
@@ -687,7 +689,7 @@ App.versions = (function($){
 	    "link invalidate": "Wrong format link"
 	  },
 	  accept:{
-	    fail         :"Registration link was overdue for too long interval. You can sign in directly and add email address connection in Setting"
+	    fail         :"Registration link was overdue for too long interval. You can Join directly and add email address connection in Setting"
 	  },
 	  active:{
 	    fail         : "Registration link was overdue for too long interval. You can add again in Setting"
