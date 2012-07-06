@@ -30,7 +30,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipper:ok");
     },
     message_hide:function(){
-      document.cookie = "first=false";
+      data.setTime(data.getTime() + 30*24*60*60*10000);
+      document.cookie = "first=false"+";expires=" + data.toGMTString();
       //console.info(document.cookie);
       $(".message").hide();
     },
@@ -117,6 +118,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     //console.info(document.cookie);
     if(!/first=false/.test(document.cookie)){
       $(".message").show();
+    }else{
+      data.setTime(data.getTime() + 30*24*60*60*10000);
+      document.cookie = "first=false"+";expires=" + data.toGMTString();
     }
   };
 
