@@ -385,17 +385,17 @@ App.versions = (function($){
 	  login_ok      : "Log in",
 	  register_ok   : "Sign in",
 	  login_state   : "Sign in automatically in one month",
-	  register      : "For simpler,just sign up by sending email to 1@cliclip.com",
+	  register      : "Join us by simply sending an email to 1@cliclip.com",
 	  name : {
 	    name        : "user name",
-	    is_null     : "User name is not fill in",
+	    is_null     : "User name is not filled in",
 	    not_exist   : "This User name does not exist",
 	    invalidate  : "Wrong format of User name",
 	    exist       : "User name already exists"
 	  },
 	  pass : {
 	    pass        : "password",
-	    is_null     : "Password has not fill in",
+	    is_null     : "Password has not filled in",
 	    not_match   : "Password input not consistent"
 	  }
 	},
@@ -442,16 +442,16 @@ App.versions = (function($){
 	  danger_operate : "High-risk operation",
 	  export      : "Export clips",
 	  delete      : "Close your account",
-	  is_null     : "Password has not fill in",
+	  is_null     : "Password has not filled in",
 	  not_match   : "Password input not consistent",
 	  auth_success: "Your password has been changed",
 	  newpass : {
 	    prompt:"Please input new password",
-	    is_null   :"Password has not fill in"
+	    is_null   :"Password has not filled in"
 	  },
 	  conpass:{
 	    prompt:"Confirm password",
-	    is_null   :"Password has not fill in"
+	    is_null   :"Password has not filled in"
 	  },
 	  confirm:{
 	    password_diff: "Password input not consistent"
@@ -664,7 +664,7 @@ App.versions = (function($){
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
-	  cliplist_null  : "Sorry, no related information is found",
+	  cliplist_null  : "Sorry, no results found",
 	  clip : {
 	    has_this_clip: "You have this clip already",
 	    has_recliped : "You reclip this clip already",
