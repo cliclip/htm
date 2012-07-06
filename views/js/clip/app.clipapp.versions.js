@@ -372,20 +372,21 @@ App.versions = (function($){
 	  mine      : "My clips",
 	  recommend : "@Me",
 	  interest  : "Firends",
-	  set       : "Setting",
-	  logout    : "Sign out",
-	  login     : "Log in",
-	  register  : "Sign up",
+	  set       : "Settings",
+	  logout    : "Logout",
+	  login     : "Login",
+	  register  : "Join",
 	  ok        : "OK"
 	},
 
 	login : {
 	  default_name  : "User name/Email",
 	  title         : "User log in" ,
-	  login_ok      : "Log in",
-	  register_ok   : "Sign in",
-	  login_state   : "Sign in automatically in one month",
+	  login_ok      : "Login",
+	  register_ok   : "Join",
+	  login_state   : "Login automatically in one month",
 	  register      : "Join us by simply sending an email to 1@cliclip.com",
+
 	  name : {
 	    name        : "user name",
 	    is_null     : "User name is not filled in",
