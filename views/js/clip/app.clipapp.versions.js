@@ -371,7 +371,7 @@ App.versions = (function($){
 	me : {
 	  mine      : "My clips",
 	  recommend : "@Me",
-	  interest  : "Firends",
+	  interest  : "Friends",
 	  set       : "Setting",
 	  logout    : "Sign out",
 	  login     : "Log in",
