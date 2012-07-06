@@ -300,7 +300,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       tags: tags,
       follows: follows,
       bubs:_.intersection(_.union(bubs.zh, bubs.en), tags),
-      sink:_.intersection(_.union(sink.zh, sink.en), tags),
+      sink:_.intersection(sink[lang], tags),
       self: self
     };
     if(homepage) opt.homepage = homepage;

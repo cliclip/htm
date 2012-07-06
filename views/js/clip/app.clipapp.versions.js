@@ -373,19 +373,19 @@ App.versions = (function($){
 	  recommend : "@Me",
 	  interest  : "Firends",
 	  set       : "Settings",
-	  logout    : "Sign out",
-	  login     : "Log in",
-	  register  : "Sign up",
+	  logout    : "Logout",
+	  login     : "Login",
+	  register  : "Join",
 	  ok        : "OK"
 	},
 
 	login : {
 	  default_name  : "User name/Email",
 	  title         : "User log in" ,
-	  login_ok      : "Log in",
-	  register_ok   : "Sign in",
-	  login_state   : "Sign in automatically in one month",
-	  register      : "For simpler,just sign up by sending email to 1@cliclip.com",
+	  login_ok      : "Login",
+	  register_ok   : "Join",
+	  login_state   : "Login automatically in one month",
+	  register      : "just join us by sending email to 1@cliclip.com",
 	  name : {
 	    name        : "user name",
 	    is_null     : "User name is not fill in",
