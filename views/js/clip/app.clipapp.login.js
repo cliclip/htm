@@ -107,7 +107,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	  }
 	},
 	error:function(model,error){
-	  that.showError(error);
+	  that.showError('login',error);
 	}
       });
     },
