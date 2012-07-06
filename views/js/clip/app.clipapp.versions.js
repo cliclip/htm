@@ -664,7 +664,7 @@ App.versions = (function($){
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
-	  cliplist_null:"Sorry,have not found appropriate clauses......",
+	  cliplist_null  : "Sorry, no related information is found",
 	  clip : {
 	    has_this_clip: "You have this clip already",
 	    has_recliped : "You reclip this clip already",
