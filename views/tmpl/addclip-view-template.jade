@@ -4,6 +4,8 @@ script(type="text/template",id="addClip-view-template")
     h2.subject_add
       div.pop_left
         i.note
+        div.message
+          |<%=_i18n('addClip.note_message')%>
       div.pop_right
         div.button_frame
           iframe(name="post_frame",id="post_frame")

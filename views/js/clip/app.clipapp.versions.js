@@ -214,6 +214,7 @@ App.versions = (function($){
 
 	addClip : {
 	  title       : "增加",
+	  note_message: "添加备注",
 	  upload      : "上传图片",
 	  link        : "链接图片",
 	  ok          : "确 定",
@@ -280,6 +281,7 @@ App.versions = (function($){
 	  ok            : "确 定",
 	  login_success : "您已成功登录",
 	  imageUp_fail  : "您上传的文件不是图片文件",
+	  img_alt       : "不好啦，图片那小子悄悄溜了！",
 	  is_null       : "摘录不存在",
 	  not_array     : "摘录必须是数组",
 	  is_empty      : "摘录不能为空",
@@ -295,6 +297,7 @@ App.versions = (function($){
 	  reclip_tag     : "您实际收录了 %s 条载录，其余摘录已经拥有了",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
+	  "account_hasbind" : "您的帐号之前已经绑定过，若要重新绑定，请先解绑",
 	  reclip         : "收录成功",
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
@@ -368,7 +371,7 @@ App.versions = (function($){
 	me : {
 	  mine      : "My clips",
 	  recommend : "@Me",
-	  interest  : "Experts",
+	  interest  : "Firends",
 	  set       : "Setting",
 	  logout    : "Sign out",
 	  login     : "Log in",
@@ -574,6 +577,7 @@ App.versions = (function($){
 	},
 
 	addClip : {
+	  note_message:"add notes",
 	  title       : "Add",
 	  upload      : "&nbspUpload image",
 	  link        : "Web image",
@@ -641,6 +645,7 @@ App.versions = (function($){
 	  ok            : "OK",
 	  login_success : "Log in successfully",
 	  imageUp_fail  : "The file you upload is NOT an image",
+	  img_alt       : "Picture fail to load",
 	  is_null       : "Clip not exist",
 	  not_array     : "Clip must be array",
 	  is_empty      : "Clip can't be empty",
@@ -655,6 +660,7 @@ App.versions = (function($){
 	  reclip_tag_fail: "You have these clips already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  recomm         : "Your clip @ successfully",
+	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Cliclip twice",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",

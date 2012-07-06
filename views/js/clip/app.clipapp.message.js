@@ -13,7 +13,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click #sure": "MessageSure"
     },
     MessageSure: function(){
-      if(this.model.get("message") == "在添加邮件之前请先设置用户名")
+      if(this.model.get("message") == _i18n('message.nouname'))
 	App.vent.trigger("app.clipapp.useredit:rename");
       App.setpopRegion.close();
     }
