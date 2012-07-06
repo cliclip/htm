@@ -76,12 +76,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     toggleChildren : function(e){
       e.preventDefault();
-      if($(e.target).attr("class") == "comm_link"){
+      var curr = $(e.target).attr("class");
+      if(curr != "reply_comment" && curr != "del_comment"){
 	// 取得当前的marking
-	var marking = $(e.target).children(".marking").text();
+	var marking = $(e.target).siblings(".marking").text();
 	if(marking){ // 如果有值取反
 	  marking = marking == '+' ? '-' :'+';
-	  $(e.target).children(".marking").text(marking);
+	  $(e.target).siblings(".marking").text(marking);
 	}
 	$(e.currentTarget).siblings(".children").toggle();
       }
