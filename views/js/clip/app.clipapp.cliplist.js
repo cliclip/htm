@@ -204,7 +204,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     end = App.ClipApp.Url.page;
     url = App.util.unique_url(base_url + "/" + start+".."+ end);
     if(data){
+      var tag = data.tag ? data.tag : null;
       data = JSON.stringify(data);
+      console.info(data);
       var contentType = "application/json; charset=utf-8";
       collection.fetch({url:url,type:type,contentType:contentType,data:data});
     }else{
@@ -234,9 +236,17 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       if(collection.length<10){
 	App.vent.trigger("app.clipapp:nextpage");
       }
+      console.info(tag);
       if(!clips_exist){
-	$("#list").append(_i18n('message.cliplist_null'));
-      }else{
+	if(window.location.hash=="#my"){
+	  $("#list").append(_i18n('message.cliplist_null.my'));
+	}else if(window.location.hash=="#my/recommend"){
+	  $("#list").append(_i18n('message.cliplist_null.recommend'));
+	}else if(window.location.hash=="#my/interest"){
+	  $("#list").append(_i18n('message.cliplist_null.interest'));
+	}else{
+	  $("#list").append(_i18n('message.cliplist_null.all'));
+	}
       }
     });
   };

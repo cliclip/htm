@@ -229,6 +229,9 @@ App.util = (function(){
     img.src='img/img_error.jpg';
     $(".fake_" + img.id).hide();
     $("." + img.id).show();
+    setTimeout(function(){
+      $("#list").masonry("reload");
+    },50);
   };
 
   util.get_imgid = function(frameid,callback){
