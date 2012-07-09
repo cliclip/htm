@@ -58,17 +58,17 @@ App.versions = (function($){
 	},
 
 	ruleEdit : {
-	  open_rule   : "开启",
+	  open_rule   : "启用邮箱识别",
 	  head        : "邮件识别",
 	  title       : "标题必须有",
 	  cc_text     : "必须抄送给",
 	  to_text     : "必须发给",
-	  update      : "更新",
+	  update      : "更新邮件规则",
 	  cc : {
-	    invalidate  : "抄送人中含有不合法的邮件地址"
+	    invalidate  : "抄送人中含有无法辨识的邮件地址"
 	  },
 	  to : {
-	    invalidate  : "收件人中含有不合法的邮件地址"
+	    invalidate  : "收件人中含有无法辨识的邮件地址"
 	  }
 	},
 
@@ -295,7 +295,7 @@ App.versions = (function($){
 	  rename_success : "您的用户名已经修改",
 	  reclip_null    : "该标签下暂时还没有数据",
 	  reclip_tag_success : "恭喜您，收录成功！",
-	  reclip_tag_fail: "您已经转拥有这些摘录了！",
+	  reclip_tag_fail: "您已经拥有这些摘录了！",
 	  reclip_tag     : "您实际收录了 %s 条摘录，其余摘录已经拥有了",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
@@ -349,7 +349,7 @@ App.versions = (function($){
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
-	  "oauth_fail"   : "认证失败，请重新认证!",
+	  "oauth_fail"   : "认证失败，请重新认证！",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
 	},
 	util : {
