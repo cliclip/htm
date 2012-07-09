@@ -102,10 +102,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	    App.vent.trigger("app.clipapp.register:success","register_success",response);
 	  }else{
 	    App.vent.trigger("app.clipapp.login:success", response, remember);
+	    //App.vent.trigger("app.clipapp.gotosetup:show", "register_success",response);
+	    //两个事件都要使用popregion显示东西所以不能同时出发
 	  }
 	},
 	error:function(model,error){
-	  that.showError(error);
+	  that.showError('login',error);
 	}
       });
     },

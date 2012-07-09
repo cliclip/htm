@@ -75,6 +75,8 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       else data.enable = true;
       if(data.to) data.to =  _.compact($.trim(data.to).split(";"));
       if(data.cc) data.cc =  _.compact($.trim(data.cc).split(";"));
+      // 因为不能在输入框中正常显示 所以对双引号进行转换
+      if(data.title) data.title = data.title.replace(/"/g, '&#34;');
       this.tmpmodel.set(data,{
 	error:function(model, error){
 	  if(error.rule == "is_null"){ // 因为有特殊逻辑所以要单独set

@@ -47,7 +47,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     self = false;
     homepage = true;
     getSiteTags(function(tags, follows){
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
+      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
     });
   };
 
@@ -192,7 +192,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function getSiteBubs(callback){
     getSiteTags(function(tags, follows){
-      var tags2 = _.intersection(tags, bubs[lang]);
+      var tags2 = _.intersection(tags,bubs[lang]);
       var follows2 = _.intersection(follows, bubs[lang]);
       callback(tags2, follows2);
     });
@@ -299,8 +299,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var opt = {
       tags: tags,
       follows: follows,
-      bubs: _.intersection(bubs[lang], tags),
-      sink: _.intersection(sink[lang], tags),
+      bubs:_.intersection(_.union(bubs.zh, bubs.en), tags),
+      sink:_.intersection(sink[lang], tags),
       self: self
     };
     if(homepage) opt.homepage = homepage;

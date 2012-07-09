@@ -78,6 +78,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
     //document.cookie = "token="+res.token;
     Register.close();
+    Backbone.history.navigate("my",true);
     App.vent.trigger("app.clipapp.gotosetup:show", key, res.email);
   });
 

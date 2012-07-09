@@ -164,7 +164,8 @@
   $.fn.tagsInput = function(options) {
     var settings = jQuery.extend({
       interactive:true,
-      defaultText:'add a tag',
+      defaultText:_i18n('clipmemo.add_tag'),
+      //defaultText:'add a tag',
       minChars:0,
       width:'270px',
       height:'75px',

@@ -304,7 +304,7 @@
 				}
 			}
 			li.set{
-				border-bottom:1px solid #55485f;
+				//border-bottom:1px solid #55485f;
 			}
 			li.logout{
 				.sprites(-430px,-105px)
@@ -581,8 +581,15 @@
 			padding:0 0 5px;
 			border-bottom:1px solid #bababa;
 			margin-bottom:5px;
+			//height:20px;
 			.icon_block{
 				cursor: pointer;
+			}
+			.icon_follow{
+				position:relative;
+				display: block;
+				float: left;
+				padding-left: 10px;
 			}
 		}
 		.guest{
@@ -936,9 +943,9 @@ section.follow_frame{
 			.sprites(-140px,-220px);
 		}
 	}
-	.verify{width:165px;height:37px;.sprites(-340px,-431px);margin-right:15px;}
-	.cancel{width:90px;height:37px;.sprites(-340px,-476px);}
-        .cliper{display:none;}
+	.verify{width:165px;height:37px;.sprites(-340px,-431px);margin-right:15px;margin-bottom:6px;}
+	.cancel{width:90px;height:37px;.sprites(-340px,-476px);margin-bottom:6px;}
+        .cliper{display:none;margin-bottom:6px;}
 }
 .success-view{
 	.success{
@@ -1222,7 +1229,7 @@ section.follow_frame{
 			border:1px solid #ccc;
 			overflow-x:hidden;
 			overflow-y:auto;
-			margin-bottom:20px;
+			margin-bottom:15px;
 			img{max-width:645px;}
 			overflow: hidden;
 		}	 
@@ -1470,14 +1477,14 @@ section.follow_frame{
 	}
 }
 section.edit_frame{
-	width:1000px;
+	width:970px;
 	.min-height(460px);
 	padding:30px 0;
 	margin:0 auto;
 	position: relative;
 	.close_w {
 		 top: 9px;
-		 right: -55px;
+		 right: -40px;
 	}
 	.left_bar,.right_bar{
 		width:270px;
