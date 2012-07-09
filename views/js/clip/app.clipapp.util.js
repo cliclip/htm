@@ -35,9 +35,9 @@ App.util = (function(){
   util.getBubbs = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
     if(lang == "en"){
-      return ["playful","concert","nice","delicious","cool","incisive"];
+      return ["funny","musical","pretty","tasty","cool","useful"];
     }{
-      return ["好看", "好听", "好吃", "好玩", "精辟", "酷"];
+      return ["好玩", "好听", "好看", "好吃", "酷", "好用"];
     }
   };
 

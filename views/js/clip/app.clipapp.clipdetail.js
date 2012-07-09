@@ -79,10 +79,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var curr = $(e.target).attr("class");
       if(curr != "reply_comment" && curr != "del_comment"){
 	// 取得当前的marking
-	var marking = $(e.target).siblings(".marking").text();
-	if(marking){ // 如果有值取反
-	  marking = marking == '+' ? '-' :'+';
-	  $(e.target).siblings(".marking").text(marking);
+	if(curr == "marking"){
+	  var marking = $(e.target).text();
+	  $(e.target).text(marking == '+' ? '-' : '+');
+	}else{
+	  var marking = $(e.target).siblings(".marking").text();
+	  $(e.target).siblings(".marking").text(marking == '+' ? '-' : '+');
 	}
 	$(e.currentTarget).siblings(".children").toggle();
       }
