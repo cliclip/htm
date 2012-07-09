@@ -3,7 +3,16 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var edit_view = "";
   var old_content = "";
-  var EditModel = App.Model.extend({});
+  var EditModel = App.Model.extend({
+    validate: function(attrs){
+      var content = attrs.content;
+      if(!content || content.replace(/&nbsp;/g,"") == ""){
+	return {"content":"is_null"};
+      }else{
+	return null;
+      }
+    }
+  });
   var EditView = App.ItemView.extend({
     tagName: "div",
     className: "editDetail-view",
@@ -57,19 +66,29 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	target.attr("disabled", false);
 	return;
       }*/
-      var editModel = new EditModel({content:content});
-      editModel.save({},{ // 不用this.mode因为this.model中有 录线图
-	type:'PUT',
-	url: P+"/clip/"+cid,
-	success:function(model,res){
-	  var content = model.get("content");
-	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
-	},
-	error:function(model,res){  // 出现错误，触发统一事件
-	  target.attr("disabled", false);
-	  App.vent.trigger("app.clipapp.clipedit:@error", cid);
+      var editModel = new EditModel({});
+      editModel.set({content:content},{
+	error:function(model, error){
+	  App.vent.trigger("app.clipapp.message:alert", error);
+	  App.vent.bind("app.clipapp.message:sure", function(){
+	    target.attr("disabled", false);
+	  });
 	}
       });
+      if(editModel.isValid()){
+	editModel.save({},{ // 不用this.mode因为this.model中有 录线图
+	  type:'PUT',
+	  url: P+"/clip/"+cid,
+	  success:function(model,res){
+	    var content = model.get("content");
+	    App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
+	  },
+	  error:function(model,res){  // 出现错误，触发统一事件
+	    target.attr("disabled", false);
+	    App.vent.trigger("app.clipapp.clipedit:@error", cid);
+	  }
+	});
+      };
     },
     abandonUpdate: function(){
       App.vent.trigger("app.clipapp.clipedit:@cancel");

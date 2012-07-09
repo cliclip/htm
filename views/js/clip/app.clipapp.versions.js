@@ -349,7 +349,8 @@ App.versions = (function($){
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
 	  "oauth_fail"   : "认证失败，请重新认证!",
-	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
+	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）",
+	  content        : {is_null: "摘录内容不能为空"}
 	},
 	util : {
 	  time:{
@@ -709,9 +710,10 @@ App.versions = (function($){
 	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
-	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
+	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
+	  content        :{is_null: "clip's content is null"}
 	},
-		util : {
+	util : {
 	  time:{
 	    moment:"a moment ago",
 	    second:" second ago ",
