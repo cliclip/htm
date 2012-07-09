@@ -17,6 +17,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "password/find":"findpasswd",
       "password/reset/:link":"resetpasswd",
       "oauth/callback":"oauth",
+      "error/:message":"error",
       // user
       "user/:uid": "userShow",
       "user/:uid/tag/:tag":"userShow",
