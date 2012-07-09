@@ -30,7 +30,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       edit_view = this;
-
     },
     hide_extImg:function(){    //隐藏弹出的链接地址对话框
       setTimeout(function(){
@@ -72,6 +71,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.message:alert", error);
 	  App.vent.bind("app.clipapp.message:sure", function(){
 	    target.attr("disabled", false);
+	    App.ClipApp.Editor.focus("editor");
 	  });
 	}
       });

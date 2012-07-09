@@ -57,6 +57,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.message:alert", error);
 	  App.vent.bind("app.clipapp.message:sure", function(){
 	    target.attr("disabled", false);
+	    App.ClipApp.Editor.focus("editor");
 	  });
 	}
       });
