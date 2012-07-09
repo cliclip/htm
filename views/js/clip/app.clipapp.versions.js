@@ -58,12 +58,12 @@ App.versions = (function($){
 	},
 
 	ruleEdit : {
-	  open_rule   : "打开邮箱识别",
-	  head        : "邮箱识别",
+	  open_rule   : "开启",
+	  head        : "邮件识别",
 	  title       : "标题必须有",
 	  cc_text     : "必须抄送给",
 	  to_text     : "必须发给",
-	  update      : "更新邮件规则",
+	  update      : "更新",
 	  cc : {
 	    invalidate  : "抄送人中含有不合法的邮件地址"
 	  },
@@ -87,7 +87,7 @@ App.versions = (function($){
 	  },
 	  conpass:{
 	    prompt:"确认密码",
-	    is_null:"密码尚未填写"
+	    is_null:"请输入确认密码"
 	  },
 	  confirm:{
 	    password_diff: "密码输入不一致"
@@ -100,7 +100,7 @@ App.versions = (function($){
 	},
 
 	emailAdd : {
-	  title       : "添加邮件",
+	  title       : "添加邮箱",
 	  ok          : "确 定",
 	  cancel      : "取 消",
 	  email : {
@@ -203,7 +203,8 @@ App.versions = (function($){
 
 	showcomment : {
 	  reply       : "回复",
-	  delete      : "删除"
+	  delete      : "删除",
+	  text        : "此内容已被删除"
 	},
 
 	addcomm : {
@@ -226,8 +227,8 @@ App.versions = (function($){
 	},
 
 	clippreview : {
-	  reprint     : "转载",
-	  reply       : "回复",
+	  reprint     : "收录",
+	  reply       : "评论",
 	  comment     : "评论",
 	  recommend   : "转发",
 	  reclip      : "收录",
@@ -303,10 +304,10 @@ App.versions = (function($){
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
 	  pre_active:"您已激活%s邮件地址。您现在可以再登录时使用此邮件地址，并接受来自此邮件地址的收藏。",
-	  cliplist_null:"抱歉，没有找到相关的信息......",
+	  cliplist_null  : "抱歉，没有找到相关的信息......",
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
-	    has_recliped : "您已经转载过该条摘录了",
+	    has_recliped : "您已经收录过该条摘录了",
 	    not_exist    : "摘录不存在",
 	    deleted      : "此条摘录已经被删除！",
 	    no_public    : "作者没有公开此条摘录！"
@@ -392,7 +393,7 @@ App.versions = (function($){
 	    name        : "user name",
 	    is_null     : "User name is not filled in",
 	    not_exist   : "This user name does not exist",
-	    invalidate  : "Wrong format of User name",
+	    invalidate  : "Wrong format of User name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
 	    exist       : "User name already exists"
 	  },
 	  pass : {
@@ -409,11 +410,11 @@ App.versions = (function($){
 
 	faceEdit : {
 	  no_name     : "no user name",
-	  set_name    : "Set User name",
+	  set_name    : "Set user name",
 	  ok          : "OK",
 	  upload      : "Upload image",
 	  name : {
-	    is_null   : "User name has not yet to fill in",
+	    is_null   : "User name is not filled in",
 	    invalidate: "Wrong format of User name",
 	    exist     :"User name already exists"
 	  }
@@ -424,17 +425,17 @@ App.versions = (function($){
 	},
 
 	ruleEdit : {
-	  open_rule   : "Enable clipping",
-	  head        : "Email clipping",
-	  title       : "Title must include",
-	  cc_text     : "Must Cc to",
-	  to_text     : "Must send to",
-	  update      : "Update setting",
+	  open_rule   : "Enable",
+	  head        : "Email Recognition",
+	  title       : "Title includes",
+	  cc_text     : "Is Cc‘d to",
+	  to_text     : "Is sent to",
+	  update      : "Update",
 	  cc : {
-	    invalidate: "Cc to unrecognized address"
+	    invalidate: "Invalid email address"
 	  },
 	  to : {
-	    invalidate: "Send to unrecognized address"
+	    invalidate: "Invalid email address"
 	  }
 	},
 
@@ -569,7 +570,8 @@ App.versions = (function($){
 
 	showcomment : {
 	  reply       : "Reply",
-	  delete      : "Delete"
+	  delete      : "Delete",
+	  text        : "The comment has been removed"
 	},
 
 	addcomm : {
@@ -605,14 +607,14 @@ App.versions = (function($){
 	follower : {
 	  follower    : "Followed by",
 	  following   : "Following",
-	  p           : "Nobody follows you!",
+	  p           : "Nobody is following you",
 	  all         : "All"
 	},
 
 	following : {
 	  follower    : "Followed by",
 	  following   : "Following",
-	  p           : "Nobody follows you!",
+	  p           : "You are not following anyone",
 	  all         : "All"
 	},
 
@@ -647,7 +649,7 @@ App.versions = (function($){
 	  title         : "Notice",
 	  ok            : "OK",
 	  login_success : "Log in successfully",
-	  imageUp_fail  : "The file you upload is NOT an image",
+	  imageUp_fail  : "The file you upload is not an image",
 	  img_alt       : "Picture fail to load",
 	  is_null       : "Clip not exist",
 	  not_array     : "Clip must be array",
@@ -660,9 +662,10 @@ App.versions = (function($){
 	  rename_success : "Your User name has been changed",
 	  reclip_null    : "No clip under thist tag",
 	  reclip_tag_success : "Congratulation for successful reclip",
-	  reclip_tag_fail: "You have these clips already",
+	  reclip_tag_fail: "You have reclipped these already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
-	  recomm         : "Your clip @ successfully",
+	  reclip         : "Recliped successfully",
+	  recomm         : "Clip was forwarded successfully",
 	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
@@ -670,7 +673,7 @@ App.versions = (function($){
 	  cliplist_null  : "Sorry, no results found",
 	  clip : {
 	    has_this_clip: "You have this clip already",
-	    has_recliped : "You reclip this clip already",
+	    has_recliped : "You have reclipped this already",
 	    not_exist    : "This Clip doesn't  exist",
 	    deleted      : "This Clip has been deleted",
 	    no_public    : "This Clip is private"
