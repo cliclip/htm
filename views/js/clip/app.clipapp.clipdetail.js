@@ -199,7 +199,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
-      var text = ($("#comm_text").val()).replace(/[\s]/g, "");
+      var text = $.trim($("#comm_text").val());
       if(text == "" || text == _i18n('comment.defaultText')){$("#comm_text").focus(); return;}
       $(e.currentTarget).attr("disabled",true);
       var params = {clipid: cid, text: text, pid: pid};

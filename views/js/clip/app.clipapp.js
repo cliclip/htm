@@ -50,6 +50,9 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.oauth = function(){
     ClipApp.Oauth.process();
   };
+  ClipApp.error = function(message){
+    ClipApp.Error.process(message);
+  };
 
   ClipApp.userShow = function(uid, tag){
     ClipApp.Face.showUser(uid);
