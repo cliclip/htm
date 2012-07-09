@@ -81,10 +81,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	// 取得当前的marking
 	if(curr == "marking"){
 	  var marking = $(e.target).text();
-	  $(e.target).text(marking == '+' ? '-' : '+');
+	  if(marking)
+	    $(e.target).text(marking == '+' ? '-' : '+');
 	}else{
 	  var marking = $(e.target).siblings(".marking").text();
-	  $(e.target).siblings(".marking").text(marking == '+' ? '-' : '+');
+	  if(marking)
+	    $(e.target).siblings(".marking").text(marking == '+' ? '-' : '+');
 	}
 	$(e.currentTarget).siblings(".children").toggle();
       }
@@ -201,8 +203,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
-      var text = ($("#comm_text").val()).replace(/[\s]/g, "");
-      if(text == "" || text == _i18n('comment.defaultText')){$("#comm_text").focus(); return;}
+      var text = ($("#comm_text").val()).replace(/[\s]/g, " ");
+      if(text == " " || text == _i18n('comment.defaultText')){$("#comm_text").focus(); return;}
       $(e.currentTarget).attr("disabled",true);
       var params = {clipid: cid, text: text, pid: pid};
       var params1 = null;
