@@ -94,10 +94,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "reclip_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	$("#submit").attr("disabled",true);
-	App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
-      });
-      App.vent.bind("app.clipapp.message:cancel",function(){
 	App.popRegion.close();
 	mid = null;
       });

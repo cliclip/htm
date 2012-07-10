@@ -46,7 +46,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     cancelClick:function(e){
       e.preventDefault();
       var n_data = loadData(this.$el);
-      App.vent.trigger("app.clipapp.memo:@close",n_data, this.model.id);
+      App.vent.trigger("app.clipapp.memo:@close",n_data);
     }
   });
 
@@ -129,7 +129,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
   };
 
-  ClipMemo.close=function(n_data,cid){
+  ClipMemo.close=function(n_data){
     var flag = true;
     if(!n_data)App.popRegion.close();
     else{
@@ -144,10 +144,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
 	App.vent.trigger("app.clipapp.message:alert", "memo_save");
 	App.vent.bind("app.clipapp.message:sure",function(){
-	  $("#organize_button").attr("disabled",true);
-	  App.vent.trigger("app.clipapp.memo:@ok", n_data, cid);
-	});
-	App.vent.bind("app.clipapp.message:cancel",function(){
 	  App.popRegion.close();
 	});
       }
@@ -185,8 +181,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
   });
 
-  App.vent.bind("app.clipapp.memo:@close",function(n_data,cid){
-    ClipMemo.close(n_data,cid);
+  App.vent.bind("app.clipapp.memo:@close",function(n_data){
+    ClipMemo.close(n_data);
   });
 
   App.vent.bind("app.clipapp.memo:@error",function(model,error){
