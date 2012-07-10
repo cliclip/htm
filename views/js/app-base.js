@@ -64,9 +64,9 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView.extend({
-  showError:function(tmpl,errorCode){
+  showError:function(tmpl,errorCode,msg){
     for(var key in errorCode){
-      var error = _i18n(tmpl+'.'+key+'.'+errorCode[key]);
+      var error = _i18n(tmpl+'.'+key+'.'+errorCode[key],msg);
       this.$("#"+key).addClass("error");
       this.$("#"+key).after("<span class='error'>"+error+"</span>");
       if(this.$("#"+key).attr("type") == "password")
