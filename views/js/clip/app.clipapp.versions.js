@@ -179,7 +179,8 @@ App.versions = (function($){
 	    not_exist : "您添加的用户不存在"
 	  },
 	  recomm_text : {
-	    is_null   :"请您先设置推荐备注"
+	    is_null   :"请您先设置推荐备注",
+	    "word_limit" :"字数超过%s个字"
 	  }
 	},
 
@@ -549,7 +550,8 @@ App.versions = (function($){
 	    not_exist : "The receiver doesn't exist"
 	  },
 	  recomm_text : {
-	    is_null   :"Please add comments first"
+	    is_null   :"Please add comments first",
+	    "word_limit" :"word number more than %s"
 	  }
 	},
 
