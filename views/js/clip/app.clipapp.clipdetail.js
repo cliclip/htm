@@ -204,8 +204,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
-      var text = ($("#comm_text").val()).replace(/[\s]/g, " ");
-      if(text == " " || text == _i18n('comment.defaultText')){
+      var text = $.trim($("#comm_text").val());
+      if(text == "" || text == _i18n('comment.defaultText')){
 	this.showError("comment",{comm_text:"is_null"});
 	$("#comm_text").blur().val("");
 	return;
