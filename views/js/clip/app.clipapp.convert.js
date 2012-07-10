@@ -206,7 +206,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\n/ig, "<\/br>");
     text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\" />");
-    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\" alt="+_i18n('message.img_alt') +" />");//详情页图片加载失败后的文字提示
+    text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\" onerror=\"App.util.img_error(this)\"" +" />");//详情页图片加载失败后加载统一图片
     text = "<p>" + text + "</p>";
     return text;
   }

@@ -217,8 +217,8 @@ App.versions = (function($){
 	},
 
 	addClip : {
-	  title       : "增加",
-	  note_message: "添加备注",
+	  title       : "新建摘录",
+	  note_message: "添加标注",
 	  upload      : "上传图片",
 	  link        : "链接图片",
 	  ok          : "确 定",
@@ -307,8 +307,13 @@ App.versions = (function($){
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
 	  pre_active:"您已激活%s邮件地址。您现在可以再登录时使用此邮件地址，并接受来自此邮件地址的收藏。",
-	  cliplist_null  : "抱歉，没有找到相关的信息......",
-	  "error_message": "操作失败，请重试",
+	  cliplist_null:{
+	    all:"抱歉，没有找到相关的信息......",
+	    my:"抱歉，没有找到相关的信息......",
+	    interest:"抱歉，没有找到相关的信息......",
+	    recommend:"抱歉，没有找到相关的信息......"
+	  },
+	  error_message :"操作失败，请重试",
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
 	    has_recliped : "您已经收录过该条摘录了",
@@ -590,7 +595,7 @@ App.versions = (function($){
 
 	addClip : {
 	  note_message:"add notes",
-	  title       : "Add",
+	  title       : "new clip",
 	  upload      : "&nbspUpload image",
 	  link        : "Web image",
 	  ok          : "OK",
@@ -679,7 +684,12 @@ App.versions = (function($){
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
-	  cliplist_null  : "Sorry, no results found",
+	  cliplist_null:{
+	    all:"Sorry,have not found appropriate clauses......",
+	    my:"Sorry,have not found appropriate clauses......",
+	    interest:"Sorry,have not found appropriate clauses......",
+	    recommend:"Sorry,have not found appropriate clauses......"
+	  },
 	  "error_message" :"Operation fail,please try again!",
 	  clip : {
 	    has_this_clip: "You have this clip already",
