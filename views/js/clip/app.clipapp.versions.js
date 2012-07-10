@@ -667,7 +667,7 @@ App.versions = (function($){
 	  reclip_tag_fail: "You have reclipped these already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  reclip         : "Recliped successfully",
-	  recomm         : "Clip was forwarded successfully",
+	  recomm         : "Clip was forwarded(@) successfully",
 	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
