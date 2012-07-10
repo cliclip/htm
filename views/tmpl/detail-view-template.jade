@@ -43,7 +43,7 @@ script(type="text/template",id="showcomment-view-template")
   dd.comment_con.del_comm.
     <div class="comm_link" id="<%= id %>">
     <a class="marking"><% if(has_child) {%> - <%}%></a>
-    <%= text %><%= App.util.generatePastTime(date)%>
+    <%=_i18n('showcomment.text') %><%= App.util.generatePastTime(date)%>
     </div>
   <% } else {%>
   div.user_head
