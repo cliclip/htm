@@ -34,6 +34,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "keydown #recomm_name": "selectAction",
       "mouseover .user"      :  "MouseOver",
       "mouseout .user"       :  "MouseOut",
+      "input #recomm_text"   :  "WordsAction",
       "focus #recomm_text":  "clearAction",
       "blur  #recomm_text":  "textBlur",
       "click #submit"        :  "recommendAction",
@@ -158,15 +159,25 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     MouseOut:function(e){
        $(e.currentTarget).css("background-color","");
     },
+    WordsAction:function(e){
+      this.cleanError(e);
+      $("#submit").attr("disabled",false);
+    },
     recommendAction:function(e){
       // 在点击转确定按钮时，model.id model.name都已经设置成功
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
       var view = this;
+      var number_limit =  140;//字数限制数
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
 	var data = view.getInput();
 	if(data.text == _i18n('recommend.defaultText')){data.text = "";}
+	if(data.text.length > number_limit){
+	  var overage =data.text.length-number_limit;
+	  view.showError('recommend',{"recomm_text":"word_limit"},overage);
+	  return;
+	}
 	view.setModel('recommend',view.tmpmodel, {text: data.text, clipid: clipid});
 	//recommend 需要的参数
 	view.tmpmodel.save({},{
