@@ -3,7 +3,16 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var edit_view = "";
   var old_content = "";
-  var EditModel = App.Model.extend({});
+  var EditModel = App.Model.extend({
+    validate: function(attrs){
+      var content = attrs.content;
+      if(!content || content.replace(/&nbsp;/g,"") == ""){
+	return {"content":"is_null"};
+      }else{
+	return null;
+      }
+    }
+  });
   var EditView = App.ItemView.extend({
     tagName: "div",
     className: "editDetail-view",
@@ -22,7 +31,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       edit_view = this;
-
     },
     hide_extImg:function(){    //隐藏弹出的链接地址对话框
       setTimeout(function(){
@@ -53,7 +61,35 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       target.attr("disabled",true);
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
-      App.vent.trigger("app.clipapp.clipedit:@save",content,cid);
+      /*if(content == old_content){
+	//alert("您并未做出任何更改");
+	target.attr("disabled", false);
+	return;
+      }*/
+      var editModel = new EditModel({});
+      editModel.set({content:content},{
+	error:function(model, error){
+	  App.vent.trigger("app.clipapp.message:alert", error);
+	  App.vent.bind("app.clipapp.message:sure", function(){
+	    target.attr("disabled", false);
+	    App.ClipApp.Editor.focus("editor");
+	  });
+	}
+      });
+      if(editModel.isValid()){
+	editModel.save({},{ // 不用this.mode因为this.model中有 录线图
+	  type:'PUT',
+	  url: P+"/clip/"+cid,
+	  success:function(model,res){
+	    var content = model.get("content");
+	    App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
+	  },
+	  error:function(model,res){  // 出现错误，触发统一事件
+	    target.attr("disabled", false);
+	    App.vent.trigger("app.clipapp.clipedit:@error", cid);
+	  }
+	});
+      };
     },
     abandonUpdate: function(){
       var cid = this.model.id;
@@ -114,30 +150,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	$("#editClip_Save").attr("disabled",true);
-	App.vent.trigger("app.clipapp.clipedit:@save",n_content,cid);
+	$("#editClip_Save").click();
       });
       App.vent.bind("app.clipapp.message:cancel",function(){
 	App.viewRegion.close();
       });
     }
   };
-
-  App.vent.bind("app.clipapp.clipedit:@save",function(content,cid){
-    var editModel = new EditModel({content:content});
-    editModel.save({},{ // 不用this.mode因为this.model中有 录线图
-      type:'PUT',
-      url: P+"/clip/"+cid,
-      success:function(model,res){
-	var content = model.get("content");
-	App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
-      },
-      error:function(model,res){  // 出现错误，触发统一事件
-	$("#editClip_Save").attr("disabled",false);
-	App.vent.trigger("app.clipapp.clipedit:@error", cid);
-      }
-    });
-  });
 
   App.vent.bind("app.clipapp.clipedit:@success", function(content,cid){
     ClipEdit.close();

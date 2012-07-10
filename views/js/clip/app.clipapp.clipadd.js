@@ -6,6 +6,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   App.Model.ClipModel = App.Model.extend({
     url:function(){
       return P+"/clip";
+    },
+    validate: function(attrs){
+      var content = attrs.content;
+      if(!content || content.replace(/&nbsp;/g,"") == ""){
+	return {"content":"is_null"};
+      }else{
+	return null;
+      }
     }
   });
 
@@ -21,10 +29,10 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .pop_left":"remark_clip",
       "click .message":"message_hide",
       "click .close_w":"cancelcliper",
-      "click #ok": "okcliper",
       "click .masker_layer":"cancelcliper",
+      "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
-      "click #save": "savecliper",
+      "click #save": "savecliper", // 对应clipper的ok
       "click #empty":"emptycliper"
     },
     okcliper:function(){
@@ -35,7 +43,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var data = new Date();
       data.setTime(data.getTime() + 30*24*60*60*10000);
       document.cookie = "first=false"+";expires=" + data.toGMTString();
-      console.info(document.cookie);
     },
     cancelcliper:function(){
       clip.content = App.ClipApp.Editor.getContent("editor");
@@ -43,20 +50,32 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipadd:@cancel",clip);
     },
     savecliper:function(e){
-      $(e.currentTarget).attr("disabled",true);
+      var target = $(e.currentTarget);
+      target.attr("disabled",true);
       e.preventDefault();
       clip.content = App.ClipApp.Editor.getContent("editor");
-      this.model.save(clip,{
-      	success:function(model,res){ // 返回值res为clipid:clipid
-	  model.id = res.clipid; // 将clip本身的id设置给model
-	  App.vent.trigger("app.clipapp.clipper:save");
-	  App.vent.trigger("app.clipapp.clipadd:@success", model);
-	},
-	error:function(model,error){  // 出现错误，触发统一事件
-	  target.attr("disabled",false);
-	  App.vent.trigger("app.clipapp.clipadd:@error");
+      this.model.set(clip, {
+	error:function(model, error){
+	  App.vent.trigger("app.clipapp.message:alert", error);
+	  App.vent.bind("app.clipapp.message:sure", function(){
+	    target.attr("disabled", false);
+	    App.ClipApp.Editor.focus("editor");
+	  });
 	}
       });
+      if(this.model.isValid()){
+	this.model.save({},{
+	  success:function(model,res){ // 返回值res为clipid:clipid
+	    model.id = res.clipid; // 将clip本身的id设置给model
+	    App.vent.trigger("app.clipapp.clipper:save");
+	    App.vent.trigger("app.clipapp.clipadd:@success", model);
+	  },
+	  error:function(model,error){  // 出现错误，触发统一事件
+	    target.attr("disabled",false);
+	    App.vent.trigger("app.clipapp.clipadd:@error");
+	  }
+	});
+      }
     },
     emptycliper:function(){
       App.vent.trigger("app.clipapp.clipper:empty");

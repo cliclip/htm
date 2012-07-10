@@ -188,6 +188,7 @@ App.versions = (function($){
 	  title       : "评论",
 	  defaultText : "说点什么吧~",
 	  reclip      : "同时收录",
+	  comm_text   : {is_null : "评论内容为空"},
 	  ok          : "确 定",
 	  cancel      : "取 消"
 	},
@@ -359,7 +360,9 @@ App.versions = (function($){
 	  recommend_save : "是否放弃推荐该条摘录？",
 	  comment_save   : "是否放弃评论该条摘录？",
 	  clipadd_save   : "是否放弃新增该条摘录？",
-	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
+	  "oauth_fail"   : "认证失败，请重新认证!",
+	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）",
+	  content        : {is_null: "摘录内容不能为空"}
 	},
 	util : {
 	  time:{
@@ -563,6 +566,7 @@ App.versions = (function($){
 	comment : {
 	  title       : "Comment",
 	  defaultText : "Say something",
+	  comm_text   : {is_null : "comment's content is null"},
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel"
@@ -676,6 +680,7 @@ App.versions = (function($){
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  reclip         : "Recliped successfully",
 	  recomm         : "Clip was forwarded(@) successfully",
+	  comment        : "Commented successfully",
 	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
@@ -730,9 +735,10 @@ App.versions = (function($){
 	  recommend_save : "是否放弃推荐该条摘录？",
 	  comment_save   : "是否放弃评论该条摘录？",
 	  clipadd_save   : "是否放弃新增该条摘录？",
-	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
+	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
+	  content        : {is_null: "clip's content is null"}
 	},
-		util : {
+	util : {
 	  time:{
 	    moment:"a moment ago",
 	    second:" second ago ",
