@@ -29,9 +29,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .pop_left":"remark_clip",
       "click .message":"message_hide",
       "click .close_w":"abandon",
-      "click #ok": "okcliper",
+      "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
-      "click #save": "savecliper",
+      "click #save": "savecliper", // 对应clipper的ok
       "click #empty":"emptycliper"
     },
     okcliper:function(){
