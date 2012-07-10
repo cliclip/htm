@@ -352,7 +352,13 @@ App.versions = (function($){
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
-	  "oauth_fail"   : "认证失败，请重新认证！",
+	  oauth_fail     : "认证失败，请重新认证！",
+	  memo_save      : "您已经对备注作了修改，是否保存？",
+	  clipedit_save  : "您已经对载录作了修改，是否保存？",
+	  reclip_save    : "是否放弃转载该条摘录？",
+	  recommend_save : "是否放弃推荐该条摘录？",
+	  comment_save   : "是否放弃评论该条摘录？",
+	  clipadd_save   : "是否放弃新增该条摘录？",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
 	},
 	util : {
@@ -718,6 +724,12 @@ App.versions = (function($){
 	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
+	  memo_save      : "您已经对备注作了修改，是否保存？",
+	  clipedit_save  : "您已经对载录作了修改，是否保存？",
+	  reclip_save    : "是否放弃转载该条摘录？",
+	  recommend_save : "是否放弃推荐该条摘录？",
+	  comment_save   : "是否放弃评论该条摘录？",
+	  clipadd_save   : "是否放弃新增该条摘录？",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
 	},
 		util : {

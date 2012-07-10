@@ -23,6 +23,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click .size48"    :"maintagAction",
       "click #submit"    :"comment",
       "click #cancel"    :"cancel",
+      "click .masker_layer":"cancel",
       "click .close_w"   :"cancel"
     },
     foucsAction:function(e){
@@ -67,7 +68,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.comment:@close");
+      var text = $.trim($("#comm_text").val());
+      if(text == _i18n('comment.defaultText')) text = "";
+      App.vent.trigger("app.clipapp.comment:@close",text);
     }
   });
 
@@ -83,9 +86,21 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     $(".small_pop").css("top", App.util.getPopTop("small"));
   };
 
-  Comment.close = function(){
-    App.popRegion.close();
-    mid = null;
+  Comment.close = function(text){
+    if(!text || text == ""){
+      App.popRegion.close();
+      mid = null;
+    }else{
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+      App.vent.trigger("app.clipapp.message:alert", "comment_save");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	$("#submit").click();
+      });
+      App.vent.bind("app.clipapp.message:cancel",function(){
+	App.popRegion.close();
+	mid = null;
+      });
+    }
   };
 
   App.vent.bind("app.clipapp.comment:@submit", function(params,params1){
@@ -105,8 +120,8 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       }
     });
   });
-  App.vent.bind("app.clipapp.comment:@close", function(){
-    Comment.close();
+  App.vent.bind("app.clipapp.comment:@close", function(text){
+    Comment.close(text);
   });
 
   return Comment;

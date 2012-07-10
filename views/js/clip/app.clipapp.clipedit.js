@@ -17,6 +17,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
+      "click .masker_layer":"abandonUpdate",
       "click .close_w":"abandonUpdate"
     },
     initialize: function(){
@@ -52,27 +53,12 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       target.attr("disabled",true);
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
-      /*if(content == old_content){
-	//alert("您并未做出任何更改");
-	target.attr("disabled", false);
-	return;
-      }*/
-      var editModel = new EditModel({content:content});
-      editModel.save({},{ // 不用this.mode因为this.model中有 录线图
-	type:'PUT',
-	url: P+"/clip/"+cid,
-	success:function(model,res){
-	  var content = model.get("content");
-	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
-	},
-	error:function(model,res){  // 出现错误，触发统一事件
-	  target.attr("disabled", false);
-	  App.vent.trigger("app.clipapp.clipedit:@error", cid);
-	}
-      });
+      App.vent.trigger("app.clipapp.clipedit:@save",content,cid);
     },
     abandonUpdate: function(){
-      App.vent.trigger("app.clipapp.clipedit:@cancel");
+      var cid = this.model.id;
+      var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+      App.vent.trigger("app.clipapp.clipedit:@cancel",content,cid);
     }
   });
 
@@ -122,9 +108,36 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     });
   };
 
-  ClipEdit.close = function(){
-    App.viewRegion.close();
+  ClipEdit.close = function(n_content,cid){
+    if(!n_content || n_content.trim() == old_content.trim())App.viewRegion.close();
+    else{
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+      App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	$("#editClip_Save").attr("disabled",true);
+	App.vent.trigger("app.clipapp.clipedit:@save",n_content,cid);
+      });
+      App.vent.bind("app.clipapp.message:cancel",function(){
+	App.viewRegion.close();
+      });
+    }
   };
+
+  App.vent.bind("app.clipapp.clipedit:@save",function(content,cid){
+    var editModel = new EditModel({content:content});
+    editModel.save({},{ // 不用this.mode因为this.model中有 录线图
+      type:'PUT',
+      url: P+"/clip/"+cid,
+      success:function(model,res){
+	var content = model.get("content");
+	App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
+      },
+      error:function(model,res){  // 出现错误，触发统一事件
+	$("#editClip_Save").attr("disabled",false);
+	App.vent.trigger("app.clipapp.clipedit:@error", cid);
+      }
+    });
+  });
 
   App.vent.bind("app.clipapp.clipedit:@success", function(content,cid){
     ClipEdit.close();
@@ -132,8 +145,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
   });
 
-  App.vent.bind("app.clipapp.clipedit:@cancel", function(){
-    ClipEdit.close();
+  App.vent.bind("app.clipapp.clipedit:@cancel", function(n_content,cid){
+    ClipEdit.close(n_content,cid);
   });
 
   App.vent.trigger("app.clipapp.clipedit:@error", function(){
