@@ -66,7 +66,7 @@ App.util = (function(){
   util.getPopTop = function(clss){
     var top = 0;
     var scroll = document.documentElement.scrollTop + document.body.scrollTop;
-    if(clss == "big") top = 10;
+    if(clss == "big") top = 30;
     if(clss == "small") top = 150;
     return scroll + top + "px";
   };
@@ -256,6 +256,17 @@ App.util = (function(){
 	}
       }
     });
+  };
+
+  util.clearFileInput = function(file){
+    var form=document.createElement('form');
+    document.body.appendChild(form);
+    //记住file在旧表单中的的位置
+    var pos=file.nextSibling;
+    form.appendChild(file);
+    form.reset();
+    pos.parentNode.insertBefore(file,pos);
+    document.body.removeChild(form);
   };
 
   var MESSAGE = {

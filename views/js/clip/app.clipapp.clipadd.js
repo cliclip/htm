@@ -2,7 +2,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
   var clip = {};
-
+  var ieRange=false;
   App.Model.ClipModel = App.Model.extend({
     url:function(){
       return P+"/clip";
@@ -16,8 +16,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     events: {
       "click .link_img":"extImg",
       "click .btn_img":"up_extImg", // 确定上传
+      "mousedown #formUpload":"save_range", //IE-7,8,9下保存Range对象
+      "mousedown .link_img":"save_range", //IE-7,8,9下保存Range对象
       //"change #formUpload":"image_change", // 改成了直接在jade中绑定
       "blur #img_upload_url":"hide_extImg", // extImg输入框失焦就隐藏
+      "click #img_upload_url":"show_extImg",
       "click .pop_left":"remark_clip",
       "click .message":"message_hide",
       "click .close_w":"abandon",
@@ -25,6 +28,17 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click #cancel": "cancelcliper",
       "click #save": "savecliper",
       "click #empty":"emptycliper"
+    },
+    save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
+      var isIE=document.all? true:false;
+      var win=document.getElementById('editor').contentWindow;
+      var doc=win.document;
+      //ieRange=false;
+      //doc.designMode='On';//可编辑
+      win.focus();
+      if(isIE){//是否IE并且判断是否保存过Range对象
+	ieRange=doc.selection.createRange();
+      }
     },
     okcliper:function(){
       App.vent.trigger("app.clipapp.clipper:ok");
@@ -34,7 +48,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var data = new Date();
       data.setTime(data.getTime() + 30*24*60*60*10000);
       document.cookie = "first=false"+";expires=" + data.toGMTString();
-      console.info(document.cookie);
     },
     cancelcliper:function(){
       App.vent.trigger("app.clipapp.clipper:cancel");
@@ -67,6 +80,10 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       $("#img_upload_url").focus();
       $("#img_upload_url").val("");
     },
+    show_extImg:function(evt){
+      $(".img_upload_span").show();
+      $("#img_upload_url").focus();
+    },
     hide_extImg: function(){
       setTimeout(function(){
 	$(".img_upload_span").hide();
@@ -77,7 +94,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var url = $("#img_upload_url").val();
       if(url == "http://" || !url )return;
       $(".img_upload_span").hide();
-      App.ClipApp.Editor.insertImage("editor", {url: url});
+      App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },
     abandon: function(){
       App.vent.trigger("app.clipapp.clipper:cancel");
@@ -98,15 +115,17 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
        img.src = App.util.get_img_src(sender.files[0]);
        img.onload=function(){
        if(img.complete){
-       App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++});
+       App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
        }};}*/
 
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(img_src){
 	// console.info("after submit",img_src);
 	// img_list.push(img_src);
-	App.ClipApp.Editor.insertImage("editor", {url: img_src});
+	App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
       });
+      //解决ie 789 无法连续上传相同的图片，需要清空上传控件中的数据
+      App.util.clearFileInput(sender);
     }
   };
 

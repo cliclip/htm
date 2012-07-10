@@ -141,9 +141,7 @@ if(typeof console !="object"){
     info:function(){},
     dir:function(){}
   };
-
 }
-
 App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
@@ -193,7 +191,7 @@ App.bind("initialize:after", function(){
     if(obj && obj.last()&& obj.last()[0]){
       var last_top = $("#list .clip").last()[0].offsetTop;
     }
-    // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+    //console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
 
     if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
       time_gap = false;
