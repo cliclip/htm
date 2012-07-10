@@ -48,11 +48,16 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       var range = objEditor.contentWindow.getSelection().getRangeAt(0);
       var sel = objEditor.contentWindow.getSelection();
       range.setStart(el.body.childNodes[0], 0);
-      range.collapse(true);
+      range.collapse(true); // 将光标移动到editor的起始位置
       sel.removeAllRanges();
       sel.addRange(range);
       el.body.focus();
     };
+  };
+
+  Editor.focus = function(editroId){
+    var ifrm=document.getElementById("editor");
+    ifrm.contentWindow.focus();
   };
 
   // data 可以是一个对象 没有必要设为数组

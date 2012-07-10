@@ -25,8 +25,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
   // 与显示无关，只是用来确定泡泡的大小而已
   var bubs = {
-    zh: ["好玩", "好听", "好看", "好吃", "酷", "精辟"],
-    en: ["playful","concert","nice","delicious","cool","incisive"]
+    zh: ["好玩", "好听", "好看", "好吃", "酷", "好用"],
+    en: ["funny","musical","pretty","tasty","cool","useful"]
   };
   var sink = {
     zh: ["讨厌"],
@@ -176,8 +176,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // GET $HOST/$BASE/_/user/0/meta/0..19
     // 替换掉之前的取用户2的数据为，常量
     var	siteTags = {
-      zh: ["好玩", "好听", "好看", "好吃", "酷", "精辟","讨厌","书籍","电影","旅游","资料"],
-      en: ["playful","concert","nice","delicious","cool","incisive","hate","book","film","tour","data"]
+      zh: ["好玩", "好听", "好看", "好吃", "酷", "好用", "精辟","讨厌","书籍","电影","旅游","资料"],
+      en: ["funny","musical","pretty","tasty","cool","useful","incisive","hate","book","film","tour","data"]
     };
     callback(siteTags[lang],[]);
 
@@ -299,8 +299,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var opt = {
       tags: tags,
       follows: follows,
-      bubs:_.intersection(_.union(bubs.zh, bubs.en), tags),
-      sink:_.intersection(sink[lang], tags),
+      bubs: self ? bubs[lang] : _.intersection(_.union(bubs.zh, bubs.en), tags),
+      sink: self ? sink[lang] : _.intersection(sink[lang], tags),
       self: self
     };
     if(homepage) opt.homepage = homepage;

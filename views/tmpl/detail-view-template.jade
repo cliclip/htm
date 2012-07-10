@@ -43,13 +43,13 @@ script(type="text/template",id="showcomment-view-template")
   dd.comment_con.del_comm.
     <div class="comm_link" id="<%= id %>">
     <a class="marking"><% if(has_child) {%> - <%}%></a>
-    <%= text %><%= App.util.generatePastTime(date)%>
+    <%=_i18n('showcomment.text') %><%= App.util.generatePastTime(date)%>
     </div>
   <% } else {%>
   div.user_head
     <a href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
-  dt.username
-    <a href="#user/<%=user.id%>"><%= user.name %></a>
+  div.username
+    <a href="#user/<%=user.id%>"><%=user.name%></a>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>">
     <a class="marking"><% if(has_child) {%> - <%}%></a>
@@ -77,4 +77,4 @@ script(type="text/template",id="addcomm-view-template")
   <% } %>
   div.btn_group.clearfix.
     <input type="button" class="verify" value="<%=_i18n('addcomm.commentOK')%>" />
-    <input type="button" class="cancel" value="cancel" />
+    <input type="button" class="cancel" value="<%=_i18n('addcomm.cancel" />

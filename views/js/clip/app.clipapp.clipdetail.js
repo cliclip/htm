@@ -79,10 +79,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var curr = $(e.target).attr("class");
       if(curr != "reply_comment" && curr != "del_comment"){
 	// 取得当前的marking
-	var marking = $(e.target).siblings(".marking").text();
-	if(marking){ // 如果有值取反
-	  marking = marking == '+' ? '-' :'+';
-	  $(e.target).siblings(".marking").text(marking);
+	if(curr == "marking"){
+	  var marking = $(e.target).text();
+	  if(marking)
+	    $(e.target).text(marking == '+' ? '-' : '+');
+	}else{
+	  var marking = $(e.target).siblings(".marking").text();
+	  if(marking)
+	    $(e.target).siblings(".marking").text(marking == '+' ? '-' : '+');
 	}
 	$(e.currentTarget).siblings(".children").toggle();
       }
@@ -171,6 +175,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       checked = false;
     },
     foucsAction:function(e){
+      this.cleanError(e);
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == _i18n('comment.defaultText') ? "" : text );
     },
@@ -199,8 +204,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
-      var text = ($("#comm_text").val()).replace(/[\s]/g, "");
-      if(text == "" || text == _i18n('comment.defaultText')){$("#comm_text").focus(); return;}
+      var text = ($("#comm_text").val()).replace(/[\s]/g, " ");
+      if(text == " " || text == _i18n('comment.defaultText')){
+	this.showError("comment",{comm_text:"is_null"});
+	$("#comm_text").blur().val("");
+	return;
+      }
       $(e.currentTarget).attr("disabled",true);
       var params = {clipid: cid, text: text, pid: pid};
       var params1 = null;
