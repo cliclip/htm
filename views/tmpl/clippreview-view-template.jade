@@ -7,7 +7,11 @@ script(type="text/template",id="clippreview-view-template")
         <div class="user_info_small">
           <img src="<%=App.util.face_url(recommend.user.face,50)%>" title="<%=recommend.user.name%>" onerror="this.src='img/f.jpg'"/>
         </div>
+        <dt class="username">
+          <%= recommend.user.name %>
+        <dt>
       </a>&nbsp;&nbsp;
+      <span class="recommend_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(recommend.Date)%></span>
       <div class="user_text">
         <%=recommend.text%>
       </div>
