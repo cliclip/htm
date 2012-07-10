@@ -235,7 +235,7 @@ $(function() {
 	// this.model.set("current", true);
 	// game.open(this.$(".bub span").text());
 	fire("open", this.$(".bub span").text());
-	parent.window.location.href="javascript:scroll(0,100)";
+	//parent.window.location.href="javascript:scroll(0,100)";
       },
       follow: function(){
 	// this.model.set("follow", true);

@@ -2,7 +2,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var edit_view = "";
-  var old_content = "";
+  var old_content = "",ieRange = false;
   var EditModel = App.Model.extend({
     validate: function(attrs){
       var content = attrs.content;
@@ -18,10 +18,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     className: "editDetail-view",
     template: "#editDetail-view-template",
     events: {
-      "click .link_img":"show_extImg",
+      "click .link_img":"extImg",
       "click .img_upload_span .btn_img":"up_extImg",
       "blur #img_upload_url":"hide_extImg",
       // "change #formUpload":"image_change", // 改成了直接在jade中绑定
+      "mousedown #formUpload":"save_range", //IE-7,8,9下保存Range对象
+      "mousedown .link_img":"save_range", //IE-7,8,9下保存Range对象
+      "click #img_upload_url":"show_extImg",
       "click .format":"upFormat",
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
@@ -32,12 +35,27 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     initialize: function(){
       edit_view = this;
     },
+    save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
+      var isIE=document.all? true:false;
+      var win=document.getElementById('editor').contentWindow;
+      var doc=win.document;
+      //ieRange=false;
+      //doc.designMode='On';//可编辑
+      win.focus();
+      if(isIE){//是否IE并且判断是否保存过Range对象
+	ieRange=doc.selection.createRange();
+      }
+    },
     hide_extImg:function(){    //隐藏弹出的链接地址对话框
       setTimeout(function(){
 	$(".img_upload_span").hide();
       },500);
     },
     show_extImg:function(evt){    //弹出输入链接地址的对话框
+      $(".img_upload_span").show();
+      $("#img_upload_url").focus();
+    },
+    extImg:function(evt){    //弹出输入链接地址的对话框
       $(".img_upload_span").show();
       $("#img_upload_url").val("");
       $("#img_upload_url").focus();
@@ -46,7 +64,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var url = $("#img_upload_url").val();
       if(url == "http://" || !url )return;
       $(".img_upload_span").hide();
-      App.ClipApp.Editor.insertImage("editor", {url: url});
+      App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
@@ -111,14 +129,15 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
        img.src = App.util.get_img_src(sender.files[0]);
        img.onload=function(){
        if(img.complete){
-       App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++});
+       App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
        }};}*/
 
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(img_src){
 	//img_list.push(img_src);
-	App.ClipApp.Editor.insertImage("editor", {url: img_src});
+	App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
       });
+      App.util.clearFileInput(sender);
     }
   };
 /*
