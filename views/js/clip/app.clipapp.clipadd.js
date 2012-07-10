@@ -31,7 +31,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click #img_upload_url":"show_extImg",
       "click .pop_left":"remark_clip",
       "click .message":"message_hide",
-      "click .close_w":"abandon",
+      "click .close_w":"cancelcliper",
+      "click .masker_layer":"cancelcliper",
       "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
       "click #save": "savecliper", // 对应clipper的ok
@@ -58,8 +59,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       document.cookie = "first=false"+";expires=" + data.toGMTString();
     },
     cancelcliper:function(){
+      clip.content = App.ClipApp.Editor.getContent("editor");
       App.vent.trigger("app.clipapp.clipper:cancel");
-      App.vent.trigger("app.clipapp.clipadd:@cancel");
+      App.vent.trigger("app.clipapp.clipadd:@cancel",clip);
     },
     savecliper:function(e){
       var target = $(e.currentTarget);
@@ -116,10 +118,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },
-    abandon: function(){
-      App.vent.trigger("app.clipapp.clipper:cancel");
-      App.vent.trigger("app.clipapp.clipadd:@cancel");
-    },
     remark_clip: function(){ // 此全局变量就是为了clip的注操作
       App.vent.trigger("app.clipapp:clipmemo", clip);
     }
@@ -165,8 +163,19 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   };
 
-  ClipAdd.close = function(){
-    App.viewRegion.close();
+  ClipAdd.close = function(clip){
+    if(!clip || !clip.content){
+      App.viewRegion.close();
+    }else{
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+      App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	$("#save").click();
+      });
+      App.vent.bind("app.clipapp.message:cancel",function(){
+	App.viewRegion.close();
+      });
+    }
   };
 
   // 由外部触发
@@ -191,8 +200,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp.clipadd:@cancel", function(){
-    ClipAdd.close();
+  App.vent.bind("app.clipapp.clipadd:@cancel", function(clip){
+    ClipAdd.close(clip);
   });
 
   App.vent.bind("app.clipapp.clipadd:@error", function(){

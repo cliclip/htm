@@ -358,6 +358,13 @@ App.versions = (function($){
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
+	  oauth_fail     : "认证失败，请重新认证！",
+	  memo_save      : "您已经对备注作了修改，离开后会使修改内容丢失，是否离开？",
+	  clipedit_save  : "您已经对载录作了修改，离开后会使修改内容丢失，是否离开？",
+	  reclip_save    : "您正在编辑的转载内容尚未保存，离开后会使内容丢失，是否离开？",
+	  recommend_save : "您正在编辑的推荐内容尚未保存，离开后会使内容丢失，是否离开？",
+	  comment_save   : "您正在编辑的评论内容尚未保存，离开后会使内容丢失，是否离开？",
+	  clipadd_save   : "您正在编辑的摘录尚未保存，离开后会使内容丢失，是否离开？",
 	  "oauth_fail"   : "认证失败，请重新认证!",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）",
 	  content        : {is_null: "摘录内容不能为空"}
@@ -677,7 +684,7 @@ App.versions = (function($){
 	  reclip_tag_fail: "You have reclipped these already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  reclip         : "Recliped successfully",
-	  recomm         : "Clip was forwarded successfully",
+	  recomm         : "Clip was forwarded(@) successfully",
 	  comment        : "Commented successfully",
 	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
@@ -732,8 +739,14 @@ App.versions = (function($){
 	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
+	  memo_save      : "您已经对备注作了修改，离开后会使修改内容丢失，是否离开？",
+	  clipedit_save  : "您已经对载录作了修改，离开后会使修改内容丢失，是否离开？",
+	  reclip_save    : "您正在编辑的转载内容尚未保存，离开后会使内容丢失，是否离开？",
+	  recommend_save : "您正在编辑的推荐内容尚未保存，离开后会使内容丢失，是否离开？",
+	  comment_save   : "您正在编辑的评论内容尚未保存，离开后会使内容丢失，是否离开？",
+	  clipadd_save   : "您正在编辑的摘录尚未保存，离开后会使内容丢失，是否离开？",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
-	  content        :{is_null: "clip's content is null"}
+	  content        : {is_null: "clip's content is null"}
 	},
 	util : {
 	  time:{

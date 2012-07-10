@@ -20,6 +20,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "blur #organize_text"    :"noteBlur",
       "click #organize_button" :"okClick",
       "click #cancel_button"   :"cancelClick",
+      "click .masker_layer"    :"cancelClick", // 点击detail下的层，便隐藏
       "click .close_w"         :"cancelClick"
     },
     tagToggle:function(e){
@@ -44,14 +45,14 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
     cancelClick:function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.memo:@close");
+      var n_data = loadData(this.$el);
+      App.vent.trigger("app.clipapp.memo:@close",n_data);
     }
   });
 
   function loadData(el){
     var _data = {};
     var main_tag = [];
-
     for(var i=0;i<6;i++){
       if($("#main_tag_"+i, el).attr("class") == "size48 orange_48"){
 	main_tag.push($.trim($("#main_tag_"+i, el).html()));
@@ -88,6 +89,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	_(ns).each(function(n){ text += n+" "; });
       }
     }
+    o_data = {tag:tags,note:text,"public":pub};
     var tag_main = _(_(App.util.getBubbs()).map(function(e){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
@@ -96,7 +98,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   var ClipMemo = {};
-  var memoType,defaultNote = _i18n('clipmemo.memo');
+  var memoType,defaultNote = _i18n('clipmemo.memo'),o_data;
   function showMemo(data){
     var memoModel = new MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});
@@ -127,8 +129,25 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
   };
 
-  ClipMemo.close=function(){
-    App.popRegion.close();
+  ClipMemo.close=function(n_data){
+    var flag = true;
+    if(!n_data)App.popRegion.close();
+    else{
+      if(o_data['public'] != 'false'){
+	o_data['public'] = 'true';
+      }
+      flag = flag && (o_data.note.trim()==n_data.note[0].text.trim());
+      flag = flag && n_data.tag.length==o_data.tag.length && _.difference(n_data.tag,o_data.tag).length==0;
+      flag = flag && n_data['public'] == o_data['public'];
+      if(flag)App.popRegion.close();
+      else{
+	App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+	App.vent.trigger("app.clipapp.message:alert", "memo_save");
+	App.vent.bind("app.clipapp.message:sure",function(){
+	  App.popRegion.close();
+	});
+      }
+    }
   };
 
   // 触发更新clip中的注的事件
@@ -162,8 +181,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
   });
 
-  App.vent.bind("app.clipapp.memo:@close",function(){
-    ClipMemo.close();
+  App.vent.bind("app.clipapp.memo:@close",function(n_data){
+    ClipMemo.close(n_data);
   });
 
   App.vent.bind("app.clipapp.memo:@error",function(model,error){

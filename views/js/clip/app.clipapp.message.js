@@ -10,6 +10,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
     className: "message-view",
     template: "#message-view-template",
     events: {
+      "click .masker_layer":"MessageSure",
       "click #sure": "MessageSure"
     },
     MessageSure: function(){
@@ -30,6 +31,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
     className: "message-view",
     template: "#warning-view-template",
     events: {
+      "click .masker_layer":"Messageclose",
       "click #sure": "MessageSure",
       "click #cancel":"Messageclose"
     },
