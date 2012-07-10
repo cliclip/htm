@@ -188,6 +188,7 @@ App.versions = (function($){
 	  title       : "评论",
 	  defaultText : "说点什么吧~",
 	  reclip      : "同时收录",
+	  comm_text   : {is_null : "评论内容为空"},
 	  ok          : "确 定",
 	  cancel      : "取 消"
 	},
@@ -558,6 +559,7 @@ App.versions = (function($){
 	comment : {
 	  title       : "Comment",
 	  defaultText : "Say something",
+	  comm_text   : {is_null : "comment's content is null"},
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel"
@@ -671,6 +673,7 @@ App.versions = (function($){
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  reclip         : "Recliped successfully",
 	  recomm         : "Clip was forwarded successfully",
+	  comment        : "Commented successfully",
 	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",

@@ -175,6 +175,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       checked = false;
     },
     foucsAction:function(e){
+      this.cleanError(e);
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == _i18n('comment.defaultText') ? "" : text );
     },
@@ -204,7 +205,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = ($("#comm_text").val()).replace(/[\s]/g, " ");
-      if(text == " " || text == _i18n('comment.defaultText')){$("#comm_text").focus(); return;}
+      if(text == " " || text == _i18n('comment.defaultText')){
+	this.showError("comment",{comm_text:"is_null"});
+	$("#comm_text").blur().val("");
+	return;
+      }
       $(e.currentTarget).attr("disabled",true);
       var params = {clipid: cid, text: text, pid: pid};
       var params1 = null;
