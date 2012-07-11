@@ -377,6 +377,7 @@ App.versions = (function($){
 	  recommend_save : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  comment_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  clipadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  emailadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  "oauth_fail"   : "认证失败，请重新认证!",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
 	},
@@ -488,7 +489,7 @@ App.versions = (function($){
 	  },
 	  conpass:{
 	    prompt:"Confirm password",
-	    is_null   :"Password is not filled in"
+	    is_null   :"Enter the same password"
 	  },
 	  confirm:{
 	    password_diff: "Password input not consistent"
@@ -772,6 +773,7 @@ App.versions = (function($){
 	  recommend_save : "If close the window, what you filled will lost, are you sure?",
 	  comment_save   : "If close the window, what you filled will lost, are you sure?",
 	  clipadd_save   : "If close the window, what you filled will lost, are you sure?",
+	  emailadd_save   : "If close the window, what you filled will lost, are you sure?",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
 	},
 	util : {

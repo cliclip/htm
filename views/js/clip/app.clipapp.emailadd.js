@@ -29,12 +29,14 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     events: {
       "click #emailadd_commit":"EmailAddcommit",
       "click #emailadd_cancel":"EmailAddclose",
+      "click .masker_layer"   :"EmailAddclose",
       "click .close_w"        :"EmailAddclose",
       "focus #email"          :"cleanError",
       "error" : "showError"
     },
     EmailAddclose: function(){
-      App.vent.trigger("app.clipapp.emailadd:@close");
+      var data = this.getInput();
+      App.vent.trigger("app.clipapp.emailadd:@close",data.email);
     },
     EmailAddcommit: function(){
       var view = this;
@@ -80,8 +82,19 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     });
   };
 
-  EmailAdd.close = function(){
+  EmailAdd.close = function(address){
     App.setpopRegion.close();
+    /*
+    if(!address)
+      App.setpopRegion.close();
+    else{
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+      App.vent.trigger("app.clipapp.message:alert", "emailadd_save");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	console.log("111");
+	App.setpopRegion.close();
+      });
+    }*/
   };
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
@@ -89,8 +102,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   });
 
   // 操作完成直接关闭 view
-  App.vent.bind("app.clipapp.emailadd:@close",function(){
-    EmailAdd.close();
+  App.vent.bind("app.clipapp.emailadd:@close",function(address){
+    EmailAdd.close(address);
   });
 
 
