@@ -4,6 +4,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var face_change_flag = false;
   var face_remote_flag = false;
   var flag = false;
+  var submit_face = false;
   var EditModel = App.Model.extend({});
 
   var FaceModel = App.Model.extend({
@@ -181,12 +182,23 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var editModel = new EditModel();
     var editView = new EditView({model: editModel});
     App.mysetRegion.show(editView);
-    UserEdit.showFace();
+    UserEdit.showFace(false);
     UserEdit.showEmail();
     App.ClipApp.RuleEdit.show();
     App.ClipApp.WeiboEdit.show();
     App.ClipApp.TwitterEdit.show();
     UserEdit.showPassEdit();
+/*    var iframe=document.getElementById("post_frame_face");
+    iframe.onload = function(){
+      if(submit_face){
+	console.info(iframe);
+	submit_face = false;
+	if($(iframe.contentWindow.document.body).text()[1]!=="0"){//取得图片上传的结果：成功或失败
+
+	}
+      }
+    };
+*/
   };
 
 
@@ -206,6 +218,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "mouseover .lang-list": "MouseOver",
       "mouseout  .lang-list": "MouseOut",
       "click .lang-list" : "lang_save"
+    },
+    initialize:function(){
     },
     setName: function(e){
       e.preventDefault();
@@ -241,6 +255,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       });
     },
     submitFace:function(event){
+      submit_face = true;
       $("#confirm_face").hide();
       if(face_remote_flag){
 	event.preventDefault();
@@ -311,36 +326,36 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showFace = function(flag){
+  UserEdit.showFace = function(flag){//设置页面显示用户名和头像
     var face = App.util.getMyFace();
     var uid = App.util.getMyUid();
     var faceModel = new FaceModel(face);
-    if(flag){
+    if(flag){//设置用户名后重新显示
       faceModel.fetch({
 	url:App.util.unique_url(P+"/my/info")
       });
-      faceModel.onChange(function(faceModel){
+      faceModel.onChange(function(faceModel){//设置用户名以及更新头像都会触发此事件
 	UserEdit.faceRegion = new App.Region({el:".left_bar"});
 	var faceView = new FaceView({model: faceModel});
 	UserEdit.faceRegion.show(faceView);
-	faceLoad(face.face,uid);//修改头像
+	faceLoad(face.face,uid);//为iframe 绑定load事件，加载头像
       });
-    }else{
+    }else{//直接加载页设置面时调用
       UserEdit.faceRegion = new App.Region({el:".left_bar"});
       var faceView = new FaceView({model: faceModel});
       UserEdit.faceRegion.show(faceView);
-      faceLoad(face.face,uid);//修改头像
+      faceLoad(face.face,uid);
     }
   };
 
   UserEdit.onUploadImgChange = function(sender){
     if( !sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i)){
-      App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
+      App.vent.trigger("app.clipapp.message:confirm","imageUp_error");
       return false;
     }else{
       if(sender.files && sender.files[0]&&(navigator.userAgent.indexOf("Firefox")>0||(window.google && window.chrome))){
 	$("#confirm_face").show();
-	preview_face(sender);// ff chrome 之外其他浏览器预览头像
+	preview_face(sender);// ff chrome
 	//$("#myface").attr("src",img.src);
 	return true;
       }else if(sender.value && window.navigator.userAgent.indexOf("MSIE")>=1){
@@ -361,6 +376,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }else {
 	face_remote_flag = true;
 	$("#face_form").submit();
+	submit_face = true;
       }
       return false;
     }
@@ -404,7 +420,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
-	if(returnObj[0] == 0){
+	//console.info(returnObj);
+	if(returnObj[0] == 0){//上传成功
 	  var currentFace = returnObj[1][0];
 	  if(currentFace){
 	    var facemodel = new FaceModel({face:currentFace});
@@ -430,8 +447,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	      saveFace(facemodel,{face:currentFace});
 	    }*/
 	  }
+	}else{//上传失败
+	  if(submit_face){//flag 作用判断是刚刚打开设置页面还是正在更新头像
+	    App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
+	  }
 	}
       }
+      submit_face = false;
     });
   }
 //ff chrome 之外的其他浏览器本地预览头像
@@ -494,7 +516,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.useredit:@showface",function(){
     //设置用户名后需要重新显示faceview
-    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
+    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());//主页重新显示用户名和头像，不是设置页面
     UserEdit.showFace(true);
   });
 
