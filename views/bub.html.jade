@@ -20,7 +20,6 @@ html
     //-script(src="/js/lib/box2d.js")
     //-script(src="/js/bub.js")
     script(src="/js/bub.js")
-
     :less
       .tag_icon(@x:0, @y:0) {
         background: url(../img/tag_bg.png) no-repeat;
@@ -135,11 +134,11 @@ html
       <% if(!self && !homepage){%>
       <span>
       <% if (follow) {%>
-      <a href="#" class="unfollow">停</a>
+      <a href="#" class="unfollow"><%=t_unfollow%></a>
       <% } else { %>
-      <a href="#" class="follow">追</a>
+      <a href="#" class="follow"><%=t_follow%></a>
       <% } %>
-      <a href="#" class="reclip">收</a>
+      <a href="#" class="reclip"><%=t_reclip%></a>
       </span>
       <% } %>
       </div>
