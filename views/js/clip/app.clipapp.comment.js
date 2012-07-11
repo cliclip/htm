@@ -39,6 +39,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     },
     maintagAction:function(e){
       // 取得评论框中的文本并转为数组，去除掉数组中的默认值和空值。
+      $("#comm_text").focus();
       var arr_text = _.compact(_.without($("#comm_text").val().split(","),_i18n('comment.defaultText')));
       var tag = $(e.currentTarget).text(); //取得当前点击的tag
       $(e.currentTarget).toggleClass("white_48"); //tag颜色的切换
