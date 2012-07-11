@@ -16,7 +16,9 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	App.vent.unbind("app.clipapp.message:cancel");
 	App.vent.trigger("app.clipapp.message:alert", "oauth_fail");
 	App.vent.bind("app.clipapp.message:sure",function(){
-	  window.location.href="/oauth/req/twitter?force_login=true";
+	  var my=App.util.getMyUid();
+	  if(my)  Backbone.history.navigate("my",true);
+	  else    Backbone.history.navigate("register",true);
 	});
 	App.vent.bind("app.clipapp.message:cancel",function(){
 	  Backbone.history.navigate("",true);
