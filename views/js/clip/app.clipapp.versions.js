@@ -206,7 +206,9 @@ App.versions = (function($){
 	showcomment : {
 	  reply       : "回复",
 	  delete      : "删除",
-	  text        : "此内容已被删除"
+	  text        : "此内容已被删除",
+	  pack        : "(收起)",
+	  open        : "(展开)"
 	},
 
 	addcomm : {
@@ -589,7 +591,9 @@ App.versions = (function($){
 	showcomment : {
 	  reply       : "Reply",
 	  delete      : "Delete",
-	  text        : "The comment has been removed"
+	  text        : "The comment has been removed",
+	  pack        : "(pack up)",
+	  open        : "(open up)"
 	},
 
 	addcomm : {

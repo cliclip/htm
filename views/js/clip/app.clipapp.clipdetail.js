@@ -82,11 +82,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	if(curr == "marking"){
 	  var marking = $(e.target).text();
 	  if(marking)
-	    $(e.target).text(marking == '+' ? '-' : '+');
+	    $(e.target).text(marking == _i18n('showcomment.open') ? _i18n('showcomment.pack') : _i18n('showcomment.open'));
 	}else{
 	  var marking = $(e.target).siblings(".marking").text();
 	  if(marking)
-	    $(e.target).siblings(".marking").text(marking == '+' ? '-' : '+');
+	    $(e.target).siblings(".marking").text(marking == _i18n('showcomment.open') ? _i18n('showcomment.pack') : _i18n('showcomment.open'));
 	}
 	$(e.currentTarget).siblings(".children").toggle();
       }
