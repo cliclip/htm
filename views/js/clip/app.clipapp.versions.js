@@ -41,6 +41,12 @@ App.versions = (function($){
 	  follow      : "谁追我"
 	},
 
+	bubb : {
+	  follow      : "追",
+	  unfollow    : "停",
+	  reclip      : "收"
+	},
+
 	faceEdit : {
 	  no_name     : "您还没有用户名",
 	  set_name    : "设置用户名",
@@ -422,6 +428,12 @@ App.versions = (function($){
 	userface : {
 	  following   : "Following",
 	  follow      : "Followed by"
+	},
+
+	bubb : {
+	  follow      : "follow",
+	  unfollow    : "unfollow",
+	  reclip      : "reclip"
 	},
 
 	faceEdit : {
