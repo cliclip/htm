@@ -67,7 +67,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       if($("#reclip_box").attr("checked")){
 	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};
       }
-      var tmpmodel = new App.Model.CommModel();
+      var tmpmodel = new App.Model.CommModel(params);
       tmpmodel.save({},{
 	url: P+"/clip/"+clipid+"/comment",
 	success: function(model, res){
