@@ -64,7 +64,7 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView.extend({
-  showError:function(tmpl,errorCode,msg){
+  showError:function(tmpl,errorCode,msg){ // 显示validate验证的错误提示
     for(var key in errorCode){
       var error = _i18n(tmpl+'.'+key+'.'+errorCode[key],msg);
       this.$("#"+key).addClass("error");
@@ -73,19 +73,19 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
 	this.$("#"+key).val("");
     }
   },
-  cleanError:function(e){
+  cleanError:function(e){ // 当用户进行鼠标聚焦时，清空错误提示
     var id = e.currentTarget.id;
     this.$("#"+id).siblings("span.error").remove();
     this.$("#"+id).removeClass("error");
   },
-  getInput:function(){
+  getInput:function(){ // 获取页面输入框的值
     var data = {};
     _.each(this.$(":input").serializeArray(), function(obj){
       data[obj.name] = obj.value == "" ? undefined : obj.value;
     });
     return data;
   },
-  setModel:function(tmpl, model, data){
+  setModel:function(tmpl, model, data){ // 封装了model.set和showError方法
     var view = this;
     model.set(data, {
       error: function(model, error){
@@ -141,9 +141,7 @@ if(typeof console !="object"){
     info:function(){},
     dir:function(){}
   };
-
 }
-
 App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
@@ -193,7 +191,7 @@ App.bind("initialize:after", function(){
     if(obj && obj.last()&& obj.last()[0]){
       var last_top = $("#list .clip").last()[0].offsetTop;
     }
-    // console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+    //console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
 
     if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
       time_gap = false;

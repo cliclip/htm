@@ -12,7 +12,7 @@ script(type='text/template',id='userface-view-template')
       <% }} %>	
     dl.user_detail.clearfix
       dt.
-        <a class="user_list" href="javascript:scroll(0,100)">
+        <a class="user_list">
           <%if(name){%>
           <%=name%>
           <%} else {%>
@@ -23,7 +23,7 @@ script(type='text/template',id='userface-view-template')
           span.icon_follow
             //-i.icon_biezhen
             div.
-              <a class="following" href="javascript:scroll(0,100)">
+              <a class="following">
                 <%=_i18n('userface.following')%>(<%=following%>)
               </a> 
           span.icon_block

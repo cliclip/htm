@@ -25,7 +25,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     // if(isIE){
       var data = objEditor.contentWindow.document.body.innerHTML;
-    console.info(data);
+    //console.info(data);
     // }else{
       // var data = objEditor.contentWindow.document.body.innerHTML;;
     // }
@@ -48,11 +48,16 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       var range = objEditor.contentWindow.getSelection().getRangeAt(0);
       var sel = objEditor.contentWindow.getSelection();
       range.setStart(el.body.childNodes[0], 0);
-      range.collapse(true);
+      range.collapse(true); // 将光标移动到editor的起始位置
       sel.removeAllRanges();
       sel.addRange(range);
       el.body.focus();
     };
+  };
+
+  Editor.focus = function(editroId){
+    var ifrm=document.getElementById("editor");
+    ifrm.contentWindow.focus();
   };
 
   // data 可以是一个对象 没有必要设为数组
@@ -62,9 +67,15 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     if(data.url)
       img = "<img src="+data.url+ " style='max-width:630px;' />";
     if(isIE){ // TODO
-      objEditor.contentWindow.focus();
-      var editor = objEditor.contentWindow.document.selection.createRange();
-      editor.pasteHTML(img);
+      if(data.ieRange){
+	data.ieRange.pasteHTML(img);
+	data.ieRange.select();
+	data.ieRange=false;//清空下range对象
+      }else{
+	objEditor.contentWindow.focus();
+	var editor = objEditor.contentWindow.document.selection.createRange();
+	editor.pasteHTML(img);
+      }
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, img);
     }

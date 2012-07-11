@@ -47,9 +47,9 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	    App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
 	  },
 	  error:function(model, res){
-	    if(res.email == "no_uname")
+	    if(res.email == "no_uname"){
 	      App.vent.trigger("app.clipapp.message:chinese", res);
-	    else{
+	    }else{
 	      view.showError('emailAdd',res);
 	    }
 	  }

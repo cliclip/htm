@@ -8,6 +8,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     events : {
       "click #deleteok_button" : "okClick",
       "click #cancel_button" : "cancelClick",
+      "click .masker_layer"  : "cancelClick",
       "click .close_w"       : "cancelClick"
     },
     okClick : function(e){
@@ -35,7 +36,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
 	 App.vent.trigger("app.clipapp.cliplist:remove",model.id);
 	 //在删clip时不能根据删除clip的tag来refresh   bubbs。所以重新load
 	 if(/my/.test(window.location.hash)){
-	   App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());     
+	   App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
 	 }
 	 ClipDelete.close();
 	 if(App.viewRegion){ // 从detail来，需要关闭viewRegion
