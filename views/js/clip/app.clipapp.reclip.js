@@ -74,7 +74,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 
 
   var Reclip = {};
-  var mid;
+  var mid,o_pub;
 
   Reclip.show = function(cid,model_id,recommend,pub){
     mid = model_id;
@@ -88,13 +88,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
       $(".small_pop").css("top", App.util.getPopTop("small"));
+      o_pub = pub;
       if(pub == "false") $("#checkbox").attr("checked",true);
       $('#obj_tag').tagsInput({});
     }
   };
 
   Reclip.close = function(params){
-    if(!params||(params.clip.note[0].text==""&&params.clip.tag.length==0&&params.clip['public']!='false')){
+    if(!params||(params.clip.note[0].text==""&&params.clip.tag.length==0&&params.clip['public']==o_pub)){
       App.popRegion.close();
       mid = null;
     }else{
