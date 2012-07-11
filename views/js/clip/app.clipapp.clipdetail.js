@@ -29,11 +29,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
       var cid = this.model.id;
-      var rid = this.model.get("rid");
+      var recommend = { // 传给reclip用
+	rid : this.model.get("rid"),
+	user: this.model.get("ruser")
+      };
       var pub = this.model.get("public");
       switch(opt){
 	case 'biezhen':
-	App.vent.trigger("app.clipapp:reclip", cid,mid,rid,pub);break;
+	App.vent.trigger("app.clipapp:reclip", cid,mid,recommend,pub);break;
 	case 'refresh':
 	App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
 	case 'comment':
@@ -276,9 +279,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  ClipDetail.show = function(cid,model_id,rid){   // 此处的cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id,recommend){   // 此处的cid等于detailModel.id
     mid = model_id;
-    var clip = new App.Model.DetailModel({id: cid, rid:rid});
+    var clip = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user});
     clip.fetch({
       success:function(res,model){
 	clip.onChange(function(detailModel){
