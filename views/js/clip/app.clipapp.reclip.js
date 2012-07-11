@@ -76,14 +76,21 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
   var mid;
 
-  Reclip.show = function(cid,model_id,rid,pub){
+  Reclip.show = function(cid,model_id,recommend,pub){
     mid = model_id;
-    var model = new ReclipModel({id:cid,rid:rid});
-    var reclipView = new ReclipView({model : model});
-    App.popRegion.show(reclipView);
-    $(".small_pop").css("top", App.util.getPopTop("small"));
-    if(pub == "false") $("#checkbox").attr("checked",true);
-    $('#obj_tag').tagsInput({});
+    var rid = recommend.rid;
+    var ruser = recommend.user;
+    if(pub == "false" && ruser != cid.split(':')[0]){
+      // 是没公开的，并且不是clip_owner进行的操作
+      App.vent.trigger("app.clipapp.message:chinese", {reclip: "no_pub"});
+    }else{
+      var model = new ReclipModel({id:cid,rid:rid});
+      var reclipView = new ReclipView({model : model});
+      App.popRegion.show(reclipView);
+      $(".small_pop").css("top", App.util.getPopTop("small"));
+      if(pub == "false") $("#checkbox").attr("checked",true);
+      $('#obj_tag').tagsInput({});
+    }
   };
 
   Reclip.close = function(params){
@@ -105,7 +112,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     model.save({},{
       type: "POST",
       success: function(model, res){
-	App.vent.trigger("app.clipapp.message:success", "reclip");
+	App.vent.trigger("app.clipapp.message:success", {reclip:"success"});
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
 	App.vent.trigger("app.clipapp.taglist:taglistRefresh",params.clip.tag);
       },

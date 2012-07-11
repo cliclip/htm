@@ -7,9 +7,9 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
       if(err&&err.hasbind_err){
 	App.vent.trigger("app.clipapp.message:confirm", "account_hasbind");
 	Backbone.history.navigate("my",true);
-      }else if(res.oauth){
+      }else if(res&&res.oauth){
 	App.vent.trigger("app.clipapp.userbind:show",res.oauth,"");
-      }else if(res.token){
+      }else if(res&&res.token){
 	App.vent.trigger("app.clipapp.login:success", res);
       }else{
 	App.vent.unbind("app.clipapp.message:sure");

@@ -18,8 +18,27 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   });
   var FollowingView=App.ItemView.extend({
     tagName:"div",
-    template:"#following-view-template"
+    template:"#following-view-template",
+    onRender:function(){//动态设置宽度
+      var tags_num=this.model.get("tag").length;
+      var widths = tags_num*58+"px";
+      this.$(".items").css({width:widths});
+    },
+    events:{
+      "mouseover .box"      :  "MouseOver"
+    },
+    MouseOver:function(e){
+      var XPath = this.$(".box").offset().left;
+      var MouseX = e.pageX;
+      var left =MouseX-XPath;
+      var tags_num=this.model.get("tag").length;
+      var widths = tags_num*58;
+      var position = "-"+(left/545)*(widths-545)+"px";
+      this.$(".items").css({left:position});
+    }
+
   });
+
   var FollowingListView=App.CompositeView.extend({
     tagName:"div",
     className:"following-item",

@@ -14,9 +14,11 @@ script(type="text/template",id="follower-view-template")
           span.size48.blue_48
             | <%if(tag== "*"){%> <a href="#user/<%=App.ClipApp.Face.getUserId()%>"><%=_i18n('follower.all')%><%}else{%><a href="#user/<%=App.ClipApp.Face.getUserId()%>/tag/<%=tag%>"><%=tag%><%}%></a>	
         div.tags
-          | <% for(var i=0; i<user.length; i++){%>
-          | <a href="#user/<%=user[i].id%>"><span class="heads" title="<%=user[i].name%>">
-          | <img src="<%=App.util.face_url(user[i].face,50)%>" />
-          | <p> <%=user[i].name%></p>
-          | </span></a><%}%>
-          //i.follow
+          div.box
+            div.items
+              | <% for(var i=0; i<user.length; i++){%>
+              | <a href="#user/<%=user[i].id%>"><span class="heads" title="<%=user[i].name%>">
+              | <img src="<%=App.util.face_url(user[i].face,50)%>" />
+              | <p> <%=user[i].name%></p>
+              | </span></a><%}%>
+              //i.follow

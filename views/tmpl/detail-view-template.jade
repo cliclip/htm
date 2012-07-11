@@ -42,7 +42,7 @@ script(type="text/template",id="showcomment-view-template")
   <% if (text == "此内容已被删除"){ %>
   dd.comment_con.del_comm.
     <div class="comm_link" id="<%= id %>">
-    <a class="marking"><% if(has_child) {%> - <%}%></a>
+    <a class="marking"><% if(has_child) {%> <%=_i18n('showcomment.pack')%> <%}%></a>
     <%=_i18n('showcomment.text') %><%= App.util.generatePastTime(date)%>
     </div>
   <% } else {%>
@@ -52,7 +52,7 @@ script(type="text/template",id="showcomment-view-template")
     <a href="#user/<%=user.id%>"><%=user.name%></a>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>">
-    <a class="marking"><% if(has_child) {%> - <%}%></a>
+    <a class="marking"><% if(has_child) {%> <%=_i18n('showcomment.pack')%> <%}%></a>
     <span class="comment_text"><%= text %></span>
     <span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
     <div id="reply_<%=id%>" style="display:none;">
