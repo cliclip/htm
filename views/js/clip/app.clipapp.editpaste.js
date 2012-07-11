@@ -25,7 +25,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     // if(isIE){
       var data = objEditor.contentWindow.document.body.innerHTML;
-    console.info(data);
+    //console.info(data);
     // }else{
       // var data = objEditor.contentWindow.document.body.innerHTML;;
     // }
@@ -67,9 +67,15 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     if(data.url)
       img = "<img src="+data.url+ " style='max-width:630px;' />";
     if(isIE){ // TODO
-      objEditor.contentWindow.focus();
-      var editor = objEditor.contentWindow.document.selection.createRange();
-      editor.pasteHTML(img);
+      if(data.ieRange){
+	data.ieRange.pasteHTML(img);
+	data.ieRange.select();
+	data.ieRange=false;//清空下range对象
+      }else{
+	objEditor.contentWindow.focus();
+	var editor = objEditor.contentWindow.document.selection.createRange();
+	editor.pasteHTML(img);
+      }
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, img);
     }

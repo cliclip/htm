@@ -57,6 +57,9 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       var followerlistView = new FollowerListView({collection:followerlist});
       $("#list").css({height:"auto"});
       App.listRegion.show(followerlistView);
+      if( $(window).scrollTop()>100){
+	window.location.href="javascript:scroll(0,100)";
+      }
       //console.info(App.listRegion.currentView.$el[0].className);
       if(flag) $(".empty_user").css("display","none");
       App.vent.trigger("app.clipapp:showpage");

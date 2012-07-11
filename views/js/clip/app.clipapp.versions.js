@@ -217,8 +217,8 @@ App.versions = (function($){
 	},
 
 	addClip : {
-	  title       : "增加",
-	  note_message: "添加备注",
+	  title       : "新建摘录",
+	  note_message: "添加标注",
 	  upload      : "上传图片",
 	  link        : "链接图片",
 	  ok          : "确 定",
@@ -307,8 +307,13 @@ App.versions = (function($){
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
 	  pre_active:"您已激活%s邮件地址。您现在可以再登录时使用此邮件地址，并接受来自此邮件地址的收藏。",
-	  cliplist_null  : "抱歉，没有找到相关的信息......",
-	  "error_message": "操作失败，请重试",
+	  cliplist_null:{
+	    all:"抱歉，没有找到相关的信息......",
+	    my:"抱歉，没有找到相关的信息......",
+	    interest:"抱歉，没有找到相关的信息......",
+	    recommend:"抱歉，没有找到相关的信息......"
+	  },
+	  error_message :"操作失败，请重试",
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
 	    has_recliped : "您已经收录过该条摘录了",
@@ -353,6 +358,13 @@ App.versions = (function($){
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
+	  oauth_fail     : "认证失败，请重新认证！",
+	  memo_save      : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  clipedit_save  : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  reclip_save    : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  recommend_save : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  comment_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  clipadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  "oauth_fail"   : "认证失败，请重新认证!",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
 	},
@@ -589,7 +601,7 @@ App.versions = (function($){
 
 	addClip : {
 	  note_message:"add notes",
-	  title       : "Add",
+	  title       : "new clip",
 	  upload      : "&nbspUpload image",
 	  link        : "Web image",
 	  ok          : "OK",
@@ -671,14 +683,19 @@ App.versions = (function($){
 	  reclip_tag_fail: "You have reclipped these already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  reclip         : "Recliped successfully",
-	  recomm         : "Clip was forwarded successfully",
+	  recomm         : "Clip was forwarded(@) successfully",
 	  comment        : "Commented successfully",
 	  account_hasbind:"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
-	  cliplist_null  : "Sorry, no results found",
+	  cliplist_null:{
+	    all:"Sorry,have not found appropriate clauses......",
+	    my:"Sorry,have not found appropriate clauses......",
+	    interest:"Sorry,have not found appropriate clauses......",
+	    recommend:"Sorry,have not found appropriate clauses......"
+	  },
 	  "error_message" :"Operation fail,please try again!",
 	  clip : {
 	    has_this_clip: "You have this clip already",
@@ -721,6 +738,13 @@ App.versions = (function($){
 	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
+	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
+	  memo_save      : "If close the window, what you filled will lost, are you sure?",
+	  clipedit_save  : "If close the window, what you filled will lost, are you sure?",
+	  reclip_save    : "If close the window, what you filled will lost, are you sure?",
+	  recommend_save : "If close the window, what you filled will lost, are you sure?",
+	  comment_save   : "If close the window, what you filled will lost, are you sure?",
+	  clipadd_save   : "If close the window, what you filled will lost, are you sure?",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
 	},
 	util : {

@@ -18,6 +18,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
       "click .size48"      : "maintagAction",
+      "click .masker_layer": "cancel",
       "click .close_w"     : "cancel"
     },
     maintagAction:function(e){
@@ -43,7 +44,10 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.reclip_tag:@close");
+      var params = loadData(this.$el);
+      params["id"] = this.model.get("user");
+      params["tag"] = this.model.get("tag");
+      App.vent.trigger("app.clipapp.reclip_tag:@close",params, this.model.get('count'));
     }
   });
 
@@ -97,8 +101,16 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     });
   };
 
-  ReclipTag.close = function(){
-    App.popRegion.close();
+  ReclipTag.close = function(params, count){
+    if(!params||(params.clip.note[0].text==""&&params.clip.tag.length==0&&params.clip['public']!='false')){
+      App.popRegion.close();
+    }else{
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+      App.vent.trigger("app.clipapp.message:alert", "reclip_save");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	App.popRegion.close();
+      });
+    }
   };
 
   App.vent.bind("app.clipapp.reclip_tag:@submit", function(params,count){
@@ -122,8 +134,8 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     });
   });
 
-  App.vent.bind("app.clipapp.reclip_tag:@close",function(){
-    ReclipTag.close();
+  App.vent.bind("app.clipapp.reclip_tag:@close",function(params, count){
+    ReclipTag.close(params, count);
   });
 
   return ReclipTag;
