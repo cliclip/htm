@@ -21,7 +21,25 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   });
   var FollowerView=App.ItemView.extend({
     tagName:"div",
-    template:"#follower-view-template"
+    template:"#follower-view-template",
+    onRender:function(){
+      var user_num = this.model.get("user").length;
+      var widths = user_num*58+"px";
+      this.$(".items").css({width:widths});
+    },
+    events:{
+      "mouseover .box"   :  "MouseOver"
+    },
+    MouseOver:function(e){
+      var XPath = this.$(".box").offset().left;
+      var MouseX = e.pageX;
+      var left =MouseX-XPath;
+      var user_num = this.model.get("user").length;
+      var widths = user_num*53;
+      var position = "-"+(left/545)*(widths-545)+"px";
+      this.$(".items").css({left:position});
+    }
+
   });
   var FollowerListView=App.CompositeView.extend({
     tagName:"div",

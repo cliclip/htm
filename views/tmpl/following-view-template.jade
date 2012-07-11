@@ -17,7 +17,9 @@ script(type="text/template",id="following-view-template")
           p
             | <a href="#user/<%=id%>"><%=name%></a>
         div.tags.tag_box
-          <%for(var i=0;i<tag.length;i++){%>
-          span.size48.blue_48
-            | <%if(tag[i]== "*"){%><a href="#user/<%=id%>"><%=_i18n('following.all')%><%}else{%><a href="#user/<%=id%>/tag/<%=tag[i]%>"><%=tag[i]%><%}%></a>
-          <%}%>
+          div.box
+            div.items
+              <%for(var i=0;i<tag.length;i++){%>
+              span.size48.blue_48
+                | <%if(tag[i]== "*"){%><a href="#user/<%=id%>"><%=_i18n('following.all')%><%}else{%><a href="#user/<%=id%>/tag/<%=tag[i]%>"><%=tag[i]%><%}%></a>
+              <%}%>
