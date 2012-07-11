@@ -140,7 +140,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.util.get_imgid("post_frame",function(img_src){
 	// console.info("after submit",img_src);
 	// img_list.push(img_src);
-	App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
+	if(img_src)
+	  App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
       });
       //解决ie 789 无法连续上传相同的图片，需要清空上传控件中的数据
       App.util.clearFileInput(sender);
