@@ -88,9 +88,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	//ie-7 8 无getSelection()只有document.selection
 	return;
       }
-      var rid = this.model.get("recommend").rid;
+      var recommend = {
+	rid: this.model.get("recommend").rid,
+	user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
+      };
       var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
-      App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id,rid);
+      App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id,recommend);
     },
     mouseEnter: function(e){
       $(e.currentTarget).children(".master").children("#opt").show();
@@ -104,12 +107,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var cid = this.model.get("user").id + ":" + this.model.get("clipid");
       var pub = this.model.get("public");
       var mid = this.model.id;
-      var recommend = {
+      var recommend = { // 只是传给reclip用
 	rid : this.model.get("recommend").rid,
-	user: this.model.get("recommend").user.id
+	user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
       };
-      //var clip = this.model.get("clip");
-      //var cid = clip.user.id+":"+clip.id;
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip",cid,mid,recommend,pub);break;
