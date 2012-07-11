@@ -207,6 +207,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "mouseout  .lang-list": "MouseOut",
       "click .lang-list" : "lang_save"
     },
+    initialize:function(){
+      var iframe=document.getElementById("post_frame_face");
+      console.info("qqqq");
+      iframe.onload = function(){
+	alert("aaa");
+      };
+    },
     setName: function(e){
       e.preventDefault();
       var view = this;
@@ -340,7 +347,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }else{
       if(sender.files && sender.files[0]&&(navigator.userAgent.indexOf("Firefox")>0||(window.google && window.chrome))){
 	$("#confirm_face").show();
-	preview_face(sender);// ff chrome 之外其他浏览器预览头像
+	preview_face(sender);// ff chrome
 	//$("#myface").attr("src",img.src);
 	return true;
       }else if(sender.value && window.navigator.userAgent.indexOf("MSIE")>=1){

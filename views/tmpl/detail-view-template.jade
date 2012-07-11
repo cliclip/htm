@@ -48,7 +48,7 @@ script(type="text/template",id="showcomment-view-template")
   <% } else {%>
   div.user_head
     <a href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
-  div.username
+  dt.username
     <a href="#user/<%=user.id%>"><%=user.name%></a>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>">
@@ -76,5 +76,5 @@ script(type="text/template",id="addcomm-view-template")
       |  <%=_i18n('addcomm.reclip')%>
   <% } %>
   div.btn_group.clearfix.
-    <input type="button" class="verify" value="<%=_i18n('addcomm.commentOK')%>" />
-    <input type="button" class="cancel" value="<%=_i18n('addcomm.cancel" />
+    <input type="button" class="verify" value="<%=_i18n('comment.ok')%>" />
+    <input type="button" class="cancel" value="<%=_i18n('comment.cancel')%>" />
