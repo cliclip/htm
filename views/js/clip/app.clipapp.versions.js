@@ -694,7 +694,7 @@ App.versions = (function($){
 	  not_array     : "Clip must be array",
 	  is_empty      : "Clip can't be empty",
 	  is_null       : "You haven't set the rule of email connection",
-	  no_uname      : "Please set User name before add email connection",
+	  no_uname      : "Please set user name before add email connection",
 	  faceUp_success : "Your portrait has been updated",
 	  passwd_success : "Your password has been changed",
 	  setRule_success: "Your rule of email connection has been updated",
