@@ -474,7 +474,11 @@
 	}
 }
 #setpop{
-	z-index: 3;
+	//z-index: 3;
+	left: 630px;
+    	position: absolute;
+    	z-index: 30;
+	top: 0;
 	.masker_layer{
 		z-index:10;
 	}
@@ -999,10 +1003,10 @@ section.follow_frame{
 		li{margin-bottom:10px;list-style:none;}
 		li.input_text input{width:270px;height:25px;border:1px solid #ccc;margin-bottom:0;}
 		li.input_text input.error{width:270px;height:25px;border:1px solid #f00;margin-bottom:0;}
-                li.input_text span.error{position:absolute;z-index:1000;width: auto;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:1px;text-align:center;padding:5px;min-height:1em;.border-radius(5px);font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;margin-left:-130px}
+                li.input_text span.error{position:absolute;z-index:1000;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:1px;text-align:center;padding:5px;min-height:1em;.border-radius(5px);font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;right:0px}
 		li.input_textarea textarea{width:270px;height:72px;border:1px solid #ccc;margin-bottom:0;resize:none;}
 		li.input_textarea textarea.error{width:270px;height:72px;border:1px solid #f00;margin-bottom:0;}
-		li.input_textarea span.error{position:absolute;z-index:1000;width:auto;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:1px;text-align:center;padding:5px;min-height:1em;.border-radius(5px);font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;margin-left:-184px;margin-top:46px;}
+		li.input_textarea span.error{position:absolute;z-index:1000;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:1px;text-align:center;padding:5px;min-height:1em;.border-radius(5px);font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;right:0px;margin-top:46px;}
 		li.select_user input{width:220px;height:32px;float:left;margin-left:10px;border-style:none;}
 		li.select_user div.container{border:1px solid #ccc;width:278px;height:40px;}
 		li.select_user div.container input.error{
@@ -1013,11 +1017,10 @@ section.follow_frame{
 		li.select_user div.container span.error{
 		       position:absolute;
 		       z-index:1000;
-		       width: auto;
+		       right:0px;
 		       margin-top:0.2px;
-		       margin-left:100px;
 		       *margin-top:-40px;
-		       *margin-left:-100px;
+		       *right:0px;
 		       max-width:500px;
 		       min-width:110px;
 		       background:#EEFF00 none repeat scroll 0% 50%;
@@ -1240,7 +1243,7 @@ section.follow_frame{
 				float:left;
 				img{width:33px;height:33px;}
 			}
-			.username{
+			dt.username{
 				margin-left:43px;
 				margin-bottom:5px;
 				time{
@@ -1285,7 +1288,7 @@ section.follow_frame{
 			position:absolute;
 			z-index:1000;
 			width: auto;
-			margin-left:-187px;
+			margin-left:-130px;
 			margin-top:28px;
 			max-width:500px;
 			min-width:110px;

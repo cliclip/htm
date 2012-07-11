@@ -29,6 +29,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
+      "click .masker_layer":"abandonUpdate",
       "click .close_w":"abandonUpdate"
     },
     initialize: function(){
@@ -86,7 +87,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var editModel = new EditModel({});
       editModel.set({content:content},{
 	error:function(model, error){
-	  App.vent.trigger("app.clipapp.message:alert", error);
+	  App.vent.trigger("app.clipapp.message:confirm", error);
 	  App.vent.bind("app.clipapp.message:sure", function(){
 	    target.attr("disabled", false);
 	    App.ClipApp.Editor.focus("editor");
@@ -109,7 +110,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       };
     },
     abandonUpdate: function(){
-      App.vent.trigger("app.clipapp.clipedit:@cancel");
+      var cid = this.model.id;
+      var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+      App.vent.trigger("app.clipapp.clipedit:@cancel",content,cid);
     }
   });
 
@@ -160,8 +163,15 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     });
   };
 
-  ClipEdit.close = function(){
-    App.viewRegion.close();
+  ClipEdit.close = function(n_content,cid){
+    if(!n_content || n_content.trim() == old_content.trim())App.viewRegion.close();
+    else{
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+      App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	App.viewRegion.close();
+      });
+    }
   };
 
   App.vent.bind("app.clipapp.clipedit:@success", function(content,cid){
@@ -170,8 +180,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
   });
 
-  App.vent.bind("app.clipapp.clipedit:@cancel", function(){
-    ClipEdit.close();
+  App.vent.bind("app.clipapp.clipedit:@cancel", function(n_content,cid){
+    ClipEdit.close(n_content,cid);
   });
 
   App.vent.trigger("app.clipapp.clipedit:@error", function(){

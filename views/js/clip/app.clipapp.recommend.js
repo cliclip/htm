@@ -39,6 +39,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "blur  #recomm_text":  "textBlur",
       "click #submit"        :  "recommendAction",
       "click #cancel"        :  "cancelAction",
+      "click .masker_layer"  :  "cancelAction",
       "click .close_w"       :  "cancelAction"
     },
     initialize:function(){
@@ -182,6 +183,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	//recommend 需要的参数
 	view.tmpmodel.save({},{
 	  success:function(model,res){
+	    uid = null;
 	    Recommend.close();
 	    App.vent.trigger("app.clipapp.message:success","recomm");
 	  },
@@ -199,7 +201,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     clearAction:function(e){
       this.cleanError(e);
       $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('recommend.defaultText') ? "" :
-      $(e.currentTarget).val() );
+      $(e.currentTarget).val());
+      // 当输入框再次聚焦的时候，使得确定按钮可用
+      $("#submit").attr("disabled",false);
     },
     textBlur:function(e){
       var view = this;
@@ -209,7 +213,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       view.setModel('recommend',view.tmpmodel, {text: data.text});
     },
     cancelAction:function(e){
-      App.vent.trigger("app.clipapp.recommend:@close");
+      var text = this.tmpmodel.get('text');
+      App.vent.trigger("app.clipapp.recommend:@close",text);
     }
   });
 
@@ -255,9 +260,20 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     }
   };
 
-  Recommend.close = function(){
-    App.popRegion.close();
-    mid = null;
+  Recommend.close = function(text){
+    if(!uid && !text){
+      App.popRegion.close();
+      mid = null;
+      uid = null;
+    }else{
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
+      App.vent.trigger("app.clipapp.message:alert", "recommend_save");
+      App.vent.bind("app.clipapp.message:sure",function(){
+	App.popRegion.close();
+	mid = null;
+	uid = null;
+      });
+    }
   };
 
   App.vent.bind("app.clipapp.recommend:@lookup",function(params,owner_id){
@@ -282,8 +298,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     });
   });
 
-  App.vent.bind("app.clipapp.recommend:@close",function(){
-    Recommend.close();
+  App.vent.bind("app.clipapp.recommend:@close",function(text){
+    Recommend.close(text);
   });
 
   App.bind("initialize:after", function(){

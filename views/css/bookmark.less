@@ -18,7 +18,14 @@
   //position:relative;
   behavior: url(css/pie.htc);
 }
-
+.message{
+	background:url(../img/message.png)no-repeat left top;
+	font-size:20px;
+	position:absolute;
+	margin-top:36px;
+	cursor:pointer;
+	display:none;
+}
 .border-radius-input (@radius) {
   -moz-border-radius: @radius;
   -webkit-border-radius: @radius;
@@ -288,7 +295,7 @@
 	}
 	span.orange_48{
 		color:#cb5331;
-		.tag_bg(0,-96px);
+		.tag_bg(0,-48px);
 	}
 	span.green_48{
 		.tag_bg(0,-144px);
@@ -297,7 +304,6 @@
 		.tag_bg(0,-192px);
 	}
 }
-
 .btn_frame{
 	input{float:left;border:none;font-size:16px;}
 	input.reg_btn{

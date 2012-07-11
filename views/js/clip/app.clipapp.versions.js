@@ -322,7 +322,7 @@ App.versions = (function($){
 	    no_public    : "作者没有公开此条摘录！"
 	  },
 	  content:{
-	    is_null      : "摘录不存在",
+	    is_null      : "摘录内容不能为空",
 	    not_array    : "摘录必须是数组",
 	    is_empty     : "摘录不能为空"
 	  },
@@ -358,9 +358,15 @@ App.versions = (function($){
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
+	  oauth_fail     : "认证失败，请重新认证！",
+	  memo_save      : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  clipedit_save  : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  reclip_save    : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  recommend_save : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  comment_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  clipadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  "oauth_fail"   : "认证失败，请重新认证!",
-	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）",
-	  content        : {is_null: "摘录内容不能为空"}
+	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
 	},
 	util : {
 	  time:{
@@ -677,9 +683,9 @@ App.versions = (function($){
 	  reclip_tag_fail: "You have reclipped these already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
 	  reclip         : "Recliped successfully",
-	  recomm         : "Clip was forwarded successfully",
+	  recomm         : "Clip was forwarded(@) successfully",
 	  comment        : "Commented successfully",
-	  "account_hasbind" :"This account has been used for connection before,you can't use same account connect Clickdang twice",
+	  account_hasbind:"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
@@ -699,7 +705,7 @@ App.versions = (function($){
 	    no_public    : "This Clip is private"
 	  },
 	  content:{
-	    is_null      : "This Content doesn't exist",
+	    is_null      : "Content can't be null",
 	    not_array    : "Content must be array",
 	    is_empty     : "Content can't be empty"
 	  },
@@ -733,7 +739,13 @@ App.versions = (function($){
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
-	  content        :{is_null: "clip's content is null"}
+	  memo_save      : "If close the window, what you filled will lost, are you sure?",
+	  clipedit_save  : "If close the window, what you filled will lost, are you sure?",
+	  reclip_save    : "If close the window, what you filled will lost, are you sure?",
+	  recommend_save : "If close the window, what you filled will lost, are you sure?",
+	  comment_save   : "If close the window, what you filled will lost, are you sure?",
+	  clipadd_save   : "If close the window, what you filled will lost, are you sure?",
+	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
 	},
 	util : {
 	  time:{
