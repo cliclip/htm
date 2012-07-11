@@ -263,7 +263,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       loading = true;
       start += App.ClipApp.Url.page;
-      end += App.ClipApp.Url.page;
+      end =start + App.ClipApp.Url.page-1;
       url = App.util.unique_url(base_url + "/" + start + ".." + end);
       var contentType = "application/json; charset=utf-8";
       if(!data){

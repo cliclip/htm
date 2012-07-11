@@ -488,7 +488,7 @@ App.versions = (function($){
 	  },
 	  conpass:{
 	    prompt:"Confirm password",
-	    is_null   :"Please enter the same password as above"
+	    is_null   :"Password is not filled in"
 	  },
 	  confirm:{
 	    password_diff: "Password input not consistent"

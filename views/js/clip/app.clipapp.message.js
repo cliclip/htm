@@ -102,10 +102,10 @@ App.ClipApp.Message = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.message:confirm", function(key, value){
     var message = null;
     if(typeof(key)=="string"){
-      message = _i18n('message.'+key);
+      message = _i18n('message.'+key, value);
     }else if(typeof(key)=="object"){
       for(var k in key){
-	message = _i18n('message'+'.'+k+'.'+key[k]);
+	message = _i18n('message'+'.'+k+'.'+key[k], value);
       }
     }
     Message.show("confirm", message);
@@ -114,10 +114,10 @@ App.ClipApp.Message = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.message:alert", function(key, value){
     var message = null;
     if(typeof(key)=="string"){
-      message = _i18n('warning.'+key,value);
+      message = _i18n('warning.'+key, value);
     }else if(typeof(key)=="object"){
       for(var k in key){
-	message = _i18n('warning'+'.'+k+'.'+key[k]);
+	message = _i18n('warning'+'.'+k+'.'+key[k], value);
       }
     }
     Message.show("warning", message);

@@ -187,6 +187,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       $(e.currentTarget).val( text == "" ? _i18n('comment.defaultText') : text);
     },
     maintagAction:function(e){
+      $("#comm_text").focus();
       var id = e.target.id;
       $(e.currentTarget).toggleClass("original");
       $(e.currentTarget).toggleClass("selected");

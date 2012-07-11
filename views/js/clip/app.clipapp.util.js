@@ -253,6 +253,9 @@ App.util = (function(){
 	  //App.ClipApp.Editor.insertImage("editor", {url: url});
 	  //}
 	  callback(url);
+	}else{//上传图片失败
+	  App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
+	  callback(null);
 	}
       }
     });
