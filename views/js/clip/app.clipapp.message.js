@@ -114,7 +114,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.message:alert", function(key, value){
     var message = null;
     if(typeof(key)=="string"){
-      message = _i18n('warning.'+key);
+      message = _i18n('warning.'+key,value);
     }else if(typeof(key)=="object"){
       for(var k in key){
 	message = _i18n('warning'+'.'+k+'.'+key[k]);
