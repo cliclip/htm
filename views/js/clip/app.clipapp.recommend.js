@@ -199,7 +199,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     clearAction:function(e){
       this.cleanError(e);
       $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('recommend.defaultText') ? "" :
-      $(e.currentTarget).val() );
+      $(e.currentTarget).val());
+      // 当输入框再次聚焦的时候，使得确定按钮可用
+      $("#submit").attr("disabled",false);
     },
     textBlur:function(e){
       var view = this;

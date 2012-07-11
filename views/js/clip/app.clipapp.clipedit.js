@@ -68,7 +68,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var editModel = new EditModel({});
       editModel.set({content:content},{
 	error:function(model, error){
-	  App.vent.trigger("app.clipapp.message:alert", error);
+	  App.vent.trigger("app.clipapp.message:confirm", error);
 	  App.vent.bind("app.clipapp.message:sure", function(){
 	    target.attr("disabled", false);
 	    App.ClipApp.Editor.focus("editor");

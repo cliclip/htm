@@ -54,7 +54,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       clip.content = App.ClipApp.Editor.getContent("editor");
       this.model.set(clip, {
 	error:function(model, error){
-	  App.vent.trigger("app.clipapp.message:alert", error);
+	  App.vent.trigger("app.clipapp.message:confirm", error);
 	  App.vent.bind("app.clipapp.message:sure", function(){
 	    target.attr("disabled", false);
 	    App.ClipApp.Editor.focus("editor");

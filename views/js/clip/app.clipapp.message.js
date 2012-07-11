@@ -13,8 +13,10 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click #sure": "MessageSure"
     },
     MessageSure: function(){
-      if(this.model.get("message") == _i18n('message.nouname'))
+      if(this.model.get("message") == _i18n('message.email.no_uname')){
 	App.vent.trigger("app.clipapp.useredit:rename");
+      }
+      App.vent.trigger("app.clipapp.message:sure");
       App.setpopRegion.close();
     }
   });
@@ -96,7 +98,14 @@ App.ClipApp.Message = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.message:confirm", function(key, value){
-    var message = _i18n('message.'+key,value);
+    var message = null;
+    if(typeof(key)=="string"){
+      message = _i18n('message.'+key);
+    }else if(typeof(key)=="object"){
+      for(var k in key){
+	message = _i18n('message'+'.'+k+'.'+key[k]);
+      }
+    }
     Message.show("confirm", message);
   });
 
