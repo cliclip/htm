@@ -102,14 +102,17 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       var cid = this.model.get("user").id + ":" + this.model.get("clipid");
-      var rid = this.model.get("recommend").rid;
       var pub = this.model.get("public");
       var mid = this.model.id;
+      var recommend = {
+	rid : this.model.get("recommend").rid,
+	user: this.model.get("recommend").user.id
+      };
       //var clip = this.model.get("clip");
       //var cid = clip.user.id+":"+clip.id;
       switch(opt){
 	case 'biezhen'://收
-	  App.vent.trigger("app.clipapp:reclip",cid,mid,rid,pub);break;
+	  App.vent.trigger("app.clipapp:reclip",cid,mid,recommend,pub);break;
 	case 'refresh'://转
 	  App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
 	case 'comment'://评

@@ -156,15 +156,16 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
       $(".big_pop").css("top", App.util.getPopTop("big"));
+      var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
-      var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.setContent("editor", html);
     });
   };
 
   ClipEdit.close = function(n_content,cid){
-    if(!n_content || n_content.trim() == old_content.trim())App.viewRegion.close();
+    if(!n_content || n_content.trim() == old_content.trim())
+      App.viewRegion.close();
     else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipedit_save");

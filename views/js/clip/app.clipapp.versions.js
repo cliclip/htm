@@ -303,7 +303,10 @@ App.versions = (function($){
 	  recomm         : "转发成功",
 	  "account_hasbind" : "您的帐号之前已经绑定过，若要重新绑定，请先解绑",
 	   InternalOAuthError:"绑定认证过程出现了点小问题，再试一次吧！",
-	  reclip         : "收录成功",
+	  reclip:{
+	    success: "收录成功",
+	    no_pub: "作者没有公开该条clip,您暂时不能收录"
+	  },
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
 	  pre_active:"您已激活%s邮件地址。您现在可以再登录时使用此邮件地址，并接受来自此邮件地址的收藏。",
@@ -682,7 +685,10 @@ App.versions = (function($){
 	  reclip_tag_success : "Congratulation for successful reclip",
 	  reclip_tag_fail: "You have reclipped these already",
 	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
-	  reclip         : "Recliped successfully",
+	  reclip:{
+	    success:"Recliped successfully",
+	    no_pub: "This Clip is private,you can't reclip it"
+	  },
 	  recomm         : "Clip was forwarded(@) successfully",
 	  comment        : "Commented successfully",
 	  account_hasbind:"This account has been used for connection before,you can't use same account connect Clickdang twice",
@@ -728,6 +734,9 @@ App.versions = (function($){
 	  },
 	  rule:{
 	    is_null: "You haven’t set the rule of email connection"
+	  },
+	  recommend:{
+	    no_pub      :"This Clip is private,You can't recommend to others"
 	  }
 	},
 
