@@ -110,9 +110,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       };
     },
     abandonUpdate: function(){
-      var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
-      App.vent.trigger("app.clipapp.clipedit:@cancel",content,cid);
+      App.vent.trigger("app.clipapp.clipedit:@cancel",content);
     }
   });
 
@@ -152,19 +151,20 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     var model = new App.Model.DetailModel({id: clipid});
     model.fetch();
     model.onChange(function(editModel){
-      old_content = editModel.get("content");
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
       $(".big_pop").css("top", App.util.getPopTop("big"));
+      var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
-      var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.setContent("editor", html);
+      old_content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
     });
   };
 
-  ClipEdit.close = function(n_content,cid){
-    if(!n_content || n_content.trim() == old_content.trim())App.viewRegion.close();
+  ClipEdit.close = function(n_content){
+    if(!n_content || n_content.trim() == old_content.trim())
+      App.viewRegion.close();
     else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
@@ -180,8 +180,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
   });
 
-  App.vent.bind("app.clipapp.clipedit:@cancel", function(n_content,cid){
-    ClipEdit.close(n_content,cid);
+  App.vent.bind("app.clipapp.clipedit:@cancel", function(n_content){
+    ClipEdit.close(n_content);
   });
 
   App.vent.trigger("app.clipapp.clipedit:@error", function(){

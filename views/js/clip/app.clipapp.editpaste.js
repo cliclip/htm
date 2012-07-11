@@ -36,12 +36,15 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   Editor.setContent = function(editorId, data){
     var objEditor = document.getElementById(editorId);
     if(isIE){
-      objEditor.contentWindow.focus();
-      var range = objEditor.contentWindow.document.selection.createRange();
-      range.pasteHTML(data);
-      range.moveStart("character", 0);
-      range.collapse(true);
-      range.select();
+      setTimeout(function(){
+	// ie 在列表页多次点击，会将要编辑的内容加到页面的最上边 [还需测试]
+	objEditor.contentWindow.focus();
+	var range = objEditor.contentWindow.document.selection.createRange();
+	range.pasteHTML(data);
+	range.moveStart("character", 0);
+	range.collapse(true);
+	range.select();
+      },100);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, data);
       var el = objEditor.contentWindow.document;

@@ -301,7 +301,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       follows: follows,
       bubs: self ? bubs[lang] : _.intersection(_.union(bubs.zh, bubs.en), tags),
       sink: self ? sink[lang] : _.intersection(sink[lang], tags),
-      self: self
+      self: self,
+      t_reclip: _i18n('bubb.reclip'),
+      t_follow: _i18n('bubb.follow'),
+      t_unfollow: _i18n('bubb.unfollow')
     };
     if(homepage) opt.homepage = homepage;
     if(tag) opt.current = tag;
