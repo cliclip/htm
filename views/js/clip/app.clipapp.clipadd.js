@@ -22,13 +22,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     className: "addClip-view",
     template: "#addClip-view-template",
     events: {
-      "click .link_img":"extImg",
-      "click .btn_img":"up_extImg", // 确定上传
       "mousedown #formUpload":"save_range", //IE-7,8,9下保存Range对象
       "mousedown .link_img":"save_range", //IE-7,8,9下保存Range对象
       //"change #formUpload":"image_change", // 改成了直接在jade中绑定
-      "blur #img_upload_url":"hide_extImg", // extImg输入框失焦就隐藏
-      "click #img_upload_url":"show_extImg",
+      "click .link_img":"extImg",//显示连接图片输入框并清空输入框
+      "click .btn_img":"up_extImg", // 确定上传
+      "click .masker_layer1":"hide_extImg",
       "click .pop_left":"remark_clip",
       "click .message":"message_hide",
       "click .close_w":"cancelcliper",
@@ -37,6 +36,27 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click #cancel": "cancelcliper",
       "click #save": "savecliper", // 对应clipper的ok
       "click #empty":"emptycliper"
+    },
+    initialize:function(){
+      clip = {};
+    },
+    extImg:function(evt){
+      $(".masker_layer1").show();
+      $(".img_upload_span").show();
+      $("#img_upload_url").focus();
+      $("#img_upload_url").val("");
+    },
+    hide_extImg: function(e){
+      $(".masker_layer1").hide();
+      $(".img_upload_span").hide();
+    },
+    up_extImg: function(e){
+      e.preventDefault();
+      var url = $("#img_upload_url").val();
+      if(url == "http://" || !url )return;
+      $(".masker_layer1").hide();
+      $(".img_upload_span").hide();
+      App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
       var isIE=document.all? true:false;
@@ -94,30 +114,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     emptycliper:function(){
       App.vent.trigger("app.clipapp.clipper:empty");
     },
-    initialize:function(){
-      clip = {};
-    },
-    extImg:function(evt){
-      $(".img_upload_span").show();
-      $("#img_upload_url").focus();
-      $("#img_upload_url").val("");
-    },
-    show_extImg:function(evt){
-      $(".img_upload_span").show();
-      $("#img_upload_url").focus();
-    },
-    hide_extImg: function(){
-      setTimeout(function(){
-	$(".img_upload_span").hide();
-      },500);
-    },
-    up_extImg: function(e){
-      e.preventDefault();
-      var url = $("#img_upload_url").val();
-      if(url == "http://" || !url )return;
-      $(".img_upload_span").hide();
-      App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
-    },
     remark_clip: function(){ // 此全局变量就是为了clip的注操作
       App.vent.trigger("app.clipapp:clipmemo", clip);
     }
@@ -154,8 +150,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.viewRegion.show(addClipView);
     $(".big_pop").css("top", App.util.getPopTop("big"));
     App.ClipApp.Editor.init();
+    App.ClipApp.Editor.focus("editor");
     //console.info(document.cookie);
-    if(!/first=false/.test(document.cookie)){
+    if(!/first=false/.test(document.cookie)){//判断是否是第一次打开网，新建clip
       $(".message").show();
     }else{
       var data = new Date();
