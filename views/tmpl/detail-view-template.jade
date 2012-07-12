@@ -53,7 +53,7 @@ script(type="text/template",id="showcomment-view-template")
   dd.comment_con.
     <div class="comm_link" id="<%= id %>">
     <a class="marking"><% if(has_child) {%> <%=_i18n('showcomment.pack')%> <%}%></a>
-    <span class="comment_text"><%= text %></span>
+    <span class="comment_text"><%= App.util.commentToHtml(text)%></span>
     <span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
     <div id="reply_<%=id%>" style="display:none;">
     <a href="javascript:void(0)" class="reply_comment" id="<%= id %>"><%=_i18n('showcomment.reply')%></a>

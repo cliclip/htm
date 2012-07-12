@@ -104,6 +104,19 @@ App.util = (function(){
     return App.ClipApp.Convert.ubbToHtml(content);
   };
 
+  util.cleanComment = function(comment){ // 对comment的内容进行html过滤，防止脚本注入
+    comment = App.ClipApp.Convert.cleanHtml(comment);
+    comment = comment.replace(/<\/?div[^>]*>/ig, "");
+    comment = comment.replace(/<\/?div[^>]*>/ig, "");
+    return comment;
+  };
+
+  util.commentToHtml = function(comment){
+    comment = comment.replace(/\n{2,}/ig, "<\/p><p>");
+    comment = comment.replace(/\n/ig, "<\/br>");
+    return comment;
+  };
+
   util.getPreview = function(content, length){
     var data = {};
     var reg = /\[img\].*?\[\/img\]/;
