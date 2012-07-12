@@ -57,6 +57,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).attr("disabled",true);
       var view = this;
       var text = $.trim($("#comm_text").val());
+      text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
       if(text == "" || text == _i18n('comment.defaultText')){
 	this.showError("comment",{comm_text:"is_null"});
 	$("#comm_text").blur().val("");
