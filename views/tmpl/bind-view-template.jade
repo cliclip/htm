@@ -16,8 +16,10 @@ script(type="text/template",id="bind-view-template")
             li
               input(type="text",name="name",id="name")
               label.username
+                | <%=_i18n('login.name.name')%>
             li
               input(type="password",name="pass",id="pass")
               label.password
+                | <%=_i18n('login.pass.pass')%>
         div.btn_frame.bind_ok.
           <input type="button" class="reg_btn" id="bind_ok" value="<%=_i18n('bind.bind_ok')%>" />
