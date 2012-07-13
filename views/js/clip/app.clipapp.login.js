@@ -9,7 +9,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       var err = {};
       if(!attrs.name ||attrs.name == "" || attrs.name == _i18n('login.default_name')){
 	err.name = "is_null";
-      }else if(attrs.name.length<=20 && !App.util.name_pattern.test(attrs.name)){
+      }else if(attrs.name.length<=20&&!(App.util.name_pattern.test(attrs.name)||App.util.email_pattern.test(attrs.name))){
 	err.name = "invalidate";
       }
       if(attrs.pass == ""){
