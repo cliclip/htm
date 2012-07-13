@@ -23,8 +23,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
     className: "userface-view",
     template: "#userface-view-template",
     events: {
-      "click .stop": "followAction",
-      "click .zhui": "stopAction",
+      "click #user_zhui": "followAction",
+      "click #user_stop": "stopAction",
       "click .user_list": "userList",
       "click .following": "following",
       "click .follower": "follower",

@@ -37,6 +37,8 @@ App.versions = (function($){
 	},
 
 	userface : {
+	  zhui        : "zhui",
+	  stop        : "stop",
 	  mfollowing  : "我追谁",
 	  mfollow     : "谁追我",
 	  following   : "ta追谁",
@@ -438,6 +440,8 @@ App.versions = (function($){
 	},
 
 	userface : {
+	  zhui        : "ezhui",
+	  stop        : "estop",
 	  mfollowing  : "Following",
 	  mfollow     : "Followed by",
 	  following   : "Following",
