@@ -2,7 +2,7 @@ App.util = (function(){
   var util = {};
   var P = App.ClipApp.Url.base;
 
-  util.name_pattern = /^[a-zA-Z\d]\w{3,18}[a-zA-Z\d]$/;
+  util.name_pattern = /^[a-zA-Z0-9][a-zA-Z0-9\.]{3,18}[a-zA-Z0-9]$/;
   util.email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
   util.getCookie = function(name){
     var start = document.cookie.indexOf( name+"=" );
