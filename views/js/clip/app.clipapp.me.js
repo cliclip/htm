@@ -161,18 +161,18 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
   function current_page(str){
     if(str=="my"){
-      $(".my").css({"z-index":2,"top":"-7px","height":"37px"});
+      $(".my").css({"z-index":2,"top":"-3px","height":"33px"});
       $(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
       $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
 
     }else if(str=="@me"){
       $(".my").css({"z-index":1,"top":"0px","height":"30px"});
-      $(".at_me").css({"z-index":1,"top":"-7px","height":"37px"});
+      $(".at_me").css({"z-index":1,"top":"-3px","height":"33px"});
       $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
     }else if(str=="interest"){
       $(".my").css({"z-index":0,"top":"0px","height":"30px"});
       $(".at_me").css({"z-index":0,"top":"0px","height":"30px"});
-      $(".expert").css({"z-index":0,"top":"-7px","height":"37px"});
+      $(".expert").css({"z-index":0,"top":"-3px","height":"33px"});
     }
   }
   Me.show = function(){
