@@ -37,8 +37,10 @@ App.versions = (function($){
 	},
 
 	userface : {
-	  following   : "我追谁",
-	  follow      : "谁追我"
+	  mfollowing  : "我追谁",
+	  mfollow     : "谁追我",
+	  following   : "ta追谁",
+	  follow      : "谁追ta"
 	},
 
 	bubb : {
@@ -248,15 +250,19 @@ App.versions = (function($){
 	},
 
 	follower : {
-	  follower    : "追我的人",
-	  following   : "我追的人",
+	  mfollower   : "追我的人",
+	  mfollowing  : "我追的人",
+	  follower    : "追ta的人",
+	  following   : "ta追的人",
 	  p           : "还没有人追你哟",
 	  all         : "所有"
 	},
 
 	following : {
-	  follower    : "追我的人",
-	  following   : "我追的人",
+	  mfollower   : "追我的人",
+	  mfollowing  : "我追的人",
+	  follower    : "追ta的人",
+	  following   : "ta追的人",
 	  p           : "你还没有追任何人哟",
 	  all         : "所有"
 	},
@@ -318,7 +324,6 @@ App.versions = (function($){
 	  },
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
-	  pre_active:"您已激活%s邮件地址。您现在可以再登录时使用此邮件地址，并接受来自此邮件地址的收藏。",
 	  cliplist_null:{
 	    all:"抱歉，没有找到相关的信息......",
 	    my:"抱歉，没有找到相关的信息......",
@@ -433,6 +438,8 @@ App.versions = (function($){
 	},
 
 	userface : {
+	  mfollowing  : "Following",
+	  mfollow     : "Followed by",
 	  following   : "Following",
 	  follow      : "Followed by"
 	},
@@ -644,6 +651,8 @@ App.versions = (function($){
 	},
 
 	follower : {
+	  mfollower   : "Followed by",
+	  mfollowing  : "Following",
 	  follower    : "Followed by",
 	  following   : "Following",
 	  p           : "Nobody is following you",
@@ -651,6 +660,8 @@ App.versions = (function($){
 	},
 
 	following : {
+	  mfollower   : "Followed by",
+	  mfollowing  : "Following",
 	  follower    : "Followed by",
 	  following   : "Following",
 	  p           : "You are not following anyone",
@@ -714,7 +725,6 @@ App.versions = (function($){
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
-	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
 	  cliplist_null:{
 	    all:"Sorry,have not found appropriate clauses......",
 	    my:"Sorry,have not found appropriate clauses......",
@@ -746,7 +756,8 @@ App.versions = (function($){
 	    fail         :"Registration link was overdue for too long interval. You can Join directly and add email address connection in Setting"
 	  },
 	  active:{
-	    fail         : "Registration link was overdue for too long interval. You can add again in Setting"
+	    fail         : "Registration link was overdue for too long interval. You can add again in Setting",
+	    email   : "You have activated the email address of %s in our system. \nNow you can login with this email account and clip by sending email from this account"
 	  },
 	  email:{
 	    no_uname     : "Set your user name before adding mail address connection"

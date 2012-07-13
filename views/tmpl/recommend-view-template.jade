@@ -12,12 +12,13 @@ script(type="text/template",id="recommend-view-template")
       div.name_list#name_listDiv
       li.input_textarea
         |<textarea id="recomm_text" name="text"><%=_i18n('recommend.defaultText')%></textarea>
-      <% if(!App.util.self(clipid.split(":")[0])) {%>
-      li.input_checkbox
-        label
-          input(type="checkbox",id="reclip_box")
-          | <%=_i18n('recommend.reclip')%>
-      <%}%>
+      // 注释
+        <% if(!App.util.self(clipid.split(":")[0])) {%>
+        li.input_checkbox
+          label
+            input(type="checkbox",id="reclip_box")
+            | <%=_i18n('recommend.reclip')%>
+        <%}%>
       li.btn_group.clearfix.
         <input type="button" class="verify" value="<%=_i18n('recommend.ok')%>" id="submit" />
         <input type="button" class="cancel" value="<%=_i18n('recommend.cancel')%>" id="cancel" />

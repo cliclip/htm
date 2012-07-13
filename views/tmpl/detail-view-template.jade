@@ -66,15 +66,16 @@ script(type="text/template",id="showcomment-view-template")
           
 script(type="text/template",id="addcomm-view-template")
   |<textarea id="comm_text"><%=_i18n('addcomm.defaultText')%></textarea>
-  div
-    <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
-    <input type="button" class="main_tag original" id="maintag_<%=i%>" value="<%=main_tag[i]%>" /><% } %>
-  <% if(!App.util.self(cid.split(":")[0])){ %>
-  .input_checkbox
-    span
-      input(type="checkbox",id="reclip")
-      |  <%=_i18n('addcomm.reclip')%>
-  <% } %>
+  // 注释掉tag和“同时收”
+    div
+      <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+      <input type="button" class="main_tag original" id="maintag_<%=i%>" value="<%=main_tag[i]%>" /><% } %>
+    <% if(!App.util.self(cid.split(":")[0])){ %>
+    .input_checkbox
+      span
+        input(type="checkbox",id="reclip")
+        |  <%=_i18n('addcomm.reclip')%>
+    <% } %>
   div.btn_group.clearfix.
     <input type="button" class="verify" value="<%=_i18n('comment.ok')%>" />
     <input type="button" class="cancel" value="<%=_i18n('comment.cancel')%>" />

@@ -6,13 +6,14 @@ script(type='text/template',id='comment-view-template')
     ul.pop_body
       li.input_textarea
         |<textarea id="comm_text"><%=_i18n('comment.defaultText')%></textarea>
-      li.tag_box.
-        <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
-        <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i]%></span><% } %>
-      li.input_checkbox
-        label
-          input(type="checkbox",id="reclip_box")
-          | <%=_i18n('comment.reclip')%>
+      // 注释
+        li.tag_box.
+          <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+          <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i]%></span><% } %>
+        li.input_checkbox
+          label
+            input(type="checkbox",id="reclip_box")
+            | <%=_i18n('comment.reclip')%>
       li.btn_group.clearfix.
         <input type="button" class="verify" value="<%=_i18n('comment.ok')%>" id="submit" />
         <input type="button" class="cancel" value="<%=_i18n('comment.cancel')%>" id="cancel" />
