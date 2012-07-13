@@ -5,7 +5,9 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   // 代替了filterPastetext的过滤方法
   Convert.filter = function (html) {
     if (isWord(html)) {html = cleanWord(html);}
-    html = cleanHtml(html);
+     // 本身是在 cleanHtml中的因为要和cleanComment公用，所以挪出此句子
+    html = html.replace(/\r\n|\n|\r/ig, "");
+    html = _cleanHtml(html);
     html = _htmlToUbb(html);
     html = _ubbToHtml(html);
     return html;
@@ -16,6 +18,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     return html;
   };
 
+  Convert.cleanHtml = _cleanHtml;
   Convert.htmlToUbb = _htmlToUbb;
   Convert.ubbToHtml = _ubbToHtml;
 
@@ -135,8 +138,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     return str;
   }
 
-  function cleanHtml(str) {
-    str = str.replace(/\r\n|\n|\r/ig, "");
+  function _cleanHtml(str) {
     //remove html body form
     str = str.replace(/<\/?(html|body|form)(?=[\s\/>])[^>]*>/ig, "");
     //remove doctype
@@ -171,8 +173,6 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   function _htmlToUbb(html){
     var text = html;
     // 先将不是html的网址转换成 a 标签
-    // 此转换方法不对，如果网址后面直接再跟内容则不能正常识别
-    // var re=/^((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*)/g;
     var re=/((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"\s\u4E00-\u9FA5\uf900-\ufa2d])*)/g;
     var reg = /(="|='|=)(?=http:\/\/)/;
     text = text.replace(re,function(a,b,c){

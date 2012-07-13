@@ -422,7 +422,7 @@ App.versions = (function($){
 	    name        : "user name",
 	    is_null     : "User name is not filled in",
 	    not_exist   : "This user name does not exist",
-	    invalidate  : "Wrong format of User name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
+	    invalidate  : "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
 	    exist       : "User name already exists"
 	  },
 	  pass : {
@@ -450,7 +450,7 @@ App.versions = (function($){
 	  upload      : "Upload image",
 	  name : {
 	    is_null   : "User name is not filled in",
-	    invalidate: "Wrong format of User name",
+	    invalidate: "Invalid format of user name",
 	    exist     :"User name already exists"
 	  }
 	},
@@ -509,7 +509,7 @@ App.versions = (function($){
 	    is_Exist  : "Email address already exists",
 	    you_exist : "You have already add that email address",
 	    other_exist:"The email address you added has already been connected with other account in the system",
-	    invalidate: "Wrong format of email address",
+	    invalidate: "Invalid format of email address",
 	    is_null   : "Email address has not fill in"
 	  }
 	},
@@ -609,8 +609,8 @@ App.versions = (function($){
 	  reply       : "Reply",
 	  delete      : "Delete",
 	  text        : "The comment has been removed",
-	  pack        : "(pack up)",
-	  open        : "(open up)"
+	  pack        : "(Collapse)",
+	  open        : "(Expand)"
 	},
 
 	addcomm : {
@@ -633,8 +633,8 @@ App.versions = (function($){
 	},
 
 	clippreview : {
-	  reprint     : "Reclip",
-	  reply       : "Reply",
+	  reprint     : "reclips",
+	  reply       : "comments",
 	  comment     : "Comment",
 	  recommend   : "@",
 	  reclip      : "Reclip",
@@ -740,7 +740,7 @@ App.versions = (function($){
 	  error:{
 	    "link 已作废": "Overdue link",
 	    "link doesnt exist": "Invalid link",
-	    "link invalidate": "Wrong format link"
+	    "link invalidate": "Invalid format link"
 	  },
 	  accept:{
 	    fail         :"Registration link was overdue for too long interval. You can Join directly and add email address connection in Setting"
@@ -767,14 +767,14 @@ App.versions = (function($){
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
-	  memo_save      : "If close the window, what you filled will lost, are you sure?",
-	  clipedit_save  : "If close the window, what you filled will lost, are you sure?",
-	  reclip_save    : "If close the window, what you filled will lost, are you sure?",
-	  recommend_save : "If close the window, what you filled will lost, are you sure?",
-	  comment_save   : "If close the window, what you filled will lost, are you sure?",
-	  clipadd_save   : "If close the window, what you filled will lost, are you sure?",
-	  emailadd_save   : "If close the window, what you filled will lost, are you sure?",
-	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
+	  memo_save     :"If you close the window, what you filled will be lost. Are you sure?",
+	  clipedit_save :"If you close the window, what you filled will be lost. Are you sure?",
+	  reclip_save   :"If you close the window, what you filled will be lost. Are you sure?",
+	  recommend_save:"If you close the window, what you filled will be lost. Are you sure?",
+	  comment_save  :"If you close the window, what you filled will be lost. Are you sure?",
+	  clipadd_save  :"If you close the window, what you filled will be lost. Are you sure?",
+	  emailadd_save :"If you close the window, what you filled will be lost. Are you sure?",
+	  del_comment   : "You really mean to delete this comment? It can’t restore any more"
 	},
 	util : {
 	  time:{

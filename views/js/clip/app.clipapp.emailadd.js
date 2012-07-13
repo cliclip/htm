@@ -63,7 +63,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   EmailAdd.showEmailAdd = function(uid){
     var emailAddModel = new EmailAddModel();
     var emailAddView = new EmailAddView({model : emailAddModel});
-    App.setpopRegion.show(emailAddView);
+    App.popRegion.show(emailAddView);
   };
 
   EmailAdd.active = function(key){
@@ -83,18 +83,15 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   };
 
   EmailAdd.close = function(address){
-    App.setpopRegion.close();
-    /*
     if(!address)
-      App.setpopRegion.close();
+      App.popRegion.close();
     else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "emailadd_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	console.log("111");
-	App.setpopRegion.close();
+	App.popRegion.close();
       });
-    }*/
+    }
   };
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){

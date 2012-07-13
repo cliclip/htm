@@ -171,9 +171,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	$("#save").click();
-      });
-      App.vent.bind("app.clipapp.message:cancel",function(){
 	App.viewRegion.close();
       });
     }
