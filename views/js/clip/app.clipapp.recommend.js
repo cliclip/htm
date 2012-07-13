@@ -191,11 +191,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	    view.showError('recommend',res);
 	  }
 	});
+	/*
 	//reclip 需要的参数
 	if($("#reclip_box").attr("checked")){
 	  var params1 = {id : clipid, clip : {note : [{text : data.text}]}};
 	  App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
-	}
+	}*/
       }, 300);
     },
     clearAction:function(e){

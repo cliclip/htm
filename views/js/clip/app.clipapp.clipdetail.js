@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid,checked,tag_list;
+  var mid,checked;
 
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
@@ -167,11 +167,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     tagName : "div",
     className : "addcomment-view",
     template : "#addcomm-view-template",
-    tag_list : [],
+    //tag_list : [],
     events : {
       "focus #comm_text" : "focusAction",
       "blur #comm_text"  : "blurAction",
-      "click .main_tag"  : "maintagAction",
+      //"click .main_tag"  : "maintagAction",
       "click .verify"    : "comment",
       "click .cancel"    : "cancel"
     },
@@ -188,6 +188,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val( text == "" ? _i18n('comment.defaultText') : text);
     },
+    /*
     maintagAction:function(e){
       $("#comm_text").focus();
       var id = e.target.id;
@@ -206,6 +207,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
       }
     },
+     */
     comment : function(e){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
@@ -219,16 +221,18 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	return;
       }
       var params = {clipid: cid, text: text, pid: pid};
+      /*
       var params1 = null;
       if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量
 	params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
       }
+       */
       if(!App.ClipApp.getMyUid()){
 	App.vent.trigger("app.clipapp:login", function(){
-	  App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, params1, mid);
+	  App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, mid);
 	});
       }else{
-	App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, params1, mid);
+	App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, mid);
       }
     },
     cancel : function(){
@@ -332,14 +336,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp.clipdetail:@save_addComm", function(params, params1, mid){
+  App.vent.bind("app.clipapp.clipdetail:@save_addComm", function(params, mid){
     var model = new App.Model.CommModel();
     model.save({pid:params.pid, text:params.text},{
       url : P+"/clip/"+params.clipid+"/comment",
       success:function(comment,response){
+	/*
 	if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
 	}
+	 */
 	showComment(params.clipid);
 	showAddComm(params.clipid);
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
