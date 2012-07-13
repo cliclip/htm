@@ -10,7 +10,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     if(this.get("oauth_id")){
       return P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id");
     }else{
-      return P+"/user/"+ my +"/provider/"+this.get("provider");
+      return App.util.unique_url(P+"/user/"+ my +"/provider/"+this.get("provider"));
     }
     }
   });
