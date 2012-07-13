@@ -16,6 +16,7 @@ App.Model = Backbone.Model.extend({
   runOnChangeCallbacks: function(){
     this.onChangeCallbacks.run(this, this);
   },
+  // override to parse [0, res] | [1, err] structure
   sync: function(method, model, options){
     var success = options.success;
     var error = options.error;
@@ -45,6 +46,21 @@ App.Collection = Backbone.Collection.extend({
   runOnResetCallbacks: function(){
     this.onResetCallbacks.run(this, this);
   },
+  // override to filter out duplicate model
+  add: function(models, options){
+    models = _.isArray(models) ? models.slice() : [models];
+    var models2 = [];
+    for (var i=0, length=models.length; i < length; i++){
+      // todo 仅判断 id 与 collection 已有的重复，未判断与 models 里的其他重复
+      var id = models[i].id;
+      if(id != null && this._byId[id] != null){
+      } else {
+	models2.push(models[i]);
+      }
+    }
+    Backbone.Collection.prototype.add.apply(this, [models2, options]);
+  },
+  // override to parse [0, res] | [1, err] structure
   sync: function(method, model, options){
     var success = options.success;
     var error = options.error;
@@ -123,7 +139,6 @@ App.Routing = (function(App, Backbone){
 })(App, Backbone);
 
 App.addRegions({
-
   mineRegion: "#mine",
   mysetRegion: "#myset",
   faceRegion: "#face",

@@ -18,13 +18,12 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     className: "editDetail-view",
     template: "#editDetail-view-template",
     events: {
-      "click .link_img":"extImg",
-      "click .img_upload_span .btn_img":"up_extImg",
-      "blur #img_upload_url":"hide_extImg",
       // "change #formUpload":"image_change", // 改成了直接在jade中绑定
       "mousedown #formUpload":"save_range", //IE-7,8,9下保存Range对象
       "mousedown .link_img":"save_range", //IE-7,8,9下保存Range对象
-      "click #img_upload_url":"show_extImg",
+      "click .link_img":"extImg",
+      "click .btn_img":"up_extImg",
+      "click .masker_layer1":"hide_extImg",
       "click .format":"upFormat",
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
@@ -46,23 +45,22 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	ieRange=doc.selection.createRange();
       }
     },
-    hide_extImg:function(){    //隐藏弹出的链接地址对话框
-      setTimeout(function(){
-	$(".img_upload_span").hide();
-      },500);
-    },
-    show_extImg:function(evt){    //弹出输入链接地址的对话框
+    extImg:function(evt){
+      $(".masker_layer1").show();
       $(".img_upload_span").show();
       $("#img_upload_url").focus();
-    },
-    extImg:function(evt){    //弹出输入链接地址的对话框
-      $(".img_upload_span").show();
       $("#img_upload_url").val("");
-      $("#img_upload_url").focus();
+    },
+    hide_extImg: function(e){
+      console.info("@@@@@@@@@11111111111111");
+      $(".masker_layer1").hide();
+      $(".img_upload_span").hide();
     },
     up_extImg: function(){ // 确定上传
+      console.info("@@@@@@@@@");
       var url = $("#img_upload_url").val();
       if(url == "http://" || !url )return;
+      $(".masker_layer1").hide();
       $(".img_upload_span").hide();
       App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },

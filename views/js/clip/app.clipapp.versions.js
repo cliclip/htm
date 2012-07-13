@@ -7,9 +7,9 @@ App.versions = (function($){
 	me : {
 	  mine      : "我的",
 	  recommend : "@我",
-	  interest  : "砖家",
-	  set       : "&nbsp&nbsp设置",
-	  logout    : "&nbsp&nbsp登出",
+	  interest  : "朋友",
+	  set       : "&nbsp;&nbsp;设置",
+	  logout    : "&nbsp;&nbsp;登出",
 	  login     : "登 录",
 	  register  : "注 册",
 	  ok        : "确 定"
@@ -37,6 +37,8 @@ App.versions = (function($){
 	},
 
 	userface : {
+	  zhui        : "zhui",
+	  stop        : "stop",
 	  mfollowing  : "我追谁",
 	  mfollow     : "谁追我",
 	  following   : "ta追谁",
@@ -139,9 +141,9 @@ App.versions = (function($){
 	},
 
 	editDetail : {
-	  upload      : "上传图片",
-	  link        : "链接图片",
-	  clear       : "整理格式",
+	  upload      : "&nbsp上传图片",
+	  link        : "&nbsp链接图片",
+	  clear       : "&nbsp整理格式",
 	  update      : "修 改",
 	  ok          : "确 定",
 	  ok_title    : "保 存",
@@ -229,10 +231,10 @@ App.versions = (function($){
 	addClip : {
 	  title       : "新建摘录",
 	  note_message: "添加标注",
-	  upload      : "上传图片",
-	  link        : "链接图片",
+	  upload      : "&nbsp上传图片",
+	  link        : "&nbsp链接图片",
 	  ok          : "确 定",
-	  clear       : "整理格式",
+	  clear       : "&nbsp整理格式",
 	  cancel      : "取 消",
 	  back        : "返 回",
 	  clean       : "清 空"
@@ -438,6 +440,8 @@ App.versions = (function($){
 	},
 
 	userface : {
+	  zhui        : "ezhui",
+	  stop        : "estop",
 	  mfollowing  : "Following",
 	  mfollow     : "Followed by",
 	  following   : "Following",
@@ -540,8 +544,8 @@ App.versions = (function($){
 	},
 
 	editDetail : {
-	  upload      : "Upload image",
-	  link        : "Web image",
+	  upload      : "&nbspUpload image",
+	  link        : "&nbspWeb image",
 	  clear       : "Tidy format",
 	  update      : "Edit",
 	  ok          : "OK",
@@ -631,7 +635,7 @@ App.versions = (function($){
 	  note_message:"add notes",
 	  title       : "new clip",
 	  upload      : "&nbspUpload image",
-	  link        : "Web image",
+	  link        : "&nbspWeb image",
 	  ok          : "OK",
 	  clear       : "Tidy format",
 	  cancel      : "Cancel",
