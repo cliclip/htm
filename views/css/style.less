@@ -318,7 +318,6 @@
 		line-height:30px;
 		right:0;
 		margin-right:100px;
-
 		span{
 			height:30px;
 			float: right;
@@ -1470,6 +1469,9 @@ section.follow_frame{
 					font-size:20px;
 					*margin-top:-15px;
 				}
+				label.out_link{
+					//margin-left:108px;
+				}
 				.login_input{
 					.sprites(-340px,-520px);
 					height: 35px;
@@ -1493,7 +1495,14 @@ section.follow_frame{
 					height:26px;
 					border:1px solid #f00;
 				}
-				span.next_login{color:#fff;}
+				span.next_login{
+					color:#fff;
+					margin-left:49px;
+					#remember{
+						display:inline;
+						float:none;
+					}
+				}
 				span.error{
 					position:absolute;
 					z-index:1000;
@@ -1512,14 +1521,15 @@ section.follow_frame{
 			p{
 				font-size:14px;
 				color:#d4ce86;
-				margin-bottom:20px;
+				margin-top:10px;
+				margin-left:-20px;
 			}
 		}
 	}
 	
 }
 .btn_frame{
-	margin-top:-10px;
+	margin-top:5px;
 	input{float:left;border:none;font-size:16px;}
 	button{
 		float:left;
@@ -1542,6 +1552,7 @@ section.follow_frame{
 	button.upload{
 		width:110px;
 		height:37px;
+		margin-top:-15px;
 		.sprites(-340px,-431px);
 		span{
 			width:10px;
@@ -1554,6 +1565,7 @@ section.follow_frame{
 		width:90px;
 		height:37px;
 		float:right;
+		margin-top:-15px;
 		.sprites(-340px,-431px)
 	}
 }
@@ -1962,6 +1974,10 @@ html .masker_layer{
     		font-size: 17px;
     		line-height: 25px;
 		background:#d8d8d8;
+     		.head{
+			margin-left:10px;
+			margin-right:10px;
+		}
 	}	
 	div.info{
 		height: 72px;

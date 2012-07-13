@@ -270,7 +270,7 @@ App.versions = (function($){
 	},
 
 	bind : {
-	 header   : "您已登录 %s 账户，但尚未将此帐号关联给clickdang任何帐户。",
+	 header   : "您已登录 %s 账户，但尚未将此帐号关联给点忆任何帐户。",
 	  bind        : "关联已有帐户",
 	  register    : "注册新帐户",
 	  bind_ok     : "立即关联",
@@ -673,9 +673,9 @@ App.versions = (function($){
 	},
 
 	bind : {
-	  header      : "You have logged in %s ,while not connecting it with any Clickdang account",
+	  header      : "You have logged in with %s account,while not connecting it with any Clickdang account",
 	  bind        : "Connect with current account",
-	  register    : "Join new account",
+	  register    : "Create a new account",
 	  bind_ok     : "Connect now",
 	  register_ok : "Join now"
 	},
