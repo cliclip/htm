@@ -673,9 +673,9 @@ App.versions = (function($){
 	},
 
 	bind : {
-	  header      : "You have logged in %s ,while not connecting it with any Clickdang account",
+	  header      : "You have logged in with %s account,while not connecting it with any Clickdang account",
 	  bind        : "Connect with current account",
-	  register    : "Join new account",
+	  register    : "Create a new account",
 	  bind_ok     : "Connect now",
 	  register_ok : "Join now"
 	},
