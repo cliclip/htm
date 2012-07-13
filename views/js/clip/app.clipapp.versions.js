@@ -105,8 +105,8 @@ App.versions = (function($){
 	},
 
 	emailEdit : {
-	  add         : "增加邮箱绑定",
-	  title       : "邮箱绑定"
+	  add         : "增加邮箱关联",
+	  title       : "邮箱关联"
 	},
 
 	emailAdd : {
@@ -123,12 +123,12 @@ App.versions = (function($){
 	},
 
 	weiboEdit : {
-	  title       : "微博绑定",
-	  add         : "增加微博绑定"
+	  title       : "微博关联",
+	  add         : "增加微博关联"
 	},
 	twitterEdit : {
-	  title       : "twitter绑定",
-	  add         : "增加twitter绑定"
+	  title       : "twitter关联",
+	  add         : "增加twitter关联"
 	},
 
 	clipmemo : {
@@ -270,10 +270,10 @@ App.versions = (function($){
 	},
 
 	bind : {
-	 header   : "您已登录 %s 账户，但尚未将此帐号绑定给clickdang任何帐户。",
-	  bind        : "绑定已有帐户",
+	 header   : "您已登录 %s 账户，但尚未将此帐号关联给clickdang任何帐户。",
+	  bind        : "关联已有帐户",
 	  register    : "注册新帐户",
-	  bind_ok     : "立即绑定",
+	  bind_ok     : "立即关联",
 	  register_ok : "立即注册"
 	},
 
@@ -318,8 +318,8 @@ App.versions = (function($){
 	  reclip_tag     : "您实际收录了 %s 条摘录，其余摘录已经拥有了",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
-	  "account_hasbind" : "您的帐号之前已经绑定过，若要重新绑定，请先解绑",
-	   InternalOAuthError:"绑定认证过程出现了点小问题，再试一次吧！",
+	  "account_hasbind" : "您的帐号之前已经关联过，若要重新关联，请先解绑",
+	   InternalOAuthError:"关联认证过程出现了点小问题，再试一次吧",
 	  reclip:{
 	    success: "收录成功",
 	    no_pub: "作者没有公开该条clip,您暂时不能收录"
@@ -376,7 +376,7 @@ App.versions = (function($){
 	  ok             : "确 定",
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
-	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
+	  deloauth       : "您真的要删除 %s 账号关联吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
 	  oauth_fail     : "认证失败，请重新认证！",
 	  memo_save      : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  clipedit_save  : "关闭窗口，您填写的内容将不会被保存。请确认。",
