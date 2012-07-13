@@ -136,7 +136,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       if(o_data['public'] != 'false'){
 	o_data['public'] = 'true';
       }
-      flag = flag && (o_data.note.trim()==n_data.note[0].text.trim());
+      flag = flag && ($.trim(o_data.note)==$.trim(n_data.note[0].text));
       flag = flag && n_data.tag.length==o_data.tag.length && _.difference(n_data.tag,o_data.tag).length==0;
       flag = flag && n_data['public'] == o_data['public'];
       if(flag)App.popRegion.close();
