@@ -79,7 +79,9 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
 	window.location.href="javascript:scroll(0,100)";
       }
       //console.info(App.listRegion.currentView.$el[0].className);
-      if(flag) $(".empty_user").css("display","none");
+      setTimeout(function(){//IE8兼容性问题marionate也作了更改
+   	if(flag) $(".empty_user").css("display","none");
+      },0);
       App.vent.trigger("app.clipapp:showpage");
     });
   };
