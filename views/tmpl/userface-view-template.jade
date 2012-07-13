@@ -6,9 +6,9 @@ script(type='text/template',id='userface-view-template')
       </a>
       <% if(id&&App.util.getMyUid() !=id){ %>
       <% if(_.isEmpty(relation)){ %>
-      <b class="user_i" style="display:none;"><i class="stop" /></b>
+      <b class="user_i" style="display:none;"><i class="<%=_i18n('userface.zhui')%>" id="user_zhui" /></b>
       <% }else{ %>
-      <b class="user_i" style="display:none;"><i class="zhui" /></b>
+      <b class="user_i" style="display:none;"><i class="<%=_i18n('userface.stop')%>" id="user_stop" /></b>
       <% }} %>	
     dl.user_detail.clearfix
       dt.
@@ -24,11 +24,17 @@ script(type='text/template',id='userface-view-template')
             //-i.icon_biezhen
             div.
               <a class="following">
+                <% if(id == App.util.getMyUid()){%>
+                <%=_i18n('userface.mfollowing')%>(<%=following%>)<% }else{ %>
                 <%=_i18n('userface.following')%>(<%=following%>)
+                <% } %>
               </a> 
           span.icon_block
             //-i.icon_quote
             div.
               <a class="follower">
+                <% if(id == App.util.getMyUid()){%>
+                <%=_i18n('userface.mfollow')%>(<%=follower%>)<% }else{ %>
                 <%=_i18n('userface.follow')%>(<%=follower%>)
+                <% } %>
               </a>

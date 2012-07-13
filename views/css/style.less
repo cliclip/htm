@@ -251,7 +251,7 @@
 	}	
 	.log{
 		margin-left: 135px;
-    	    	width: 110px;
+    	    	//width: 95px;
 		margin-top: 40px;
 	}
 	.my_info{
@@ -539,7 +539,7 @@
 			width:25px;
 			height:25px;
 			position:absolute;
-			right:10px;
+			right:25px;
 			bottom:10px;
 			.sprites(-300px,-20px);
 			cursor: pointer;
@@ -550,11 +550,26 @@
 				bottom:25px;
 				left:-20px;
 			}
-			.zhui{
+			.euser_i_icon{
+				width:75px;
+				height:57px;
+				position: absolute;
+				bottom:25px;
+				left:-33px;
+			}
+			.ezhui{
+				.euser_i_icon;
+				.sprites(-40px,-713px);
+			}
+			.estop{
+				.euser_i_icon;
+				.sprites(-133px,-713px);
+			}
+			.stop{
 				.user_i_icon;
 				.sprites(-517px,-20px);
 			}
-			.stop{
+			.zhui{
 				.user_i_icon;
 				.sprites(-590px,-20px);
 			}
@@ -589,6 +604,7 @@
 				cursor: pointer;
 			}
 			.icon_follow{
+				cursor: pointer;
 				position:relative;
 				display: block;
 				float: left;
@@ -690,10 +706,11 @@ article.clip{
 		bottom:0;
 		background:#ededed;
 		.metas{
-			width:160px;
+			//width:180px;
 			height:20px;
 			float:right;
 			margin-top: 20px;
+			margin-right: 15px;
 			color:#aaaaaa;
 		}
 		.user_info_small{
@@ -888,7 +905,7 @@ section.follow_frame{
 				position: relative;
 				span{margin-right:10px;}
 				.box{
-					width:545px;height:60px;overflow:hidden;
+					width:545px;height:60px;overflow:hidden;position:relative;
 					.items{
 						height:48px;left:0px;position:relative;	
 						.heads{
@@ -970,6 +987,7 @@ section.follow_frame{
 		margin-left:-90px;
 		background:#fff;
 		min-width: 150px;
+		max-width: 300px;
 		.pop_body{
 			padding:10px 25px;
 			margin:0;
@@ -1452,14 +1470,21 @@ section.follow_frame{
 					font-size:20px;
 					*margin-top:-15px;
 				}
-				input{
-					color:#fff;
-					height:27px;
-					border:none;
-					width:197px;
+				.login_input{
 					.sprites(-340px,-520px);
+					height: 35px;
+    					width: 205px;
 					float:right;
-					margin-bottom:0px;
+					input{
+						color:#fff;
+						height:27px;
+						border:none;
+						width:197px;
+						float:right;
+						margin-bottom:0px;
+						//.sprites(-340px,-520px);
+						background:none repeat scroll 00 transparent;
+					}
 				}
 				input#remember{float: left;width:auto!important;height:auto!important;}
 				input:focus{
@@ -1863,7 +1888,7 @@ section.edit_frame{
 		.tag_bg(0,-192px);
 	}
         div.box{
-		width:545px;height:48px;overflow:hidden;
+		width:545px;height:48px;overflow:hidden;position:relative;
 		div.items{
 			height:48px;left:0px;position:relative;
 			span.size48{width:48px;height:48px;line-height:48px;float:left;font-size:12px;color:#fff;text-align:center;cursor: pointer;}

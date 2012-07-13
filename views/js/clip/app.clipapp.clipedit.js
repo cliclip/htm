@@ -157,12 +157,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
       App.ClipApp.Editor.setContent("editor", html);
-      old_content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+      setTimeout(function(){
+	old_content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+      },100);
     });
   };
 
   ClipEdit.close = function(n_content){
-    if(!n_content || n_content.trim() == old_content.trim())
+    if(!n_content || n_content == old_content)
       App.viewRegion.close();
     else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题

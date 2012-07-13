@@ -2,6 +2,8 @@ App.util = (function(){
   var util = {};
   var P = App.ClipApp.Url.base;
 
+  util.name_pattern = /^[a-zA-Z\d]\w{3,18}[a-zA-Z\d]$/;
+  util.email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
   util.getCookie = function(name){
     var start = document.cookie.indexOf( name+"=" );
     var len = start + name.length + 1;
@@ -100,6 +102,19 @@ App.util = (function(){
   // 将content内容转换为，可用于显示的html
   util.contentToHtml = function(content){
     return App.ClipApp.Convert.ubbToHtml(content);
+  };
+
+  util.cleanComment = function(comment){ // 对comment的内容进行html过滤，防止脚本注入
+    comment = App.ClipApp.Convert.cleanHtml(comment);
+    comment = comment.replace(/<\/?div[^>]*>/ig, "");
+    comment = comment.replace(/<\/?div[^>]*>/ig, "");
+    return comment;
+  };
+
+  util.commentToHtml = function(comment){
+    comment = comment.replace(/\n{2,}/ig, "<\/p><p>");
+    comment = comment.replace(/\n/ig, "<\/br>");
+    return comment;
   };
 
   util.getPreview = function(content, length){

@@ -311,7 +311,10 @@ Backbone.Marionette = (function(Backbone, _, $){
 
         var collectionIsRendered = that.renderCollection();
         $.when(collectionIsRendered).then(function(){
-          compositeRendered.resolve();
+	setTimeout(function(){
+	  compositeRendered.resolve();
+	},0);
+
         });
       });
 

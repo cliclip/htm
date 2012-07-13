@@ -21,7 +21,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     events : {
       "focus #comm_text" :"foucsAction",
       "blur #comm_text"  :"blurAction",
-      "click .size48"    :"maintagAction",
+     // "click .size48"    :"maintagAction",
       "click #submit"    :"comment",
       "click #cancel"    :"cancel",
       "click .masker_layer":"cancel",
@@ -37,6 +37,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('comment.defaultText') :
       $(e.currentTarget).val() );
     },
+  /*
     maintagAction:function(e){
       // 取得评论框中的文本并转为数组，去除掉数组中的默认值和空值。
       $("#comm_text").focus();
@@ -52,11 +53,13 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	$("#comm_text").val((_.without(arr_text,tag)).join(","));
       }
     },
+*/
     comment : function(e){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
       var view = this;
       var text = $.trim($("#comm_text").val());
+      text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
       if(text == "" || text == _i18n('comment.defaultText')){
 	this.showError("comment",{comm_text:"is_null"});
 	$("#comm_text").blur().val("");
@@ -64,16 +67,20 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       }
       var params = {text: text, pid: 0};
       var params1 = null;
+      /*
       if($("#reclip_box").attr("checked")){
 	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};
       }
+       */
       var tmpmodel = new App.Model.CommModel(params);
       tmpmodel.save({},{
 	url: P+"/clip/"+clipid+"/comment",
 	success: function(model, res){
+	  /*
 	  if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	  }
+	   */
 	  App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
 	  App.vent.trigger("app.clipapp.message:success","comment");
 	  Comment.close();

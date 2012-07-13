@@ -37,8 +37,12 @@ App.versions = (function($){
 	},
 
 	userface : {
-	  following   : "我追谁",
-	  follow      : "谁追我"
+	  zhui        : "zhui",
+	  stop        : "stop",
+	  mfollowing  : "我追谁",
+	  mfollow     : "谁追我",
+	  following   : "ta追谁",
+	  follow      : "谁追ta"
 	},
 
 	bubb : {
@@ -101,8 +105,8 @@ App.versions = (function($){
 	},
 
 	emailEdit : {
-	  add         : "增加邮箱绑定",
-	  title       : "邮箱绑定"
+	  add         : "增加邮箱关联",
+	  title       : "邮箱关联"
 	},
 
 	emailAdd : {
@@ -119,12 +123,12 @@ App.versions = (function($){
 	},
 
 	weiboEdit : {
-	  title       : "微博绑定",
-	  add         : "增加微博绑定"
+	  title       : "微博关联",
+	  add         : "增加微博关联"
 	},
 	twitterEdit : {
-	  title       : "twitter绑定",
-	  add         : "增加twitter绑定"
+	  title       : "twitter关联",
+	  add         : "增加twitter关联"
 	},
 
 	clipmemo : {
@@ -248,24 +252,28 @@ App.versions = (function($){
 	},
 
 	follower : {
-	  follower    : "追我的人",
-	  following   : "我追的人",
+	  mfollower   : "追我的人",
+	  mfollowing  : "我追的人",
+	  follower    : "追ta的人",
+	  following   : "ta追的人",
 	  p           : "还没有人追你哟",
 	  all         : "所有"
 	},
 
 	following : {
-	  follower    : "追我的人",
-	  following   : "我追的人",
+	  mfollower   : "追我的人",
+	  mfollowing  : "我追的人",
+	  follower    : "追ta的人",
+	  following   : "ta追的人",
 	  p           : "你还没有追任何人哟",
 	  all         : "所有"
 	},
 
 	bind : {
-	 header   : "您已登录 %s 账户，但尚未将此帐号绑定给clickdang任何帐户。",
-	  bind        : "绑定已有帐户",
+	 header   : "您已登录 %s 账户，但尚未将此帐号关联给clickdang任何帐户。",
+	  bind        : "关联已有帐户",
 	  register    : "注册新帐户",
-	  bind_ok     : "立即绑定",
+	  bind_ok     : "立即关联",
 	  register_ok : "立即注册"
 	},
 
@@ -310,15 +318,14 @@ App.versions = (function($){
 	  reclip_tag     : "您实际收录了 %s 条摘录，其余摘录已经拥有了",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
-	  "account_hasbind" : "您的帐号之前已经绑定过，若要重新绑定，请先解绑",
-	   InternalOAuthError:"绑定认证过程出现了点小问题，再试一次吧！",
+	  "account_hasbind" : "您的帐号之前已经关联过，若要重新关联，请先解绑",
+	   InternalOAuthError:"关联认证过程出现了点小问题，再试一次吧",
 	  reclip:{
 	    success: "收录成功",
 	    no_pub: "作者没有公开该条clip,您暂时不能收录"
 	  },
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
-	  pre_active:"您已激活%s邮件地址。您现在可以再登录时使用此邮件地址，并接受来自此邮件地址的收藏。",
 	  cliplist_null:{
 	    all:"抱歉，没有找到相关的信息......",
 	    my:"抱歉，没有找到相关的信息......",
@@ -369,7 +376,7 @@ App.versions = (function($){
 	  ok             : "确 定",
 	  cancel         : "取 消",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
-	  deloauth       : "您真的要删除 %s 账号绑定吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
+	  deloauth       : "您真的要删除 %s 账号关联吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
 	  oauth_fail     : "认证失败，请重新认证！",
 	  memo_save      : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  clipedit_save  : "关闭窗口，您填写的内容将不会被保存。请确认。",
@@ -422,7 +429,7 @@ App.versions = (function($){
 	    name        : "user name",
 	    is_null     : "User name is not filled in",
 	    not_exist   : "This user name does not exist",
-	    invalidate  : "Wrong format of User name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
+	    invalidate  : "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
 	    exist       : "User name already exists"
 	  },
 	  pass : {
@@ -433,6 +440,10 @@ App.versions = (function($){
 	},
 
 	userface : {
+	  zhui        : "ezhui",
+	  stop        : "estop",
+	  mfollowing  : "Following",
+	  mfollow     : "Followed by",
 	  following   : "Following",
 	  follow      : "Followed by"
 	},
@@ -450,7 +461,7 @@ App.versions = (function($){
 	  upload      : "Upload image",
 	  name : {
 	    is_null   : "User name is not filled in",
-	    invalidate: "Wrong format of User name",
+	    invalidate: "Invalid format of user name",
 	    exist     :"User name already exists"
 	  }
 	},
@@ -509,7 +520,7 @@ App.versions = (function($){
 	    is_Exist  : "Email address already exists",
 	    you_exist : "You have already add that email address",
 	    other_exist:"The email address you added has already been connected with other account in the system",
-	    invalidate: "Wrong format of email address",
+	    invalidate: "Invalid format of email address",
 	    is_null   : "Email address has not fill in"
 	  }
 	},
@@ -609,8 +620,8 @@ App.versions = (function($){
 	  reply       : "Reply",
 	  delete      : "Delete",
 	  text        : "The comment has been removed",
-	  pack        : "(pack up)",
-	  open        : "(open up)"
+	  pack        : "(Collapse)",
+	  open        : "(Expand)"
 	},
 
 	addcomm : {
@@ -633,8 +644,8 @@ App.versions = (function($){
 	},
 
 	clippreview : {
-	  reprint     : "Reclip",
-	  reply       : "Reply",
+	  reprint     : "reclips",
+	  reply       : "comments",
 	  comment     : "Comment",
 	  recommend   : "@",
 	  reclip      : "Reclip",
@@ -644,6 +655,8 @@ App.versions = (function($){
 	},
 
 	follower : {
+	  mfollower   : "Followed by",
+	  mfollowing  : "Following",
 	  follower    : "Followed by",
 	  following   : "Following",
 	  p           : "Nobody is following you",
@@ -651,6 +664,8 @@ App.versions = (function($){
 	},
 
 	following : {
+	  mfollower   : "Followed by",
+	  mfollowing  : "Following",
 	  follower    : "Followed by",
 	  following   : "Following",
 	  p           : "You are not following anyone",
@@ -714,7 +729,6 @@ App.versions = (function($){
 	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
-	  pre_active     : "You have activated the email address of %s in our system. Now you can sign in with this email account and clip by sending email from this account",
 	  cliplist_null:{
 	    all:"Sorry,have not found appropriate clauses......",
 	    my:"Sorry,have not found appropriate clauses......",
@@ -740,13 +754,14 @@ App.versions = (function($){
 	  error:{
 	    "link 已作废": "Overdue link",
 	    "link doesnt exist": "Invalid link",
-	    "link invalidate": "Wrong format link"
+	    "link invalidate": "Invalid format link"
 	  },
 	  accept:{
 	    fail         :"Registration link was overdue for too long interval. You can Join directly and add email address connection in Setting"
 	  },
 	  active:{
-	    fail         : "Registration link was overdue for too long interval. You can add again in Setting"
+	    fail         : "Registration link was overdue for too long interval. You can add again in Setting",
+	    email   : "You have activated the email address of %s in our system. \nNow you can login with this email account and clip by sending email from this account"
 	  },
 	  email:{
 	    no_uname     : "Set your user name before adding mail address connection"
@@ -767,14 +782,14 @@ App.versions = (function($){
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
 	  "oauth_fail"   : "Authenticate fail,please try again",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
-	  memo_save      : "If close the window, what you filled will lost, are you sure?",
-	  clipedit_save  : "If close the window, what you filled will lost, are you sure?",
-	  reclip_save    : "If close the window, what you filled will lost, are you sure?",
-	  recommend_save : "If close the window, what you filled will lost, are you sure?",
-	  comment_save   : "If close the window, what you filled will lost, are you sure?",
-	  clipadd_save   : "If close the window, what you filled will lost, are you sure?",
-	  emailadd_save   : "If close the window, what you filled will lost, are you sure?",
-	  del_comment    : "You really mean to delete this comment? It can’t restore any more"
+	  memo_save     :"If you close the window, what you filled will be lost. Are you sure?",
+	  clipedit_save :"If you close the window, what you filled will be lost. Are you sure?",
+	  reclip_save   :"If you close the window, what you filled will be lost. Are you sure?",
+	  recommend_save:"If you close the window, what you filled will be lost. Are you sure?",
+	  comment_save  :"If you close the window, what you filled will be lost. Are you sure?",
+	  clipadd_save  :"If you close the window, what you filled will be lost. Are you sure?",
+	  emailadd_save :"If you close the window, what you filled will be lost. Are you sure?",
+	  del_comment   : "You really mean to delete this comment? It can’t restore any more"
 	},
 	util : {
 	  time:{
