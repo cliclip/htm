@@ -7,7 +7,6 @@ script(type="text/template",id="addClip-view-template")
         div.message
           |<%=_i18n('addClip.note_message')%>
       div.pop_right
-        | <%=_i18n('addClip.title')%>
         div.button_frame
           iframe(name="post_frame",id="post_frame")
           |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
@@ -16,7 +15,8 @@ script(type="text/template",id="addClip-view-template")
           |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipAdd.image_change(this)">
           |</span>
           |</form>
-          span
+          div.masker_layer1
+          span#link_image
             button.link_img <%=_i18n('addClip.link')%>
             span.url_text.img_upload_span
               input.text#img_upload_url(type="text")
@@ -27,6 +27,7 @@ script(type="text/template",id="addClip-view-template")
             //- ie-7 若不加空格则右上角关闭按钮不显示
             |&nbsp&nbsp&nbsp&nbsp&nbsp
         //- ie-7 文字若不放到此位置导致显示格式不正确
+        | <%=_i18n('addClip.title')%>
     div.pop_left
     div.pop_right
       section.pop_inner

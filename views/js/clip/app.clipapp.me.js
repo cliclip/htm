@@ -76,9 +76,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.useredit:show",this.model.get("id"));
     },
     switch_my:function(){
-      $(".my").css({"z-index":2});
-      $(".at_me").css({"z-index":1});
-      $(".expert").css({"z-index":0});
+      current_page("my");
       if(!(/my/.test(window.location.hash))){
         Backbone.history.navigate("my",true);
 	App.vent.trigger("app.clipapp.face:reset",this.model.id);
@@ -87,9 +85,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }
     },
     switch_at_me:function(){
-      $(".my").css({"z-index":1});
-      $(".at_me").css({"z-index":1});
-      $(".expert").css({"z-index":0});
+      current_page("@me");
       if(!(/my/.test(window.location.hash))){
         Backbone.history.navigate("my/recommend",true);
 	App.vent.trigger("app.clipapp.face:reset",this.model.id);
@@ -98,9 +94,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }
     },
     switch_expert:function(){
-      $(".my").css({"z-index":0});
-      $(".at_me").css({"z-index":0});
-      $(".expert").css({"z-index":0});
+      current_page("interest");
       if(!(/my/.test(window.location.hash))){
         Backbone.history.navigate("my/interest",true);
 	App.vent.trigger("app.clipapp.face:reset",this.model.id);
@@ -165,7 +159,22 @@ App.ClipApp.Me = (function(App, Backbone, $){
       $("." + opt).css({"z-index":0});
     }*/
   });
+  function current_page(str){
+    if(str=="my"){
+      $(".my").css({"z-index":2,"top":"-7px","height":"37px"});
+      $(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
+      $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
 
+    }else if(str=="@me"){
+      $(".my").css({"z-index":1,"top":"0px","height":"30px"});
+      $(".at_me").css({"z-index":1,"top":"-7px","height":"37px"});
+      $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+    }else if(str=="interest"){
+      $(".my").css({"z-index":0,"top":"0px","height":"30px"});
+      $(".at_me").css({"z-index":0,"top":"0px","height":"30px"});
+      $(".expert").css({"z-index":0,"top":"-7px","height":"37px"});
+    }
+  }
   Me.show = function(){
     if(!App.util.getMyUid()){
       var meView = new View();
@@ -180,6 +189,13 @@ App.ClipApp.Me = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.versions:change",meModel.get("lang"));
       }
       App.mineRegion.show(meView);
+      if((/my\/recommend/.test(window.location.hash))){
+	current_page("@me");
+      }else if(/my\/interest/.test(window.location.hash)){
+	current_page("interest");
+      }else if(/my/.test(window.location.hash)){
+	current_page("my");
+      }
     });
   };
 

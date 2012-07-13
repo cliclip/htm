@@ -14,7 +14,7 @@ script(type="text/template",id="organize-view-template")
       li.input_checkbox
         label
           | <input type="checkbox" id="memo_private" <% if(pub=="false"){ %>checked="checked" <% } %>/>
-          | <%=_i18n('clipmemo.private')%>
+          | &nbsp;<%=_i18n('clipmemo.private')%>
       li.btn_group.clearfix.
         <input type="button" class="verify" id="organize_button" value="<%=_i18n('clipmemo.ok')%>" />
         <input type="button" class="cancel" id="cancel_button" value="<%=_i18n('clipmemo.cancel')%>" />

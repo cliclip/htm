@@ -349,20 +349,20 @@
 		}
 		.my{
 			width:90px;
-			.sprites(-30px,-430px);
+			.sprites(-30px,-424px);
 			z-index:2;
 			a{color:#925d00;text-decoration:none;outline:none}
 		}
 		.at_me{
 			width:90px;
-			.sprites(-120px, -430px);
+			.sprites(-120px, -424px);
 			left:70px;
 			z-index:1;
 			a{text-decoration:none;outline:none}
 		}
 		.expert{
 			width:90px;
-			.sprites(-210px,-430px);
+			.sprites(-210px,-424px);
 			left:140px;
 			z-index:0;
 			a{text-decoration:none;outline:none}
@@ -1006,6 +1006,25 @@ section.follow_frame{
 	top:0;
 	left:0;
 }
+.masker_layer1{//连接图片弹出框弹出后加一层遮罩层，点击遮罩层弹出框消失
+	display:none;
+	width: 100%; //1000px;
+	height: 100%; //1000px;
+	position: fixed; //absolute;
+	_position: absolute;
+	//background:red;
+	//opacity: 0.5;
+	//filter:alpha(opacity=50);
+	top:0;
+	left:0;
+	z-index:2;
+	_position: absolute;
+	_left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
+	_top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
+}
+#link_image{//为链接图片的span设置层次
+	z-index:3;
+}
 .small_pop{
 	z-index:20;
 	width:330px;
@@ -1110,13 +1129,14 @@ section.follow_frame{
 			}
 			button{
 				border:0 none;
-				width:100px;
-				padding:0 0 0 15px;
+				width:103px;
+				padding:0 0 0 20px;
 				float:left;
 				height:25px;
 				line-height:25px;
 				color: #8b8b8b;
 				margin-left:5px;
+				text-align:left;
 				position: relative;
 			}
             		span.close_w {

@@ -279,8 +279,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  new_page = false;
 	  loading = false;
 	},
-	success :function(){
-	  if(collection.length-collection_length>=App.ClipApp.Url.page){
+	success :function(col,res){
+	  if(res.length>=App.ClipApp.Url.page){
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;

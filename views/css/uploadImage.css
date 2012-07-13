@@ -31,6 +31,7 @@
     position: absolute;
     right: -1px;
     top: 0;
+    height:20px;
     filter: alpha(opacity=0); 
 }
 
