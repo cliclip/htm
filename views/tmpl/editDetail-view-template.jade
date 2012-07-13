@@ -13,11 +13,12 @@ script(type="text/template",id="editDetail-view-template")
           |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipEdit.image_change(this)"/>
           |</span>
           |</form>
-          span
+          div.masker_layer1
+          span#link_image
             button.link_img <%=_i18n('editDetail.link')%>
             span.url_text.img_upload_span
               input.text#img_upload_url(type="text")
-              | <input type="buttn" class="btn_img" value="<%=_i18n('editDetail.ok')%>" />
+              | <input type="submit" class="btn_img" value="<%=_i18n('editDetail.ok')%>" />
           span
             button.format <%=_i18n('editDetail.clear')%>
           span.close_w

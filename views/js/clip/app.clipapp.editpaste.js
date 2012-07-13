@@ -59,7 +59,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   };
 
   Editor.focus = function(editroId){
-    var ifrm=document.getElementById("editor");
+    var ifrm=document.getElementById(editroId);
     ifrm.contentWindow.focus();
   };
 
