@@ -218,6 +218,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection.onReset(function(clips){
       if(clips&&clips.length==0){
 	clips_exist = false;
+      }else{
+	clips_exist = true;
       }
       collection_length = clips.length;
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
