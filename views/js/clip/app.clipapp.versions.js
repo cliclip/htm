@@ -726,14 +726,14 @@ App.versions = (function($){
 	  recomm         : "Clip was forwarded(@) successfully",
 	  comment        : "Commented successfully",
 	  account_hasbind:"This account has been used for connection before,you can't use same account connect Clickdang twice",
-	  InternalOAuthError:"Sorry,connection occurs some problems,please try again",
+	  InternalOAuthError:"Sorry, some problems occurred during the connection,Please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
 	  cliplist_null:{
-	    all:"Sorry,have not found appropriate clauses......",
-	    my:"Sorry,have not found appropriate clauses......",
-	    interest:"Sorry,have not found appropriate clauses......",
-	    recommend:"Sorry,have not found appropriate clauses......"
+	    all:"Sorry, no results found",
+	    my:"Sorry, no results found",
+	    interest:"Sorry, no results found",
+	    recommend:"Sorry, no results found"
 	  },
 	  "error_message" :"Operation fail,please try again!",
 	  clip : {
