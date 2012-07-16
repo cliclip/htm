@@ -139,7 +139,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show(uid);
   });
 
-  App.vent.bind("app.clipapp:usershow", function(uid){
+  App.vent.bind("app.clipapp:usershow", function(uid){//点击用户名和头像跳到用户主页
     ClipApp.ClipList.showUserClips(uid);
     App.vent.trigger("app.clipapp.routing:usershow", uid);
   });

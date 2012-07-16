@@ -162,6 +162,25 @@ App.util = (function(){
       return true;
     }
   };
+  util.current_page = function(str){
+    if(str=="my"){
+      $(".my").css({"z-index":2,"top":"-3px","height":"33px"});
+      $(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
+      $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+    }else if(str=="@me"){
+      $(".my").css({"z-index":1,"top":"0px","height":"30px"});
+      $(".at_me").css({"z-index":1,"top":"-3px","height":"33px"});
+      $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+    }else if(str=="interest"){//ie7 此处层次关系导致次数必须设成0,2,2，0,0,1和0,1,2 效果不正确
+      $(".my").css({"z-index":0,"top":"0px","height":"30px"});
+      $(".at_me").css({"z-index":2,"top":"0px","height":"30px"});
+      $(".expert").css({"z-index":2,"top":"-3px","height":"33px"});
+    }else {
+      $(".my").css({"z-index":2,"top":"0px","height":"30px"});
+      $(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
+      $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+    }
+  };
 
   util.generatePastTime = function(time){
     if(!time) return null;//TODO ie8 problem
