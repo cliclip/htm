@@ -167,6 +167,13 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var loginModel = new App.Model.LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
+    if(/language=en/.test(document.cookie)){
+      $("#note_img").removeClass("note_img_zh");
+      $("#note_img").addClass("note_img_en");
+    }else{
+      $("#note_img").removeClass("note_img_en");
+      $("#note_img").addClass("note_img_zh");
+    }
     $("#name").focus();
   };
 
@@ -201,7 +208,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
  // TEST
 
- //App.bind("initialize:after", function(){ Login.show(); });
+ App.bind("initialize:after", function(){
+   //console.info(document.cookie);
+ });
 
  return Login;
 })(App, Backbone, jQuery);
