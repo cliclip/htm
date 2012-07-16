@@ -21,12 +21,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   });
   // constants
-
-  // var bubs = ["好玩", "好听", "好看", "好吃", "好用", "弓虽"];
   // 与显示无关，只是用来确定泡泡的大小而已
   var bubs = {
-    zh: ["好玩", "好听", "好看", "好吃", "酷", "好用"],
-    en: ["funny","musical","pretty","tasty","cool","useful"]
+    zh: ["好看", "好听", "好玩", "好吃",  "好用", "真棒"],
+    en: ["pretty","musical","funny","tasty","useful","awesome"]
   };
   var sink = {
     zh: ["讨厌"],
@@ -176,8 +174,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // GET $HOST/$BASE/_/user/0/meta/0..19
     // 替换掉之前的取用户2的数据为，常量
     var	siteTags = {
-      zh: ["好玩", "好听", "好看", "好吃", "酷", "好用", "精辟","讨厌","书籍","电影","旅游","资料"],
-      en: ["funny","musical","pretty","tasty","cool","useful","incisive","hate","book","film","tour","data"]
+      zh: ["好看", "好听", "好玩", "好吃", "好用", "真棒", "精辟","讨厌","书籍","电影","旅游","资料"],
+      en: ["pretty","musical","funny","tasty","useful","awesome","incisive","hate","book","film","tour","data"]
     };
     callback(siteTags[lang],[]);
 
