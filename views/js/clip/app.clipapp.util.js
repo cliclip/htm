@@ -164,7 +164,8 @@ App.util = (function(){
   };
 
   util.generatePastTime = function(time){
-    if(!time) return null;
+    if(!time) return null;//TODO ie8 problem
+    //time=$.i18n.parseDate(time,"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
     var ftime = new Date(time);
     var ttime = new Date();
     return subTimes(ftime,ttime);
