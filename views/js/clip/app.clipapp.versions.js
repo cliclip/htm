@@ -427,7 +427,7 @@ App.versions = (function($){
 
 	  name : {
 	    name        : "user name",
-	    is_null     : "User name is not filled in",
+	    is_null     : "User name is not filled",
 	    not_exist   : "This user name does not exist",
 	    invalidate  : "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
 	    exist       : "User name already exists"
