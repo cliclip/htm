@@ -147,6 +147,11 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       document.cookie = "token="+res.token;
     }
     saveOauth(bindOauth,function(err,reply){
+      if(bindOauth.provider == "weibo"){
+	App.vent.trigger("app.clipapp.message:confirm", "weibo_sucmsg",bindOauth.info.name);
+      }else if(bindOauth.provider == "twitter"){
+	App.vent.trigger("app.clipapp.message:confirm", "twitter_sucmsg",bindOauth.info.name);
+      }
       App.vent.trigger("app.clipapp.userbind:bindok");
       Backbone.history.navigate("my",true);
       if(reply){

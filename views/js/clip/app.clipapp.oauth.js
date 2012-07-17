@@ -10,6 +10,13 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
       }else if(res&&res.oauth){
 	App.vent.trigger("app.clipapp.userbind:show",res.oauth,"");
       }else if(res&&res.token){
+	if(res.provider == "weibo"){
+	  App.vent.trigger("app.clipapp.message:confirm", "weibo_sucmsg",res.name);
+	}else if(res.provider == "twitter"){
+	  App.vent.trigger("app.clipapp.message:confirm", "twitter_sucmsg",res.name);
+	}
+	delete res.provider;
+	delete res.name;
 	App.vent.trigger("app.clipapp.login:success", res);
       }else{
 	App.vent.unbind("app.clipapp.message:sure");

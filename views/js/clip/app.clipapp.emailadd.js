@@ -47,6 +47,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	  type:"POST",
 	  success: function(model, res){
 	    App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
+	    App.vent.trigger("app.clipapp.emailadd:@close");
 	  },
 	  error:function(model, res){
 	    if(res.email == "no_uname"){
