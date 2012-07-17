@@ -71,17 +71,18 @@ script(type="text/template",id="ruleEdit-view-template")
           |<input type="checkbox" id="open_rule" name="enable" <% if(enable){ %> checked="checked" <%}%> />
           label(for="open_rule")|<%=_i18n('ruleEdit.open_rule')%>
         |<%=_i18n('ruleEdit.head')%>
-      li
-        label <%=_i18n('ruleEdit.title')%>
-        |<input type="text" class="text_input" name="title" id="title" value="<%=title%>"/>
-      li
-        label <%=_i18n('ruleEdit.cc_text')%>
-        |<input type="text" class="text_input" name="cc" id="cc" value="<%=cc?cc.join(';'):''%>" />
-      li
-        label <%=_i18n('ruleEdit.to_text')%>
-        |<input type="text" class="text_input" name="to" id="to" value="<%=to?to.join(';'):''%>" />
-      li.
-        <input type="submit" class="btn_blue" id="update_rule" value="<%=_i18n('ruleEdit.update')%>" />
+      div.rule_input
+        li
+          label <%=_i18n('ruleEdit.title')%>
+          |<input type="text" class="text_input" name="title" id="title" value="<%=title%>"/>
+        li
+          label <%=_i18n('ruleEdit.cc_text')%>
+          |<input type="text" class="text_input" name="cc" id="cc" value="<%=cc?cc.join(';'):''%>" />
+        li
+          label <%=_i18n('ruleEdit.to_text')%>
+          |<input type="text" class="text_input" name="to" id="to" value="<%=to?to.join(';'):''%>" />
+        li.
+          <input type="submit" class="btn_blue" id="update_rule" value="<%=_i18n('ruleEdit.update')%>" />
 
 script(type="text/template",id="passEdit-view-template")
   h3.edit_password <%=_i18n('passEdit.title')%>

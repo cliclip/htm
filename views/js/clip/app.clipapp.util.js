@@ -183,12 +183,25 @@ App.util = (function(){
   };
 
   util.generatePastTime = function(time){
-    if(!time) return null;//TODO ie8 problem
-    //time=$.i18n.parseDate(time,"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
+    if(!time) return null;
     var ftime = new Date(time);
+    if(ftime == "NaN"){
+      time_Date=time.split('T')[0];
+      var year=time_Date.split('-')[0];
+      var month=time_Date.split('-')[1];
+      var date=time_Date.split('-')[2];
+      var time_time=time.split('T')[1];
+      var hrs=time_time.split(':')[0];
+      var min=time_time.split(':')[1];
+      var sec=time_time.split(':')[2].split('.')[0];
+      var ms=time_time.split(':')[2].split('.')[1].replace('Z','');
+      time=Date.UTC(year,month-1,date,hrs,min,sec,ms);//UTC中的month是0-11
+      ftime = new Date(time);
+    }
     var ttime = new Date();
     return subTimes(ftime,ttime);
   };
+
 
   subTimes = function(Ftime,Ttime){
     var dtime = (Ttime.getTime() - Ftime.getTime())/1000;
@@ -208,7 +221,7 @@ App.util = (function(){
     }else if(dtime>=60*60*24*30 && dtime<60*60*24*30*6){//month
       returnVal = Math.round(dtime/(60*60*24*7*4)) + _i18n('util.time.month');
     }else if(dtime>=60*60*24*30*6 && dtime<60*60*24*30*6*12){//half year
-      returnVal = _18n('util.time.half_year');
+      returnVal = _i18n('util.time.half_year');
     }else if(dtime>=60*60*24*30*6*12){//year
       returnVal = Math.round(dtime/(60*60*24*30*6*12)) + _i18n('util.time.year');
     }

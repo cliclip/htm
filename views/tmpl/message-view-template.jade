@@ -4,11 +4,13 @@ script(type="text/template",id="message-view-template")
     h2
       <%=_i18n('message.title')%>
     ul.pop_body.
-      <% if (typeof message == "object") { for(key in message){%>
-      <%= message[key]%>
-      <% }}else{ %>
-      <%=message%>
-      <%}%>
+      <p>    
+        <% if (typeof message == "object") { for(key in message){%>
+        <%= message[key]%>
+        <% }}else{ %>
+        <%=message%>
+        <%}%>
+      </p>
       <br>
       <br>
       <li class="btn_group clearfix">
