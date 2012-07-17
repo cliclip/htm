@@ -100,6 +100,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
 	success:function(model,response){
+	  if(/language=en/.test(document.cookie)){
+	    //clickdang的uid为28
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 28, "newbie");
+	  }else{
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 28, "新手");
+	  }
 	  if(typeof fun != "function"){
 	    App.vent.trigger("app.clipapp.register:success","register_success",response);
 	  }else{
