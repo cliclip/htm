@@ -72,28 +72,27 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
-      "click .comment_con" : "toggleChildren",
-      "mouseover .comm_link" : "discoloration",
-      "mouseout .comm_link" : "resume",
+      "click .text" : "toggleChildren",
+      "mouseover .comment_show" : "discoloration",
+      "mouseout .comment_show" : "resume",
       "click .reply_comment" : "reply_comment",
       "click .del_comment" : "del_comment"
     },
     toggleChildren : function(e){
       e.preventDefault();
       var curr = $(e.target).attr("class");
-      if(curr != "reply_comment" && curr != "del_comment"){
-	// 取得当前的marking
-	if(curr == "marking"){
-	  var marking = $(e.target).text();
-	  if(marking)
-	    $(e.target).text(marking == _i18n('showcomment.open') ? _i18n('showcomment.pack') : _i18n('showcomment.open'));
-	}else{
-	  var marking = $(e.target).siblings(".marking").text();
-	  if(marking)
-	    $(e.target).siblings(".marking").text(marking == _i18n('showcomment.open') ? _i18n('showcomment.pack') : _i18n('showcomment.open'));
-	}
-	$(e.currentTarget).siblings(".children").toggle();
+      // 取得当前的marking
+      if(curr == "marking"){
+	var marking = $(e.target).text();
+	if(marking)
+	  $(e.target).text(marking == _i18n('showcomment.open') ? _i18n('showcomment.pack') : _i18n('showcomment.open'));
+      }else{
+	var marking = $(e.target).siblings(".marking").text();
+	if(marking)
+	  $(e.target).siblings(".marking").text(marking == _i18n('showcomment.open') ? _i18n('showcomment.pack') : _i18n('showcomment.open'));
       }
+      var div = $($(e.currentTarget).parent()[0]).parent();
+      $(div).siblings(".children").toggle();
     },
     discoloration : function(e){
       e.preventDefault();

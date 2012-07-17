@@ -1,7 +1,6 @@
 App.ClipApp.RuleEdit = (function(App, Backbone, $){
   var RuleEdit = {};
   var P = App.ClipApp.Url.base;
-
   var RuleModel = App.Model.extend({
     defaults:{
       title:"",
@@ -17,16 +16,16 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
       var error = {};
       // 如果没有attrs.rule, 则在fetch时候不会触发onChange事件
-      if(!attrs.title && !attrs.to&& !attrs.cc && !attrs.rule){
-	error.rule = "is_null";
-      }else{
+      if(attrs.to){
 	for(var i=0; attrs.to && i<attrs.to.length; i++){
 	  if(!email_pattern.test(attrs.to[i])){
 	    error.to = "invalidate";
 	    i = attrs.to.length;
 	  }
 	}
-	for(i =0; attrs.cc && i< attrs.cc.length; i++){
+      }
+      if(attrs.cc){
+	for(var i =0; attrs.cc && i< attrs.cc.length; i++){
 	  if(!email_pattern.test(attrs.cc[i])){
 	    error.cc = "invalidate";
 	    i = attrs.cc.length;
@@ -50,10 +49,35 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       "blur #to" : "blurAction",
       "focus #to": "cleanError",
       "focus #cc": "cleanError",
+      "click #open_rule" : "openRule",
       "error": "showError"
     },
     initialize:function(){
       this.tmpmodel = new RuleModel();
+    },
+    openRule:function(e){
+      var checked = $("#open_rule").attr("checked");
+      if(checked){
+	o_data.enable = true;
+	this.tmpmodel.save(o_data,{
+	  success: function(model, res){
+	    $(".rule_input").show();
+	  },
+	  error:function(model, error){
+	    console.info(error);
+	  }
+	});
+      }else{
+	o_data.enable = false;
+	this.tmpmodel.save(o_data,{
+	  success: function(model, res){
+	    $(".rule_input").hide();
+	  },
+	  error:function(model, error){
+	    console.log(error);
+	  }
+	});
+      }
     },
     setCC:function(e){
       var key = e.keyCode;
@@ -77,20 +101,15 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       if(data.cc) data.cc =  _.compact($.trim(data.cc).split(";"));
       // 因为不能在输入框中正常显示 所以对双引号进行转换
       if(data.title) data.title = data.title.replace(/"/g, '&#34;');
-      this.tmpmodel.set(data,{
-	error:function(model, error){
-	  if(error.rule == "is_null"){ // 因为有特殊逻辑所以要单独set
-	    App.vent.trigger("app.clipapp.message:chinese", error);
-	  }else{
-	    view.showError('ruleEdit',error);
-	  }
-	}
-      });
-      if(this.tmpmodel.isValid()){
-	this.tmpmodel.save({},{
+      // 如果没有设置rule, 则在fetch时候不会触发onChange事件"
+      if(data.title==o_data.title&&((data.to==o_data.to)||(data.to&&o_data.to&&data.to.join()==o_data.to.join()))&&((data.cc==o_data.cc)||(data.cc&&o_data.cc&&data.cc.join()==o_data.cc.join()))){
+	App.vent.trigger("app.clipapp.message:chinese", {rule:"not_update"});
+      }else{
+	this.tmpmodel.save(data,{
 	  success: function(model, res){
   	    App.vent.trigger("app.clipapp.ruleedit:@showrule", model.id);
 	    App.vent.trigger("app.clipapp.message:success", "setRule_success");
+	    o_data = data;
 	  },
 	  error:function(model, res){
 	    view.showError('ruleEdit',res);
@@ -138,6 +157,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     }
   }
 
+  var o_data;
   RuleEdit.show = function(){
     var ruleModel = new RuleModel();
     RuleEdit.ruleRegion = new App.Region({el:"#rule"});
@@ -145,7 +165,13 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     ruleModel.onChange(function(ruleModel){
       var ruleView = new RuleView({model: ruleModel});
       RuleEdit.ruleRegion.show(ruleView);
-    });
+      if(!ruleModel.get("enable")){
+	$(".rule_input").hide();
+      }else{
+	$(".rule_input").show();
+      }
+      o_data = {title:ruleModel.get("title")?ruleModel.get("title"):undefined,cc:ruleModel.get("cc")?ruleModel.get("cc"):undefined,to:ruleModel.get("to")?ruleModel.get("to"):undefined};
+   });
   };
 
   RuleEdit.close = function(){
