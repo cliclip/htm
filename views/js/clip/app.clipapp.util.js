@@ -39,7 +39,7 @@ App.util = (function(){
     if(lang == "en"){
       return ["pretty", "musical", "funny", "tasty", "useful", "awesome"];
     }{
-      return ["好看", "好听", "好玩", "好吃", "好用", "真棒"];
+      return ["好看", "好听", "好玩", "好吃", "好用", "真好"];
     }
   };
 
