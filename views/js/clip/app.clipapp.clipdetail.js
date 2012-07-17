@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid;
+  var mid, view, number_limit =  140;
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -173,6 +173,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .verify"    : "comment",
       "click .cancel"    : "cancel"
     },
+    initialize:function(){
+      view = this;
+    },
     focusAction:function(e){
       this.cleanError(e);
       $(".verify").attr("disabled",false);
@@ -342,7 +345,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
       },
       error:function(comment,res){
-	view.showError("comment", res);
+	if(res.comm_text == "word_limit"){
+	  view.showError("comment", res, params.text.length - number_limit);
+	}else{
+	  view.showError("comment", res);
+	  $("#comm_text").blur().val("");
+	}
       }
     });
   });
