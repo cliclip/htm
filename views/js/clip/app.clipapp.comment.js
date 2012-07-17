@@ -1,5 +1,7 @@
 // app.comment.js
 App.ClipApp.Comment = (function(App, Backbone, $){
+  var number_limit =  140;
+
   // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
     url:function(){
@@ -11,7 +13,18 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     }
   });
   // 主要用于进行comment的保存操作
-  App.Model.CommModel = App.Model.extend({}); //和api层进行交互
+  App.Model.CommModel = App.Model.extend({
+    validate: function(attr){
+      var text = attr.text;
+      if(text == "" || text == _i18n('comment.defaultText')){
+	return {comm_text: "is_null"};
+      }else if(text.length > number_limit){
+	return {comm_text: "word_limit"};
+      }else{
+	return null;
+      }
+    }
+  }); //和api层进行交互
 
   var CommentView = App.ItemView.extend({
     tagName : "div",
@@ -60,32 +73,29 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       var view = this;
       var text = $.trim($("#comm_text").val());
       text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
-      if(text == "" || text == _i18n('comment.defaultText')){
-	this.showError("comment",{comm_text:"is_null"});
-	$("#comm_text").blur().val("");
-	return;
-      }
       var params = {text: text, pid: 0};
       var params1 = null;
-      /*
-      if($("#reclip_box").attr("checked")){
-	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};
-      }
-       */
-      var tmpmodel = new App.Model.CommModel(params);
-      tmpmodel.save({},{
+      /*if($("#reclip_box").attr("checked")){
+	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};}*/
+      var tmpmodel = new App.Model.CommModel();
+      tmpmodel.save(params,{
 	url: P+"/clip/"+clipid+"/comment",
 	success: function(model, res){
-	  /*
-	  if(params1){
+	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
-	  }
-	   */
+	  }*/
 	  App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
 	  App.vent.trigger("app.clipapp.message:success","comment");
 	  Comment.close();
 	},
-	error:function(model, res){}
+	error:function(model, res){
+	  if(res.comm_text == "word_limit"){
+	    view.showError("comment", res, text.length - number_limit);
+	  }else{
+	    view.showError("comment", res);
+	    $("#comm_text").blur().val("");
+	  }
+	}
       });
     },
     cancel : function(e){

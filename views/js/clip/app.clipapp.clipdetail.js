@@ -1,7 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid,checked;
-
+  var mid;
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -174,9 +173,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .verify"    : "comment",
       "click .cancel"    : "cancel"
     },
-    initialize:function(){
-      checked = false;
-    },
     focusAction:function(e){
       this.cleanError(e);
       $(".verify").attr("disabled",false);
@@ -214,18 +210,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = $.trim($("#comm_text").val());
       text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
-      if(text == "" || text == _i18n('comment.defaultText')){
+      /*if(text == "" || text == _i18n('comment.defaultText')){
 	this.showError("comment",{comm_text:"is_null"});
 	$("#comm_text").blur().val("");
 	return;
-      }
+      }*/
       var params = {clipid: cid, text: text, pid: pid};
-      /*
-      var params1 = null;
+      /*var params1 = null;
       if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量
 	params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
-      }
-       */
+      }*/
       if(!App.ClipApp.getMyUid()){
 	App.vent.trigger("app.clipapp:login", function(){
 	  App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, mid);
@@ -340,16 +334,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     model.save({pid:params.pid, text:params.text},{
       url : P+"/clip/"+params.clipid+"/comment",
       success:function(comment,response){
-	/*
-	if(params1){ // 避免comment和reclip同时去写clip数据
+	/*if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
-	}
-	 */
+	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
       },
-      error:function(comment,response){}
+      error:function(comment,res){
+	view.showError("comment", res);
+      }
     });
   });
 
