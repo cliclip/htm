@@ -8,7 +8,7 @@ script(type="text/template",id="clippreview-view-template")
           <img src="<%=App.util.face_url(recommend.user.face,50)%>" title="<%=recommend.user.name%>" onerror="this.src='img/f.jpg'"/>
         </div>
         <dt class="username">
-          <%= recommend.user.name %>
+          <%= recommend.user.name === undefined ? "" : recommend.user.name%>
         <dt>
       </a>&nbsp;&nbsp;
       <span class="recommend_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(recommend.Date)%></span>
@@ -43,7 +43,7 @@ script(type="text/template",id="clippreview-view-template")
           |   <img src="<%=App.util.face_url(user.face,50)%>"/>
           dl.name
             dt.
-              <%=user.name%>
+              <%=user.name === undefined ? "" : user.name%>
           </a>
         <%}%>
       div.action#opt(style="display:none;").
