@@ -320,8 +320,10 @@ App.versions = (function($){
 	  reclip_tag     : "您实际收录了 %s 条摘录，其余摘录已经拥有了",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
-	  "account_hasbind" : "您的帐号之前已经关联过，若要重新关联，请先解绑",
-	   InternalOAuthError:"关联认证过程出现了点小问题，再试一次吧",
+	  account_hasbind : "您的帐号之前已经关联过，若要重新关联，请先解绑",
+	  weibo_sucmsg   :"恭喜您，关联 %s 微博帐号已成功，在新浪微博中@clickdang就可以收录了，现在就去@一条试试?",
+	  twitter_sucmsg :"恭喜您，关联 %s Twitter帐号已成功，您的Twitter收藏可以收录到点忆了，现在就去收藏一条试试?",
+	  InternalOAuthError:"关联认证过程出现了点小问题，再试一次吧",
 	  reclip:{
 	    success: "收录成功",
 	    no_pub: "作者没有公开该条clip,您暂时不能收录"
@@ -387,7 +389,7 @@ App.versions = (function($){
 	  comment_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  clipadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  emailadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
-	  "oauth_fail"   : "认证失败，请重新认证!",
+	  oauth_fail   : "认证失败，请重新认证!",
 	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
 	},
 	util : {
@@ -464,7 +466,7 @@ App.versions = (function($){
 	  upload      : "Upload image",
 	  name : {
 	    is_null   : "User name is not filled in",
-	    invalidate: "Invalid format of user name",
+	    invalidate: "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
 	    exist     :"User name already exists"
 	  }
 	},
@@ -730,6 +732,8 @@ App.versions = (function($){
 	  comment        : "Commented successfully",
 	  account_hasbind:"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry, some problems occurred during the connection,Please try again",
+	  weibo_sucmsg:"Connect Sina Weibo account %s successfully,now you can reclip clips from Sina Weibo,just @clickdang,have a try",
+	  twitter_sucmsg:"Connect Twitter account %s successfully,now you can reclip clips from Twitter Favorite,have a try",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	  addemail       : "You have added %s email connection.Please login you mailbox check the email and click the activating link",
 	  cliplist_null:{
@@ -783,7 +787,7 @@ App.versions = (function($){
 	  cancel         : "Cancel",
 	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
 	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
-	  "oauth_fail"   : "Authenticate fail,please try again",
+	  oauth_fail   : "Authenticate fail,please try again",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
 	  memo_save     :"If you close the window, what you filled will be lost. Are you sure?",
 	  clipedit_save :"If you close the window, what you filled will be lost. Are you sure?",

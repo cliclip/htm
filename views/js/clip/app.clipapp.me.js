@@ -76,7 +76,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.useredit:show",this.model.get("id"));
     },
     switch_my:function(){
-      current_page("my");
+      App.util.current_page("my");
       if(!(/my/.test(window.location.hash))){
         Backbone.history.navigate("my",true);
 	App.vent.trigger("app.clipapp.face:reset",this.model.id);
@@ -85,7 +85,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }
     },
     switch_at_me:function(){
-      current_page("@me");
+      App.util.current_page("@me");
       if(!(/my/.test(window.location.hash))){
         Backbone.history.navigate("my/recommend",true);
 	App.vent.trigger("app.clipapp.face:reset",this.model.id);
@@ -94,7 +94,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }
     },
     switch_expert:function(){
-      current_page("interest");
+      App.util.current_page("interest");
       if(!(/my/.test(window.location.hash))){
         Backbone.history.navigate("my/interest",true);
 	App.vent.trigger("app.clipapp.face:reset",this.model.id);
@@ -159,22 +159,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
       $("." + opt).css({"z-index":0});
     }*/
   });
-  function current_page(str){
-    if(str=="my"){
-      $(".my").css({"z-index":2,"top":"-3px","height":"33px"});
-      $(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
-      $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-
-    }else if(str=="@me"){
-      $(".my").css({"z-index":1,"top":"0px","height":"30px"});
-      $(".at_me").css({"z-index":1,"top":"-3px","height":"33px"});
-      $(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-    }else if(str=="interest"){
-      $(".my").css({"z-index":0,"top":"0px","height":"30px"});
-      $(".at_me").css({"z-index":0,"top":"0px","height":"30px"});
-      $(".expert").css({"z-index":0,"top":"-3px","height":"33px"});
-    }
-  }
   Me.show = function(){
     if(!App.util.getMyUid()){
       var meView = new View();
@@ -190,11 +174,15 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }
       App.mineRegion.show(meView);
       if((/my\/recommend/.test(window.location.hash))){
-	current_page("@me");
+	App.util.current_page("@me");
       }else if(/my\/interest/.test(window.location.hash)){
-	current_page("interest");
+	App.util.current_page("interest");
+      }else if(/my\/follow/.test(window.location.hash)){
+	App.util.current_page("follow");
       }else if(/my/.test(window.location.hash)){
-	current_page("my");
+	App.util.current_page("my");
+      }else{
+	App.util.current_page("");
       }
     });
   };

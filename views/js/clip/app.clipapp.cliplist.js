@@ -150,7 +150,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserClips = function(uid, tag){
     ClipList.flag_show_user = false;
     base_url = App.ClipApp.Url.base+"/user/"+uid+"/query";
-    data = {user: uid,"startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
+    data = {user: uid,"startTime":Date.parse('March 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
@@ -218,6 +218,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection.onReset(function(clips){
       if(clips&&clips.length==0){
 	clips_exist = false;
+      }else{
+	clips_exist = true;
       }
       collection_length = clips.length;
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
