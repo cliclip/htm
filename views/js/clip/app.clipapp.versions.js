@@ -22,6 +22,8 @@ App.versions = (function($){
 	  register_ok : "注 册",
 	  login_state : "一月内自动登录",
 	  register    : "嫌麻烦？直接发邮件到1@clickdang.com也可注册",
+	  twitter     : "Twitter登录",
+	  weibo       : "微博登录",
 	  name : {
 	    name:"用户名",
 	    is_null    : "用户名尚未填写",
@@ -325,7 +327,7 @@ App.versions = (function($){
 	    no_pub: "作者没有公开该条clip,您暂时不能收录"
 	  },
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
-	  addemail       : "您已添加 %s 邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
+	  addemail       : "您已成功添加 %s 邮件地址。请登录您的邮箱，查收邮件，并点击其中的链接进行激活。",
 	  cliplist_null:{
 	    all:"抱歉，没有找到相关的信息......",
 	    my:"抱歉，没有找到相关的信息......",
@@ -364,7 +366,7 @@ App.versions = (function($){
 	    no_uname     : "在添加邮件之前请先设置用户名"
 	  },
 	  rule:{
-	    is_null: "您还没有添加邮件规则"
+	    not_update   : "您没有更新邮件规则"
 	  },
 	  recommend:{
 	    no_pub      :"该条clip是私有数据,您暂时不能向外部推荐"
@@ -424,7 +426,8 @@ App.versions = (function($){
 	  register_ok   : "Join",
 	  login_state   : "Login automatically in one month",
 	  register      : "Join us by simply sending an email to 1@clickdang.com",
-
+	  twitter       : "Login with Twitter",
+	  weibo         : "Login with Weibo",
 	  name : {
 	    name        : "user name",
 	    is_null     : "User name is not filled in",
@@ -728,7 +731,7 @@ App.versions = (function($){
 	  account_hasbind:"This account has been used for connection before,you can't use same account connect Clickdang twice",
 	  InternalOAuthError:"Sorry, some problems occurred during the connection,Please try again",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
-	  addemail       : "You have added %s email connection.We need your confirmation to prevent junk mail. Please check the email and click the activating link",
+	  addemail       : "You have added %s email connection.Please login you mailbox check the email and click the activating link",
 	  cliplist_null:{
 	    all:"Sorry, no results found",
 	    my:"Sorry, no results found",
@@ -767,7 +770,7 @@ App.versions = (function($){
 	    no_uname     : "Set your user name before adding mail address connection"
 	  },
 	  rule:{
-	    is_null: "You haven’t set the rule of email connection"
+	    not_update   : "You haven’t update the rule of email connection"
 	  },
 	  recommend:{
 	    no_pub      :"This Clip is private,You can't recommend to others"
