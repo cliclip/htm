@@ -37,7 +37,8 @@ App.ClipApp.TagList=(function(App,Backbone,$){
 
 
   var TagList = {};
-  TagList.myTag = App.util.getObjTags();
+  var myTag = App.util.getObjTags();
+  TagList.myTag = myTag;
   TagList.show = function(tags,str){
     TagList.tagListRegion = new App.Region({el:".taglistDiv"});
     var obj_tags = [];
@@ -58,7 +59,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   };
 
   App.vent.bind("app.clipapp.bubb:mytag",function(tags){
-    TagList.myTag  = _.difference(_.union(tags,TagList.myTag),App.util.getBubbs());
+    TagList.myTag  = _.difference(_.union(tags,myTag),App.util.getBubbs());
   });
 
   App.vent.bind("app.tagsinput:taglist",function(str){

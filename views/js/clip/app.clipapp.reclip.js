@@ -39,7 +39,12 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
+      if($(".error").length == 0){
+	App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
+      }else{
+	$(e.currentTarget).attr("disabled",false);
+      }
+
     },
     cancel : function(e){
       e.preventDefault();

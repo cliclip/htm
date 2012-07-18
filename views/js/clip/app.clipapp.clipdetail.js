@@ -219,6 +219,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	$("#comm_text").blur().val("");
 	return;
       }
+      var words_limit =  140;//字数限制数
+      if(text.length > words_limit){
+	var overage =text.length-words_limit;
+	this.showError('comment',{"comm_text":"word_limit"},overage);
+	return;
+      }
       var params = {clipid: cid, text: text, pid: pid};
       /*
       var params1 = null;
