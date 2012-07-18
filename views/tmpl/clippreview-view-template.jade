@@ -3,17 +3,23 @@ script(type="text/template",id="clippreview-view-template")
   div.clip_item
     <% if(recommend){ %>
     hgroup.clearfix.
-      <a href="/#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
-        <div class="user_info_small">
+      <div class="user_info_small">
+        <a href="/#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
           <img src="<%=App.util.face_url(recommend.user.face,50)%>" title="<%=recommend.user.name%>" onerror="this.src='img/f.jpg'"/>
-        </div>
-        <dt class="username">
+        </a>
+      </div>
+      <dt class="username">
+        <a href="/#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
           <%= recommend.user.name === undefined ? "" : recommend.user.name%>
-        <dt>
-      </a>&nbsp;&nbsp;
-      <span class="recommend_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(recommend.Date)%></span>
+        </a>
+        <div class="recommend_time">
+          <span><%= App.util.generatePastTime(recommend.Date)%></span>
+        </div>
+      </dt>
       <div class="user_text">
-        <%=recommend.text%>
+      <% if(recommend.text){%>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=recommend.text%>
+      <%}%>
       </div>
       <%}%>
     header#header
