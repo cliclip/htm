@@ -613,7 +613,8 @@ App.versions = (function($){
 	  defaultText : "Say something(Limited to 140 characters)",
 	  comm_text   : {
 	    is_null : "comment's content is null",
-	    "word_limit" :"Limited to 140 characters, %s characters over now"
+	    "word_limit" :"Limited to 140 characters, %s characters over now",
+	    defaultText : "Say something"
 	  },
 	  reclip      : "Reclip too",
 	  ok          : "OK",
