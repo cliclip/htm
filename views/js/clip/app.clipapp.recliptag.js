@@ -137,6 +137,41 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.reclip_tag:@close",function(params, count){
     ReclipTag.close(params, count);
   });
+//user 为用户名为clickdang 的user_id tag为新手或helper
+  App.vent.bind("app.clipapp.reclip_tag:xinshou", function(user,tag){
+    var model_get = new ReclipTagModel(); //此model只用于取数据
+    model_get.fetch({
+      type: "GET",
+      url: App.util.unique_url(P+"/user/"+user+"/clip/tag/"+encodeURIComponent(tag)),
+      success: function(model, res){
+	if(!res.count){
+	  // 现在只是公用该事件，事件名称有待改进
+	  //App.vent.trigger("app.clipapp.message:confirm","reclip_null");
+	}else{
+	  // 有count表示可以收到数据
+	  var params = {clip:{"public":"false","tag":[tag]},id:user,tag:tag};
+	  var model_post = new ReclipTagModel(params);
+	  model_post.save({}, {
+	    type: "POST",
+	    success: function(model, res){
+	      App.vent.trigger("app.clipapp.taglist:taglistRefresh",[tag]);
+	      var uid = App.util.getMyUid();
+	      App.ClipApp.Bubb.showUserTags(uid);
+	      App.ClipApp.ClipList.showUserClips(uid);
+	      //console.info(res);
+	    },
+	    error:function(model, res){
+	      //console.info(res);
+	    }
+	  });
+	}
+      },
+      error:function(model, res){
+	console.info(res);
+      }
+    });
+
+  });
 
   return ReclipTag;
 })(App, Backbone, jQuery);

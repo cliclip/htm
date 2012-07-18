@@ -178,7 +178,7 @@ App.versions = (function($){
 
 	recommend :{
 	  title       : "转发",
-	  defaultText : "说点啥吧～",
+	  defaultText : "说点啥吧～(140字以内)",
 	  reclip      : "同时收录",
 	  ok          : "确 定",
 	  cancel      : "取 消",
@@ -191,15 +191,18 @@ App.versions = (function($){
 	  },
 	  recomm_text : {
 	    is_null   :"请您先设置推荐备注",
-	    "word_limit" :"字数超过%s个字"
+	    "word_limit" :"限制140字，已经超过%s个字"
 	  }
 	},
 
 	comment : {
 	  title       : "评论",
-	  defaultText : "说点什么吧~",
+	  defaultText : "说点什么吧~(140字以内)",
 	  reclip      : "同时收录",
-	  comm_text   : {is_null : "评论内容为空"},
+	  comm_text   : {
+	    is_null : "评论内容为空",
+	    "word_limit" :"限制140字，已经超过%s个字"
+	  },
 	  ok          : "确 定",
 	  cancel      : "取 消"
 	},
@@ -436,7 +439,7 @@ App.versions = (function($){
 	  weibo         : "Login with Weibo",
 	  name : {
 	    name        : "user name",
-	    is_null     : "User name is not filled in",
+	    is_null     : "User name is not filled",
 	    not_exist   : "This user name does not exist",
 	    invalidate  : "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
 	    exist       : "User name already exists"
@@ -588,7 +591,7 @@ App.versions = (function($){
 
 	recommend :{
 	  title       : "@",
-	  defaultText : "Say something",
+	  defaultText : "Say something(Limited to 140 characters)",
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel",
@@ -601,14 +604,17 @@ App.versions = (function($){
 	  },
 	  recomm_text : {
 	    is_null   :"Please add comments first",
-	    "word_limit" :"word number more than %s"
+	    "word_limit" :"Limited to 140 characters, %s characters over now"
 	  }
 	},
 
 	comment : {
 	  title       : "Comment",
-	  defaultText : "Say something",
-	  comm_text   : {is_null : "comment's content is null"},
+	  defaultText : "Say something(Limited to 140 characters)",
+	  comm_text   : {
+	    is_null : "comment's content is null",
+	    "word_limit" :"Limited to 140 characters, %s characters over now"
+	  },
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel"
@@ -794,7 +800,7 @@ App.versions = (function($){
 	  ok             : "OK",
 	  cancel         : "Cancel",
 	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
-	  deloauth       : "You really mean to delete the connection with account %s? After deleting, you can’t use this twitter account to log in or send message from it to clip",
+	  deloauth       : "Are you sure you want to disconnect with account %s? After disconnecting, you won't be able to use this account to login clickdang,or clip messages from this account",
 	  oauth_fail   : "Authenticate fail,please try again",
 	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
 	  memo_save     :"If you close the window, what you filled will be lost. Are you sure?",

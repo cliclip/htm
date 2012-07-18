@@ -169,13 +169,13 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
       var view = this;
-      var number_limit =  140;//字数限制数
+      var words_limit =  140;//字数限制数
       setTimeout(function(){
 	var clipid = view.model.get("clipid");
 	var data = view.getInput();
 	if(data.text == _i18n('recommend.defaultText')){data.text = "";}
-	if(data.text.length > number_limit){
-	  var overage =data.text.length-number_limit;
+	if(data.text.length > words_limit){
+	  var overage =data.text.length-words_limit;
 	  view.showError('recommend',{"recomm_text":"word_limit"},overage);
 	  return;
 	}
