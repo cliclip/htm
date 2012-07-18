@@ -181,7 +181,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
 	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转
 	return a;
       }else{
-	return '<a href="http://'+c+'">'+a+'</a>';
+	return '<a href="'+a+'">'+a+'</a>';
+	//return '<a href="http://'+c+'">'+a+'</a>';
       }
     });
     //并不完善需没办法正确处理超链接图片
