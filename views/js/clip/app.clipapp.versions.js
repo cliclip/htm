@@ -365,7 +365,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。",
-	    email        : "您已激活 %s 邮件地址。\n您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。"
+	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，并且您只需使用这个地址发送邮件到b@clickdang.com，即可将邮件内容保存到您的私有收藏中。"
 	  },
 	  email:{
 	    no_uname     : "在添加邮件之前请先设置用户名"
@@ -375,6 +375,12 @@ App.versions = (function($){
 	  },
 	  recommend:{
 	    no_pub      :"该条clip是私有数据,您暂时不能向外部推荐"
+	  },
+	  auth:{
+	    no_name     : "做此操作前请先设置用户名",
+	    not_login   : "",
+	    not_self    : "",
+	    not_owner   : ""
 	  }
 	},
 
@@ -774,7 +780,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "Registration link was overdue for too long interval. You can add again in Setting",
-	    email   : "You have activated the email address of %s in our system. \nNow you can login with this email account and clip by sending email from this account"
+	    email   : "You have activated the email address of %s in our system. \nNow you can login with this email account and clip by sending email from this account to b@clickdang.com, mail will saved to your private information."
 	  },
 	  email:{
 	    no_uname     : "Set your user name before adding mail address connection"
@@ -784,6 +790,12 @@ App.versions = (function($){
 	  },
 	  recommend:{
 	    no_pub      :"This Clip is private,You can't recommend to others"
+	  },
+	  auth:{
+	    no_name     : "Please set name before do it",
+	    not_login   : "",
+	    not_self    : "",
+	    not_owner   : ""
 	  }
 	},
 
