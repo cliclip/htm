@@ -197,7 +197,8 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     return text;
   }
 
-  function _ubbToHtml(ubb){
+  function _ubbToHtml(ubb, flag){
+    // flag仅仅用来标识是否需要在text上加上p标签
     var text = ubb;
     text = text.replace(/\[b\](.*?)\[\/b\]/ig, "<b>$1</b>");
     text = text.replace(/\[i\](.*?)\[\/i\]/ig, "<i>$1</i>");
@@ -207,7 +208,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
     text = text.replace(/\[url=(.*?)\](.*?)\[\/url\]/ig, "<a href=\"$1\">$2</a>");
     text = text.replace(/\[img=(.*?)\]/ig, "<img src=\"$1\" />");
     text = text.replace(/\[img\](.*?)\[\/img\]/ig, "<img src=\"$1\" onerror=\"App.util.img_error(this)\"" +" />");//详情页图片加载失败后加载统一图片
-    text = "<p>" + text + "</p>";
+    if(!flag){ text = "<p>" + text + "</p>"; }
     return text;
   }
 
