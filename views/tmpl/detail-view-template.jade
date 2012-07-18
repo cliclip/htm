@@ -64,7 +64,7 @@ script(type="text/template",id="showcomment-view-template")
   | </div>
         
 script(type="text/template",id="addcomm-view-template")
-  |<textarea id="comm_text"><%=_i18n('addcomm.defaultText')%></textarea>
+  |<textarea id="comm_text"><%=_i18n('comment.defaultText')%></textarea>
   // 注释掉tag和“同时收”
     div
       <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 

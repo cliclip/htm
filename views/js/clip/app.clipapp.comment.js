@@ -61,8 +61,14 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       var text = $.trim($("#comm_text").val());
       text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
       if(text == "" || text == _i18n('comment.defaultText')){
-	this.showError("comment",{comm_text:"is_null"});
+	view.showError("comment",{comm_text:"is_null"});
 	$("#comm_text").blur().val("");
+	return;
+      }
+      var words_limit =  140;//字数限制数
+      if(text.length > words_limit){
+	var overage =text.length-words_limit;
+	view.showError('comment',{"comm_text":"word_limit"},overage);
 	return;
       }
       var params = {text: text, pid: 0};

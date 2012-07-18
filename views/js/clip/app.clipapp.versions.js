@@ -198,9 +198,12 @@ App.versions = (function($){
 
 	comment : {
 	  title       : "评论",
-	  defaultText : "说点什么吧~",
+	  defaultText : "说点什么吧~(140字以内)",
 	  reclip      : "同时收录",
-	  comm_text   : {is_null : "评论内容为空"},
+	  comm_text   : {
+	    is_null : "评论内容为空",
+	    "word_limit" :"限制140字，已经超过%s个字"
+	  },
 	  ok          : "确 定",
 	  cancel      : "取 消"
 	},
@@ -604,8 +607,11 @@ App.versions = (function($){
 
 	comment : {
 	  title       : "Comment",
-	  defaultText : "Say something",
-	  comm_text   : {is_null : "comment's content is null"},
+	  defaultText : "Say something(Limited to 140 characters)",
+	  comm_text   : {
+	    is_null : "comment's content is null",
+	    "word_limit" :"Limited to 140 characters, %s characters over now"
+	  },
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel"
