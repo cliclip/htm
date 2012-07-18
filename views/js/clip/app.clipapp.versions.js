@@ -138,8 +138,7 @@ App.versions = (function($){
 	  memo        : "备注一下吧~",
 	  "private"   : "不公开",
 	  ok          : "确 定",
-	  cancel      : "取 消",
-	  add_tag     : "添加标签"
+	  cancel      : "取 消"
 	},
 
 	editDetail : {
@@ -296,6 +295,11 @@ App.versions = (function($){
 	gotosetup : {
 	  register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
 	  ok          : "确 定"
+	},
+
+	tag:{
+	  add_tag     : "添加标签",
+	  beyond      : "标签过长，最多支持10个汉字、20个英文字母或数字"
 	},
 
 	message : {
@@ -544,8 +548,7 @@ App.versions = (function($){
 	  memo        : "Make a note",
 	  "private"   : "Private",
 	  ok          : "OK",
-	  cancel      : "Cancel",
-	  add_tag     : "add a tag"
+	  cancel      : "Cancel"
 	},
 
 	editDetail : {
@@ -702,6 +705,11 @@ App.versions = (function($){
 	gotosetup : {
 	  register_success : "Congratulation! You just finished registration. We suggest you add the most used email address to clip conveniently by sending email",
 	  ok          : "OK"
+	},
+
+	tag:{
+	  add_tag     : "Add a tag",
+	  beyond      : "Tag is too long, maximum 10 Chinese characters, 20 letters or numbers"
 	},
 
 	message : {

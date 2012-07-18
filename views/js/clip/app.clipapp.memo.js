@@ -41,7 +41,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var data = loadData(this.$el);
       // clip在update时需要clip的id
       // data["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.memo:@ok", data, this.model.id);
+      if($(".error").length == 0){
+	App.vent.trigger("app.clipapp.memo:@ok", data, this.model.id);
+      }else{
+	$(e.currentTarget).attr("disabled",false);
+      }
     },
     cancelClick:function(e){
       e.preventDefault();
