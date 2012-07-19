@@ -164,9 +164,10 @@
   $.fn.tagsInput = function(options) {
     var settings = jQuery.extend({
       interactive:true,
-      defaultText:_i18n('clipmemo.add_tag'),
+      defaultText:_i18n('tag.add_tag'),
       //defaultText:'add a tag',
       minChars:0,
+      maxChars:20,
       width:'270px',
       height:'75px',
       autocomplete: {selectFirst: false },
@@ -203,7 +204,7 @@
       var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
 
       if (settings.interactive) {
-	markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" /><div class="taglistDiv" style="display:none;" ></div>';
+	markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" maxlength="20"/><div class="taglistDiv" style="display:none;" ></div>';
       }
 
       markup = markup + '</div><div class="tags_clear"></div></div>';
@@ -264,6 +265,8 @@
 	});
 
 	$(data.fake_input).bind('focus',data,function(event) {
+	  $("#"+id+"_tag").siblings("span.error").remove();
+	  $("#"+id+"_tag").removeClass("error");
 	  if( $(".taglistDiv").children().children().length != 0){
 	    $(".taglistDiv").show();
 	  }else{
@@ -304,8 +307,21 @@
 	  $(data.fake_input).bind('blur',data,function(event) {
 	    var d = $(this).attr('data-default');
 	    if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) {
-	      if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
-		$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});}
+	      var len = 0;
+	      var tag = $(event.data.fake_input).val();
+	      for(i=0;i<tag.length;i++){
+		if(tag.charCodeAt(i)>256){
+		  len   +=   2;
+		}else{
+		  len++;
+		}
+	      }
+	      if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= len)) ){
+		$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});}else{
+		  var error = _i18n("tag.beyond");
+		  $("#"+id+"_tag").after("<span class='error'>"+error+"</span>");
+		  App.vent.trigger("app.clipapp.tagsinput:error");
+	      }
 	    } else {
 	      $(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
 	      $(event.data.fake_input).css('color',settings.placeholderColor);
@@ -316,8 +332,20 @@
 	// if user types a comma, create a new tag
 	$(data.fake_input).bind('keypress',data,function(event) {
 	  if (event.which==event.data.delimiter.charCodeAt(0) || event.which==13 ) {
-	    if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) ){
+	    var len = 0;
+	    var tag = $(event.data.fake_input).val();
+	    for(i=0;i<tag.length;i++){
+	      if(tag.charCodeAt(i)>256){
+		len   +=   2;
+	      }else{
+		len++;
+	      }
+	    }
+	    if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= len)) ){
               $(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique)});
+	    }else{
+	      var error = _i18n("tag.beyond");
+	      $("#"+id+"_tag").after("<span class='error'>"+error+"</span>");
 	    }
 	    $(event.data.fake_input).resetAutosize(settings);
 	    App.vent.trigger("app.tagsinput:taglist");
