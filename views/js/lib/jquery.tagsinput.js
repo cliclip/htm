@@ -92,18 +92,24 @@
       }
       if (value !='' && skipTag != true) {
         $('<span>').addClass('tag').append(
-	  $('<span>').text(value),
+	  $('<div class="text">').append(
+	  $('<span>').text(value)),
+	  $('<div class="del">').append(
 	  $('<a>', {
               href  : '#',
               title : 'Removing tag',
-              text  : ' x'
+              text  : '  x'
 	  }).click(function () {
 	    return $('#' + id).removeTag(escape(value));
-	  })
+	  }))
 	).mouseover(function(e){
-	  $($(e.currentTarget)[0].children[1]).show();
+	  $($(e.currentTarget)[0].children[0]).removeClass("text");
+	  $(e.currentTarget).addClass("tag_text");
+	  $($(e.currentTarget)[0].children[1].children[0]).show();
 	}).mouseout(function(e){
-	  $($(e.currentTarget)[0].children[1]).hide();
+	  $(e.currentTarget).removeClass("tag_text");
+	  $($(e.currentTarget)[0].children[0]).addClass("text");
+	  $($(e.currentTarget)[0].children[1].children[0]).hide();
 	})
 	.insertBefore('#' + id + '_addTag');
 	tagslist.push(value);
@@ -140,7 +146,6 @@
 	  str = str + delimiter[id] +old[i];
 	}
       }
-
       $.fn.tagsInput.importTags(this,str);
       if (tags_callbacks[id] && tags_callbacks[id]['onRemoveTag']) {
 	var f = tags_callbacks[id]['onRemoveTag'];
@@ -260,8 +265,11 @@
 	  },200);
 	});
 
+	App.vent.unbind("app.clipapp.taglist:gettag");// 解决请求多次的问题
 	App.vent.bind("app.clipapp.taglist:gettag",function(tag){
-	  $(data.real_input).addTag(tag,{focus:false,unique:(settings.unique)});
+	  if(tag){
+	    $(data.real_input).addTag(tag,{focus:true,unique:(settings.unique)});
+	  }
 	});
 
 	$(data.fake_input).bind('focus',data,function(event) {
@@ -357,12 +365,12 @@
 	 //Delete last tag on backspace
 	 data.removeWithBackspace && $(data.fake_input).bind('keydown', function(event){
 	 if(event.keyCode == 8 && $(this).val() == ''){
-	   event.preventDefault();
+/*	   event.preventDefault();
 	   var last_tag = $(this).closest('.tagsinput').find('.tag:last').text();
 	   var id = $(this).attr('id').replace(/_tag$/, '');
 	   last_tag = last_tag.replace(/[\s]+x$/, '');
 	   $('#' + id).removeTag(escape(last_tag));
-	   $(this).trigger('focus');
+	   $(this).trigger('focus');*/
 	 }else if(event.keyCode == 38){ // Down
 	   var flag = true;
 	   var div = $(".taglistDiv").children().children();
