@@ -511,6 +511,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.useredit:show", function(uid){
+    App.popRegion.close();
+    App.viewRegion.close();
     UserEdit.showUserEdit (uid);
   });
 
