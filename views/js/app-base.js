@@ -25,10 +25,29 @@ App.Model = Backbone.Model.extend({
 	// console.info("sync success:");console.dir(resp[1]);
 	if(success) success.apply(model, [resp[1], status, xhr]);
       } else {
-	//console.log("sync error:");console.dir(resp[1]);
-	if(error) error.apply(model, [resp[1], status, xhr]);
+	if("auth" in resp[1]){
+	  Backbone.Events.trigger("alert", resp[1]);
+	}else{
+	  if(error) error.apply(model, [resp[1], status, xhr]);
+	}
       }
     };
+    Backbone.Events.on("alert", function(msg){
+      App.vent.trigger("app.clipapp.message:alert", msg);
+      App.vent.unbind("app.clipapp.message:sure");
+      if(msg.auth == "no_name"){
+	App.vent.bind("app.clipapp.message:sure", function(){
+	  App.vent.trigger("app.clipapp.useredit:show");
+	  App.vent.trigger("app.clipapp.useredit:rename");
+	});
+      }else if(msg.auth == "not_login"){
+	App.vent.trigger("app.clipapp:login");
+      }
+      App.vent.unbind("app.clipapp.message:cancel");
+      App.vent.bind("app.clipapp.message:cancel", function(){
+	App.popRegion.close();
+      });
+    });
     Backbone.sync.apply(Backbone, [method, model, options]);
   }
 });
@@ -71,10 +90,16 @@ App.Collection = Backbone.Collection.extend({
 	  success.apply(model, [resp[1], status, xhr]);
 	}
       } else {
-	//console.log("collection.sync error:");console.dir(resp[1]);
-	if(error) error.apply(model, [resp[1], status, xhr]);
+	if("auth" in resp[1]){
+	  Backbone.Events.trigger("alert", resp[1]);
+	}else{
+	  if(error) error.apply(model, [resp[1], status, xhr]);
+	}
       }
     };
+    Backbone.Events.on("alert", function(msg){
+      App.vent.trigger("app.clipapp.message:alert", msg);
+    });
     Backbone.sync.apply(Backbone, [method, model, options]);
   }
 });

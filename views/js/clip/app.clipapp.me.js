@@ -165,6 +165,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.mineRegion.show(meView);
     }
     Me.me.onChange(function(meModel){
+      App.vent.trigger("app.clipapp.me:@hasname");
       //console.info("onChange :: "+Me.me.get("id"));
       var meView = new View({
 	model: meModel
@@ -187,6 +188,16 @@ App.ClipApp.Me = (function(App, Backbone, $){
     });
   };
 
+  App.vent.bind("app.clipapp.me:@hasname", function(){
+    if(!Me.me.get("name")){
+      App.vent.trigger("app.clipapp.message:alert", "no_name");
+      App.vent.unbind("app.clipapp.message:sure");
+      App.vent.bind("app.clipapp.message:sure", function(){
+	App.vent.trigger("app.clipapp.useredit:show");
+	App.vent.trigger("app.clipapp.useredit:rename");
+      });
+    }
+  });
   App.vent.bind("app.clipapp.userbind:bindok", function(){
     Me.me.fetch();
   });

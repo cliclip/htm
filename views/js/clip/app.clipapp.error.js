@@ -1,7 +1,7 @@
 App.ClipApp.Error=(function(App,Backbone,$){
-  var Error = {};
+ var Error = {};
  Error.process=function(message){
-   console.log(typeof(message));
+   // console.log(typeof(message));
    if(message == "InternalOAuthError"){
      App.vent.trigger("app.clipapp.message:confirm", message);
      var my=App.util.getMyUid();
