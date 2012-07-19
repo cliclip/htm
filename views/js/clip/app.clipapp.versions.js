@@ -597,7 +597,7 @@ App.versions = (function($){
 
 	recommend :{
 	  title       : "@",
-	  defaultText : "Say something(Limited to 140 characters)",
+	  defaultText : "Say something (Limited to 140 characters)",
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel",
@@ -616,7 +616,7 @@ App.versions = (function($){
 
 	comment : {
 	  title       : "Comment",
-	  defaultText : "Say something(Limited to 140 characters)",
+	  defaultText : "Say something (Limited to 140 characters)",
 	  comm_text   : {
 	    is_null : "comment's content is null",
 	    "word_limit" :"Limited to 140 characters, %s characters over now",
