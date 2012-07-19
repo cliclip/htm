@@ -369,7 +369,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。",
-	    email        : "您已激活 %s 邮件地址。\n您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。"
+	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，并且您只需使用这个地址发送邮件到b@clickdang.com，即可将邮件内容保存到您的私有收藏中。"
 	  },
 	  email:{
 	    no_uname     : "在添加邮件之前请先设置用户名"
@@ -386,6 +386,7 @@ App.versions = (function($){
 	  title          : "操作确认",
 	  ok             : "确 定",
 	  cancel         : "取 消",
+	  no_name        : "您没有设置用户名，目前只能做的操作有clip的添加、修改、以及删除，如果想要进行更多的操作请先设置用户名",
 	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
 	  deloauth       : "您真的要删除 %s 账号关联吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
 	  oauth_fail     : "认证失败，请重新认证！",
@@ -397,7 +398,13 @@ App.versions = (function($){
 	  clipadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  emailadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  oauth_fail   : "认证失败，请重新认证!",
-	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）"
+	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）",
+	  auth:{
+	    no_name     : "做此操作前请先设置用户名",
+	    not_login   : "做此操作前请先登录",
+	    not_self    : "只有数据的拥有这才可以进行此操作",
+	    not_owner   : "您对暂时没有权限做这些操作"
+	  }
 	},
 	util : {
 	  time:{
@@ -591,7 +598,7 @@ App.versions = (function($){
 
 	recommend :{
 	  title       : "@",
-	  defaultText : "Say something(Limited to 140 characters)",
+	  defaultText : "Say something (Limited to 140 characters)",
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel",
@@ -610,7 +617,7 @@ App.versions = (function($){
 
 	comment : {
 	  title       : "Comment",
-	  defaultText : "Say something(Limited to 140 characters)",
+	  defaultText : "Say something (Limited to 140 characters)",
 	  comm_text   : {
 	    is_null : "comment's content is null",
 	    "word_limit" :"Limited to 140 characters, %s characters over now",
@@ -783,7 +790,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "Registration link was overdue for too long interval. You can add again in Setting",
-	    email   : "You have activated the email address of %s in our system. \nNow you can login with this email account and clip by sending email from this account"
+	    email   : "You have activated the email address of %s in our system. \nNow you can login with this email account and clip by sending email from this account to b@clickdang.com, mail will saved to your private information."
 	  },
 	  email:{
 	    no_uname     : "Set your user name before adding mail address connection"
@@ -800,6 +807,8 @@ App.versions = (function($){
 	  title          : "Confirm",
 	  ok             : "OK",
 	  cancel         : "Cancel",
+	  no_name        : "You had't set the user name, the operation can only do a clip of add, update, and delete, if you want more action, please set the user name",
+
 	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
 	  deloauth       : "Are you sure you want to disconnect with account %s? After disconnecting, you won't be able to use this account to login clickdang,or clip messages from this account",
 	  oauth_fail   : "Authenticate fail,please try again",
@@ -811,7 +820,13 @@ App.versions = (function($){
 	  comment_save  :"If you close the window, what you filled will be lost. Are you sure?",
 	  clipadd_save  :"If you close the window, what you filled will be lost. Are you sure?",
 	  emailadd_save :"If you close the window, what you filled will be lost. Are you sure?",
-	  del_comment   : "You really mean to delete this comment? It can’t restore any more"
+	  del_comment   : "You really mean to delete this comment? It can’t restore any more",
+	  auth:{
+	    no_name     : "Please set name before do it",
+	    not_login   : "Please login before do it",
+	    not_self    : "",
+	    not_owner   : ""
+	  }
 	},
 	util : {
 	  time:{
