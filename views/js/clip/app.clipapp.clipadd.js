@@ -31,7 +31,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .pop_left":"remark_clip",
       "click .message":"message_hide",
       "click .close_w":"cancelcliper",
-      "click .masker_layer":"masker",
+      "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
       "click #save": "savecliper", // 对应clipper的ok
@@ -79,7 +79,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       document.cookie = "first=false"+";expires=" + data.toGMTString();
     },
     masker:function(e){
-      if($(e.target).attr("class") == "masker_layer"){
+      if($(e.target).attr("class") == "masker"){
 	this.cancelcliper();
       }
     },

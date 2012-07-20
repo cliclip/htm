@@ -19,7 +19,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template: "#detail-view-template",
     events: {
       "click .operate" : "Operate",
-      "click .masker_layer" : "Masker", // 点击detail下的层，便隐藏
+      "click .masker" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
       "click .user_head": "Close",
       "click .username": "Close",
@@ -50,7 +50,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }
     },
     Masker: function(e){
-      if($(e.target).attr("class") == "masker_layer"){
+      if($(e.target).attr("class") == "masker"){
 	App.vent.trigger("app.clipapp.clipdetail:@close");
       }
     },
