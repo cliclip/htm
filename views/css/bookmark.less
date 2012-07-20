@@ -177,7 +177,6 @@
 	background:url(../img/login_bg.png) repeat left top #66517f;
 	z-index:13;
 	box-shadow:inset 0 0 15px rgba(0,0,0,50%);
-	span{display:block;}
 	header{
 		height:95px;
 		.logo{
@@ -216,14 +215,20 @@
 		right:20px;
 		position:absolute;
 		background:url(../img/login_right_bg.png) no-repeat left top;
-		.note_img{
+		#note_img{
 			width:340px;
-			height:430px;
+			height:431px;
 			position: absolute;
 			left:40px;
 			bottom:-360px;
+		}
+		.note_img_zh{
 			background:url(../img/login_right_bg.png) no-repeat left bottom;
 		}
+		.note_img_en{
+			background:url(../img/login_right_bg_en.png) no-repeat left bottom;
+		}
+
 	}
 	.login_left{
 		width:340px;
@@ -235,54 +240,96 @@
 			width:270px;
 			height:135px;
 			margin:0 auto;
-			margin-bottom:30px;
+			margin-bottom:10px;
 		}
 		fieldset{
 			width:290px;
 			margin:0 auto;
-			border:0 none;
-			padding: 0px;
-			legend{display: none;}
+			legend{
+				display: none;
+			}
 			form{
-				label.password{
-					width:70px;
-					height:37px;
-					.sprites(-420px,-345px);
-				}
+				margin:0 0 0 0;
 				label.username{
-					width:70px;
-					height:37px;
-					.sprites(-420px,-300px);
-					margin-bottom:20px;
+					width:100px;
+					height:35px;
+					//.sprites(-420px,-300px);
+					padding-top:7px;
+					color:wheat;
+					font-size:20px;
+					*margin-top:-15px;
 				}
-				li{list-style-type:none;margin:0;}
-				input{
-					color:#fff;
-					height:27px;
-					border:none;
-					width:200px;
+				li{list-style-type:none;margin-left:-20px;}
+				label.password{
+					width:100px;
+					height:35px;
+					padding-top:7px;
+					//.sprites(-420px,-345px);
+					color:wheat;
+					font-size:20px;
+					*margin-top:-15px;
+				}
+				.out_link{
+					*margin-left:-15px;
+				}
+				.login_input{
 					.sprites(-340px,-520px);
+					height: 35px;
+    					width: 205px;
 					float:right;
-					margin-bottom:15px;
+					input{
+						color:#fff;
+						height:100%;
+						border:none;
+						width:100%;
+						float:right;
+						margin-bottom:0px;
+						//.sprites(-340px,-520px);
+						background:none repeat scroll 00 transparent;
+					}
 				}
-				input:focus{}
+				input#remember{float: left;width:auto!important;height:auto!important;}
+				input:focus{
+				}
 				input.error{
-					height:28px;
+					height:100%;
 					border:1px solid #f00;
 				}
+				span.next_login{
+					color:#fff;
+					*margin-left:42px!important;
+					margin-left:49px;
+					#remember{
+						display:inline;
+						float:none;
+					}
+				}
 				span.error{
-					position:absolute;z-index:1000;width: auto;margin-left:180px;max-width:500px;min-width:110px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:6px;text-align:center;min-height:1em;-moz-border-radius:5px;font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+					z-index:1000;
+					left:250px;
+					*width:200px;
+					min-width:110px;
+					background:#EEFF00 none repeat scroll 0% 50%;
+					border:3px solid #EEFF00;
+					padding:6px;
+					text-align:center;
+					min-height:1em;
+					.border-radius(5px);
+					font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+					position:absolute;
 				}
 			}
 			p{
 				font-size:14px;
 				color:#d4ce86;
-				margin-bottom:20px;
+				margin-top:10px;
+				margin-left:-20px;
 			}
 		}
 	}
 	
 }
+
 .tag_bg(@x:0,@y:0){background:url(../img/tag_bg.png) no-repeat @x @y;}
 .tag_box{
 	span.size48{width:48px;height:48px;line-height:48px;float:left;font-size:12px;color:#fff;text-align:center;cursor: pointer;}

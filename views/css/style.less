@@ -460,40 +460,33 @@
 // clipdetail等
 #view {
       z-index: 10;
-      .masker_layer {
-	z-index: 2;
-      }		
+      .masker_layer { z-index: 2;}	
+      .masker{z-index:3}	
 }
 // clipdetail上边的
 #pop{
   z-index: 20;
-  .masker_layer{		
-     z-index: 12;
-   }
+  .masker_layer{ z-index: 12; }
+  .masker{z-index:13}
 }
 #setpop{
   left: 50%;
   position: absolute;
   z-index: 30;
   top: 80px;
-  .masker_layer{
-     z-index:10;
-  }
-  h2{
-     margin-left: 10px;
-  }
+  .masker_layer{ z-index:10; }
+  .masker{ z-index:11 }
+  h2{ margin-left: 10px; }
 }
-
 
 .icons_frame{
 	line-height:22px;
 	height:22px;
-
 	.icon_block{
 		position:relative;
 		display: block;
 		float: left;
-		padding-left: 17px;
+		padding-left: 5px;
 		margin-right:5px;
 	}
 	.icons{
@@ -619,9 +612,8 @@
 	}
 }
 section.edit {
-  .masker_layer {
-    z-index: 2;
-  }
+  .masker_layer { z-index:2; }
+  .masker { z-index:3; }
   .edit_user {
     background: #d9d9d9;
     position: relative;
@@ -643,7 +635,7 @@ article.clip{
 		background:url(../img/purple_shadow.jpg) repeat-x left bottom #f6edfa;
 		.user_info_small{
 			width:33px;
-			height:33px;
+			height:35px;
 			float: left;
 			img{
 				width:33px;
@@ -652,10 +644,10 @@ article.clip{
 		}
 		dt.username{
 			margin-left: 38px;
-    			margin-top: 7px;
+    			margin-top: 18px;
 			div.recommend_time{
-				margin-top: -18px;
-				padding-right: 20px;
+				margin-top: -36px;
+				padding-right: 15px;
 				text-align: right;
 				span{
 					margin-left: 117px;
@@ -722,9 +714,9 @@ article.clip{
 			height:20px;
 			text-align:right;
 			float:right;
-			margin-top: 20px;
+			margin-top: 10px;
 			margin-right: 15px;
-			color:#aaaaaa;
+			color:#818181;
 		}
 		.user_info_small{
 			height:33px;
@@ -742,17 +734,18 @@ article.clip{
 				float:left;
 			}
 			dl.name{
-				margin: 0;
-				margin-left:38px;
+				margin-top: 20px;
+				margin-left:40px;
 			}
 		}
 		.action{
 			height:40px;
 			width:140px;
-			padding:0 10px;
+			padding:0 80px;
 			position: absolute;
-			right:15px;
-			top:10px;
+			top:-40px;
+			opacity:0.5;
+			filter:alpha(opacity=50);
 			background:#67507a;
 			i{
 				width:45px;height:40px;
@@ -1007,15 +1000,23 @@ section.follow_frame{
 		}
 	}	
 }
-.masker_layer{
+.masker{
    position: fixed; //absolute;
    width: 100%; //1000px;
    height: 100%; //1000px;
    overflow-x:auto;
    overflow-y:scroll;
    _position: absolute;
-   background-color: rgba(0, 0, 0, 0.53);
-   opacity: 1;
+   top:0;
+   left:0;
+}
+.masker_layer{
+   width: 100%; //1000px;
+   height: 100%; //1000px;
+   position: fixed; //absolute;
+   _position: absolute;
+   background:#000;
+   opacity: 0.5;
    filter:alpha(opacity=50);
    top:0;
    left:0;
@@ -1095,7 +1096,8 @@ section.follow_frame{
 		.tag_box{
 			height:48px;
 			min-width: 288px;
-			background:#ddd;
+			margin-left:-5px;
+			//background:#ddd;
 		}
 	}
 	.subject_put{
@@ -1227,7 +1229,7 @@ section.follow_frame{
 			list-style:none;
 			margin:8px 13px;
 			li.user_head{
-				j{
+				div{
                                   margin-top:-25px;
 				  margin-left:1px;
 				  height:50px;
@@ -1548,8 +1550,9 @@ section.follow_frame{
 				span.error{
 					z-index:1000;
 					left:250px;
-					width:200px;
-					//min-width:110px;
+					*width:200px;
+					min-width:150px;
+					//.min-width(130px);
 					background:#EEFF00 none repeat scroll 0% 50%;
 					border:3px solid #EEFF00;
 					padding:6px;
@@ -1922,16 +1925,25 @@ section.edit_frame{
 }
 .tag_bg(@x:0,@y:0){background:url(../img/tag_bg.png) no-repeat @x @y;}
 .tag_box{
-	span.size48{width:48px;height:48px;line-height:48px;float:left;font-size:12px;color:#fff;text-align:center;cursor: pointer;}
+	span.size48{
+		width:48px;
+		height:48px;
+		line-height:48px;
+		float:left;
+		font-size:12px;
+		color:#fff;
+		text-align:center;
+		cursor: pointer;
+	}
 	span.white_48{
 		.tag_bg(0,0);
-		color: #999;
+		color: #669;
 	}
 	span.blue_48{
 		.tag_bg(0,-48px);
 	}
 	span.orange_48{
-		color:#cb5331;
+		color:#966;
 		.tag_bg(0,-48px);
 	}
 	span.green_48{
@@ -1984,15 +1996,21 @@ section.edit_frame{
 html {
   _background:url() fixed;
   height:100%;
-}
-.noscroll{ overflow: hidden !important; }
-html body {
-  position:relative;
-  _margin:0; 
-  height:100%;
+  *overflow:hidden !important;
 }
 
-html .masker_layer{
+.noscroll{ 
+  overflow:hidden !important;
+}
+html body {
+  position:relative;
+  _margin:0px;
+  _padding:0px;
+  height:100%;
+  *overflow:auto;
+}
+
+html .masker{
   _position: absolute;
   _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
   _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";

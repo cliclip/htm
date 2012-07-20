@@ -1,5 +1,6 @@
 script(type="text/template",id="detail-view-template")
   div.masker_layer
+  div.masker
     section.big_pop
       h2.subject_edit
         div.pop_left
@@ -25,7 +26,7 @@ script(type="text/template",id="detail-view-template")
             <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
             </a>
             <% if(i < users.length-1 ){ %>
-               <j class="join"></j>
+               <div class="join"></div>
             <% } %>
           </li>
           <%}%>
@@ -46,7 +47,7 @@ script(type="text/template",id="showcomment-view-template")
     <%=_i18n('showcomment.text') %><%= App.util.generatePastTime(date)%>
     <% } else {%>
   div.user_head
-    <a href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
+    <a class="userhead" href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
   dt
     span.username
       <a href="#user/<%=user.id%>"><%=user.name%> :</a>

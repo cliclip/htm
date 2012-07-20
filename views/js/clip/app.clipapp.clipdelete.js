@@ -8,7 +8,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     events : {
       "click #deleteok_button" : "okClick",
       "click #cancel_button" : "cancelClick",
-      "click .masker_layer"  : "cancelClick",
+      "click .masker"        : "masker",
       "click .close_w"       : "cancelClick"
     },
     initialize:function(){
@@ -16,6 +16,11 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     },
     okClick : function(e){
       App.vent.trigger("app.clipapp.clipdelete:@ok",this.model);
+    },
+    masker : function(e){
+      if($(e.target).attr("class") == "masker"){
+	this.cancelClick(e);
+      };
     },
     cancelClick : function(e){
       App.vent.trigger("app.clipapp.clipdelete:@close");
