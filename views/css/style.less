@@ -460,35 +460,28 @@
 // clipdetail等
 #view {
       z-index: 10;
-      .masker_layer {
-	z-index: 2;
-      }		
+      .masker_layer { z-index: 2;}	
+      .masker{z-index:3}	
 }
 // clipdetail上边的
 #pop{
   z-index: 20;
-  .masker_layer{		
-     z-index: 12;
-   }
+  .masker_layer{ z-index: 12; }
+  .masker{z-index:13}
 }
 #setpop{
   left: 50%;
   position: absolute;
   z-index: 30;
   top: 80px;
-  .masker_layer{
-     z-index:10;
-  }
-  h2{
-     margin-left: 10px;
-  }
+  .masker_layer{ z-index:10; }
+  .masker{ z-index:11 }
+  h2{ margin-left: 10px; }
 }
-
 
 .icons_frame{
 	line-height:22px;
 	height:22px;
-
 	.icon_block{
 		position:relative;
 		display: block;
@@ -619,9 +612,8 @@
 	}
 }
 section.edit {
-  .masker_layer {
-    z-index: 2;
-  }
+  .masker_layer { z-index:2; }
+  .masker { z-index:3; }
   .edit_user {
     background: #d9d9d9;
     position: relative;
@@ -1008,15 +1000,23 @@ section.follow_frame{
 		}
 	}	
 }
-.masker_layer{
+.masker{
    position: fixed; //absolute;
    width: 100%; //1000px;
    height: 100%; //1000px;
    overflow-x:auto;
    overflow-y:scroll;
    _position: absolute;
-   background-color: rgba(0, 0, 0, 0.53);
-   opacity: 1;
+   top:0;
+   left:0;
+}
+.masker_layer{
+   width: 100%; //1000px;
+   height: 100%; //1000px;
+   position: fixed; //absolute;
+   _position: absolute;
+   background:#000;
+   opacity: 0.5;
    filter:alpha(opacity=50);
    top:0;
    left:0;
@@ -1996,15 +1996,21 @@ section.edit_frame{
 html {
   _background:url() fixed;
   height:100%;
-}
-.noscroll{ overflow: hidden !important; }
-html body {
-  position:relative;
-  _margin:0; 
-  height:100%;
+  *overflow:hidden !important;
 }
 
-html .masker_layer{
+.noscroll{ 
+  overflow:hidden !important;
+}
+html body {
+  position:relative;
+  _margin:0px;
+  _padding:0px;
+  height:100%;
+  *overflow:auto;
+}
+
+html .masker{
   _position: absolute;
   _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
   _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";

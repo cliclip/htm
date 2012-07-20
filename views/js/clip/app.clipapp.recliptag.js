@@ -18,7 +18,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
       "click .size48"      : "maintagAction",
-      "click .masker_layer": "masker",
+      "click .masker"      : "masker",
       "click .close_w"     : "cancel"
     },
     maintagAction:function(e){
@@ -44,7 +44,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     },
     masker : function(e){
       e.preventDefault();
-      if($(e.target).attr("class") == "masker_layer"){
+      if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
     },
