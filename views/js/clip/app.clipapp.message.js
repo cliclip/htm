@@ -67,8 +67,16 @@ App.ClipApp.Message = (function(App, Backbone, $){
   Message.show = function(type, message){
     var messageModel = new MessageModel({message:message});
     if(type == "warning"){
+      if(!$("body").hasClass("noscroll")){
+	flag = true;
+	$("body").addClass("noscroll");
+      }
       var view = new WarningView({model: messageModel});
     }else if(type == "confirm"){
+      if(!$("body").hasClass("noscroll")){
+	flag = true;
+	$("body").addClass("noscroll");
+      }
       var view = new MessageView({model : messageModel});
     }else{
       var view = new SuccessView({model : messageModel});
@@ -77,10 +85,6 @@ App.ClipApp.Message = (function(App, Backbone, $){
       },1000);
     }
     App.setpopRegion.show(view);
-    if(!$("body").hasClass("noscroll")){
-      flag = true;
-      $("body").addClass("noscroll");
-    }
   };
 
   Message.close = function(){

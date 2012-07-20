@@ -21,14 +21,13 @@ script(type="text/template",id="message-view-template")
 
 script(type="text/template",id="success-view-template")
   div.masker_layer
-  div.masker
-    section.success
-      ul.pop_body.
-        <% if (typeof message == "object") { for(key in message){%>
-        <%= message[key]%>
-        <% }}else{ %>
-        <%=message%>
-        <%}%>
+  section.success
+    ul.pop_body.
+      <% if (typeof message == "object") { for(key in message){%>
+      <%= message[key]%>
+      <% }}else{ %>
+      <%=message%>
+      <%}%>
 
 
 script(type="text/template",id="warning-view-template")

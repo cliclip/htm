@@ -130,15 +130,15 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 
   Comment.close = function(text){
     if(!text || text == ""){
-      App.popRegion.close();
       if(flag){ $("body").removeClass("noscroll"); }
+      App.popRegion.close();
       mid = null;
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "comment_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	App.popRegion.close();
 	if(flag){ $("body").removeClass("noscroll"); }
+	App.popRegion.close();
 	mid = null;
       });
     }
