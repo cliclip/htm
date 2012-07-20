@@ -1,7 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid,checked;
-
+  var mid, view, number_limit =  140;
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -20,7 +19,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template: "#detail-view-template",
     events: {
       "click .operate" : "Operate",
-      "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
+      "click .masker_layer" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
       "click .userhead": "Close",
       "click .username": "Close",
@@ -50,10 +49,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     },
+    Masker: function(e){
+      if($(e.target).attr("class") == "masker_layer"){
+	App.vent.trigger("app.clipapp.clipdetail:@close");
+      }
+    },
     Close: function(e){
       App.vent.trigger("app.clipapp.clipdetail:@close");
     },
     editDetail:function(e){
+      console.log("eidt == ");
       e.preventDefault();
       var self = App.util.getMyUid();
       if(!self){
@@ -175,7 +180,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .cancel"    : "cancel"
     },
     initialize:function(){
-      checked = false;
+      view = this;
     },
     focusAction:function(e){
       this.cleanError(e);
@@ -214,24 +219,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = $.trim($("#comm_text").val());
       text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
-      if(text == "" || text == _i18n('comment.defaultText')){
-	this.showError("comment",{comm_text:"is_null"});
-	$("#comm_text").blur().val("");
-	return;
-      }
-      var words_limit =  140;//字数限制数
-      if(text.length > words_limit){
-	var overage =text.length-words_limit;
-	this.showError('comment',{"comm_text":"word_limit"},overage);
-	return;
-      }
       var params = {clipid: cid, text: text, pid: pid};
-      /*
-      var params1 = null;
+      /*var params1 = null;
       if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量
 	params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
-      }
-       */
+      }*/
       if(!App.ClipApp.getMyUid()){
 	App.vent.trigger("app.clipapp:login", function(){
 	  App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, mid);
@@ -249,7 +241,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $(".big_pop").css("top",App.util.getPopTop("big"));
+    $("body").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
     this.$(".content").focus();
     var anchors = this.$(".content a");
@@ -346,16 +338,21 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     model.save({pid:params.pid, text:params.text},{
       url : P+"/clip/"+params.clipid+"/comment",
       success:function(comment,response){
-	/*
-	if(params1){ // 避免comment和reclip同时去写clip数据
+	/*if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
-	}
-	 */
+	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
       },
-      error:function(comment,response){}
+      error:function(comment,res){
+	if(res.comm_text == "word_limit"){
+	  view.showError("comment", res, params.text.length - number_limit);
+	}else{
+	  view.showError("comment", res);
+	  $("#comm_text").blur().val("");
+	}
+      }
     });
   });
 
@@ -387,7 +384,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   // 应该绑定在那里
   App.vent.bind("app.clipapp.clipdetail:@close", function(){
-    console.info("22222222222222222");
+    $("body").removeClass("noscroll");
     ClipDetail.close();
   });
 

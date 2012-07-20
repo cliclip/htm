@@ -3,7 +3,7 @@
 App.ClipApp.Recommend = (function(App,Backbone,$){
   // 用来列出可以转给那些用户
   var P = App.ClipApp.Url.base;
-  var that;
+  var that, flag = false;
   var uid = null; // 被推荐用户的id标识
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
@@ -39,7 +39,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "blur  #recomm_text":  "textBlur",
       "click #submit"        :  "recommendAction",
       "click #cancel"        :  "cancelAction",
-      "click .masker_layer"  :  "cancelAction",
+      "click .masker_layer"  :  "masker",
       "click .close_w"       :  "cancelAction"
     },
     initialize:function(){
@@ -213,6 +213,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var data = view.getInput();
       view.setModel('recommend',view.tmpmodel, {text: data.text});
     },
+    masker: function(e){
+      e.preventDefault();
+      if($(e.target).attr("class") == "masker_layer"){
+	this.cancelAction(e);
+      }
+    },
     cancelAction:function(e){
       var text = this.tmpmodel.get('text');
       App.vent.trigger("app.clipapp.recommend:@close",text);
@@ -246,7 +252,10 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     }else{
       mid = model_id;
       App.popRegion.show(recommView);
-      $(".small_pop").css("top", App.util.getPopTop("small"));
+      if(!$("body").hasClass("noscroll")){
+	flag = true;
+	$("body").addClass("noscroll");
+      }
       //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
       if(/msie/i.test(navigator.userAgent)){
 	function nameListAction(evt){
@@ -264,6 +273,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   Recommend.close = function(text){
     if(!uid && !text){
       App.popRegion.close();
+      if(flag){ $("body").removeClass("noscroll"); }
       mid = null;
       uid = null;
     }else{
@@ -271,6 +281,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       App.vent.trigger("app.clipapp.message:alert", "recommend_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
+	if(flag){ $("body").removeClass("noscroll"); }
 	mid = null;
 	uid = null;
       });

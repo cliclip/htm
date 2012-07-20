@@ -2,7 +2,7 @@
 
 App.ClipApp.Login = (function(App, Backbone, $){
 
-  var Login = {};
+  var Login = {}, flag = false;
   var fun = "";  // 用于记录用户登录前应该触发的事件
   App.Model.LoginModel = App.Model.extend({
     validate: function(attrs){
@@ -173,6 +173,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var loginModel = new App.Model.LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
+    if(!$("body").hasClass("noscroll")){
+      flag = true;
+      $("body").addClass("noscroll");
+    }
     if(/language=en/.test(document.cookie)){
       $("#note_img").removeClass("note_img_zh");
       $("#note_img").addClass("note_img_en");
@@ -180,10 +184,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
       $("#note_img").removeClass("note_img_en");
       $("#note_img").addClass("note_img_zh");
     }
-    $("#name").focus();
+    //$("#name").focus();
   };
 
   Login.close = function(){
+    if(flag){ $("body").removeClass("noscroll"); }
     App.popRegion.close();
   };
 

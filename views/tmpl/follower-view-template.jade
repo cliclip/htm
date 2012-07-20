@@ -17,7 +17,8 @@ script(type="text/template",id="follower-view-template")
           div.box
             div.items
               | <% for(var i=0; i<user.length; i++){%>
-              | <span class="heads" title="<%=user[i].name%>"><a href="#user/<%=user[i].id%>">
+              | <span class="heads" title="<%=user[i].name%>">
+              | <a href="#user/<%=user[i].id%>">
               | <img src="<%=App.util.face_url(user[i].face,50)%>" />
               | </a></span><%}%>
               //i.follow

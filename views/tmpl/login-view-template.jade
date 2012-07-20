@@ -1,33 +1,33 @@
 script(type="text/template",id="login-view-template")
   div.masker_layer
-  section.login_window
-    span.close_w
-    div.login_left
-      div.logo_bg
-      fieldset
-        legend.
-          <%=_i18n('login.title')%>
-        form(action="",method="")
-          li
-            div.login_input
-              input(type="text",name="name",id="name")
-            label.username
-              | <%=_i18n('login.name.name')%>
-          li
-            div.login_input
-              input(type="password",name="pass",id="pass")
-            label.password
-              | <%=_i18n('login.pass.pass')%>
-          li
-            div.out_link
-              | <a class="twitter"  href="javascript:void(0)" title="<%=_i18n('login.twitter')%>"><img src="img/sign-in-with-twitter-l.png"></img></a>
-              | <a class="weibo"  href="javascript:void(0)" title="<%=_i18n('login.weibo')%>"><img src="img/16.png"></img></a>
-              span.next_login
-                input(type="checkbox",id="remember")
-                | <%=_i18n('login.login_state')%>
-        p|<%=_i18n('login.register')%> </br>
-      div.btn_frame.clearfix.
-        <input type="submit" class="reg_btn" value="<%=_i18n('login.register_ok')%>" />
-        <input type="submit" class="login_btn" value="<%=_i18n('login.login_ok')%>" />
-    div.login_right
-      #note_img
+    section.login_window
+      span.close_w
+      div.login_left
+        div.logo_bg
+        fieldset
+          legend.
+            <%=_i18n('login.title')%>
+          form(action="",method="")
+            li
+              div.login_input
+                |<input type="text" name="name" id="name" value="<%=_i18n('login.default_name')%>"/>
+              label.username
+                | <%=_i18n('login.name.name')%>
+            li
+              div.login_input
+                input(type="password",name="pass",id="pass")
+              label.password
+                | <%=_i18n('login.pass.pass')%>
+            li
+              div.out_link
+                | <a class="twitter"  href="javascript:void(0)" title="<%=_i18n('login.twitter')%>"><img src="img/sign-in-with-twitter-l.png"></img></a>
+                | <a class="weibo"  href="javascript:void(0)" title="<%=_i18n('login.weibo')%>"><img src="img/16.png"></img></a>
+                span.next_login
+                  input(type="checkbox",id="remember")
+                  | <%=_i18n('login.login_state')%>
+          p|<%=_i18n('login.register')%> </br>
+        div.btn_frame.clearfix.
+          <input type="submit" class="reg_btn" value="<%=_i18n('login.register_ok')%>" />
+          <input type="submit" class="login_btn" value="<%=_i18n('login.login_ok')%>" />
+      div.login_right
+        #note_img

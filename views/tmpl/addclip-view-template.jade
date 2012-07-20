@@ -1,41 +1,41 @@
 script(type="text/template",id="addClip-view-template")
   div.masker_layer
-  section.big_pop
-    h2.subject_add
+    section.big_pop
+      h2.subject_add
+        div.pop_left
+          i.note
+          div.message
+            |<%=_i18n('addClip.note_message')%>
+        div.pop_right
+          div.button_frame
+            iframe(name="post_frame",id="post_frame")
+            |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
+            |<span class="file">
+            |<button class="upload_img" id="localImg"><%=_i18n('addClip.upload')%></button>
+            |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipAdd.image_change(this)">
+            |</span>
+            |</form>
+            div.masker_layer1
+            span#link_image
+              button.link_img <%=_i18n('addClip.link')%>
+              span.url_text.img_upload_span
+                input.text#img_upload_url(type="text")
+                | <input type="submit" class="btn_img" value="<%=_i18n('addClip.ok')%>" />
+            span
+              button.format <%=_i18n('addClip.clear')%>
+            span.close_w
+              //- ie-7 若不加空格则右上角关闭按钮不显示
+              |&nbsp&nbsp&nbsp&nbsp&nbsp
+          //- ie-7 文字若不放到此位置导致显示格式不正确
+          | <%=_i18n('addClip.title')%>
       div.pop_left
-        i.note
-        div.message
-          |<%=_i18n('addClip.note_message')%>
       div.pop_right
-        div.button_frame
-          iframe(name="post_frame",id="post_frame")
-          |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
-          |<span class="file">
-          |<button class="upload_img" id="localImg"><%=_i18n('addClip.upload')%></button>
-          |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipAdd.image_change(this)">
-          |</span>
-          |</form>
-          div.masker_layer1
-          span#link_image
-            button.link_img <%=_i18n('addClip.link')%>
-            span.url_text.img_upload_span
-              input.text#img_upload_url(type="text")
-              | <input type="submit" class="btn_img" value="<%=_i18n('addClip.ok')%>" />
-          span
-            button.format <%=_i18n('addClip.clear')%>
-          span.close_w
-            //- ie-7 若不加空格则右上角关闭按钮不显示
-            |&nbsp&nbsp&nbsp&nbsp&nbsp
-        //- ie-7 文字若不放到此位置导致显示格式不正确
-        | <%=_i18n('addClip.title')%>
-    div.pop_left
-    div.pop_right
-      section.pop_inner
-        article.content_new
-          //- css 中设置iframe无边框在ie8- 中不起作用
-          iframe#editor(frameborder="no",border="0")
-        div.btn_group.clearfix.
-          <input type="button" class="verify" id="save" title="<%=_i18n('addClip.ok')%>" value="<%=_i18n('addClip.ok')%>" />
-          <input type="button" class="cancel" id="cancel" title="<%=_i18n('addClip.cancel')%>" value="<%=_i18n('addClip.cancel')%>" />
-          <input type="button" class="cliper ok" id="ok" title="<%=_i18n('addClip.back')%>" value="<%=_i18n('addClip.back')%>" />
-          <input type="button" class="cliper empty" id="empty" title="<%=_i18n('addClip.clean')%>" value="<%=_i18n('addClip.clean')%>" />
+        section.pop_inner
+          article.content_new
+            //- css 中设置iframe无边框在ie8- 中不起作用
+            iframe#editor(frameborder="no",border="0")
+          div.btn_group.clearfix.
+            <input type="button" class="verify" id="save" title="<%=_i18n('addClip.ok')%>" value="<%=_i18n('addClip.ok')%>" />
+            <input type="button" class="cancel" id="cancel" title="<%=_i18n('addClip.cancel')%>" value="<%=_i18n('addClip.cancel')%>" />
+            <input type="button" class="cliper ok" id="ok" title="<%=_i18n('addClip.back')%>" value="<%=_i18n('addClip.back')%>" />
+            <input type="button" class="cliper empty" id="empty" title="<%=_i18n('addClip.clean')%>" value="<%=_i18n('addClip.clean')%>" />

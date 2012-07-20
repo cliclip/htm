@@ -1,43 +1,43 @@
 script(type="text/template",id="message-view-template")
   div.masker_layer
-  section.small_pop
-    h2
-      <%=_i18n('message.title')%>
-    ul.pop_body.
-      <p>    
+    section.small_pop
+      h2
+        <%=_i18n('message.title')%>
+      ul.pop_body.
+        <p>    
+          <% if (typeof message == "object") { for(key in message){%>
+          <%= message[key]%>
+          <% }}else{ %>
+          <%=message%>
+          <%}%>
+        </p>
+        <br>
+        <br>
+        <li class="btn_group clearfix">
+          <input class=verify type="button" value="<%=_i18n('message.ok')%>" id="sure"/>
+        </li>
+
+
+script(type="text/template",id="success-view-template")
+  div.masker_layer
+    section.success
+      ul.pop_body.
         <% if (typeof message == "object") { for(key in message){%>
         <%= message[key]%>
         <% }}else{ %>
         <%=message%>
         <%}%>
-      </p>
-      <br>
-      <br>
-      <li class="btn_group clearfix">
-        <input class=verify type="button" value="<%=_i18n('message.ok')%>" id="sure"/>
-      </li>
-
-
-script(type="text/template",id="success-view-template")
-  div.masker_layer
-  section.success
-    ul.pop_body.
-      <% if (typeof message == "object") { for(key in message){%>
-      <%= message[key]%>
-      <% }}else{ %>
-      <%=message%>
-      <%}%>
 
 
 script(type="text/template",id="warning-view-template")
   div.masker_layer
-  section.small_pop
-    h2
-      <%=_i18n('warning.title')%>
-    ul.pop_body
-      |<%=message%>
-      br
-      br
-      li.btn_group.clearfix.
-        <input type="button" class="verify" value="<%=_i18n('warning.ok')%>" id="sure" />
-        <input type="button" class="cancel" value="<%=_i18n('warning.cancel')%>" id="cancel" />
+    section.small_pop
+      h2
+        <%=_i18n('warning.title')%>
+      ul.pop_body
+        |<%=message%>
+        br
+        br
+        li.btn_group.clearfix.
+          <input type="button" class="verify" value="<%=_i18n('warning.ok')%>" id="sure" />
+          <input type="button" class="cancel" value="<%=_i18n('warning.cancel')%>" id="cancel" />
