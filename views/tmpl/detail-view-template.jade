@@ -1,42 +1,42 @@
 script(type="text/template",id="detail-view-template")
   div.masker_layer
-  section.big_pop
-    h2.subject_edit
-      div.pop_left
-        span.breadcrumbs
-          //|<%=_i18n('detail.route')%>
-      div.pop_right.
-        <% if(!App.util.self(user)) {%>
-          <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
-          <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>
-          <i class="biezhen operate" title="<%=_i18n('detail.reclip')%>"></i>
-        <% }else {%>
-          <i class="del operate" title="<%=_i18n('detail.delete')%>"></i>
-          <i class="change operate" title="<%=_i18n('detail.update')%>"></i>
-          <i class="note operate" title="<%=_i18n('detail.memo')%>"></i>
-          <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>	   
-        <% } %>
-        <span class="close_w"></span>
-    div.pop_left
-      ul.forward_log.
-        <% for(var i =0; i<users.length; i++){%>
-        <li class="user_head">
-          <a href="#user/<%= users[i].id%>">
-          <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
-          </a>
-          <% if(i < users.length-1 ){ %>
-             <j class="join"></j>
+    section.big_pop
+      h2.subject_edit
+        div.pop_left
+          span.breadcrumbs
+            //|<%=_i18n('detail.route')%>
+        div.pop_right.
+          <% if(!App.util.self(user)) {%>
+            <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
+            <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>
+            <i class="biezhen operate" title="<%=_i18n('detail.reclip')%>"></i>
+          <% }else {%>
+            <i class="del operate" title="<%=_i18n('detail.delete')%>"></i>
+            <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>	   
+            <i class="change operate" title="<%=_i18n('detail.update')%>"></i>
+            <i class="note operate" title="<%=_i18n('detail.memo')%>"></i>
           <% } %>
-        </li>
-        <%}%>
-    div.pop_right
-      section.pop_inner
-        article.content
-          |&nbsp</br> 
-          <%= App.util.contentToHtml(content)%>
-        <%= App.util.generatePastTime(updateTime)%>
-        dl.comments.clearfix
-        div.input_textarea
+          <span class="close_w"></span>
+      div.pop_left
+        ul.forward_log.
+          <% for(var i =0; i<users.length; i++){%>
+          <li class="user_head">
+            <a href="#user/<%= users[i].id%>">
+            <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
+            </a>
+            <% if(i < users.length-1 ){ %>
+               <j class="join"></j>
+            <% } %>
+          </li>
+          <%}%>
+      div.pop_right
+        section.pop_inner
+          article.content
+            |&nbsp</br> 
+            <%= App.util.contentToHtml(content)%>
+          <%= App.util.generatePastTime(updateTime)%>
+          dl.comments.clearfix
+          div.input_textarea
 
 script(type="text/template",id="showcomment-view-template")
   | <div class="comment_show" id="<%= id %>">

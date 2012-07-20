@@ -20,8 +20,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "blur #organize_text"    :"noteBlur",
       "click #organize_button" :"okClick",
       "click #cancel_button"   :"cancelClick",
-      "click .masker_layer"    :"cancelClick", // 点击detail下的层，便隐藏
+      "click .masker_layer"    :"masker", // 点击detail下的层，便隐藏
       "click .close_w"         :"cancelClick"
+    },
+    initialize:function(){
+      noscroll = false;
     },
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
@@ -45,6 +48,12 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	App.vent.trigger("app.clipapp.memo:@ok", data, this.model.id);
       }else{
 	$(e.currentTarget).attr("disabled",false);
+      }
+    },
+    masker:function(e){
+      e.preventDefault();
+      if($(e.target).attr("class") == "masker_layer"){
+	this.cancelClick(e);
       }
     },
     cancelClick:function(e){
@@ -102,12 +111,15 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   var ClipMemo = {};
-  var memoType,defaultNote = _i18n('clipmemo.memo'),o_data;
+  var memoType,defaultNote = _i18n('clipmemo.memo'),o_data, noscroll = false;
   function showMemo(data){
     var memoModel = new MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
-    $(".small_pop").css("top", App.util.getPopTop("small"));
+    if(!$("body").hasClass("noscroll")){
+      noscroll = true;
+      $("body").addClass("noscroll");
+    }
     $('#obj_tag').tagsInput({});
   }
 
@@ -135,19 +147,24 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   ClipMemo.close=function(n_data){
     var flag = true;
-    if(!n_data)App.popRegion.close();
-    else{
+    if(!n_data){
+      App.popRegion.close();
+      if(noscroll) { $("body").removeClass("noscroll"); }
+    }else{
       if(o_data['public'] != 'false'){
 	o_data['public'] = 'true';
       }
       flag = flag && ($.trim(o_data.note)==$.trim(n_data.note[0].text));
       flag = flag && n_data.tag.length==o_data.tag.length && _.difference(n_data.tag,o_data.tag).length==0;
       flag = flag && n_data['public'] == o_data['public'];
-      if(flag)App.popRegion.close();
-      else{
+      if(flag){
+	App.popRegion.close();
+	if(noscroll) { $("body").removeClass("noscroll"); }
+      }else{
 	App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
 	App.vent.trigger("app.clipapp.message:alert", "memo_save");
 	App.vent.bind("app.clipapp.message:sure",function(){
+	  if(noscroll) { $("body").removeClass("noscroll"); }
 	  App.popRegion.close();
 	});
       }

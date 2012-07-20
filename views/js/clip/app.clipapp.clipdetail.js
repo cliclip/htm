@@ -19,7 +19,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     template: "#detail-view-template",
     events: {
       "click .operate" : "Operate",
-      "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
+      "click .masker_layer" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
       "click .user_head": "Close",
       "click .username": "Close",
@@ -49,10 +49,16 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
       }
     },
+    Masker: function(e){
+      if($(e.target).attr("class") == "masker_layer"){
+	App.vent.trigger("app.clipapp.clipdetail:@close");
+      }
+    },
     Close: function(e){
       App.vent.trigger("app.clipapp.clipdetail:@close");
     },
     editDetail:function(e){
+      console.log("eidt == ");
       e.preventDefault();
       var self = App.util.getMyUid();
       if(!self){
@@ -235,7 +241,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $(".big_pop").css("top",App.util.getPopTop("big"));
+    $("body").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
     this.$(".content").focus();
     var anchors = this.$(".content a");
@@ -378,6 +384,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   // 应该绑定在那里
   App.vent.bind("app.clipapp.clipdetail:@close", function(){
+    $("body").removeClass("noscroll");
     ClipDetail.close();
   });
 

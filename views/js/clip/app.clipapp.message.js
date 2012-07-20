@@ -1,5 +1,5 @@
 App.ClipApp.Message = (function(App, Backbone, $){
-  var Message = {};
+  var Message = {}, flag = false;
 
   var MessageModel = App.Model.extend({
     defaults:{message:""}
@@ -13,11 +13,15 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click .masker_layer":"MessageSure",
       "click #sure": "MessageSure"
     },
+    initialize:function(){
+      flag = false;
+    },
     MessageSure: function(){
       if(this.model.get("message") == _i18n('message.email.no_uname')){
 	App.vent.trigger("app.clipapp.useredit:rename");
       }
       App.vent.trigger("app.clipapp.message:sure");
+      if(flag){ $("body").removeClass("noscroll"); }
       App.setpopRegion.close();
     }
   });
@@ -37,11 +41,16 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click #sure": "MessageSure",
       "click #cancel":"Messageclose"
     },
+    initialize:function(){
+      flag = false;
+    },
     MessageSure: function(){
+      if(flag){	$("body").removeClass("noscroll"); }
       App.setpopRegion.close();
       App.vent.trigger("app.clipapp.message:sure");
     },
     Messageclose: function(){
+      if(flag){ $("body").removeClass("noscroll"); }
       App.setpopRegion.close();
       App.vent.trigger("app.clipapp.message:cancel");
     }
@@ -68,7 +77,10 @@ App.ClipApp.Message = (function(App, Backbone, $){
       },1000);
     }
     App.setpopRegion.show(view);
-    $(".small_pop").css("top", App.util.getPopTop("small"));
+    if(!$("body").hasClass("noscroll")){
+      flag = true;
+      $("body").addClass("noscroll");
+    }
   };
 
   Message.close = function(){

@@ -1,7 +1,7 @@
 App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
-  var edit_view = "";
+  var edit_view = "", flag = false;
   var old_content = "",ieRange = false;
   var EditModel = App.Model.extend({
     validate: function(attrs){
@@ -28,11 +28,12 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
-      "click .masker_layer":"abandonUpdate",
+      "click .masker_layer":"masker",
       "click .close_w":"abandonUpdate"
     },
     initialize: function(){
       edit_view = this;
+      flag = false;
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
       var isIE=document.all? true:false;
@@ -52,12 +53,10 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       $("#img_upload_url").val("");
     },
     hide_extImg: function(e){
-      console.info("@@@@@@@@@11111111111111");
       $(".masker_layer1").hide();
       $(".img_upload_span").hide();
     },
     up_extImg: function(){ // 确定上传
-      console.info("@@@@@@@@@");
       var url = $("#img_upload_url").val();
       if(url == "http://" || !url )return;
       $(".masker_layer1").hide();
@@ -107,6 +106,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	});
       };
     },
+    masker: function(e){
+      if($(e.target).attr("class") == "masker_layer"){
+	this.abandonUpdate();
+      }
+    },
     abandonUpdate: function(){
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
       App.vent.trigger("app.clipapp.clipedit:@cancel",content);
@@ -152,7 +156,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     model.onChange(function(editModel){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
-      $(".big_pop").css("top", App.util.getPopTop("big"));
+      $("body").addClass("noscroll");
       var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
@@ -164,13 +168,15 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   };
 
   ClipEdit.close = function(n_content){
-    if(!n_content || n_content == old_content)
+    if(!n_content || n_content == old_content){
       App.viewRegion.close();
-    else{
+      $("body").removeClass("noscroll");
+    }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
+	$("body").removeClass("noscroll");
       });
     }
   };

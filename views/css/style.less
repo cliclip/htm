@@ -1,8 +1,8 @@
   // 常用 mixin
 .sprites (@x:0, @y:0) {
-	background: url(../img/sprite.png) no-repeat;
-	background-position: @x @y;
-	display: block;
+  background: url(../img/sprite.png) no-repeat;
+  background-position: @x @y;
+  display: block;
 }
 .box-shadow (@x: 0px, @y: 0px, @blur: 1px, @color: #ccc) {
   box-shadow: @arguments;
@@ -12,14 +12,14 @@
   //behavior: url(css/pie.htc);
 }
 .min-height (@height){
-	min-height:@height;	
-	_height:auto!important;
-	_height: height; // 看到有这样来写 IE7 hack 的，可以用 * 但不能用 +
+  min-height:@height;	
+  _height:auto!important;
+  _height: height; // 看到有这样来写 IE7 hack 的，可以用 * 但不能用 +
 }
 .min-width (@width){
-	min-width:@width;	
-	_width:auto!important;
-	_width: width;
+  min-width:@width;	
+  _width:auto!important;
+  _width: width;
 }
 .border-radius (@radius) {
   -moz-border-radius: @radius;
@@ -85,7 +85,6 @@
 
 	}
 }
-
 // 页面整体布局 layout.less
 .layout{
 	min-width:1000px;
@@ -462,28 +461,27 @@
 #view {
       z-index: 10;
       .masker_layer {
-		z-index: 2;
+	z-index: 2;
       }		
 }
 // clipdetail上边的
 #pop{
-	z-index: 20;
-	.masker_layer{
-		z-index: 12;
-	}
+  z-index: 20;
+  .masker_layer{		
+     z-index: 12;
+   }
 }
 #setpop{
-	//z-index: 3;
-	left: 50%;
-    	position: absolute;
-    	z-index: 30;
-	top: 80px;
-	.masker_layer{
-		z-index:10;
-	}
-	h2{
-		margin-left: 10px;
-	}
+  left: 50%;
+  position: absolute;
+  z-index: 30;
+  top: 80px;
+  .masker_layer{
+     z-index:10;
+  }
+  h2{
+     margin-left: 10px;
+  }
 }
 
 
@@ -1009,36 +1007,37 @@ section.follow_frame{
 		}
 	}	
 }
-
 .masker_layer{
-	width: 100%; //1000px;
-	height: 100%; //1000px;
-	position: fixed; //absolute;
-	_position: absolute;
-	background:#000;
-	opacity: 0.5;
-	filter:alpha(opacity=50);
-	top:0;
-	left:0;
+   position: fixed; //absolute;
+   width: 100%; //1000px;
+   height: 100%; //1000px;
+   overflow-x:auto;
+   overflow-y:scroll;
+   _position: absolute;
+   background-color: rgba(0, 0, 0, 0.53);
+   opacity: 1;
+   filter:alpha(opacity=50);
+   top:0;
+   left:0;
 }
 .masker_layer1{//连接图片弹出框弹出后加一层遮罩层，点击遮罩层弹出框消失
-	display:none;
-	width: 100%; //1000px;
-	height: 100%; //1000px;
-	position: fixed; //absolute;
-	_position: absolute;
-	background:red;
-	opacity: 0;
-	filter:alpha(opacity=0);
-	top:0;
-	left:0;
-	z-index:2;
-	_position: absolute;
-	_left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
-	_top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
+   display:none;
+   width: 100%; //1000px;
+   height: 100%; //1000px;
+   position: fixed; //absolute;
+   _position: absolute;
+   background:red;
+   opacity: 0;
+   filter:alpha(opacity=0);
+   top:0;
+   left:0;
+   z-index:2;
+   _position: absolute;
+   _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
+   _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
 }
 #link_image{//为链接图片的span设置层次
-	z-index:3;
+   z-index:3;
 }
 .small_pop{
 	z-index:20;
@@ -1125,7 +1124,7 @@ section.follow_frame{
 	width:750px;
 	position: absolute;
 	left:50%;
-	top:100px;
+	top:15px;
 	margin-left:-370px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	i{
@@ -1275,7 +1274,6 @@ section.follow_frame{
 			}
 			width:650px;
 			min-height:200px;
-			max-height:500px;
 			padding:4px;
 			border:1px solid #ccc;
 			overflow-x:hidden;
@@ -1987,6 +1985,7 @@ html {
   _background:url() fixed;
   height:100%;
 }
+.noscroll{ overflow: hidden !important; }
 html body {
   position:relative;
   _margin:0; 
@@ -1998,7 +1997,6 @@ html .masker_layer{
   _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
   _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
 }
-
 .bind_window{
   	width:420px;
 	height:250px;

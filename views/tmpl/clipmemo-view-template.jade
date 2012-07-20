@@ -1,20 +1,20 @@
 script(type="text/template",id="organize-view-template")
   div.masker_layer
-  section.small_pop
-    span.close_w
-    h2.subject_note <%=_i18n('clipmemo.title')%>
-    ul.pop_body
-      li.tag_box.
-        <% for(var i=0;i<main_tag.length;i++){ %> 
-        <span <% if(main_tag[i].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_<%=i%>"><%=main_tag[i].tag%></span> <% } %>
-      li
-        <input type="text" class="obj_tags" id="obj_tag" value="<%=obj_tag.join(",")%>" />
-      li.input_textarea.
-        <textarea id="organize_text"><% if(note){%><%=note%><% }else{ %><%=_i18n('clipmemo.memo')%><%}%></textarea>
-      li.input_checkbox
-        label
-          | <input type="checkbox" id="memo_private" <% if(pub=="false"){ %>checked="checked" <% } %>/>
-          | &nbsp;<%=_i18n('clipmemo.private')%>
-      li.btn_group.clearfix.
-        <input type="button" class="verify" id="organize_button" value="<%=_i18n('clipmemo.ok')%>" />
-        <input type="button" class="cancel" id="cancel_button" value="<%=_i18n('clipmemo.cancel')%>" />
+    section.small_pop
+      span.close_w
+      h2.subject_note <%=_i18n('clipmemo.title')%>
+      ul.pop_body
+        li.tag_box.
+          <% for(var i=0;i<main_tag.length;i++){ %> 
+          <span <% if(main_tag[i].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_<%=i%>"><%=main_tag[i].tag%></span> <% } %>
+        li
+          <input type="text" class="obj_tags" id="obj_tag" value="<%=obj_tag.join(",")%>" />
+        li.input_textarea.
+          <textarea id="organize_text"><% if(note){%><%=note%><% }else{ %><%=_i18n('clipmemo.memo')%><%}%></textarea>
+        li.input_checkbox
+          label
+            | <input type="checkbox" id="memo_private" <% if(pub=="false"){ %>checked="checked" <% } %>/>
+            | &nbsp;<%=_i18n('clipmemo.private')%>
+        li.btn_group.clearfix.
+          <input type="button" class="verify" id="organize_button" value="<%=_i18n('clipmemo.ok')%>" />
+          <input type="button" class="cancel" id="cancel_button" value="<%=_i18n('clipmemo.cancel')%>" />
