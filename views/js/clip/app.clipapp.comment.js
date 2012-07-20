@@ -1,6 +1,6 @@
 // app.comment.js
 App.ClipApp.Comment = (function(App, Backbone, $){
-  var number_limit =  140;
+  var number_limit =  140, flag = false;
 
   // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
@@ -37,7 +37,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
      // "click .size48"    :"maintagAction",
       "click #submit"    :"comment",
       "click #cancel"    :"cancel",
-      "click .masker_layer":"cancel",
+      "click .masker_layer":"masker",
       "click .close_w"   :"cancel"
     },
     foucsAction:function(e){
@@ -98,6 +98,12 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	}
       });
     },
+    masker: function(e){
+      e.preventDefault();
+      if($(e.target).attr("class") == "masker_layer"){
+	this.cancel(e);
+      }
+    },
     cancel : function(e){
       e.preventDefault();
       var text = $.trim($("#comm_text").val());
@@ -116,18 +122,23 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     var model = new App.Model.CommModel({cid: cid});
     var view = new CommentView({model : model});
     App.popRegion.show(view);
-    $(".small_pop").css("top", App.util.getPopTop("small"));
+    if(!$("body").hasClass("noscroll")){
+      flag = true;
+      $("body").addClass("noscroll");
+    }
   };
 
   Comment.close = function(text){
     if(!text || text == ""){
       App.popRegion.close();
+      if(flag){ $("body").removeClass("noscroll"); }
       mid = null;
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "comment_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
+	if(flag){ $("body").removeClass("noscroll"); }
 	mid = null;
       });
     }

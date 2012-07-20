@@ -31,7 +31,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .pop_left":"remark_clip",
       "click .message":"message_hide",
       "click .close_w":"cancelcliper",
-      "click .masker_layer":"cancelcliper",
+      "click .masker_layer":"masker",
       "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
       "click #save": "savecliper", // 对应clipper的ok
@@ -77,6 +77,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var data = new Date();
       data.setTime(data.getTime() + 30*24*60*60*10000);
       document.cookie = "first=false"+";expires=" + data.toGMTString();
+    },
+    masker:function(e){
+      if($(e.target).attr("class") == "masker_layer"){
+	this.cancelcliper();
+      }
     },
     cancelcliper:function(){
       clip.content = App.ClipApp.Editor.getContent("editor");
@@ -148,9 +153,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
-    $(".big_pop").css("top", App.util.getPopTop("big"));
     App.ClipApp.Editor.init();
     App.ClipApp.Editor.focus("editor");
+    $("body").addClass("noscroll");
     //console.info(document.cookie);
     if(!/first=false/.test(document.cookie)){//判断是否是第一次打开网，新建clip
       $(".message").show();
@@ -164,11 +169,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   ClipAdd.close = function(clip){
     if(!clip || !clip.content){
       App.viewRegion.close();
+      $("body").removeClass("noscroll");
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
+	$("body").removeClass("noscroll");
       });
     }
   };

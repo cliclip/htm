@@ -1,5 +1,5 @@
 App.ClipApp.ReclipTag = (function(App, Backbone, $){
-  var ReclipTag = {};
+  var ReclipTag = {}, flag = false;
   var P = App.ClipApp.Url.base;
 
   var ReclipTagModel = App.Model.extend({
@@ -18,7 +18,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
       "click .size48"      : "maintagAction",
-      "click .masker_layer": "cancel",
+      "click .masker_layer": "masker",
       "click .close_w"     : "cancel"
     },
     maintagAction:function(e){
@@ -41,6 +41,12 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       params["id"] = this.model.get("user");
       params["tag"] = this.model.get("tag");
       App.vent.trigger("app.clipapp.reclip_tag:@submit", params,this.model.get("count"));
+    },
+    masker : function(e){
+      e.preventDefault();
+      if($(e.target).attr("class") == "masker_layer"){
+	this.cancel(e);
+      }
     },
     cancel : function(e){
       e.preventDefault();
@@ -89,7 +95,10 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	  model.set({user:user,tag:tag,count:res.count});
 	  var view = new ReclipTagView({model : model});
 	  App.popRegion.show(view);
-	  $(".small_pop").css("top", App.util.getPopTop("small"));
+	  if(!$("body").hasClass("noscroll")){
+	    flag = true;
+	    $("body").addClass("noscroll");
+	  }
 	  $('#obj_tag').tagsInput({
 	    //autocomplete_url:'test/fake_json_endpoint.html'
 	  });
@@ -103,11 +112,13 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 
   ReclipTag.close = function(params, count){
     if(!params||(params.clip.note[0].text==""&&params.clip.tag.length==0&&params.clip['public']!='false')){
+      if(flag){ $("body").removeClass("noscroll"); }
       App.popRegion.close();
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "reclip_save");
       App.vent.bind("app.clipapp.message:sure",function(){
+	if(flag){ $("body").removeClass("noscroll"); }
 	App.popRegion.close();
       });
     }

@@ -1,6 +1,6 @@
 // app.delete.js
 App.ClipApp.ClipDelete = (function(App, Backbone, $){
-  var ClipDelete = {};
+  var ClipDelete = {}, flag = false;
   var DeleteView = App.ItemView.extend({
     tagName : "div",
     className : "delete-view",
@@ -10,6 +10,9 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
       "click #cancel_button" : "cancelClick",
       "click .masker_layer"  : "cancelClick",
       "click .close_w"       : "cancelClick"
+    },
+    initialize:function(){
+      flag = false;
     },
     okClick : function(e){
       App.vent.trigger("app.clipapp.clipdelete:@ok",this.model);
@@ -23,10 +26,14 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
      var model = new App.Model.DetailModel({id:cid});
      var view = new DeleteView({model : model});
      App.popRegion.show(view);
-     $(".small_pop").css("top", App.util.getPopTop("small"));
+     if(!$("body").hasClass("noscroll")){
+       flag = true;
+       $("body").addClass("noscroll");
+     }
    };
 
    ClipDelete.close = function(){
+     if(flag) { $("body").removeClass("noscroll"); }
      App.popRegion.close();
    };
 
