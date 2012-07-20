@@ -39,7 +39,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       "blur  #recomm_text":  "textBlur",
       "click #submit"        :  "recommendAction",
       "click #cancel"        :  "cancelAction",
-      "click .masker_layer"  :  "masker",
+      "click .masker"  :  "masker",
       "click .close_w"       :  "cancelAction"
     },
     initialize:function(){
@@ -215,7 +215,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     masker: function(e){
       e.preventDefault();
-      if($(e.target).attr("class") == "masker_layer"){
+      if($(e.target).attr("class") == "masker"){
 	this.cancelAction(e);
       }
     },

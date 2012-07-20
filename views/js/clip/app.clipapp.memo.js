@@ -20,7 +20,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "blur #organize_text"    :"noteBlur",
       "click #organize_button" :"okClick",
       "click #cancel_button"   :"cancelClick",
-      "click .masker_layer"    :"masker", // 点击detail下的层，便隐藏
+      "click .masker"          :"masker", // 点击detail下的层，便隐藏
       "click .close_w"         :"cancelClick"
     },
     initialize:function(){
@@ -52,7 +52,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
     masker:function(e){
       e.preventDefault();
-      if($(e.target).attr("class") == "masker_layer"){
+      if($(e.target).attr("class") == "masker"){
 	this.cancelClick(e);
       }
     },

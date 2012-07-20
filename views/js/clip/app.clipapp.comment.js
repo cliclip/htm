@@ -37,7 +37,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
      // "click .size48"    :"maintagAction",
       "click #submit"    :"comment",
       "click #cancel"    :"cancel",
-      "click .masker_layer":"masker",
+      "click .masker"    :"masker",
       "click .close_w"   :"cancel"
     },
     foucsAction:function(e){
@@ -100,7 +100,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     },
     masker: function(e){
       e.preventDefault();
-      if($(e.target).attr("class") == "masker_layer"){
+      if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
     },

@@ -1,5 +1,6 @@
 script(type="text/template",id="message-view-template")
   div.masker_layer
+  div.masker
     section.small_pop
       h2
         <%=_i18n('message.title')%>
@@ -20,6 +21,7 @@ script(type="text/template",id="message-view-template")
 
 script(type="text/template",id="success-view-template")
   div.masker_layer
+  div.masker
     section.success
       ul.pop_body.
         <% if (typeof message == "object") { for(key in message){%>
@@ -31,6 +33,7 @@ script(type="text/template",id="success-view-template")
 
 script(type="text/template",id="warning-view-template")
   div.masker_layer
+  div.masker
     section.small_pop
       h2
         <%=_i18n('warning.title')%>

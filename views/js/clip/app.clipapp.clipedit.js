@@ -28,7 +28,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .pop_left":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
-      "click .masker_layer":"masker",
+      "click .masker":"masker",
       "click .close_w":"abandonUpdate"
     },
     initialize: function(){
@@ -107,7 +107,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       };
     },
     masker: function(e){
-      if($(e.target).attr("class") == "masker_layer"){
+      if($(e.target).attr("class") == "masker"){
 	this.abandonUpdate();
       }
     },
