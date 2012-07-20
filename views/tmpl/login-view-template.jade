@@ -10,7 +10,7 @@ script(type="text/template",id="login-view-template")
         form(action="",method="")
           li
             div.login_input
-              input(type="text",name="name",id="name")
+              |<input type="text" name="name" id="name" value="<%=_i18n('login.default_name')%>"/>
             label.username
               | <%=_i18n('login.name.name')%>
           li
