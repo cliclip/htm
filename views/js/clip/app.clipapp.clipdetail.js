@@ -22,7 +22,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .operate" : "Operate",
       "click .masker_layer" : "Close", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
-      "click .user_head": "Close",
+      "click .userhead": "Close",
       "click .username": "Close",
       "dblclick .content": "editDetail"
     },
@@ -387,6 +387,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   // 应该绑定在那里
   App.vent.bind("app.clipapp.clipdetail:@close", function(){
+    console.info("22222222222222222");
     ClipDetail.close();
   });
 

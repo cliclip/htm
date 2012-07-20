@@ -20,6 +20,7 @@
 	min-width:@width;	
 	_width:auto!important;
 	_width: width;
+	*width: width;
 }
 .border-radius (@radius) {
   -moz-border-radius: @radius;
@@ -1229,7 +1230,7 @@ section.follow_frame{
 			list-style:none;
 			margin:8px 13px;
 			li.user_head{
-				j{
+				div{
                                   margin-top:-25px;
 				  margin-left:1px;
 				  height:50px;
@@ -1551,8 +1552,9 @@ section.follow_frame{
 				span.error{
 					z-index:1000;
 					left:250px;
-					width:200px;
-					//min-width:110px;
+					*width:200px;
+					min-width:150px;
+					//.min-width(130px);
 					background:#EEFF00 none repeat scroll 0% 50%;
 					border:3px solid #EEFF00;
 					padding:6px;
