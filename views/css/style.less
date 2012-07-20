@@ -1096,7 +1096,8 @@ section.follow_frame{
 		.tag_box{
 			height:48px;
 			min-width: 288px;
-			background:#ddd;
+			margin-left:-5px;
+			//background:#ddd;
 		}
 	}
 	.subject_put{
@@ -1924,16 +1925,25 @@ section.edit_frame{
 }
 .tag_bg(@x:0,@y:0){background:url(../img/tag_bg.png) no-repeat @x @y;}
 .tag_box{
-	span.size48{width:48px;height:48px;line-height:48px;float:left;font-size:12px;color:#fff;text-align:center;cursor: pointer;}
+	span.size48{
+		width:48px;
+		height:48px;
+		line-height:48px;
+		float:left;
+		font-size:12px;
+		color:#fff;
+		text-align:center;
+		cursor: pointer;
+	}
 	span.white_48{
 		.tag_bg(0,0);
-		color: #999;
+		color: #669;
 	}
 	span.blue_48{
 		.tag_bg(0,-48px);
 	}
 	span.orange_48{
-		color:#cb5331;
+		color:#966;
 		.tag_bg(0,-48px);
 	}
 	span.green_48{
