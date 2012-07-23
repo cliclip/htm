@@ -214,7 +214,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       view.setModel('recommend',view.tmpmodel, {text: data.text});
     },
     masker: function(e){
-      e.preventDefault();
       if($(e.target).attr("class") == "masker"){
 	this.cancelAction(e);
       }

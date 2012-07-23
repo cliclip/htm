@@ -99,7 +99,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       });
     },
     masker: function(e){
-      e.preventDefault();
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }

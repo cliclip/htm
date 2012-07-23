@@ -47,7 +47,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     },
 
     masker: function(e){
-      e.preventDefault();
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
