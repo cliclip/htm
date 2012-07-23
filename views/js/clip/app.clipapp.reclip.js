@@ -99,9 +99,9 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var model = new ReclipModel({id:cid,rid:rid});
       var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
-      if(!$("body").hasClass("noscroll")){
+      if(!$("html").hasClass("noscroll")){
 	flag = true;
-	$("body").addClass("noscroll");
+	$("html").addClass("noscroll");
       }
       o_pub = pub;
       if(pub == "false") $("#checkbox").attr("checked",true);
@@ -112,14 +112,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   Reclip.close = function(params){
     if(!params||(params.clip.note[0].text==""&&params.clip.tag.length==0&&params.clip['public']==o_pub)){
       App.popRegion.close();
-      if(flag){ $("body").removeClass("noscroll"); }
+      if(flag){ $("html").removeClass("noscroll"); }
       mid = null;
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "reclip_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
-	if(flag){ $("body").removeClass("noscroll"); }
+	if(flag){ $("html").removeClass("noscroll"); }
 	mid = null;
       });
     }

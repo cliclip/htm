@@ -156,7 +156,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     model.onChange(function(editModel){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
-      $("body").addClass("noscroll");
+      $("html").addClass("noscroll");
       var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
@@ -170,13 +170,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   ClipEdit.close = function(n_content){
     if(!n_content || n_content == old_content){
       App.viewRegion.close();
-      $("body").removeClass("noscroll");
+      $("html").removeClass("noscroll");
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
-	$("body").removeClass("noscroll");
+	$("html").removeClass("noscroll");
       });
     }
   };

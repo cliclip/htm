@@ -1,5 +1,5 @@
 App.ClipApp.Register = (function(App, Backbone, $){
-  var Register = {};
+  var Register = {}, flag = false;
 
   App.Model.RegisterModel = App.Model.extend({
     url: function(){
@@ -17,6 +17,9 @@ App.ClipApp.Register = (function(App, Backbone, $){
       "click #submit": "submit",
       "click #reset": "reset",
       "click #login": "login"
+    },
+    initialize: function(){
+      flag = false;
     },
     submit: function(e){
       e.preventDefault();
@@ -60,6 +63,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
   };
 
   Register.close = function(){
+    if(flag){ $("html").removeClass("noscroll"); }
     App.popRegion.close();
     // window.location.href='javascript:history.go(-1);'; // 返回注册前的页面
   };
@@ -70,6 +74,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
     if (error) registerModel.set("error", error);
     var registerView = new RegisterView({model: registerModel});
     App.popRegion.show(registerView);
+        if(!$("html").hasClass("noscroll")){
+      flag = true;
+      $("html").addClass("noscroll");
+    }
   };
 
   App.vent.bind("app.clipapp.register:success", function(key, res, fun){

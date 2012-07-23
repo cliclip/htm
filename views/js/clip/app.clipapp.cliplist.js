@@ -241,7 +241,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
       App.listRegion.show(clipListView);
       //App.vent.trigger("app.clipapp:showpage");
-      if(collection.length<10){
+      if(collection.length<10){ // 去重之后不够十条继续请求
 	App.vent.trigger("app.clipapp:nextpage");
       }
       //console.info(tag);
