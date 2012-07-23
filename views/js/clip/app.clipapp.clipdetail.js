@@ -347,7 +347,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       },
       error:function(comment,res){
 	if(res.comm_text == "word_limit"){
-	  view.showError("comment", res, params.text.length - number_limit);
+	  view.showError("comment", res);
 	}else{
 	  view.showError("comment", res);
 	  $("#comm_text").blur().val("");
