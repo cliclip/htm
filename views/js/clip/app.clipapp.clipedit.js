@@ -163,7 +163,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.ClipApp.Editor.setContent("editor", html);
       setTimeout(function(){
 	old_content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
-      },100);
+      },200);
     });
   };
 
