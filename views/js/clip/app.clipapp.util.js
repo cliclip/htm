@@ -137,7 +137,7 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return App.ClipApp.Convert.ubbToHtml(content, true);
+    return App.ClipApp.Convert.ubbToHtml(content);
   };
 
   function trim(content, length){
@@ -145,11 +145,11 @@ App.util = (function(){
     if (!content) return r;
     if (_.isString(content) && content.length){
       // 先对content内容进行空格去除，在做截断
-      content = content.replace(/\s/g," ");
+      content = content.replace(/\s/g," "); // 去掉p标签
       if(content.length < length){
 	r = content;
       } else {
-	r = content.substring(0, length) + "...";
+	r = content.substring(0, length).replace(/<$/, "") + "...";
       }
     }
     return r;
