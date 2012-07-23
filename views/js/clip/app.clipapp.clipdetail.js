@@ -241,9 +241,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $("body").addClass("noscroll");
+    $("html").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
-    this.$(".content").focus();
+    $(".masker").focus();
     var anchors = this.$(".content a");
     for(var i=0;i<anchors.length;i++){
       var anchor = anchors[i];
@@ -384,7 +384,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   // 应该绑定在那里
   App.vent.bind("app.clipapp.clipdetail:@close", function(){
-    $("body").removeClass("noscroll");
+    $("html").removeClass("noscroll");
     ClipDetail.close();
   });
 

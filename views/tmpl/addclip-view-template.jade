@@ -4,11 +4,12 @@ script(type="text/template",id="addClip-view-template")
     section.big_pop
       h2.subject_add
         div.pop_left
-          i.note
-          div.message
-            |<%=_i18n('addClip.note_message')%>
         div.pop_right
           div.button_frame
+            span
+              i(class="note",title="<%=_i18n('detail.memo')%>")
+            //- div.message
+            //- |<%=_i18n('addClip.note_message')%>
             iframe(name="post_frame",id="post_frame")
             |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
             |<span class="file">
