@@ -92,24 +92,21 @@
       }
       if (value !='' && skipTag != true) {
         $('<span>').addClass('tag').append(
-	  $('<div class="text">').append(
-	  $('<span>').text(value)),
-	  $('<div class="del">').append(
+	  $('<span>').text(value),
+	  "<a>&nbsp;&nbsp;&nbsp;</a>",
 	  $('<a>', {
               href  : '#',
               title : 'Removing tag',
-              text  : '  x'
-	  }).click(function () {
+              text  : ' X'
+	  }).addClass('del').click(function () {
 	    return $('#' + id).removeTag(escape(value));
-	  }))
+	  })
 	).mouseover(function(e){
-	  $($(e.currentTarget)[0].children[0]).removeClass("text");
-	  $(e.currentTarget).addClass("tag_text");
-	  $($(e.currentTarget)[0].children[1].children[0]).show();
+	  $($(e.currentTarget)[0].children[1]).hide();
+	  $($(e.currentTarget)[0].children[2]).show();
 	}).mouseout(function(e){
-	  $(e.currentTarget).removeClass("tag_text");
-	  $($(e.currentTarget)[0].children[0]).addClass("text");
-	  $($(e.currentTarget)[0].children[1].children[0]).hide();
+	  $($(e.currentTarget)[0].children[1]).show();
+	  $($(e.currentTarget)[0].children[2]).hide();
 	})
 	.insertBefore('#' + id + '_addTag');
 	tagslist.push(value);

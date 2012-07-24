@@ -175,8 +175,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	var data = view.getInput();
 	if(data.text == _i18n('recommend.defaultText')){data.text = "";}
 	if(data.text.length > words_limit){
-	  var overage =data.text.length-words_limit;
-	  view.showError('recommend',{"recomm_text":"word_limit"},overage);
+	  view.showError('recommend',{"recomm_text":"word_limit"});
 	  return;
 	}
 	view.setModel('recommend',view.tmpmodel, {text: data.text, clipid: clipid});
@@ -214,7 +213,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       view.setModel('recommend',view.tmpmodel, {text: data.text});
     },
     masker: function(e){
-      e.preventDefault();
       if($(e.target).attr("class") == "masker"){
 	this.cancelAction(e);
       }
@@ -252,9 +250,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     }else{
       mid = model_id;
       App.popRegion.show(recommView);
-      if(!$("body").hasClass("noscroll")){
+      if(!$("html").hasClass("noscroll")){
 	flag = true;
-	$("body").addClass("noscroll");
+	$("html").addClass("noscroll");
       }
       //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
       if(/msie/i.test(navigator.userAgent)){
@@ -273,7 +271,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   Recommend.close = function(text){
     if(!uid && !text){
       App.popRegion.close();
-      if(flag){ $("body").removeClass("noscroll"); }
+      if(flag){ $("html").removeClass("noscroll"); }
       mid = null;
       uid = null;
     }else{
@@ -281,7 +279,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       App.vent.trigger("app.clipapp.message:alert", "recommend_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
-	if(flag){ $("body").removeClass("noscroll"); }
+	if(flag){ $("html").removeClass("noscroll"); }
 	mid = null;
 	uid = null;
       });

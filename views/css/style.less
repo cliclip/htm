@@ -249,7 +249,8 @@
 		height:25px;
 	}	
 	.log{
-		margin-left: 135px;
+		float:right;
+		margin-right: 10px;
     	    	//width: 95px;
 		margin-top: 40px;
 	}
@@ -321,7 +322,8 @@
 			height:30px;
 			float: right;
 			position: absolute;
-			left:0;top:0;
+			left:50px; //去掉@前是0px
+			top:0;
 			text-align:center;
 			a{
 				text-decoration:none;
@@ -361,7 +363,7 @@
 		.expert{
 			width:90px;
 			.sprites(-210px,-424px);
-			left:140px;
+			left:140px; 
 			z-index:0;
 			a{text-decoration:none;outline:none}
 		}
@@ -627,7 +629,7 @@ article.clip{
 	margin-right: 30px;
 	margin-bottom:35px;
 	position:relative;
-	.min-height(307px);	
+	//.min-height(307px);	
 	float:left; // 为制作方便加上，采用程序布局时，会取消
 	background:white;
 	hgroup{
@@ -667,16 +669,16 @@ article.clip{
 	}
 	header{
 		padding:15px;
-		margin-bottom:60px;
+		margin-bottom:80px;
 		cursor: pointer;
-		.min-height(220px);
+		.min-height(120px);
 		img.img_fake{
 			//height:220px;
 			//width:270px;
 			}
 		.article_photo{
 			width:270px;
-			margin-bottom: 20px;
+			margin-bottom: 10px;
 			text-align: center;
 			img{
 				display:none;
@@ -748,8 +750,11 @@ article.clip{
 			filter:alpha(opacity=50);
 			background:#67507a;
 			i{
-				width:45px;height:40px;
-				float:left;position: static;
+				width:40px;
+				height:40px;
+				float:left;
+				margin-left:5px;
+				position: static;
 				cursor: pointer;
 			}
 			.biezhen{
@@ -775,7 +780,7 @@ article.clip{
 	footer.master{
 		background-color:#f2e49f;
 		.user_more{
-			.sprites(-587px,-98px);
+			.sprites(-594px,-99px);
 			padding: 5px 0 5px 5px;
 		}
 		
@@ -1010,6 +1015,11 @@ section.follow_frame{
    top:0;
    left:0;
 }
+a#focus{
+	font-size: 1px;
+ 	outline: none;
+	margin-left: -10px;	
+}
 .masker_layer{
    width: 100%; //1000px;
    height: 100%; //1000px;
@@ -1036,9 +1046,6 @@ section.follow_frame{
    _position: absolute;
    _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
    _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
-}
-#link_image{//为链接图片的span设置层次
-   z-index:3;
 }
 .small_pop{
 	z-index:20;
@@ -1126,7 +1133,7 @@ section.follow_frame{
 	width:750px;
 	position: absolute;
 	left:50%;
-	top:15px;
+	top:74px;
 	margin-left:-370px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	i{
@@ -1146,19 +1153,27 @@ section.follow_frame{
 			button{
 				border:0 none;
 				width:103px;
-				padding:0 0 0 20px;
+				padding:0 0 0 17px;
 				float:left;
 				height:25px;
 				line-height:25px;
 				color: #8b8b8b;
-				margin-left:5px;
+				// margin-left:5px;
 				text-align:left;
 				position: relative;
 			}
             		span.close_w {
-		  	    top: -30px;
+		  	    	top: -30px;
 		 	}
-
+			span#link_image{//为链接图片的span设置层次
+				z-index:3;
+			}
+			span.note_clip{
+				.note{
+					.sprites(-589px,-307px);	
+					padding-left: 30px;
+				}
+			}
 			span.url_text{
 				width:280px;
 				height:28px;
@@ -1409,13 +1424,20 @@ section.follow_frame{
 			.sprites(-583px,-343px);
 		}
 	}
+	.bottom{
+	    height: 10px; 
+	    margin-top:-3px;
+	    background:#000;
+   	    opacity: 0.5;
+   	    filter:alpha(opacity=50);   
+	}
 }
 .login_window{
 	width:735px;
 	height:415px;
 	position: absolute;
 	left:50%;
-	top:100px;
+	top:140px;
 	margin-left:-367px;
 	background:url(../img/login_bg.png) repeat left top #66517f;
 	z-index:13;
@@ -2000,7 +2022,6 @@ section.edit_frame{
 html {
   _background:url() fixed;
   height:100%;
-  *overflow:hidden !important;
 }
 
 .noscroll{ 
@@ -2011,7 +2032,6 @@ html body {
   _margin:0px;
   _padding:0px;
   height:100%;
-  *overflow:auto;
 }
 
 html .masker{
@@ -2044,7 +2064,7 @@ html .masker{
 	}	
 	div.info{
 		height: 72px;
-		margin-left: 180px;
+		text-align:center;
 		margin-top: 5px;
 	}	
 	div.bind_body{

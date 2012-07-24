@@ -114,8 +114,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip",cid,mid,recommend,pub);break;
-	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
+	//case 'refresh'://转
+	  //App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment",cid,mid);break;
 	case 'note'://注
@@ -145,6 +145,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
+    App.vent.trigger("app.clipapp.routing:siteshow", tag);
   };
 
   ClipList.showUserClips = function(uid, tag){
@@ -241,7 +242,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
       App.listRegion.show(clipListView);
       //App.vent.trigger("app.clipapp:showpage");
-      if(collection.length<10){
+      if(collection.length<10){ // 去重之后不够十条继续请求
 	App.vent.trigger("app.clipapp:nextpage");
       }
       //console.info(tag);
@@ -332,17 +333,21 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   // 评论总数以及转载总数的同步
   App.vent.bind("app.clipapp.cliplist:refresh",function(args){
-    var model=App.listRegion.currentView.collection.get(args.model_id);
-    var clip=model.get("clip");
-    if(args.type == "comment"){
-      if(args.pid == 0){
-	var reply_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
-	model.set({"reply_count":reply_count});
+    if(!args || !args.model_id){
+      return;
+    }else{
+      var model=App.listRegion.currentView.collection.get(args.model_id);
+      var clip=model.get("clip");
+      if(args.type == "comment"){
+	if(args.pid == 0){
+	  var reply_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
+	  model.set({"reply_count":reply_count});
+	}
       }
-    }
-    if(args.type == "reclip"){
-      var reprint_count = model.get("reprint_count") ? model.get("reprint_count")+1 : 1;
-      model.set({"reprint_count":reprint_count});
+      if(args.type == "reclip"){
+	var reprint_count = model.get("reprint_count") ? model.get("reprint_count")+1 : 1;
+	model.set({"reprint_count":reprint_count});
+      }
     }
   });
 

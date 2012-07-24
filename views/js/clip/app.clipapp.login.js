@@ -37,6 +37,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
+      flag = false;
     },
     blurName: function(e){
       var that = this;
@@ -101,10 +102,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	type: "POST",
 	success:function(model,response){
 	  if(/language=en/.test(document.cookie)){
-	    //clickdang的uid为28
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 28, "newbie");
+	    //cliclip的uid为72
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, "newbie");
 	  }else{
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 28, "新手");
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, "新手");
 	  }
 	  if(typeof fun != "function"){
 	    App.vent.trigger("app.clipapp.register:success","register_success",response);
@@ -173,9 +174,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var loginModel = new App.Model.LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
-    if(!$("body").hasClass("noscroll")){
+    if(!$("html").hasClass("noscroll")){
       flag = true;
-      $("body").addClass("noscroll");
+      $("html").addClass("noscroll");
     }
     if(/language=en/.test(document.cookie)){
       $("#note_img").removeClass("note_img_zh");
@@ -188,7 +189,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   };
 
   Login.close = function(){
-    if(flag){ $("body").removeClass("noscroll"); }
+    if(flag){ $("html").removeClass("noscroll"); }
     App.popRegion.close();
   };
 

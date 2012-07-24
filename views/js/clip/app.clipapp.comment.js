@@ -90,7 +90,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	},
 	error:function(model, res){
 	  if(res.comm_text == "word_limit"){
-	    view.showError("comment", res, text.length - number_limit);
+	    view.showError("comment", res);
 	  }else{
 	    view.showError("comment", res);
 	    $("#comm_text").blur().val("");
@@ -99,7 +99,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       });
     },
     masker: function(e){
-      e.preventDefault();
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
@@ -122,22 +121,22 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     var model = new App.Model.CommModel({cid: cid});
     var view = new CommentView({model : model});
     App.popRegion.show(view);
-    if(!$("body").hasClass("noscroll")){
+    if(!$("html").hasClass("noscroll")){
       flag = true;
-      $("body").addClass("noscroll");
+      $("html").addClass("noscroll");
     }
   };
 
   Comment.close = function(text){
     if(!text || text == ""){
-      if(flag){ $("body").removeClass("noscroll"); }
+      if(flag){ $("html").removeClass("noscroll"); }
       App.popRegion.close();
       mid = null;
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "comment_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	if(flag){ $("body").removeClass("noscroll"); }
+	if(flag){ $("html").removeClass("noscroll"); }
 	App.popRegion.close();
 	mid = null;
       });
