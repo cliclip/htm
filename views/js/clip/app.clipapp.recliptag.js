@@ -13,8 +13,8 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     className : "reclipTag-view",
     template : "#reclipTag-view-template",
     events : {
-      "focus #reclip_text" : "foucsAction",
-      "blur #reclip_text"  : "blurAction",
+      //"focus #reclip_text" : "foucsAction",
+      //"blur #reclip_text"  : "blurAction",
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
       "click .size48"      : "maintagAction",
@@ -25,7 +25,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       $(e.currentTarget).toggleClass("white_48");
       $(e.currentTarget).toggleClass("orange_48");
     },
-
+    /*
     foucsAction:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('reclipTag.defaultNote') ? "" :
       $(e.currentTarget).val() );
@@ -35,6 +35,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('reclipTag.defaultNote') :
       $(e.currentTarget).val() );
     },
+    */
     submit:function(evt){
       evt.preventDefault();
       var params = loadData(this.$el);
@@ -58,10 +59,12 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 
 
   function loadData(el){
+    /*
     var text = "";
     if($.trim($("#reclip_text", el).val())!=_i18n('reclipTag.defaultNote')){//过滤defaultNote默认值
       text = $.trim($("#reclip_text", el).val());
     }
+   */
     var main_tag = [];
     for(var i=0;i<6;i++){
       if($("#main_tag_"+i,el).attr("class") == "size48 orange_48"){
@@ -71,9 +74,9 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     var tag = _.without($("#obj_tag",el).val().split(","),"");
     tag = _.union(tag, main_tag);
     if($("#checkbox",el).attr("checked")){
-      var params = {clip:{note: [{text:text}],tag:tag,"public":"false"}};
+      var params = {clip:{tag:tag,"public":"false"}};
     }else{
-      var params = {clip:{note: [{text:text}],tag:tag}};
+      var params = {clip:{tag:tag}};
     }
     return params;
   }
@@ -110,7 +113,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   };
 
   ReclipTag.close = function(params, count){
-    if(!params||(params.clip.note[0].text==""&&params.clip.tag.length==0&&params.clip['public']!='false')){
+    if(!params||(params.clip.tag.length==0&&params.clip['public']!='false')){
       if(flag){ $("html").removeClass("noscroll"); }
       App.popRegion.close();
     }else{
