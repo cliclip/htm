@@ -974,6 +974,7 @@ section.follow_frame{
 	}
 }
 .btn_group{
+        height: 25px;
 	input{
 		color:#fff;
 		border:none;
@@ -1036,6 +1037,11 @@ section.follow_frame{
    _position: absolute;
    top:0;
    left:0;
+   .bottom{
+       height: 22px; 
+       width: 100%;
+       position: absolute;
+   }
 }
 a#focus{
 	font-size: 1px;
@@ -1153,10 +1159,9 @@ a#focus{
 .big_pop{
 	z-index:2;
 	width:750px;
-	position: absolute;
-	left:50%;
-	top:74px;
-	margin-left:-370px;
+	position: static;
+	margin-left:281px;
+	margin-top: 62px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	i{
 		cursor: pointer;
@@ -1186,6 +1191,7 @@ a#focus{
 			}
             		span.close_w {
 		  	    	top: -30px;
+				right: -12px;
 		 	}
 			span#link_image{//为链接图片的span设置层次
 				z-index:3;
@@ -1296,6 +1302,10 @@ a#focus{
 			.addcomment-view{
 				height:115px;
 			}
+		}
+                span.close_w {
+			right: 297px;
+    			top: 66px;
 		}
   		.original{
 			color: #000;
@@ -1445,13 +1455,6 @@ a#focus{
 		.del{
 			.sprites(-583px,-343px);
 		}
-	}
-	.bottom{
-	    height: 10px; 
-	    margin-top:-3px;
-	    background:#000;
-   	    opacity: 0.5;
-   	    filter:alpha(opacity=50);   
 	}
 }
 .login_window{

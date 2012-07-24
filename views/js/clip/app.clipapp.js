@@ -166,6 +166,8 @@ App.ClipApp = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.routing:userfollower", uid);
   });
 
+
+
   //reclip 用户一个clip
   App.vent.bind("app.clipapp:reclip", function(clipid, model_id, rid, pub){
     var uid = getMyUid();
