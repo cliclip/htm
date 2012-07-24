@@ -57,7 +57,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipdetail:@close");
     },
     editDetail:function(e){
-      console.log("eidt == ");
       e.preventDefault();
       var self = App.util.getMyUid();
       if(!self){
@@ -242,7 +241,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     App.viewRegion.show(detailView);
     $("html").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
-    $(".masker").focus();
+    $("#focus").focus();
+    // $(".masker").focus(); 仅有firefox支持div直接获得焦点
     var anchors = this.$(".content a");
     for(var i=0;i<anchors.length;i++){
       var anchor = anchors[i];
