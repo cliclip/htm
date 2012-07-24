@@ -192,7 +192,7 @@ App.versions = (function($){
 	  },
 	  recomm_text : {
 	    is_null   : "请您先设置推荐备注",
-	    "word_limit" :"请把文字长度限制在140字以内"
+	    word_limit :"请把文字长度限制在140字以内"
 	  }
 	},
 
@@ -202,7 +202,7 @@ App.versions = (function($){
 	  reclip      : "同时转摘",
 	  comm_text   : {
 	    is_null   : "评论内容为空",
-	    "word_limit" :"请把文字长度限制在140字以内"
+	    word_limit :"请把文字长度限制在140字以内"
 	  },
 	  ok          : "确 定",
 	  cancel      : "取 消"
@@ -613,7 +613,7 @@ App.versions = (function($){
 	  },
 	  recomm_text : {
 	    is_null   :"Please add comments first",
-	    "word_limit" :"Please limit your comments to 140 characters"
+	    word_limit :"Please limit your comments to 140 characters"
 	  }
 	},
 
@@ -622,7 +622,7 @@ App.versions = (function($){
 	  defaultText : "Say something (limited to 140 characters)",
 	  comm_text   : {
 	    is_null : "Please enter comments",
-	    "word_limit" :"Please limited your comments to 140 characters",
+	    word_limit :"Please limited your comments to 140 characters",
 	    defaultText : "Say something"
 	  },
 	  reclip      : "Reclip too",

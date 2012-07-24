@@ -1,6 +1,7 @@
 script(type="text/template",id="detail-view-template")
   div.masker_layer
   div.masker
+    a(id="focus",href="#")点
     section.big_pop
       h2.subject_edit
         div.pop_left
@@ -9,11 +10,11 @@ script(type="text/template",id="detail-view-template")
         div.pop_right.
           <% if(!App.util.self(user)) {%>
             <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
-            <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>
+            <!--<i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>-->
             <i class="biezhen operate" title="<%=_i18n('detail.reclip')%>"></i>
           <% }else {%>
             <i class="del operate" title="<%=_i18n('detail.delete')%>"></i>
-            <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>	   
+            <!--<i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>-->	   
             <i class="change operate" title="<%=_i18n('detail.update')%>"></i>
             <i class="note operate" title="<%=_i18n('detail.memo')%>"></i>
           <% } %>
@@ -38,6 +39,7 @@ script(type="text/template",id="detail-view-template")
           <%= App.util.generatePastTime(updateTime)%>
           dl.comments.clearfix
           div.input_textarea
+      div.bottom
 
 script(type="text/template",id="showcomment-view-template")
   | <div class="comment_show" id="<%= id %>">

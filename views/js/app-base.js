@@ -105,9 +105,9 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView.extend({
-  showError:function(tmpl,errorCode,msg){ // 显示validate验证的错误提示
+  showError:function(tmpl,errorCode){ // 显示validate验证的错误提示
     for(var key in errorCode){
-      var error = _i18n(tmpl+'.'+key+'.'+errorCode[key],msg);
+      var error = _i18n(tmpl+'.'+key+'.'+errorCode[key]);
       this.$("#"+key).addClass("error");
       this.$("#"+key).after("<span class='error'>"+error+"</span>");
       if(this.$("#"+key).attr("type") == "password")

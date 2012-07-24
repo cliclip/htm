@@ -321,7 +321,8 @@
 			height:30px;
 			float: right;
 			position: absolute;
-			left:0;top:0;
+			left:50px; //去掉@前是0px
+			top:0;
 			text-align:center;
 			a{
 				text-decoration:none;
@@ -361,7 +362,7 @@
 		.expert{
 			width:90px;
 			.sprites(-210px,-424px);
-			left:140px;
+			left:140px; 
 			z-index:0;
 			a{text-decoration:none;outline:none}
 		}
@@ -1013,6 +1014,11 @@ section.follow_frame{
    top:0;
    left:0;
 }
+a#focus{
+	font-size: 1px;
+ 	outline: none;
+	margin-left: -10px;	
+}
 .masker_layer{
    width: 100%; //1000px;
    height: 100%; //1000px;
@@ -1126,7 +1132,7 @@ section.follow_frame{
 	width:750px;
 	position: absolute;
 	left:50%;
-	top:20px;
+	top:74px;
 	margin-left:-370px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	i{
@@ -1146,12 +1152,12 @@ section.follow_frame{
 			button{
 				border:0 none;
 				width:103px;
-				padding:0 0 0 20px;
+				padding:0 0 0 17px;
 				float:left;
 				height:25px;
 				line-height:25px;
 				color: #8b8b8b;
-				margin-left:5px;
+				// margin-left:5px;
 				text-align:left;
 				position: relative;
 			}
@@ -1417,13 +1423,20 @@ section.follow_frame{
 			.sprites(-583px,-343px);
 		}
 	}
+	.bottom{
+	    height: 10px; 
+	    margin-top:-3px;
+	    background:#000;
+   	    opacity: 0.5;
+   	    filter:alpha(opacity=50);   
+	}
 }
 .login_window{
 	width:735px;
 	height:415px;
 	position: absolute;
 	left:50%;
-	top:100px;
+	top:140px;
 	margin-left:-367px;
 	background:url(../img/login_bg.png) repeat left top #66517f;
 	z-index:13;

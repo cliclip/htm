@@ -126,6 +126,11 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.UserEdit.showUserEdit(uid);
   };
 
+  ClipApp.showDetail = function(uid, clipid){
+    ClipApp.siteShow();
+    App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
+  };
+
   App.vent.bind("app.clipapp:login", function(callback){
     ClipApp.Login.show(callback);
   });

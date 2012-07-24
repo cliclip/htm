@@ -175,8 +175,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	var data = view.getInput();
 	if(data.text == _i18n('recommend.defaultText')){data.text = "";}
 	if(data.text.length > words_limit){
-	  var overage =data.text.length-words_limit;
-	  view.showError('recommend',{"recomm_text":"word_limit"},overage);
+	  view.showError('recommend',{"recomm_text":"word_limit"});
 	  return;
 	}
 	view.setModel('recommend',view.tmpmodel, {text: data.text, clipid: clipid});

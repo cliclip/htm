@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid, view, number_limit =  140;
+  var mid, view, number_limit =  140, hist;
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -25,8 +25,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .operate" : "Operate",
       "click .masker" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
-      "click .userhead": "Close",
-      "click .username": "Close",
+      "click .user_head": "Close",
       "dblclick .content": "editDetail"
     },
     Operate: function(e){
@@ -41,8 +40,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       switch(opt){
 	case 'biezhen':
 	App.vent.trigger("app.clipapp:reclip", cid,mid,recommend,pub);break;
-	case 'refresh':
-	App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
+	//case 'refresh':
+	//App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:@comment", cid);break;
 	case 'note':
@@ -62,7 +61,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipdetail:@close");
     },
     editDetail:function(e){
-      console.log("eidt == ");
       e.preventDefault();
       var self = App.util.getMyUid();
       if(!self){
@@ -247,7 +245,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     App.viewRegion.show(detailView);
     $("html").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
-    $(".masker").focus();
+    $("#focus").focus();
+    // $(".masker").focus(); 仅有firefox支持div直接获得焦点
     var anchors = this.$(".content a");
     for(var i=0;i<anchors.length;i++){
       var anchor = anchors[i];
@@ -288,9 +287,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  ClipDetail.show = function(cid,model_id,recommend){   // 此处的cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id,recommend){ // cid等于detailModel.id
+    var ids = cid.split(":");
     mid = model_id;
     var clip = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user});
+    hist = Backbone.history.fragment;
+    Backbone.history.navigate("clip/"+ids[0]+"/"+ids[1], false);
     clip.fetch({
       success:function(res,model){
 	clip.onChange(function(detailModel){
@@ -316,6 +318,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
     App.popRegion.close();
     App.viewRegion.close();
+    Backbone.history.navigate(hist);
     mid = null;
   };
 
@@ -351,7 +354,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       },
       error:function(comment,res){
 	if(res.comm_text == "word_limit"){
-	  view.showError("comment", res, params.text.length - number_limit);
+	  view.showError("comment", res);
 	}else{
 	  view.showError("comment", res);
 	  $("#comm_text").blur().val("");
