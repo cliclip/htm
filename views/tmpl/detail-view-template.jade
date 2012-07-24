@@ -21,12 +21,12 @@ script(type="text/template",id="detail-view-template")
           <span class="close_w"></span>
       div.pop_left
         ul.forward_log.
-          <% for(var i =0; i<users.length; i++){%>
+          <% for(var i = 0; i<users.length; i++){%>
           <li class="user_head">
             <a href="#user/<%= users[i].id%>">
             <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
             </a>
-            <% if(i < users.length-1 ){ %>
+            <% if(i < users.length-1){ %>
                <div class="join"></div>
             <% } %>
           </li>

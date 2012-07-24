@@ -21,7 +21,7 @@ App.versions = (function($){
 	  login_ok    : "登 录",
 	  register_ok : "注 册",
 	  login_state : "一月内自动登录",
-	  register    : "嫌麻烦？直接发邮件到<a href='mailto:1@clickdang.com'>1@clickdang.com</a>也可注册",
+	  register    : "嫌麻烦？直接发邮件到<a href='mailto:1@cliclip.com'>1@cliclip.com</a>也可注册",
 	  twitter     : "通过 Twitter 登录",
 	  weibo       : "通过微博登录",
 	  name : {
@@ -329,7 +329,7 @@ App.versions = (function($){
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
 	  account_hasbind : "您的帐号之前已经做过关联，若要重新关联，请先解绑",
-	  weibo_sucmsg   : "恭喜您，微博帐号 %s 关联成功，在新浪微博中 @clickdang 就可以摘录到点忆(评论除外)，现在就去 @ 一条<a href='http://weibo.com' target='_blank'>试试</a>？",
+	  weibo_sucmsg   : "恭喜您，微博帐号 %s 关联成功，在新浪微博中 @cliclip 就可以摘录到点忆(评论除外)，现在就去 @ 一条<a href='http://weibo.com' target='_blank'>试试</a>？",
 	  twitter_sucmsg :"恭喜您，Twitter帐号 %s 已关联成功，您在 Twitter 的收藏(评论除外)可以直接摘录到点忆，现在就去收藏一条<a href='http://twitter.com' target='_blank'>试试</a>？",
 	  InternalOAuthError:"认证失败，请重试",
 	  reclip:{
@@ -370,7 +370,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "此激活链接已过期。您可在设置界面重新添加。",
-	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，您使用该地址发到b@clickdang.com的邮件，会保存为您的私有摘录。"
+	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，您使用该地址发到b@cliclip.com的邮件，会保存为您的私有摘录。"
 	  },
 	  email:{
 	    no_uname     : "请先设置用户名"
@@ -442,7 +442,7 @@ App.versions = (function($){
 	  login_ok      : "Login",
 	  register_ok   : "Register",
 	  login_state   : "Keep me sign in for 1 month",
-	  register      : "Register by simply sending an email to <a href='mailto:1@clickdang.com'>1@clickdang.com</a>",
+	  register      : "Register by simply sending an email to <a href='mailto:1@cliclip.com'>1@cliclip.com</a>",
 	  twitter       : "Login with Twitter",
 	  weibo         : "Login with Weibo",
 	  name : {
@@ -697,7 +697,7 @@ App.versions = (function($){
 	},
 
 	bind : {
-	  header      : "You have logged in with %s account, which is not connected with any Clickdang account",
+	  header      : "You have logged in with %s account, which is not connected with any Cliclip account",
 	  bind        : "Connect",
 	  register    : "Create",
 	  bind_ok     : "Connect now",
@@ -755,7 +755,7 @@ App.versions = (function($){
 	  recomm         : "Clip was forwarded(@) successfully",
 	  comment        : "Commented successfully",
 	  account_hasbind:"This account has been used before. Please enter another account",
-	  weibo_sucmsg:"Connect Sina Weibo account %s successfully. Now you can reclip clips from Sina Weibo(except comments), just @clickdang, <a href='http://weibo.com' target='_blank'>enjoy</a>!",
+	  weibo_sucmsg:"Connect Sina Weibo account %s successfully. Now you can reclip clips from Sina Weibo(except comments), just @cliclip, <a href='http://weibo.com' target='_blank'>enjoy</a>!",
 	  twitter_sucmsg:"Connect Twitter account %s successfully. Now you can reclip clips from Twitter Favorite(except comments), <a href='http://twitter.com' target='_blank'>enjoy</a>!",
 	  InternalOAuthError:"Connection failed. Please try again.",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
@@ -792,7 +792,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "Activation link expired. You can add email again in Setting",
-	    email   : "You have activated %s in our system. \nNow you can log in with this email account and clip by sending email from this account to b@clickdang.com. Clips will be saved as private."
+	    email   : "You have activated %s in our system. \nNow you can log in with this email account and clip by sending email from this account to b@cliclip.com. Clips will be saved as private."
 	  },
 	  email:{
 	    no_uname     : "Set your user name first"

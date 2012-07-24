@@ -150,7 +150,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.reclip_tag:@close",function(params, count){
     ReclipTag.close(params, count);
   });
-//user 为用户名为clickdang 的user_id tag为新手或helper
+//user 为用户名为cliclip 的user_id tag为新手或helper
   App.vent.bind("app.clipapp.reclip_tag:xinshou", function(user,tag){
     var model_get = new ReclipTagModel(); //此model只用于取数据
     model_get.fetch({
