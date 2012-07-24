@@ -6,11 +6,9 @@ script(type="text/template",id="addClip-view-template")
         div.pop_left
         div.pop_right
           div.button_frame
-            span.class_note
-              <i class="note" title="<%=_i18n('detail.memo')%>"></i>
-            //- div.message
-            //- |<%=_i18n('addClip.note_message')%>
             iframe(name="post_frame",id="post_frame")
+            span.note_clip.
+              <button class="note" title="<%=_i18n('detail.memo')%>"><%=_i18n('detail.memo')%></button>
             |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
             |<span class="file">
             |<button class="upload_img" id="localImg"><%=_i18n('addClip.upload')%></button>

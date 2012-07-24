@@ -628,7 +628,7 @@ article.clip{
 	margin-right: 30px;
 	margin-bottom:35px;
 	position:relative;
-	.min-height(307px);	
+	//.min-height(307px);	
 	float:left; // 为制作方便加上，采用程序布局时，会取消
 	background:white;
 	hgroup{
@@ -668,16 +668,16 @@ article.clip{
 	}
 	header{
 		padding:15px;
-		margin-bottom:60px;
+		margin-bottom:80px;
 		cursor: pointer;
-		.min-height(220px);
+		.min-height(120px);
 		img.img_fake{
 			//height:220px;
 			//width:270px;
 			}
 		.article_photo{
 			width:270px;
-			margin-bottom: 20px;
+			margin-bottom: 10px;
 			text-align: center;
 			img{
 				display:none;
@@ -749,8 +749,11 @@ article.clip{
 			filter:alpha(opacity=50);
 			background:#67507a;
 			i{
-				width:45px;height:40px;
-				float:left;position: static;
+				width:40px;
+				height:40px;
+				float:left;
+				margin-left:5px;
+				position: static;
 				cursor: pointer;
 			}
 			.biezhen{
@@ -776,7 +779,7 @@ article.clip{
 	footer.master{
 		background-color:#f2e49f;
 		.user_more{
-			.sprites(-587px,-98px);
+			.sprites(-594px,-99px);
 			padding: 5px 0 5px 5px;
 		}
 		
@@ -1043,9 +1046,6 @@ a#focus{
    _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
    _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
 }
-#link_image{//为链接图片的span设置层次
-   z-index:3;
-}
 .small_pop{
 	z-index:20;
 	width:330px;
@@ -1133,7 +1133,6 @@ a#focus{
 	position: absolute;
 	left:50%;
 	top:74px;
-	margin-bottom: 30px;
 	margin-left:-370px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	i{
@@ -1163,11 +1162,16 @@ a#focus{
 				position: relative;
 			}
             		span.close_w {
-		  	    top: -30px;
+		  	    	top: -30px;
 		 	}
-			span.class_note{
-				float: left;
-  				margin-left : 5px; 
+			span#link_image{//为链接图片的span设置层次
+				z-index:3;
+			}
+			span.note_clip{
+				.note{
+					.sprites(-589px,-307px);	
+					padding-left: 30px;
+				}
 			}
 			span.url_text{
 				width:280px;
