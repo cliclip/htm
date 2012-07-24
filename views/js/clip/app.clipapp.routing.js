@@ -31,8 +31,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/following":"userFollowing",
       "my/follower":"userFollower",
 
-      "my/recommend":"myRecommend",
-      "my/recommend/tag/:tag":"myRecommend",
+      //"my/recommend":"myRecommend",
+      //"my/recommend/tag/:tag":"myRecommend",
       "my/interest":"myInterest",
       "my/interest/tag/:tag":"myInterest",
       "my/setup":"mySetup"
