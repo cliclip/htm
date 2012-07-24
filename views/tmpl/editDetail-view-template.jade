@@ -3,12 +3,11 @@ script(type="text/template",id="editDetail-view-template")
   div.masker
     section.big_pop
       h2.subject_edit
-        div.pop_left
         div.pop_right
           div.button_frame
-            span
-              i(class="note",title="<%=_i18n('detail.memo')%>")
             iframe(name="post_frame",id="post_frame")
+            span.note_clip.
+              <button class="note" title="<%=_i18n('detail.memo')%>"><%=_i18n('detail.memo')%></button>
             |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
             |<span class="file">
             |<button class="upload_img" id="localImg"><%=_i18n('editDetail.upload')%></button>

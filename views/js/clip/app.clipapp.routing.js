@@ -35,7 +35,10 @@ App.Routing.ClipRouting = (function(App, Backbone){
       //"my/recommend/tag/:tag":"myRecommend",
       "my/interest":"myInterest",
       "my/interest/tag/:tag":"myInterest",
-      "my/setup":"mySetup"
+      "my/setup":"mySetup",
+
+      "clip/:uid/:clipid":"showDetail"
+
     }
   });
 
@@ -51,8 +54,11 @@ App.Routing.ClipRouting = (function(App, Backbone){
   });
 
   App.vent.bind("app.clipapp.routing:siteshow", function(tag){
-    if($.browser.safari){tag = encodeURI(tag);}
-    App.Routing.showRoute("tag", tag);
+    if(tag){
+      if($.browser.safari){tag = encodeURI(tag);}
+      App.Routing.showRoute("tag", tag);
+    }
+    App.Routing.showRoute("");
   });
 
   App.vent.bind("app.clipapp.routing:usershow", function(uid, tag){

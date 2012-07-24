@@ -1,8 +1,8 @@
 $(function() {
   var r ;
   var socket = new easyXDM.Socket({
-    swf: 'http://clickdang.com/img/easyxdm.swf',
-    // swf: 'http://clickdang.com:4000/img/easyxdm.swf',
+    swf: 'http://cliclip.com/img/easyxdm.swf',
+    // swf: 'http://cliclip.com:4000/img/easyxdm.swf',
     // swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
     swfNoThrottle: true,
     onMessage: function(message, origin){

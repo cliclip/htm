@@ -10,8 +10,8 @@ script(type="text/template",id="organize-view-template")
           <span <% if(main_tag[i].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_<%=i%>"><%=main_tag[i].tag%></span> <% } %>
         li
           <input type="text" class="obj_tags" id="obj_tag" value="<%=obj_tag.join(",")%>" />
-        li.input_textarea.
-          <textarea id="organize_text"><% if(note){%><%=note%><% }else{ %><%=_i18n('clipmemo.memo')%><%}%></textarea>
+        //li.input_textarea.
+        //<textarea id="organize_text"></textarea>
         li.input_checkbox
           label
             | <input type="checkbox" id="memo_private" <% if(pub=="false"){ %>checked="checked" <% } %>/>
