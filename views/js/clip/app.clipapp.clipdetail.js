@@ -9,6 +9,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     // 跟cliplist一致，使得model.id = "uid:id"
     parse: function(resp){
       resp.id = resp.user+":"+resp.id;
+      if(_.isEmpty(resp.users)){
+	//resp.users[0] = resp.user;
+      }
+      //console.info(resp);
       return resp;
     }
   });
