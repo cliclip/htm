@@ -21,18 +21,18 @@ App.versions = (function($){
 	  login_ok    : "登 录",
 	  register_ok : "注 册",
 	  login_state : "一月内自动登录",
-	  register    : "嫌麻烦？直接发邮件到1@clickdang.com也可注册",
-	  twitter     : "Twitter登录",
-	  weibo       : "微博登录",
+	  register    : "嫌麻烦？直接发邮件到<a href='mailto:1@clickdang.com'>1@clickdang.com</a>也可注册",
+	  twitter     : "通过 Twitter 登录",
+	  weibo       : "通过微博登录",
 	  name : {
-	    name:"用户名",
+	    name      : "用户名",
 	    is_null    : "用户名尚未填写",
 	    not_exist   : "用户名不存在",
 	    invalidate  : "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
-	    exist       :"此用户名已经存在"
+	    exist       : "此用户名已经存在"
 	  },
 	  pass : {
-	    pass:"密码",
+	    pass : "密码",
 	    is_null     : "密码尚未填写",
 	    not_match   : "密码输入不一致"
 	  }
@@ -54,28 +54,29 @@ App.versions = (function($){
 	},
 
 	faceEdit : {
-	  no_name     : "您还没有用户名",
+	  no_name     : "无名氏",
 	  set_name    : "设置用户名",
 	  ok          : "确 定",
 	  upload      : "上传本地图像",
 	  name : {
-	    is_null    : "用户名尚未填写",
+	    is_null    : "请填写用户名",
 	    invalidate  : "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
-	    exist       :"此用户名已经存在"
+	    exist       : "此用户名已经存在"
 	  }
 	},
 
 	languageSet:{
-	  lang:"界面语言"
+	  lang : "界面语言"
 	},
 
 	ruleEdit : {
-	  open_rule   : "启用邮箱识别",
-	  head        : "邮件识别",
+	  head        : "邮件摘录反垃圾规则",
+	  open_rule   : "启用",
+	  desc        : "不符合规则的邮件会被当作是垃圾邮件",
 	  title       : "标题必须有",
 	  cc_text     : "必须抄送给",
 	  to_text     : "必须发给",
-	  update      : "更新邮件规则",
+	  update      : "更新规则",
 	  cc : {
 	    invalidate  : "抄送人中含有无法辨识的邮件地址"
 	  },
@@ -91,28 +92,28 @@ App.versions = (function($){
 	  export      : "导出摘录",
 	  delete      : "删除账户",
 	  is_null     : "密码尚未填写",
-	  not_match   : "两次密码输入不一致",
+	  not_match   : "两次输入的密码不一致",
 	  auth_success: "您的密码已更改",
 	  newpass : {
 	    prompt:"请输入新密码",
-	    is_null:"密码尚未填写"
+	    is_null:"请输入新密码"
 	  },
 	  conpass:{
-	    prompt:"确认密码",
-	    is_null:"请输入确认密码"
+	    prompt:"再次输入新密码",
+	    is_null:"请再次输入相同的密码"
 	  },
 	  confirm:{
-	    password_diff: "密码输入不一致"
+	    password_diff: "两次输入的密码不一致"
 	  }
 	},
 
 	emailEdit : {
-	  add         : "增加邮箱关联",
-	  title       : "邮箱关联"
+	  title       : "邮件摘录",
+	  add         : "增加邮箱"
 	},
 
 	emailAdd : {
-	  title       : "添加邮箱",
+	  title       : "增加邮箱",
 	  ok          : "确 定",
 	  cancel      : "取 消",
 	  email : {
@@ -120,17 +121,17 @@ App.versions = (function($){
 	    you_exist : "您已经添加过该邮件地址",
 	    other_exist:"您所添加的邮件地址已经在系统中了",
 	    invalidate: "邮件地址格式有误",
-	    is_null   : "邮件地址尚未填写"
+	    is_null   : "请输入邮件地址"
 	  }
 	},
 
 	weiboEdit : {
-	  title       : "微博关联",
-	  add         : "增加微博关联"
+	  title       : "微博摘录",
+	  add         : "增加微博帐号"
 	},
 	twitterEdit : {
-	  title       : "twitter关联",
-	  add         : "增加twitter关联"
+	  title       : "twitter摘录",
+	  add         : "增加twitter帐号"
 	},
 
 	clipmemo : {
@@ -155,13 +156,13 @@ App.versions = (function($){
 	delete : {
 	  title       : "删除",
 	  h3          : "真的要删除吗？",
-	  p           : "删除后将无法恢复",
+	  p           : "删除操作无法恢复",
 	  ok          : "确 定",
 	  cancel      : "取 消"
 	},
 
 	reclip : {
-	  title       : "收录",
+	  title       : "转载",
 	  defaultNote : "备注一下吧~",
 	  "private"   : "不公开",
 	  ok          : "确 定",
@@ -169,7 +170,7 @@ App.versions = (function($){
 	},
 
 	reclipTag : {
-	  title       : '您将收藏%d条数据',
+	  title       : '您将转摘%d条数据',
 	  defaultNote : "备注一下吧~",
 	  "private"   : "不公开",
 	  ok          : "确 定",
@@ -179,29 +180,29 @@ App.versions = (function($){
 	recommend :{
 	  title       : "转发",
 	  defaultText : "说点啥吧～(140字以内)",
-	  reclip      : "同时收录",
+	  reclip      : "同时转摘",
 	  ok          : "确 定",
 	  cancel      : "取 消",
 	  is_null     : "请添加用户",
 	  not_exist   : "您添加的用户不存在",
-	  is_null     :"请您先设置推荐备注",
+	  is_null     : "请您先设置推荐备注",
 	  recomm_name : {
 	    is_null   : "请添加用户名",
 	    not_exist : "您添加的用户不存在"
 	  },
 	  recomm_text : {
-	    is_null   :"请您先设置推荐备注",
-	    "word_limit" :"限制140字，已经超过%s个字"
+	    is_null   : "请您先设置推荐备注",
+	    "word_limit" :"请把文字长度限制在140字以内"
 	  }
 	},
 
 	comment : {
 	  title       : "评论",
 	  defaultText : "说点什么吧~(140字以内)",
-	  reclip      : "同时收录",
+	  reclip      : "同时转摘",
 	  comm_text   : {
-	    is_null : "评论内容为空",
-	    "word_limit" :"限制140字，已经超过%s个字"
+	    is_null   : "评论内容为空",
+	    "word_limit" :"请把文字长度限制在140字以内"
 	  },
 	  ok          : "确 定",
 	  cancel      : "取 消"
@@ -211,7 +212,7 @@ App.versions = (function($){
 	  route       : "录线图",
 	  comment     : "评论",
 	  recommend   : "转发",
-	  reclip      : "收录",
+	  reclip      : "转摘",
 	  delete      : "删除",
 	  update      : "修改",
 	  memo        : "标注"
@@ -227,7 +228,7 @@ App.versions = (function($){
 
 	addcomm : {
 	  defaultText : "说点什么吧~",
-	  reclip      : "同时收录",
+	  reclip      : "同时转摘",
 	  commentOK   : "评论",
 	  cancel      : "取消"
 	},
@@ -237,19 +238,19 @@ App.versions = (function($){
 	  note_message: "添加标注",
 	  upload      : "&nbsp上传图片",
 	  link        : "&nbsp链接图片",
-	  ok          : "确 定",
 	  clear       : "&nbsp整理格式",
+	  ok          : "确 定",
 	  cancel      : "取 消",
 	  back        : "返 回",
 	  clean       : "清 空"
 	},
 
 	clippreview : {
-	  reprint     : "收录",
+	  reprint     : "转摘",
 	  reply       : "评论",
 	  comment     : "评论",
 	  recommend   : "转发",
-	  reclip      : "收录",
+	  reclip      : "转摘",
 	  delete      : "删除",
 	  update      : "修改",
 	  memo        : "标注"
@@ -274,7 +275,7 @@ App.versions = (function($){
 	},
 
 	bind : {
-	 header   : "您已登录 %s 账户，但尚未将此帐号关联给点忆任何帐户。",
+	 header   : "您已登录 %s 账户，但此帐户尚未将关联任何点忆帐户。",
 	  bind        : "关联已有帐户",
 	  register    : "注册新帐户",
 	  bind_ok     : "立即关联",
@@ -296,7 +297,7 @@ App.versions = (function($){
 	},
 
 	gotosetup : {
-	  register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
+	  register_success : "您的注册已完成。下一步，您可添加常用的邮件地址。",
 	  ok          : "确 定"
 	},
 
@@ -311,29 +312,29 @@ App.versions = (function($){
 	  login_success : "您已成功登录",
 	  imageUp_error : "您上传的文件不是图片文件",
 	  imageUp_fail  : "对不起，上传失败",
-	  img_alt       : "不好啦，图片那小子悄悄溜了！",
+	  img_alt       : "对不起，图片加载失败",
 	  is_null       : "摘录不存在",
 	  not_array     : "摘录必须是数组",
-	  is_empty      : "摘录不能为空",
-	  is_null       : "您还没有添加邮件规则",
-	  no_uname      : "在添加邮件之前请先设置用户名",
+	  is_empty      : "摘录没有内容",
+	  is_null       : "您还没有添加邮件摘录的反垃圾规则",
+	  no_uname      : "请先设置用户名",
 	  faceUp_success : "您的头像已更新",
 	  passwd_success : "您的密码已修改",
-	  setRule_success: "您已成功更新邮箱规则",
+	  setRule_success: "您已成功更新邮箱摘录反垃圾规则",
 	  rename_success : "您的用户名已经修改",
 	  reclip_null    : "该标签下暂时还没有数据",
-	  reclip_tag_success : "恭喜您，收录成功！",
+	  reclip_tag_success : "恭喜您，转摘成功！",
 	  reclip_tag_fail: "您已经拥有这些摘录了！",
-	  reclip_tag     : "您实际收录了 %s 条摘录，其余摘录已经拥有了",
+	  reclip_tag     : "您成功转摘了 %s 条摘录",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
-	  account_hasbind : "您的帐号之前已经关联过，若要重新关联，请先解绑",
-	  weibo_sucmsg   :"恭喜您，关联 %s 微博帐号已成功，在新浪微博中@clickdang就可以收录(评论除外)了，现在就去@一条<a href='http://weibo.com' target='_blank'>试试?</a>",
-	  twitter_sucmsg :"恭喜您，关联 %s Twitter帐号已成功，您的Twitter收藏(评论除外)可以收录到点忆了，现在就去收藏一条<a href='http://twitter.com' target='_blank'>试试?</a>",
-	  InternalOAuthError:"关联认证过程出现了点小问题，再试一次吧",
+	  account_hasbind : "您的帐号之前已经做过关联，若要重新关联，请先解绑",
+	  weibo_sucmsg   : "恭喜您，微博帐号 %s 关联成功，在新浪微博中 @clickdang 就可以摘录到点忆(评论除外)，现在就去 @ 一条<a href='http://weibo.com' target='_blank'>试试</a>？",
+	  twitter_sucmsg :"恭喜您，Twitter帐号 %s 已关联成功，您在 Twitter 的收藏(评论除外)可以直接摘录到点忆，现在就去收藏一条<a href='http://twitter.com' target='_blank'>试试</a>？",
+	  InternalOAuthError:"认证失败，请重试",
 	  reclip:{
-	    success: "收录成功",
-	    no_pub: "作者没有公开该条clip,您暂时不能收录"
+	    success: "转摘成功",
+	    no_pub: "作者没有公开该条摘录，您暂时不能转摘"
 	  },
 	  invite         : "您已通过发往 %s 邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
 	  addemail       : "您已成功添加 %s 邮件地址。请登录您的邮箱，查收邮件，并点击其中的链接进行激活。",
@@ -346,7 +347,7 @@ App.versions = (function($){
 	  error_message :"操作失败，请重试",
 	  clip : {
 	    has_this_clip: "您已经有该条摘录了",
-	    has_recliped : "您已经收录过该条摘录了",
+	    has_recliped : "您已经转摘过该条摘录了",
 	    not_exist    : "摘录不存在",
 	    deleted      : "此条摘录已经被删除！",
 	    no_public    : "作者没有公开此条摘录！"
@@ -365,20 +366,20 @@ App.versions = (function($){
 	    "link invalidate": "此链接格式有误"
 	  },
 	  accept:{
-	    fail         :"因为间隔时间太长，此注册链接已经失效。您可直接注册，再到设置界面添加您的邮箱地址。"
+	    fail         :"此注册链接已过期。您可直接注册，再到设置界面添加您的邮箱地址。"
 	  },
 	  active:{
-	    fail         : "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。",
-	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，并且您只需使用这个地址发送邮件到b@clickdang.com，即可将邮件内容保存到您的私有收藏中。"
+	    fail         : "此激活链接已过期。您可在设置界面重新添加。",
+	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，您使用该地址发到b@clickdang.com的邮件，会保存为您的私有摘录。"
 	  },
 	  email:{
-	    no_uname     : "在添加邮件之前请先设置用户名"
+	    no_uname     : "请先设置用户名"
 	  },
 	  rule:{
-	    not_update   : "您没有更新邮件规则"
+	    not_update   : "您没有设置邮件摘录的反垃圾规则"
 	  },
 	  recommend:{
-	    no_pub      :"该条clip是私有数据,您暂时不能向外部推荐"
+	    no_pub      : "这条摘录是私有数据，您不能进行推荐"
 	  }
 	},
 
@@ -386,9 +387,9 @@ App.versions = (function($){
 	  title          : "操作确认",
 	  ok             : "确 定",
 	  cancel         : "取 消",
-	  no_name        : "您没有设置用户名，目前只能做的操作有clip的添加、修改、以及删除，如果想要进行更多的操作请先设置用户名",
-	  delemail       : "您真的要删除 %s 邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
-	  deloauth       : "您真的要删除 %s 账号关联吗？删除后，您将无法使用此账号进行登录，也无法接收来自此账号的收藏。",
+	  no_name        : "您还没有设置用户名，目前只能进行摘录的增加、修改、删除操作。请设置用户名，开启更多操作",
+	  delemail       : "您真的要删除 %s 邮件地址吗？",
+	  deloauth       : "您真的要删除 %s 账号关联吗？",
 	  oauth_fail     : "认证失败，请重新认证！",
 	  memo_save      : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  clipedit_save  : "关闭窗口，您填写的内容将不会被保存。请确认。",
@@ -398,12 +399,12 @@ App.versions = (function($){
 	  clipadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  emailadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  oauth_fail   : "认证失败，请重新认证!",
-	  del_comment    : "您真的要删除这条评论吗？（此操作无法恢复）",
+	  del_comment    : "您真的要删除这条评论吗？",
 	  auth:{
-	    no_name     : "做此操作前请先设置用户名",
-	    not_login   : "做此操作前请先登录",
-	    not_self    : "只有数据的拥有这才可以进行此操作",
-	    not_owner   : "您对暂时没有权限做这些操作"
+	    no_name     : "请先设置您的用户名",
+	    not_login   : "请您先登录",
+	    not_self    : "您没有执行此操作的权限",
+	    not_owner   : "您没有执行此操作的权限"
 	  }
 	},
 	util : {
@@ -431,7 +432,7 @@ App.versions = (function($){
 	  set       : "Settings",
 	  logout    : "Logout",
 	  login     : "Login",
-	  register  : "Join",
+	  register  : "Register",
 	  ok        : "OK"
 	},
 
@@ -439,22 +440,22 @@ App.versions = (function($){
 	  default_name  : "User name/Email",
 	  title         : "User log in" ,
 	  login_ok      : "Login",
-	  register_ok   : "Join",
-	  login_state   : "Login automatically in one month",
-	  register      : "Join us by simply sending an email to 1@clickdang.com",
+	  register_ok   : "Register",
+	  login_state   : "Keep me sign in for 1 month",
+	  register      : "Register by simply sending an email to <a href='mailto:1@clickdang.com'>1@clickdang.com</a>",
 	  twitter       : "Login with Twitter",
 	  weibo         : "Login with Weibo",
 	  name : {
-	    name        : "user name",
-	    is_null     : "User name is not filled",
+	    name        : "User name",
+	    is_null     : "User name is missing",
 	    not_exist   : "This user name does not exist",
 	    invalidate  : "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
-	    exist       : "User name already exists"
+	    exist       : "This user name already exists"
 	  },
 	  pass : {
-	    pass        : "password",
-	    is_null     : "Password is not filled in",
-	    not_match   : "Password input not consistent"
+	    pass        : "Password",
+	    is_null     : "Password is missing",
+	    not_match   : "Inconsistent password"
 	  }
 	},
 
@@ -474,27 +475,28 @@ App.versions = (function($){
 	},
 
 	faceEdit : {
-	  no_name     : "no user name",
+	  no_name     : "NO NAME",
 	  set_name    : "Set user name",
 	  ok          : "OK",
 	  upload      : "Upload image",
 	  name : {
-	    is_null   : "User name is not filled in",
-	    invalidate: "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
-	    exist     :"User name already exists"
+	    is_null   : "User name is missing",
+	    invalidate: "Invalid format of user name(user name may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
+	    exist     :"This user name already exists"
 	  }
 	},
 
 	languageSet:{
-	  lang:"Language Setting"
+	  lang:"Language setting"
 	},
 
 	ruleEdit : {
 	  open_rule   : "Enable",
-	  head        : "Email Recognition",
+	  head        : "Spam filter rules",
+	  desc        : "Emails compliant with following rules will NOT be considered as spam",
 	  title       : "Title includes",
-	  cc_text     : "Is Cc‘d to",
-	  to_text     : "Is sent to",
+	  cc_text     : "Cc‘d to",
+	  to_text     : "Sent to",
 	  update      : "Update",
 	  cc : {
 	    invalidate: "Invalid email address"
@@ -507,55 +509,55 @@ App.versions = (function($){
 	passEdit : {
 	  title       : "Change password",
 	  update      : "Change",
-	  danger_operate : "High-risk operation",
+	  danger_operate : "High-risk operations",
 	  export      : "Export clips",
 	  delete      : "Close your account",
-	  is_null     : "Password is not filled in",
+	  is_null     : "Password is missing",
 	  not_match   : "Password input not consistent",
-	  auth_success: "Your password has been changed",
+	  auth_success: "Password changed successfully",
 	  newpass : {
-	    prompt:"Please input new password",
-	    is_null   :"Password is not filled in"
+	    prompt:"Please enter new password",
+	    is_null   :"Password is missing"
 	  },
 	  conpass:{
-	    prompt:"Confirm password",
-	    is_null   :"Enter the same password"
+	    prompt:"Please re-enter new password",
+	    is_null   :"Enter the same password as above"
 	  },
 	  confirm:{
-	    password_diff: "Password input not consistent"
+	    password_diff: "Inconsistent password"
 	  }
 	},
 
 	emailEdit : {
-	  add         : "Add connection",
-	  title       : "Connect with mailbox"
+	  add         : "Add",
+	  title       : "Recognized emails"
 	},
 
 	emailAdd : {
-	  title       : "Add connection",
+	  title       : "Add email",
 	  ok          : "OK",
 	  cancel      : "Cancel",
 	  email : {
 	    is_Exist  : "Email address already exists",
-	    you_exist : "You have already add that email address",
+	    you_exist : "You have already added that email address",
 	    other_exist:"The email address you added has already been connected with other account in the system",
 	    invalidate: "Invalid format of email address",
-	    is_null   : "Email address has not fill in"
+	    is_null   : "Email is missing"
 	  }
 	},
 
 	weiboEdit : {
-	  title       : "Connect with weibo",
-	  add         : "Add connection"
+	  title       : "Recognized weibo accounts",
+	  add         : "Add"
 	},
 	twitterEdit : {
-	  title       : "Connect with twitter",
-	  add         : "Add connection"
+	  title       : "Recognized twitter accounts",
+	  add         : "Add"
 	},
 
 	clipmemo : {
 	  title       : "Tag it",
-	  memo        : "Make a note",
+	  memo        : "Type your note here",
 	  "private"   : "Private",
 	  ok          : "OK",
 	  cancel      : "Cancel"
@@ -564,7 +566,7 @@ App.versions = (function($){
 	editDetail : {
 	  upload      : "&nbspUpload image",
 	  link        : "&nbspWeb image",
-	  clear       : "Tidy format",
+	  clear       : "&nbspAuto re-format",
 	  update      : "Edit",
 	  ok          : "OK",
 	  ok_title    : "Save",
@@ -574,15 +576,15 @@ App.versions = (function($){
 
 	delete : {
 	  title       : "Delete",
-	  h3          : "You really mean to delete?",
-	  p           : "Can't restore any more after deleting",
+	  h3          : "Do you really want to delete?",
+	  p           : "This clip will be deleted forever",
 	  ok          : "OK",
 	  cancel      : "Cancel"
 	},
 
 	reclip : {
 	  title       : "Reclip",
-	  defaultNote : "Make a note",
+	  defaultNote : "Type your note here",
 	  "private"   : "Private",
 	  ok          : "OK",
 	  cancel      : "Cancel"
@@ -590,7 +592,7 @@ App.versions = (function($){
 
 	reclipTag : {
 	  title       : 'You will reclip %d clips',
-	  defaultNote : "Make a note",
+	  defaultNote : "Type your note here",
 	  "private"   : "Private",
 	  ok          : "OK",
 	  cancel      : "Cancel"
@@ -598,29 +600,29 @@ App.versions = (function($){
 
 	recommend :{
 	  title       : "@",
-	  defaultText : "Say something (Limited to 140 characters)",
+	  defaultText : "Say something (limited to 140 characters)",
 	  reclip      : "Reclip too",
 	  ok          : "OK",
 	  cancel      : "Cancel",
-	  is_null     : "Please add the receiver",
-	  not_exist   : "The receiver doesn't exist",
+	  is_null     : "Please add the recipient",
+	  not_exist   : "The recipient doesn't exist",
 	  is_null     :"Please add comments first",
 	  recomm_name : {
-	    is_null   : "Please add the receiver",
-	    not_exist : "The receiver doesn't exist"
+	    is_null   : "Please add the recipient",
+	    not_exist : "The recipient doesn't exist"
 	  },
 	  recomm_text : {
 	    is_null   :"Please add comments first",
-	    "word_limit" :"Limited to 140 characters, %s characters over now"
+	    "word_limit" :"Please limit your comments to 140 characters"
 	  }
 	},
 
 	comment : {
 	  title       : "Comment",
-	  defaultText : "Say something (Limited to 140 characters)",
+	  defaultText : "Say something (limited to 140 characters)",
 	  comm_text   : {
-	    is_null : "comment's content is null",
-	    "word_limit" :"Limited to 140 characters, %s characters over now",
+	    is_null : "Please enter comments",
+	    "word_limit" :"Please limited your comments to 140 characters",
 	    defaultText : "Say something"
 	  },
 	  reclip      : "Reclip too",
@@ -658,16 +660,16 @@ App.versions = (function($){
 	  title       : "new clip",
 	  upload      : "&nbspUpload image",
 	  link        : "&nbspWeb image",
+	  clear       : "&nbspAuto re-format",
 	  ok          : "OK",
-	  clear       : "Tidy format",
 	  cancel      : "Cancel",
 	  back        : "Back",
 	  clean       : "Clear"
 	},
 
 	clippreview : {
-	  reprint     : "reclips",
-	  reply       : "comments",
+	  reprint     : "reclip(s)",
+	  reply       : "comment(s)",
 	  comment     : "Comment",
 	  recommend   : "@",
 	  reclip      : "Reclip",
@@ -695,11 +697,11 @@ App.versions = (function($){
 	},
 
 	bind : {
-	  header      : "You have logged in with %s account,while not connecting it with any Clickdang account",
-	  bind        : "Connect with current account",
-	  register    : "Create a new account",
+	  header      : "You have logged in with %s account, which is not connected with any Clickdang account",
+	  bind        : "Connect",
+	  register    : "Create",
 	  bind_ok     : "Connect now",
-	  register_ok : "Join now"
+	  register_ok : "Create now"
 	},
 
 	findpass : {
@@ -717,47 +719,47 @@ App.versions = (function($){
 	},
 
 	gotosetup : {
-	  register_success : "Congratulation! You just finished registration. We suggest you add the most used email address to clip conveniently by sending email",
+	  register_success : "Congratulations! The registration is completed. Your next step is to add your email address",
 	  ok          : "OK"
 	},
 
 	tag:{
 	  add_tag     : "Add a tag",
-	  beyond      : "Tag is too long, maximum 10 Chinese characters, 20 letters or numbers"
+	  beyond      : "Tag is too long (maximum 10 Chinese characters, 20 letters or numbers)"
 	},
 
 	message : {
 	  title         : "Notice",
 	  ok            : "OK",
 	  login_success : "Log in successfully",
-	  imageUp_error : "The file you upload is not an image",
+	  imageUp_error : "The file is not an image",
 	  imageUp_fail  : "Sorry, image failed to upload",
-	  img_alt       : "Picture fail to load",
-	  is_null       : "Clip not exist",
+	  img_alt       : "Image failed to load",
+	  is_null       : "Clip does not exist",
 	  not_array     : "Clip must be array",
-	  is_empty      : "Clip can't be empty",
-	  is_null       : "You haven't set the rule of email connection",
-	  no_uname      : "Please set user name before add email connection",
-	  faceUp_success : "Your portrait has been updated",
+	  is_empty      : "Clip cannot be empty",
+	  is_null       : "You have not set the rules for spam filter",
+	  no_uname      : "Please set user name first",
+	  faceUp_success : "Your photo has been updated",
 	  passwd_success : "Your password has been changed",
-	  setRule_success: "Your rule of email connection has been updated",
+	  setRule_success: "Your rule for spam filter has been updated",
 	  rename_success : "Your User name has been changed",
-	  reclip_null    : "No clip under thist tag",
-	  reclip_tag_success : "Congratulation for successful reclip",
+	  reclip_null    : "No clip under this tag",
+	  reclip_tag_success : "Reclip successful",
 	  reclip_tag_fail: "You have reclipped these already",
-	  reclip_tag     : "You reclip %s clips，not including the clips you already have",
+	  reclip_tag     : "You have successfully reclipped %s new clips",
 	  reclip:{
 	    success:"Recliped successfully",
-	    no_pub: "This Clip is private,you can't reclip it"
+	    no_pub: "This Clip is private, so you cannot reclip it"
 	  },
 	  recomm         : "Clip was forwarded(@) successfully",
 	  comment        : "Commented successfully",
-	  account_hasbind:"This account has been used for connection before,you can't use same account connect Clickdang twice",
-	  weibo_sucmsg:"Connect Sina Weibo account %s successfully,now you can reclip clips from Sina Weibo(except comments),just @clickdang,<a href='http://weibo.com' target='_blank'>have a try</a>",
-	  twitter_sucmsg:"Connect Twitter account %s successfully,now you can reclip clips from Twitter Favorite(except comments),<a href='http://twitter.com' target='_blank'>have a try</a>",
-	  InternalOAuthError:"Sorry, some problems occurred during the connection,Please try again",
+	  account_hasbind:"This account has been used before. Please enter another account",
+	  weibo_sucmsg:"Connect Sina Weibo account %s successfully. Now you can reclip clips from Sina Weibo(except comments), just @clickdang, <a href='http://weibo.com' target='_blank'>enjoy</a>!",
+	  twitter_sucmsg:"Connect Twitter account %s successfully. Now you can reclip clips from Twitter Favorite(except comments), <a href='http://twitter.com' target='_blank'>enjoy</a>!",
+	  InternalOAuthError:"Connection failed. Please try again.",
 	  invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
-	  addemail       : "You have added %s email connection.Please login you mailbox check the email and click the activating link",
+	  addemail       : "You have added %s email. The activation link has been sent to this email account. Please check your email and click the activation link.",
 	  cliplist_null:{
 	    all:"Sorry, no results found",
 	    my:"Sorry, no results found",
@@ -781,25 +783,25 @@ App.versions = (function($){
 	    all          : "You have already followed all tags of this user"
 	  },
 	  error:{
-	    "link 已作废": "Overdue link",
+	    "link 已作废": "Link expired",
 	    "link doesnt exist": "Invalid link",
-	    "link invalidate": "Invalid format link"
+	    "link invalidate": "Invalid link format"
 	  },
 	  accept:{
-	    fail         :"Registration link was overdue for too long interval. You can Join directly and add email address connection in Setting"
+	    fail         :"Registration link expired. You can Register directly and add email address in Setting"
 	  },
 	  active:{
-	    fail         : "Registration link was overdue for too long interval. You can add again in Setting",
-	    email   : "You have activated the email address of %s in our system. \nNow you can login with this email account and clip by sending email from this account to b@clickdang.com, mail will saved to your private information."
+	    fail         : "Activation link expired. You can add email again in Setting",
+	    email   : "You have activated %s in our system. \nNow you can log in with this email account and clip by sending email from this account to b@clickdang.com. Clips will be saved as private."
 	  },
 	  email:{
-	    no_uname     : "Set your user name before adding mail address connection"
+	    no_uname     : "Set your user name first"
 	  },
 	  rule:{
-	    not_update   : "You haven’t update the rule of email connection"
+	    not_update   : "You have not set the rules for spam filter"
 	  },
 	  recommend:{
-	    no_pub      :"This Clip is private,You can't recommend to others"
+	    no_pub      :"This clip is private. You cannot recommend to others"
 	  }
 	},
 
@@ -807,23 +809,23 @@ App.versions = (function($){
 	  title          : "Confirm",
 	  ok             : "OK",
 	  cancel         : "Cancel",
-	  no_name        : "You had't set the user name, the operation can only do a clip of add, update, and delete, if you want more action, please set the user name",
+	  no_name        : "Without user name, you can only add, update and delete clips. Please set your user name to enable more actions.",
 
-	  delemail       : "You really mean to delete the connection with email address %s? After deleting, you can’t use this email address to log in or send email from this address to clip",
-	  deloauth       : "Are you sure you want to disconnect with account %s? After disconnecting, you won't be able to use this account to login clickdang,or clip messages from this account",
-	  oauth_fail   : "Authenticate fail,please try again",
-	  del_comment    : "You really mean to delete this comment? It can’t restore any more",
-	  memo_save     :"If you close the window, what you filled will be lost. Are you sure?",
-	  clipedit_save :"If you close the window, what you filled will be lost. Are you sure?",
-	  reclip_save   :"If you close the window, what you filled will be lost. Are you sure?",
-	  recommend_save:"If you close the window, what you filled will be lost. Are you sure?",
-	  comment_save  :"If you close the window, what you filled will be lost. Are you sure?",
-	  clipadd_save  :"If you close the window, what you filled will be lost. Are you sure?",
-	  emailadd_save :"If you close the window, what you filled will be lost. Are you sure?",
+	  delemail       : "Do you really want to delete this email %s?",
+	  deloauth       : "Do you really want to delete this account %s?",
+	  oauth_fail   : "Authentication failed. Please try again",
+	  del_comment    : "Do you really want to delete this comment?",
+	  memo_save     :"If you close the window, what you entered will be lost. Are you sure?",
+	  clipedit_save :"If you close the window, what you entered will be lost. Are you sure?",
+	  reclip_save   :"If you close the window, what you entered will be lost. Are you sure?",
+	  recommend_save:"If you close the window, what you entered will be lost. Are you sure?",
+	  comment_save  :"If you close the window, what you entered will be lost. Are you sure?",
+	  clipadd_save  :"If you close the window, what you entered will be lost. Are you sure?",
+	  emailadd_save :"If you close the window, what you entered will be lost. Are you sure?",
 	  del_comment   : "You really mean to delete this comment? It can’t restore any more",
 	  auth:{
-	    no_name     : "Please set name before do it",
-	    not_login   : "Please login before do it",
+	    no_name     : "Please set user name first",
+	    not_login   : "Please log in first",
 	    not_self    : "",
 	    not_owner   : ""
 	  }
@@ -831,14 +833,14 @@ App.versions = (function($){
 	util : {
 	  time:{
 	    moment:"a moment ago",
-	    second:" second ago ",
-	    minute:" minute ago",
-	    hour:" hour ago",
-	    day:" day ago",
-	    week:" week ago",
-	    month:" month ago",
-	    half_year:" six month ago",
-	    year:" year ago"
+	    second:" second(s) ago ",
+	    minute:" minute(s) ago",
+	    hour:" hour(s) ago",
+	    day:" day(s) ago",
+	    week:" week(s) ago",
+	    month:" month(s) ago",
+	    half_year:" six months ago",
+	    year:" year(s) ago"
 	  }
 	}
       }

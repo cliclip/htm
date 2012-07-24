@@ -73,6 +73,8 @@ script(type="text/template",id="ruleEdit-view-template")
         |<%=_i18n('ruleEdit.head')%>
       div.rule_input
         li
+          |<%=_i18n('ruleEdit.desc')%>
+        li
           label <%=_i18n('ruleEdit.title')%>
           |<input type="text" class="text_input" name="title" id="title" value="<%=title%>"/>
         li
@@ -98,7 +100,7 @@ script(type="text/template",id="passEdit-view-template")
   h3.danger <%=_i18n('passEdit.danger_operate')%>
   ul.input_list
     li.btn_line.
-      <input type="submit" class="btn_blue" value="<%=_i18n('passEdit.export')%>" />
+      <input type="submit" class="btn_gray" value="<%=_i18n('passEdit.export')%>" />
     li.
       <input type="submit" class="btn_gray" value="<%=_i18n('passEdit.delete')%>" />
 
