@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid, view, number_limit =  140;
+  var mid, view, number_limit =  140, hist;
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -21,8 +21,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .operate" : "Operate",
       "click .masker" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
-      "click .userhead": "Close",
-      "click .username": "Close",
+      "click .user_head": "Close",
       "dblclick .content": "editDetail"
     },
     Operate: function(e){
@@ -284,9 +283,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  ClipDetail.show = function(cid,model_id,recommend){   // 此处的cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id,recommend){ // cid等于detailModel.id
+    var ids = cid.split(":");
     mid = model_id;
     var clip = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user});
+    hist = Backbone.history.fragment;
+    Backbone.history.navigate("clip/"+ids[0]+"/"+ids[1], false);
     clip.fetch({
       success:function(res,model){
 	clip.onChange(function(detailModel){
@@ -312,6 +314,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
     App.popRegion.close();
     App.viewRegion.close();
+    Backbone.history.navigate(hist);
     mid = null;
   };
 

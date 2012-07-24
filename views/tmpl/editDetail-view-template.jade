@@ -6,8 +6,8 @@ script(type="text/template",id="editDetail-view-template")
         div.pop_left
         div.pop_right
           div.button_frame
-            span
-              i(class="note",title="<%=_i18n('detail.memo')%>")
+            span.class_note
+              <i class="note" title="<%=_i18n('detail.memo')%>"></i>
             iframe(name="post_frame",id="post_frame")
             |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
             |<span class="file">
