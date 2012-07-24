@@ -129,9 +129,9 @@ script(type="text/template",id="weiboEdit-view-template")
         |<%=_i18n('weiboEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="oauth_li">
-      |<span class="info_name" id="<%=info[i].uid%>"></span>
-      |<a href="<%=info[i].url%>" target="_blank"><apan class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
-      |<a href="<%=info[i].url%>" target="_blank"><apan class="info_name" id="name_<%=info[i].uid%>" ><%=info[i].name%></span></a>
+      |<span class="oauth_del" id="<%=info[i].uid%>"></span>
+      |<a href="<%=info[i].url%>" target="_blank"><span class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
+      |<a href="<%=info[i].url%>" target="_blank"><span class="info_name" id="name_<%=info[i].uid%>" ><%=info[i].name%></span></a>
       |</li><% }} }%>
 script(type="text/template",id="twitterEdit-view-template")
   .mail_verify.sec
@@ -143,9 +143,9 @@ script(type="text/template",id="twitterEdit-view-template")
         |<%=_i18n('twitterEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="oauth_li">
-      |<span class="info_name" id="<%=info[i].uid%>"></span>
-      |<a href="<%=info[i].url%>" target="_blank"><apan class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
-      |<a href="<%=info[i].url%>" target="_blank"><apan class="info_name" id="name_<%=info[i].uid%>" ><%=info[i].name%></span></a>
+      |<span class="oauth_del" id="<%=info[i].uid%>"></span>
+      |<a href="<%=info[i].url%>" target="_blank"><span class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
+      |<a href="<%=info[i].url%>" target="_blank"><span class="info_name" id="name_<%=info[i].uid%>" ><%=info[i].name%></span></a>
       |</li><% }} }%>
 
 

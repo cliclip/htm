@@ -10,7 +10,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
     template: "#twitterEdit-view-template",
     events: {
       "click #info_add":"TwitterAdd",
-      "click .info_name":"TwitterCut"
+      "click .oauth_del":"TwitterCut"
     },
     TwitterAdd:function(e){
       window.location.href="/oauth/req/twitter?force_login=true";
