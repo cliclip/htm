@@ -43,7 +43,6 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.reclip_tag:@submit", params,this.model.get("count"));
     },
     masker : function(e){
-      e.preventDefault();
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
