@@ -25,7 +25,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .btn_img":"up_extImg",
       "click .masker_layer1":"hide_extImg",
       "click .format":"upFormat",
-      "click .pop_left":"remarkClip",
+      "click .note":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
       "click .masker":"masker",
