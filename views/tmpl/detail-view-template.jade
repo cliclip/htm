@@ -10,11 +10,11 @@ script(type="text/template",id="detail-view-template")
         div.pop_right.
           <% if(!App.util.self(user)) {%>
             <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
-            <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>
+            <!--<i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>-->
             <i class="biezhen operate" title="<%=_i18n('detail.reclip')%>"></i>
           <% }else {%>
             <i class="del operate" title="<%=_i18n('detail.delete')%>"></i>
-            <i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>	   
+            <!--<i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>-->	   
             <i class="change operate" title="<%=_i18n('detail.update')%>"></i>
             <i class="note operate" title="<%=_i18n('detail.memo')%>"></i>
           <% } %>

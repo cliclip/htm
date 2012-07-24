@@ -90,7 +90,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	},
 	error:function(model, res){
 	  if(res.comm_text == "word_limit"){
-	    view.showError("comment", res, text.length - number_limit);
+	    view.showError("comment", res);
 	  }else{
 	    view.showError("comment", res);
 	    $("#comm_text").blur().val("");

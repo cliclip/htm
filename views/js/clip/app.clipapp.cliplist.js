@@ -114,8 +114,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       switch(opt){
 	case 'biezhen'://收
 	  App.vent.trigger("app.clipapp:reclip",cid,mid,recommend,pub);break;
-	case 'refresh'://转
-	  App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
+	//case 'refresh'://转
+	  //App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment",cid,mid);break;
 	case 'note'://注

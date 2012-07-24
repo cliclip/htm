@@ -36,8 +36,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       switch(opt){
 	case 'biezhen':
 	App.vent.trigger("app.clipapp:reclip", cid,mid,recommend,pub);break;
-	case 'refresh':
-	App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
+	//case 'refresh':
+	//App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:@comment", cid);break;
 	case 'note':
@@ -350,7 +350,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       },
       error:function(comment,res){
 	if(res.comm_text == "word_limit"){
-	  view.showError("comment", res, params.text.length - number_limit);
+	  view.showError("comment", res);
 	}else{
 	  view.showError("comment", res);
 	  $("#comm_text").blur().val("");
