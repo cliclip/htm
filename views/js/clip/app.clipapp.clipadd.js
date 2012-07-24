@@ -28,7 +28,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .link_img":"extImg",//显示连接图片输入框并清空输入框
       "click .btn_img":"up_extImg", // 确定上传
       "click .masker_layer1":"hide_extImg",
-      "click .pop_left":"remark_clip",
+      "click .note":"remark_clip",
       "click .message":"message_hide",
       "click .close_w":"cancelcliper",
       "click .masker":"masker",
