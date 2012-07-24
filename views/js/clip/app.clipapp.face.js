@@ -29,9 +29,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
       "click .following": "following",
       "click .follower": "follower",
       "mouseenter .user_head": "mouseEnter",
-      "mouseleave .user_head": "mouseLeave"
-    },
-    initialize: function(){
+      "mouseleave .user_head": "mouseLeave",
+
+      "focus #input_keyword" : "cleanDefault",
+      "click .search_btn"   : "queryUser"
     },
     mouseEnter: function(e){
       $(e.currentTarget).children(".user_i").show();
@@ -64,6 +65,20 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     follower: function(){
       App.vent.trigger("app.clipapp:showfollower", user_id);
+    },
+    cleanDefault: function(e){
+      var def = null;
+      if(App.util.self(user_id)){
+	def = _i18n('userface.mysearch');
+      }else{
+	def = _i18n('userface.search');
+      }
+      $(e.currentTarget).val($.trim($(e.currentTarget).val()) == def ? "" :$(e.currentTarget).val() );
+    },
+    queryUser: function(){
+      var word = this.$("#input_keyword").val();
+      this.$(".input_keyword").val("");
+      App.vent.trigger("app.clipapp:userquery", user_id, word);
     }
   });
 

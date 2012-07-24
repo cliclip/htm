@@ -610,6 +610,29 @@
 			height:43px;
 			float: right;
 		}
+		.input{
+			width:207px;
+			height:32px;
+			.sprites(-260px,-220px);
+			margin-top: 26px;
+			input.text{
+				width:166px;
+				height:22px;
+				background:none;
+				overflow: hidden;
+				border:none;
+				float: left;
+				color:#fff;
+				*display:inline;
+			}
+			input.search_btn{
+				width:32px;
+				height:32px;
+				.sprites(-135px,-94px);
+				border:none;
+				float: left;
+			}
+		}
 	}
 }
 section.edit {
@@ -1005,9 +1028,9 @@ section.follow_frame{
 	}	
 }
 .masker{
-   position: fixed; //absolute;
-   width: 100%; //1000px;
-   height: 100%; //1000px;
+   position: fixed;
+   width: 100%;
+   height: 100%;
    overflow-x:auto;
    overflow-y:scroll;
    _position: absolute;
