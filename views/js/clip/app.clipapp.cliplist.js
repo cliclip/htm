@@ -145,7 +145,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
-    App.vent.trigger("app.clipapp.routing:siteshow", tag);
   };
 
   ClipList.showUserClips = function(uid, tag){
@@ -168,6 +167,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     init_page();
   };
 
+  // 是否public以及originality 都在api层进行判断
   ClipList.showUserQuery = function(uid, word, tag){
     ClipList.flag_show_user = false;
     base_url = App.ClipApp.Url.base + "/user/"+uid+"/query";

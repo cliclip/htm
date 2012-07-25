@@ -35,6 +35,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "focus #comm_text" :"foucsAction",
       "blur #comm_text"  :"blurAction",
      // "click .size48"    :"maintagAction",
+      "keydown #comm_text":"shortcut_comment",
       "click #submit"    :"comment",
       "click #cancel"    :"cancel",
       "click .masker"    :"masker",
@@ -98,6 +99,16 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	}
       });
     },
+
+    shortcut_comment : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#submit").click();
+	return false;
+      }else {
+	return true;
+      }
+    },
+
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
@@ -121,22 +132,22 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     var model = new App.Model.CommModel({cid: cid});
     var view = new CommentView({model : model});
     App.popRegion.show(view);
-    if(!$("html").hasClass("noscroll")){
+    if(!$("body").hasClass("noscroll")){
       flag = true;
-      $("html").addClass("noscroll");
+      $("body").addClass("noscroll");
     }
   };
 
   Comment.close = function(text){
     if(!text || text == ""){
-      if(flag){ $("html").removeClass("noscroll"); }
+      if(flag){ $("body").removeClass("noscroll"); }
       App.popRegion.close();
       mid = null;
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "comment_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	if(flag){ $("html").removeClass("noscroll"); }
+	if(flag){ $("body").removeClass("noscroll"); }
 	App.popRegion.close();
 	mid = null;
       });

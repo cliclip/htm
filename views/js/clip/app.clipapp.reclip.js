@@ -10,6 +10,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     className : "reclip-view",
     template : "#reclip-view-template",
     events : {
+      //"keydown #reclip_text":"shortcut_submit",
       //"focus #reclip_text" : "foucsAction",
       //"blur #reclip_text"  : "blurAction",
       "click #submit"      : "submit",
@@ -43,6 +44,15 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
       }else{
 	$(e.currentTarget).attr("disabled",false);
+      }
+    },
+
+    shortcut_submit : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#submit").click();
+	return false;
+      }else{
+	return true;
       }
     },
 
@@ -100,9 +110,9 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var model = new ReclipModel({id:cid,rid:rid});
       var reclipView = new ReclipView({model : model});
       App.popRegion.show(reclipView);
-      if(!$("html").hasClass("noscroll")){
+      if(!$("body").hasClass("noscroll")){
 	flag = true;
-	$("html").addClass("noscroll");
+	$("body").addClass("noscroll");
       }
       o_pub = pub;
       if(pub == "false") $("#checkbox").attr("checked",true);
@@ -113,14 +123,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   Reclip.close = function(params){
     if(!params||(params.clip.tag.length==0&&params.clip['public']==o_pub)){
       App.popRegion.close();
-      if(flag){ $("html").removeClass("noscroll"); }
+      if(flag){ $("body").removeClass("noscroll"); }
       mid = null;
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "reclip_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
-	if(flag){ $("html").removeClass("noscroll"); }
+	if(flag){ $("body").removeClass("noscroll"); }
 	mid = null;
       });
     }

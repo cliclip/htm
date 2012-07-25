@@ -31,14 +31,14 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
      var model = new App.Model.DetailModel({id:cid});
      var view = new DeleteView({model : model});
      App.popRegion.show(view);
-     if(!$("html").hasClass("noscroll")){
+     if(!$("body").hasClass("noscroll")){
        flag = true;
-       $("html").addClass("noscroll");
+       $("body").addClass("noscroll");
      }
    };
 
    ClipDelete.close = function(){
-     if(flag) { $("html").removeClass("noscroll"); }
+     if(flag) { $("body").removeClass("noscroll"); }
      App.popRegion.close();
    };
 
