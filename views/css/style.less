@@ -611,6 +611,29 @@
 			height:43px;
 			float: right;
 		}
+		.input{
+			width:207px;
+			height:32px;
+			// .sprites(-260px,-220px);
+			margin-top: 26px;
+			input.text{
+				width:166px;
+				height:22px;
+				background:#EEEEEE;
+				overflow: hidden;
+				border:none;
+				float: left;
+				color:#999;
+				*display:inline;
+			}
+			input.search_btn{
+				width:32px;
+				height:32px;
+				.sprites(-135px,-94px);
+				border:none;
+				float: left;
+			}
+		}
 	}
 }
 section.edit {
@@ -952,6 +975,7 @@ section.follow_frame{
 	}
 }
 .btn_group{
+        height: 28px;
 	input{
 		color:#fff;
 		border:none;
@@ -1006,14 +1030,20 @@ section.follow_frame{
 	}	
 }
 .masker{
-   position: fixed; //absolute;
-   width: 100%; //1000px;
-   height: 100%; //1000px;
+   position: fixed;
+   width: 100%;
+   height: 100%;
    overflow-x:auto;
    overflow-y:scroll;
    _position: absolute;
    top:0;
    left:0;
+   .bottom{
+       height: 22px; 
+       width: 100%;
+       position: absolute;
+       margin-top: 671px;
+   }
 }
 a#focus{
 	font-size: 1px;
@@ -1132,9 +1162,11 @@ a#focus{
 	z-index:2;
 	width:750px;
 	position: absolute;
-	left:50%;
-	top:74px;
-	margin-left:-370px;
+	left: 50%;
+	top: 74px;
+	margin-left: -370px;
+	// margin-top: 62px;
+        // margin-left: 308px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	i{
 		cursor: pointer;
@@ -1164,6 +1196,7 @@ a#focus{
 			}
             		span.close_w {
 		  	    	top: -30px;
+				right: -12px;
 		 	}
 			span#link_image{//为链接图片的span设置层次
 				z-index:3;
@@ -1425,11 +1458,7 @@ a#focus{
 		}
 	}
 	.bottom{
-	    height: 10px; 
-	    margin-top:-3px;
-	    background:#000;
-   	    opacity: 0.5;
-   	    filter:alpha(opacity=50);   
+		margin-top: 0px;
 	}
 }
 .login_window{
@@ -2026,6 +2055,7 @@ section.edit_frame{
 html {
   _background:url() fixed;
   height:100%;
+  *overflow: hidden !important;
 }
 
 .noscroll{ 
@@ -2036,6 +2066,7 @@ html body {
   _margin:0px;
   _padding:0px;
   height:100%;
+  *overflow: auto;
 }
 
 html .masker{

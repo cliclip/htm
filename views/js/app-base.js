@@ -198,10 +198,15 @@ App.bind("initialize:after", function(){
     $(".user_detail").removeClass("fixed").css("margin-top", paddingTop);
     $("#bubb").removeClass("fixed").css("margin-top", 5+"px");
   };
-  var time_gap = true;
+  var time_gap = true, tmp;
   var paddingTop = 0 + "px";
   remove_fixed(paddingTop);
-  $(window).scroll(function() {
+  if(navigator.appVersion.match(/7./i)=="7."){
+     tmp = $(document.body); // 如果是ie7
+  }else{
+    tmp = $(window);
+  }
+  tmp.scroll(function() {
     remove_fixed(paddingTop);
     var st = $(window).scrollTop();
     //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();

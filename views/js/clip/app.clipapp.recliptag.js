@@ -97,9 +97,9 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	  model.set({user:user,tag:tag,count:res.count});
 	  var view = new ReclipTagView({model : model});
 	  App.popRegion.show(view);
-	  if(!$("html").hasClass("noscroll")){
+	  if(!$("body").hasClass("noscroll")){
 	    flag = true;
-	    $("html").addClass("noscroll");
+	    $("body").addClass("noscroll");
 	  }
 	  $('#obj_tag').tagsInput({
 	    //autocomplete_url:'test/fake_json_endpoint.html'
@@ -114,13 +114,13 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 
   ReclipTag.close = function(params, count){
     if(!params||(params.clip.tag.length==0&&params.clip['public']!='false')){
-      if(flag){ $("html").removeClass("noscroll"); }
+      if(flag){ $("body").removeClass("noscroll"); }
       App.popRegion.close();
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "reclip_save");
       App.vent.bind("app.clipapp.message:sure",function(){
-	if(flag){ $("html").removeClass("noscroll"); }
+	if(flag){ $("body").removeClass("noscroll"); }
 	App.popRegion.close();
       });
     }

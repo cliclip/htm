@@ -319,11 +319,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	url = url.substr(0, i);
 	return url += "/tag/"+encode_tag;
       }else{
-	if(url.indexOf("my/interest") >= 0)
-	  return "/my/interest/tag/"+encode_tag;
-	else if(url.indexOf("my/recommend") >= 0)
-	  return "/my/recommend/tag/"+encode_tag;
-	else if(url.indexOf("my") >= 0)
+	/* if(url.indexOf("my/interest") >= 0)
+	   return "/my/interest/tag/"+encode_tag;
+	 else if(url.indexOf("my/recommend") >= 0)
+	  return "/my/recommend/tag/"+encode_tag; */
+	if(url.indexOf("my") >= 0)
 	  return "/my/tag/"+encode_tag;
 	else
 	  return "/user/"+_uid+"/tag/"+encode_tag;

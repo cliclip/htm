@@ -61,6 +61,13 @@ App.ClipApp = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.routing:usershow", uid, tag);
   };
 
+  ClipApp.userQuery = function(uid, word, tag){
+    ClipApp.Face.showUser(uid);
+    ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.ClipList.showUserQuery(uid, word, tag);
+    App.vent.trigger("app.clipapp.routing:query", word, uid);
+  };
+
   // user所追的人的列表 无需在请求Face 和 Bubb
   ClipApp.userFollowing = function(uid, tag){
     if(!uid) uid = getMyUid();
@@ -93,33 +100,33 @@ App.ClipApp = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.routing:usershow",uid, tag);
   };
 
-  ClipApp.myQuery = function(word, tag){
+/*  ClipApp.myQuery = function(word, tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
     App.vent.trigger("app.clipapp.routing:query", word);
-  };
+  };*/
 
   // interest和recommend 只需要显示 主观tag就可以了
   ClipApp.myInterest = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showBubs(uid);
+    // ClipApp.Bubb.showBubs(uid);
     // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.vent.trigger("app.clipapp.routing:interest", tag);
   };
 
-  ClipApp.myRecommend = function(tag){
+  /*ClipApp.myRecommend = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showBubs(uid);
+    // ClipApp.Bubb.showBubs(uid);
     // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserRecommend(uid, tag);
     App.vent.trigger("app.clipapp.routing:recommend", tag);
-  };
+  };*/
 
   ClipApp.mySetup = function(){
     var uid = getMyUid();
@@ -158,6 +165,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.FollowerList.showUserFollower(uid);
     App.vent.trigger("app.clipapp.routing:userfollower", uid);
   });
+
+
 
   //reclip 用户一个clip
   App.vent.bind("app.clipapp:reclip", function(clipid, model_id, rid, pub){
@@ -260,14 +269,11 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:query", function(word, tag){
-    var userid = ClipApp.Face.getUserId();
-    var now_href = window.location.href;
-    var myid = getMyUid();
-    if(/my/.test(now_href)){
-      ClipApp.myQuery(word, tag);
-    }else{
-      ClipApp.siteQuery(word, tag);
-    }
+    ClipApp.siteQuery(word, tag);
+  });
+
+  App.vent.bind("app.clipapp:userquery", function(uid, word, tag){
+    ClipApp.userQuery(uid, word, tag);
   });
 
   return ClipApp;
