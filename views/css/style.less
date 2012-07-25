@@ -613,16 +613,16 @@
 		.input{
 			width:207px;
 			height:32px;
-			.sprites(-260px,-220px);
+			// .sprites(-260px,-220px);
 			margin-top: 26px;
 			input.text{
 				width:166px;
 				height:22px;
-				background:none;
+				background:#EEEEEE;
 				overflow: hidden;
 				border:none;
 				float: left;
-				color:#fff;
+				color:#999;
 				*display:inline;
 			}
 			input.search_btn{
@@ -974,7 +974,7 @@ section.follow_frame{
 	}
 }
 .btn_group{
-        height: 25px;
+        height: 28px;
 	input{
 		color:#fff;
 		border:none;
@@ -1041,6 +1041,7 @@ section.follow_frame{
        height: 22px; 
        width: 100%;
        position: absolute;
+       margin-top: 671px;
    }
 }
 a#focus{
@@ -1159,9 +1160,12 @@ a#focus{
 .big_pop{
 	z-index:2;
 	width:750px;
-	position: static;
-	margin-left:281px;
-	margin-top: 62px;
+	position: absolute;
+	left: 50%;
+	top: 74px;
+	margin-left: -370px;
+	// margin-top: 62px;
+        // margin-left: 308px;
 	background:url(../img/pop_left_bg.jpg) repeat-y left top #fff;
 	i{
 		cursor: pointer;
@@ -1302,10 +1306,6 @@ a#focus{
 			.addcomment-view{
 				height:115px;
 			}
-		}
-                span.close_w {
-			right: 297px;
-    			top: 66px;
 		}
   		.original{
 			color: #000;
@@ -1455,6 +1455,9 @@ a#focus{
 		.del{
 			.sprites(-583px,-343px);
 		}
+	}
+	.bottom{
+		margin-top: 0px;
 	}
 }
 .login_window{
@@ -2047,6 +2050,7 @@ section.edit_frame{
 html {
   _background:url() fixed;
   height:100%;
+  *overflow: hidden !important;
 }
 
 .noscroll{ 
@@ -2057,6 +2061,7 @@ html body {
   _margin:0px;
   _padding:0px;
   height:100%;
+  *overflow: auto;
 }
 
 html .masker{

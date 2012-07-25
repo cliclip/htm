@@ -145,7 +145,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     init_page();
-    App.vent.trigger("app.clipapp.routing:siteshow", tag);
   };
 
   ClipList.showUserClips = function(uid, tag){
