@@ -16,6 +16,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     template:"#organize-view-template",
     events:{
       "click .size48"          :"tagToggle",
+      //"keydown #organize_text" :"shortcut_ok",
       //"focus #organize_text"   :"noteFocus",
       //"blur #organize_text"    :"noteBlur",
       "click #organize_button" :"okClick",
@@ -52,6 +53,16 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	$(e.currentTarget).attr("disabled",false);
       }
     },
+
+    shortcut_ok : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#organize_button").click();
+	return false;
+      }else{
+	return true;
+      }
+    },
+
     masker:function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancelClick(e);

@@ -34,6 +34,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
+      //"keydown #editor":"shortcut_save",
       "click #save": "savecliper", // 对应clipper的ok
       "click #empty":"emptycliper"
     },
@@ -155,7 +156,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.viewRegion.show(addClipView);
     App.ClipApp.Editor.init();
     App.ClipApp.Editor.focus("editor");
-    $("html").addClass("noscroll");
+    $("body").addClass("noscroll");
     //console.info(document.cookie);
     if(!/first=false/.test(document.cookie)){//判断是否是第一次打开网，新建clip
       $(".message").show();
@@ -164,18 +165,29 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       data.setTime(data.getTime() + 30*24*60*60*10000);
       document.cookie = "first=false"+";expires=" + data.toGMTString();
     }
+    //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
+    if(document.all){
+      document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
+    }else{
+      document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
+    }
+    function shortcut_save(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#save").click();
+      }
+    }
   };
 
   ClipAdd.close = function(clip){
     if(!clip || !clip.content){
       App.viewRegion.close();
-      $("html").removeClass("noscroll");
+      $("body").removeClass("noscroll");
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
-	$("html").removeClass("noscroll");
+	$("body").removeClass("noscroll");
       });
     }
   };

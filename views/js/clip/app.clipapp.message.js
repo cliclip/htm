@@ -21,7 +21,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.useredit:rename");
       }
       App.vent.trigger("app.clipapp.message:sure");
-      if(flag){ $("html").removeClass("noscroll"); }
+      if(flag){ $("body").removeClass("noscroll"); }
       App.setpopRegion.close();
     }
   });
@@ -45,12 +45,12 @@ App.ClipApp.Message = (function(App, Backbone, $){
       flag = false;
     },
     MessageSure: function(){
-      if(flag){	$("html").removeClass("noscroll"); }
+      if(flag){	$("body").removeClass("noscroll"); }
       App.setpopRegion.close();
       App.vent.trigger("app.clipapp.message:sure");
     },
     Messageclose: function(){
-      if(flag){ $("html").removeClass("noscroll"); }
+      if(flag){ $("body").removeClass("noscroll"); }
       App.setpopRegion.close();
       App.vent.trigger("app.clipapp.message:cancel");
     }
@@ -68,15 +68,15 @@ App.ClipApp.Message = (function(App, Backbone, $){
     var messageModel = new MessageModel({message:message});
     if(type == "warning"){
       var view = new WarningView({model: messageModel});
-      if(!$("html").hasClass("noscroll")){
+      if(!$("body").hasClass("noscroll")){
 	flag = true;
-	$("html").addClass("noscroll");
+	$("body").addClass("noscroll");
       }
     }else if(type == "confirm"){
       var view = new MessageView({model : messageModel});
-      if(!$("html").hasClass("noscroll")){
+      if(!$("body").hasClass("noscroll")){
 	flag = true;
-	$("html").addClass("noscroll");
+	$("body").addClass("noscroll");
       }
     }else{
       var view = new SuccessView({model : messageModel});

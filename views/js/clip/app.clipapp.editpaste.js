@@ -7,6 +7,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     ifrm.contentWindow.document.write("<body style=\"font-size:16px;color:#333;line-height: 1.7;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     //ifrm.contentWindow.document.write("<body style=\"font-size:20px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
+
     if(isIE){
       ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){
 	return pasteClipboardData(ifrm.id,e);

@@ -24,10 +24,12 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "user/:uid/following":"userFollowing",
       "user/:uid/follower":"userFollower",
 
+      "user/:uid/query/:word":"userQuery",
+
       // my
       "my":"myShow",
       "my/tag/:tag":"myShow",
-      "my/query/:word":"myQuery",
+      // "my/query/:word":"myQuery",
       "my/following":"userFollowing",
       "my/follower":"userFollower",
 
@@ -43,11 +45,14 @@ App.Routing.ClipRouting = (function(App, Backbone){
   });
 
   //输入内容搜索，返回显示结果需要更新hash
-  App.vent.bind("app.clipapp.routing:query",function(word){
+  App.vent.bind("app.clipapp.routing:query",function(word, uid){
     if($.browser.safari){word = encodeURI(word);}
-    var now_href = window.location.href;
-    if(/my/.test(now_href)){
-      App.Routing.showRoute("my/query",word);
+    if(uid){
+      if(App.util.self(uid)){
+	App.Routing.showRoute("my/query",word);
+      }else{
+	App.Routing.showRoute("user", uid, "query",word);
+      }
     }else{
       App.Routing.showRoute("query",word);
     }
