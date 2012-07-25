@@ -35,6 +35,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "focus #comm_text" :"foucsAction",
       "blur #comm_text"  :"blurAction",
      // "click .size48"    :"maintagAction",
+      "keydown #comm_text":"shortcut_comment",
       "click #submit"    :"comment",
       "click #cancel"    :"cancel",
       "click .masker"    :"masker",
@@ -98,6 +99,16 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	}
       });
     },
+
+    shortcut_comment : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#submit").click();
+	return false;
+      }else {
+	return true;
+      }
+    },
+
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);

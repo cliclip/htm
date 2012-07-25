@@ -18,6 +18,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "click .size48"          :"tagToggle",
       "focus #organize_text"   :"noteFocus",
       "blur #organize_text"    :"noteBlur",
+      //"keydown #organize_text" :"shortcut_ok",
       "click #organize_button" :"okClick",
       "click #cancel_button"   :"cancelClick",
       "click .masker"          :"masker", // 点击detail下的层，便隐藏
@@ -50,6 +51,16 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	$(e.currentTarget).attr("disabled",false);
       }
     },
+
+    shortcut_ok : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#organize_button").click();
+	return false;
+      }else{
+	return true;
+      }
+    },
+
     masker:function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancelClick(e);

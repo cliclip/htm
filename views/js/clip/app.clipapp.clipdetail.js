@@ -9,10 +9,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     // 跟cliplist一致，使得model.id = "uid:id"
     parse: function(resp){
       resp.id = resp.user+":"+resp.id;
-      if(_.isEmpty(resp.users)){
-	//resp.users[0] = resp.user;
-      }
-      //console.info(resp);
       return resp;
     }
   });
@@ -178,6 +174,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "focus #comm_text" : "focusAction",
       "blur #comm_text"  : "blurAction",
       //"click .main_tag"  : "maintagAction",
+      "keydown #comm_text":"shortcut_comment",
       "click .verify"    : "comment",
       "click .cancel"    : "cancel"
     },
@@ -234,6 +231,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, mid);
       }
     },
+    shortcut_comment : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$(".verify").click();
+	return false;
+      }else{
+	return true;
+      }
+    },
     cancel : function(){
       App.vent.trigger("app.clipapp.clipdetail:@cancel_addComm",this.model.get("cid"));
     }
@@ -285,6 +290,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     ClipDetail.addCommRegion.show(addCommView);
     $(".cancel").css("display","none");
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
+
   };
 
   ClipDetail.show = function(cid,model_id,recommend){ // cid等于detailModel.id

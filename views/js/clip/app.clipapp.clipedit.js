@@ -162,9 +162,20 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // 保证了api层接受的数据和返回的数据都是ubb格式的
       App.ClipApp.Editor.setContent("editor", html);
       setTimeout(function(){
-	old_content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+	old_content = App.ClipApp.Editor.getContent("editor"); //参数为编辑器id
       },200);
+      if(document.all){
+	document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
+      }else{
+	document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
+      }
+      function shortcut_save(e){
+	if(e.ctrlKey&&e.keyCode==13){
+	  $("#editClip_Save").click();
+	}
+      }
     });
+    //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
   };
 
   ClipEdit.close = function(n_content){

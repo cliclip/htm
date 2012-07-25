@@ -34,6 +34,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
+      //"keydown #editor":"shortcut_save",
       "click #save": "savecliper", // 对应clipper的ok
       "click #empty":"emptycliper"
     },
@@ -163,6 +164,17 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var data = new Date();
       data.setTime(data.getTime() + 30*24*60*60*10000);
       document.cookie = "first=false"+";expires=" + data.toGMTString();
+    }
+    //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
+    if(document.all){
+      document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
+    }else{
+      document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
+    }
+    function shortcut_save(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#save").click();
+      }
     }
   };
 

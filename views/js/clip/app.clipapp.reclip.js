@@ -12,6 +12,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     events : {
       "focus #reclip_text" : "foucsAction",
       "blur #reclip_text"  : "blurAction",
+      "keydown #reclip_text":"shortcut_submit",
       "click #submit"      : "submit",
       "click #cancel"      : "cancel",
       "click .size48"      : "maintagAction",
@@ -43,6 +44,15 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
       }else{
 	$(e.currentTarget).attr("disabled",false);
+      }
+    },
+
+    shortcut_submit : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#submit").click();
+	return false;
+      }else{
+	return true;
       }
     },
 
