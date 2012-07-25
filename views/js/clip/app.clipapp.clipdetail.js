@@ -1,6 +1,6 @@
 App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var ClipDetail = {};
-  var mid, view, number_limit =  140, hist;
+  var mid, view, number_limit =  140, hist, offset;
   var P = App.ClipApp.Url.base;
   App.Model.DetailModel = App.Model.extend({
     url: function(){
@@ -43,6 +43,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'change':
+	  App.vent.trigger("app.clipapp.clipdetail:resetUrl", hist, offset);
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
@@ -64,6 +65,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }else{
 	if(self == this.model.get("user")){
 	  var cid = this.model.id;
+	  App.vent.trigger("app.clipapp.clipdetail:resetUrl", hist, offset);
 	  App.vent.trigger("app.clipapp:clipedit", cid);
 	}
       }
@@ -248,7 +250,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $("html").addClass("noscroll");
+    $("body").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
     $("#focus").focus();
     // $(".masker").focus(); 仅有firefox支持div直接获得焦点
@@ -297,7 +299,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var ids = cid.split(":");
     mid = model_id;
     var clip = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user});
+    // 获取当前页面的 url 以及 scrollTop
     hist = Backbone.history.fragment;
+    offset = $(window).scrollTop() || $(document.body).scrollTop();
     Backbone.history.navigate("clip/"+ids[0]+"/"+ids[1], false);
     clip.fetch({
       success:function(res,model){
@@ -324,7 +328,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
     App.popRegion.close();
     App.viewRegion.close();
-    Backbone.history.navigate(hist);
+    App.vent.trigger("app.clipapp.clipdetail:resetUrl", hist, offset);
     mid = null;
   };
 
@@ -397,8 +401,23 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   // 应该绑定在那里
   App.vent.bind("app.clipapp.clipdetail:@close", function(){
-    $("html").removeClass("noscroll");
     ClipDetail.close();
+    $("body").removeClass("noscroll");
+  });
+
+  App.vent.bind("app.clipapp.clipdetail:resetUrl", function(hist, offset){
+    console.log("hist " + hist);
+    console.log("offset " + offset);
+    Backbone.history.navigate(hist, false);
+    // ie7、Chrome、Safari
+    if(navigator.appVersion.match(/7./i)=="7."
+       || navigator.userAgent.indexOf("Chrome") > 0
+       || navigator.userAgent.indexOf("Safari") > 0
+     ){
+      $("body").scrollTop(offset);
+    }else{
+      $("html").scrollTop(offset);
+    }
   });
 
   return ClipDetail;

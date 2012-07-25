@@ -16,9 +16,9 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     template:"#organize-view-template",
     events:{
       "click .size48"          :"tagToggle",
-      "focus #organize_text"   :"noteFocus",
-      "blur #organize_text"    :"noteBlur",
       //"keydown #organize_text" :"shortcut_ok",
+      //"focus #organize_text"   :"noteFocus",
+      //"blur #organize_text"    :"noteBlur",
       "click #organize_button" :"okClick",
       "click #cancel_button"   :"cancelClick",
       "click .masker"          :"masker", // 点击detail下的层，便隐藏
@@ -31,6 +31,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       $(e.currentTarget).toggleClass("white_48");
       $(e.currentTarget).toggleClass("orange_48");
     },
+   /*
     noteFocus:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultNote ? "" :
       $(e.currentTarget).val() );
@@ -39,6 +40,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultNote :
       $(e.currentTarget).val() );
     },
+   */
     okClick:function(e){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
@@ -85,11 +87,13 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var tag_list = _.union(main_tag,obj_tag);
     tag_list = _.compact(tag_list); // 去除掉数组中的空值
     _data.tag = tag_list;
+    /* 注释的note部分
     var text = "";
     if($.trim($("#organize_text", el).val())!=defaultNote){//过滤defaultNote默认值
       text = $.trim($("#organize_text", el).val());
     }
     _data.note = [{text: text}];
+    */
     if($("#memo_private", el).attr("checked")){
       _data["public"] = "false";
     }else{
@@ -102,9 +106,10 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var id = clip.id;
     var pub = clip["public"];
     var tags = clip.tag?clip.tag:[];
-    var note = clip.note?clip.note:"";
-    var text = "";
+    //var note = clip.note?clip.note:"";
+    //var text = "";
     tags = _(tags).map(function(e){return e.toLocaleLowerCase();});
+    /*
     if(!_.isEmpty(note)){
       var _ns = _(note).select(function(e){return e.text; });
       if(!_.isEmpty(_ns)){
@@ -112,12 +117,13 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	_(ns).each(function(n){ text += n+" "; });
       }
     }
-    o_data = {tag:tags,note:text,"public":pub};
+    */
+    o_data = {tag:tags,"public":pub};
     var tag_main = _(_(App.util.getBubbs()).map(function(e){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
     var tag_obj = _.difference(tags,App.util.getBubbs());
-    return {id:id,note:text,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
+    return {id:id,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
   };
 
   var ClipMemo = {};
@@ -164,7 +170,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       if(o_data['public'] != 'false'){
 	o_data['public'] = 'true';
       }
-      flag = flag && ($.trim(o_data.note)==$.trim(n_data.note[0].text));
+      //flag = flag && ($.trim(o_data.note)==$.trim(n_data.note[0].text));
       flag = flag && n_data.tag.length==o_data.tag.length && _.difference(n_data.tag,o_data.tag).length==0;
       flag = flag && n_data['public'] == o_data['public'];
       if(flag){

@@ -44,7 +44,10 @@ App.versions = (function($){
 	  mfollowing  : "我追谁",
 	  mfollow     : "谁追我",
 	  following   : "ta追谁",
-	  follow      : "谁追ta"
+	  follow      : "谁追ta",
+	  mysearch    : "搜索我的收藏",
+	  search      : "搜索ta的收藏"
+
 	},
 
 	bubb : {
@@ -465,7 +468,9 @@ App.versions = (function($){
 	  mfollowing  : "Following",
 	  mfollow     : "Followed by",
 	  following   : "Following",
-	  follow      : "Followed by"
+	  follow      : "Followed by",
+	  mysearch    : "search my collection",
+	  search      : "search his collection"
 	},
 
 	bubb : {
@@ -521,7 +526,7 @@ App.versions = (function($){
 	  },
 	  conpass:{
 	    prompt:"Please re-enter new password",
-	    is_null   :"Enter the same password as above"
+	    is_null   :"Enter the same password"
 	  },
 	  confirm:{
 	    password_diff: "Inconsistent password"

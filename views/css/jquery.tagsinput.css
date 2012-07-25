@@ -1,7 +1,7 @@
 div.tagsinput {  background: #FFF;  overflow-y: hidden; overflow-x:hidden;}
 div.tagsinput span.tag  { border: 1px solid #a5d24a; -moz-border-radius:2px; -webkit-border-radius:2px; display: block; float: left; padding: 3px; text-decoration:none; background: #cde69c; color: #638421; margin-right: 5px; margin-bottom:5px;font-family: helvetica;  font-size:18px;white-space:nowrap;height: 20px;}
-div.tagsinput span a.del { font-weight: bold; color: #82ad2b; text-decoration:none; display:none;} 
-div.tagsinput input { width:80px; height:25px; margin:0px; font-family: helvetica; font-size: 13px; border:1px solid transparent; padding:5px; background: transparent; color: #000; outline:0px;  margin-right:5px; margin-bottom:5px; }
+div.tagsinput span a.del { font-weight: bold; color: #82ad2b; text-decoration:none; display:none;font-size: 16px;} 
+div.tagsinput input { width:80px; height:25px; margin:0px; font-family: helvetica; font-size: 13px; border:1px solid  activeborder; padding:5px; background: transparent; color: #000; outline:0px;  margin-right:5px; margin-bottom:5px; }
 div.tagsinput div { display:block; float: left; } 
 span.error{position:absolute;z-index:1000;max-width:500px;min-width:120px;background:#EEFF00 none repeat scroll 0% 50%;border:3px solid #EEFF00;padding:1px;text-align:center;padding:5px;min-height:1em;.border-radius(5px);font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;}
 .taglistDiv {position:absolute;z-index:20;border:1px solid #999999;min-width:90px;background-color:#FFFFFF;

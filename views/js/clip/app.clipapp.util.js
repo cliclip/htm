@@ -54,7 +54,8 @@ App.util = (function(){
 
   // 判断当前的用户和传过来的参数是否是同一人
   util.self = function(uid){
-    return util.getMyUid() == uid || App.ClipApp.Me.me.get("name") == uid;
+    // return util.getMyUid() == uid || App.ClipApp.Me.me.get("name") == uid;
+    return util.getMyUid() == uid;
   };
 
   util.getImg_upUrl = function(){

@@ -156,7 +156,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.viewRegion.show(addClipView);
     App.ClipApp.Editor.init();
     App.ClipApp.Editor.focus("editor");
-    $("html").addClass("noscroll");
+    $("body").addClass("noscroll");
     //console.info(document.cookie);
     if(!/first=false/.test(document.cookie)){//判断是否是第一次打开网，新建clip
       $(".message").show();
@@ -181,13 +181,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   ClipAdd.close = function(clip){
     if(!clip || !clip.content){
       App.viewRegion.close();
-      $("html").removeClass("noscroll");
+      $("body").removeClass("noscroll");
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
-	$("html").removeClass("noscroll");
+	$("body").removeClass("noscroll");
       });
     }
   };
