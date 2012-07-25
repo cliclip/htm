@@ -100,20 +100,20 @@ App.ClipApp = (function(App, Backbone, $){
     App.vent.trigger("app.clipapp.routing:usershow",uid, tag);
   };
 
-/*  ClipApp.myQuery = function(word, tag){
+  ClipApp.myQuery = function(word, tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
-    // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
     App.vent.trigger("app.clipapp.routing:query", word);
-  };*/
+  };
 
   // interest和recommend 只需要显示 主观tag就可以了
   ClipApp.myInterest = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    // ClipApp.Bubb.showBubs(uid);
+    ClipApp.Bubb.showUserTags(uid, tag);
+    // ClipApp.Bubb.showBubs(uid); // 固定的
     // ClipApp.Bubb.showUserBubs(uid, tag);
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.vent.trigger("app.clipapp.routing:interest", tag);

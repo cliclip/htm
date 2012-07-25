@@ -406,6 +406,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.clipdetail:resetUrl", function(hist, offset){
+    if(/clip\/([0-9]+)\/([0-9]+)/.test(hist)) hist = "";
     Backbone.history.navigate(hist, false);
     // ie7、Chrome、Safari
     if(navigator.appVersion.match(/7./i)=="7."
