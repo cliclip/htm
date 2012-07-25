@@ -19,6 +19,9 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       "click .masker"      : "masker",
       "click .close_w"     : "cancel"
     },
+    initialize: function(){
+      flag = false;
+    },
     maintagAction:function(e){
       $(e.currentTarget).toggleClass("white_48");
       $(e.currentTarget).toggleClass("orange_48");
