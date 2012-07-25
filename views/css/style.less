@@ -87,7 +87,7 @@
 }
 // 页面整体布局 layout.less
 .layout{
-	min-width:1000px;
+	min-height: 960px;
 	background-color: #d9d9d9;
 	.left{
 		width:240px;
@@ -102,9 +102,10 @@
 	}
 	.right{
 		margin-left:240px;
+		min-height: 832px;
 		background:#d9d9d9 url(../img/top_shadow.jpg) repeat-x left top;
 		.left_shadow{
-			.min-height(600px);
+			.min-height(832px);
 			padding:30px 0px 0 25px;
 			background:url(../img/left_shadow.jpg) repeat-y left top;
 			position:relative;
@@ -1193,6 +1194,7 @@ a#focus{
 				// margin-left:5px;
 				text-align:left;
 				position: relative;
+				white-space: nowrap;
 			}
             		span.close_w {
 		  	    	top: -30px;
