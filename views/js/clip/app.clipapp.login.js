@@ -93,6 +93,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     registerAction:function(e){
       var that = this;
       e.preventDefault();
+      //$("html").removeClass("noscroll");
       var remember = false;
       if($("#remember").attr("checked")){
 	remember = true;
@@ -103,9 +104,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	success:function(model,response){
 	  if(/language=en/.test(document.cookie)){
 	    //cliclip的uid为72
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 7, ["helper","newbie"]);
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["helper","newbie"]);
 	  }else{
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 7, ["帮助","新手"]);
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
 	  }
 	  if(typeof fun != "function"){
 	    App.vent.trigger("app.clipapp.register:success","register_success",response);
