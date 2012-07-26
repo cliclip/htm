@@ -206,12 +206,17 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
-    var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..19");
+    if(uid == App.util.getMyUid()){ //为了taglist的显示，暂时这样改。
+      var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..0");
+    }else{
+      var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..19");
+    }
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
       if(uid == App.util.getMyUid()){
 	App.vent.trigger("app.clipapp.bubb:mytag",bubb.tag);
+	bubb.tag = bubb.tag.slice(0,19);
       }
       callback(bubb.tag, bubb.follow);
     });
