@@ -103,9 +103,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	success:function(model,response){
 	  if(/language=en/.test(document.cookie)){
 	    //cliclip的uid为72
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, "newbie");
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 7, ["helper","newbie"]);
 	  }else{
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, "新手");
+	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 7, ["帮助","新手"]);
 	  }
 	  if(typeof fun != "function"){
 	    App.vent.trigger("app.clipapp.register:success","register_success",response);
