@@ -25,7 +25,9 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "user/:uid/follower":"userFollower",
 
       "user/:uid/query/:word":"userQuery",
-      "my/query/:word"       :"myQuery",
+      "user/:uid/query":"userQuery",
+      "my/query/:word":"myQuery",
+      "my/query":"myQuery",
 
       // my
       "my":"myShow",
