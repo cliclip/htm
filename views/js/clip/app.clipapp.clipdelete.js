@@ -51,7 +51,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
 	   App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
 	 }
 	 ClipDelete.close();
-	 if(App.viewRegion){ // 从detail来，需要关闭viewRegion
+	 if(App.viewRegion.$el){ // 从detail来，需要关闭viewRegion
 	   App.vent.trigger("app.clipapp.clipdetail:@close");
 	 }
        },
