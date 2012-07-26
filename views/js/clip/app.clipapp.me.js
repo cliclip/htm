@@ -35,7 +35,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       // "mouseenter .navigate": "mouseEnter",
       // "mouseleave .navigate": "mouseLeave",
       "click .my": "switch_my",
-      "click .at_me": "switch_at_me",
+      // "click .at_me": "switch_at_me",
       "click .expert": "switch_expert",
       "click .delang" : "showLanguage",
       "mouseout .language": "closeLanguage",
@@ -83,7 +83,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }else{
 	Backbone.history.navigate("my",true);
       }
-    },
+    },/*
     switch_at_me:function(){
       App.util.current_page("@me");
       if(!(/my/.test(window.location.hash))){
@@ -92,7 +92,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       }else{
 	Backbone.history.navigate("my/recommend",true);
       }
-    },
+    },*/
     switch_expert:function(){
       App.util.current_page("interest");
       if(!(/my/.test(window.location.hash))){

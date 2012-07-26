@@ -112,9 +112,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myInterest = function(tag){
     var uid = getMyUid();
     ClipApp.Face.showUser(uid);
-    ClipApp.Bubb.showUserTags(uid, tag);
-    // ClipApp.Bubb.showBubs(uid); // 固定的
-    // ClipApp.Bubb.showUserBubs(uid, tag);
+    ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.vent.trigger("app.clipapp.routing:interest", tag);
   };
