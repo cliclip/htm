@@ -97,8 +97,11 @@ App.ClipApp.Face = (function(App, Backbone, $){
       });
     },
     queryUser: function(){
-      var word = this.$("#input_keyword").val();
-      this.$(".input_keyword").val("");
+      var word = $.trim(this.$("#input_keyword").val());
+      var def = null;
+      if(App.util.self(user_id))def = _i18n('userface.mysearch');
+      else def = _i18n('userface.search');
+      if(word == def) word = null;
       App.vent.trigger("app.clipapp:userquery", user_id, word);
     }
   });
