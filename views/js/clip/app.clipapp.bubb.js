@@ -66,6 +66,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
+  Bubb.cleanTags = function(){
+    App.vent.trigger("app.clipapp.bubb:@show", mkTag([],[],null,false));
+  };
 
   Bubb.showBubs = function(uid){ // 直接显示 六个主观tag即可
     App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs[lang], [], null, true));
