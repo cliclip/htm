@@ -26,6 +26,11 @@ html
         background-position: @x @y;
         display: block;
       }
+      .sprites (@x:0, @y:0) {
+        background: url(../img/sprite.png) no-repeat;
+        background-position: @x @y;
+        display: block;
+      }
       body {
         overflow: hidden;
         background-color: #d9d9d9;
@@ -57,10 +62,47 @@ html
         span {
           text-decoration: none;
         }
+        ._reclip{
+          .sprites(-260px,-190px);                      
+          width:24px;
+          height:24px;
+          margin-top:70px;
+          margin-left:70px;
+        }
+        ._follow{
+          .sprites(-300px,-190px);                      
+          width:24px;
+          height:24px;
+          margin-top:70px;
+          margin-left:20px;
+        }
+        ._unfollow{
+          .sprites(-340px,-190px);                      
+          width:24px;
+          height:24px;
+          margin-top:70px;
+          margin-left:20px;
+        }
         a {
           color: #fff;
           text-decoration: none;
           font-size:15px;
+          .follow{
+            .sprites(-220px,-260px);            
+            width:10px;
+            height:10px;
+
+          }
+          .unfollow{
+            .sprites(-220px,-260px);
+            width:10px;
+            height:10px;
+          }
+          .reclip{
+            .sprites(-220px,-260px);
+            width:10px;
+            height:10px;
+          }
         }
         a:hover {
           font-size: 120%;
@@ -134,6 +176,11 @@ html
       <% if(!self && !homepage){%>
       <span>
       <% if (follow) {%>
+      //- <a href="#" class="unfollow"><div class="_unfollow"></div></a>
+      //- <% } else { %>
+      //- <a href="#" class="follow"><div class="_follow"></div></a>
+      //- <% } %>
+      //- <a href="#" class="reclip"><div class="_reclip"></div></a>
       <a href="#" class="unfollow"><%=t_unfollow%></a>
       <% } else { %>
       <a href="#" class="follow"><%=t_follow%></a>

@@ -7,21 +7,21 @@ script(type="text/template",id="editDetail-view-template")
           div.button_frame
             iframe(name="post_frame",id="post_frame")
             span.note_clip.
-              <button class="note" title="<%=_i18n('detail.memo')%>"><%=_i18n('detail.memo')%></button>
+              <button class="note" title="<%=_i18n('editDetail.note_message')%>"></button>
             |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
             |<span class="file">
-            |<button class="upload_img" id="localImg"><%=_i18n('editDetail.upload')%></button>
+            |<button class="upload_img" id="localImg"></button>
             |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipEdit.image_change(this)"/>
             |</span>
             |</form>
             div.masker_layer1
             span#link_image
-              button.link_img <%=_i18n('editDetail.link')%>
+              | <button class="link_img" title="<%=_i18n('editDetail.link')%>"></button>
               span.url_text.img_upload_span
                 input.text#img_upload_url(type="text")
                 | <input type="submit" class="btn_img" value="<%=_i18n('editDetail.ok')%>" />
-            span
-              button.format <%=_i18n('editDetail.clear')%>
+            span.
+              <button class="format" title="<%=_i18n('editDetail.clear')%>"></button>
             span.close_w
               //- ie-7无空格 右上角关闭按钮不显示
               |&nbsp&nbsp&nbsp&nbsp&nbsp
