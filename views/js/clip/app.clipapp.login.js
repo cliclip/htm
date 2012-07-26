@@ -109,6 +109,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
 	  }
 	  if(typeof fun != "function"){
+	    Login.close();
 	    App.vent.trigger("app.clipapp.register:success","register_success",response);
 	  }else{
 	    App.vent.trigger("app.clipapp.login:success", response, remember);
@@ -175,9 +176,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var loginModel = new App.Model.LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
-    if(!$("html").hasClass("noscroll")){
+    if(!$("body").hasClass("noscroll")){
       flag = true;
-      $("html").addClass("noscroll");
+      $("body").addClass("noscroll");
     }
     if(/language=en/.test(document.cookie)){
       $("#note_img").removeClass("note_img_zh");
@@ -190,7 +191,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   };
 
   Login.close = function(){
-    if(flag){ $("html").removeClass("noscroll"); }
+    if(flag){ $("body").removeClass("noscroll"); }
     App.popRegion.close();
   };
 
