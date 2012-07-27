@@ -400,6 +400,16 @@
 				cursor: pointer;
 				_display:inline;
 			}
+			ul.en{
+				li{
+					background:url(../img/menu_en.png) no-repeat;
+				}
+			}
+			ul.zh{
+				li{
+					background:url(../img/menu_zh.png) no-repeat;
+				}
+			}
 			ul.options{
 				width:200px;
 				height:228px;
@@ -415,7 +425,8 @@
 				li{
 					height:42px;
 					margin-bottom:3px;
-					background:url(../img/menu.png) no-repeat;
+					//background:url(../img/menu_en.png) no-repeat;
+					background-color:#d9d9d9;
 					a{
 						display: block;
 						width:100%;
@@ -425,11 +436,11 @@
 						outline:none;
 					}
 				}
-				li.bookmark{background-position: 0 0;}
-				li.addons{background-position: 0 -44px;}
+				li.copy{background-position: 0 0;}
+				li.bookmark{background-position: 0 -44px;}
 				li.email{background-position: 0 -88px;}
-				li.iphone{background-position: 0 -132px;}
-				li.andriod{background-position: 0 -176px;}
+				li.weibo{background-position: 0 -132px;}
+				li.twitter{background-position: 0 -176px;}
 			}
 		}
 		.input{
