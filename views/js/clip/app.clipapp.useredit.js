@@ -323,7 +323,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    //App.vent.trigger("app.clipapp.useredit:show",response);
 	  },
 	  error:function(model,error){
-	    App.vent.trigger("app.clipapp.message:chinese",error);
+	    App.vent.trigger("app.clipapp.message:confirm",error);
 	  }
 	});
       }

@@ -406,8 +406,8 @@ App.versions = (function($){
 	  auth:{
 	    no_name     : "请先设置您的用户名",
 	    not_login   : "请您先登录",
-	    not_self    : "您没有执行此操作的权限",
-	    not_owner   : "您没有执行此操作的权限"
+	    not_self    : "您的登录以过期，请从新登录",
+	    not_owner   : "您的登录以过期，请从新登录"
 	  }
 	},
 	util : {
@@ -831,8 +831,8 @@ App.versions = (function($){
 	  auth:{
 	    no_name     : "Please set user name first",
 	    not_login   : "Please log in first",
-	    not_self    : "",
-	    not_owner   : ""
+	    not_self    : "Your login expired,login in again",
+	    not_owner   : "Your login expired,login in again"
 	  }
 	},
 	util : {
