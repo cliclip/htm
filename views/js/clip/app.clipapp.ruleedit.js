@@ -103,7 +103,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       if(data.title) data.title = data.title.replace(/"/g, '&#34;');
       // 如果没有设置rule, 则在fetch时候不会触发onChange事件"
       if(data.title==o_data.title&&((data.to==o_data.to)||(data.to&&o_data.to&&data.to.join()==o_data.to.join()))&&((data.cc==o_data.cc)||(data.cc&&o_data.cc&&data.cc.join()==o_data.cc.join()))){
-	App.vent.trigger("app.clipapp.message:chinese", {rule:"not_update"});
+	App.vent.trigger("app.clipapp.message:confirm", {rule:"not_update"});
       }else{
 	this.tmpmodel.save(data,{
 	  success: function(model, res){

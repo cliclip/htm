@@ -142,7 +142,8 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	ReclipTag.close();
       },
       error:function(model, res){
-	//console.info(res);
+	App.vent.trigger("app.clipapp.message:confirm",res);
+	ReclipTag.close();
       }
     });
   });

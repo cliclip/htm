@@ -187,10 +187,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
       $("#note_img").removeClass("note_img_en");
       $("#note_img").addClass("note_img_zh");
     }
+    console.log("login_show :: " + flag);
     //$("#name").focus();
   };
 
   Login.close = function(){
+    console.log(flag);
     if(flag){ $("body").removeClass("noscroll"); }
     App.popRegion.close();
   };
@@ -210,10 +212,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }else{
       Backbone.history.navigate("my",true);
     }
-  });
-
-  App.vent.bind("app.clipapp.login:@error", function(model, error){
-    Login.show(model, App.util.getErrorMessage(error));
   });
 
   App.vent.bind("app.clipapp.login:@cancel", function(){

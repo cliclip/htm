@@ -85,16 +85,41 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   */
 
   Bubb.followUserBubs = function(uid, tag){
-    if(!uid) _uid = 2;
+    if(!uid) uid = ClipApp.Face.getUserId();;
     followUserTag(uid, tag, function(){
       // 更新bubb显示
-      iframe_call('bubbles', "followTag", tag);
+      if(tag == '*'){
+	App.vent.trigger("app.clipapp.bubb:refresh",uid,['*']);
+      }else{
+	iframe_call('bubbles', "followTag", tag);
+      }
       App.vent.trigger("app.clipapp.followerlist:refresh"); //刷新右边follower列表
       if(last && last.follows){
 	if(_.isEmpty(last.follows) || tag == "*"){
 	  App.vent.trigger("app.clipapp.face:show",_uid);
 	}
 	last.follows.push(tag);
+      }
+    });
+  };
+
+  Bubb.unfollowUserBubs = function(uid, tag){
+    if(!uid) uid = ClipApp.Face.getUserId();
+    unfollowUserTag(uid, tag, function(){
+      // 更新bubb显示
+      if(tag == '*'){
+	App.vent.trigger("app.clipapp.bubb:refresh",uid,[]);
+      }else{
+	iframe_call('bubbles', "unfollowTag", tag);
+      }
+      // 刷新右边follower列表
+      App.vent.trigger("app.clipapp.followerlist:refresh");
+      // 若之后已停，则需刷新头像为追
+      if(last && last.follows){
+	last.follows = _.without(last.follows,tag);
+	if(_.isEmpty(last.follows)){
+	  App.vent.trigger("app.clipapp.face:show",_uid);
+	}
       }
     });
   };
@@ -147,19 +172,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.bubb:unfollow", function(tag, uid){
-    unfollowUserTag(uid, tag, function(){
-      // 更新bubb显示
-      iframe_call('bubbles', "unfollowTag", tag);
-      // 刷新右边follower列表
-      App.vent.trigger("app.clipapp.followerlist:refresh");
-      // 若之后已停，则需刷新头像为追
-      if(last && last.follows){
-	last.follows = _.without(last.follows,tag);
-	if(_.isEmpty(last.follows)){
-	  App.vent.trigger("app.clipapp.face:show",_uid);
-	}
-      }
-    });
+    App.vent.trigger("app.clipapp:unfollow", uid, tag);
   });
 
   // 有_uid作为全局变量，进行url地址匹配
@@ -241,7 +254,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       contentType:"application/json; charset=utf-8",
       success:callback,
       error:function(model, error){
-	App.vent.trigger("app.clipapp.message:chinese", error);
+	App.vent.trigger("app.clipapp.message:confirm", error);
       }
     });
   }

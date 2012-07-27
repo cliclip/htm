@@ -312,7 +312,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	});
       },
       error:function(res,error){
-	 App.vent.trigger("app.clipapp.message:chinese",error);
+	 App.vent.trigger("app.clipapp.message:confirm",error);
       }
     });
   };
