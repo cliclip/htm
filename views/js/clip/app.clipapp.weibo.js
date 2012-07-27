@@ -10,7 +10,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
     template: "#weiboEdit-view-template",
     events: {
       "click #info_add":"WeiboAdd",
-      "click .info_name":"WeiboCut"
+      "click .oauth_del":"WeiboCut"
     },
     WeiboAdd:function(e){
       window.location.href="/oauth/req/weibo?forcelogin=true";
