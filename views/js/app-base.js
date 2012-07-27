@@ -202,19 +202,19 @@ App.bind("initialize:after", function(){
   var paddingTop = 0 + "px";
   remove_fixed(paddingTop);
   if(navigator.appVersion.match(/7./i)=="7."){
-     tmp = $(document.body); // 如果是ie7
+    tmp = $(document.body); // 如果是ie7
   }else{
     tmp = $(window);
   }
   tmp.scroll(function() {
     remove_fixed(paddingTop);
     var st = $(window).scrollTop();
+    var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
+    var mt = $(".clearfix").offset().top + shifting;
+    //console.info(shifting+"shifting");
     //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
     //var gap = document.getElementById("user_info").style.paddingTop;
     //console.info(gap);
-    var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
-    var mt = $(".clearfix").offset().top + shifting;
-    //console.info(shifting);
     //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
     if(st>0){
       $(".return_top").show();
