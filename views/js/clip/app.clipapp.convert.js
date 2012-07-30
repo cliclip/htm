@@ -172,7 +172,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   // 对与pre和code类的标签此处是作为文本内容进行处理的
   function _htmlToUbb(html){
     var text = html;
-    // 先将不是html的网址转换成 a 标签
+    // 先将不是html的网址转换成 a 标签"
     var re=/((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"\s\u4E00-\u9FA5\uf900-\ufa2d])*)/g;
     var reg = /(="|='|=)(?=http:\/\/)/;
     var no_transform_A,no_transform_B,url_front = "",url_back="";
@@ -188,7 +188,7 @@ App.ClipApp.Convert = (function(App, Backbone, $){
 	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转
 	return a;
       }else{
-	return '<a href="'+a+'">'+a+'</a>';
+	return '<a href="'+a+'">'+a+'</a>&nbsp;';
 	//return '<a href="http://'+c+'">'+a+'</a>';
       }
     });
