@@ -163,10 +163,6 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     });
   });
 
-  App.vent.bind("app.clipapp.userbind:@error", function(model, error){
-    UserBind.show(model, App.util.getErrorMessage(error));
-  });
-
   App.vent.bind("app.clipapp.userbind:@cancel", function(){
   if(Backbone.history){
      Backbone.history.navigate("",true);

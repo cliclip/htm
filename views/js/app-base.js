@@ -32,22 +32,6 @@ App.Model = Backbone.Model.extend({
 	}
       }
     };
-    Backbone.Events.on("alert", function(msg){
-      App.vent.trigger("app.clipapp.message:alert", msg);
-      App.vent.unbind("app.clipapp.message:sure");
-      if(msg.auth == "no_name"){
-	App.vent.bind("app.clipapp.message:sure", function(){
-	  App.vent.trigger("app.clipapp.useredit:show");
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else if(msg.auth == "not_login"){
-	App.vent.trigger("app.clipapp:login");
-      }
-      App.vent.unbind("app.clipapp.message:cancel");
-      App.vent.bind("app.clipapp.message:cancel", function(){
-	App.popRegion.close();
-      });
-    });
     Backbone.sync.apply(Backbone, [method, model, options]);
   }
 });
@@ -97,9 +81,6 @@ App.Collection = Backbone.Collection.extend({
 	}
       }
     };
-    Backbone.Events.on("alert", function(msg){
-      App.vent.trigger("app.clipapp.message:alert", msg);
-    });
     Backbone.sync.apply(Backbone, [method, model, options]);
   }
 });
@@ -202,19 +183,19 @@ App.bind("initialize:after", function(){
   var paddingTop = 0 + "px";
   remove_fixed(paddingTop);
   if(navigator.appVersion.match(/7./i)=="7."){
-     tmp = $(document.body); // 如果是ie7
+    tmp = $(document.body); // 如果是ie7
   }else{
     tmp = $(window);
   }
   tmp.scroll(function() {
     remove_fixed(paddingTop);
     var st = $(window).scrollTop();
+    var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
+    var mt = $(".clearfix").offset().top + shifting;
+    //console.info(shifting+"shifting");
     //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
     //var gap = document.getElementById("user_info").style.paddingTop;
     //console.info(gap);
-    var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
-    var mt = $(".clearfix").offset().top + shifting;
-    //console.info(shifting);
     //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
     if(st>0){
       $(".return_top").show();
@@ -246,6 +227,19 @@ App.bind("initialize:after", function(){
       },500);
     }
 
+  });
+
+  Backbone.Events.on("alert", function(msg){
+    // App.vent.unbind("app.clipapp.message:sure");
+    if(msg.auth == "no_name"){
+      App.vent.trigger("app.clipapp.message:alert", msg);
+      App.vent.bind("app.clipapp.message:sure", function(){
+	App.vent.trigger("app.clipapp.useredit:show");
+	App.vent.trigger("app.clipapp.useredit:rename");
+      });
+    }else if(msg.auth == "not_login" || msg.auth == "not_self"){
+      App.vent.trigger("app.clipapp:login");
+    }
   });
 
 });

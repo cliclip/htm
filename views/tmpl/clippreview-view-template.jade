@@ -38,10 +38,10 @@ script(type="text/template",id="clippreview-view-template")
       div.metas.icons_frame
         span.icon_block
           //- i.icon_biezhen
-          | (<%=reprint_count?reprint_count:0%>) <%=_i18n('clippreview.reprint')%>
+          | <%=reprint_count?reprint_count:0%>&nbsp; <%=_i18n('clippreview.reprint')%>
         span.icon_block
           //- i.icon_quote
-          | (<%=reply_count?reply_count:0%>) <%=_i18n('clippreview.reply')%>
+          | <%=reply_count?reply_count:0%>&nbsp; <%=_i18n('clippreview.reply')%>
       div.user_info_small
         <% if(user && App.ClipApp.ClipList.flag_show_user){ %>
         div.user_more

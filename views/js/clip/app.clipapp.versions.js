@@ -146,9 +146,10 @@ App.versions = (function($){
 	},
 
 	editDetail : {
-	  upload      : "&nbsp上传图片",
-	  link        : "&nbsp链接图片",
-	  clear       : "&nbsp整理格式",
+	  note_message: "添加标注",
+	  upload      : "上传图片",
+	  link        : "链接图片",
+	  clear       : "整理格式",
 	  update      : "修 改",
 	  ok          : "确 定",
 	  ok_title    : "保 存",
@@ -239,9 +240,9 @@ App.versions = (function($){
 	addClip : {
 	  title       : "新建摘录",
 	  note_message: "添加标注",
-	  upload      : "&nbsp上传图片",
-	  link        : "&nbsp链接图片",
-	  clear       : "&nbsp整理格式",
+	  upload      : "上传图片",
+	  link        : "链接图片",
+	  clear       : "整理格式",
 	  ok          : "确 定",
 	  cancel      : "取 消",
 	  back        : "返 回",
@@ -406,8 +407,8 @@ App.versions = (function($){
 	  auth:{
 	    no_name     : "请先设置您的用户名",
 	    not_login   : "请您先登录",
-	    not_self    : "您没有执行此操作的权限",
-	    not_owner   : "您没有执行此操作的权限"
+	    not_self    : "您的登录以过期，请从新登录",
+	    not_owner   : "您的登录以过期，请从新登录"
 	  }
 	},
 	util : {
@@ -569,9 +570,10 @@ App.versions = (function($){
 	},
 
 	editDetail : {
-	  upload      : "&nbspUpload image",
-	  link        : "&nbspWeb image",
-	  clear       : "&nbspAuto re-format",
+	  note_message: "add notes",
+	  upload      : "Upload image",
+	  link        : "Web image",
+	  clear       : "Auto re-format",
 	  update      : "Edit",
 	  ok          : "OK",
 	  ok_title    : "Save",
@@ -663,9 +665,9 @@ App.versions = (function($){
 	addClip : {
 	  note_message:"add notes",
 	  title       : "new clip",
-	  upload      : "&nbspUpload image",
-	  link        : "&nbspWeb image",
-	  clear       : "&nbspAuto re-format",
+	  upload      : "Upload image",
+	  link        : "Web image",
+	  clear       : "Auto re-format",
 	  ok          : "OK",
 	  cancel      : "Cancel",
 	  back        : "Back",
@@ -831,8 +833,8 @@ App.versions = (function($){
 	  auth:{
 	    no_name     : "Please set user name first",
 	    not_login   : "Please log in first",
-	    not_self    : "",
-	    not_owner   : ""
+	    not_self    : "Your login expired,login in again",
+	    not_owner   : "Your login expired,login in again"
 	  }
 	},
 	util : {

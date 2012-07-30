@@ -10,19 +10,21 @@ App.ClipApp.Message = (function(App, Backbone, $){
     className: "message-view",
     template: "#message-view-template",
     events: {
-      "click .masker":"MessageSure",
+      "click .masker":"Masker",
       "click #sure": "MessageSure"
     },
-    initialize:function(){
-      flag = false;
+    Masker: function(e){
+      e.preventDefault();
+      if($(e.target).attr("class") == "masker"){
+	this.MessageSure(e);
+      }
     },
     MessageSure: function(){
       if(this.model.get("message") == _i18n('message.email.no_uname')){
 	App.vent.trigger("app.clipapp.useredit:rename");
       }
+      Message.close();
       App.vent.trigger("app.clipapp.message:sure");
-      if(flag){ $("body").removeClass("noscroll"); }
-      App.setpopRegion.close();
     }
   });
 
@@ -37,34 +39,30 @@ App.ClipApp.Message = (function(App, Backbone, $){
     className: "message-view",
     template: "#warning-view-template",
     events: {
-      "click .masker":"Messageclose",
+      "click .masker":"Masker",
       "click #sure": "MessageSure",
-      "click #cancel":"Messageclose"
+      "click #cancel":"MessageClose"
     },
-    initialize:function(){
-      flag = false;
-    },
-    MessageSure: function(){
-      if(flag){	$("body").removeClass("noscroll"); }
-      App.setpopRegion.close();
+    MessageSure: function(e){
+      e.preventDefault();
+      Message.close();
       App.vent.trigger("app.clipapp.message:sure");
     },
-    Messageclose: function(){
-      if(flag){ $("body").removeClass("noscroll"); }
-      App.setpopRegion.close();
+    Masker: function(e){
+      e.preventDefault();
+      if($(e.target).attr("class") == "masker"){
+	this.MessageClose(e);
+      }
+    },
+    MessageClose: function(e){
+      e.preventDefault();
+      Message.close();
       App.vent.trigger("app.clipapp.message:cancel");
     }
   });
 
-  Message.getMessage = function(key, value){
-    return  value ? App.util.getMessage("pre_"+key)+value+App.util.getMessage("post_"+key) : App.util.getMessage(key);
-  };
-
-  Message.getError = function(key){
-    return App.util.getErrorMessage(key);
-  };
-
   Message.show = function(type, message){
+    flag = false;
     var messageModel = new MessageModel({message:message});
     if(type == "warning"){
       var view = new WarningView({model: messageModel});
@@ -88,6 +86,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
   };
 
   Message.close = function(){
+    if(flag){ $("body").removeClass("noscroll"); }
     App.setpopRegion.close();
   };
 
@@ -101,18 +100,6 @@ App.ClipApp.Message = (function(App, Backbone, $){
       }
     }
     Message.show("success", message);
-  });
-
-  App.vent.bind("app.clipapp.message:chinese", function(key){
-    var chinese = null;
-    if(typeof(key)=="string"){
-      chinese = _i18n('message.'+key);
-    }else if(typeof(key)=="object"){
-      for(var k in key){
-	chinese = _i18n('message'+'.'+k+'.'+key[k]);
-      }
-    }
-    Message.show("confirm", chinese);
   });
 
   App.vent.bind("app.clipapp.message:confirm", function(key, value){

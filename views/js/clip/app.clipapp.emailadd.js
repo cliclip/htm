@@ -51,7 +51,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	  },
 	  error:function(model, res){
 	    if(res.email == "no_uname"){
-	      App.vent.trigger("app.clipapp.message:chinese", res);
+	      App.vent.trigger("app.clipapp.message:confirm", res);
 	    }else{
 	      view.showError('emailAdd',res);
 	    }
@@ -78,7 +78,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       },
       error:function(model,error){
 	// 则显示该链接不能再点击
-	App.vent.trigger("app.clipapp.message:chinese", error);
+	App.vent.trigger("app.clipapp.message:confirm", error);
       }
     });
   };

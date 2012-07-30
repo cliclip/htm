@@ -194,8 +194,18 @@ App.ClipApp = (function(App, Backbone, $){
 	App.ClipApp.Bubb.followUserBubs(uid, tag);
       });
     }else{
-      if(!uid) uid = ClipApp.Face.getUserId();
       ClipApp.Bubb.followUserBubs(uid, tag);
+    }
+  });
+
+  App.vent.bind("app.clipapp:unfollow", function(uid, tag){
+    var me = getMyUid(); // 需要判断是因为可能出现token过期现象
+    if(!me){
+      ClipApp.Login.show(function(){
+	App.ClipApp.Bubb.unfollowUserBubs(uid, tag);
+      });
+    }else{
+      ClipApp.Bubb.unfollowUserBubs(uid, tag);
     }
   });
 

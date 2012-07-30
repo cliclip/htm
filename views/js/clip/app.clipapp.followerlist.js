@@ -75,8 +75,8 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       var followerlistView = new FollowerListView({collection:followerlist});
       $("#list").css({height:"auto"});
       App.listRegion.show(followerlistView);
-      if( $(window).scrollTop()>100){
-	window.location.href="javascript:scroll(0,100)";
+      if( $(window).scrollTop()>99){
+	window.location.href="javascript:scroll(0,99)";
       }
       //console.info(App.listRegion.currentView.$el[0].className);
       setTimeout(function(){//IE8兼容性问题marionate也作了更改

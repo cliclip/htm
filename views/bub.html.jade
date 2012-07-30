@@ -109,12 +109,52 @@ html
           height: 108px;
           width: 108px;
           .tag_icon(0px, -368px);
+          a{
+            div{
+              z-index:1;
+              width:20px;
+              height:20px;
+              margin-top:68px;
+            }
+            ._reclip{
+              .tag_icon(-104px,-40px);            
+              margin-left:54px;
+            }
+            ._unfollow{
+              .tag_icon(-104px,-20px);            
+              margin-left:34px;
+            }
+            ._follow{
+              .tag_icon(-104px,0px);            
+              margin-left:34px;
+            }
+          }
         }
         .shadow.s124 {
           line-height: 214px;
           height: 124px;
           width: 124px;
           .tag_icon(0px, -476px);
+          a{
+            div{
+              z-index:1;
+              width:20px;
+              height:20px;
+              margin-top:70px;
+            }
+            ._reclip{
+              .tag_icon(-104px,-40px);            
+              margin-left:62px;
+            }
+            ._unfollow{
+              .tag_icon(-104px,-20px);            
+              margin-left:42px;
+            }
+            ._follow{
+              .tag_icon(-104px,0px);            
+              margin-left:42px;
+            }
+          }
         }
       }
 
@@ -126,7 +166,7 @@ html
 
     script(type="text/template",id="ball-template")
       <div class="bub s<%=size%><% if(follow) { %> isfollow<% } %><% if(current) { %> iscurrent<% } %><% if(sink) { %> issink<% } %>">
-      <span><%= text %></span>
+      <span class="open_bub"><%= text %></span>
       </div>
 
     script(type="text/template",id="ball-shadow-template")
@@ -134,11 +174,11 @@ html
       <% if(!self && !homepage){%>
       <span>
       <% if (follow) {%>
-      <a href="#" class="unfollow"><%=t_unfollow%></a>
+      <a href="#" class="unfollow"><div class="_unfollow" title="<%=t_unfollow%>"></div></a>
       <% } else { %>
-      <a href="#" class="follow"><%=t_follow%></a>
+      <a href="#" class="follow"><div class="_follow" title="<%=t_follow%>"></div></a>
       <% } %>
-      <a href="#" class="reclip"><%=t_reclip%></a>
+      <a href="#" class="reclip"><div class="_reclip" title="<%=t_reclip%>"></div></a>
       </span>
       <% } %>
       </div>

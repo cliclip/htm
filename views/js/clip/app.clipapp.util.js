@@ -279,9 +279,9 @@ App.util = (function(){
     img.src='img/img_error.jpg';
     $(".fake_" + img.id).hide();
     $("." + img.id).show();
-    setTimeout(function(){
+    img.onload = function(){
       $("#list").masonry("reload");
-    },50);
+    };
   };
 
   util.get_imgid = function(frameid,callback){
@@ -321,145 +321,6 @@ App.util = (function(){
     pos.parentNode.insertBefore(file,pos);
     document.body.removeChild(form);
   };
-
-  var MESSAGE = {
-    recomm : "您的clip已经转发成功",
-
-    register_success : "您的注册已完成。我们建议您添加常用的邮件地址，以便能通过发邮件来进行收藏。",
-    pre_invite   : "您已通过发往",
-    post_invite  : "邮件地址的邀请注册成功。我们建议您立即修改密码并设置自己的用户名。",
-    pre_addemail : "您已添加",
-    post_addemail: "邮件地址。为防止垃圾邮件给您带来困扰，我们需要您进行确认。请查收邮件，点击其中的激活链接。",
-    pre_active   : "您已激活",
-    post_active  : "邮件地址。您现在可以在登录时使用此邮件地址，并接收来自此邮件地址的收藏。",
-    pre_delemail : "您真的要删除",
-    post_delemail: "邮件地址吗？删除后，您将无法使用此邮件地址登录，也无法接收来自此邮件地址的收藏。",
-    pre_deloauth : "您真的要删除",
-    post_deloauth: "微博账号吗？删除后，您将无法使用此微博账号进行登录，也无法接收来自此微博账号的收藏。",
-    pre_deloauth_twitter : "您真的要删除",
-    post_deloauth_twitter: " twitter账号吗？删除后，您将无法使用此twitter账号进行登录，也无法接收来自此twitter账号的收藏。",
-    oauth_fail   :   "认证失败，请重新认证",
-    del_comment  : "您真的要删除这条评论吗？（此操作无法恢复）",
-
-    reclip_null  : "该标签下暂时还没有数据",
-    imageUp_fail : "您上传的文件不是图片文件",
-    faceUp_success  : "您的头像已更新",
-    passwd_success  : "您的密码已修改",
-    setRule_success : "您已成功更新邮箱规则",
-    rename_success  : "您的用户名已经修改",
-    reclip_tag_success : "恭喜您，转载成功！",
-    reclip_tag_fail    : "您已经转拥有这些载录了！",
-    pre_reclip_tag   : "您实际转载了" ,
-    post_reclip_tag  : "条载录，其余摘录已经拥有了"
-  };
-
-  util.getMessage = function(key){
-    // console.log(key);
-    // console.log(MESSAGE[key]);
-    return MESSAGE[key] ? MESSAGE[key] : key;
-  };
-
-  var ERROR = {
-    login_success : "您已成功登录",
-    auth_success : "您的密码已更改",
-    collect_success : "您已成功收藏",
-    comment_success : "您的评论已发表",
-    recomment_success : "您的转发已完成",
-
-    user:{
-      not_exist: "用户不存在"
-    },
-    auth: {
-      not_exist: "用户不存在",
-      not_match: "您的登录信息有误，请退出再重新登录",
-      not_login: "您尚未登录"
-    },
-    recomm_name:{
-      is_null: "请添加用户",
-      not_exist: "您添加的用户不存在"
-    },
-    recomm_text:{
-      is_null:"请您先设置推荐备注"
-    },
-    name:{
-      is_null: "用户名尚未填写",
-      invalidate: "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
-      exist:"此用户名已经存在",
-      not_exist: "用户名不存在"
-    },
-    newpass:{
-      is_null: "密码尚未填写"
-    },
-    pass:{
-      is_null: "密码尚未填写",
-      not_match: "密码输入不一致"
-    },
-    conpass:{
-      is_null:"密码尚未填写"
-    },
-    confirm:{
-      password_diff: "密码输入不一致"
-    },
-    email:{
-      is_Exist: "邮件地址已经存在",
-      you_exist: "您已经添加过该邮件地址",
-      other_exist:"您所添加的邮件地址已经在系统中了",
-      invalidate: "邮件地址格式有误",
-      is_null: "邮件地址尚未填写",
-      no_uname: "在添加邮件之前请先设置用户名"
-    },
-    to:{
-      invalidate: "收件人中含有不合法的邮件地址"
-    },
-    cc:{
-      invalidate: "抄送人中含有不合法的邮件地址"
-    },
-    rule:{
-      is_null: "您还没有添加邮件规则"
-    },
-    accept:{
-      fail:"因为间隔时间太长，此注册链接已经失效。您可直接注册，再到设置界面添加您的邮箱地址。"
-    },
-    active:{
-      fail: "因为间隔时间太长，此激活链接已经失效。您可在设置界面重新添加。"
-    },
-    clip:{
-      has_this_clip: "您已经有该条摘录了",
-      has_recliped: "您已经转载过该条载录了",
-      not_exist: "摘录不存在",
-      deleted: "此条摘录已经被删除！",
-      no_public: "作者没有公开此条摘录！"
-    },
-    content:{
-      is_null: "摘录不存在",
-      not_array: "摘录必须是数组",
-      is_empty: "摘录不能为空"
-    },
-    follow:{
-      all: "您已经追了该用户的全部标签"
-    },
-    error:{
-      "link 已作废": "此链接已过期",
-      "link doesnt exist": "此链接无效",
-      "link invalidate": "此链接格式有误"
-    }
-  };
-
-  util.getErrorMessage = function(errorCode){
-    if(typeof(errorCode)=="string"){
-      var error = ERROR[errorCode];
-      return error ? error : errorCode;
-    } else if(typeof(errorCode)=="object"){
-      var error = {};
-      for (key in errorCode){
-	// console.log("errorCode["+key+"] :: %j " + errorCode[key]);
-	error[key] = ERROR[key] ? ERROR[key][errorCode[key]] : errorCode[key];;
-      }
-      return _.isEmpty(error) ? errorCode : error;
-    }else{
-      return errorCode;
-    }
- };
 
   return util;
 })();

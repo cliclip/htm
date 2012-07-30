@@ -237,8 +237,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
       });
       $("#list").css({height:"0px"});
-      if($(window).scrollTop()>100){
-	window.location.href="javascript:scroll(0,100)";
+      //页面头部的紫色区域高度为99px；$(".header").height()==99
+      if($(window).scrollTop()>99){
+	window.location.href="javascript:scroll(0,99)";
       }
       App.listRegion.show(clipListView);
       //App.vent.trigger("app.clipapp:showpage");
