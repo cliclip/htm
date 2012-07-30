@@ -279,9 +279,9 @@ App.util = (function(){
     img.src='img/img_error.jpg';
     $(".fake_" + img.id).hide();
     $("." + img.id).show();
-    setTimeout(function(){
+    img.onload = function(){
       $("#list").masonry("reload");
-    },50);
+    };
   };
 
   util.get_imgid = function(frameid,callback){
@@ -321,6 +321,6 @@ App.util = (function(){
     pos.parentNode.insertBefore(file,pos);
     document.body.removeChild(form);
   };
-	      
+
   return util;
 })();
