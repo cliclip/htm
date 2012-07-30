@@ -246,7 +246,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     var clip_owner = that.model.get("clipid").split(":")[0];
     if(pub == "false" && !App.util.self(clip_owner)){
       // 是非public并且不是clip_owner进行的操作
-      App.vent.trigger("app.clipapp.message:chinese", {recommend: "no_pub"});
+      App.vent.trigger("app.clipapp.message:confrim", {recommend: "no_pub"});
     }else{
       mid = model_id;
       App.popRegion.show(recommView);

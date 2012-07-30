@@ -526,11 +526,15 @@ $(function() {
 	  var t_reclip =  options.t_reclip;
 	  var t_follow =  options.t_follow;
 	  var t_unfollow =  options.t_unfollow;
+	  var follows = options.follows;
+	  var current = options.current;
 	  delete options.self;
 	  delete options.homepage;
 	  delete options.t_reclip;
 	  delete options.t_follow;
 	  delete options.t_unfollow;
+	  delete options.follows;
+	  delete options.current;
 	  _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs&&_.indexOf(options.bubs,e)!=-1) ? 64 : 48;
 	    var body = setBall(size + 2, WIDTH, HEIGHT, wall_thickness);
@@ -539,9 +543,9 @@ $(function() {
 	      "self": self,
 	      "size": size,
 	      "body": body,
-	      "current": ( options.current && options.current == e ),
+	      "current": ( current && current == e ),
 	      "sink": ( options.sink && _.indexOf(options.sink,e) !=  -1 ),
-	      "follow": ( options.follows &&_.indexOf(options.follows,e)!=-1 ),
+	      "follow": ( follows &&_.indexOf(follows,e)!=-1 ),
 	      "hover": false,
 	      "homepage":homepage,
 	      "t_reclip":t_reclip,

@@ -75,12 +75,10 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
   });
 
   function loadData(el){
-    /*
-    var text = "";
+    /*var text = "";
     if($.trim($("#reclip_text", el).val())!=_i18n('reclip.defaultNote')){//过滤defaultNote默认值
       text = $.trim($("#reclip_text", el).val());
-    }
-     */
+    }*/
     var main_tag = [];
     for(var i=0;i<6;i++){
       if($("#main_tag_"+i,el).attr("class") == "size48 orange_48"){
@@ -108,7 +106,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     var ruser = recommend.user;
     if(pub == "false" && ruser != cid.split(':')[0]){
       // 是没公开的，并且不是clip_owner进行的操作
-      App.vent.trigger("app.clipapp.message:chinese", {reclip: "no_pub"});
+      App.vent.trigger("app.clipapp.message:confirm", {reclip: "no_pub"});
     }else{
       var model = new ReclipModel({id:cid,rid:rid});
       var reclipView = new ReclipView({model : model});
@@ -147,16 +145,17 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.message:success", {reclip:"success"});
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
 	App.vent.trigger("app.clipapp.taglist:taglistRefresh",params.clip.tag);
+	Reclip.close();
       },
       error:function(model, res){
-	App.vent.trigger("app.clipapp.message:chinese",res);
+	App.vent.trigger("app.clipapp.message:confirm",res);
+	Reclip.close();
       }
     });
   }
 
   App.vent.bind("app.clipapp.reclip:@submit", function(params,mid){
     reclipSave(params,mid);
-    Reclip.close();
   });
 
   App.vent.bind("app.clipapp.reclip:sync", function(params,mid){
