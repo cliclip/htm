@@ -85,7 +85,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   */
 
   Bubb.followUserBubs = function(uid, tag){
-    if(!uid) uid = ClipApp.Face.getUserId();;
+    if(!uid) uid = App.ClipApp.Face.getUserId();;
     followUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
@@ -104,7 +104,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   };
 
   Bubb.unfollowUserBubs = function(uid, tag){
-    if(!uid) uid = ClipApp.Face.getUserId();
+    if(!uid) uid = App.ClipApp.Face.getUserId();
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
