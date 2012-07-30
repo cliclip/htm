@@ -556,6 +556,7 @@ $(function() {
 	    $("#bubbles").append(view.render().el);
 	    balls.push(ball);
 	  });
+	  options.follows = follows;
 	  // color theme
 	  // theme = themes[Math.random() * themes.length >> 0];
 	  // document.body.style['backgroundColor'] = theme[0];
