@@ -37,9 +37,9 @@ App.util = (function(){
   util.getBubbs = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
     if(lang == "en"){
-      return ["pretty", "musical", "funny", "tasty", "useful", "awesome"];
+      return ["pretty","funny","musical","cool","tasty","wish"];
     }{
-      return ["好看", "好听", "好玩", "好吃", "好用", "真好"];
+      return ["好看", "有趣","好听", "真赞", "好吃",  "想要"];
     }
   };
 
@@ -279,9 +279,9 @@ App.util = (function(){
     img.src='img/img_error.jpg';
     $(".fake_" + img.id).hide();
     $("." + img.id).show();
-    setTimeout(function(){
+    img.onload = function(){
       $("#list").masonry("reload");
-    },50);
+    };
   };
 
   util.get_imgid = function(frameid,callback){
@@ -321,6 +321,6 @@ App.util = (function(){
     pos.parentNode.insertBefore(file,pos);
     document.body.removeChild(form);
   };
-	      
+
   return util;
 })();

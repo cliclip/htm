@@ -20,6 +20,13 @@ App.ClipApp.Query = (function(App,Backbone,$){
       App.vent.trigger("app.clipapp:clipadd");
     },
     showMore:function(){
+      if(/language=en/.test(document.cookie)){
+	$("ul.options").removeClass("zh");
+	$("ul.options").addClass("en");
+      }else{
+	$("ul.options").removeClass("en");
+	$("ul.options").addClass("zh");
+      }
       $("ul.options").toggle();
     },
     keepOpenMysetup: function(){

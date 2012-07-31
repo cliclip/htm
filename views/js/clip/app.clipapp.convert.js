@@ -172,23 +172,24 @@ App.ClipApp.Convert = (function(App, Backbone, $){
   // 对与pre和code类的标签此处是作为文本内容进行处理的
   function _htmlToUbb(html){
     var text = html;
-    // 先将不是html的网址转换成 a 标签
+    // 先将不是html的网址转换成 a 标签"
     var re=/((https?|ftp|news):\/\/)?([A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"\s\u4E00-\u9FA5\uf900-\ufa2d])*)/g;
     var reg = /(="|='|=)(?=http:\/\/)/;
+    var reg1 = /\*?url/;
     var no_transform_A,no_transform_B,url_front = "",url_back="";
     text = text.replace(re,function(a,b,c,d,e,f){
       // 使用a来拼正则表达式,报错'
       if(c=="http" || c=="https" || c=="ftp" || c=="news"){
-	url_front = text.substring(f-7,f-9);
+	url_front = text.substring(f-5,f-1);
 	url_back = text.substring(f+a.length,f+a.length+4);
       }
-      no_transform_A = url_front == "<a" ? true : url_front == "<A" ? true : false ;
+      no_transform_A = reg1.test(url_front) ? true : url_front == "ref=" ? true : url_front == "src=" ? true : url_front == "tle=" ? true : false ; //ref是A标签中的标志(href),src是图片标志，url是某些CSS背景图片,某些title也用了url地址
       no_transform_B = url_back == "</a>" ? true : url_back == "</A>" ? true : false;
       if(no_transform_A || no_transform_B){
-	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转
+	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转"
 	return a;
       }else{
-	return '<a href="'+a+'">'+a+'</a>';
+	return '<a href="'+a+'">'+a+'</a>&nbsp;';
 	//return '<a href="http://'+c+'">'+a+'</a>';
       }
     });
