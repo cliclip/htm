@@ -179,10 +179,10 @@ $(function() {
       template: _.template($("#ball-template").html()),
       shadow_tmpl: _.template($("#ball-shadow-template").html()),
       events: {
-	"click .bub":   "open",
-	"click a.follow":   "follow",
-	"click a.unfollow": "unfollow",
-	"click a.reclip":   "reclip"
+	"click .bub":   "open"
+//	"click a.follow":   "follow",
+//	"click a.unfollow": "unfollow",
+//	"click a.reclip":   "reclip"
       },
       initialize: function(){
 	this.model.bind('change', this.update, this);

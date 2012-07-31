@@ -158,7 +158,20 @@ html
         }
       }
 
-    //-end of less
+    //- end of less
+
+    //- 气泡上的“追” ，“停” ，“收”按钮全部去掉，暂时注释掉
+    //
+      <% if(!self && !homepage){%>
+      <span>
+      <% if (follow) {%>
+      <a href="#" class="unfollow"><div class="_unfollow" title="<%=t_unfollow%>"></div></a>
+      <% } else { %>
+      <a href="#" class="follow"><div class="_follow" title="<%=t_follow%>"></div></a>
+      <% } %>
+      <a href="#" class="reclip"><div class="_reclip" title="<%=t_reclip%>"></div></a>
+      </span>
+      <% } %>
 
   body
 
@@ -171,14 +184,4 @@ html
 
     script(type="text/template",id="ball-shadow-template")
       <div class="shadow s<%=size+60%>">
-      <% if(!self && !homepage){%>
-      <span>
-      <% if (follow) {%>
-      <a href="#" class="unfollow"><div class="_unfollow" title="<%=t_unfollow%>"></div></a>
-      <% } else { %>
-      <a href="#" class="follow"><div class="_follow" title="<%=t_follow%>"></div></a>
-      <% } %>
-      <a href="#" class="reclip"><div class="_reclip" title="<%=t_reclip%>"></div></a>
-      </span>
-      <% } %>
       </div>
