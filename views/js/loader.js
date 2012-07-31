@@ -61,7 +61,8 @@
     if(win[hash].val.show) return;
     win[hash].val.show = true;
     savedScrollTop = win.pageYOffset;
-    win.scroll(0, 0);
+    // win.scroll(0, 0);
+    doc.documentElement.style.overflowY   =   "hidden ";
     socket = new easyXDM.Socket({
       remote: 'http://cliclip.com/clipper.html?r='+Math.random()*9999999,
       // remote: 'http://cliclip.com:4000/clipper.html?r='+Math.random()*9999999,
@@ -108,6 +109,7 @@
     if(!win[hash].val.show) return;
     win[hash].val.show = false;
     socket.destroy();
+    doc.documentElement.style.overflowY   =   "auto ";
     win.scroll(0, savedScrollTop);
   }
 
