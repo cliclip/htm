@@ -322,7 +322,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       t_unfollow: _i18n('bubb.unfollow')
     };
     if(homepage) opt.homepage = homepage;
-    if(tag && !_.find(tag, tags)) opt.current = tag;
+    if(tag) opt.current = tag;
     return opt;
   }
 
