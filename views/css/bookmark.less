@@ -34,14 +34,40 @@
 // clipdetail等
 #view {
       .masker_layer{z-index:2}
+      .masker{z-index:3}
       z-index: 10;
 }
 // clipdetail上边的
 #pop{
       .masker_layer{z-index:12}
+      .masker{z-index:13}
       z-index: 20;
 }
-
+#setpop{
+  left: 50%;
+  position: absolute;
+  z-index: 30;
+  top: 80px;
+  .masker_layer{ z-index:10; }
+  .masker{ z-index:11 }
+  h2{ margin-left: 10px; }
+}
+.masker{
+   position: fixed;
+   width: 100%;
+   height: 100%;
+   overflow-x:auto;
+   overflow-y:scroll;
+   _position: absolute;
+   top:0;
+   left:0;
+   .bottom{
+       height: 22px; 
+       width: 100%;
+       position: absolute;
+       margin-top: 671px;
+   }
+}
 .btn_group{
 	input{color:#fff;border:none;float:left;}
 	.verify{
@@ -66,15 +92,15 @@
 	cursor: pointer;
 }
 .masker_layer{
-	width: 100%; //1000px;
-	height: 100%; //1000px;
-	position: fixed; //absolute;
-	_position: absolute;
-	background:#000;
-	opacity: 0.5;
-	filter:alpha(opacity=50);
-	top:0;
-	left:0;
+   width: 100%; //1000px;
+   height: 100%; //1000px;
+   position: fixed; //absolute;
+   _position: absolute;
+   background:#000;
+   opacity: 0.5;
+   filter:alpha(opacity=50);
+   top:0;
+   left:0;
 }
 .small_pop{
 	z-index:20;
@@ -117,7 +143,7 @@
 	overflow-y:auto;	
 	position:absolute;
 	left:50%;
-	top:6px;
+	top:24px;
 	margin-left:-350px;
 	width:700px;
 	z-index:2;
@@ -132,7 +158,7 @@
 	.pop_right{
 		padding-left: 80px;
 		section.pop_inner{
-			padding:10px 10px 10px 0;
+                  padding:10px 10px 10px 0;
 		}
 		.content_new{
 			width:600px;
@@ -148,20 +174,57 @@
 	.subject_add{
 		margin-top: 0px;
 		.pop_right{
+                        .button_frame{
+				float:right;
+				*margin-top:10px;
+				z-index: 20;
+				iframe {
+				       display:none;	
+				}
+				button{
+					border:0 none;
+					width:45px;
+					//padding:0 0 0 17px;
+					float:left;
+					height:35px;
+					line-height:25px;
+					color: #8b8b8b;
+					// margin-left:5px;
+					text-align:left;
+					position: relative;
+					white-space: nowrap;
+				}
+            			span.close_w {
+		  	    		     top: -23px;
+					     *top: -26px;
+					     right: -15px;
+					     *right: -19px;
+					     margin-top: -28px;
+					     margin-left: 82px; 
+		 		}
+				span#link_image{//为链接图片的span设置层次
+					z-index:3;
+				}
+				span.note_clip{
+					.note{
+						.sprites(-580px,-301px);
+						padding-left: 30px;
+					}
+				}
+
+			}
 			#post_frame{display:none;}
 			#img_form{display:none;}
 			.link_img{display:none;}
 			.url_text{display:none;}
 			.format{display:none}
-			.close_w{right:-580px;top:-40px;}
 		}
 		.pop_left{
 		       i{
 				width:45px;
 				height:45px;
 				float:left;
-			}	
-                	.note{.sprites(-583px,-298px);}
+			}
 			display:block;
 		}
 		.pop_title
@@ -377,6 +440,9 @@
 
 html {
   _background:url() fixed;
+}
+.noscroll{ 
+  overflow:hidden !important;
 }
 .masker_layer{
     _position: absolute;

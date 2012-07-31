@@ -521,42 +521,28 @@ $(function() {
 	  balls = [];
 	  mouseOver = null;
 	  mouseJoint = null;
-	  var self = options.self;
-	  var homepage = options.homepage;
-	  var t_reclip =  options.t_reclip;
-	  var t_follow =  options.t_follow;
-	  var t_unfollow =  options.t_unfollow;
-	  var follows = options.follows;
-	  var current = options.current;
-	  delete options.self;
-	  delete options.homepage;
-	  delete options.t_reclip;
-	  delete options.t_follow;
-	  delete options.t_unfollow;
-	  delete options.follows;
-	  delete options.current;
-	  _.chain(options).values().flatten().uniq().each(function(e){
+	  _.each(options.tags, function(e){
+	 // _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs&&_.indexOf(options.bubs,e)!=-1) ? 64 : 48;
 	    var body = setBall(size + 2, WIDTH, HEIGHT, wall_thickness);
 	    var ball = new BallModel({
 	      "text": e,
-	      "self": self,
+	      "self": options.self,
 	      "size": size,
 	      "body": body,
-	      "current": ( current && current == e ),
+	      "current": ( options.current && options.current == e ),
 	      "sink": ( options.sink && _.indexOf(options.sink,e) !=  -1 ),
-	      "follow": ( follows &&_.indexOf(follows,e)!=-1 ),
+	      "follow": ( options.follows &&_.indexOf(options.follows,e)!=-1 ),
 	      "hover": false,
-	      "homepage":homepage,
-	      "t_reclip":t_reclip,
-	      "t_follow":t_follow,
-	      "t_unfollow":t_unfollow
+	      "homepage":options.homepage,
+	      "t_reclip":options.t_reclip,
+	      "t_follow":options.t_follow,
+	      "t_unfollow":options.t_unfollow
 	    });
 	    var view = new BallView({ model : ball });
 	    $("#bubbles").append(view.render().el);
 	    balls.push(ball);
 	  });
-	  options.follows = follows;
 	  // color theme
 	  // theme = themes[Math.random() * themes.length >> 0];
 	  // document.body.style['backgroundColor'] = theme[0];
