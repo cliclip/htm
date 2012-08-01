@@ -89,10 +89,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     return w.getSelection ? w.getSelection() : w.document.selection;
   };
 
-  var ensureUnits = function(v) {
-    return v + ((v !== "0") && (/\d$/.test(v)))? "px" : "";
-  };
-
   var setRange = function (sel,r){
     sel.removeAllRanges();
     sel.addRange(r);
