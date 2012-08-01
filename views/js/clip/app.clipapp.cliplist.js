@@ -260,6 +260,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }else{
 	if(!/#my/.test(window.location.hash)){
 	  App.util.current_page();
+	}else if(/#my\/query/.test(window.location.hash)){
+	  App.util.current_page("my");
 	}
       }
     });
