@@ -178,9 +178,7 @@
 				iframe {
 				       display:none;	
 			 	}
-				span{
-					margin-left:15px;
-				}
+				.masker_layer1{dispaly:none;}
 				button{
 					border:0 none;
 					width:45px;
@@ -193,20 +191,27 @@
 					text-align:left;
 					position: relative;
 					white-space: nowrap;
+					padding: 0px;
 				}
             			span.close_w {
-		  	    		top: -61px;
-					*top: -64px;
-					right: -91px;
-					*right: -94px;
+		  	    		top: -47px;
+					*top: -59px;
+					right: -14px;
+					*right: -101px;
 		 		}
 				span#link_image{//为链接图片的span设置层次
+					display:none;
+				}
+				#img_form{
+					display:none;
+				}
+				button#localImg{
 					display:none;
 				}
 				span.note_clip{
 					.note{
 						.sprites(-580px,-301px);
-						padding-left: 30px;
+						margin-left: -38px;
 					}
 				}
 				span.url_text{

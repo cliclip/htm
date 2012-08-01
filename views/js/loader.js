@@ -64,7 +64,11 @@
     win[hash].val.show = true;
     savedScrollTop = win.pageYOffset;
     // win.scroll(0, 0);
-    doc.documentElement.style.overflowY   =   "hidden ";
+    if(window.ActiveXObject){ // 是ie
+      doc.documentElement.style.overflowY = "hidden";
+    }else{
+      doc.documentElement.style.overflowY = "hidden ";
+    }
     socket = new easyXDM.Socket({
       remote: 'http://cliclip.com/clipper.html?r='+Math.random()*9999999,
       // remote: 'http://cliclip.com:4000/clipper.html?r='+Math.random()*9999999,
