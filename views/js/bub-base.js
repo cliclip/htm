@@ -179,6 +179,7 @@ $(function() {
       template: _.template($("#ball-template").html()),
       shadow_tmpl: _.template($("#ball-shadow-template").html()),
       events: {
+	"selectstart .bub":"no_select",//bub文字被选中后高亮显示后无法恢复
 	"click .bub":   "open"
 //	"click a.follow":   "follow",
 //	"click a.unfollow": "unfollow",
@@ -187,6 +188,9 @@ $(function() {
       initialize: function(){
 	this.model.bind('change', this.update, this);
 	this.model.bind('destroy', this.remove, this);
+      },
+      no_select: function(){
+	return false;
       },
       render: function(){
 	$(this.el).html(this.template(this.model.toJSON()));
