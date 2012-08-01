@@ -521,7 +521,7 @@ $(function() {
 	  balls = [];
 	  mouseOver = null;
 	  mouseJoint = null;
-	  _.each(options.tags, function(e){
+	  _.each(_.union(options.tags,options.bubs,options.sink), function(e){
 	 // _.chain(options).values().flatten().uniq().each(function(e){
 	    var size = (options.bubs&&_.indexOf(options.bubs,e)!=-1) ? 64 : 48;
 	    var body = setBall(size + 2, WIDTH, HEIGHT, wall_thickness);
