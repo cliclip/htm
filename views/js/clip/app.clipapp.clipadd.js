@@ -2,7 +2,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
   var P = App.ClipApp.Url.base;
   var clip = {};
-  var ieRange=false;
+  var ieRange = false, clipper = "";
   App.Model.ClipModel = App.Model.extend({
     url:function(){
       return P+"/clip";
@@ -86,8 +86,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     cancelcliper:function(){
       clip.content = App.ClipApp.Editor.getContent("editor");
-      App.vent.trigger("app.clipapp.clipper:cancel");
-      App.vent.trigger("app.clipapp.clipadd:@cancel",clip);
+      if(clipper){
+	App.vent.trigger("app.clipapp.clipper:cancel", clip);
+      }else{
+	App.vent.trigger("app.clipapp.clipadd:@cancel",clip);
+      }
     },
     savecliper:function(e){
       var target = $(e.currentTarget);
@@ -107,8 +110,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	this.model.save({},{
 	  success:function(model,res){ // 返回值res为clipid:clipid
 	    model.id = res.clipid; // 将clip本身的id设置给model
-	    App.vent.trigger("app.clipapp.clipper:save");
-	    App.vent.trigger("app.clipapp.clipadd:@success", model);
+	    if(clipper){
+	      App.vent.trigger("app.clipapp.clipper:save");
+	    }else{
+	      App.vent.trigger("app.clipapp.clipadd:@success", model);
+	    }
 	  },
 	  error:function(model,error){  // 出现错误，触发统一事件
 	    target.attr("disabled",false);
@@ -150,7 +156,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   };
 
-  ClipAdd.show = function(){
+  ClipAdd.show = function(flag){
+    clipper = flag;
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
