@@ -257,6 +257,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}else{
 	  $("#list").append(_i18n('message.cliplist_null.all'));
 	}
+      }else{
+	if(!/#my/.test(window.location.hash)){
+	  App.util.current_page();
+	}
       }
     });
   };
