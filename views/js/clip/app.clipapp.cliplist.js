@@ -1,6 +1,5 @@
  // app.clipapp.cliplist.js
 App.ClipApp.ClipList = (function(App, Backbone, $){
-
   var ClipList = {};
   var flag = false;
   var clips_exist = true;
@@ -80,12 +79,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
     show_detail: function(){
-      //部分ff浏览器 选中clip preview 中内容会触发鼠标单击事件打开详情页面
-      if(window.getSelection&&$.trim(window.getSelection().toString())){//ie-9 chrome ff 都有此对象
-	//console.info($.trim(window.getSelection().toString()));
+      //部分ff ie 选中clip preview 中内容会触发鼠标单击事件打开详情页
+      //ie-7 8 无getSelection()只有document.selection  ie9 两个对象都有
+      if(document.selection&&document.selection.createRange().htmlText){
 	return;
-      }else if(document.selection&&document.selection.createRange().text){
-	//ie-7 8 无getSelection()只有document.selection
+      }else if(window.getSelection&&$.trim(window.getSelection().toString())){
 	return;
       }
       var recommend = {
