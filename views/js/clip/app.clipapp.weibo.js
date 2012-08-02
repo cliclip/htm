@@ -42,7 +42,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.weibo:@weibodel",function(uid){
-  var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid});
+    var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid});
     model.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	WeiboEdit.show();
