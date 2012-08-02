@@ -22,17 +22,19 @@
   // get selection content html
   function getSelection(){
     if (win.getSelection) { // all browsers, except ie < 9
-      var sel = win.getSelection() || document.selection;
+      var sel = win.getSelection() || doc.selection;
       var html = "";
       for (var i=0;i<sel.rangeCount;i++){
         var d = doc.createElement("span");
         var r = sel.getRangeAt(i);
-	var fragment = r.extractContents();
+	// 刪除文檔內容並以DocumentFragment 對象的形式返回它
+	// var fragment = r.extractContents();
+	var fragment = r.cloneContents();
 	d.appendChild(fragment);
 	// r.surroundContents(d);
         var parent_element = r.commonAncestorContainer;
         var prev_html = parent_element.innerHTML;
-        html += d.innerHTML;
+	html += d.innerHTML;
         parent_element.innerHTML = prev_html;
       }
       return html;
@@ -62,7 +64,11 @@
     win[hash].val.show = true;
     savedScrollTop = win.pageYOffset;
     // win.scroll(0, 0);
-    doc.documentElement.style.overflowY   =   "hidden ";
+    if(window.ActiveXObject){ // 是ie
+      doc.documentElement.style.overflowY = "hidden";
+    }else{
+      doc.documentElement.style.overflowY = "hidden ";
+    }
     socket = new easyXDM.Socket({
       remote: 'http://cliclip.com/clipper.html?r='+Math.random()*9999999,
       // remote: 'http://cliclip.com:4000/clipper.html?r='+Math.random()*9999999,

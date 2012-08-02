@@ -139,8 +139,6 @@
 	}
 }
 .big_pop{
-	overflow-x:hidden;
-	overflow-y:auto;	
 	position:absolute;
 	left:50%;
 	top:24px;
@@ -174,13 +172,13 @@
 	.subject_add{
 		margin-top: 0px;
 		.pop_right{
-                        .button_frame{
+			.button_frame{
 				float:right;
 				*margin-top:10px;
-				z-index: 20;
 				iframe {
 				       display:none;	
-				}
+			 	}
+				.masker_layer1{dispaly:none;}
 				button{
 					border:0 none;
 					width:45px;
@@ -193,31 +191,44 @@
 					text-align:left;
 					position: relative;
 					white-space: nowrap;
+					padding: 0px;
 				}
             			span.close_w {
-		  	    		     top: -23px;
-					     *top: -26px;
-					     right: -15px;
-					     *right: -19px;
-					     margin-top: -28px;
-					     margin-left: 82px; 
+		  	    		top: -47px;
+					*top: -59px;
+					right: -14px;
+					*right: -101px;
 		 		}
 				span#link_image{//为链接图片的span设置层次
-					z-index:3;
+					display:none;
+				}
+				#img_form{
+					display:none;
+				}
+				button#localImg{
+					display:none;
 				}
 				span.note_clip{
 					.note{
 						.sprites(-580px,-301px);
-						padding-left: 30px;
+						margin-left: -38px;
 					}
+				}
+				span.url_text{
+					display:none;
+				}
+				.upload_img{
+					// .sprites(-526px,-330px);
+				}
+				.link_img{
+					// .sprites(-526px,-373px);
+				}
+				.format{
+					display:none;
+					// .sprites(-526px,-417px);
 				}
 
 			}
-			#post_frame{display:none;}
-			#img_form{display:none;}
-			.link_img{display:none;}
-			.url_text{display:none;}
-			.format{display:none}
 		}
 		.pop_left{
 		       i{

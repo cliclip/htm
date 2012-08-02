@@ -34,7 +34,7 @@ App.versions = (function($){
 	  pass : {
 	    pass : "密码",
 	    is_null     : "密码尚未填写",
-	    not_match   : "密码输入不一致"
+	    not_match   : "您的密码不正确"
 	  }
 	},
 
@@ -459,7 +459,7 @@ App.versions = (function($){
 	  pass : {
 	    pass        : "Password",
 	    is_null     : "Password is missing",
-	    not_match   : "Inconsistent password"
+	    not_match   : "Password is incorrect"
 	  }
 	},
 
