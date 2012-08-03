@@ -10,7 +10,7 @@ script(type="text/template",id="editDetail-view-template")
               <button class="note" title="<%=_i18n('editDetail.note_message')%>"></button>
             |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
             |<span class="file">
-            |<button class="upload_img" id="localImg"></button>
+            |<button class="upload_img" id="localImg" title="<%=_i18n('addClip.upload')%>"></button>
             |<input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.ClipEdit.image_change(this)"/>
             |</span>
             |</form>
