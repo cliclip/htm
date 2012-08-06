@@ -90,12 +90,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	  Comment.close();
 	},
 	error:function(model, res){
-	  if(res.comm_text == "word_limit"){
-	    view.showError("comment", res);
-	  }else{
-	    view.showError("comment", res);
+	  if(res.comm_text == "is_null")
 	    $("#comm_text").blur().val("");
-	  }
+	  view.showError("comment", res);
 	}
       });
     },
@@ -114,6 +111,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	this.cancel(e);
       }
     },
+
     cancel : function(e){
       e.preventDefault();
       var text = $.trim($("#comm_text").val());

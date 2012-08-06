@@ -225,7 +225,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量
 	params1 = {id:cid,clip:{tag:this.tag_list,note:[{text:text}]}};
       }*/
-      if(!App.ClipApp.getMyUid()){
+      if(!App.util.getMyUid()){
 	App.vent.trigger("app.clipapp:login", function(){
 	  App.vent.trigger("app.clipapp.clipdetail:@save_addComm", params, mid);
 	});
@@ -363,12 +363,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
       },
       error:function(comment,res){
-	if(res.comm_text == "word_limit"){
-	  view.showError("comment", res);
-	}else{
-	  view.showError("comment", res);
+	if(res.comm_text == "is_null")
 	  $("#comm_text").blur().val("");
-	}
+	view.showError("comment", res);
       }
     });
   });
@@ -383,7 +380,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:login", function(){
 	if(ClipDetail.replyCommRegion)
 	  ClipDetail.replyCommRegion.close();
-	  showAddComm(cid, true);
+	showAddComm(cid, true);
       });
     }
   });

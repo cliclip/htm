@@ -213,7 +213,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	}
       });
     }else if(memoType == "add"){
-      App.vent.trigger("app.clipapp.clip:update", data);
+      App.vent.trigger("app.clipapp.clipadd:update", data);
       ClipMemo.close();
     }
   });

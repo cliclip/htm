@@ -41,23 +41,20 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     EmailAddcommit: function(){
       var view = this;
       var data = view.getInput();
-      view.setModel('emailAdd',this.model, data);
-      if(this.model.isValid()){
-	this.model.save(data,{
-	  type:"POST",
-	  success: function(model, res){
-	    App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
-	    App.vent.trigger("app.clipapp.emailadd:@close");
-	  },
-	  error:function(model, res){
-	    if(res.email == "no_uname"){
-	      App.vent.trigger("app.clipapp.message:confirm", res);
-	    }else{
-	      view.showError('emailAdd',res);
-	    }
+      this.model.save(data,{
+	type:"POST",
+	success: function(model, res){
+	  App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
+	  App.vent.trigger("app.clipapp.emailadd:@close");
+	},
+	error:function(model, res){
+	  if(res.email == "no_uname"){
+	    App.vent.trigger("app.clipapp.message:confirm", res);
+	  }else{
+	    view.showError('emailAdd',res);
 	  }
-	});
-      }
+	}
+      });
     }
   });
 

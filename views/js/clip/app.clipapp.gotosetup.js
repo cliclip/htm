@@ -35,7 +35,7 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.gotosetup:go", function(){
     App.popRegion.close();
     if(flag) $("body").removeClass("noscroll");
-    App.vent.trigger("app.clipapp.useredit:show",App.ClipApp.getMyUid());
+    App.vent.trigger("app.clipapp.useredit:show",App.util.getMyUid());
   });
 
   return  GotoSetup;
