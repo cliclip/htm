@@ -65,15 +65,7 @@ App.util = (function(){
   util.getFace_upUrl = function(){
     return P+"/user/" + util.getMyUid() + "/upload_face";
   };
-/*
-  util.getPopTop = function(clss){
-    var top = 0;
-    var scroll = document.documentElement.scrollTop + document.body.scrollTop;
-    if(clss == "big"){ return  15+"px"; }
-    else { return 150+"px"; };
-    // return scroll + top + "px";
-  };
-*/
+
   util.unique_url = function(url){
     var now = new Date();
     return url + "?now=" + now.getTime();
