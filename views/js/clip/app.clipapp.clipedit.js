@@ -6,8 +6,10 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var EditModel = App.Model.extend({
     validate: function(attrs){
       var content = attrs.content;
-      if(!content || content.replace(/&nbsp;/g,"") == ""){
+      if(!content || content.replace(/&nbsp;+|\s+/g,"") == ""){
 	return {"content":"is_null"};
+      }else if(content == old_content){
+	return {"content": "no_change"};
       }else{
 	return null;
       }
@@ -76,35 +78,20 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       target.attr("disabled",true);
       var cid = this.model.id;
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
-      /*if(content == old_content){
-	//alert("您并未做出任何更改");
-	target.attr("disabled", false);
-	return;
-      }*/
       var editModel = new EditModel({});
-      editModel.set({content:content},{
-	error:function(model, error){
-	  App.vent.trigger("app.clipapp.message:confirm", error);
-	  App.vent.bind("app.clipapp.message:sure", function(){
-	    target.attr("disabled", false);
-	    App.ClipApp.Editor.focus("editor");
-	  });
+      // 不用this.mode因为this.model中有 录线图
+      editModel.save({content: content}, {
+	type:'PUT',
+	url: P+"/clip/"+cid,
+	success:function(model, res){
+	  var content = model.get("content");
+	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
+	},
+	error:function(model, error){  // 出现错误，触发统一事件
+	  target.attr("disabled", false);
+	  App.vent.trigger("app.clipapp.clipedit:@error", error);
 	}
       });
-      if(editModel.isValid()){
-	editModel.save({},{ // 不用this.mode因为this.model中有 录线图
-	  type:'PUT',
-	  url: P+"/clip/"+cid,
-	  success:function(model,res){
-	    var content = model.get("content");
-	    App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
-	  },
-	  error:function(model,res){  // 出现错误，触发统一事件
-	    target.attr("disabled", false);
-	    App.vent.trigger("app.clipapp.clipedit:@error", cid);
-	  }
-	});
-      };
     },
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
@@ -142,14 +129,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       App.util.clearFileInput(sender);
     }
   };
-/*
-  ClipEdit.autoResize1= function() { // 作用？
-    try {
-      document.all["mainFrame"].style.height =
-	mainFrame.document.body.scrollHeight;
-    }catch(e){}
-  };
-*/
+
   ClipEdit.show = function(clipid){
     var model = new App.Model.DetailModel({id: clipid});
     model.fetch();
@@ -164,7 +144,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       setTimeout(function(){
 	old_content = App.ClipApp.Editor.getContent("editor"); //参数为编辑器id
       },200);
-      if(document.all){
+      if(document.all){ // 非firefox
 	document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
       }else{
 	document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
@@ -202,8 +182,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     ClipEdit.close(n_content);
   });
 
-  App.vent.trigger("app.clipapp.clipedit:@error", function(){
+  App.vent.bind("app.clipapp.clipedit:@error", function(error){
     // 可以弹出错误对话框，提示错误信息
+    App.vent.trigger("app.clipapp.message:confirm", error);
+    App.vent.unbind("app.clipapp.message:sure");
+    App.vent.bind("app.clipapp.message:sure", function(){
+      App.ClipApp.Editor.focus("editor");
+    });
   });
 
   return ClipEdit;

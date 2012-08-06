@@ -9,7 +9,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     validate: function(attrs){
       var content = attrs.content;
-      if(!content || content.replace(/&nbsp;/g,"") == ""){
+      if(!content || content.replace(/&nbsp;+|\s+/g,"") == ""){
 	return {"content":"is_null"};
       }else{
 	return null;
@@ -29,7 +29,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .btn_img":"up_extImg", // 确定上传
       "click .masker_layer1":"hide_extImg",
       "click .note":"remark_clip",
-      "click .message":"message_hide",
       "click .close_w":"cancelcliper",
       "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
@@ -73,12 +72,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     okcliper:function(){
       App.vent.trigger("app.clipapp.clipper:ok");
     },
-    message_hide:function(){
-      $(".message").hide();
-      var data = new Date();
-      data.setTime(data.getTime() + 30*24*60*60*10000);
-      document.cookie = "first=false"+";expires=" + data.toGMTString();
-    },
     masker:function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancelcliper();
@@ -97,31 +90,20 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       target.attr("disabled",true);
       e.preventDefault();
       clip.content = App.ClipApp.Editor.getContent("editor");
-      this.model.set(clip, {
-	error:function(model, error){
-	  App.vent.trigger("app.clipapp.message:confirm", error);
-	  App.vent.bind("app.clipapp.message:sure", function(){
-	    target.attr("disabled", false);
-	    App.ClipApp.Editor.focus("editor");
-	  });
+      this.model.save(clip, {
+	success:function(model,res){ // 返回值res为clipid:clipid
+	  model.id = res.clipid; // 将clip本身的id设置给model
+	  if(clipper){
+	    App.vent.trigger("app.clipapp.clipper:save");
+	  }else{
+	    App.vent.trigger("app.clipapp.clipadd:@success", model);
+	  }
+	},
+	error:function(model,error){  // 出现错误，触发统一事件
+	  target.attr("disabled",false);
+	  App.vent.trigger("app.clipapp.clipadd:@error", error);
 	}
       });
-      if(this.model.isValid()){
-	this.model.save({},{
-	  success:function(model,res){ // 返回值res为clipid:clipid
-	    model.id = res.clipid; // 将clip本身的id设置给model
-	    if(clipper){
-	      App.vent.trigger("app.clipapp.clipper:save");
-	    }else{
-	      App.vent.trigger("app.clipapp.clipadd:@success", model);
-	    }
-	  },
-	  error:function(model,error){  // 出现错误，触发统一事件
-	    target.attr("disabled",false);
-	    App.vent.trigger("app.clipapp.clipadd:@error");
-	  }
-	});
-      }
     },
     emptycliper:function(){
       App.vent.trigger("app.clipapp.clipper:empty");
@@ -164,16 +146,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.ClipApp.Editor.init();
     App.ClipApp.Editor.focus("editor");
     $("body").addClass("noscroll");
-    //console.info(document.cookie);
-    if(!/first=false/.test(document.cookie)){//判断是否是第一次打开网，新建clip
-      $(".message").show();
-    }else{
-      var data = new Date();
-      data.setTime(data.getTime() + 30*24*60*60*10000);
-      document.cookie = "first=false"+";expires=" + data.toGMTString();
-    }
     //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
-    if(document.all){
+    if(document.all){ // 非firefox
       document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
     }else{
       document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
@@ -200,7 +174,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   };
 
   // 由外部触发
-  App.vent.bind("app.clipapp.clip:update",function(data){
+  App.vent.bind("app.clipapp.clipadd:update",function(data){
     clip.note = data.note;
     clip.tag = data.tag;
     clip.public = data.public;
@@ -225,8 +199,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     ClipAdd.close(clip);
   });
 
-  App.vent.bind("app.clipapp.clipadd:@error", function(){
-    // console.info("addClip error"); // 触发统一的错误事件
+  App.vent.bind("app.clipapp.clipadd:@error", function(error){
+    App.vent.trigger("app.clipapp.message:confirm", error);
+    App.vent.unbind("app.clipapp.message:sure");
+    App.vent.bind("app.clipapp.message:sure", function(){
+      App.ClipApp.Editor.focus("editor");
+    });
   });
 
   return ClipAdd;

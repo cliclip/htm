@@ -52,11 +52,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     userList: function(e){
       App.vent.trigger("app.clipapp:usershow", user_id);
-      /*if(App.util.self(user_id)){//点击右侧用户大头像，跳到用户首页需要修改右上角三个标签的样式
-	App.util.current_page("my");
-      }else {
-	App.util.current_page("");
-      }*/
     },
     following: function(){
       App.vent.trigger("app.clipapp:showfollowing", user_id);

@@ -83,7 +83,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //ie-7 8 无getSelection()只有document.selection  ie9 两个对象都有
       if(document.selection&&document.selection.createRange().htmlText){
 	return;
-      }else if(window.getSelection&&$.trim(window.getSelection().toString())){
+      }else if(window.getSelection()&&$.trim(window.getSelection().toString())){
 	return;
       }
       var recommend = {

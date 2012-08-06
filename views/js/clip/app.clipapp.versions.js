@@ -359,7 +359,8 @@ App.versions = (function($){
 	  content:{
 	    is_null      : "摘录内容不能为空",
 	    not_array    : "摘录必须是数组",
-	    is_empty     : "摘录不能为空"
+	    is_empty     : "摘录不能为空",
+	    no_change    : "摘录内容没有变化"
 	  },
 	  follow:{
 	    all          : "您已经追了该用户的全部标签"
@@ -784,7 +785,8 @@ App.versions = (function($){
 	  content:{
 	    is_null      : "Content can't be null",
 	    not_array    : "Content must be array",
-	    is_empty     : "Content can't be empty"
+	    is_empty     : "Content can't be empty",
+	    no_change    : "Content dose't change"
 	  },
 	  follow:{
 	    all          : "You have already followed all tags of this user"

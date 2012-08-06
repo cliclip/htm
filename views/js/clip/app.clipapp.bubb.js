@@ -73,8 +73,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   Bubb.showBubs = function(uid){ // 直接显示 六个主观tag即可
     App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs[lang], [], null, true));
   };
-
-  /*
+/*
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
     getUserBubs(uid, function(tags, follows){
@@ -82,8 +81,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
-  */
-
+*/
   Bubb.followUserBubs = function(uid, tag){
     if(!uid) uid = App.ClipApp.Face.getUserId();;
     followUserTag(uid, tag, function(){
@@ -186,22 +184,12 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function getSiteTags(callback){
     // API getSiteTags
-    // CHANGE 需按当前用户查找各 tag 的 follow 关系
-    // GET $HOST/$BASE/_/user/0/meta/0..19
     // 替换掉之前的取用户2的数据为，常量
     var	siteTags = {
       zh: ["好看", "有趣","好听", "真赞", "好吃",  "想要", "精辟","讨厌","书籍","电影","旅游","资料"],
       en: ["pretty","funny","musical","cool","tasty","wish","incisive","hate","book","film","tour","data"]
     };
     callback(siteTags[lang],[]);
-
-    /*var bubbModel = new BubbModel({id: "2"});
-    var url = P+"/user/"+bubbModel.id+"/meta/0..19";
-    bubbModel.fetch({url: url});
-    bubbModel.onChange(function(bubbs){
-      var bubb = bubbs.toJSON();
-      callback(bubb.tag, bubb.follow);
-    });*/
   }
 
   function getSiteBubs(callback){
@@ -229,16 +217,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       callback(bubb.tag.slice(0,19), bubb.follow);
     });
   }
-
-  /*
+/*
   function getUserBubs(uid, callback){
     getUserTags(uid, function(tags, follows){
       var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
     });
-  }*/
-
+  }
+*/
   function followUserTag(uid, tag, callback){
     if(!uid) uid = _uid;
     var url = url = P+"/user/"+uid+"/follow";
