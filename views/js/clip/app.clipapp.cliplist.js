@@ -110,15 +110,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
       };
       switch(opt){
-	case 'biezhen'://收
+	case 'reclip'://收
 	  App.vent.trigger("app.clipapp:reclip",cid,mid,recommend,pub);break;
-	//case 'refresh'://转
+	//case 'recommend'://转
 	  //App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment",cid,mid);break;
 	case 'note'://注
 	  App.vent.trigger("app.clipapp:clipmemo",cid);break;
-	case 'change'://改
+	case 'modify'://改
 	  App.vent.trigger("app.clipapp:clipedit",cid);break;
 	case 'del'://删
 	  App.vent.trigger("app.clipapp:clipdelete",cid);break;

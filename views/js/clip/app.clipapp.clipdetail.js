@@ -34,15 +34,15 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       };
       var pub = this.model.get("public");
       switch(opt){
-	case 'biezhen':
+	case 'reclip':
 	App.vent.trigger("app.clipapp:reclip", cid,mid,recommend,pub);break;
-	//case 'refresh':
+	//case 'recommend':
 	//App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
 	case 'comment':
 	  App.vent.trigger("app.clipapp.clipdetail:@comment", cid);break;
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
-	case 'change':
+	case 'modify':
 	  App.vent.trigger("app.clipapp.clipdetail:resetUrl", hist, offset);
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
