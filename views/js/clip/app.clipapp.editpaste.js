@@ -1,13 +1,12 @@
 App.ClipApp.Editor = (function(App, Backbone, $){
   var Editor = {};
-  var isIE = (navigator.appName.indexOf("Microsoft")!=-1)?true:false;
+  var isIE =( Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
   Editor.init = function(){
     var ifrm=document.getElementById("editor");
     ifrm.contentWindow.document.designMode = "On";
     ifrm.contentWindow.document.write("<body style=\"font-size:16px;color:#333;line-height: 1.7;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     //ifrm.contentWindow.document.write("<body style=\"font-size:20px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
-
     if(isIE){
       ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){
 	return pasteClipboardData(ifrm.id,e);

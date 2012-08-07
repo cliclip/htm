@@ -1,7 +1,6 @@
  // app.clipapp.cliplist.js
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
-  var flag = false;
   var clips_exist = true;
   var hide_clips = [];
   var clipListView = {};
@@ -75,7 +74,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	    $container.masonry("reload");
 	  },0);
 	}
-	flag = true;
       });
     },
     show_detail: function(){
@@ -83,7 +81,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //ie-7 8 无getSelection()只有document.selection  ie9 两个对象都有
       if(document.selection&&document.selection.createRange().htmlText){
 	return;
-      }else if(window.getSelection()&&$.trim(window.getSelection().toString())){
+      }else if(window.getSelection && $.trim(window.getSelection().toString())){
 	return;
       }
       var recommend = {
@@ -132,8 +130,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     itemView: ClipPreviewView
   });
 
-  ClipList.flag_show_user = true;//clippreview是否显示用户名和用户头像
-  // site == user2 网站首首页
+  ClipList.flag_show_user = true; //clippreview是否显示用户名和用户头像
   ClipList.showSiteClips = function(tag){
     ClipList.flag_show_user = true;
     base_url = App.ClipApp.Url.base+"/query";

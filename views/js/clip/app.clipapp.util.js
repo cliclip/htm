@@ -280,7 +280,7 @@ App.util = (function(){
   util.get_imgid = function(frameid,callback){
     $("#" + frameid).unbind("load");
     $("#" + frameid).load(function(){ // 加载图片
-      if(window.navigator.userAgent.indexOf("MSIE")>=1){
+      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){
 	var returnVal = this.contentWindow.document.documentElement.innerText;
       }else{
 	var returnVal = this.contentDocument.documentElement.textContent;
