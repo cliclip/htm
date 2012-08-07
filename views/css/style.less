@@ -26,7 +26,7 @@
   -webkit-border-radius: @radius;
   border-radius: @radius;
   //position:relative;
-  behavior: url(css/pie.htc);
+  //behavior: url(css/pie.htc);
 }
 
 .border-radius-input (@radius) {
@@ -34,9 +34,8 @@
   -webkit-border-radius: @radius;
   border-radius: @radius;
 }
-
-.align-left{float:left;}
-.align-right{float:right;}
+a{color:#005580;}
+img{max-width: 100000px;}
 .message{
 	background:url(../img/message.png)no-repeat left top;
 	font-size:20px;
@@ -51,7 +50,6 @@
 	width:33px;
 	height:33px;
 	.sprites(-140px,-160px);
-	// z-index:10;
 	position: absolute;
 	right:-15px;
 	top:-15px;
@@ -1024,9 +1022,23 @@ section.follow_frame{
 			.sprites(-140px,-220px);
 		}
 	}
-	.verify{width:165px;height:37px;.sprites(-340px,-431px);margin-right:15px;margin-bottom:6px;}
-	.cancel{width:90px;height:37px;.sprites(-340px,-476px);margin-bottom:6px;}
-        .cliper{display:none;margin-bottom:6px;}
+	.verify{
+		width:165px;
+		height:37px;
+		.sprites(-340px,-431px);
+		margin-right:15px;
+		margin-bottom:6px;
+	}
+	.cancel{
+		width:90px;
+		height:37px;
+		.sprites(-340px,-476px);
+		margin-bottom:6px;
+	}
+        .cliper{
+		display:none;
+		margin-bottom:6px;
+	}
 }
 .success-view{
 	.success{
@@ -1243,6 +1255,10 @@ a#focus{
 			}
 			span{
 				margin-left:5px;
+				input[type="file"]{
+					height: 35px;
+					right: 0;
+				}
 			}
 			button{
 				border:0 none;
@@ -1806,33 +1822,39 @@ section.edit_frame{
 			iframe{
 				display:none;
 			}
-			.btn_frame{
-				margin-top: 5px;
-				input{    
-					font-size: 29px;
-					height: 38px;
-					top: -16px;
-				}
-				button{
-					float:left;
+			form{
+				margin-top: -10px;
+				button.verify{
+					width:90px;
+					height:37px;
+					float:right;
+					.sprites(-340px,-431px);
+					display:none;
 					border:none;
 					color:#fff;
 					padding:0;
 					line-height:36px;
 				}
-				button.upload{
-					width:110px;
+				span.file{
 					height:37px;
-					margin-top:-15px;
-					.sprites(-340px,-431px);
-				}
-				button.verify{
-					width:90px;
-					height:37px;
-					float:right;
-					margin-top:-15px;
-					.sprites(-340px,-431px);
-					display:none;
+					input[type=file]{    
+						font-size: 29px;
+						height: 38px;
+						top: -1px;
+						*top:-5px;
+						*width:10000px;
+						width:430px;
+					}
+					button.upload{
+						float:left;
+						border:none;
+						color:#fff;
+						padding:0;
+						line-height:36px;
+						width:110px;
+						height:37px;
+						.sprites(-340px,-431px);
+					}
 				}
 			}
 		}
@@ -1901,7 +1923,8 @@ section.edit_frame{
 				line-height:30px;
 				margin-bottom:10px;
 				border-bottom:2px solid #ccc;
-				.add_mailbind{
+				.add_accountbind{
+					float:right;
 					height:25px;
 					line-height:22px;
 					.sprites(-340px,-690px);

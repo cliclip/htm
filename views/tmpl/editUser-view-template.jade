@@ -29,7 +29,7 @@ script(type="text/template",id="faceEdit-view-template")
     | <div class="btn_frame">
     | <button class="verify" type="submit" id="confirm_face"><%=_i18n('faceEdit.ok')%></button>
     | <div class="button_frame">
-    | <span>
+    | <span class="file">
     | <button class="upload"><%=_i18n('faceEdit.upload')%></button>
     | <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
     | </span>
@@ -54,7 +54,7 @@ script(type="text/template",id="emailEdit-view-template")
   .mail_verify.fir
     ul.mail_list
       h3
-        button.add_mailbind.align-right(type="button",id="email_add",)
+        button.add_accountbind(type="button",id="email_add",)
           span
           |<%=_i18n('emailEdit.add')%> 	
         |<%=_i18n('emailEdit.title')%>
@@ -124,7 +124,7 @@ script(type="text/template",id="weiboEdit-view-template")
   .mail_verify.fir
     ul.mail_list
       h3
-        button.add_mailbind.align-right(type="button",id="info_add",)
+        button.add_accountbind(type="button",id="info_add",)
           span
           |<%=_i18n('weiboEdit.add')%> 	
         |<%=_i18n('weiboEdit.title')%>
@@ -140,7 +140,7 @@ script(type="text/template",id="twitterEdit-view-template")
   .mail_verify.sec
     ul.mail_list
       h3
-        button.add_mailbind.align-right(type="button",id="info_add",)
+        button.add_accountbind(type="button",id="info_add",)
           span
           |<%=_i18n('twitterEdit.add')%> 	
         |<%=_i18n('twitterEdit.title')%>
