@@ -1,9 +1,9 @@
 App.ClipApp.Editor = (function(App, Backbone, $){
   var Editor = {};
-  var isIE =( Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
 
   Editor.init = function(){
     var ifrm=document.getElementById("editor");
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     ifrm.contentWindow.document.designMode = "On";
     ifrm.contentWindow.document.write("<body style=\"font-size:16px;color:#333;line-height: 1.7;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     //ifrm.contentWindow.document.write("<body style=\"font-size:20px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
@@ -31,6 +31,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
     var objEditor = document.getElementById(editorId);
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     if(isIE){
       setTimeout(function(){
 	// ie 在列表页多次点击，会将要编辑的内容加到页面的最上边 [还需测试]
@@ -62,6 +63,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   // data 可以是一个对象 没有必要设为数组
   Editor.insertImage = function(editorId, data){
     var objEditor = document.getElementById(editorId);
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     var img = "";
     if(data.url)
       img = "<img src="+data.url+ " style='max-width:630px;' />";
@@ -98,6 +100,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var newData;
     var objEditor = document.getElementById(editorId);
     var edDoc=objEditor.contentWindow.document;
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     if(isIE){
       var orRange=objEditor.contentWindow.document.selection.createRange();
       var ifmTemp=document.getElementById("ifmTemp");
