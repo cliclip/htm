@@ -164,7 +164,10 @@ if(typeof console !="object"){
   };
 }
 
-App.bind("initialize:before", function(){
+App.bind("initialize:after", function(){
+  if(Backbone.history){
+    Backbone.history.start();
+  }
   Modernizr.addTest("browser", function(){
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
     var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器
@@ -195,12 +198,7 @@ App.bind("initialize:before", function(){
     if(isSafari) return "safari";
     return null;
   });
-});
 
-App.bind("initialize:after", function(){
-  if(Backbone.history){
-    Backbone.history.start();
-  }
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
    // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
