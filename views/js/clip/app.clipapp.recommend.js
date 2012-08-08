@@ -255,7 +255,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	$("body").addClass("noscroll");
       }
       //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
-      if(/msie/i.test(navigator.userAgent)){
+      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){
 	function nameListAction(evt){
 	  that.$("#imgId").css("display","none");
 	  var str = $.trim(that.$("#recomm_name").val());

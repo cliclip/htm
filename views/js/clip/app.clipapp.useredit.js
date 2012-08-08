@@ -391,19 +391,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   };
 
-  function removeFace(facemodel,face_id,callback){
-    facemodel.destroy({
-      url: P+"/user/"+ facemodel.id+"/face/" +face_id,
-      success:function(){
-	callback(true);
-	//console.info("delete success!!!!!!!!!!");
-      },
-      error:function(){
-	callback(false);
-	//console.info("delete error!!!!!!!!!!");
-      }
-    });
-  };
 /*
   function saveFace(facemodel,params){
     facemodel.save(params,{
@@ -422,7 +409,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   function faceLoad(originalFace,uid){
     $("#post_frame_face").unbind("load");
     $("#post_frame_face").load(function(){ // 加载图片
-      if(window.navigator.userAgent.indexOf("MSIE")>=1){
+      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){
 	var returnVal = this.contentWindow.document.documentElement.innerText;
       }else{
 	var returnVal = this.contentDocument.documentElement.textContent;
@@ -448,13 +435,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 		//console.info("error!!!!!!!!!!");
 	      }
 	    });
-	    /*if(originalFace && originalFace!=currentFace){
-	      removeFace(facemodel,originalFace,function(){ //删除原始头像
-		saveFace(facemodel,{face:currentFace}); //保存新上传的头像
-	      });
-	    }else {
-	      saveFace(facemodel,{face:currentFace});
-	    }*/
 	  }
 	}else{//上传失败
 	  if(submit_face){//flag 作用判断是刚刚打开设置页面还是正在更新头像

@@ -65,15 +65,7 @@ App.util = (function(){
   util.getFace_upUrl = function(){
     return P+"/user/" + util.getMyUid() + "/upload_face";
   };
-/*
-  util.getPopTop = function(clss){
-    var top = 0;
-    var scroll = document.documentElement.scrollTop + document.body.scrollTop;
-    if(clss == "big"){ return  15+"px"; }
-    else { return 150+"px"; };
-    // return scroll + top + "px";
-  };
-*/
+
   util.unique_url = function(url){
     var now = new Date();
     return url + "?now=" + now.getTime();
@@ -132,7 +124,7 @@ App.util = (function(){
   function getContentText (content){
     // 取得ubb中常用的标签之后留下的内容
     // 去掉所有的ubb标签中的内容，只留下文本内容
-    var reg1 = /\[img\].*\[\/img\]?/;
+    var reg1 = /\[img\].*?\[\/img\]/gi;
     var reg = /\[\/?[^\]].*?\]/gi;  //\[\/?[^].*?\]/gi;
     // 去除img标签
     while(reg1.test(content)) content = content.replace(reg1,"");
@@ -146,8 +138,8 @@ App.util = (function(){
     if (!content) return r;
     if (_.isString(content) && content.length){
       // 先对content内容进行空格去除，在做截断
-      content = content.replace(/\s+/g," "); // 去掉p标签
-      content = content.replace(/&nbsp;/g, "");
+      content = content.replace(/\s+/g," ");
+      content = content.replace(/&nbsp;+/g, "");
       if(content.length < length){
 	r = content;
       } else {
@@ -288,7 +280,7 @@ App.util = (function(){
   util.get_imgid = function(frameid,callback){
     $("#" + frameid).unbind("load");
     $("#" + frameid).load(function(){ // 加载图片
-      if(window.navigator.userAgent.indexOf("MSIE")>=1){
+      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){
 	var returnVal = this.contentWindow.document.documentElement.innerText;
       }else{
 	var returnVal = this.contentDocument.documentElement.textContent;

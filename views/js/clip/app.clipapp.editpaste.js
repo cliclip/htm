@@ -1,13 +1,13 @@
 App.ClipApp.Editor = (function(App, Backbone, $){
   var Editor = {};
-  var isIE = (navigator.appName.indexOf("Microsoft")!=-1)?true:false;
+
   Editor.init = function(){
     var ifrm=document.getElementById("editor");
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     ifrm.contentWindow.document.designMode = "On";
     ifrm.contentWindow.document.write("<body style=\"font-size:16px;color:#333;line-height: 1.7;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     //ifrm.contentWindow.document.write("<body style=\"font-size:20px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
-
     if(isIE){
       ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){
 	return pasteClipboardData(ifrm.id,e);
@@ -24,18 +24,14 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 
   Editor.getContent = function(editorId){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
-    // if(isIE){
-      var data = objEditor.contentWindow.document.body.innerHTML;
-    //console.info(data);
-    // }else{
-      // var data = objEditor.contentWindow.document.body.innerHTML;;
-    // }
+    var data = objEditor.contentWindow.document.body.innerHTML;
     return App.ClipApp.Convert.toUbb(data); // 此处的内容会提交到api层去
   };
 
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
     var objEditor = document.getElementById(editorId);
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     if(isIE){
       setTimeout(function(){
 	// ie 在列表页多次点击，会将要编辑的内容加到页面的最上边 [还需测试]
@@ -67,6 +63,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   // data 可以是一个对象 没有必要设为数组
   Editor.insertImage = function(editorId, data){
     var objEditor = document.getElementById(editorId);
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     var img = "";
     if(data.url)
       img = "<img src="+data.url+ " style='max-width:630px;' />";
@@ -103,6 +100,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
     var newData;
     var objEditor = document.getElementById(editorId);
     var edDoc=objEditor.contentWindow.document;
+    var isIE = (Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
     if(isIE){
       var orRange=objEditor.contentWindow.document.selection.createRange();
       var ifmTemp=document.getElementById("ifmTemp");
@@ -130,7 +128,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       newData=ifmTemp.contentWindow.document.body.innerHTML;
       //filter the pasted data
       newData =  App.ClipApp.Convert.filter(newData);
-      ifmTemp.contentWindow.document.body.innerHTML=newData;
+      // ifmTemp.contentWindow.document.body.innerHTML=newData;
       // paste the data into the editor
       orRange.pasteHTML(newData);
       //block default paste
@@ -138,65 +136,71 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 	e.returnValue = false;
 	if(e.preventDefault)
 	  e.preventDefault();
-     }
-     return false;
-   }else{
-     enableKeyDown=false;
-     //create the temporary html editor
-     // var divTemp=edDoc.createElement("DIV");
-     divTemp=edDoc.createElement("DIV");
-     divTemp.id='htmleditor_tempdiv';
-     divTemp.innerHTML='\uFEFF';
-     divTemp.style.left="-10000px";	//hide the div
-     divTemp.style.height="1px";
-     divTemp.style.width="1px";
-     divTemp.style.position="absolute";
-     divTemp.style.overflow="hidden";
-     edDoc.body.appendChild(divTemp);
-     //disable keyup,keypress, mousedown and keydown
-     objEditor.contentWindow.document.addEventListener("mousedown",block,false);
-     objEditor.contentWindow.document.addEventListener("keydown",block,false);
-     enableKeyDown=false;
-     //get current selection;
-     w=objEditor.contentWindow;
-     or=getSel(w).getRangeAt(0);
+      }
+      return false;
+    }else{
+      enableKeyDown=false;
+      //create the temporary html editor
+      divTemp=edDoc.createElement("DIV");
+      divTemp.id='htmleditor_tempdiv';
+      divTemp.innerHTML='\uFEFF';
+      divTemp.style.left="-10000px";	//hide the div
+      divTemp.style.height="1px";
+      divTemp.style.width="1px";
+      divTemp.style.position="absolute";
+      divTemp.style.overflow="hidden";
+      edDoc.body.appendChild(divTemp);
+      //disable keyup,keypress, mousedown and keydown
+      objEditor.contentWindow.document.addEventListener("mousedown",block,false);
+      objEditor.contentWindow.document.addEventListener("keydown",block,false);
+      enableKeyDown=false;
+      //get current selection;
+      w=objEditor.contentWindow;
+      or=getSel(w).getRangeAt(0);
 
-     //move the cursor to into the div
-     var docBody=divTemp.firstChild;
-     rng = edDoc.createRange();
-     rng.setStart(docBody, 0);
-     rng.setEnd(docBody, 1);
-     setRange(getSel(w),rng);
-
-     originText=objEditor.contentWindow.document.body.textContent;
-     // console.log(originText);
-     if(originText==='\uFEFF'){
-       originText="";
-     }
-     window.setTimeout(function(){
-       //get and filter the data after onpaste is done
-       if(divTemp.innerHTML==='\uFEFF'){
-	 newData="";
-	 edDoc.body.removeChild(divTemp);
-	 return;
-       }
-       newData=divTemp.innerHTML;
-       // Restore the old selection
-       if (or){
-	 setRange(getSel(w),or);
-       }
-       newData =  App.ClipApp.Convert.filter(newData);
-       divTemp.innerHTML=newData;
-       // paste the new data to the editor
-       objEditor.contentWindow.document.execCommand('inserthtml', false, newData );
-       edDoc.body.removeChild(divTemp);
-  },0);
-  //enable keydown,keyup,keypress, mousedown;
-  enableKeyDown=true;
-  objEditor.contentWindow.document.removeEventListener("mousedown",block,false);
-  objEditor.contentWindow.document.removeEventListener("keydown",block,false);
-  return true;
+      //move the cursor to into the div
+      var docBody=divTemp.firstChild;
+      rng = edDoc.createRange();
+      rng.setStart(docBody, 0);
+      rng.setEnd(docBody, 1);
+      setRange(getSel(w),rng);
+      originText=objEditor.contentWindow.document.body.textContent;
+      // console.log(originText);
+      if(originText==='\uFEFF'){
+	originText="";
+      }
+      window.setTimeout(function(){
+	//get and filter the data after onpaste is done
+	if(divTemp.innerHTML==='\uFEFF'){
+	  newData="";
+	  edDoc.body.removeChild(divTemp);
+	  return;
+	}
+	newData=divTemp.innerHTML;
+	// Restore the old selection
+	if (or){
+	  setRange(getSel(w),or);
+	}
+	edDoc.body.removeChild(divTemp);
+	newData =  App.ClipApp.Convert.filter(newData);
+	// divTemp.innerHTML=newData;
+	// paste the new data to the editor
+	objEditor.contentWindow.document.execCommand('inserthtml', false, newData );
+	// webkit为核心的浏览器
+	if( Modernizr.browser == "Chrome" || Modernizr.browser == "Safari"){
+	  objEditor.contentWindow.document.execCommand('inserthtml', false, '<p>&nbsp;</p><span id="cke_paste_marker" data-cke-temp="1"></span>');
+	  var marker = objEditor.contentWindow.document.getElementById( 'cke_paste_marker' );
+	  marker.scrollIntoView(false); // 不家false参数 会影响到外部的滚动条
+	  $(marker).remove();
+	  marker = null;
+	}
+      },0);
+      //enable keydown,keyup,keypress, mousedown;
+      enableKeyDown=true;
+      objEditor.contentWindow.document.removeEventListener("mousedown",block,false);
+      objEditor.contentWindow.document.removeEventListener("keydown",block,false);
+      return true;
+    };
   };
-};
   return Editor;
 })(App, Backbone, jQuery);

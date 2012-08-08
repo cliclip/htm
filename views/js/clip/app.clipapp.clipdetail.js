@@ -406,9 +406,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(/clip\/([0-9]+)\/([0-9]+)/.test(hist)) hist = "";
     Backbone.history.navigate(hist, false);
     // ie7、Chrome、Safari
-    if(navigator.appVersion.match(/7./i)=="7."
-       || navigator.userAgent.indexOf("Chrome") > 0
-       || navigator.userAgent.indexOf("Safari") > 0
+    if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "Chrome"|| Modernizr.browser == "Safari"
      ){
       $("body").scrollTop(offset);
     }else{

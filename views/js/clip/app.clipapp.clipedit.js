@@ -38,7 +38,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       flag = false;
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
-      var isIE=document.all? true:false;
+      var isIE= (Modernizr.browser== "lt-ie8" || Modernizr.browser== "gt-ie7")?true:false;
       var win=document.getElementById('editor').contentWindow;
       var doc=win.document;
       //ieRange=false;
@@ -109,7 +109,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     var uid = that.model.get("user");
     var change = App.util.isImage("formUpload");
     if(!change){
-      App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
+      App.vent.trigger("app.clipapp.clipedit:@error","imageUp_fail");
     }else{
 
       /*if( sender.files &&sender.files[0] ){
@@ -144,7 +144,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       setTimeout(function(){
 	old_content = App.ClipApp.Editor.getContent("editor"); //参数为编辑器id
       },200);
-      if(document.all){ // 非firefox
+      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){ // 非firefox
 	document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
       }else{
 	document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
