@@ -133,70 +133,71 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 	e.returnValue = false;
 	if(e.preventDefault)
 	  e.preventDefault();
-     }
-     return false;
-   }else{
-     enableKeyDown=false;
-     //create the temporary html editor
-     divTemp=edDoc.createElement("DIV");
-     divTemp.id='htmleditor_tempdiv';
-     divTemp.innerHTML='\uFEFF';
-     divTemp.style.left="-10000px";	//hide the div
-     divTemp.style.height="1px";
-     divTemp.style.width="1px";
-     divTemp.style.position="absolute";
-     divTemp.style.overflow="hidden";
-     edDoc.body.appendChild(divTemp);
-     //disable keyup,keypress, mousedown and keydown
-     objEditor.contentWindow.document.addEventListener("mousedown",block,false);
-     objEditor.contentWindow.document.addEventListener("keydown",block,false);
-     enableKeyDown=false;
-     //get current selection;
-     w=objEditor.contentWindow;
-     or=getSel(w).getRangeAt(0);
+      }
+      return false;
+    }else{
+      enableKeyDown=false;
+      //create the temporary html editor
+      divTemp=edDoc.createElement("DIV");
+      divTemp.id='htmleditor_tempdiv';
+      divTemp.innerHTML='\uFEFF';
+      divTemp.style.left="-10000px";	//hide the div
+      divTemp.style.height="1px";
+      divTemp.style.width="1px";
+      divTemp.style.position="absolute";
+      divTemp.style.overflow="hidden";
+      edDoc.body.appendChild(divTemp);
+      //disable keyup,keypress, mousedown and keydown
+      objEditor.contentWindow.document.addEventListener("mousedown",block,false);
+      objEditor.contentWindow.document.addEventListener("keydown",block,false);
+      enableKeyDown=false;
+      //get current selection;
+      w=objEditor.contentWindow;
+      or=getSel(w).getRangeAt(0);
 
-     //move the cursor to into the div
-     var docBody=divTemp.firstChild;
-     rng = edDoc.createRange();
-     rng.setStart(docBody, 0);
-     rng.setEnd(docBody, 1);
-     setRange(getSel(w),rng);
-     originText=objEditor.contentWindow.document.body.textContent;
-     // console.log(originText);
-     if(originText==='\uFEFF'){
-       originText="";
-     }
-     window.setTimeout(function(){
-       //get and filter the data after onpaste is done
-       if(divTemp.innerHTML==='\uFEFF'){
-	 newData="";
-	 edDoc.body.removeChild(divTemp);
-	 return;
-       }
-       newData=divTemp.innerHTML;
-       // Restore the old selection
-       if (or){
-	 setRange(getSel(w),or);
-       }
-       edDoc.body.removeChild(divTemp);
-       newData =  App.ClipApp.Convert.filter(newData);
-       // divTemp.innerHTML=newData;
-       // paste the new data to the editor
-       objEditor.contentWindow.document.execCommand('inserthtml', false, newData );
-       if( /webkit/i.test(navigator.userAgent) ){
-	 objEditor.contentWindow.document.execCommand('inserthtml', false, '<p>&nbsp;</p><span id="cke_paste_marker" data-cke-temp="1"></span>');
-	 var marker = objEditor.contentWindow.document.getElementById( 'cke_paste_marker' );
-	 marker.scrollIntoView(false); // 不家false参数 会影响到外部的滚动条
-	 $(marker).remove();
-	 marker = null;
-       }
-  },0);
-  //enable keydown,keyup,keypress, mousedown;
-  enableKeyDown=true;
-  objEditor.contentWindow.document.removeEventListener("mousedown",block,false);
-  objEditor.contentWindow.document.removeEventListener("keydown",block,false);
-  return true;
+      //move the cursor to into the div
+      var docBody=divTemp.firstChild;
+      rng = edDoc.createRange();
+      rng.setStart(docBody, 0);
+      rng.setEnd(docBody, 1);
+      setRange(getSel(w),rng);
+      originText=objEditor.contentWindow.document.body.textContent;
+      // console.log(originText);
+      if(originText==='\uFEFF'){
+	originText="";
+      }
+      window.setTimeout(function(){
+	//get and filter the data after onpaste is done
+	if(divTemp.innerHTML==='\uFEFF'){
+	  newData="";
+	  edDoc.body.removeChild(divTemp);
+	  return;
+	}
+	newData=divTemp.innerHTML;
+	// Restore the old selection
+	if (or){
+	  setRange(getSel(w),or);
+	}
+	edDoc.body.removeChild(divTemp);
+	newData =  App.ClipApp.Convert.filter(newData);
+	// divTemp.innerHTML=newData;
+	// paste the new data to the editor
+	objEditor.contentWindow.document.execCommand('inserthtml', false, newData );
+	// webkit为核心的浏览器
+	if( Modernizr.browser == "Chrome" || Modernizr.browser == "Safari"){
+	  objEditor.contentWindow.document.execCommand('inserthtml', false, '<p>&nbsp;</p><span id="cke_paste_marker" data-cke-temp="1"></span>');
+	  var marker = objEditor.contentWindow.document.getElementById( 'cke_paste_marker' );
+	  marker.scrollIntoView(false); // 不家false参数 会影响到外部的滚动条
+	  $(marker).remove();
+	  marker = null;
+	}
+      },0);
+      //enable keydown,keyup,keypress, mousedown;
+      enableKeyDown=true;
+      objEditor.contentWindow.document.removeEventListener("mousedown",block,false);
+      objEditor.contentWindow.document.removeEventListener("keydown",block,false);
+      return true;
+    };
   };
-};
   return Editor;
 })(App, Backbone, jQuery);

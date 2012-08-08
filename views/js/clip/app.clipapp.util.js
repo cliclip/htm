@@ -124,7 +124,7 @@ App.util = (function(){
   function getContentText (content){
     // 取得ubb中常用的标签之后留下的内容
     // 去掉所有的ubb标签中的内容，只留下文本内容
-    var reg1 = /\[img\].*\[\/img\]?/;
+    var reg1 = /\[img\].*?\[\/img\]/gi;
     var reg = /\[\/?[^\]].*?\]/gi;  //\[\/?[^].*?\]/gi;
     // 去除img标签
     while(reg1.test(content)) content = content.replace(reg1,"");
