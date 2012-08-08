@@ -1,6 +1,7 @@
 App.ClipApp.Editor = (function(App, Backbone, $){
   var Editor = {};
   var isIE =( Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7") ? true : false;
+
   Editor.init = function(){
     var ifrm=document.getElementById("editor");
     ifrm.contentWindow.document.designMode = "On";
@@ -23,12 +24,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 
   Editor.getContent = function(editorId){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
-    // if(isIE){
-      var data = objEditor.contentWindow.document.body.innerHTML;
-    //console.info(data);
-    // }else{
-      // var data = objEditor.contentWindow.document.body.innerHTML;;
-    // }
+    var data = objEditor.contentWindow.document.body.innerHTML;
     return App.ClipApp.Convert.toUbb(data); // 此处的内容会提交到api层去
   };
 
@@ -129,7 +125,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       newData=ifmTemp.contentWindow.document.body.innerHTML;
       //filter the pasted data
       newData =  App.ClipApp.Convert.filter(newData);
-      ifmTemp.contentWindow.document.body.innerHTML=newData;
+      // ifmTemp.contentWindow.document.body.innerHTML=newData;
       // paste the data into the editor
       orRange.pasteHTML(newData);
       //block default paste
@@ -142,7 +138,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
    }else{
      enableKeyDown=false;
      //create the temporary html editor
-     // var divTemp=edDoc.createElement("DIV");
      divTemp=edDoc.createElement("DIV");
      divTemp.id='htmleditor_tempdiv';
      divTemp.innerHTML='\uFEFF';
@@ -166,7 +161,6 @@ App.ClipApp.Editor = (function(App, Backbone, $){
      rng.setStart(docBody, 0);
      rng.setEnd(docBody, 1);
      setRange(getSel(w),rng);
-
      originText=objEditor.contentWindow.document.body.textContent;
      // console.log(originText);
      if(originText==='\uFEFF'){
@@ -184,11 +178,18 @@ App.ClipApp.Editor = (function(App, Backbone, $){
        if (or){
 	 setRange(getSel(w),or);
        }
+       edDoc.body.removeChild(divTemp);
        newData =  App.ClipApp.Convert.filter(newData);
-       divTemp.innerHTML=newData;
+       // divTemp.innerHTML=newData;
        // paste the new data to the editor
        objEditor.contentWindow.document.execCommand('inserthtml', false, newData );
-       edDoc.body.removeChild(divTemp);
+       if( /webkit/i.test(navigator.userAgent) ){
+	 objEditor.contentWindow.document.execCommand('inserthtml', false, '<p>&nbsp;</p><span id="cke_paste_marker" data-cke-temp="1"></span>');
+	 var marker = objEditor.contentWindow.document.getElementById( 'cke_paste_marker' );
+	 marker.scrollIntoView(false); // 不家false参数 会影响到外部的滚动条
+	 $(marker).remove();
+	 marker = null;
+       }
   },0);
   //enable keydown,keyup,keypress, mousedown;
   enableKeyDown=true;
