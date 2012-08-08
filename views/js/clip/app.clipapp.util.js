@@ -138,8 +138,8 @@ App.util = (function(){
     if (!content) return r;
     if (_.isString(content) && content.length){
       // 先对content内容进行空格去除，在做截断
-      content = content.replace(/\s+/g," "); // 去掉p标签
-      content = content.replace(/&nbsp;/g, "");
+      content = content.replace(/\s+/g," ");
+      content = content.replace(/&nbsp;+/g, "");
       if(content.length < length){
 	r = content;
       } else {

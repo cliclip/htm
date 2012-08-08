@@ -59,7 +59,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
-      var isIE=document.all? true:false;
+      var isIE=(Modernizr.browser== "lt-ie8" || Modernizr.browser== "gt-ie7")? true:false;
       var win=document.getElementById('editor').contentWindow;
       var doc=win.document;
       //ieRange=false;
@@ -147,7 +147,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.ClipApp.Editor.focus("editor");
     $("body").addClass("noscroll");
     //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
-    if(document.all){ // 非firefox
+    if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){ // 非firefox
       document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
     }else{
       document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
