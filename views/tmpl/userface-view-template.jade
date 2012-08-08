@@ -21,7 +21,6 @@ script(type='text/template',id='userface-view-template')
       dd.clearfix
         span.icons_frame
           span.icon_follow
-            //-i.icon_biezhen
             div.
               <a class="following">
                 <% if(id == App.util.getMyUid()){%>
@@ -30,7 +29,6 @@ script(type='text/template',id='userface-view-template')
                 <% } %>
               </a> 
           span.icon_block
-            //-i.icon_quote
             div.
               <a class="follower">
                 <% if(id == App.util.getMyUid()){%>

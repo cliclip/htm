@@ -46,10 +46,8 @@ label {
   color: @grayDark;
 }
 
-// Inputs, Textareas, Selects   input[type="text"]本未设定type ie圆角设定与ie 透明效果冲突，为其加入type="text"
-input[type="text"],
-input[type="password"],
-input[type="textarea"],
+// Inputs, Textareas, Selects   
+input,
 textarea,
 select,
 .uneditable-input {
@@ -62,7 +60,7 @@ select,
   line-height: @baseLineHeight;
   color: @gray;
   border: 1px solid #ccc;
-  .border-radius-input(3px);
+  .border-radius(3px);
 }
 .uneditable-textarea {
   width: auto;
@@ -88,7 +86,7 @@ input[type="radio"] {
   line-height: normal;
   border: 0;
   cursor: pointer;
-  .border-radius(0);
+  border-radius: 0 e("\0/"); // Nuke border-radius for IE9 only
 }
 
 // Reset the file input to browser defaults

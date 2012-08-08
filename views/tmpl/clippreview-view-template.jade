@@ -35,12 +35,10 @@ script(type="text/template",id="clippreview-view-template")
         | <%= content.text %>
       <%}%>
     footer.master
-      div.metas.icons_frame
+      div.metas
         span.icon_block
-          //- i.icon_biezhen
           | <%=reprint_count?reprint_count:0%>&nbsp; <%=_i18n('clippreview.reprint')%>
         span.icon_block
-          //- i.icon_quote
           | <%=reply_count?reply_count:0%>&nbsp; <%=_i18n('clippreview.reply')%>
       div.user_info_small
         <% if(user && App.ClipApp.ClipList.flag_show_user){ %>
@@ -55,12 +53,12 @@ script(type="text/template",id="clippreview-view-template")
       div.action#opt(style="display:none;").
         <% if( App.util.self(user.id) ) {%>
           <i class="note operate" title="<%=_i18n('clippreview.memo')%>" id="<%=user.id%>:<%=id%>"></i>
-          <i class="change operate" title="<%=_i18n('clippreview.update')%>" id="<%=user.id%>:<%=id%>"></i>
+          <i class="modify operate" title="<%=_i18n('clippreview.update')%>" id="<%=user.id%>:<%=id%>"></i>
           <i class="del operate" title="<%=_i18n('clippreview.delete')%>" id="<%=user.id%>:<%=id%>"></i>
         <% } else {%>
-          <i class="biezhen operate" title="<%=_i18n('clippreview.reclip')%>" id="<%=user.id%>:<%=id%>"></i>
+          <i class="reclip operate" title="<%=_i18n('clippreview.reclip')%>" id="<%=user.id%>:<%=id%>"></i>
           <i ></i>
-          <!--<i class="refresh operate" title="<%=_i18n('clippreview.recommend')%>" id="<%=user.id%>:<%=id%>"></i>-->
+          <!--<i class="recommend operate" title="<%=_i18n('clippreview.recommend')%>" id="<%=user.id%>:<%=id%>"></i>-->
           <i class="comment operate" title="<%=_i18n('clippreview.comment')%>" id="<%=user.id%>:<%=id%>"></i>          
         <% } %>
     span.biezhen

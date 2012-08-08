@@ -351,12 +351,23 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_error");
       return false;
     }else{
-      if(sender.files && sender.files[0]&&(Modernizr.browser == "FF"||(window.google && window.chrome))){
-	$("#confirm_face").show();
-	preview_face(sender);// ff chrome
-	//$("#myface").attr("src",img.src);
-	return true;
-      }else if(sender.value && Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){
+      Modernizr.addTest('filereader', function () {
+	return !!(window.File && window.FileList && window.FileReader);
+      });
+      Modernizr.addTest('cssfilters', function() {
+	var el = document.createElement('div');
+	el.style.cssText = Modernizr._prefixes.join('filter' + ':blur(2px); ');
+	// return  !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
+	return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 6));
+      });
+      console.info(Modernizr.filereader);
+      console.info(Modernizr.cssfilters);
+      if(sender.files && sender.files[0]&&Modernizr.filereader){
+	  $("#confirm_face").show();
+	  preview_face(sender);// ff chrome
+	  //$("#myface").attr("src",img.src);
+	  return true;
+      }else if(Modernizr.cssfilters){
 	$("#confirm_face").show();
 	sender.select();
 	sender.blur();
@@ -375,8 +386,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	face_remote_flag = true;
 	$("#face_form").submit();
 	submit_face = true;
+	return true;
       }
-      return false;
     }
   };
 
