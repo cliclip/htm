@@ -406,12 +406,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(/clip\/([0-9]+)\/([0-9]+)/.test(hist)) hist = "";
     Backbone.history.navigate(hist, false);
     // ie7、Chrome、Safari
-    if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "Chrome"|| Modernizr.browser == "Safari"
-     ){
+    $(window).scrollTop(offset) || $(document.body).scrollTop(offset);
+    /*
+    if($('html').hasClass("lt-ie8") || $('html').hasClass('websqldatabase')){
       $("body").scrollTop(offset);
     }else{
       $("html").scrollTop(offset);
-    }
+    }*/
   });
 
   return ClipDetail;

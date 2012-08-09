@@ -20,17 +20,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       return this;
     }
   });
-  // constants
-  // 与显示无关，只是用来确定泡泡的大小而已
-  var bubs = {
-    zh: ["好看", "有趣","好听", "真赞", "好吃",  "想要"],
-    en: ["pretty","funny","musical","cool","tasty","wish"]
-  };
-  var sink = {
-    zh: ["讨厌"],
-    en: ["hate"]
-  };
-
   // private
   var _uid  = null;
   var last = null;
@@ -38,8 +27,16 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var self = true;
   var lang = App.versions.getLanguage(); // 用户语言设置
   var homepage = false;
-  // exports
 
+  // constants
+  // 与显示无关，只是用来确定泡泡的大小而已
+  var sink = {
+    zh: ["讨厌"],
+    en: ["hate"]
+  };
+  var bubs = App.util.getBubbs();
+
+  // exports
   Bubb.showSiteTags = function(tag){
     _uid = null;
     self = false;
@@ -71,7 +68,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   };
 
   Bubb.showBubs = function(uid){ // 直接显示 六个主观tag即可
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs[lang], [], null, true));
+    App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs, [], null, true));
   };
 /*
   Bubb.showUserBubs = function(uid, tag){
@@ -194,8 +191,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function getSiteBubs(callback){
     getSiteTags(function(tags, follows){
-      var tags2 = _.intersection(tags,bubs[lang]);
-      var follows2 = _.intersection(follows, bubs[lang]);
+      var tags2 = _.intersection(tags,bubs);
+      var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
     });
   }
@@ -301,8 +298,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var opt = {
       tags: tags,
       follows: follows,
-      bubs: self ? bubs[lang] : _.intersection(_.union(bubs.zh, bubs.en), tags),
-      sink: self ? sink[lang] : _.intersection(sink[lang], tags),
+      bubs: self ? bubs : _.intersection(bubs, tags),
+      sink: self ? sink : _.intersection(sink[lang], tags),
       self: self,
       t_reclip: _i18n('bubb.reclip'),
       t_follow: _i18n('bubb.follow'),

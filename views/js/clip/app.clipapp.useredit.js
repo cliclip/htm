@@ -409,7 +409,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   function faceLoad(originalFace,uid){
     $("#post_frame_face").unbind("load");
     $("#post_frame_face").load(function(){ // 加载图片
-      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){
+      if(App.util.isIE()){ // 保证是ie
 	var returnVal = this.contentWindow.document.documentElement.innerText;
       }else{
 	var returnVal = this.contentDocument.documentElement.textContent;

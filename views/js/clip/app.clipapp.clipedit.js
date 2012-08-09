@@ -1,6 +1,7 @@
 App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
+  var isIE = App.util.isIE();
   var edit_view = "", flag = false;
   var old_content = "",ieRange = false;
   var EditModel = App.Model.extend({
@@ -38,7 +39,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       flag = false;
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
-      var isIE= (Modernizr.browser== "lt-ie8" || Modernizr.browser== "gt-ie7")?true:false;
       var win=document.getElementById('editor').contentWindow;
       var doc=win.document;
       //ieRange=false;
@@ -144,7 +144,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       setTimeout(function(){
 	old_content = App.ClipApp.Editor.getContent("editor"); //参数为编辑器id
       },200);
-      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){ // 非firefox
+      //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
+      if(isIE){
 	document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
       }else{
 	document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
@@ -154,8 +155,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  $("#editClip_Save").click();
 	}
       }
-    });
-    //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
+   });
   };
 
   ClipEdit.close = function(n_content){
