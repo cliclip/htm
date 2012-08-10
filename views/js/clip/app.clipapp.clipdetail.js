@@ -405,14 +405,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.clipdetail:resetUrl", function(hist, offset){
     if(/clip\/([0-9]+)\/([0-9]+)/.test(hist)) hist = "";
     Backbone.history.navigate(hist, false);
-    // ie7、Chrome、Safari
-    $(window).scrollTop(offset) || $(document.body).scrollTop(offset);
-    /*
-    if($('html').hasClass("lt-ie8") || $('html').hasClass('websqldatabase')){
-      $("body").scrollTop(offset);
+    if($('html').hasClass("lt-ie8")){ // ie7
+      $(document.body).scrollTop(offset);
     }else{
-      $("html").scrollTop(offset);
-    }*/
+      $(window).scrollTop(offset);
+    }
   });
 
   return ClipDetail;

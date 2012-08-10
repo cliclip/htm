@@ -191,45 +191,49 @@ App.bind("initialize:after", function(){
     tmp = $(window);
   }
   tmp.scroll(function() {
-    remove_fixed(paddingTop);
-    var st = $(window).scrollTop();
-    var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
-    var mt = $(".clearfix").offset().top + shifting;
-    //console.info(shifting+"shifting");
-    //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
-    //var gap = document.getElementById("user_info").style.paddingTop;
-    //console.info(gap);
-    //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
-    if(st>0){
-      $(".return_top").show();
-      $("#add_right").show();
+    if($("#editor").length > 0){
+      console.log("编辑器的滚动事件，nextpage不用响应");
+      return;
     }else{
-      $(".return_top").hide();
-      $("#add_right").hide();
-    }
-    if(st > mt ){
-      //console.log("锁定气泡组件",st,mt);
-      fixed(paddingTop);
-    } else {
-      //console.log("解除锁定气泡组件",st,mt);
       remove_fixed(paddingTop);
-    }
-    var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
-    var lt = $(".loader").offset().top;
-    var obj = $("#list .clip");
-    if(obj && obj.last()&& obj.last()[0]){
-      var last_top = $("#list .clip").last()[0].offsetTop;
-    }
-    //console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+      var st = $(window).scrollTop();
+      var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
+      var mt = $(".clearfix").offset().top + shifting;
+      //console.info(shifting+"shifting");
+      //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
+      //var gap = document.getElementById("user_info").style.paddingTop;
+      //console.info(gap);
+      //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
+      if(st>0){
+	$(".return_top").show();
+	$("#add_right").show();
+      }else{
+	$(".return_top").hide();
+	$("#add_right").hide();
+      }
+      if(st > mt ){
+	//console.log("锁定气泡组件",st,mt);
+	fixed(paddingTop);
+      } else {
+	//console.log("解除锁定气泡组件",st,mt);
+	remove_fixed(paddingTop);
+      }
+      var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
+      var lt = $(".loader").offset().top;
+      var obj = $("#list .clip");
+      if(obj && obj.last()&& obj.last()[0]){
+	var last_top = $("#list .clip").last()[0].offsetTop;
+      }
+      //console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
 
-    if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
-      time_gap = false;
-      App.vent.trigger("app.clipapp:nextpage");
-      setTimeout(function(){
-	time_gap = true;
-      },500);
+      if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
+	time_gap = false;
+	App.vent.trigger("app.clipapp:nextpage");
+	setTimeout(function(){
+	  time_gap = true;
+	},500);
+      }
     }
-
   });
 
   Backbone.Events.on("alert", function(msg){

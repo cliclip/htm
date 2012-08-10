@@ -279,7 +279,7 @@ App.util = (function(){
   };
 
   util.isIE = function(){
-    return isIE=$('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie8");
+    return isIE=$('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
   };
 
   util.get_imgid = function(frameid,callback){

@@ -135,6 +135,8 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       }
       return false;
     }else{
+      var scrollbody = $("#editor").get(0).contentWindow.document.body;
+      var clientheight = scrollbody.clientHeight;
       enableKeyDown=false;
       //create the temporary html editor
       divTemp=edDoc.createElement("DIV");
@@ -181,14 +183,17 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 	newData =  App.ClipApp.Convert.filter(newData);
 	// divTemp.innerHTML=newData;
 	// paste the new data to the editor
-	objEditor.contentWindow.document.execCommand('inserthtml', false, newData );
+	objEditor.contentWindow.document.execCommand('inserthtml',false,newData );
 	// webkit为核心的浏览器
 	if($('html').hasClass('websqldatabase')){
-	  objEditor.contentWindow.document.execCommand('inserthtml', false, '<p>&nbsp;</p><span id="cke_paste_marker" data-cke-temp="1"></span>');
-	  var marker = objEditor.contentWindow.document.getElementById( 'cke_paste_marker' );
-	  marker.scrollIntoView(false); // 不家false参数 会影响到外部的滚动条
+	  objEditor.contentWindow.document.execCommand('inserthtml',false,'<p>&nbsp;</p><span id="cke_paste_marker" data-cke-temp="1"></span>');
+	  var marker = objEditor.contentWindow.document.getElementById('cke_paste_marker');
+	  var top = $(marker).position().top;
 	  $(marker).remove();
 	  marker = null;
+	  // console.log("top = " + top + "clientheight =" + clientheight);
+	  $(scrollbody).scrollTop(top - clientheight);
+	  // console.log("after set " + $(scrollbody).scrollTop());
 	}
       },0);
       //enable keydown,keyup,keypress, mousedown;

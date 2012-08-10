@@ -35,7 +35,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     en: ["hate"]
   };
   var bubs = App.util.getBubbs();
-
   // exports
   Bubb.showSiteTags = function(tag){
     _uid = null;
@@ -299,7 +298,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       tags: tags,
       follows: follows,
       bubs: self ? bubs : _.intersection(bubs, tags),
-      sink: self ? sink : _.intersection(sink[lang], tags),
+      sink: self ? sink[lang] : _.intersection(sink[lang], tags),
       self: self,
       t_reclip: _i18n('bubb.reclip'),
       t_follow: _i18n('bubb.follow'),
