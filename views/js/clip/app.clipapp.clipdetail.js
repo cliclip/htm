@@ -51,11 +51,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     Masker: function(e){
       if($(e.target).attr("class") == "masker"){
-	App.vent.trigger("app.clipapp.clipdetail:@close");
+	this.Close();
       }
     },
     Close: function(e){
-      App.vent.trigger("app.clipapp.clipdetail:@close");
+      App.vent.trigger("app.clipapp.clipdetail:close");
     },
     editDetail:function(e){
       e.preventDefault();
@@ -397,7 +397,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   // 应该绑定在那里
-  App.vent.bind("app.clipapp.clipdetail:@close", function(){
+  App.vent.bind("app.clipapp.clipdetail:close", function(){
     ClipDetail.close();
     $("body").removeClass("noscroll");
   });

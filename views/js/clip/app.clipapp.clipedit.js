@@ -145,16 +145,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	old_content = App.ClipApp.Editor.getContent("editor"); //参数为编辑器id
       },200);
       //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
-      if(isIE){
-	document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
-      }else{
-	document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
-      }
-      function shortcut_save(e){
+      $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
 	if(e.ctrlKey&&e.keyCode==13){
 	  $("#editClip_Save").click();
 	}
-      }
+      });
    });
   };
 

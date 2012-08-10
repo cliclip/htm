@@ -147,11 +147,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.ClipApp.Editor.focus("editor");
     $("body").addClass("noscroll");
     //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
-    if(isIE){ // 非firefox
-      document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
-    }else{
-      document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
-    }
+    $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#save").click();
+      }
+    });
     function shortcut_save(e){
       if(e.ctrlKey&&e.keyCode==13){
 	$("#save").click();

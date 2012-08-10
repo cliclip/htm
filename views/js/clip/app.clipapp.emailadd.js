@@ -58,7 +58,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     }
   });
 
-  EmailAdd.showEmailAdd = function(uid){
+  EmailAdd.show = function(uid){
     var emailAddModel = new EmailAddModel();
     var emailAddView = new EmailAddView({model : emailAddModel});
     App.popRegion.show(emailAddView);
@@ -93,7 +93,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
-    EmailAdd.showEmailAdd(uid);
+    EmailAdd.show(uid);
   });
 
   // 操作完成直接关闭 view
