@@ -86,6 +86,22 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView.extend({
+  onShow:function(){
+    if(this.flag != undefined){ // view的flag属性表示需要设定noscroll
+      if(!$("body").hasClass("noscroll")){
+	this.flag = true;
+	$("body").addClass("noscroll");
+      }
+    }
+  },
+  close:function(){
+    this.trigger('item:before:close');
+    Backbone.Marionette.ItemView.prototype.close.apply(this, arguments);
+    this.trigger('item:closed');
+    if(this.flag == true) {
+      $("body").removeClass("noscroll");
+    }
+  },
   showError:function(tmpl,errorCode){ // 显示validate验证的错误提示
     for(var key in errorCode){
       var error = _i18n(tmpl+'.'+key+'.'+errorCode[key]);
@@ -116,6 +132,7 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
     });
   }
 });
+
 App.Region = Backbone.Marionette.Region;
 App.TemplateCache = Backbone.Marionette.TemplateCache;
 App.CollectionView = Backbone.Marionette.CollectionView;

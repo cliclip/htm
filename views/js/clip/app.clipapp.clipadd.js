@@ -40,6 +40,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     initialize:function(){
       clip = {};
+      this.flag = true;
     },
     extImg:function(evt){
       $(".masker_layer1").show();
@@ -145,7 +146,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.viewRegion.show(addClipView);
     App.ClipApp.Editor.init();
     App.ClipApp.Editor.focus("editor");
-    $("body").addClass("noscroll");
     //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
     $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
       if(e.ctrlKey&&e.keyCode==13){
@@ -162,13 +162,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   ClipAdd.close = function(clip){
     if(!clip || !clip.content){
       App.viewRegion.close();
-      $("body").removeClass("noscroll");
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
-	$("body").removeClass("noscroll");
       });
     }
   };

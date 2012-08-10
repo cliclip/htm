@@ -24,6 +24,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .user_head": "Close",
       "dblclick .content": "editDetail"
     },
+    initialize: function(){
+      this.flag = true;
+    },
     Operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
@@ -250,7 +253,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $("body").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
     $("#focus").focus();
     // $(".masker").focus(); 仅有firefox支持div直接获得焦点
@@ -399,7 +401,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   // 应该绑定在那里
   App.vent.bind("app.clipapp.clipdetail:close", function(){
     ClipDetail.close();
-    $("body").removeClass("noscroll");
   });
 
   App.vent.bind("app.clipapp.clipdetail:resetUrl", function(hist, offset){
