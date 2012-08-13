@@ -21,7 +21,8 @@ App.versions = (function($){
 	  login_ok    : "登 录",
 	  register_ok : "注 册",
 	  login_state : "一月内自动登录",
-	  register    : "嫌麻烦？直接发邮件到<a href='mailto:1@cliclip.com'>1@cliclip.com</a>也可注册",
+	  findpass    : "忘记密码？",
+	  register    : "注 册",
 	  twitter     : "通过 Twitter 登录",
 	  weibo       : "通过微博登录",
 	  name : {
@@ -35,6 +36,22 @@ App.versions = (function($){
 	    pass : "密码",
 	    is_null     : "密码尚未填写",
 	    not_match   : "您的密码不正确"
+	  }
+	},
+	register : {
+	  title       : "用户注册" ,
+	  register_ok : "注 册",
+	  register    : "嫌麻烦？直接发邮件到<a href='mailto:1@cliclip.com'>1@cliclip.com</a>也可注册",
+	  name : {
+	    name      : "用户名",
+	    is_null    : "用户名尚未填写",
+	    not_exist   : "用户名不存在",
+	    invalidate  : "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
+	    exist       : "此用户名已经存在"
+	  },
+	  pass : {
+	    pass : "密码",
+	    is_null     : "密码尚未填写"
 	  }
 	},
 
