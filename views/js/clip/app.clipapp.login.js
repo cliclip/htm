@@ -31,7 +31,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "keydown #pass"            : "keydownAction",
       "click .login_btn"         : "loginAction",
       "click .close_w"           : "cancel",
-      "click .reg_btn"           : "registerAction",
       "click .weibo"             : "openWeibo",
       "click .twitter"           : "openTwitter"
     },
@@ -90,37 +89,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	$('.login_btn').click();
       }
      },
-    registerAction:function(e){
-      var that = this;
-      e.preventDefault();
-      var remember = false;
-      if($("#remember").attr("checked")){
-	remember = true;
-      }
-      this.tmpmodel.save({},{
-	url : App.ClipApp.Url.base+"/register",
-	type: "POST",
-	success:function(model,response){
-	  if(/language=en/.test(document.cookie)){
-	    //cliclip的uid为72
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["helper","newbie"]);
-	  }else{
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
-	  }
-	  if(typeof fun != "function"){
-	    Login.close();
-	    App.vent.trigger("app.clipapp.register:success","register_success",response);
-	  }else{
-	    App.vent.trigger("app.clipapp.login:success", response, remember);
-	    //App.vent.trigger("app.clipapp.gotosetup:show", "register_success",response);
-	    //两个事件都要使用popregion显示东西所以不能同时出发
-	  }
-	},
-	error:function(model,error){
-	  that.showError('login',error);
-	}
-      });
-    },
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.clipper:cancel");
