@@ -95,9 +95,11 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
     }
   },
   close:function(){
+    // view.close的源代码
     this.trigger('item:before:close');
     Backbone.Marionette.ItemView.prototype.close.apply(this, arguments);
     this.trigger('item:closed');
+    // 新添加的 去掉body的noscroll属性
     if(this.flag == true) {
       $("body").removeClass("noscroll");
     }
@@ -187,8 +189,6 @@ App.bind("initialize:after", function(){
   }
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
-   // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
-    //var y = $(".user_detail").height() ? $(".user_detail").height() + 5 :0;
     var y = $(".user_detail").height()+5;
     $("#bubb").addClass("fixed").css({"margin-top":y+"px", "top": paddingTop});
   };
