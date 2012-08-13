@@ -165,6 +165,15 @@ if(typeof console !="object"){
 }
 
 App.bind("initialize:before", function(){
+  Modernizr.addTest('filereader', function () {
+    return !!(window.File && window.FileList && window.FileReader);
+  });
+  Modernizr.addTest('cssfilters', function() {
+    var el = document.createElement('div');
+    el.style.cssText = Modernizr._prefixes.join('filter' + ':blur(2px); ');
+    // return  !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
+    return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 6));
+  });
   Modernizr.addTest("browser", function(){
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
     var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器

@@ -9,6 +9,10 @@ html
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
     //- pack :: css
     link(rel="stylesheet",href="css/clipper.css")
+    //if lt IE 7
+      link(rel="stylesheet",href="css/ie6.less")
+    //if IE 7
+      link(rel="stylesheet",href="css/ie7.less")
     script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js")
     script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js")
     script(src="/js/bookmark.js") // 引用文件
