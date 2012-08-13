@@ -190,13 +190,12 @@ App.ClipApp.Convert = (function(App, Backbone, $){
       // url_front 可能是title
       no_transform_A = reg1.test(url_front) ? true : url_front == "ref=" ? true : url_front == "src=" ? true : url_front == "tle=" ? true : url_front == "itle" ? true : false ; //ref是A标签中的标志(href),src是图片标志，url是某些CSS背景图片,某些title也用了url地址
       no_transform_B = url_back == "</a>" ? true : url_back == "</A>" ? true : false;
-      if(c == "") no_transform_A = true;
-      if(no_transform_A || no_transform_B){
-	// 对像www.baidu.com这样的地址、以及已经是超链接格式的代码不转"
+      if(c == "" || c === undefined ) no_transform_A = true;
+      // alert("a = " + a + " b = " + b + " c = " + c + " d = " + d + " e = " + e + " f = " + f + " notransform_A = " + no_transform_A + " notransform_B =" + no_transform_B);
+      if(no_transform_A || no_transform_B){ // www.baidu.com、超链接直接返回
 	return a;
       }else{
-	return '<a href="'+a+'">'+a+'</a>&nbsp;';
-	//return '<a href="http://'+c+'">'+a+'</a>';
+	return '<a href="'+a+'">'+a+'</a>&nbsp;'; // 火狐浏览器超链接截断
       }
     });
     //并不完善需没办法正确处理超链接图片

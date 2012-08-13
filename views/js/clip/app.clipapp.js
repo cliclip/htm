@@ -4,14 +4,13 @@ App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
 
   ClipApp.siteShow = function(tag){
-    //alert("siteShow     " + document.URL + "    " + window.location.href);
-    ClipApp.Face.showUser();
+    ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
   };
 
   ClipApp.siteQuery = function(word, tag){
-    ClipApp.Face.showUser();
+    ClipApp.Face.show();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
     App.vent.trigger("app.clipapp.routing:query", word);
@@ -22,14 +21,14 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.invite = function(key){ // 接受处理用户的激活注册
-    ClipApp.Face.showUser();
+    ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags();
     ClipApp.ClipList.showSiteClips();
     ClipApp.Register.invite(key);
   };
 
   ClipApp.active = function(key){ // 接受用户的邮件添加激活或者是合并激活
-    ClipApp.Face.showUser();
+    ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags();
     ClipApp.ClipList.showSiteClips();
     ClipApp.EmailAdd.active(key);
@@ -52,14 +51,14 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.userShow = function(uid, tag){
-    ClipApp.Face.showUser(uid);
+    ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
     App.vent.trigger("app.clipapp.routing:usershow", uid, tag);
   };
 
   ClipApp.userQuery = function(uid, word, tag){
-    ClipApp.Face.showUser(uid);
+    ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
     App.vent.trigger("app.clipapp.routing:query", word, uid);
@@ -68,7 +67,7 @@ App.ClipApp = (function(App, Backbone, $){
   // user所追的人的列表 无需在请求Face 和 Bubb
   ClipApp.userFollowing = function(uid, tag){
     if(!uid) uid = App.util.getMyUid();
-    ClipApp.Face.showUser(uid);
+    ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowingList.showUserFollowing(uid);
     App.vent.trigger("app.clipapp.routing:userfollowing", uid);
@@ -77,7 +76,7 @@ App.ClipApp = (function(App, Backbone, $){
   // 追user的人的列表 无需再请求Face 和 Bubb
   ClipApp.userFollower = function(uid, tag){
     if(!uid) uid = App.util.getMyUid();
-    ClipApp.Face.showUser(uid);
+    ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowerList.showUserFollower(uid);
     App.vent.trigger("app.clipapp.routing:userfollower", uid);
@@ -85,7 +84,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.myShow = function(tag){
     var uid = App.util.getMyUid();
-    ClipApp.Face.showUser(uid);
+    ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
     App.vent.trigger("app.clipapp.routing:usershow",uid, tag);
@@ -93,7 +92,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.myQuery = function(word, tag){
     var uid = App.util.getMyUid();
-    ClipApp.Face.showUser(uid);
+    ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
     App.vent.trigger("app.clipapp.routing:query", word);
@@ -102,7 +101,7 @@ App.ClipApp = (function(App, Backbone, $){
   // interest和recommend 只需要显示 主观tag就可以了
   ClipApp.myInterest = function(tag){
     var uid = App.util.getMyUid();
-    ClipApp.Face.showUser(uid);
+    ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.vent.trigger("app.clipapp.routing:interest", tag);
@@ -110,9 +109,8 @@ App.ClipApp = (function(App, Backbone, $){
 
   /*ClipApp.myRecommend = function(tag){
     var uid = App.util.getMyUid();
-    ClipApp.Face.showUser(uid);
-    // ClipApp.Bubb.showBubs(uid);
-    // ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.Face.show(uid);
+    ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserRecommend(uid, tag);
     App.vent.trigger("app.clipapp.routing:recommend", tag);
   };*/
@@ -274,6 +272,10 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:userquery", function(uid, word, tag){
     ClipApp.userQuery(uid, word, tag);
+  });
+
+  App.vent.bind("app.clipapp:followset", function(follow){
+    ClipApp.Face.followSet(follow);
   });
 
   return ClipApp;

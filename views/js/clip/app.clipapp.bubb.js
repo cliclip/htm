@@ -3,11 +3,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   // model && view
 
-  var BubbModel = App.Model.extend({
-    parse: function(resp){
-      return resp;
-    }
-  });
+  var BubbModel = App.Model.extend({});
 
   var BubbView = App.ItemView.extend({
     id : "bubbles",
@@ -20,17 +16,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       return this;
     }
   });
-  // constants
-  // 与显示无关，只是用来确定泡泡的大小而已
-  var bubs = {
-    zh: ["好看", "有趣","好听", "真赞", "好吃",  "想要"],
-    en: ["pretty","funny","musical","cool","tasty","wish"]
-  };
-  var sink = {
-    zh: ["讨厌"],
-    en: ["hate"]
-  };
-
   // private
   var _uid  = null;
   var last = null;
@@ -38,8 +23,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   var self = true;
   var lang = App.versions.getLanguage(); // 用户语言设置
   var homepage = false;
-  // exports
 
+  // constants
+  // 与显示无关，只是用来确定泡泡的大小而已
+  var sink = {
+    zh: ["讨厌"],
+    en: ["hate"]
+  };
+  var bubs = App.util.getBubbs();
+  // exports
   Bubb.showSiteTags = function(tag){
     _uid = null;
     self = false;
@@ -60,18 +52,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserTags = function(uid, tag){
     _uid = uid;
+    self = App.util.self(uid);
+    homepage = false;
     getUserTags(uid, function(tags, follows){
-      self = App.util.self(uid);
       App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
     });
   };
 
   Bubb.cleanTags = function(){
     App.vent.trigger("app.clipapp.bubb:@show", mkTag([],[],null,false));
-  };
-
-  Bubb.showBubs = function(uid){ // 直接显示 六个主观tag即可
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag(bubs[lang], [], null, true));
   };
 /*
   Bubb.showUserBubs = function(uid, tag){
@@ -90,13 +79,14 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.bubb:refresh",uid,['*']);
       }else{
 	iframe_call('bubbles', "followTag", tag);
+	last.follows.push(tag);
       }
-      App.vent.trigger("app.clipapp.followerlist:refresh"); //刷新右边follower列表
+      //刷新右边follower列表
+      App.vent.trigger("app.clipapp.followerlist:refresh");
       if(last && last.follows){
 	if(_.isEmpty(last.follows) || tag == "*"){
-	  App.vent.trigger("app.clipapp.face:show",_uid);
+	  App.vent.trigger("app.clipapp:followset",last.follows);
 	}
-	last.follows.push(tag);
       }
     });
   };
@@ -116,7 +106,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       if(last && last.follows){
 	last.follows = _.without(last.follows,tag);
 	if(_.isEmpty(last.follows)){
-	  App.vent.trigger("app.clipapp.face:show",_uid);
+	  App.vent.trigger("app.clipapp:followset",last.follows);
 	}
       }
     });
@@ -194,27 +184,29 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function getSiteBubs(callback){
     getSiteTags(function(tags, follows){
-      var tags2 = _.intersection(tags,bubs[lang]);
-      var follows2 = _.intersection(follows, bubs[lang]);
+      var tags2 = _.intersection(tags,bubs);
+      var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
     });
   }
 
   // 取 uid 的 tag
-  Bubb._getUserTags = getUserTags;
   function getUserTags(uid, callback){
     // API getUserTags
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
+    var my = App.util.getMyUid();
     var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..0");
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
-      if(uid == App.util.getMyUid()){
+      if(uid == my){
 	App.vent.trigger("app.clipapp.bubb:mytag",bubb.tag);
+      }else if(my){
+	App.vent.trigger("app.clipapp:followset", bubb.follow);
       }
-      callback(bubb.tag.slice(0,19), bubb.follow);
+      if(callback)callback(bubb.tag.slice(0,19), bubb.follow);
     });
   }
 /*
@@ -301,7 +293,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var opt = {
       tags: tags,
       follows: follows,
-      bubs: self ? bubs[lang] : _.intersection(_.union(bubs.zh, bubs.en), tags),
+      bubs: self ? bubs : _.intersection(bubs, tags),
       sink: self ? sink[lang] : _.intersection(sink[lang], tags),
       self: self,
       t_reclip: _i18n('bubb.reclip'),
@@ -324,9 +316,9 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	return url += "/tag/"+encode_tag;
       }else{
 	/* if(url.indexOf("my/interest") >= 0)
-	   return "/my/interest/tag/"+encode_tag;
+	 return "/my/interest/tag/"+encode_tag;
 	 else if(url.indexOf("my/recommend") >= 0)
-	  return "/my/recommend/tag/"+encode_tag; */
+	 return "/my/recommend/tag/"+encode_tag; */
 	if(url.indexOf("my") >= 0)
 	  return "/my/tag/"+encode_tag;
 	else

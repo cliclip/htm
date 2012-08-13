@@ -153,10 +153,12 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.message:confirm", "twitter_sucmsg",bindOauth.info.name);
       }
       App.vent.trigger("app.clipapp.userbind:bindok");
-      Backbone.history.navigate("my",true);
       if(reply){
 	if(typeof fun == "function"){
+	  App.ClipApp.Bubb._getUserTags(res.token.split(":")[0]);
 	  fun();
+	}else{
+	  Backbone.history.navigate("my",true);
 	}
 	UserBind.close();
       }

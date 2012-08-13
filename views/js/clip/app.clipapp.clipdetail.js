@@ -24,6 +24,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .user_head": "Close",
       "dblclick .content": "editDetail"
     },
+    initialize: function(){
+      this.flag = true;
+    },
     Operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(" ")[0];
@@ -51,11 +54,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     Masker: function(e){
       if($(e.target).attr("class") == "masker"){
-	App.vent.trigger("app.clipapp.clipdetail:@close");
+	this.Close();
       }
     },
     Close: function(e){
-      App.vent.trigger("app.clipapp.clipdetail:@close");
+      App.vent.trigger("app.clipapp.clipdetail:close");
     },
     editDetail:function(e){
       e.preventDefault();
@@ -250,7 +253,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $("body").addClass("noscroll");
     // 取得更深层次的内容,有待改进 base属性 设置content    TODO
     $("#focus").focus();
     // $(".masker").focus(); 仅有firefox支持div直接获得焦点
@@ -397,20 +399,17 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   });
 
   // 应该绑定在那里
-  App.vent.bind("app.clipapp.clipdetail:@close", function(){
+  App.vent.bind("app.clipapp.clipdetail:close", function(){
     ClipDetail.close();
-    $("body").removeClass("noscroll");
   });
 
   App.vent.bind("app.clipapp.clipdetail:resetUrl", function(hist, offset){
     if(/clip\/([0-9]+)\/([0-9]+)/.test(hist)) hist = "";
     Backbone.history.navigate(hist, false);
-    // ie7、Chrome、Safari
-    if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "Chrome"|| Modernizr.browser == "Safari"
-     ){
-      $("body").scrollTop(offset);
+    if($('html').hasClass("lt-ie8")){ // ie7
+      $(document.body).scrollTop(offset);
     }else{
-      $("html").scrollTop(offset);
+      $(window).scrollTop(offset);
     }
   });
 

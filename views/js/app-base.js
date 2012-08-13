@@ -86,6 +86,24 @@ App.Collection = Backbone.Collection.extend({
 });
 
 App.ItemView = Backbone.Marionette.ItemView.extend({
+  onShow:function(){
+    if(this.flag != undefined){ // view的flag属性表示需要设定noscroll
+      if(!$("body").hasClass("noscroll")){
+	this.flag = true;
+	$("body").addClass("noscroll");
+      }
+    }
+  },
+  close:function(){
+    // view.close的源代码
+    this.trigger('item:before:close');
+    Backbone.Marionette.ItemView.prototype.close.apply(this, arguments);
+    this.trigger('item:closed');
+    // 新添加的 去掉body的noscroll属性
+    if(this.flag == true) {
+      $("body").removeClass("noscroll");
+    }
+  },
   showError:function(tmpl,errorCode){ // 显示validate验证的错误提示
     for(var key in errorCode){
       var error = _i18n(tmpl+'.'+key+'.'+errorCode[key]);
@@ -116,6 +134,7 @@ App.ItemView = Backbone.Marionette.ItemView.extend({
     });
   }
 });
+
 App.Region = Backbone.Marionette.Region;
 App.TemplateCache = Backbone.Marionette.TemplateCache;
 App.CollectionView = Backbone.Marionette.CollectionView;
@@ -174,36 +193,6 @@ App.bind("initialize:before", function(){
     // return  !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
     return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 6));
   });
-  Modernizr.addTest("browser", function(){
-    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-    var isOpera = userAgent.indexOf("Opera") > -1; //判断是否Opera浏览器
-    var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera ; //判断是否IE浏览器
-    var isChrome = userAgent.indexOf("Chrome") > -1;
-    var isFF = userAgent.indexOf("Firefox") > -1 ; //判断是否Firefox
-    var isSafari = userAgent.indexOf("Safari") > -1 ; //判断是否Safari
-    if(isIE){
-      var IE5 = IE55 = IE6 = IE7 = IE8 = IE9 = false;
-      var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
-      var fIEVersion = null;
-      userAgent.replace(reIE, function(a, b, c){
-	fIEVersion = b;
-      });
-      IE55 = fIEVersion == 5.5;
-      IE6 = fIEVersion == 6.0;
-      IE7 = fIEVersion == 7.0;
-      IE8 = fIEVersion == 8.0;
-      IE9 = fIEVersion == 9.0;
-      if(IE55 || IE6 || IE7)
-	return "lt-ie8";
-      if(IE8 || IE9)
-	return "gt-ie7";
-    };
-    if(isOpera) return "Opera";
-    if(isChrome) return "Chrome";
-    if(isFF) return "FF";
-    if(isSafari) return "safari";
-    return null;
-  });
 });
 
 App.bind("initialize:after", function(){
@@ -212,8 +201,6 @@ App.bind("initialize:after", function(){
   }
   var fixed = function(paddingTop){
     $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
-   // $("#bubb").addClass("fixed").css({"margin-top": $(".user_detail").height()+"px", "top": paddingTop});
-    //var y = $(".user_detail").height() ? $(".user_detail").height() + 5 :0;
     var y = $(".user_detail").height()+5;
     $("#bubb").addClass("fixed").css({"margin-top":y+"px", "top": paddingTop});
   };
@@ -227,51 +214,55 @@ App.bind("initialize:after", function(){
   var paddingTop = 0 + "px";
   remove_fixed(paddingTop);
 
-  if(Modernizr.browser == 'lt-ie8'){
-    tmp = $(document.body); // 如果是ie7
+  if($('html').hasClass('lt-ie8')){ // 如果是ie7
+    tmp = $(document.body);
   }else{
     tmp = $(window);
   }
   tmp.scroll(function() {
-    remove_fixed(paddingTop);
-    var st = $(window).scrollTop();
-    var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
-    var mt = $(".clearfix").offset().top + shifting;
-    //console.info(shifting+"shifting");
-    //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
-    //var gap = document.getElementById("user_info").style.paddingTop;
-    //console.info(gap);
-    //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
-    if(st>0){
-      $(".return_top").show();
-      $("#add_right").show();
+    if($("#editor").length > 0){
+      console.log("编辑器的滚动事件，nextpage不用响应");
+      return;
     }else{
-      $(".return_top").hide();
-      $("#add_right").hide();
-    }
-    if(st > mt ){
-      //console.log("锁定气泡组件",st,mt);
-      fixed(paddingTop);
-    } else {
-      //console.log("解除锁定气泡组件",st,mt);
       remove_fixed(paddingTop);
-    }
-    var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
-    var lt = $(".loader").offset().top;
-    var obj = $("#list .clip");
-    if(obj && obj.last()&& obj.last()[0]){
-      var last_top = $("#list .clip").last()[0].offsetTop;
-    }
-    //console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+      var st = $(window).scrollTop();
+      var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
+      var mt = $(".clearfix").offset().top + shifting;
+      //console.info(shifting+"shifting");
+      //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
+      //var gap = document.getElementById("user_info").style.paddingTop;
+      //console.info(gap);
+      //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
+      if(st>0){
+	$(".return_top").show();
+	$("#add_right").show();
+      }else{
+	$(".return_top").hide();
+	$("#add_right").hide();
+      }
+      if(st > mt ){
+	//console.log("锁定气泡组件",st,mt);
+	fixed(paddingTop);
+      } else {
+	//console.log("解除锁定气泡组件",st,mt);
+	remove_fixed(paddingTop);
+      }
+      var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
+      var lt = $(".loader").offset().top;
+      var obj = $("#list .clip");
+      if(obj && obj.last()&& obj.last()[0]){
+	var last_top = $("#list .clip").last()[0].offsetTop;
+      }
+      //console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
 
-    if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
-      time_gap = false;
-      App.vent.trigger("app.clipapp:nextpage");
-      setTimeout(function(){
-	time_gap = true;
-      },500);
+      if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
+	time_gap = false;
+	App.vent.trigger("app.clipapp:nextpage");
+	setTimeout(function(){
+	  time_gap = true;
+	},500);
+      }
     }
-
   });
 
   Backbone.Events.on("alert", function(msg){

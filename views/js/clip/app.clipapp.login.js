@@ -2,7 +2,7 @@
 
 App.ClipApp.Login = (function(App, Backbone, $){
 
-  var Login = {}, flag = false;
+  var Login = {};
   var fun = "";  // 用于记录用户登录前应该触发的事件
   App.Model.LoginModel = App.Model.extend({
     validate: function(attrs){
@@ -37,7 +37,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
-      flag = false;
+      this.flag = false;
     },
     blurName: function(e){
       var that = this;
@@ -93,7 +93,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     registerAction:function(e){
       var that = this;
       e.preventDefault();
-      //$("html").removeClass("noscroll");
       var remember = false;
       if($("#remember").attr("checked")){
 	remember = true;
@@ -176,10 +175,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     var loginModel = new App.Model.LoginModel();
     var loginView = new LoginView({model : loginModel});
     App.popRegion.show(loginView);
-    if(!$("body").hasClass("noscroll")){
-      flag = true;
-      $("body").addClass("noscroll");
-    }
     if(/language=en/.test(document.cookie)){
       $("#note_img").removeClass("note_img_zh");
       $("#note_img").addClass("note_img_en");
@@ -187,13 +182,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
       $("#note_img").removeClass("note_img_en");
       $("#note_img").addClass("note_img_zh");
     }
-    console.log("login_show :: " + flag);
     //$("#name").focus();
   };
 
   Login.close = function(){
-    console.log(flag);
-    if(flag){ $("body").removeClass("noscroll"); }
     App.popRegion.close();
   };
 
@@ -208,6 +200,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     // 用户登录成功 页面跳转
     Login.close();
     if(typeof fun == "function"){
+      App.ClipApp.Bubb._getUserTags(res.token.split(":")[0]);
       fun();
     }else{
       Backbone.history.navigate("my",true);

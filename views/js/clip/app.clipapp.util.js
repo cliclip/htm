@@ -258,6 +258,7 @@ App.util = (function(){
     });
 */
   });
+
   util.img_load = function(img){
     img.onload = null;
     if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){
@@ -277,10 +278,14 @@ App.util = (function(){
     };
   };
 
+  util.isIE = function(){
+    return isIE=$('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
+  };
+
   util.get_imgid = function(frameid,callback){
     $("#" + frameid).unbind("load");
     $("#" + frameid).load(function(){ // 加载图片
-      if(Modernizr.browser == "lt-ie8" || Modernizr.browser == "gt-ie7"){
+      if(util.isIE()){
 	var returnVal = this.contentWindow.document.documentElement.innerText;
       }else{
 	var returnVal = this.contentDocument.documentElement.textContent;
