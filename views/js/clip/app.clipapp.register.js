@@ -15,6 +15,9 @@ App.ClipApp.Register = (function(App, Backbone, $){
       }else if(_.include(nameList, attrs.name)){
         err.name = 'not_allow';
       }
+      if(attrs.pass == ""){
+	err.pass = "is_null";
+      }
       return _.isEmpty(err) ? null : err;
     }
   });
@@ -27,7 +30,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
     events:{
       "blur #name"     : "blurName",
       "blur #pass"     : "blurPass",
-      "click .reg_btn"  : "submit",
+      "focus #name"    : "cleanError",
+      "focus #pass"    : "cleanError",
+      "click #agree"    : "agreeAction",
+      "click .reg_btn" : "submit",
       "click .close_w" : "cancel"
     },
     initialize: function(){
@@ -36,8 +42,9 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     blurName: function(e){
       var that = this;
-      this.tmpmodel.save({name:$("#name").val()}, {
-	url : App.ClipApp.Url.base+"/register/"+attrs.name+"/check",
+      var name = $("#name").val();
+      this.tmpmodel.save({name:name}, {
+	url : App.ClipApp.Url.base+"/register/"+name+"/check",
 	type: "GET",
 	success:function(model,response){},
 	error:function(model,error){
@@ -47,32 +54,42 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     blurPass: function(e){
       var that = this;
-      // this.model.set({pass:$("#pass").val()},{
       this.tmpmodel.set({pass:$("#pass").val()},{
 	error:function(model, error){
 	  that.showError("login",error);
 	}
       });
     },
+    agreeAction: function(e){
+      if($("#agree").attr("checked")){
+	$(".reg_btn").attr("disabled",false);
+      }else{
+	$(".reg_btn").attr("disabled",true);
+      }
+    },
     submit: function(e){
       e.preventDefault();
       var that = this;
-      this.tmpmodel.save({},{
-	url : App.ClipApp.Url.base+"/register",
-	type: "POST",
-	success:function(model,response){
-	  if(/language=en/.test(document.cookie)){
-	    //cliclip的uid为72
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["helper","newbie"]);
-	  }else{
-	    App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
+      if($("#agree").attr("checked")){
+	this.tmpmodel.save({},{
+	  url : App.ClipApp.Url.base+"/register",
+	  type: "POST",
+	  success:function(model,response){
+	    if(/language=en/.test(document.cookie)){
+	      //cliclip的uid为72
+	      App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["helper","newbie"]);
+	    }else{
+	      App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
+	    }
+	    App.vent.trigger("app.clipapp.register:success","register_success",response);
+	  },
+	  error:function(model,error){
+	    that.showError('register',error);
 	  }
-	  App.vent.trigger("app.clipapp.register:success","register_success",response);
-	},
-	error:function(model,error){
-	  that.showError('register',error);
-	}
-      });
+	});
+      }else{
+
+      }
     },
     cancel : function(e){
       e.preventDefault();
@@ -105,6 +122,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     var registerView = new RegisterView({model: registerModel});
     App.popRegion.show(registerView);
     $("#name").focus();
+    $("#agree").attr("checked",true);
   };
 
   App.vent.bind("app.clipapp.register:success", function(key, res, fun){
