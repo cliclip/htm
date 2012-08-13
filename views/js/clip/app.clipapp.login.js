@@ -200,6 +200,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     // 用户登录成功 页面跳转
     Login.close();
     if(typeof fun == "function"){
+      App.ClipApp.Bubb._getUserTags(res.token.split(":")[0]);
       fun();
     }else{
       Backbone.history.navigate("my",true);

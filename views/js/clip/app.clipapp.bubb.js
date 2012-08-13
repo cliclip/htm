@@ -206,7 +206,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       }else if(my){
 	App.vent.trigger("app.clipapp:followset", bubb.follow);
       }
-      callback(bubb.tag.slice(0,19), bubb.follow);
+      if(callback)callback(bubb.tag.slice(0,19), bubb.follow);
     });
   }
 /*
