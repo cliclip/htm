@@ -131,7 +131,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:register", function(){
-    ClipApp.Login.show();//register login 共用一个弹出框
+    ClipApp.Register.show();//register login 共用一个弹出框
   });
 
   App.vent.bind("app.clipapp:logout", function(){

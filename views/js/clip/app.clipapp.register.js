@@ -1,9 +1,31 @@
 App.ClipApp.Register = (function(App, Backbone, $){
   var Register = {};
+  var nameList = ['google', 'pepsi', 'twitter', 'facebook', 'baidu', 'sina'];
 
   App.Model.RegisterModel = App.Model.extend({
     url: function(){
       return App.ClipApp.Url.base+"/register";
+    },
+    validate: function(attrs){
+      console.log(attrs.name);
+      var err = {};
+      if(!attrs.name ||attrs.name == "" || attrs.name == _i18n('login.default_name')){
+	err.name = "is_null";
+      }else if(attrs.name.indexOf('@')<=0 && !App.util.name_pattern.test(attrs.name)){
+	err.name = "invalidate";
+      }else if(_.without(nameList, attrs.name)){
+	err.name = 'not_allow';
+      }else {
+	this.save({}, {
+	  url : App.ClipApp.Url.base+"/register/"+attrs.name+"/check",
+	  type: "GET",
+	  success:function(model,response){},
+	  error:function(model,error){
+	    err.name = "exist";
+	  }
+	});
+      }
+      return _.isEmpty(err) ? null : err;
     }
   });
 
