@@ -210,7 +210,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       if(uid == App.util.getMyUid()){
 	App.vent.trigger("app.clipapp.bubb:mytag",bubb.tag);
       }
-      callback(bubb.tag.slice(0,19), bubb.follow);
+      if(callback)callback(bubb.tag.slice(0,19), bubb.follow);
     });
   }
 /*
