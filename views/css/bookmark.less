@@ -16,15 +16,7 @@
   -webkit-border-radius: @radius;
   border-radius: @radius;
   //position:relative;
-  behavior: url(css/pie.htc);
-}
-.message{
-	background:url(../img/message.png)no-repeat left top;
-	font-size:20px;
-	position:absolute;
-	margin-top:36px;
-	cursor:pointer;
-	display:none;
+  //behavior: url(css/pie.htc);
 }
 .border-radius-input (@radius) {
   -moz-border-radius: @radius;
@@ -58,7 +50,6 @@
    height: 100%;
    overflow-x:auto;
    overflow-y:scroll;
-   _position: absolute;
    top:0;
    left:0;
    .bottom{
@@ -95,7 +86,6 @@
    width: 100%; //1000px;
    height: 100%; //1000px;
    position: fixed; //absolute;
-   _position: absolute;
    background:#000;
    opacity: 0.5;
    filter:alpha(opacity=50);
@@ -123,10 +113,27 @@
 	.pop_body{
 		padding:10px 25px;
 		margin:0;
-		li{margin-bottom:10px;list-style:none;}
-		li.input_text input{width:270px;height:25px;border:1px solid #ccc;margin-bottom:0;}
-		li.input_textarea textarea{width:270px;height:72px;border:1px solid #ccc;margin-bottom:0;}
-		li.input_checkbox input{float: left;width:auto!important;height:auto!important;}
+		li{
+			margin-bottom:10px;
+			list-style:none;
+		}
+		li.input_text input{
+			width:270px;
+			height:25px;
+			border:1px solid #ccc;
+			margin-bottom:0;
+		}
+		li.input_textarea textarea{
+			width:270px;
+			height:72px;
+			border:1px solid #ccc;
+			margin-bottom:0;
+		}
+		li.input_checkbox input{
+			float: left;
+			width:auto;
+			height:auto;
+		}
 		.tag_box{
 			height:48px;
 			min-width: 288px;
@@ -174,7 +181,6 @@
 		.pop_right{
 			.button_frame{
 				float:right;
-				*margin-top:10px;
 				iframe {
 				       display:none;	
 			 	}
@@ -195,9 +201,7 @@
 				}
             			span.close_w {
 		  	    		top: -47px;
-					*top: -59px;
 					right: -14px;
-					*right: -101px;
 		 		}
 				span#link_image{//为链接图片的span设置层次
 					display:none;
@@ -331,7 +335,6 @@
 					padding-top:7px;
 					color:wheat;
 					font-size:20px;
-					*margin-top:-15px;
 				}
 				li{list-style-type:none;margin-left:-20px;}
 				label.password{
@@ -341,10 +344,8 @@
 					//.sprites(-420px,-345px);
 					color:wheat;
 					font-size:20px;
-					*margin-top:-15px;
 				}
 				.out_link{
-					*margin-left:-15px;
 					label{
 						color: #FFFFFF;
 					}
@@ -374,7 +375,6 @@
 				}
 				span.next_login{
 					color:#fff;
-					*margin-left:42px!important;
 					margin-left:49px;
 					#remember{
 						display:inline;
@@ -384,7 +384,6 @@
 				span.error{
 					z-index:1000;
 					left:250px;
-					*width:200px;
 					min-width:110px;
 					background:#EEFF00 none repeat scroll 0% 50%;
 					border:3px solid #EEFF00;
@@ -454,15 +453,6 @@
 }
 
 // ie6 fix masker
-
-html {
-  _background:url() fixed;
-}
 .noscroll{ 
   overflow:hidden !important;
-}
-.masker_layer{
-    _position: absolute;
-    _left: ~"expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth)";
-    _top: ~"expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight)";
 }

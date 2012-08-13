@@ -183,6 +183,18 @@ if(typeof console !="object"){
   };
 }
 
+App.bind("initialize:before", function(){
+  Modernizr.addTest('filereader', function () {
+    return !!(window.File && window.FileList && window.FileReader);
+  });
+  Modernizr.addTest('cssfilters', function() {
+    var el = document.createElement('div');
+    el.style.cssText = Modernizr._prefixes.join('filter' + ':blur(2px); ');
+    // return  !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
+    return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 6));
+  });
+});
+
 App.bind("initialize:after", function(){
   if(Backbone.history){
     Backbone.history.start();
@@ -254,9 +266,9 @@ App.bind("initialize:after", function(){
   });
 
   Backbone.Events.on("alert", function(msg){
-    // App.vent.unbind("app.clipapp.message:sure");
     if(msg.auth == "no_name"){
       App.vent.trigger("app.clipapp.message:alert", msg);
+      App.vent.unbind("app.clipapp.message:sure");
       App.vent.bind("app.clipapp.message:sure", function(){
 	App.vent.trigger("app.clipapp.useredit:show");
 	App.vent.trigger("app.clipapp.useredit:rename");
