@@ -25,7 +25,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "click .close_w"         :"cancelClick"
     },
     initialize:function(){
-      noscroll = false;
+      this.flag = false;
     },
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
@@ -127,15 +127,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   var ClipMemo = {};
-  var memoType,defaultNote = _i18n('clipmemo.memo'),o_data, noscroll = false;
+  var memoType,defaultNote = _i18n('clipmemo.memo'),o_data;
   function showMemo(data){
     var memoModel = new MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
-    if(!$("body").hasClass("noscroll")){
-      noscroll = true;
-      $("body").addClass("noscroll");
-    }
     $('#obj_tag').tagsInput({});
   }
 
@@ -165,7 +161,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var flag = true;
     if(!n_data){
       App.popRegion.close();
-      if(noscroll) { $("body").removeClass("noscroll"); }
     }else{
       if(o_data['public'] != 'false'){
 	o_data['public'] = 'true';
@@ -175,12 +170,10 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       flag = flag && n_data['public'] == o_data['public'];
       if(flag){
 	App.popRegion.close();
-	if(noscroll) { $("body").removeClass("noscroll"); }
       }else{
 	App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
 	App.vent.trigger("app.clipapp.message:alert", "memo_save");
 	App.vent.bind("app.clipapp.message:sure",function(){
-	  if(noscroll) { $("body").removeClass("noscroll"); }
 	  App.popRegion.close();
 	});
       }

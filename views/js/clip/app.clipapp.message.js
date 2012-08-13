@@ -1,5 +1,5 @@
 App.ClipApp.Message = (function(App, Backbone, $){
-  var Message = {}, flag = false;
+  var Message = {};
 
   var MessageModel = App.Model.extend({
     defaults:{message:""}
@@ -12,6 +12,9 @@ App.ClipApp.Message = (function(App, Backbone, $){
     events: {
       "click .masker":"Masker",
       "click #sure": "MessageSure"
+    },
+    initialize: function(){
+      this.flag = false;
     },
     Masker: function(e){
       e.preventDefault();
@@ -43,6 +46,9 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click #sure": "MessageSure",
       "click #cancel":"MessageClose"
     },
+    initialize: function(){
+      this.flag = false;
+    },
     MessageSure: function(e){
       e.preventDefault();
       Message.close();
@@ -62,20 +68,11 @@ App.ClipApp.Message = (function(App, Backbone, $){
   });
 
   Message.show = function(type, message){
-    flag = false;
     var messageModel = new MessageModel({message:message});
     if(type == "warning"){
       var view = new WarningView({model: messageModel});
-      if(!$("body").hasClass("noscroll")){
-	flag = true;
-	$("body").addClass("noscroll");
-      }
     }else if(type == "confirm"){
       var view = new MessageView({model : messageModel});
-      if(!$("body").hasClass("noscroll")){
-	flag = true;
-	$("body").addClass("noscroll");
-      }
     }else{
       var view = new SuccessView({model : messageModel});
       setTimeout(function(){
@@ -86,7 +83,6 @@ App.ClipApp.Message = (function(App, Backbone, $){
   };
 
   Message.close = function(){
-    if(flag){ $("body").removeClass("noscroll"); }
     App.setpopRegion.close();
   };
 

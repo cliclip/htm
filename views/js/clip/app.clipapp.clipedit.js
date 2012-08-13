@@ -2,7 +2,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var isIE = App.util.isIE();
-  var edit_view = "", flag = false;
+  var edit_view = "";
   var old_content = "",ieRange = false;
   var EditModel = App.Model.extend({
     validate: function(attrs){
@@ -36,7 +36,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       edit_view = this;
-      flag = false;
+      this.flag = true;
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
       var win=document.getElementById('editor').contentWindow;
@@ -136,7 +136,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     model.onChange(function(editModel){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
-      $("body").addClass("noscroll");
       var html = App.util.contentToHtml(editModel.toJSON().content);
       App.ClipApp.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
@@ -145,29 +144,22 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	old_content = App.ClipApp.Editor.getContent("editor"); //参数为编辑器id
       },200);
       //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
-      if(isIE){
-	document.getElementById("editor").contentWindow.document.documentElement.attachEvent("onkeydown",shortcut_save);
-      }else{
-	document.getElementById("editor").contentWindow.document.addEventListener("keydown",shortcut_save,false);
-      }
-      function shortcut_save(e){
+      $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
 	if(e.ctrlKey&&e.keyCode==13){
 	  $("#editClip_Save").click();
 	}
-      }
+      });
    });
   };
 
   ClipEdit.close = function(n_content){
     if(!n_content || n_content == old_content){
       App.viewRegion.close();
-      $("body").removeClass("noscroll");
     }else{
       App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
-	$("body").removeClass("noscroll");
       });
     }
   };

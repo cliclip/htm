@@ -3,7 +3,7 @@
 App.ClipApp.Recommend = (function(App,Backbone,$){
   // 用来列出可以转给那些用户
   var P = App.ClipApp.Url.base;
-  var that, flag = false;
+  var that;
   var uid = null; // 被推荐用户的id标识
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
@@ -45,6 +45,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     initialize:function(){
       that = this;
       this.tmpmodel= new RecommModel();
+      this.falg = false;
       setTimeout(function(){
 	this.$("#recomm_name").focus();
       },500);
@@ -250,10 +251,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     }else{
       mid = model_id;
       App.popRegion.show(recommView);
-      if(!$("body").hasClass("noscroll")){
-	flag = true;
-	$("body").addClass("noscroll");
-      }
       //ie浏览器 input 事件存在bug 为元素绑定onpropertychange事件
       if(App.util.isIE()){
 	function nameListAction(evt){
@@ -271,7 +268,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   Recommend.close = function(text){
     if(!uid && !text){
       App.popRegion.close();
-      if(flag){ $("body").removeClass("noscroll"); }
       mid = null;
       uid = null;
     }else{
@@ -279,7 +275,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       App.vent.trigger("app.clipapp.message:alert", "recommend_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
-	if(flag){ $("body").removeClass("noscroll"); }
 	mid = null;
 	uid = null;
       });

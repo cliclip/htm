@@ -3,7 +3,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var face_change_flag = false;
   var face_remote_flag = false;
-  var flag = false, scroll = false;
+  var flag = false;
   var submit_face = false;
   var EditModel = App.Model.extend({});
 
@@ -69,6 +69,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#editUser-view-template",
     events: {
       "click .close_w" : "cancel"
+    },
+    initialize: function(){
+      this.flag = false;
     },
     cancel : function(e){
       e.preventDefault();
@@ -185,10 +188,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     App.ClipApp.WeiboEdit.show();
     App.ClipApp.TwitterEdit.show();
     UserEdit.showPassEdit();
-    if(!$("body").hasClass("noscroll")){
-	scroll = true;
-	$("body").addClass("noscroll");
-    }
 /*    var iframe=document.getElementById("post_frame_face");
     iframe.onload = function(){
       if(submit_face){
@@ -493,9 +492,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       face_change_flag = false;
     }
     App.mysetRegion.close();
-    if(scroll){
-      $("body").removeClass("noscroll");
-    }
   };
 
   App.vent.bind("app.clipapp.useredit:@close", function(){
