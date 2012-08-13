@@ -12,17 +12,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
         err.name = "is_null";
       }else if(!App.util.name_pattern.test(attrs.name)){
         err.name = "invalidate";
-      }else if(_.find(nameList, attrs.name)){
+      }else if(_.include(nameList, attrs.name)){
         err.name = 'not_allow';
-      }else {
-        this.save({}, {
-          url : App.ClipApp.Url.base+"/register/"+attrs.name+"/check",
-          type: "GET",
-          success:function(model,response){},
-          error:function(model,error){
-            err.name = "exist";
-          }
-        });
       }
       return _.isEmpty(err) ? null : err;
     }
@@ -45,10 +36,13 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     blurName: function(e){
       var that = this;
-      this.tmpmodel.set({name:$("#name").val()}, {
-	error:function(model, error){
-	  that.showError('login',error);
-	}
+      this.tmpmodel.save({name:$("#name").val()}, {
+	url : App.ClipApp.Url.base+"/register/"+attrs.name+"/check",
+	type: "GET",
+	success:function(model,response){},
+	error:function(model,error){
+	  that.showError("register",error);
+        }
       });
     },
     blurPass: function(e){
@@ -62,6 +56,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     submit: function(e){
       e.preventDefault();
+      var that = this;
       this.tmpmodel.save({},{
 	url : App.ClipApp.Url.base+"/register",
 	type: "POST",
@@ -75,7 +70,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.register:success","register_success",response);
 	},
 	error:function(model,error){
-	  that.showError('login',error);
+	  that.showError('register',error);
 	}
       });
     },
