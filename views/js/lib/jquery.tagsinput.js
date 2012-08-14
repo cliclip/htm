@@ -169,7 +169,7 @@
       defaultText:_i18n('tag.add_tag'),
       //defaultText:'add a tag',
       minChars:0,
-      maxChars:20,
+      maxChars:10,
       width:'270px',
       height:'75px',
       autocomplete: {selectFirst: false },
@@ -206,7 +206,7 @@
       var markup = '<div id="'+id+'_tagsinput" class="tagsinput"><div id="'+id+'_addTag">';
 
       if (settings.interactive) {
-	markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" maxlength="20"/><div class="taglistDiv" style="display:none;" ></div>';
+	markup = markup + '<input id="'+id+'_tag" value="" data-default="'+settings.defaultText+'" maxlength="10"/><div class="taglistDiv" style="display:none;" ></div>';
       }
 
       markup = markup + '</div><div class="tags_clear"></div></div>';

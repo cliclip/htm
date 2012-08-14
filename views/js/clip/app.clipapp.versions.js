@@ -41,12 +41,15 @@ App.versions = (function($){
 	register : {
 	  title       : "用户注册" ,
 	  register_ok : "注 册",
+	  login       : "登 录",
+	  register_state : "同意<a href='#'>户用协议</a>",
 	  register    : "嫌麻烦？直接发邮件到<a href='mailto:1@cliclip.com'>1@cliclip.com</a>也可注册",
 	  name : {
 	    name      : "用户名",
 	    is_null    : "用户名尚未填写",
 	    not_exist   : "用户名不存在",
 	    invalidate  : "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
+	    not_allow   : "此用户名不允许注册",
 	    exist       : "此用户名已经存在"
 	  },
 	  pass : {
@@ -324,7 +327,7 @@ App.versions = (function($){
 
 	tag:{
 	  add_tag     : "添加标签",
-	  beyond      : "标签过长，最多支持10个汉字、20个英文字母或数字"
+	  beyond      : "标签过长，最多支持5个汉字、10个英文字母或数字"
 	},
 
 	message : {
@@ -472,6 +475,27 @@ App.versions = (function($){
 	    is_null     : "User name is missing",
 	    not_exist   : "This user name does not exist",
 	    invalidate  : "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
+	    exist       : "This user name already exists"
+	  },
+	  pass : {
+	    pass        : "Password",
+	    is_null     : "Password is missing",
+	    not_match   : "Password is incorrect"
+	  }
+	},
+
+	register : {
+	  title         : "User log in" ,
+	  register_ok   : "Register",
+	  register      : "Register by simply sending an email to <a href='mailto:1@cliclip.com'>1@cliclip.com</a>",
+	  login         : "Login",
+	  register_state: "Agree to <a href='#'>user agreement</a>",
+	  name : {
+	    name        : "User name",
+	    is_null     : "User name is missing",
+	    not_exist   : "This user name does not exist",
+	    invalidate  : "Invalid format of user name(Username may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
+	    not_allow   : "This user name not allow register",
 	    exist       : "This user name already exists"
 	  },
 	  pass : {
@@ -750,7 +774,7 @@ App.versions = (function($){
 
 	tag:{
 	  add_tag     : "Add a tag",
-	  beyond      : "Tag is too long (maximum 10 Chinese characters, 20 letters or numbers)"
+	  beyond      : "Tag is too long (maximum 5 Chinese characters, 10 letters or numbers)"
 	},
 
 	message : {

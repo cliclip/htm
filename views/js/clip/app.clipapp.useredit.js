@@ -350,17 +350,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.message:confirm","imageUp_error");
       return false;
     }else{
-      Modernizr.addTest('filereader', function () {
-	return !!(window.File && window.FileList && window.FileReader);
-      });
-      Modernizr.addTest('cssfilters', function() {
-	var el = document.createElement('div');
-	el.style.cssText = Modernizr._prefixes.join('filter' + ':blur(2px); ');
-	// return  !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
-	return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 6));
-      });
-      console.info(Modernizr.filereader);
-      console.info(Modernizr.cssfilters);
       if(sender.files && sender.files[0]&&Modernizr.filereader){
 	  $("#confirm_face").show();
 	  preview_face(sender);// ff chrome
