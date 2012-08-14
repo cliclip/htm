@@ -57,6 +57,7 @@ App.versions = (function($){
 	},
 
 	faceEdit : {
+	  title       : "设置",
 	  no_name     : "无名氏",
 	  set_name    : "设置用户名",
 	  ok          : "确 定",
@@ -482,6 +483,7 @@ App.versions = (function($){
 	},
 
 	faceEdit : {
+	  title       : "Settings",
 	  no_name     : "NO NAME",
 	  set_name    : "Set user name",
 	  ok          : "OK",

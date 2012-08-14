@@ -3,10 +3,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var face_change_flag = false;
   var face_remote_flag = false;
-  var flag = false;
   var submit_face = false;
+  var flag = false;
   var EditModel = App.Model.extend({});
-
   var FaceModel = App.Model.extend({
     url:function(){
       var my = App.util.getMyUid();
@@ -68,7 +67,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "edit",
     template: "#editUser-view-template",
     events: {
-      "click .close_w" : "cancel"
+      "click .close_w" : "cancel",
+      "click .masker":"masker_close"
     },
     initialize: function(){
       this.flag = false;
@@ -76,6 +76,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.useredit:@close");
+    },
+    masker_close:function(e){
+      if($(e.target).attr("class") == "masker"){
+	App.vent.trigger("app.clipapp.useredit:@close");
+      }
     }
   });
 
@@ -112,7 +117,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "focus #pass" : "cleanError",
       "blur #pass" : "blurAction",
       "focus #confirm": "cleanError",
-      "blur #confirm" : "blurAction"
+      "blur #confirm" : "blurAction",
+      "click .delang" : "showLanguage",
+      "mouseout .language": "closeLanguage",
+      "mouseover #show_language":"keepShowLanguage",
+      "mouseout #show_language": "closeLanguageMust",
+      "mouseover .lang-list": "MouseOver",
+      "mouseout  .lang-list": "MouseOut",
+      "click .lang-list" : "lang_save"
     },
     focusAction:function(e){
       var id = e.currentTarget.id;
@@ -158,6 +170,66 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  view.showError('passEdit',res);
   	}
       });
+    },
+    showLanguage: function(e){
+      $("#show_language").toggle();
+      var span = $(".delang").children()[1];
+      if($("#show_language").css("display") == 'block'){
+	$(span).text("▲");
+	var defaultLang = e.currentTarget.children[0].className;
+	$("#"+defaultLang).css("background-color","#D9D9D9");
+      }else{
+	$(span).text("▼");
+      }
+    },
+    keepShowLanguage: function(e){
+      flag = true;
+      var span = $(".delang").children()[1];
+      $(span).text("▲");
+      $("#show_language").show();
+    },
+    closeLanguage: function(e){
+      setTimeout(function(){
+	if(!flag){
+	  var span = $(".delang").children()[1];
+	  $(span).text("▼");
+	  $("#show_language").hide();
+	}
+      },200);
+    },
+    closeLanguageMust: function(e){
+      flag = false;
+      var span = $(".delang").children()[1];
+      $(span).text("▼");
+      $("#show_language").hide();
+    },
+    MouseOver:function(e){
+      var div = $("#show_language").children();
+      _(div).each(function(e){
+	$(e).css("background-color","");
+      });
+      $(e.currentTarget).css("background-color","#D9D9D9");
+    },
+    MouseOut:function(e){
+      $(e.currentTarget).css("background-color","");
+    },
+    lang_save: function(e){
+      var lang = e.currentTarget.id;
+      var uid = App.util.getMyUid();
+      if(lang){
+	var model = new EditModel();
+	model.save({},{
+	  type:'PUT',
+	  url : App.util.unique_url(P+"/user/"+uid+"/lang/"+lang),
+	  success:function(model,res){
+	    App.vent.trigger("app.clipapp.versions:change",lang);
+	    //App.vent.trigger("app.clipapp.useredit:show",response);
+	  },
+	  error:function(model,error){
+	    App.vent.trigger("app.clipapp.message:confirm",error);
+	  }
+	});
+      }
     }
   });
 
@@ -174,7 +246,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   UserEdit.showPassEdit = function(){
     var passModel = new PassEditModel();
     var passView = new PassView({model: passModel});
-    UserEdit.passeditRegion = new App.Region({el:".right_bar"});
+    UserEdit.passeditRegion = new App.Region({el:"#modify_pass"});
     UserEdit.passeditRegion.show(passView);
   };
 
@@ -210,14 +282,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click .edit_name" : "setName",
       "error": "showError",
       "focus #name": "cleanError",
-      "click #confirm_face" : "submitFace",
-      "click .delang" : "showLanguage",
-      "mouseout .language": "closeLanguage",
-      "mouseover #show_language":"keepShowLanguage",
-      "mouseout #show_language": "closeLanguageMust",
-      "mouseover .lang-list": "MouseOver",
-      "mouseout  .lang-list": "MouseOut",
-      "click .lang-list" : "lang_save"
+      "click #confirm_face" : "submitFace"
     },
     initialize:function(){
     },
@@ -260,66 +325,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	face_remote_flag = false;
 	face_change_flag = true;
       }
-    },
-    showLanguage: function(e){
-      $("#show_language").toggle();
-      var span = $(".delang").children()[1];
-      if($("#show_language").css("display") == 'block'){
-	$(span).text("▲");
-	var defaultLang = e.currentTarget.children[0].className;
-	$("#"+defaultLang).css("background-color","#D9D9D9");
-      }else{
-	$(span).text("▼");
-      }
-    },
-    keepShowLanguage: function(e){
-      flag = true;
-      var span = $(".delang").children()[1];
-      $(span).text("▲");
-      $("#show_language").show();
-    },
-    closeLanguage: function(e){
-      setTimeout(function(){
-	if(!flag){
-	  var span = $(".delang").children()[1];
-	  $(span).text("▼");
-	  $("#show_language").css("display","none");
-	}
-      },200);
-    },
-    closeLanguageMust: function(e){
-      flag = false;
-      var span = $(".delang").children()[1];
-      $(span).text("▼");
-      $("#show_language").css("display","none");
-    },
-    MouseOver:function(e){
-      var div = $("#show_language").children();
-      _(div).each(function(e){
-	$(e).css("background-color","");
-      });
-      $(e.currentTarget).css("background-color","#D9D9D9");
-    },
-    MouseOut:function(e){
-      $(e.currentTarget).css("background-color","");
-    },
-    lang_save: function(e){
-      var lang = e.currentTarget.id;
-      var uid = App.util.getMyUid();
-      if(lang){
-	var model = new EditModel();
-	model.save({},{
-	  type:'PUT',
-	  url : App.util.unique_url(P+"/user/"+uid+"/lang/"+lang),
-	  success:function(model,res){
-	    App.vent.trigger("app.clipapp.versions:change",lang);
-	    //App.vent.trigger("app.clipapp.useredit:show",response);
-	  },
-	  error:function(model,error){
-	    App.vent.trigger("app.clipapp.message:confirm",error);
-	  }
-	});
-      }
     }
   });
 
@@ -332,13 +337,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	url:App.util.unique_url(P+"/my/info")
       });
       faceModel.onChange(function(faceModel){//设置用户名以及更新头像都会触发此事件
-	UserEdit.faceRegion = new App.Region({el:".left_bar"});
+	UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
 	var faceView = new FaceView({model: faceModel});
 	UserEdit.faceRegion.show(faceView);
 	faceLoad(face.face,uid);//为iframe 绑定load事件，加载头像
       });
     }else{//直接加载页设置面时调用
-      UserEdit.faceRegion = new App.Region({el:".left_bar"});
+      UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
       var faceView = new FaceView({model: faceModel});
       UserEdit.faceRegion.show(faceView);
       faceLoad(face.face,uid);
