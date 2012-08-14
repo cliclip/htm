@@ -1,15 +1,16 @@
 script(type="text/template",id="editUser-view-template")
   div.masker_layer
   div.masker
-    div.edit_user
-      section.edit_frame
-        span.close_w
-        div(class="left_bar")
+    section.edit_frame
+      span.close_w
+      h2.pop_title <%=_i18n('faceEdit.title')%>
+      div.pop_body
+        div(class="left_bar",id="set_user_info")
+        div(class="left_bar",id="modify_pass")
         div(class="middle",id="rule")
         div(class="middle",id="email")
         div(class="middle",id="weibo")
         div(class="middle",id="twitter")
-        div(class="right_bar")
 
 script(type="text/template",id="faceEdit-view-template")
   .edit_head
@@ -36,6 +37,20 @@ script(type="text/template",id="faceEdit-view-template")
     | </div>
     | </div>
     | </form>
+  .preview.
+    <img id="preview_size_fake" />
+
+script(type="text/template",id="passEdit-view-template")
+  ul.input_list
+    h3.edit_password <%=_i18n('passEdit.title')%>
+    li
+      |<input type="text" id="newpass" value="<%=_i18n('passEdit.newpass.prompt')%>"/>
+      input(type="password",id="pass",name="newpass",style="display:none;")
+    li
+      |<input type="text" id="conpass" value="<%=_i18n('passEdit.conpass.prompt')%>"/>
+      input(type="password",id="confirm",name="confirm",style="display:none;")
+    li.
+      <input type="submit" class="btn_blue" id="pass_confirm" value="<%=_i18n('passEdit.update')%>" />
   .language
     h3
       | <%=_i18n('languageSet.lang')%>
@@ -47,8 +62,7 @@ script(type="text/template",id="faceEdit-view-template")
       <%for(var lang in langs){ %>
       <li class="lang-list" id="<%=lang%>"><%=langs[lang]%></li>
       <% } %>
-  .preview.
-    <img id="preview_size_fake" />
+
 
 script(type="text/template",id="emailEdit-view-template")
   .mail_verify.fir
@@ -87,24 +101,6 @@ script(type="text/template",id="ruleEdit-view-template")
         li.
           <input type="submit" class="btn_blue" id="update_rule" value="<%=_i18n('ruleEdit.update')%>" />
 
-script(type="text/template",id="passEdit-view-template")
-  h3.edit_password <%=_i18n('passEdit.title')%>
-  ul.input_list
-    li
-      |<input type="text" id="newpass" value="<%=_i18n('passEdit.newpass.prompt')%>"/>
-      input(type="password",id="pass",name="newpass",style="display:none;")
-    li
-      |<input type="text" id="conpass" value="<%=_i18n('passEdit.conpass.prompt')%>"/>
-      input(type="password",id="confirm",name="confirm",style="display:none;")
-    li.
-      <input type="submit" class="btn_blue" id="pass_confirm" value="<%=_i18n('passEdit.update')%>" />
-  h3.danger <%=_i18n('passEdit.danger_operate')%>
-  ul.input_list
-    li.btn_line.
-      <input type="submit" class="btn_gray" value="<%=_i18n('passEdit.export')%>" />
-    li.
-      <input type="submit" class="btn_gray" value="<%=_i18n('passEdit.delete')%>" />
-
 script(type="text/template",id="emailAdd-view-template")
   div.masker_layer
   section.small_pop
@@ -125,7 +121,7 @@ script(type="text/template",id="weiboEdit-view-template")
     ul.mail_list
       h3
         button.add_accountbind(type="button",id="info_add",)
-          //span
+          span
           |<%=_i18n('weiboEdit.add')%> 	
         |<%=_i18n('weiboEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
@@ -137,11 +133,11 @@ script(type="text/template",id="weiboEdit-view-template")
 
 
 script(type="text/template",id="twitterEdit-view-template")
-  .mail_verify.sec
+  .mail_verify.fir
     ul.mail_list
       h3
         button.add_accountbind(type="button",id="info_add",)
-          //span
+          span
           |<%=_i18n('twitterEdit.add')%> 	
         |<%=_i18n('twitterEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
@@ -150,5 +146,10 @@ script(type="text/template",id="twitterEdit-view-template")
       |<a href="<%=info[i].url%>" target="_blank"><span class="info_face" id=""><img src="<%=info[i].face%>"></img></span></a>
       |<a href="<%=info[i].url%>" target="_blank"><span class="info_name" id="name_<%=info[i].uid%>" ><%=info[i].name%></span></a>
       |</li><% }} }%>
-
-
+  .mail_verify.sec
+    ul.mail_list
+      h3.danger.sec <%=_i18n('passEdit.danger_operate')%>
+      li.
+        <input type="submit" class="btn_gray" value="<%=_i18n('passEdit.export')%>" />
+      li.
+        <input type="submit" class="btn_gray" value="<%=_i18n('passEdit.delete')%>" />
