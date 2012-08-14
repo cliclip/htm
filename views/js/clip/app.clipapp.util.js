@@ -82,7 +82,7 @@ App.util = (function(){
   util.face_url = function(imageid,size){
     var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face/;
     if(imageid == ""){
-      return "img/f.jpg";
+      return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){
       var ids = imageid.split(":");
       if(size){

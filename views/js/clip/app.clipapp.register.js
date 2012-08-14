@@ -1,9 +1,24 @@
 App.ClipApp.Register = (function(App, Backbone, $){
   var Register = {};
+  var nameList = ['google', 'pepsi', 'twitter', 'facebook', 'baidu', 'sina'];
 
   App.Model.RegisterModel = App.Model.extend({
     url: function(){
       return App.ClipApp.Url.base+"/register";
+    },
+    validate: function(attrs){
+      var err = {};
+      if(!attrs.name ||attrs.name == ""){
+        err.name = "is_null";
+      }else if(!App.util.name_pattern.test(attrs.name)){
+        err.name = "invalidate";
+      }else if(_.include(nameList, attrs.name)){
+        err.name = 'not_allow';
+      }
+      if(attrs.pass == ""){
+	err.pass = "is_null";
+      }
+      return _.isEmpty(err) ? null : err;
     }
   });
 
@@ -13,38 +28,85 @@ App.ClipApp.Register = (function(App, Backbone, $){
     className: "register-view",
     template: "#register-view-template",
     events:{
-      // 该事件绑定之后不管用
-      "click #submit": "submit",
-      "click #reset": "reset",
-      "click #login": "login"
+      "blur #name"     : "blurName",
+      "blur #pass"     : "blurPass",
+      "focus #name"    : "cleanError",
+      "focus #pass"    : "cleanError",
+      "click #agree"   : "agreeAction",
+      "click .r_login" : "gotoLogin",
+      "click .reg_btn" : "submit",
+      "click .close_w" : "cancel"
     },
     initialize: function(){
+      this.tmpmodel = new App.Model.RegisterModel();
       this.flag = false;
     },
-    submit: function(e){
-      e.preventDefault();
-      // 取得当前点击的button的value进行处理
-      var data = {
-	name : $("#username_r").val(),
-	pass : $("#password_r").val()
-      };
-      this.model.save(data,{
-	success:function(model,response){
-	  // 转到用户登录页面
-	  App.vent.trigger("app.clipapp.register:success","register_success",response);
-	},
+    blurName: function(e){
+      var that = this;
+      var name = $("#name").val();
+      this.tmpmodel.save({name:name}, {
+	url : App.ClipApp.Url.base+"/register/"+name+"/check",
+	type: "GET",
+	success:function(model,response){},
 	error:function(model,error){
-	  // 提示登录出错
-	  App.vent.trigger("app.clipapp.register:error",model, error);
+	  that.showError("register",error);
+        }
+      });
+    },
+    blurPass: function(e){
+      var that = this;
+      this.tmpmodel.set({pass:$("#pass").val()},{
+	error:function(model, error){
+	  that.showError("login",error);
 	}
       });
     },
-    reset : function(e){
-      e.preventDefault();
-      Register.close();
+    agreeAction: function(e){
+      if($("#agree").attr("checked")){
+	$(".reg_btn").attr("disabled",false);
+      }else{
+	$(".reg_btn").attr("disabled",true);
+      }
     },
-    login : function(){
+    gotoLogin : function(e){
+      e.preventDefault();
+      App.vent.trigger("app.clipapp.register:@cancel");
       App.vent.trigger("app.clipapp:login");
+    },
+    submit: function(e){
+      e.preventDefault();
+      var that = this;
+      var name = $("#name").val();
+      var pass = $("#pass").val();
+      var model = new App.Model.RegisterModel({name:name,pass:pass});
+      if($(".error").length == 0){
+	if($("#agree").attr("checked")){
+	  model.save({},{
+	    url : App.ClipApp.Url.base+"/register",
+	    type: "POST",
+	    success:function(model,response){
+	      if(/language=en/.test(document.cookie)){
+		//cliclip的uid为72
+		App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["helper","newbie"]);
+	      }else{
+		App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
+	      }
+	      App.vent.trigger("app.clipapp.register:success","register_success",response);
+	    },
+	    error:function(model,error){
+	      that.showError('register',error);
+	    }
+	  });
+	}else{
+	  console.log("error");
+	}
+      }else{
+	$(e.currentTarget).attr("disabled",false);
+      }
+    },
+    cancel : function(e){
+      e.preventDefault();
+      App.vent.trigger("app.clipapp.register:@cancel");
     }
   });
 
@@ -64,7 +126,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   Register.close = function(){
     App.popRegion.close();
-    // window.location.href='javascript:history.go(-1);'; // 返回注册前的页面
   };
 
   Register.show = function(model, error){
@@ -73,6 +134,15 @@ App.ClipApp.Register = (function(App, Backbone, $){
     if (error) registerModel.set("error", error);
     var registerView = new RegisterView({model: registerModel});
     App.popRegion.show(registerView);
+    if(/language=en/.test(document.cookie)){
+      $("#note_img").removeClass("note_img_zh");
+      $("#note_img").addClass("note_img_en");
+    }else{
+      $("#note_img").removeClass("note_img_en");
+      $("#note_img").addClass("note_img_zh");
+    }
+    $("#name").focus();
+    $("#agree").attr("checked",true);
   };
 
   App.vent.bind("app.clipapp.register:success", function(key, res, fun){
@@ -87,6 +157,9 @@ App.ClipApp.Register = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.register:error",function(model, error){
     Register.show(model, error);
+  });
+  App.vent.bind("app.clipapp.register:@cancel", function(){
+    Register.close();
   });
 
   // Test

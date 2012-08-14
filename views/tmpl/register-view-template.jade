@@ -1,0 +1,33 @@
+script(type="text/template",id="register-view-template")
+  div.masker_layer
+  div.masker
+    section.login_window
+      span.close_w
+      div.login_left
+        div.logo_bg
+        fieldset
+          legend.
+            <%=_i18n('register.title')%>
+          form(action="",method="")
+            li
+              div.login_input
+                input(type="text",name="name",id="name")
+              label.username
+                | <%=_i18n('register.name.name')%>
+            li
+              div.login_input
+                input(type="password",name="pass",id="pass")
+              label.password
+                | <%=_i18n('register.pass.pass')%>
+            li
+              div.out_link
+                span.next_register
+                  label
+                    input(type="checkbox",id="agree")
+                    | <%=_i18n('register.register_state')%>
+          p.reg_p|<%=_i18n('register.register')%> </br>
+        div.btn_frame.clearfix.
+          <input type="submit" class="reg_btn" value="<%=_i18n('register.register_ok')%>" />
+          <span class="r_login"><%=_i18n('register.login')%></span>
+      div.login_right
+        #note_img
