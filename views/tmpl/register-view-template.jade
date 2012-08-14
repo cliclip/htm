@@ -21,12 +21,13 @@ script(type="text/template",id="register-view-template")
                 | <%=_i18n('register.pass.pass')%>
             li
               div.out_link
-                span.next_login
+                span.next_register
                   label
-                    input(type="checkbox",id="remember")
-                    | <%=_i18n('login.login_state')%>
-          p|<%=_i18n('register.register')%> </br>
+                    input(type="checkbox",id="agree")
+                    | <%=_i18n('register.register_state')%>
+          p.reg_p|<%=_i18n('register.register')%> </br>
         div.btn_frame.clearfix.
           <input type="submit" class="reg_btn" value="<%=_i18n('register.register_ok')%>" />
+          <span class="r_login"><%=_i18n('register.login')%></span>
       div.login_right
         #note_img
