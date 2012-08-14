@@ -62,7 +62,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
   FindPass.close=function(){
     App.popRegion.close();
   };
-    //link仅供测试使用
+
   App.vent.bind("app.clipapp.findpass:success",function(address){
     Backbone.history.navigate("",true);
     App.vent.trigger("app.clipapp.message:success", "go_resetpass",address);
@@ -72,6 +72,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
   App.vent.bind("app.clipapp.findpass:cancel",function(){
     FindPass.close();
     Backbone.history.navigate("",true);
+    App.vent.trigger("app.clipapp:login");
   });
  //App.bind("initialize:after", function(){ FindPass.show(); });
   return FindPass;

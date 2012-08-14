@@ -25,12 +25,20 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
     events:{
       "focus #newpass":"clearmsg",
       "focus #confirm":"clearmsg",
+      "keydown #confirm": "keydownAction",
       "click #submit" :  "submit",
       "click #reset"  :  "reset",
       "click .close_w":  "cancel"
     },
     clearmsg:function(e){
       this.cleanError(e);
+    },
+    keydownAction : function(e){
+      $('#confirm').unbind("keydown");
+      if(e.keyCode==13){
+	$("#confirm").blur();
+	$('#submit').click();
+      }
     },
     submit:function(e){
       e.preventDefault();
@@ -77,21 +85,20 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
   };
 
   App.vent.bind("app.clipapp.resetpass:@success",function(res){
-    document.cookie = "token="+res.token;
     ResetPass.close();
-    Backbone.history.navigate("my",true);
-    console.log(document.cookie);
+    document.cookie = "token="+res.token;
+    App.util.current_page("my");
+    if(!(/my/.test(window.location.hash))){
+      Backbone.history.navigate("my",true);
+      App.vent.trigger("app.clipapp.face:reset",res.token.split(":")[0]);
+    }else{ Backbone.history.navigate("my",true);}
     App.vent.trigger("app.clipapp.message:success","resetpwd_success");
-    Backbone.history.navigate("my",true);
   });
+
   App.vent.bind("app.clipapp.resetpass:cancel",function(){
     ResetPass.close();
     Backbone.history.navigate("",true);
   });
 
-  App.bind("initialize:after", function(){
-    var res={token:"1:68e8deb1a984f0298b05d7ca27c7eb7a"};
-      //App.vent.trigger("app.clipapp.resetpass:@success",res);
-   });
    return ResetPass;
 })(App,Backbone,jQuery);

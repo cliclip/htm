@@ -30,6 +30,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "focus #pass"              : "cleanError",
       "keydown #pass"            : "keydownAction",
       "click .login_btn"         : "loginAction",
+      "click .l_register"        : "gotoRegister",
       "click .close_w"           : "cancel",
       "click .weibo"             : "openWeibo",
       "click .twitter"           : "openTwitter"
@@ -63,6 +64,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	this.$("#name").val("");
       }
       this.cleanError(e);
+    },
+    gotoRegister:function(e){
+      e.preventDefault();
+      App.vent.trigger("app.clipapp.login:@cancel");
+      App.vent.trigger("app.clipapp:register");
     },
     loginAction : function(e){
       var that = this;

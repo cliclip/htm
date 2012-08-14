@@ -1,15 +1,16 @@
 script(type="text/template",id="resetpass-view-template")
   div.masker_layer
-  section.small_pop
-    span.close_w
-    h2.pop_title <%=_i18n('resetpass.title')%>
-    ur.pop_body
-      h3 <%=_i18n('resetpass.new_pass')%>
-      li.input_text.clearfix
-        input(type="password",id="newpass")
-      h3 <%=_i18n('resetpass.new_pass')%>
-      li.input_text.clearfix
-        input(type="password",id="confirm")
-      li.btn_group.clearfix.
-        <input type="button" class="verify" value="<%=_i18n('resetpass.ok')%>" id="submit"/>
-        <input type="button" class="cancel" value="<%=_i18n('resetpass.reset')%>" id="reset"/>
+  div.masker 
+    section.small_pop
+      span.close_w
+      h2.pop_title <%=_i18n('resetpass.title')%>
+      ul.pop_body
+        h3 <%=_i18n('resetpass.new_pass')%>
+        li.input_text
+          input(type="password",id="newpass")
+        h3 <%=_i18n('resetpass.new_pass')%>
+        li.input_text
+          input(type="password",id="confirm")
+        li.btn_group
+          <input type="button" class="verify" value="<%=_i18n('resetpass.ok')%>" id="submit"/>
+          <input type="button" class="cancel" value="<%=_i18n('resetpass.reset')%>" id="reset"/>
