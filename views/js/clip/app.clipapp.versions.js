@@ -488,7 +488,7 @@ App.versions = (function($){
 	  title         : "User log in" ,
 	  login_ok      : "Login",
 	  register_ok   : "Register",
-	  findpass      : "Forgot your password?",
+	  findpass      : "Forgot your password[<a href = '/#password/find' >click here</a>]",
 	  login_state   : "Keep me logined in",
 	  register      : "Register",
 	  twitter       : "Login with Twitter",
