@@ -27,9 +27,9 @@ script(type="text/template",id="login-view-template")
                   label
                     input(type="checkbox",id="remember")
                     | <%=_i18n('login.login_state')%>
-          p|<a href = "/#password/find" ><%=_i18n('login.findpass')%></a> </br>
+          p.forgetpass|<a href = "/#password/find" ><%=_i18n('login.findpass')%></a> </br>
         div.btn_frame.clearfix.
           <input type="submit" class="login_btn" value="<%=_i18n('login.login_ok')%>" />
-          <span><%=_i18n('login.register')%></span>
+          <span class="l_register"><%=_i18n('login.register')%></span>
       div.login_right
         #note_img

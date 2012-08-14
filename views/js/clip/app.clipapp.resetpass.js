@@ -90,9 +90,8 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
   });
 
   App.bind("initialize:after", function(){
-	     console.log(">>>>>>>>>>");
     var res={token:"1:68e8deb1a984f0298b05d7ca27c7eb7a"};
-      App.vent.trigger("app.clipapp.resetpass:@success",res);
+      //App.vent.trigger("app.clipapp.resetpass:@success",res);
    });
    return ResetPass;
 })(App,Backbone,jQuery);
