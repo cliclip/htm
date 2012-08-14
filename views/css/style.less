@@ -1723,31 +1723,47 @@ section.edit {
   .masker_layer { z-index:2; }
   .masker { z-index:3; }
   .edit_user {
-    background: #d9d9d9;
-    position: relative;
-    z-index: 2;
-    top: 100px;
-    min-height: 556px;
+    //background: #d9d9d9;
+    //position: relative;
+    //z-index: 2;
+    //top: 100px;
+    //min-height: 556px;
   }
 }
 //设置界面内部  editUser-view-template
 section.edit_frame{
-	width:955px;
-	min-height:460px;
+	width:750px;
 	padding:30px 0;
 	margin:0 auto;
-	position: relative;
-	.close_w {
-		 top: 9px;
-		 right: -40px;
+	//position: relative;
+	min-height:740px;
+	border:5px solid #fff;
+	position: absolute;
+	left:50%;
+	top:100px;
+	margin-left:-400px;
+	background:#d9d9d9;
+	.pop_title{
+		height:45px;
+		line-height:45px;
+		margin:-31px 5px 0px;
+		font-size:24px;
+		color:#333333;
+		border-bottom:3px solid #f0f0f0;
+		padding-left:35px;
 	}
-	.left_bar,.right_bar{
-		width:270px;
-		position: absolute;
-		top:30px;
+	.pop_body{
+		padding:10px 25px;
+		margin:0;
+	}
+	.close_w {
+		 top: -21px;
+		 right: -21px;
 	}
 	.left_bar{
-		left:0;
+		width:270px;
+		position: absolute;
+		left:35px;
 		//头像的上传和名字的修改
 		.edit_head{
 			height:280px;
@@ -1866,6 +1882,55 @@ section.edit_frame{
 				visibility:hidden;  
 			}  
 		}
+		.passEdit{
+			margin-top: 380px;
+		}
+		h3.edit_password{
+			height:35px;
+			// padding-left:40px;
+			// .sprites(-615px,-610px);
+		}
+		ul.input_list{
+			background:#fff;
+			list-style:none;
+			padding:25px;
+			margin:0 0 15px;
+			.border-radius(25px);
+			li{
+				height:30px;
+				margin-bottom:10px;
+				input{
+					margin:0 auto;
+					color: #333;
+					background-color:#efefef;
+					border:none;
+				}
+ 				input.error{
+					border:1px solid #f00;
+				}
+				span.error{
+					max-width:500px;
+					min-width:110px;
+					padding:2px;
+					right:0px;	
+				}
+				input.btn_blue{
+					height:36px;
+					width:164px;
+					border:none;
+					color:#fff;
+					.sprites(-340px,-431px);
+				}
+				input#new_pass{
+					display:none;
+				}
+				input#con_pass{
+					display:none;
+				}
+			}
+			li.btn_line{margin-bottom:20px;}
+		}
+
 		//界面语言设置
 		.language{
 			height:60px;
@@ -1908,7 +1973,7 @@ section.edit_frame{
 	}
 	.middle{
 		width:369px;
-		margin:0 auto;
+		margin-left:320px;
 		.mail_verify{
 			padding:20px 0;
 			background:url(../img/mail_verify_bg.jpg) no-repeat left bottom #fff;
@@ -1943,7 +2008,6 @@ section.edit_frame{
 						background-color:#fff;
 					}
 				}
-
 				span.open_mailcheck{
 					display: block;
 					//width:105px;
@@ -2012,68 +2076,27 @@ section.edit_frame{
 				}
 			}
 		}
-	}
-	// 修改密码和导出账户、删除账户按钮
-	.right_bar{
-		right:0;
-		h3{
-			height:35px;
-			padding-left:40px;
-			margin-bottom:10px;
-		}
-		.edit_password{
-			.sprites(-615px,-610px);
-		}
-		.danger{
+		ul.mail_list h3.danger{
 			color:red;
-			.sprites(-615px,-655px)
+			.sprites(-615px,-655px);
+			 padding-left: 40px;
+			 padding-top: 0;
 		}
-		ul.input_list{
-			background:#fff;
-			list-style:none;
-			padding:25px;
-			margin:0 0 15px;
-			.border-radius(25px);
-			li{
-				height:30px;
-				margin-bottom:10px;
-				input{
-					margin:0 auto;
-					color: #333;
-					background-color:#efefef;
-					border:none;
-				}
- 				input.error{
-					border:1px solid #f00;
-				}
-				span.error{
-					max-width:500px;
-					min-width:110px;
-					padding:2px;
-					right:0px;	
-				}
-				input.btn_blue{
-					height:36px;
-					width:164px;
-					border:none;
-					color:#fff;
-					.sprites(-340px,-431px);
-				}
-				input.btn_gray{
-					height:36px;
-					width:164px;
-					border:none;
-					color:#fff;
-					.sprites(-340px,-571px);
-				}
-				input#new_pass{
-					display:none;
-				}
-				input#con_pass{
-					display:none;
-				}
-			}
-			li.btn_line{margin-bottom:20px;}
+		input.btn_gray{
+			margin:0 auto;
+			color: #333;
+			background-color:#efefef;
+			border:none;
+			height:36px;
+			width:164px;
+			color:#fff;
+			.sprites(-340px,-571px);
+
+		}
+		input.left{
+			float:left;
+			margin-left: -5px;
+			margin-right: 10px;
 		}
 	}
 }
@@ -2170,7 +2193,7 @@ section.edit_frame{
 			margin-left:10px;
 			margin-right:10px;
 		}
-	}	
+	}
 	div.info{
 		height: 72px;
 		text-align:center;
