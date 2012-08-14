@@ -160,7 +160,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.login:success", function(res, remember){
     if(remember){
       var data = new Date();
-      data.setTime(data.getTime() + 30*24*60*60*1000);
+      data.setTime(data.getTime() +12*30*24*60*60*1000);
       document.cookie = "token="+res.token+";expires=" + data.toGMTString();
     }else{
       document.cookie = "token="+res.token;

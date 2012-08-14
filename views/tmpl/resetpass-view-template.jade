@@ -4,14 +4,12 @@ script(type="text/template",id="resetpass-view-template")
     span.close_w
     h2.pop_title <%=_i18n('resetpass.title')%>
     ur.pop_body
-      li.alert#alert
-        <%= typeof error != "undefined"&& error.error ? error.error: "" %>
       h3 <%=_i18n('resetpass.new_pass')%>
       li.input_text.clearfix
-        input(type="text",id="pass1")
+        input(type="password",id="newpass")
       h3 <%=_i18n('resetpass.new_pass')%>
       li.input_text.clearfix
-        input(type="text",id="pass2")
+        input(type="password",id="confirm")
       li.btn_group.clearfix.
         <input type="button" class="verify" value="<%=_i18n('resetpass.ok')%>" id="submit"/>
         <input type="button" class="cancel" value="<%=_i18n('resetpass.reset')%>" id="reset"/>

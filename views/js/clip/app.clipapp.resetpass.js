@@ -1,80 +1,98 @@
 App.ClipApp.ResetPass=(function(App,Backbone,$){
   var ResetPass = {};
+  var P = App.ClipApp.Url.base;
 
-  var ResetPassModel = App.Model.extend({});
+  var ResetPassModel = App.Model.extend({
+    validate:function(attrs){
+      var error = {};
+      if(!attrs.newpass){
+	error["newpass"] = "is_null";
+      }
+      if(!attrs.confirm){
+	error["conpass"] = "is_null";
+      }
+      if(attrs.newpass && attrs.confirm && attrs.newpass != attrs.confirm){
+	error["confirm"] = "password_diff";
+      }
+      if(_.isEmpty(error)) return null;
+      else return error;
+    }
+  });
   var ResetPassView=App.ItemView.extend({
     tagName:"div",
     className:"resetpass-view",
     template:"#resetpass-view-template",
     events:{
-      "focus .input_text":"clearmsg",
+      "focus #newpass":"clearmsg",
+      "focus #confirm":"clearmsg",
       "click #submit" :  "submit",
       "click #reset"  :  "reset",
       "click .close_w":  "cancel"
     },
-    clearmsg:function(){
-      $("#alert").css("display","none");
+    clearmsg:function(e){
+      this.cleanError(e);
     },
     submit:function(e){
-      var pass1 = $("#pass1").val();
-      var pass2 = $("#pass2").val();
       e.preventDefault();
-      if(!pass1 || !pass2){
-	App.vent.trigger("app.clipapp.resetpass:error",this.model,{error:"请输入新密码"});
-      }else{
-	if(pass1==pass2){
-	  this.model.save({pass:pass2},{
-	    url:App.ClipApp.Url.base+"/password/reset/"+this.model.get("link"),
-	    type:"PUT",
-	    success:function(model,res){
-	      App.vent.trigger("app.clipapp.resetpass:success",res);
-	    },
-	    error:function(model, res){
-	      App.vent.trigger("app.clipapp.resetpass:error",model,res);
-	    }
-	  });
-	}else{
-	  App.vent.trigger("app.clipapp.resetpass:error",this.model,{error:"两次密码不一致"});
+      that=this;
+      var newpass = $("#newpass").val();
+      var conpass = $("#confirm").val();
+      this.model.save({newpass:newpass,confirm:conpass},{
+	url: P+"/password/reset/"+this.model.get("link"),
+	type:"PUT",
+	success:function(model,res){
+	  console.log(res.token);
+	  App.vent.trigger("app.clipapp.resetpass:@success",res);
+	},
+	error:function(model,res){
+	  if(res.link){
+	    App.vent.trigger("app.clipapp.message:confirm",res);
+	    App.vent.unbind("app.clipapp.message:sure");
+	    App.vent.bind("app.clipapp.message:sure",function(){
+	      ResetPass.close();
+	      Backbone.history.navigate("",true);
+	    });
+	  }else{
+	    that.showError('resetpass',res);
+	  }
 	}
-      }
+      });
     },
     reset:function(e){
       e.preventDefault();
-      $("#pass1").val("");
-      $("#pass2").val("");
+      $("#newpass").val("");
+      $("#confirm").val("");
     },
     cancel:function(e){
        App.vent.trigger("app.clipapp.resetpass:cancel");
     }
   });
-  ResetPass.show=function(link,model,error){
-    var resetPassModel=new ResetPassModel({
-      link:link
-    });
-    if(model) resetPassModel.set(model.toJSON());
-    if(error) resetPassModel.set("error",error);
+  ResetPass.show=function(link){
+    var resetPassModel=new ResetPassModel({link:link});
     var resetPassView=new ResetPassView({model:resetPassModel});
     App.popRegion.show(resetPassView);
-    if(error){
-      $("#alert").css("display","block");
-    }else{
-      $("#alert").css("display","none");
-    }
   };
   ResetPass.close=function(){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.resetpass:success",function(link){
-    Backbone.history.navigate("register",true);
+  App.vent.bind("app.clipapp.resetpass:@success",function(res){
+    document.cookie = "token="+res.token;
     ResetPass.close();
-  });
-  App.vent.bind("app.clipapp.resetpass:error",function(model,error){
-    ResetPass.show(model.get("link"),model,error);
+    Backbone.history.navigate("my",true);
+    console.log(document.cookie);
+    App.vent.trigger("app.clipapp.message:success","resetpwd_success");
+    Backbone.history.navigate("my",true);
   });
   App.vent.bind("app.clipapp.resetpass:cancel",function(){
     ResetPass.close();
     Backbone.history.navigate("",true);
   });
-  return ResetPass;
+
+  App.bind("initialize:after", function(){
+	     console.log(">>>>>>>>>>");
+    var res={token:"1:68e8deb1a984f0298b05d7ca27c7eb7a"};
+      App.vent.trigger("app.clipapp.resetpass:@success",res);
+   });
+   return ResetPass;
 })(App,Backbone,jQuery);
