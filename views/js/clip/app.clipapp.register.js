@@ -84,12 +84,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	    url : App.ClipApp.Url.base+"/register",
 	    type: "POST",
 	    success:function(model,response){
-	      if(/language=en/.test(document.cookie)){
-		//cliclip的uid为72
-		App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["helper","newbie"]);
-	      }else{
-		App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
-	      }
 	      App.vent.trigger("app.clipapp.register:success","register_success",response);
 	    },
 	    error:function(model,error){
