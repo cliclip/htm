@@ -27,8 +27,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
     events:{
       "blur #name"     : "blurName",
       "blur #pass"     : "blurPass",
-      "focus #name"    : "cleanError",
-      "focus #pass"    : "cleanError",
+      "focus #name"    : "clearAction",
+      "focus #pass"    : "clearAction",
       "click #agree"   : "agreeAction",
       "click .r_login" : "gotoLogin",
       "click .reg_btn" : "submit",
@@ -46,9 +46,14 @@ App.ClipApp.Register = (function(App, Backbone, $){
       this.tmpmodel.save({name:name}, {
 	url : App.ClipApp.Url.base+"/register/"+name+"/check",
 	type: "GET",
-	success:function(model,response){},
+	success:function(model,response){
+	  if($(".error").length == 0){
+	    $(".reg_btn").attr("disabled",false);
+	  }
+	},
 	error:function(model,error){
 	  that.showError("register",error);
+	  $(".reg_btn").attr("disabled",true);
         }
       });
     },
@@ -57,11 +62,21 @@ App.ClipApp.Register = (function(App, Backbone, $){
       this.tmpmodel.set({pass:$("#pass").val()},{
 	error:function(model, error){
 	  that.showError("login",error);
+	  $(".reg_btn").attr("disabled",true);
 	}
       });
+      if($(".error").length == 0){
+	$(".reg_btn").attr("disabled",false);
+      }
+    },
+    clearAction: function(e){
+      this.cleanError(e);
+      if($(".error").length == 0){
+	$(".reg_btn").attr("disabled",false);
+      }
     },
     agreeAction: function(e){
-      if($("#agree").attr("checked")){
+      if($(".error").length == 0 && $("#agree").attr("checked")){
 	$(".reg_btn").attr("disabled",false);
       }else{
 	$(".reg_btn").attr("disabled",true);
@@ -97,10 +112,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	    }
 	  });
 	}else{
-	  console.log("error");
+	  $(e.currentTarget).attr("disabled",true);
 	}
       }else{
-	$(e.currentTarget).attr("disabled",false);
+	$(e.currentTarget).attr("disabled",true);
       }
     },
     openWeibo : function(e){
@@ -149,7 +164,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
       $("#note_img").addClass("note_img_zh");
     }
     $("#name").focus();
-    $("#agree").attr("checked",true);
   };
 
   App.vent.bind("app.clipapp.register:success", function(key, res, fun){
