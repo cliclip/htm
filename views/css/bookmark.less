@@ -245,12 +245,15 @@
 		.pop_title
 	}
 }
+img{
+	border:none;
+}
 .login_window{
 	width:735px;
-	height:415px;
+	height:390px;
 	position: absolute;
 	left:50%;
-	top:100px;
+	top:140px;
 	margin-left:-367px;
 	background:url(../img/login_bg.png) repeat left top #66517f;
 	z-index:13;
@@ -279,10 +282,17 @@
 			font-size:18px;
 			line-height:1.8;
 			margin:0 auto;
-			.btn_frame{padding-top:30px;}
+			.btn_frame{
+				margin-top:5px;
+				padding-top:30px;
+			}
 			.login_btn{
 				float:none;
 				margin:0 auto;
+				width:135px;
+				height:40px;
+				border:none;
+				.sprites(-440px,-475px);
 			}
 		}
 	}
@@ -300,13 +310,8 @@
 			left:40px;
 			bottom:-360px;
 		}
-		.note_img_zh{
-			background:url(../img/login_right_bg.png) no-repeat left bottom;
-		}
-		.note_img_en{
-			background:url(../img/login_right_bg_en.png) no-repeat left bottom;
-		}
-
+		.note_img_zh{background:url(../img/login_right_bg.png) no-repeat left bottom;}
+		.note_img_en{background:url(../img/login_right_bg_en.png) no-repeat left bottom;}
 	}
 	.login_left{
 		width:340px;
@@ -314,8 +319,8 @@
 		padding:30px;
 		float: left;
 		.logo_bg{
-			.sprites(-30px,-475px);
-			width:270px;
+			.sprites(-20px,-475px);
+			width:300px;
 			height:135px;
 			margin:0 auto;
 			margin-bottom:10px;
@@ -323,7 +328,7 @@
 		fieldset{
 			width:290px;
 			margin:0 auto;
-			border:medium none;
+			border: 0 none;
 			legend{
 				display: none;
 			}
@@ -332,9 +337,8 @@
 				label.username{
 					width:100px;
 					height:35px;
-					//.sprites(-420px,-300px);
 					padding-top:7px;
-					color:wheat;
+					color:white;
 					font-size:20px;
 				}
 				li{list-style-type:none;margin-left:-20px;}
@@ -343,16 +347,8 @@
 					height:35px;
 					padding-top:7px;
 					//.sprites(-420px,-345px);
-					color:wheat;
+					color:white;
 					font-size:20px;
-				}
-				.out_link{
-					label{
-						color: #FFFFFF;
-    						float: left;
-    						margin-left: 106px;
-    						margin-top: -21px;
-					}
 				}
 				.login_input{
 					.sprites(-340px,-520px);
@@ -361,57 +357,94 @@
 					float:right;
 					input{
 						color:#fff;
-						height:100%;
+						height:27px;
 						border:none;
-						width:100%;
+						width:197px;
 						float:right;
 						margin-bottom:0px;
-						//.sprites(-340px,-520px);
 						background:none repeat scroll 00 transparent;
 					}
 				}
-				input#remember{float: left;width:auto!important;height:auto!important;}
+				.out_link{
+					position:relative;
+					width:62px;
+					top:-41px;
+				}
+				input#remember{
+					float: left;
+					width:auto!important;
+					height:auto!important;
+				}
 				input:focus{
 				}
 				input.error{
-					height:100%;
+					height:26px;
 					border:1px solid #f00;
 				}
 				span.next_login{
 					color:#fff;
+					position:relative;
+					left:41px;	
+					top:-40px;
 					margin-left:49px;
-					lable{
-						float: right;
-					    	margin-right: 100px;
-					    	margin-top: 6px;
-					}
-					#remember{
-						display:inline;
-						float:none;
+					label{
+						color: #FFFFFF;
+    						display: inline;
+    						margin-bottom: 0;
+						#remember{
+							display:inline;
+							float:none;
+						}
 					}
 				}
 				span.error{
-					z-index:1000;
 					left:250px;
-					min-width:110px;
-					background:#EEFF00 none repeat scroll 0% 50%;
-					border:3px solid #EEFF00;
+					min-width:150px;
 					padding:6px;
-					text-align:center;
-					min-height:1em;
-					.border-radius(5px);
-					font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
-					position:absolute;
 				}
 			}
 			p{
 				font-size:14px;
 				color:#d4ce86;
+				margin-top:10px;
 				margin-left:-20px;
-    				margin-right: -70px;
+				margin-right:-70px;
 				a {
-					color: #FFFFFF;
+				  color: #fff;
 				}
+			}
+			p.forgetpass{
+				position:relative;
+				margin-left:90px;
+				top:-12px;
+			}
+		}
+		.btn_frame{
+			margin-top:5px;
+			//padding-top:30px;
+			position:relative;
+			top:-37px;
+			input{float:left;border:none;font-size:16px;}
+			button{
+				float:left;
+				border:none;
+				color:#fff;
+				padding:0;
+				line-height:36px;
+			}
+			span.l_register{
+				color: #fff;
+				position: absolute;
+				margin-left: 10px;
+    				margin-top: 10px;
+				cursor: pointer;
+				text-decoration:-moz-anchor-decoration;
+			}
+			input.login_btn{
+				width:135px;
+				height:40px;
+				.sprites(-440px,-475px);
+				margin-left: 110px;
 			}
 		}
 	}

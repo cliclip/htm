@@ -43,7 +43,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     blurName: function(e){
       var that = this;
       var name = $("#name").val();
-      this.tmpmodel.save({name:name}, {
+      this.tmpmodel.save({name: name}, {
 	url : App.ClipApp.Url.base+"/register/"+name+"/check",
 	type: "GET",
 	success:function(model,response){},
