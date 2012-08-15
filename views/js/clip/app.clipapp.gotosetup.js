@@ -10,12 +10,6 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
     },
     initialize : function(){
       this.flag = false;
-      if(/language=en/.test(document.cookie)){
-	//cliclip的uid为72
-	App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["helper","newbie"]);
-      }else{
-	App.vent.trigger("app.clipapp.reclip_tag:xinshou", 72, ["帮助","新手"]);
-      }
     },
     go : function(e){
       e.preventDefault();
