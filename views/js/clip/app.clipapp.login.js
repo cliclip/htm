@@ -31,6 +31,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "keydown #pass"            : "keydownAction",
       "click .login_btn"         : "loginAction",
       "click .l_register"        : "gotoRegister",
+      "click .masker"            : "masker",
       "click .close_w"           : "cancel",
       "click .weibo"             : "openWeibo",
       "click .twitter"           : "openTwitter"
@@ -94,7 +95,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	$("#pass").blur();
 	$('.login_btn').click();
       }
-     },
+    },
+    masker: function(e){
+      if($(e.target).attr("class") == "masker"){
+	this.cancel(e);
+      }
+    },
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.clipper:cancel");
