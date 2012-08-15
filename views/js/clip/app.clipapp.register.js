@@ -34,6 +34,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
       "click .reg_btn" : "submit",
       "click .weibo"   : "openWeibo",
       "click .twitter" : "openTwitter",
+      "click .masker"  : "masker",
       "click .close_w" : "cancel"
     },
     initialize: function(){
@@ -125,6 +126,11 @@ App.ClipApp.Register = (function(App, Backbone, $){
     openTwitter : function(e){
       App.vent.trigger("app.clipapp.register:@cancel");
       window.location.href="/oauth/req/twitter";
+    },
+    masker: function(e){
+      if($(e.target).attr("class") == "masker"){
+	this.cancel(e);
+      }
     },
     cancel : function(e){
       e.preventDefault();
