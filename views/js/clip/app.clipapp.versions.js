@@ -304,6 +304,13 @@ App.versions = (function($){
 	  bind        : "关联已有帐户",
 	  register    : "注册新帐户",
 	  bind_ok     : "立即关联",
+	  name        :{
+	    is_null   :"用户名尚未填写",
+	    invalidate:"用户名格式有误"
+	  },
+	  pass        :{
+	    is_null   :"密码尚未填写"
+	  },
 	  register_ok : "立即注册"
 	},
 
@@ -774,6 +781,13 @@ App.versions = (function($){
 	  bind        : "Connect",
 	  register    : "Create",
 	  bind_ok     : "Connect now",
+	  name        :{
+	    is_null   :"User name is missing",
+	    invalidate:"Invalid format of user name"
+	  },
+	  pass        :{
+	    is_null   :"Password is missing"
+	  },
 	  register_ok : "Create now"
 	},
 
