@@ -46,27 +46,19 @@ App.ClipApp.Register = (function(App, Backbone, $){
     blurName: function(e){
       var that = this;
       var name = $("#name").val();
-      this.tmpmodel.set({name:name},{
-	error:function(model, error){
-	  that.showError("login",error);
+      this.tmpmodel.save({name:name},{
+	url : App.ClipApp.Url.base+"/user/check/"+name,
+	type: "GET",
+	success:function(model,response){
+	  if($("#pass").val() && $(".error").length == 0 && $("#agree").attr("checked")){
+	    $(".reg_btn").attr("disabled",false);
+	  }
+	},
+	error:function(model,error){
+	  that.showError("register",error);
 	  $(".reg_btn").attr("disabled",true);
 	}
       });
-      if(name){
-	that.tmpmodel.fetch({
-	  url : App.ClipApp.Url.base+"/user/check/"+name,
-	  type: "GET",
-	  success:function(model,response){
-	    if($("#pass").val() && $(".error").length == 0 && $("#agree").attr("checked")){
-	      $(".reg_btn").attr("disabled",false);
-	    }
-	  },
-	  error:function(model,error){
-	    that.showError("register",error);
-	    $(".reg_btn").attr("disabled",true);
-          }
-	});
-      }
     },
     blurPass: function(e){
       var that = this;
