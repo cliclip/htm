@@ -355,6 +355,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   }
 
+  App.vent.bind("app.clipapp.bubb:getusertags",function(uid){
+    getUserTags(uid);
+  });
+
   // return
 
   return Bubb;
