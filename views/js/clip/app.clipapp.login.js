@@ -30,6 +30,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "focus #pass"              : "cleanError",
       "keydown #pass"            : "keydownAction",
       "click .login_btn"         : "loginAction",
+      "click .l_register"        : "gotoRegister",
       "click .close_w"           : "cancel",
       "click .weibo"             : "openWeibo",
       "click .twitter"           : "openTwitter"
@@ -63,6 +64,11 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	this.$("#name").val("");
       }
       this.cleanError(e);
+    },
+    gotoRegister:function(e){
+      e.preventDefault();
+      App.vent.trigger("app.clipapp.login:@cancel");
+      App.vent.trigger("app.clipapp:register");
     },
     loginAction : function(e){
       var that = this;
@@ -160,7 +166,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.login:success", function(res, remember){
     if(remember){
       var data = new Date();
-      data.setTime(data.getTime() + 30*24*60*60*1000);
+      data.setTime(data.getTime() +12*30*24*60*60*1000);
       document.cookie = "token="+res.token+";expires=" + data.toGMTString();
     }else{
       document.cookie = "token="+res.token;

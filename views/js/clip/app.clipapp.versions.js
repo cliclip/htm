@@ -20,8 +20,8 @@ App.versions = (function($){
 	  title       : "用户登录" ,
 	  login_ok    : "登 录",
 	  register_ok : "注 册",
-	  login_state : "一月内自动登录",
-	  findpass    : "忘记密码？",
+	  login_state : "在此浏览器无需输入密码",
+	  findpass    : "忘记密码请【<a href = '/#password/find' >点这里</a> 】",
 	  register    : "注 册",
 	  twitter     : "通过 Twitter 登录",
 	  weibo       : "通过微博登录",
@@ -77,6 +77,7 @@ App.versions = (function($){
 	},
 
 	faceEdit : {
+	  title       : "设置",
 	  no_name     : "无名氏",
 	  set_name    : "设置用户名",
 	  ok          : "确 定",
@@ -307,6 +308,11 @@ App.versions = (function($){
 	},
 
 	findpass : {
+	  address: {
+	    is_null   : "请输入您绑定的邮件地址",
+	    not_found : "我们找不到你的账户",
+	    invalidate: "邮件地址格式有误"
+	  },
 	  title       : "找回密码",
 	  email       : "邮箱地址",
 	  ok          : "确 定",
@@ -314,6 +320,15 @@ App.versions = (function($){
 	},
 
 	resetpass : {
+	  newpass : {
+	    is_null:"请输入新密码"
+	  },
+	  conpass:{
+	    is_null:"请再次输入相同的密码"
+	  },
+	  confirm:{
+	    password_diff: "两次输入的密码不一致"
+	  },
 	  title       : "设置新密码",
 	  new_pass    : "新密码",
 	  ok          : "确定",
@@ -344,6 +359,7 @@ App.versions = (function($){
 	  no_uname      : "请先设置用户名",
 	  faceUp_success : "您的头像已更新",
 	  passwd_success : "您的密码已修改",
+	  resetpwd_success:"您的密码已重置",
 	  setRule_success: "您已成功更新邮箱摘录反垃圾规则",
 	  rename_success : "您的用户名已经修改",
 	  reclip_null    : "该标签下暂时还没有数据",
@@ -352,6 +368,12 @@ App.versions = (function($){
 	  reclip_tag     : "您成功转摘了 %s 条摘录",
 	  comment        : "评论成功",
 	  recomm         : "转发成功",
+	  go_resetpass   : "找回密码邮件已经发送至 %s 邮箱，请在30分钟内从邮件中获取链接重置密码",
+	  link:{
+	    expired: "此链接已过期",
+	    not_exists: "此链接无效",
+	    invalidate: "此链接格式有误"
+	  },
 	  account_hasbind : "您的帐号之前已经做过关联，若要重新关联，请先解绑",
 	  weibo_sucmsg   : "恭喜您，微博帐号 %s 关联成功，在新浪微博中 @cliclip 就可以摘录到点忆(评论除外)，现在就去 @ 一条<a href='http://weibo.com' target='_blank'>试试</a>？",
 	  twitter_sucmsg :"恭喜您，Twitter帐号 %s 已关联成功，您在 Twitter 的收藏(评论除外)可以直接摘录到点忆，现在就去收藏一条<a href='http://twitter.com' target='_blank'>试试</a>？",
@@ -422,7 +444,7 @@ App.versions = (function($){
 	  recommend_save : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  comment_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  clipadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
-	  emailadd_save   : "关闭窗口，您填写的内容将不会被保存。请确认。",
+	  emailadd_save  : "关闭窗口，您填写的内容将不会被保存。请确认。",
 	  oauth_fail   : "认证失败，请重新认证!",
 	  del_comment    : "您真的要删除这条评论吗？",
 	  auth:{
@@ -466,8 +488,9 @@ App.versions = (function($){
 	  title         : "User log in" ,
 	  login_ok      : "Login",
 	  register_ok   : "Register",
-	  login_state   : "Keep me sign in for 1 month",
-	  register      : "Register by simply sending an email to <a href='mailto:1@cliclip.com'>1@cliclip.com</a>",
+	  findpass      : "Forgot your password[<a href = '/#password/find' >click here</a>]",
+	  login_state   : "Keep me logined in",
+	  register      : "Register",
 	  twitter       : "Login with Twitter",
 	  weibo         : "Login with Weibo",
 	  name : {
@@ -523,6 +546,7 @@ App.versions = (function($){
 	},
 
 	faceEdit : {
+	  title       : "Settings",
 	  no_name     : "NO NAME",
 	  set_name    : "Set user name",
 	  ok          : "OK",
@@ -754,6 +778,11 @@ App.versions = (function($){
 	},
 
 	findpass : {
+	  address : {
+	    is_null   : "Please enter a email address",
+	    not_found : "This email doesn't belong to any account",
+	    invalidate: "Invalid email address"
+	  },
 	  title       : "Retrieve password",
 	  email       : "Email address",
 	  ok          : "OK",
@@ -761,6 +790,15 @@ App.versions = (function($){
 	},
 
 	resetpass : {
+	  newpass : {
+	    is_null   :"Password is missing"
+	  },
+	  conpass:{
+	    is_null   :"Enter the same password"
+	  },
+	  confirm:{
+	    password_diff: "Inconsistent password"
+	  },
 	  title       : "Set new password",
 	  new_pass    : "New password",
 	  ok          : "OK",
@@ -791,10 +829,17 @@ App.versions = (function($){
 	  no_uname      : "Please set user name first",
 	  faceUp_success : "Your photo has been updated",
 	  passwd_success : "Your password has been changed",
+	  resetpwd_success :"Your password has been reseted",
 	  setRule_success: "Your rule for spam filter has been updated",
 	  rename_success : "Your User name has been changed",
 	  reclip_null    : "No clip under this tag",
 	  reclip_tag_success : "Reclip successful",
+	  go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",
+	  link:{
+	    expired: "Link expired",
+	    not_exists: "Invalid link",
+	    invalidate: "Invalid link format"
+	  },
 	  reclip_tag_fail: "You have reclipped these already",
 	  reclip_tag     : "You have successfully reclipped %s new clips",
 	  reclip:{
@@ -872,6 +917,7 @@ App.versions = (function($){
 	  comment_save  :"If you close the window, what you entered will be lost. Are you sure?",
 	  clipadd_save  :"If you close the window, what you entered will be lost. Are you sure?",
 	  emailadd_save :"If you close the window, what you entered will be lost. Are you sure?",
+	  go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",
 	  del_comment   : "You really mean to delete this comment? It can’t restore any more",
 	  auth:{
 	    no_name     : "Please set user name first",

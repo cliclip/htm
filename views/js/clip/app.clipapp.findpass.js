@@ -2,32 +2,50 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
   var FindPass = {};
 
   var FindPassModel = App.Model.extend({
-    url: App.ClipApp.Url.base+"/password/find"
+    url: function(){
+      return App.ClipApp.Url.base+"/password/find";
+    },
+    validate:function(attrs){
+      var error = {};
+      if(!attrs.address){
+	error["address"] = "is_null";
+      }
+      if(_.isEmpty(error)) return null;
+      else return error;
+    }
   });
   var FindPassView=App.ItemView.extend({
     tagName:"div",
     className:"findpass-view",
     template:"#findpass-view-template",
     events:{
-      "focus .input_text":"clearmsg",
-      "click #submit"  :  "submit",
-      "click #cancel"  :  "cancel",
-      "click .close_w" :  "cancel"
+      "focus #address"  :"clearmsg",
+      "keydown #address": "keydownAction",
+      "click #submit"   :  "submit",
+      "click #cancel"   :  "cancel",
+      "click .close_w"  :  "cancel"
     },
-    clearmsg:function(){
-      $("#alert").css("display","none");
+    clearmsg:function(e){
+      this.cleanError(e);
+    },
+    keydownAction : function(e){
+      $('#address').unbind("keydown");
+      if(e.keyCode==13){
+	$("#address").blur();
+	$('#submit').click();
+      }
     },
     submit:function(e){
-      var address = $("#address").val();
       e.preventDefault();
+      that = this;
+      var address = this.$("#address").val();
       this.model.save({address:address},{
 	type:"POST",
 	success:function(model,res){
-	  var link=res;//供测试使用
-	  App.vent.trigger("app.clipapp.findpass:success",res);
+	  App.vent.trigger("app.clipapp.findpass:success",res.address);
 	},
 	error:function(model, res){
-	  App.vent.trigger("app.clipapp.findpass:error",model,res);
+	  that.showError('findpass',res);
 	}
       });
     },
@@ -36,34 +54,25 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
       App.vent.trigger("app.clipapp.findpass:cancel");
     }
   });
-  FindPass.show=function(model,error){
+  FindPass.show=function(){
     var findPassModel=new FindPassModel();
-    if(model) findPassModel.set(model.toJSON());
-    if(error) findPassModel.set("error",error);
     var findPassView=new FindPassView({model:findPassModel});
     App.popRegion.show(findPassView);
-    if(error){
-      $("#alert").css("display","block");
-    }else{
-      $("#alert").css("display","none");
-    }
   };
   FindPass.close=function(){
     App.popRegion.close();
   };
-    //link仅供测试使用
-  App.vent.bind("app.clipapp.findpass:success",function(link){
-   // Backbone.history.navigate("",true);
-    Backbone.history.navigate("password/reset/"+link,true);//测试使用
+
+  App.vent.bind("app.clipapp.findpass:success",function(address){
+    Backbone.history.navigate("",true);
+    App.vent.trigger("app.clipapp.message:success", "go_resetpass",address);
     FindPass.close();
-  });
-  App.vent.bind("app.clipapp.findpass:error",function(model,error){
-    FindPass.show(model,error);
   });
 
   App.vent.bind("app.clipapp.findpass:cancel",function(){
     FindPass.close();
     Backbone.history.navigate("",true);
+    App.vent.trigger("app.clipapp:login");
   });
  //App.bind("initialize:after", function(){ FindPass.show(); });
   return FindPass;

@@ -19,17 +19,17 @@ script(type="text/template",id="login-view-template")
                 input(type="password",name="pass",id="pass")
               label.password
                 | <%=_i18n('login.pass.pass')%>
+            p.forgetpass|<%=_i18n('login.findpass')%></br>
             li
               div.out_link
                 | <a class="twitter"  href="javascript:void(0)" title="<%=_i18n('login.twitter')%>"><img src="img/sign-in-with-twitter-l.png"></img></a>
                 | <a class="weibo"  href="javascript:void(0)" title="<%=_i18n('login.weibo')%>"><img src="img/16.png"></img></a>
-                span.next_login
-                  label
-                    input(type="checkbox",id="remember")
-                    | <%=_i18n('login.login_state')%>
-          p|<%=_i18n('login.findpass')%> </br>
+            span.next_login
+              label
+                input(type="checkbox",id="remember")
+                | <%=_i18n('login.login_state')%>
         div.btn_frame.clearfix.
           <input type="submit" class="login_btn" value="<%=_i18n('login.login_ok')%>" />
-          <span><%=_i18n('login.register')%></span>
+          <span class="l_register"><%=_i18n('login.register')%></span>
       div.login_right
         #note_img

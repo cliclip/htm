@@ -4,11 +4,9 @@ script(type="text/template",id="findpass-view-template")
     span.close_w
     h2.pop_title <%=_i18n('findpass.title')%>
     ul.pop_body
-      li.alert#alert
-        <%= typeof error != "undefined"&& error.address ? error.address: "" %>
       h3 <%=_i18n('findpass.email')%>
-      li.input_text.clearfix
-        input(type="text",id="address")
-      li.btn_group.clearfix.
+      li.input_text
+        | <input type="text" id="address" />
+      li.btn_group
         <input type="button" class="verify" value="<%=_i18n('findpass.ok')%>" id="submit" />
         <input type="button" class="cancel" value="<%=_i18n('findpass.cancel')%>" id="cancel" />

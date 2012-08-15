@@ -1,6 +1,5 @@
 App.ClipApp.Register = (function(App, Backbone, $){
   var Register = {};
-  var nameList = ['google', 'pepsi', 'twitter', 'facebook', 'baidu', 'sina'];
 
   App.Model.RegisterModel = App.Model.extend({
     url: function(){
@@ -12,8 +11,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
         err.name = "is_null";
       }else if(!App.util.name_pattern.test(attrs.name)){
         err.name = "invalidate";
-      }else if(_.include(nameList, attrs.name)){
-        err.name = 'not_allow';
       }
       if(attrs.pass == ""){
 	err.pass = "is_null";
@@ -35,6 +32,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
       "click #agree"   : "agreeAction",
       "click .r_login" : "gotoLogin",
       "click .reg_btn" : "submit",
+      "click .weibo"   : "openWeibo",
+      "click .twitter" : "openTwitter",
       "click .close_w" : "cancel"
     },
     initialize: function(){
@@ -103,6 +102,14 @@ App.ClipApp.Register = (function(App, Backbone, $){
       }else{
 	$(e.currentTarget).attr("disabled",false);
       }
+    },
+    openWeibo : function(e){
+      App.vent.trigger("app.clipapp.register:@cancel");
+      window.location.href="/oauth/req/weibo";
+    },
+    openTwitter : function(e){
+      App.vent.trigger("app.clipapp.register:@cancel");
+      window.location.href="/oauth/req/twitter";
     },
     cancel : function(e){
       e.preventDefault();
