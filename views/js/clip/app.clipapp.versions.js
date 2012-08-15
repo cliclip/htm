@@ -417,7 +417,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "此激活链接已过期。您可在设置界面重新添加。",
-	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，您使用该地址发到b@cliclip.com的邮件，会保存为您的私有摘录。"
+	    email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，您使用该地址发到1@cliclip.com的邮件，会保存为您的私有摘录。"
 	  },
 	  email:{
 	    no_uname     : "请先设置用户名"
@@ -887,7 +887,7 @@ App.versions = (function($){
 	  },
 	  active:{
 	    fail         : "Activation link expired. You can add email again in Setting",
-	    email   : "You have activated %s in our system. \nNow you can log in with this email account and clip by sending email from this account to b@cliclip.com. Clips will be saved as private."
+	    email   : "You have activated %s in our system. \nNow you can log in with this email account and clip by sending email from this account to 1@cliclip.com. Clips will be saved as private."
 	  },
 	  email:{
 	    no_uname     : "Set your user name first"

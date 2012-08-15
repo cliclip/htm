@@ -65,7 +65,7 @@ span.error{
   border:1px solid #999999;
   min-width:90px;
   background-color:#FFFFFF;
-  height:107px;
+  max-height:107px;
   overflow-x:hidden;
   overflow-y:auto;
   padding-left:6px;
