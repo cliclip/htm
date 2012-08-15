@@ -27,8 +27,11 @@ App.ClipApp.Register = (function(App, Backbone, $){
     events:{
       "blur #name"     : "blurName",
       "blur #pass"     : "blurPass",
-      "focus #name"    : "clearAction",
-      "focus #pass"    : "clearAction",
+      "focus #name"    : "cleanError",
+      "focus #pass"    : "cleanError",
+      "input #name"   : "changeAction",
+      "input #pass"   : "changeAction",
+      "change #agree"   : "changeAction",
       "click #agree"   : "agreeAction",
       "click .r_login" : "gotoLogin",
       "click .reg_btn" : "submit",
@@ -43,19 +46,27 @@ App.ClipApp.Register = (function(App, Backbone, $){
     blurName: function(e){
       var that = this;
       var name = $("#name").val();
-      this.tmpmodel.save({name: name}, {
-	url : App.ClipApp.Url.base+"/register/"+name+"/check",
-	type: "GET",
-	success:function(model,response){
-	  if($(".error").length == 0){
-	    $(".reg_btn").attr("disabled",false);
-	  }
-	},
-	error:function(model,error){
-	  that.showError("register",error);
+      this.tmpmodel.set({name:name},{
+	error:function(model, error){
+	  that.showError("login",error);
 	  $(".reg_btn").attr("disabled",true);
-        }
+	}
       });
+      if(name){
+	that.tmpmodel.fetch({
+	  url : App.ClipApp.Url.base+"/user/check/"+name,
+	  type: "GET",
+	  success:function(model,response){
+	    if($("#pass").val() && $(".error").length == 0 && $("#agree").attr("checked")){
+	      $(".reg_btn").attr("disabled",false);
+	    }
+	  },
+	  error:function(model,error){
+	    that.showError("register",error);
+	    $(".reg_btn").attr("disabled",true);
+          }
+	});
+      }
     },
     blurPass: function(e){
       var that = this;
@@ -65,18 +76,17 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	  $(".reg_btn").attr("disabled",true);
 	}
       });
-      if($(".error").length == 0){
+      if($("#name").val() && $(".error").length == 0 && $("#agree").attr("checked")){
 	$(".reg_btn").attr("disabled",false);
       }
     },
-    clearAction: function(e){
-      this.cleanError(e);
-      if($(".error").length == 0){
+    changeAction: function(e){
+      if($("#name").val() && $(".error").length == 0 && $("#agree").attr("checked")){
 	$(".reg_btn").attr("disabled",false);
       }
     },
     agreeAction: function(e){
-      if($(".error").length == 0 && $("#agree").attr("checked")){
+      if($("#name").val() && $("#pass").val() && $(".error").length == 0 && $("#agree").attr("checked")){
 	$(".reg_btn").attr("disabled",false);
       }else{
 	$(".reg_btn").attr("disabled",true);
@@ -164,6 +174,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
       $("#note_img").addClass("note_img_zh");
     }
     $("#name").focus();
+    $(".reg_btn").attr("disabled",true);
   };
 
   App.vent.bind("app.clipapp.register:success", function(key, res, fun){
