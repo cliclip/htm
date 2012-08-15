@@ -36,7 +36,9 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     },
     EmailAddclose: function(){
       var data = this.getInput();
-      data.email = data.email.toLowerCase(); // 将要添加的邮件地址转换为小写
+      if(data.email){
+	data.email = data.email.toLowerCase(); // 将要添加的邮件地址转换为小写
+      }
       App.vent.trigger("app.clipapp.emailadd:@close",data.email);
     },
     EmailAddcommit: function(){
