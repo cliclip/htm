@@ -44,7 +44,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     validate:function(attrs){
       if(!attrs.name || attrs.name == ""){
 	return {name: "is_null"};
-      }else if(! (/^[a-zA-Z0-9.]{5,20}$/.test(attrs.name))){
+      }else if(!App.util.name_pattern.test(attrs.name)){
 	return {name: "invalidate"};
       }else{
 	return null;
