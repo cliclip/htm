@@ -59,6 +59,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   	    App.vent.trigger("app.clipapp.userbind:success", res);
   	  },
   	  error:function(model, res){
+	    console.log(res);
 	    that.showError('bind',res);
   	  }
 	});
@@ -174,7 +175,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 
  // TEST
 
-  //App.bind("initialize:after", function(){ UserBind.show({face:"",name:""}); });
+    App.bind("initialize:after", function(){ UserBind.show({info:"ll",provider:"dd"}); });
 
  return UserBind;
 })(App, Backbone, jQuery);
