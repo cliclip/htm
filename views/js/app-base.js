@@ -221,7 +221,7 @@ App.bind("initialize:after", function(){
   }
   tmp.scroll(function() {
     if($("#editor").length > 0){
-      console.log("编辑器的滚动事件，nextpage不用响应");
+      // console.log("编辑器的滚动事件，nextpage不用响应");
       return;
     }else{
       remove_fixed(paddingTop);

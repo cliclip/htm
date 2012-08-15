@@ -133,7 +133,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
   });
 
   Register.invite = function(key){
-    var model = new App.Model.RegisterModel();
+    var model = new App.Model(); // 不能用RegisterModel
     model.save({},{
       url : App.ClipApp.Url.base+"/invite/"+key,
       type: "POST",
@@ -170,10 +170,16 @@ App.ClipApp.Register = (function(App, Backbone, $){
     var data = new Date();
     data.setTime(data.getTime() + 7*24*60*60*1000);
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
-    //document.cookie = "token="+res.token;
     Register.close();
     Backbone.history.navigate("my",true);
-    App.vent.trigger("app.clipapp.gotosetup:show", key, res.email);
+    if(/language=en/.test(document.cookie)){ //cliclip的uid为72
+      App.vent.trigger("app.clipapp.reclip_tag:xinshou",72,["helper","newbie"]);
+    }else{
+      App.vent.trigger("app.clipapp.reclip_tag:xinshou",72,["帮助","新手"]);
+    }
+    if(key == "register_success"){ // invite的情况不需要触发gotosetup
+      App.vent.trigger("app.clipapp.gotosetup:show", key, res.email);
+    }
   });
 
   App.vent.bind("app.clipapp.register:error",function(model, error){
