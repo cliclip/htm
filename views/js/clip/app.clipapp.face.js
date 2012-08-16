@@ -25,7 +25,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
     events: {
       "click #user_zhui": "followAction",
       "click #user_stop": "stopAction",
-      "click .user_list": "userList",
       "click .following": "following",
       "click .follower": "follower",
       "mouseenter .user_head": "mouseEnter",
@@ -58,9 +57,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     stopAction: function(){
       App.vent.trigger("app.clipapp:unfollow",this.model.id,'*');
-    },
-    userList: function(e){
-      App.vent.trigger("app.clipapp:usershow", user_id);
     },
     following: function(){
       App.vent.trigger("app.clipapp:showfollowing", user_id);
