@@ -41,6 +41,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click .masker"    :"masker",
       "click .close_w"   :"cancel"
     },
+    initialize:function(){
+      this.bind("closeView", close);
+    },
     foucsAction:function(e){
       this.cleanError(e);
       $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('comment.defaultText') ? "" :
@@ -96,7 +99,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	}
       });
     },
-
     shortcut_comment : function(e){
       if(e.ctrlKey&&e.keyCode==13){
 	$("#submit").click();
@@ -105,18 +107,16 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	return true;
       }
     },
-
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
     },
-
     cancel : function(e){
       e.preventDefault();
       var text = $.trim($("#comm_text").val());
       if(text == _i18n('comment.defaultText')) text = "";
-      App.vent.trigger("app.clipapp.comment:@close",text);
+      this.trigger("closeView",text);
     }
   });
 
@@ -146,9 +146,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.comment:@close", function(text){
+  var close =  function(text){
     Comment.close(text);
-  });
+  };
 
   return Comment;
 })(App, Backbone, jQuery);

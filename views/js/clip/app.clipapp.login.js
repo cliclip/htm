@@ -39,6 +39,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
       this.flag = false;
+      this.bind("cancel", cancel);
     },
     blurName: function(e){
       var that = this;
@@ -68,7 +69,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     gotoRegister:function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
       App.vent.trigger("app.clipapp:register");
     },
     loginAction : function(e){
@@ -104,18 +105,18 @@ App.ClipApp.Login = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.clipper:cancel");
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
     },
     openWeibo : function(e){
       var remember = false;
       if($("#remember").attr("checked")){
 	remember = true;
       }
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
       window.location.href="/oauth/req/weibo";
     },
     openTwitter : function(e){
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
       window.location.href="/oauth/req/twitter";
     }
   });
@@ -187,9 +188,9 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp.login:@cancel", function(){
+  var cancel = function(){
     Login.close();
-  });
+  };
 
  // TEST
 

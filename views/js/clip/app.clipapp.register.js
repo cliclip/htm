@@ -43,6 +43,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     initialize: function(){
       this.tmpmodel = new App.Model.RegisterModel();
       this.flag = false;
+      this.bind("cancel", cancel);
     },
     blurName: function(e){
       var that = this;
@@ -87,7 +88,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     gotoLogin : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.register:@cancel");
+      this.trigger("cancel");
       App.vent.trigger("app.clipapp:login");
     },
     submit: function(e){
@@ -116,11 +117,11 @@ App.ClipApp.Register = (function(App, Backbone, $){
       }
     },
     openWeibo : function(e){
-      App.vent.trigger("app.clipapp.register:@cancel");
+      this.trigger("cancel");
       window.location.href="/oauth/req/weibo";
     },
     openTwitter : function(e){
-      App.vent.trigger("app.clipapp.register:@cancel");
+      this.trigger("cancel");
       window.location.href="/oauth/req/twitter";
     },
     masker: function(e){
@@ -130,7 +131,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.register:@cancel");
+      this.trigger("cancel");
     }
   });
 
@@ -188,9 +189,9 @@ App.ClipApp.Register = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.register:error",function(model, error){
     Register.show(model, error);
   });
-  App.vent.bind("app.clipapp.register:@cancel", function(){
+  var cancel = function(){
     Register.close();
-  });
+  };
 
   // Test
   // App.bind("initialize:after", function(){Register.show();});

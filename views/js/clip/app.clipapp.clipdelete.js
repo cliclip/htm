@@ -47,7 +47,7 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
 	 }
 	 ClipDelete.close();
 	 if(App.viewRegion.$el){ // 从detail来，需要关闭viewRegion
-	   App.vent.trigger("app.clipapp.clipdetail:close");
+	   App.vent.trigger("app.clipapp:clipdetail.close");
 	 }
        },
        error: function(model, res){

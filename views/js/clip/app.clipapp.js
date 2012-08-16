@@ -220,6 +220,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.show(clipid,model_id,recommend);
   });
 
+  App.vent.bind("app.clipapp:clipdetail.close", function(){
+    ClipDetail.close();
+  });
+
   App.vent.bind("app.clipapp:clipmemo", function(cid){
     ClipApp.ClipMemo.show(cid);
   });
@@ -238,6 +242,14 @@ App.ClipApp = (function(App, Backbone, $){
       // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
       ClipApp.ClipAdd.show();
     }
+  });
+
+  App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
+    ClipApp.Bubb.showUserTags(uid);
+  });
+
+  App.vent.bind("app.clipapp:bubb.refresh",function(uid,follow,new_tags){
+    ClipApp.Bubb.refresh(uid, follow, new_tags);
   });
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定

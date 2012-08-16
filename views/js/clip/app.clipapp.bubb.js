@@ -37,7 +37,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     self = false;
     homepage = true;
     getSiteTags(function(tags, follows){
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
+      showTags(mkTag(tags, follows, tag, self, homepage));
     });
   };
 
@@ -46,7 +46,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     self = false;
     homepage = true;
     getSiteBubs(function(tags, follows){
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self, homepage));
+      showTags(mkTag(tags, follows, tag, self, homepage));
     });
   };
 
@@ -55,19 +55,19 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     self = App.util.self(uid);
     homepage = false;
     getUserTags(uid, function(tags, follows){
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
+      showTags(mkTag(tags, follows, tag, self));
     });
   };
 
   Bubb.cleanTags = function(){
-    App.vent.trigger("app.clipapp.bubb:@show", mkTag([],[],null,false));
+    showTags(mkTag([],[],null,false));
   };
 /*
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
     getUserBubs(uid, function(tags, follows){
       self = App.util.self(uid);
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(tags, follows, tag, self));
+      showTags(mkTag(tags, follows, tag, self));
     });
   };
 */
@@ -76,7 +76,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     followUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
-	App.vent.trigger("app.clipapp.bubb:refresh",uid,['*']);
+	Bubb.refresh(uid, ['*']);
       }else{
 	iframe_call('bubbles', "followTag", tag);
 	last.follows.push(tag);
@@ -96,7 +96,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
-	App.vent.trigger("app.clipapp.bubb:refresh",uid,[]);
+	Bubb.refresh(uid, []);
       }else{
 	iframe_call('bubbles', "unfollowTag", tag);
       }
@@ -112,36 +112,30 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
-  // events
 
-  App.vent.bind("app.clipapp.bubb:@show", function(tags){
+  function showTags(tags){
     if($('#bubbles').length == 0){
       var bubbView = new BubbView();
       App.bubbRegion.show(bubbView);
     }
-    if (changeTags(last, tags, old_self)) {
+    if (hasChanged(last, tags, old_self)) {
       iframe_call('bubbles', "resetTags", tags);
     } else if (changeDefault(last, tags)) {
       iframe_call('bubbles', "openTag", tags.current);
     }
     old_self = _uid;
     last = tags;
-  });
+  };
 
-  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
+  Bubb.refresh = function (uid, follow, new_tag){
     _uid = uid;
     self = App.util.self(uid);
     if(follow){
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(last.tags, follow, null, self));
+      showTags(mkTag(last.tags, follow, null, self));
     }else if(new_tags){
-      App.vent.trigger("app.clipapp.bubb:@show", mkTag(_.union(last.tags,new_tags), follow, null, self));
+      showTags(mkTag(_.union(last.tags,new_tags), follow, null, self));
     }
-  });
-
-  // 只有delete在调用
-  App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
-    Bubb.showUserTags(uid);
-  });
+  };
 
   App.vent.bind("app.clipapp.bubb:open", function(tag){
     // console.log("open %s", tag + "  " +_uid);
@@ -165,7 +159,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   // 有_uid作为全局变量，进行url地址匹配
   App.vent.bind("app.clipapp.bubb:reclip", function(tag){
-    App.vent.trigger("app.clipapp:reclip_tag",  _uid, tag);
+    App.vent.trigger("app.clipapp:reclip_tag", _uid, tag);
   });
 
   // ---- implements
@@ -264,7 +258,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var _iframe =  document.getElementById(ifname);
     var ifwin;
     if(!_iframe.contentDocument){//ie6 7
-         ifwin = document.frames[ifname].document.parentWindow;;
+      ifwin = document.frames[ifname].document.parentWindow;;
     }else if(_iframe.contentDocument.parentWindow){//ie8
       ifwin = _iframe.contentDocument.parentWindow;
     }else{//其他主流浏览器
@@ -329,7 +323,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   };
 
-  function changeTags(tags1, tags2, old_self){
+  function hasChanged(tags1, tags2, old_self){
     if(old_self != _uid){ // 若 self 已经变化，则 tag 不能重用
       return true;
     }
@@ -355,11 +349,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   }
 
+  // 用户刚登录成功就需要加载其tag，memo时候需要
   App.vent.bind("app.clipapp.bubb:getusertags",function(uid){
     getUserTags(uid);
   });
 
   // return
-
   return Bubb;
 })(App, Backbone, jQuery);

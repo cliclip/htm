@@ -30,6 +30,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
+      this.bind("cancel", cancel);
     },
     blurName: function(e){
       var that = this;
@@ -87,7 +88,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.userbind:@cancel");
+      this.trigger("cancel");
     }
   });
 
@@ -165,12 +166,12 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     });
   });
 
-  App.vent.bind("app.clipapp.userbind:@cancel", function(){
+  var cancel = function(){
     if(Backbone.history){
      Backbone.history.navigate("",true);
     }
     UserBind.close();
-  });
+  };
 
  // TEST
 

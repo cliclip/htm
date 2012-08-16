@@ -23,6 +23,8 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     },
     initialize:function(){
       this.flag = false;
+      this.bind("submit", submit);
+      this.bind("closeView", close);
     },
     maintagAction:function(e){
       $(e.currentTarget).toggleClass("white_48");
@@ -44,7 +46,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["id"] = this.model.get("user");
       params["tag"] = this.model.get("tag");
-      App.vent.trigger("app.clipapp.reclip_tag:@submit", params,this.model.get("count"));
+      this.trigger("submit", params, this.model.get("count"));
     },
     masker : function(e){
       if($(e.target).attr("class") == "masker"){
@@ -56,7 +58,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["id"] = this.model.get("user");
       params["tag"] = this.model.get("tag");
-      App.vent.trigger("app.clipapp.reclip_tag:@close",params, this.model.get('count'));
+      this.trigger("closeView",params, this.model.get('count'));
     }
   });
 
@@ -123,7 +125,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.reclip_tag:@submit", function(params,count){
+  var submit = function(params,count){
     var model = new ReclipTagModel(params);
     model.save({}, {
       type: "POST",
@@ -143,11 +145,11 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.message:confirm",res);
       }
     });
-  });
+  };
 
-  App.vent.bind("app.clipapp.reclip_tag:@close",function(params, count){
+  var close = function(params, count){
     ReclipTag.close(params, count);
-  });
+  };
 
   //user 为用户名为cliclip 的user_id tag为新手,帮助或newbie
   App.vent.bind("app.clipapp.reclip_tag:xinshou", function(user,tag){

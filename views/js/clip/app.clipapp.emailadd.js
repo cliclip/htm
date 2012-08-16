@@ -34,12 +34,15 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       "focus #email"          :"cleanError",
       "error" : "showError"
     },
+    initialize: function(){
+      this.bind("closeView", close);
+    },
     EmailAddclose: function(){
       var data = this.getInput();
       if(data.email){
 	data.email = data.email.toLowerCase(); // 将要添加的邮件地址转换为小写
       }
-      App.vent.trigger("app.clipapp.emailadd:@close",data.email);
+      this.trigger("closeView",data.email);
     },
     EmailAddcommit: function(){
       var view = this;
@@ -48,7 +51,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	type:"POST",
 	success: function(model, res){
 	  App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
-	  App.vent.trigger("app.clipapp.emailadd:@close");
+	  view.trigger("closeView");
 	},
 	error:function(model, res){
 	  if(res.email == "no_uname"){
@@ -60,6 +63,11 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       });
     }
   });
+
+  // 操作完成直接关闭 view
+  var close = function(address){
+    EmailAdd.close(address);
+  };
 
   EmailAdd.show = function(uid){
     var emailAddModel = new EmailAddModel();
@@ -98,12 +106,6 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     EmailAdd.show(uid);
   });
-
-  // 操作完成直接关闭 view
-  App.vent.bind("app.clipapp.emailadd:@close",function(address){
-    EmailAdd.close(address);
-  });
-
 
   return EmailAdd;
 })(App, Backbone, jQuery);

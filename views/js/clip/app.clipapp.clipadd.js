@@ -34,13 +34,15 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
-      //"keydown #editor":"shortcut_save",
       "click #save": "savecliper", // 对应clipper的ok
       "click #empty":"emptycliper"
     },
     initialize:function(){
       clip = {};
       this.flag = true;
+      this.bind("success", saveSuccess);
+      this.bind("error", saveFailed);
+      this.bind("cancel", saveCanceled);
     },
     extImg:function(evt){
       $(".masker_layer1").show();
@@ -83,11 +85,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       if(clipper){
 	App.vent.trigger("app.clipapp.clipper:cancel", clip);
       }else{
-	App.vent.trigger("app.clipapp.clipadd:@cancel",clip);
+	this.trigger("cancel", clip);
       }
     },
     savecliper:function(e){
       var target = $(e.currentTarget);
+      var view = this;
       target.attr("disabled",true);
       e.preventDefault();
       clip.content = App.ClipApp.Editor.getContent("editor");
@@ -97,12 +100,12 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  if(clipper){
 	    App.vent.trigger("app.clipapp.clipper:save");
 	  }else{
-	    App.vent.trigger("app.clipapp.clipadd:@success", model);
+	    view.trigger("success", model);
 	  }
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
 	  target.attr("disabled",false);
-	  App.vent.trigger("app.clipapp.clipadd:@error", error);
+	  view.trigger("error", error);
 	}
       });
     },
@@ -113,6 +116,31 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:clipmemo", clip);
     }
   });
+
+  var saveSuccess = function(model){
+    ClipAdd.close();
+    var uid = App.util.getMyUid();
+    if(Backbone.history){
+      //console.log(Backbone.history.fragment);
+      if(Backbone.history.fragment == "my"){
+	App.vent.trigger("app.clipapp.cliplist:add", model);
+      }else{
+	Backbone.history.navigate("/my", true);
+      }
+      App.vent.trigger("app.clipapp:bubb.refresh",uid,null,model.get("tag"));
+      App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
+    }
+  };
+  var saveFailed = function(error){
+    App.vent.trigger("app.clipapp.message:confirm", error);
+    App.vent.unbind("app.clipapp.message:sure");
+    App.vent.bind("app.clipapp.message:sure", function(){
+      App.ClipApp.Editor.focus("editor");
+    });
+  };
+  var saveCanceled = function(clip){
+    ClipAdd.close(clip);
+  };
 
   ClipAdd.image_change = function(sender){ // 在view中直接绑定
     var change = App.util.isImage("formUpload");
@@ -139,8 +167,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   };
 
-  ClipAdd.show = function(flag){
-    clipper = flag;
+  ClipAdd.show = function(isClipper){ // 是否为书签摘录
+    clipper = isClipper;
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
@@ -176,33 +204,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     clip.note = data.note;
     clip.tag = data.tag;
     clip.public = data.public;
-  });
-
-  App.vent.bind("app.clipapp.clipadd:@success", function(model){
-    ClipAdd.close();
-    var uid = App.util.getMyUid();
-    if(Backbone.history){
-      //console.log(Backbone.history.fragment);
-      if(Backbone.history.fragment == "my"){
-	App.vent.trigger("app.clipapp.cliplist:add", model);
-      }else{
-	Backbone.history.navigate("/my", true);
-      }
-      App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
-      App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
-    }
-  });
-
-  App.vent.bind("app.clipapp.clipadd:@cancel", function(clip){
-    ClipAdd.close(clip);
-  });
-
-  App.vent.bind("app.clipapp.clipadd:@error", function(error){
-    App.vent.trigger("app.clipapp.message:confirm", error);
-    App.vent.unbind("app.clipapp.message:sure");
-    App.vent.bind("app.clipapp.message:sure", function(){
-      App.ClipApp.Editor.focus("editor");
-    });
   });
 
   return ClipAdd;

@@ -72,14 +72,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       this.flag = false;
+      this.bind("closeView", close);
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.useredit:@close");
+      this.trigger("closeView");
     },
     masker_close:function(e){
       if($(e.target).attr("class") == "masker"){
-	App.vent.trigger("app.clipapp.useredit:@close");
+	this.trigger("closeView");
       }
     }
   });
@@ -92,16 +93,20 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #email_add":"emailAdd",
       "click .email_address":"emailCut"
     },
+    initialize: function(){
+      this.bind("delEmail", delEmail);
+    },
     emailAdd:function(e){
       App.vent.trigger("app.clipapp.emailadd:show",this.model.id);
     },
     emailCut:function(e){
       e.preventDefault();
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       var address = e.currentTarget.id;
+      var view = this;
       App.vent.trigger("app.clipapp.message:alert", "delemail", address);
+      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.bind("app.clipapp.message:sure",function(){
-	App.vent.trigger("app.clipapp.useredit:@emaildel",address);
+	view.trigger("delEmail",address);
       });
     }
   });
@@ -285,6 +290,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #confirm_face" : "submitFace"
     },
     initialize:function(){
+      this.bind("showface", showface);
     },
     setName: function(e){
       e.preventDefault();
@@ -301,7 +307,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  type: 'PUT',
 	  success:function(model,res){
 	    App.vent.trigger("app.clipapp.message:success","rename_success");
-	    App.vent.trigger("app.clipapp.useredit:@showface");
+	    view.trigger("showface");
 	  },
 	  error:function(model,res){
 	    view.showError('faceEdit',res);
@@ -488,9 +494,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     App.mysetRegion.close();
   };
 
-  App.vent.bind("app.clipapp.useredit:@close", function(){
+  var close = function(){
     UserEdit.close();
-  });
+  };
 
   App.vent.bind("app.clipapp.useredit:show", function(uid){
     App.popRegion.close();
@@ -498,13 +504,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.showUserEdit (uid);
   });
 
-  App.vent.bind("app.clipapp.useredit:@showface",function(){
+  var showface = function(){
     //设置用户名后需要重新显示faceview
     App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());//主页重新显示用户名和头像，不是设置页面
     UserEdit.showFace(true);
-  });
+  };
 
-  App.vent.bind("app.clipapp.useredit:@emaildel",function(address){
+  var delEmail = function(address){
     var delModel = new EmailEditModel({id:1, address:address});
     delModel.destroy({ // destroy要求model必须要有id
       success: function(model, res){
@@ -514,7 +520,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	// console.info(res);
       }
     });
-  });
+  };
 
   App.vent.bind("app.clipapp.useredit:rename", function(){
     $(".edit_name").click(); // 触发设置用户名的动作

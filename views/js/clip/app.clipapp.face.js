@@ -29,22 +29,22 @@ App.ClipApp.Face = (function(App, Backbone, $){
       "click .follower": "follower",
       "mouseenter .user_head": "mouseEnter",
       "mouseleave .user_head": "mouseLeave",
-
       "focus #input_keyword" : "cleanDefault",
       "blur #input_keyword"  : "blurAction",
       "click #input_keyword" : "inputAction",
       "click .search_btn"    : "queryUser"
     },
     initialize: function(e){
-      this.bind("followSet", function(follow){
-	if(_.isEmpty(follow)){
-	  $(this.$('.user_i').children('i')).attr('id','user_zhui');
-	  $(this.$('.user_i').children('i')).attr('class',_i18n('userface.zhui'));
-	}else{
-	  $(this.$('.user_i').children('i')).attr('id', 'user_stop');
-	  $(this.$('.user_i').children('i')).attr('class', _i18n('userface.stop'));
-	}
-      });
+      this.bind("followSet", this.followSet);
+    },
+    followSet: function(follow){
+      if(_.isEmpty(follow)){
+	$(this.$('.user_i').children('i')).attr('id','user_zhui');
+	$(this.$('.user_i').children('i')).attr('class',_i18n('userface.zhui'));
+      }else{
+	$(this.$('.user_i').children('i')).attr('id', 'user_stop');
+	$(this.$('.user_i').children('i')).attr('class', _i18n('userface.stop'));
+      }
     },
     mouseEnter: function(e){
       $(e.currentTarget).children(".user_i").show();
@@ -130,6 +130,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
 	App.faceRegion.show(faceView);
       }
     }else{
+      faceView = null;
       App.faceRegion.close();
     }
   };
@@ -139,7 +140,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
   };
 
   Face.followSet = function(follow){
-    faceView.trigger("followSet", follow);
+    if(faceView){
+      faceView.trigger("followSet", follow);
+    }
   };
 
   App.vent.bind("app.clipapp.face:reset", function(uid){

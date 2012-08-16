@@ -2,7 +2,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var isIE = App.util.isIE();
-  var edit_view = "";
+  var view = "";
   var old_content = "",ieRange = false;
   var EditModel = App.Model.extend({
     validate: function(attrs){
@@ -35,8 +35,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .close_w":"abandonUpdate"
     },
     initialize: function(){
-      edit_view = this;
+      view = this;
       this.flag = true;
+      view.bind("success", editSuccess);
+      view.bind("error", editFailed);
+      view.bind("cancel", editCanceled);
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
       var win=document.getElementById('editor').contentWindow;
@@ -85,11 +88,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	url: P+"/clip/"+cid,
 	success:function(model, res){
 	  var content = model.get("content");
-	  App.vent.trigger("app.clipapp.clipedit:@success", content,cid);
+	  view.trigger("success", content, cid);
 	},
 	error:function(model, error){  // 出现错误，触发统一事件
 	  target.attr("disabled", false);
-	  App.vent.trigger("app.clipapp.clipedit:@error", error);
+	  view.trigger("error", error);
 	}
       });
     },
@@ -100,16 +103,16 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     abandonUpdate: function(){
       var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
-      App.vent.trigger("app.clipapp.clipedit:@cancel",content);
+      view.trigger("cancel", content);
     }
   });
 
   ClipEdit.image_change = function(sender){
-    var that = edit_view;
+    var that = view;
     var uid = that.model.get("user");
     var change = App.util.isImage("formUpload");
     if(!change){
-      App.vent.trigger("app.clipapp.clipedit:@error","imageUp_fail");
+      view.trigger("error","imageUp_fail");
     }else{
 
       /*if( sender.files &&sender.files[0] ){
@@ -164,25 +167,24 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.clipedit:@success", function(content,cid){
+  var editSuccess =  function(content,cid){
     ClipEdit.close();
     App.vent.trigger("app.clipapp.cliplist:edit", content,cid);
     App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
-  });
+  };
 
-  App.vent.bind("app.clipapp.clipedit:@cancel", function(n_content){
-    ClipEdit.close(n_content);
-  });
-
-  App.vent.bind("app.clipapp.clipedit:@error", function(error){
+  var editFailed = function(error){
     // 可以弹出错误对话框，提示错误信息
     App.vent.trigger("app.clipapp.message:confirm", error);
     App.vent.unbind("app.clipapp.message:sure");
     App.vent.bind("app.clipapp.message:sure", function(){
       App.ClipApp.Editor.focus("editor");
     });
-  });
+  };
+
+  var editCanceled =  function(n_content){
+    ClipEdit.close(n_content);
+  };
 
   return ClipEdit;
-
 })(App, Backbone, jQuery);
