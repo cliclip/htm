@@ -13,19 +13,43 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     },
     initialize:function(){
       this.flag = false;
+      this.bind("ok", ok);
+      this.bind("closeView", close);
     },
     okClick : function(e){
-      App.vent.trigger("app.clipapp.clipdelete:@ok",this.model);
+      this.trigger("ok",this.model);
     },
     masker : function(e){
       if($(e.target).attr("class") == "masker"){
-	this.cancelClick(e);
+	this.trigger("close");
       };
     },
     cancelClick : function(e){
-      App.vent.trigger("app.clipapp.clipdelete:@close");
+      this.trigger("close");
     }
    });
+
+   var ok = function(deleteModel){
+     deleteModel.destroy({
+       success: function(model, res){
+	 App.vent.trigger("app.clipapp.cliplist:remove",model.id);
+	 //在删clip时不能根据删除clip的tag来refresh   bubbs。所以重新load
+	 ClipDelete.close();
+	 if(/my/.test(window.location.hash))
+	   App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
+	 if(App.viewRegion.$el){ // 从detail来，需要关闭viewRegion
+	   App.vent.trigger("app.clipapp.clipdetail:close");
+	 }
+       },
+       error: function(model, error){
+	 App.vent.trigger("app.clipapp.message:confirm",error);
+       }
+     });
+   };
+
+   var close = function(){
+     ClipDelete.close();
+   };
 
    ClipDelete.show = function(cid){
      var model = new App.Model.DetailModel({id:cid});
@@ -36,34 +60,6 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
    ClipDelete.close = function(){
      App.popRegion.close();
    };
-
-   App.vent.bind("app.clipapp.clipdelete:@ok",function(deleteModel){
-     deleteModel.destroy({
-       success: function(model, res){
-	 App.vent.trigger("app.clipapp.cliplist:remove",model.id);
-	 //在删clip时不能根据删除clip的tag来refresh   bubbs。所以重新load
-	 if(/my/.test(window.location.hash)){
-	   App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
-	 }
-	 ClipDelete.close();
-	 if(App.viewRegion.$el){ // 从detail来，需要关闭viewRegion
-	   App.vent.trigger("app.clipapp:clipdetail.close");
-	 }
-       },
-       error: function(model, res){
-	 App.vent.trigger("app.clipapp.clipdelete:@error", model, res);
-       }
-     });
-   });
-
-   App.vent.bind("app.clipapp.clipdelete:@close", function(){
-     ClipDelete.close();
-   });
-
-   App.vent.bind("app.clipapp.clipdelete:@error", function(model, error){
-     // ClipDelete.show();
-     //	删除出错
-   });
 
   // TEST
   //App.bind("initialize:after", function(){ ClipDelete.show(); });

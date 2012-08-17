@@ -54,8 +54,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('comment.defaultText') :
       $(e.currentTarget).val() );
     },
-  /*
-    maintagAction:function(e){
+    /*maintagAction:function(e){
       // 取得评论框中的文本并转为数组，去除掉数组中的默认值和空值。
       $("#comm_text").focus();
       var arr_text = _.compact(_.without($("#comm_text").val().split(","),_i18n('comment.defaultText')));
@@ -69,8 +68,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	this.tag_list = _.without(this.tag_list,tag);
 	$("#comm_text").val((_.without(arr_text,tag)).join(","));
       }
-    },
-*/
+    },*/
     comment : function(e){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);

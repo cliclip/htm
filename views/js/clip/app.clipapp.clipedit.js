@@ -36,7 +36,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       view = this;
-      this.flag = true;
+      view.flag = true;
       view.bind("success", editSuccess);
       view.bind("error", editFailed);
       view.bind("cancel", editCanceled);
@@ -114,7 +114,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     if(!change){
       view.trigger("error","imageUp_fail");
     }else{
-
       /*if( sender.files &&sender.files[0] ){
        var img = new Image();
        img.src = App.util.get_img_src(sender.files[0]);
@@ -169,12 +168,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 
   var editSuccess =  function(content,cid){
     ClipEdit.close();
-    App.vent.trigger("app.clipapp.cliplist:edit", content,cid);
-    App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
+    App.vent.trigger("app.clipapp.cliplist:edit", content, cid);
+    App.vent.trigger("app.clipapp.bubb:showUserTags", App.util.getMyUid());
   };
 
-  var editFailed = function(error){
-    // 可以弹出错误对话框，提示错误信息
+  var editFailed = function(error){ // 可以弹出错误对话框，提示错误信息
     App.vent.trigger("app.clipapp.message:confirm", error);
     App.vent.unbind("app.clipapp.message:sure");
     App.vent.bind("app.clipapp.message:sure", function(){

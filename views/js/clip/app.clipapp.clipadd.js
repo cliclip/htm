@@ -1,9 +1,10 @@
 App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
+
   var P = App.ClipApp.Url.base;
-  var clip = {};
-  var ieRange = false, clipper = "";
-  var isIE= App.util.isIE();
+  var clip = {}, clipper = "";
+  var ieRange = false, isIE = App.util.isIE();
+
   App.Model.ClipModel = App.Model.extend({
     url:function(){
       return P+"/clip";
@@ -39,7 +40,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     initialize:function(){
       clip = {};
-      this.flag = true;
+      this.flag = true; // falg跟滚动条有关
       this.bind("success", saveSuccess);
       this.bind("error", saveFailed);
       this.bind("cancel", saveCanceled);
@@ -89,19 +90,16 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       }
     },
     savecliper:function(e){
+      e.preventDefault();
       var target = $(e.currentTarget);
       var view = this;
       target.attr("disabled",true);
-      e.preventDefault();
       clip.content = App.ClipApp.Editor.getContent("editor");
       this.model.save(clip, {
 	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model
-	  if(clipper){
-	    App.vent.trigger("app.clipapp.clipper:save");
-	  }else{
-	    view.trigger("success", model);
-	  }
+	  if(clipper) App.vent.trigger("app.clipapp.clipper:save");
+	  else view.trigger("success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
 	  target.attr("disabled",false);
@@ -121,16 +119,16 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     ClipAdd.close();
     var uid = App.util.getMyUid();
     if(Backbone.history){
-      //console.log(Backbone.history.fragment);
       if(Backbone.history.fragment == "my"){
 	App.vent.trigger("app.clipapp.cliplist:add", model);
+	App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
+	App.vent.trigger("app.clipapp.taglist:mytag",model.get("tag"));
       }else{
 	Backbone.history.navigate("/my", true);
-      }
-      App.vent.trigger("app.clipapp:bubb.refresh",uid,null,model.get("tag"));
-      App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("tag"));
+      }// 重新设置taglist
     }
   };
+
   var saveFailed = function(error){
     App.vent.trigger("app.clipapp.message:confirm", error);
     App.vent.unbind("app.clipapp.message:sure");
@@ -138,6 +136,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.ClipApp.Editor.focus("editor");
     });
   };
+
   var saveCanceled = function(clip){
     ClipAdd.close(clip);
   };
@@ -180,11 +179,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	$("#save").click();
       }
     });
-    function shortcut_save(e){
-      if(e.ctrlKey&&e.keyCode==13){
-	$("#save").click();
-      }
-    }
   };
 
   ClipAdd.close = function(clip){
@@ -199,12 +193,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   };
 
-  // 由外部触发
-  App.vent.bind("app.clipapp.clipadd:update",function(data){
+  ClipAdd.memo = function(data){
     clip.note = data.note;
     clip.tag = data.tag;
-    clip.public = data.public;
-  });
+    clip["public"] = data["public"];
+  };
 
   return ClipAdd;
 })(App, Backbone, jQuery);

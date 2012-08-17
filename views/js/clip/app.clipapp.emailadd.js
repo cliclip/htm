@@ -1,13 +1,13 @@
 App.ClipApp.EmailAdd = (function(App, Backbone, $){
   var EmailAdd = {};
   var P = App.ClipApp.Url.base;
+  var email_pattern = App.util.email_pattern;
 
   var EmailAddModel = App.Model.extend({
     defaults:{
       email:""
     },
     validate:function(attrs){
-      var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
       if(!attrs.email || attrs.email == undefined){
 	return {email:"is_null"};
       }else if(!email_pattern.test(attrs.email)){
@@ -39,14 +39,12 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     },
     EmailAddclose: function(){
       var data = this.getInput();
-      if(data.email){
-	data.email = data.email.toLowerCase(); // 将要添加的邮件地址转换为小写
-      }
       this.trigger("closeView",data.email);
     },
     EmailAddcommit: function(){
       var view = this;
       var data = view.getInput();
+      if(data.email){ data.email = data.email.toLowerCase(); }
       this.model.save(data,{
 	type:"POST",
 	success: function(model, res){
@@ -80,12 +78,10 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     model.save({},{
       url: App.ClipApp.Url.base+"/active/"+key,
       type: "POST",
-      success:function(model,response){
-	// 不只是弹出提示框这么简单
+      success:function(model,response){ // 不只是弹出提示框这么简单
 	App.vent.trigger("app.clipapp.message:confirm", {active:"email"}, response.email);
       },
-      error:function(model,error){
-	// 则显示该链接不能再点击
+      error:function(model,error){ // 则显示该链接不能再点击
 	App.vent.trigger("app.clipapp.message:confirm", error);
       }
     });
@@ -102,10 +98,6 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       });
     }
   };
-
-  App.vent.bind("app.clipapp.emailadd:show",function(uid){
-    EmailAdd.show(uid);
-  });
 
   return EmailAdd;
 })(App, Backbone, jQuery);

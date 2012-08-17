@@ -13,7 +13,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       return App.util.unique_url(P+"/user/"+my+"/rule");
     },
     validate: function(attrs){
-      var email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
+      var email_pattern = App.util.email_pattern;
       var error = {};
       // 如果没有attrs.rule, 则在fetch时候不会触发onChange事件
       if(attrs.to){

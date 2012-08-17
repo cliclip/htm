@@ -137,7 +137,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	}else{
 	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag",res.reclip_tag);
 	}
-	App.vent.trigger("app.clipapp.taglist:taglistRefresh",model.get("clip").tag);
+	App.vent.trigger("app.clipapp.taglist:mytag",model.get("clip").tag);
 	ReclipTag.close();
       },
       error:function(model, res){
@@ -168,7 +168,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	  model_post.save({}, {
 	    type: "POST",
 	    success: function(model, res){
-	      App.vent.trigger("app.clipapp.taglist:taglistRefresh",tag);
+	      App.vent.trigger("app.clipapp.taglist:mytag",tag);
 	      var uid = App.util.getMyUid();
 	      App.ClipApp.Bubb.showUserTags(uid);
 	      App.ClipApp.ClipList.showUserClips(uid);

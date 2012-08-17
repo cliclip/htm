@@ -54,7 +54,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     _uid = uid;
     self = App.util.self(uid);
     homepage = false;
-    getUserTags(uid, function(tags, follows){
+    Bubb.getUserTags(uid, function(tags, follows){
       showTags(mkTag(tags, follows, tag, self));
     });
   };
@@ -127,7 +127,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     last = tags;
   };
 
-  Bubb.refresh = function (uid, follow, new_tag){
+  Bubb.refresh = function (uid, follow, new_tags){
     _uid = uid;
     self = App.util.self(uid);
     if(follow){
@@ -144,7 +144,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     var url = mkUrl(tag);
     //高版本的marionette 设为false也可直接刷新 但是提交上去的数据是乱码
     Backbone.history.navigate(url, false);
-    App.vent.trigger("app.clipapp:cliplist.refresh", _uid, url, tag);
+    App.vent.trigger("app.clipapp.cliplist:route", _uid, url, tag);
   });
 
   // 需要外包一层事件触发，和bubb实际操作连接
@@ -185,7 +185,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   }
 
   // 取 uid 的 tag
-  function getUserTags(uid, callback){
+  Bubb.getUserTags = function(uid, callback){
     // API getUserTags
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
@@ -196,16 +196,16 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
       if(uid == my){
-	App.vent.trigger("app.clipapp.bubb:mytag",bubb.tag);
+	App.vent.trigger("app.clipapp.taglist:mytag",bubb.tag);
       }else if(my){
 	App.vent.trigger("app.clipapp:followset", bubb.follow);
       }
       if(callback)callback(bubb.tag.slice(0,19), bubb.follow);
     });
-  }
+  };
 /*
   function getUserBubs(uid, callback){
-    getUserTags(uid, function(tags, follows){
+    Bubb.getUserTags(uid, function(tags, follows){
       var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
@@ -349,10 +349,6 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   }
 
-  // 用户刚登录成功就需要加载其tag，memo时候需要
-  App.vent.bind("app.clipapp.bubb:getusertags",function(uid){
-    getUserTags(uid);
-  });
 
   // return
   return Bubb;
