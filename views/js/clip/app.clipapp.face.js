@@ -145,10 +145,5 @@ App.ClipApp.Face = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.face:reset", function(uid){
-    if(/my/.test(window.location.hash))
-      Face.show(uid);
-  });
-
   return Face;
 })(App, Backbone, jQuery);

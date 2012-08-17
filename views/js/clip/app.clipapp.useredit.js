@@ -280,7 +280,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #confirm_face" : "submitFace"
     },
     initialize:function(){
-      this.bind("showface", showface);
+      this.model.bind("change", this.render, this);
       this.bind("rename", this.rename);
     },
     rename: function(){
@@ -301,8 +301,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	nameModel.save(data ,{
 	  type: 'PUT',
 	  success:function(model,res){
+	    view.model.set("name", res.name);
 	    App.vent.trigger("app.clipapp.message:success","rename_success");
-	    view.trigger("showface");
+	    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
 	  },
 	  error:function(model,res){
 	    view.showError('faceEdit',res);
@@ -329,27 +330,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showFace = function(flag){//设置页面显示用户名和头像
+  UserEdit.showFace = function(){//设置页面显示用户名和头像
     var face = App.util.getMyFace();
     var uid = App.util.getMyUid();
     var faceModel = new FaceModel(face);
-    var faceView = null;
-    if(flag){//设置用户名后重新显示
-      faceModel.fetch({
-	url:App.util.unique_url(P+"/my/info")
-      });
-      faceModel.onChange(function(faceModel){//设置用户名以及更新头像都会触发此事件
-	UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
-	faceView = new FaceView({model: faceModel});
-	UserEdit.faceRegion.show(faceView);
-	faceLoad(face.face,uid);//为iframe 绑定load事件，加载头像
-      });
-    }else{//直接加载页设置面时调用
-      UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
-      faceView = new FaceView({model: faceModel});
-      UserEdit.faceRegion.show(faceView);
-      faceLoad(face.face,uid);
-    }
+    UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
+    var faceView = new FaceView({model: faceModel});
+    UserEdit.faceRegion.show(faceView);
+    faceLoad(face.face,uid);
   };
 
   UserEdit.onUploadImgChange = function(sender){
@@ -358,10 +346,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       return false;
     }else{
       if(sender.files && sender.files[0]&&Modernizr.filereader){
-	  $("#confirm_face").show();
-	  preview_face(sender);// ff chrome
-	  //$("#myface").attr("src",img.src);
-	  return true;
+	$("#confirm_face").show();
+	preview_face(sender);// ff chrome
+	//$("#myface").attr("src",img.src);
+	return true;
       }else if(Modernizr.cssfilters){
 	$("#confirm_face").show();
 	sender.select();
@@ -483,21 +471,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.close();
   };
 
-  var showface = function(){
-    //设置用户名后需要重新显示faceview
-    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());//主页重新显示用户名和头像，不是设置页面
-    UserEdit.showFace(true);
-  };
-
   var delEmail = function(address){
     var delModel = new EmailEditModel({id:1, address:address});
     delModel.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	UserEdit.showEmail();
       },
-      error: function(model, res){
-	// console.info(res);
-      }
+      error: function(model, res){}
     });
   };
 

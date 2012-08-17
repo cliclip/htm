@@ -13,7 +13,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
-    App.vent.trigger("app.clipapp.routing:query", word);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
   };
 
   ClipApp.register = function(){
@@ -54,14 +54,14 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    App.vent.trigger("app.clipapp.routing:usershow", uid, tag);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow", uid, tag);
   };
 
   ClipApp.userQuery = function(uid, word, tag){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
-    App.vent.trigger("app.clipapp.routing:query", word, uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word, uid);
   };
 
   // user所追的人的列表 无需在请求Face 和 Bubb
@@ -70,7 +70,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowingList.showUserFollowing(uid);
-    App.vent.trigger("app.clipapp.routing:userfollowing", uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollowing", uid);
   };
 
   // 追user的人的列表 无需再请求Face 和 Bubb
@@ -79,7 +79,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.FollowerList.showUserFollower(uid);
-    App.vent.trigger("app.clipapp.routing:userfollower", uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollower", uid);
   };
 
   ClipApp.myShow = function(tag){
@@ -87,7 +87,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    App.vent.trigger("app.clipapp.routing:usershow",uid, tag);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow",uid, tag);
   };
 
   ClipApp.myQuery = function(word, tag){
@@ -95,7 +95,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
-    App.vent.trigger("app.clipapp.routing:query", word);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
   };
 
   // interest和recommend 只需要显示 主观tag就可以了
@@ -104,7 +104,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserInterest(uid, tag);
-    App.vent.trigger("app.clipapp.routing:interest", tag);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
 
   /*ClipApp.myRecommend = function(tag){
@@ -112,19 +112,19 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserRecommend(uid, tag);
-    App.vent.trigger("app.clipapp.routing:recommend", tag);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:recommend", tag);
   };*/
 
-  ClipApp.mySetup = function(){
+  /*ClipApp.mySetup = function(){
     var uid = App.util.getMyUid();
-    ClipApp.UserEdit.showUserEdit(uid);
+    ClipApp.UserEdit.showUserEdit();
     ClipApp.UserEdit.showFace(false);
     ClipApp.UserEdit.showEmail();
     ClipApp.RuleEdit.show();
     ClipApp.WeiboEdit.show();
     ClipApp.TwitterEdit.show();
     ClipApp.UserEdit.showPassEdit();
-  };
+  };*/
 
   // 为detail页面添加网址
   ClipApp.showDetail = function(uid, clipid){
@@ -134,6 +134,12 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:login", function(callback){
     ClipApp.Login.show(callback);
+  });
+
+
+  App.vent.bind("app.clipapp.login:success", function(res, remember){
+    ClipApp.Login.success(res, remember);
+    ClipApp.Me.me.fetch();
   });
 
   App.vent.bind("app.clipapp:register", function(){
@@ -146,12 +152,24 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.useredit:show", function(){
-    ClipApp.mySetup();
+    ClipApp.UserEdit.showUserEdit();
+    ClipApp.UserEdit.showFace();
+    ClipApp.UserEdit.showEmail();
+    ClipApp.RuleEdit.show();
+    ClipApp.WeiboEdit.show();
+    ClipApp.TwitterEdit.show();
+    ClipApp.UserEdit.showPassEdit();
   });
 
 
   App.vent.bind("app.clipapp.useredit:rename", function(){
     ClipApp.UserEdit.rename();
+  });
+
+  App.vent.bind("app.clipapp.face:reset", function(){
+    ClipApp.Me.me.fetch();
+    if(/my/.test(window.location.hash))
+      ClipApp.Face.show(ClipApp.Me.me.get("id"));
   });
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
@@ -166,12 +184,12 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:showfollowing", function(uid){
     ClipApp.FollowingList.showUserFollowing(uid);
-    App.vent.trigger("app.clipapp.routing:userfollowing", uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollowing", uid);
   });
 
   App.vent.bind("app.clipapp:showfollower", function(uid){
     ClipApp.FollowerList.showUserFollower(uid);
-    App.vent.trigger("app.clipapp.routing:userfollower", uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollower", uid);
   });
 
   //reclip 用户一个clip
@@ -291,6 +309,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:getUserTags", function(uid){
     ClipApp.Bubb.getUserTags(uid);
+    ClipApp.Me.me.fetch();
   });
 
   App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){

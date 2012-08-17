@@ -42,6 +42,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click .close_w"   :"cancel"
     },
     initialize:function(){
+      this.flag = false;
       this.bind("closeView", close);
     },
     foucsAction:function(e){
