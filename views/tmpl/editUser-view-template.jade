@@ -22,16 +22,16 @@ script(type="text/template",id="faceEdit-view-template")
       <% }else{%>
       <span id="set-name" class="name"><%=_i18n('faceEdit.no_name')%></span>
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
-      <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>"/>
+      <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>" title="<%=_i18n('faceEdit.set_name')%>"/>
       <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face")
     | <form method="POST" id="face_form" action="<%=App.util.getFace_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
     | <div class="btn_frame">
-    | <button class="verify" type="submit" id="confirm_face"><%=_i18n('faceEdit.ok')%></button>
+    | <button class="verify" type="submit" id="confirm_face" title="<%=_i18n('faceEdit.ok')%>"><%=_i18n('faceEdit.ok')%></button>
     | <div class="button_frame">
-    | <span class="file">
-    | <button class="upload"><%=_i18n('faceEdit.upload')%></button>
+    | <span class="file" title="<%=_i18n('faceEdit.upload')%>">
+    | <button class="upload" ><%=_i18n('faceEdit.upload')%></button>
     | <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
     | </span>
     | </div>
@@ -50,7 +50,7 @@ script(type="text/template",id="passEdit-view-template")
       |<input type="text" id="conpass" value="<%=_i18n('passEdit.conpass.prompt')%>"/>
       input(type="password",id="confirm",name="confirm",style="display:none;")
     li.
-      <input type="submit" class="btn_blue" id="pass_confirm" value="<%=_i18n('passEdit.update')%>" />
+      <input type="submit" class="btn_blue" id="pass_confirm" value="<%=_i18n('passEdit.update')%>" title="<%=_i18n('passEdit.update')%>"/>
   .language
     h3
       | <%=_i18n('languageSet.lang')%>
@@ -67,14 +67,15 @@ script(type="text/template",id="passEdit-view-template")
 script(type="text/template",id="emailEdit-view-template")
   .mail_verify.fir
     ul.mail_list
-      h3
-        button.add_accountbind(type="button",id="email_add",)
-          span
-          |<%=_i18n('emailEdit.add')%> 	
+      h3.
+        <button class="add_accountbind" type="button" id="email_add" title="<%=_i18n('emailEdit.add')%>">
+          <span/>
+          <%=_i18n('emailEdit.add')%>
+        </button> 	
         |<%=_i18n('emailEdit.title')%>
       |<% if(email){ for(i=0;i<email.length;i++) { if(email[i]){ %>
       |<li class="mail_line">
-      |<span class="email_address" id="<%=email[i]%>"></span>
+      |<span class="email_address" id="<%=email[i]%>" title="<%=_i18n('emailEdit.del')%>"></span>
       |<%=email[i]%>
       |</li><% }} }%>
   
@@ -83,8 +84,8 @@ script(type="text/template",id="ruleEdit-view-template")
     ul.mail_list
       h3
         span.open_mailcheck
-          |<input type="checkbox" id="open_rule" name="enable" <% if(enable){ %> checked="checked" <%}%> />
-          label(for="open_rule")|<%=_i18n('ruleEdit.open_rule')%>
+          |<input type="checkbox" id="open_rule" name="enable" <% if(enable){ %> checked="checked" <%}%> title="<%=_i18n('ruleEdit.open_rule')%>"/>
+          |<label for="open_rule" title="<%=_i18n('ruleEdit.open_rule')%>"><%=_i18n('ruleEdit.open_rule')%></label>
         |<%=_i18n('ruleEdit.head')%>
       div.rule_input
         li
@@ -119,10 +120,11 @@ script(type="text/template",id="emailAdd-view-template")
 script(type="text/template",id="weiboEdit-view-template")
   .mail_verify.fir
     ul.mail_list
-      h3
-        button.add_accountbind(type="button",id="info_add",)
-          span
-          |<%=_i18n('weiboEdit.add')%> 	
+      h3.
+        <button class="add_accountbind" type="button" id="info_add" title="<%=_i18n('weiboEdit.add')%>">
+          <span/>
+          <%=_i18n('weiboEdit.add')%> 	
+        </button>
         |<%=_i18n('weiboEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="oauth_li">
@@ -135,10 +137,11 @@ script(type="text/template",id="weiboEdit-view-template")
 script(type="text/template",id="twitterEdit-view-template")
   .mail_verify.fir
     ul.mail_list
-      h3
-        button.add_accountbind(type="button",id="info_add",)
-          span
-          |<%=_i18n('twitterEdit.add')%> 	
+      h3.
+        <button class="add_accountbind" type="button" id="info_add" title="<%=_i18n('twitterEdit.add')%>">
+          <span/>
+          <%=_i18n('twitterEdit.add')%> 
+        </button>	
         |<%=_i18n('twitterEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="oauth_li">

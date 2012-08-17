@@ -352,6 +352,11 @@ App.versions = (function($){
 	  beyond      : "标签过长，最多支持5个汉字、10个英文字母或数字"
 	},
 
+	queryclip:{
+	  add         : "添加摘录",
+	  search      : "搜索"
+	},
+
 	message : {
 	  title         : "消息提示",
 	  ok            : "确 定",
@@ -362,7 +367,6 @@ App.versions = (function($){
 	  is_null       : "摘录不存在",
 	  not_array     : "摘录必须是数组",
 	  is_empty      : "摘录没有内容",
-	  is_null       : "您还没有添加邮件摘录的反垃圾规则",
 	  no_uname      : "请先设置用户名",
 	  faceUp_success : "您的头像已更新",
 	  passwd_success : "您的密码已修改",
@@ -829,6 +833,11 @@ App.versions = (function($){
 	  beyond      : "Tag is too long (maximum 5 Chinese characters, 10 letters or numbers)"
 	},
 
+	queryclip:{
+	  add         : "Add Clip",
+	  search      : "Search"
+	},
+
 	message : {
 	  title         : "Notice",
 	  ok            : "OK",
@@ -839,7 +848,6 @@ App.versions = (function($){
 	  is_null       : "Clip does not exist",
 	  not_array     : "Clip must be array",
 	  is_empty      : "Clip cannot be empty",
-	  is_null       : "You have not set the rules for spam filter",
 	  no_uname      : "Please set user name first",
 	  faceUp_success : "Your photo has been updated",
 	  passwd_success : "Your password has been changed",
