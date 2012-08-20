@@ -87,9 +87,6 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   FollowingList.close=function(){
     App.listRegion.close();
   };
-  App.vent.bind("app.clipapp.followinglist:close",function(){
-    FollowingList.close();
-  });
 
   FollowingList.nextpage = function(){
     if(loading)return;

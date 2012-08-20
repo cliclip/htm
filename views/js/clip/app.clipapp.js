@@ -121,9 +121,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserRecommend(uid, tag);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:recommend", tag);
-  };*/
-
-  /*ClipApp.mySetup = function(){
+  };
+  ClipApp.mySetup = function(){
     var uid = App.util.getMyUid();
     ClipApp.UserEdit.showUserEdit();
     ClipApp.UserEdit.showFace(false);
@@ -173,7 +172,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:logout", function(){
     var uid = App.util.getMyUid();
-    ClipApp.Logout.show(uid);
+    ClipApp.Logout.show();
   });
 
   App.vent.bind("app.clipapp.useredit:show", function(){
@@ -213,6 +212,10 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp:showfollowing", function(uid){
     ClipApp.FollowingList.showUserFollowing(uid);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollowing", uid);
+  });
+
+  App.vent.bind("app.clipapp.followerlist:refresh", function(){
+    ClipApp.FollowerList.refresh();
   });
 
   App.vent.bind("app.clipapp:showfollower", function(uid){
@@ -351,10 +354,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.remove(model_id);
   });
 
+  // 更新转载和评论次数
   App.vent.bind("app.clipapp.cliplist:refresh",function(args){
     ClipApp.ClipList.refresh(args);
   });
-
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
   App.vent.bind("app.clipapp.cliplist:route", function(uid, url, tag){
@@ -362,7 +365,6 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:clipdelete", function(clipid){
-    var uid = App.util.getMyUid();
     ClipApp.ClipDelete.show(clipid);
   });
 

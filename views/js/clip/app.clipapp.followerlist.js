@@ -88,19 +88,16 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   FollowerList.close=function(){
     App.listRegion.close();
   };
-  App.vent.bind("app.clipapp.followerlist:close",function(){
-    FollowerList.close();
-  });
 
   // 更新“谁追我”列表
-  App.vent.bind("app.clipapp.followerlist:refresh",function(){
+  FollowerList.refresh = function(){
     if(App.listRegion.currentView.className =='follow-item'){
       var uid= App.util.getMyUid();
       var id = App.ClipApp.Face.getUserId();
       if(uid) FollowerList.showUserFollower(id);
       else App.vent.trigger("app.clipapp:login");
     }
-  });
+  };
 
   FollowerList.nextpage = function(){
     if(loading)return;

@@ -40,9 +40,9 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp.userbind:ok",function(){
+  /*App.vent.bind("app.clipapp.userbind:ok",function(){
     WeiboEdit.show();
-  });
+   });*/
 
   var delTwitter = function(uid){
   var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
