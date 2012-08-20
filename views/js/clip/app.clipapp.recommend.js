@@ -49,6 +49,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       setTimeout(function(){
 	this.$("#recomm_name").focus();
       },500);
+      this.bind("lookup", lookup);
+      this.bind("closeView", close);
     },
     getUserAction:function(e){
       $("#imgId").css("display","none");
@@ -65,7 +67,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var clip_owner = this.model.get("clipid").split(":")[0];//clip的拥有者
       var params = {q:str};
       //查询friend
-      App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
+      this.trigger("lookup",params,clip_owner);
     },
     nameBlur:function(){
       var view = this;
@@ -220,7 +222,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     cancelAction:function(e){
       var text = this.tmpmodel.get('text');
-      App.vent.trigger("app.clipapp.recommend:@close",text);
+      this.trigger("closeView",text);
     }
   });
 
@@ -258,7 +260,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  var str = $.trim(that.$("#recomm_name").val());
 	  var params = {q:str};
 	  //查询friend
-	  App.vent.trigger("app.clipapp.recommend:@lookup",params,clip_owner);
+	  recommView.trigger("lookup",params,clip_owner);
 	}
 	document.getElementById('recomm_name').onpropertychange=nameListAction;
       }
@@ -271,7 +273,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       mid = null;
       uid = null;
     }else{
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "recommend_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
@@ -281,7 +282,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     }
   };
 
-  App.vent.bind("app.clipapp.recommend:@lookup",function(params,owner_id){
+  var lookup = function(params,owner_id){
     var collection = new NameList();
     collection.fetch({data:params});
     collection.onReset(function(list){
@@ -301,11 +302,11 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	$(".name_list").hide();
       }
     });
-  });
+  };
 
-  App.vent.bind("app.clipapp.recommend:@close",function(text){
+  var close = function(text){
     Recommend.close(text);
-  });
+  };
 
   App.bind("initialize:after", function(){
   });

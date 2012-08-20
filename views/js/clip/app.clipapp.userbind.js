@@ -1,17 +1,14 @@
-// app.clipapp.login.js
-
 App.ClipApp.UserBind = (function(App, Backbone, $){
 
   var UserBind = {};
-
   App.Model.UserBindModel = App.Model.extend({
     url:function(){
-    var my = App.util.getMyUid();
-    if(this.get("oauth_id")){
-      return P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id");
-    }else{
-      return App.util.unique_url(P+"/user/"+ my +"/provider/"+this.get("provider"));
-    }
+      var my = App.util.getMyUid();
+      if(this.get("oauth_id")){
+	return P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id");
+      }else{
+	return App.util.unique_url(P+"/user/"+ my +"/provider/"+this.get("provider"));
+      }
     }
   });
   var UserBindView = App.ItemView.extend({
@@ -30,6 +27,8 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
+      this.bind("cancel", cancel);
+      this.bind("success", success);
     },
     blurName: function(e){
       var that = this;
@@ -56,10 +55,9 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	  url: App.ClipApp.Url.base+"/login",
 	  type: "POST",
   	  success: function(model, res){
-  	    App.vent.trigger("app.clipapp.userbind:success", res);
+  	    that.trigger("success", res);
   	  },
   	  error:function(model, res){
-	    console.log(res);
 	    that.showError('bind',res);
   	  }
 	});
@@ -67,8 +65,8 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	this.tmpmodel.save({},{
 	  url : App.ClipApp.Url.base+"/register",
 	  type: "POST",
-	  success:function(model,res){
-	    App.vent.trigger("app.clipapp.userbind:success",res);
+	  success:function(model, res){
+	    that.trigger("success", res);
 	  },
 	  error:function(model,error){
 	    that.showError('bind',error);
@@ -88,13 +86,16 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.userbind:@cancel");
+      this.trigger("cancel");
     }
   });
 
   var bindOauth ,fun, remember = false;//fun 用于记录用户登录前应该触发的事件
 
-  UserBind.show = function(auth){
+  UserBind.show = function(oauth, fun, remember){
+    bindOauth = oauth;
+    fun = fun;
+    remember = remember;
     var model = new App.Model.UserBindModel({info:auth.info,provider:auth.provider});
     var view = new UserBindView({model : model});
     App.popRegion.show(view);
@@ -122,24 +123,16 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.userbind:show",function(oauth,f,remem){
-    UserBind.show(oauth);
-    bindOauth = oauth;
-    fun = f;
-    remember = remem;
-    //console.info(bindOauth);
-  });
-
-  //bind 设置里面增加微博绑定
+  /* //bind 设置里面增加微博绑定
   App.vent.bind("app.clipapp.userbind:bind",function(oauth){
     saveOauth(oauth,function(err,reply){
       if(reply){
 	App.vent.trigger("app.clipapp.userbind:ok");
       }
     });
-  });
+  });*/
 
-  App.vent.bind("app.clipapp.userbind:success", function(res){
+  var success = function(res){
     if(remember){
       var data = new Date();
       data.setTime(data.getTime() + 30*24*60*60*1000);
@@ -153,10 +146,11 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       }else if(bindOauth.provider == "twitter"){
 	App.vent.trigger("app.clipapp.message:confirm", "twitter_sucmsg",bindOauth.info.name);
       }
-      App.vent.trigger("app.clipapp.userbind:bindok");
+      // App.vent.trigger("app.clipapp.userbind:bindok"); 动作为 Me.me.fetch;
       if(reply){
 	if(typeof fun == "function"){
-	  App.ClipApp.Bubb._getUserTags(res.token.split(":")[0]);
+	  // 获取用户的tag 作用是什么
+	  // App.ClipApp.Bubb.getUserTags(res.token.split(":")[0]);
 	  fun();
 	}else{
 	  Backbone.history.navigate("my",true);
@@ -164,18 +158,16 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	UserBind.close();
       }
     });
-  });
+  };
 
-  App.vent.bind("app.clipapp.userbind:@cancel", function(){
-    if(Backbone.history){
-     Backbone.history.navigate("",true);
-    }
+  var cancel = function(){
+    if(Backbone.history) Backbone.history.navigate("",true);
     UserBind.close();
-  });
+  };
 
- // TEST
 
-   // App.bind("initialize:after", function(){ UserBind.show({info:"ll",provider:"dd"}); });
+ // App.bind("initialize:after", function(){ UserBind.show({info:"ll",provider:"dd"}); });
+
 
  return UserBind;
 })(App, Backbone, jQuery);

@@ -30,10 +30,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
       if(_.isEmpty(error)) return null;
       else return error;
-    },
-    defaults: {
-      //newpass : _i18n('message.newpass.prompt'),
-      //confirm : _i18n('message.conpass.prompt')
     }
   });
   var NameModel = App.Model.extend({
@@ -72,14 +68,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       this.flag = false;
+      this.bind("closeView", close);
     },
     cancel : function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.useredit:@close");
+      this.trigger("closeView");
     },
     masker_close:function(e){
       if($(e.target).attr("class") == "masker"){
-	App.vent.trigger("app.clipapp.useredit:@close");
+	this.trigger("closeView");
       }
     }
   });
@@ -92,16 +89,19 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #email_add":"emailAdd",
       "click .email_address":"emailCut"
     },
+    initialize: function(){
+      this.bind("delEmail", delEmail);
+    },
     emailAdd:function(e){
       App.vent.trigger("app.clipapp.emailadd:show",this.model.id);
     },
     emailCut:function(e){
       e.preventDefault();
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       var address = e.currentTarget.id;
+      var view = this;
       App.vent.trigger("app.clipapp.message:alert", "delemail", address);
       App.vent.bind("app.clipapp.message:sure",function(){
-	App.vent.trigger("app.clipapp.useredit:@emaildel",address);
+	view.trigger("delEmail",address);
       });
     }
   });
@@ -223,7 +223,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  url : App.util.unique_url(P+"/user/"+uid+"/lang/"+lang),
 	  success:function(model,res){
 	    App.vent.trigger("app.clipapp.versions:change",lang);
-	    //App.vent.trigger("app.clipapp.useredit:show",response);
 	  },
 	  error:function(model,error){
 	    App.vent.trigger("app.clipapp.message:confirm",error);
@@ -253,14 +252,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   UserEdit.showUserEdit = function(){
     var editModel = new EditModel();
     var editView = new EditView({model: editModel});
+    App.popRegion.close();
+    App.viewRegion.close();
     App.mysetRegion.show(editView);
-    UserEdit.showFace(false);
-    UserEdit.showEmail();
-    App.ClipApp.RuleEdit.show();
-    App.ClipApp.WeiboEdit.show();
-    App.ClipApp.TwitterEdit.show();
-    UserEdit.showPassEdit();
-/*    var iframe=document.getElementById("post_frame_face");
+    /*var iframe=document.getElementById("post_frame_face");
     iframe.onload = function(){
       if(submit_face){
 	console.info(iframe);
@@ -269,8 +264,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
 	}
       }
-    };
-*/
+    };*/
   };
 
 
@@ -285,6 +279,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #confirm_face" : "submitFace"
     },
     initialize:function(){
+      this.model.bind("change", this.render, this);
+      this.bind("rename", this.rename);
+    },
+    rename: function(){
+      $(".edit_name").click(); // 触发设置用户名的动作
+      $(".set_username").focus(); // 先让输入框聚焦
     },
     setName: function(e){
       e.preventDefault();
@@ -300,8 +300,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	nameModel.save(data ,{
 	  type: 'PUT',
 	  success:function(model,res){
+	    view.model.set("name", res.name);
 	    App.vent.trigger("app.clipapp.message:success","rename_success");
-	    App.vent.trigger("app.clipapp.useredit:@showface");
+	    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
 	  },
 	  error:function(model,res){
 	    view.showError('faceEdit',res);
@@ -328,26 +329,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showFace = function(flag){//设置页面显示用户名和头像
+  UserEdit.showFace = function(){//设置页面显示用户名和头像
     var face = App.util.getMyFace();
     var uid = App.util.getMyUid();
     var faceModel = new FaceModel(face);
-    if(flag){//设置用户名后重新显示
-      faceModel.fetch({
-	url:App.util.unique_url(P+"/my/info")
-      });
-      faceModel.onChange(function(faceModel){//设置用户名以及更新头像都会触发此事件
-	UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
-	var faceView = new FaceView({model: faceModel});
-	UserEdit.faceRegion.show(faceView);
-	faceLoad(face.face,uid);//为iframe 绑定load事件，加载头像
-      });
-    }else{//直接加载页设置面时调用
-      UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
-      var faceView = new FaceView({model: faceModel});
-      UserEdit.faceRegion.show(faceView);
-      faceLoad(face.face,uid);
-    }
+    UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
+    var faceView = new FaceView({model: faceModel});
+    UserEdit.faceRegion.show(faceView);
+    faceLoad(face.face,uid);
   };
 
   UserEdit.onUploadImgChange = function(sender){
@@ -356,10 +345,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       return false;
     }else{
       if(sender.files && sender.files[0]&&Modernizr.filereader){
-	  $("#confirm_face").show();
-	  preview_face(sender);// ff chrome
-	  //$("#myface").attr("src",img.src);
-	  return true;
+	$("#confirm_face").show();
+	preview_face(sender);// ff chrome
+	//$("#myface").attr("src",img.src);
+	return true;
       }else if(Modernizr.cssfilters){
 	$("#confirm_face").show();
 	sender.select();
@@ -384,21 +373,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   };
 
-/*
-  function saveFace(facemodel,params){
-    facemodel.save(params,{
-      url: P+"/user/"+ facemodel.id+"/face",
-      type: "POST",
-      success:function(model,res){
-	App.vent.trigger("app.clipapp.message:confirm","faceUp_success");
-	face_change_flag = true;
-      },
-      error:function(model,res){
-	//console.info("error!!!!!!!!!!");
-      }
-    });
-  };
-*/
   function faceLoad(originalFace,uid){
     $("#post_frame_face").unbind("load");
     $("#post_frame_face").load(function(){ // 加载图片
@@ -438,7 +412,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       submit_face = false;
     });
   }
-//ff chrome 之外的其他浏览器本地预览头像
+  //ff chrome 之外的其他浏览器本地预览头像
   function preview_face(sender){
       var reader = new FileReader();
       reader.onload = function(evt){
@@ -488,43 +462,25 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     App.mysetRegion.close();
   };
 
-  App.vent.bind("app.clipapp.useredit:@close", function(){
+  UserEdit.rename = function(){
+    UserEdit.faceRegion.currentView.trigger("rename");
+  };
+
+  var close = function(){
     UserEdit.close();
-  });
+  };
 
-  App.vent.bind("app.clipapp.useredit:show", function(uid){
-    App.popRegion.close();
-    App.viewRegion.close();
-    UserEdit.showUserEdit (uid);
-  });
-
-  App.vent.bind("app.clipapp.useredit:@showface",function(){
-    //设置用户名后需要重新显示faceview
-    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());//主页重新显示用户名和头像，不是设置页面
-    UserEdit.showFace(true);
-  });
-
-  App.vent.bind("app.clipapp.useredit:@emaildel",function(address){
+  var delEmail = function(address){
     var delModel = new EmailEditModel({id:1, address:address});
     delModel.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	UserEdit.showEmail();
       },
-      error: function(model, res){
-	// console.info(res);
-      }
+      error: function(model, res){}
     });
-  });
+  };
 
-  App.vent.bind("app.clipapp.useredit:rename", function(){
-    $(".edit_name").click(); // 触发设置用户名的动作
-    $(".set_username").focus(); // 先让输入框聚焦
-  });
-
-  App.bind("initialize:after", function(){
-   //UserEdit.showUserEdit(App.util.getMyUid());
-  });
+  // App.bind("initialize:after", function(){ UserEdit.showUserEdit();});
 
   return UserEdit;
-
 })(App, Backbone, jQuery);

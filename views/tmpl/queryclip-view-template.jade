@@ -1,6 +1,6 @@
 script(type="text/template",id="queryclip-view-template")
   div.select
-    b.add
+    |<b class="add" title="<%=_i18n('queryclip.add')%>" />
     b.more
     ul.options
       li.copy
@@ -15,7 +15,7 @@ script(type="text/template",id="queryclip-view-template")
         a(href="#clip/72/16") twitter
   div#query.input
     input.text#input_keyword(type="text")
-    input.search_btn#query_button(type="button")
+    |<input class="search_btn" id="query_button" type="button" title="<%=_i18n('queryclip.search')%>"/>
     //-input.text(type="text")
     //-input.search_btn(type="submit",value="")
     //-a#addClip +

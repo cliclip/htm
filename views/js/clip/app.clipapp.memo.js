@@ -26,34 +26,35 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
     initialize:function(){
       this.flag = false;
+      this.bind("ok", ok);
+      this.bind("error", error);
+      this.bind("closeView", close);
     },
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
       $(e.currentTarget).toggleClass("orange_48");
     },
-   /*
-    noteFocus:function(e){
+    /*noteFocus:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == defaultNote ? "" :
       $(e.currentTarget).val() );
     },
     noteBlur:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? defaultNote :
       $(e.currentTarget).val() );
-    },
-   */
+    },*/
     okClick:function(e){
+      var view = this;
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
       var data = loadData(this.$el);
       // clip在update时需要clip的id
       // data["id"] = this.model.id;
       if($(".error").length == 0){
-	App.vent.trigger("app.clipapp.memo:@ok", data, this.model.id);
+	view.trigger("ok", data, this.model.id);
       }else{
 	$(e.currentTarget).attr("disabled",false);
       }
     },
-
     shortcut_ok : function(e){
       if(e.ctrlKey&&e.keyCode==13){
 	$("#organize_button").click();
@@ -62,7 +63,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	return true;
       }
     },
-
     masker:function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancelClick(e);
@@ -71,7 +71,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     cancelClick:function(e){
       e.preventDefault();
       var n_data = loadData(this.$el);
-      App.vent.trigger("app.clipapp.memo:@close",n_data);
+      this.trigger("closeView",n_data);
     }
   });
 
@@ -126,6 +126,43 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     return {id:id,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
   };
 
+  // 触发更新clip中的注的事件
+  var ok = function(data, cid){
+    if(memoType == "update"){
+      var model = new MemoModel(data);
+      model.save({}, {
+	type:'PUT',
+	url: P+"/clip/"+cid,
+	success: function(model, res){
+	  if(/my/.test(window.location.hash)){
+	    App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
+	  }
+	  if(/my/.test(window.location.hash) && /tag/.test(window.location.hash)){
+	    var str = "#my/tag/";
+	    var tag = window.location.hash.split(str)[1];
+	    var flag = _.find(data.tag,function(t){return t == tag;});
+	    if(!flag)App.vent.trigger("app.clipapp.cliplist:remove",cid);
+	  }
+	  ClipMemo.close();
+	},
+	error:function(model,res){
+	  this.trigger("error",model,res);
+	}
+      });
+    }else if(memoType == "add"){
+      App.vent.trigger("app.clipapp.clipadd:memo", data);
+      ClipMemo.close();
+    }
+  };
+
+  var close = function(n_data){
+    ClipMemo.close(n_data);
+  };
+
+  var error= function(model,error){
+    //console.info(error);
+  };
+
   var ClipMemo = {};
   var memoType,defaultNote = _i18n('clipmemo.memo'),o_data;
   function showMemo(data){
@@ -137,7 +174,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   // 此处只有区分 update 和 add
   ClipMemo.show = function(args){
-    memoType = (_.isObject(args)) ? "add" : "update";
+    memoType = _.isObject(args) ? "add" : "update";
     if(memoType == "update"){
       var cid = args;
       var detailModel = new App.Model.DetailModel({id:cid});
@@ -171,7 +208,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       if(flag){
 	App.popRegion.close();
       }else{
-	App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
 	App.vent.trigger("app.clipapp.message:alert", "memo_save");
 	App.vent.bind("app.clipapp.message:sure",function(){
 	  App.popRegion.close();
@@ -179,45 +215,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       }
     }
   };
-
-  // 触发更新clip中的注的事件
-  App.vent.bind("app.clipapp.memo:@ok", function(data, cid){
-    if(memoType == "update"){
-      var model = new MemoModel(data);
-      model.save({}, {
-	type:'PUT',
-	url: P+"/clip/"+cid,
-	success: function(model, res){
-	  if(/my/.test(window.location.hash)){
-	    App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
-	  }
-	  if(/my/.test(window.location.hash) && /tag/.test(window.location.hash)){
-	    var str = "#my/tag/";
-	    var tag = window.location.hash.split(str)[1];
-	    var flag = _.find(data.tag,function(t){return t == tag;});
-	    if(!flag)App.vent.trigger("app.clipapp.cliplist:remove",cid);
-	  }
-	  //注时可能删除tag  不能只refresh
-	  //App.vent.trigger("app.clipapp.bubb:refresh",App.util.getMyUid(),null,data.tag);
-	  ClipMemo.close();
-	},
-	error:function(model,res){
-	  App.vent.trigger("app.clipapp.memo:@error",model,res);
-	}
-      });
-    }else if(memoType == "add"){
-      App.vent.trigger("app.clipapp.clipadd:update", data);
-      ClipMemo.close();
-    }
-  });
-
-  App.vent.bind("app.clipapp.memo:@close",function(n_data){
-    ClipMemo.close(n_data);
-  });
-
-  App.vent.bind("app.clipapp.memo:@error",function(model,error){
-    //console.info(error);
-  });
 
   // TEST
   // App.bind("initialize:after", function(){ ClipMemo.show(); });

@@ -4,7 +4,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var clips_exist = true;
   var hide_clips = [];
   var clipListView = {};
-  var collection = {},start = 1,end = App.ClipApp.Url.page;
+  var collection = {},start, end;
   var url = "",base_url = "",data = "",type = "",collection_length,new_page;
   var loading = false;
   var ClipPreviewModel = App.Model.extend({
@@ -103,12 +103,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var cid = this.model.get("user").id + ":" + this.model.get("clipid");
       var pub = this.model.get("public");
       var mid = this.model.id;
-      var recommend = { // 只是传给reclip用
-	rid : this.model.get("recommend").rid,
-	user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
-      };
       switch(opt){
 	case 'reclip'://收
+	  var recommend = { // 只是传给reclip用
+	    rid : this.model.get("recommend").rid,
+	    user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
+	  };
 	  App.vent.trigger("app.clipapp:reclip",cid,mid,recommend,pub);break;
 	//case 'recommend'://转
 	  //App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
@@ -191,6 +191,21 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     type = "GET";
     init_page();
   };
+
+  ClipList.route = function(uid, url, tag){
+    if(/interest/.test(url)){
+      ClipList.showUserInterest(uid, tag);
+    }else if(/recommend/.test(url)){
+      ClipList.showUserRecommend(uid, tag);
+    }else{
+      if(!uid){
+	ClipList.showSiteClips(tag);
+      }else {
+	ClipList.showUserClips(uid, tag);
+      }
+    }
+  };
+
   function collection_filter(collection,hide_list){
     collection_length -= hide_list.length;
     for(var i=0;i<hide_list.length;i++){
@@ -204,7 +219,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     end = App.ClipApp.Url.page;
     url = App.util.unique_url(base_url + "/" + start+".."+ end);
     if(data){
-      var tag = data.tag ? data.tag : null;
       data = JSON.stringify(data);
       var contentType = "application/json; charset=utf-8";
       collection.fetch({url:url,type:type,contentType:contentType,data:data});
@@ -237,11 +251,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	window.location.href="javascript:scroll(0,99)";
       }
       App.listRegion.show(clipListView);
-      //App.vent.trigger("app.clipapp:showpage");
       if(collection.length<10){ // 去重之后不够十条继续请求
-	App.vent.trigger("app.clipapp:nextpage");
+	ClipList.nextpage();
       }
-      //console.info(tag);
       if(!clips_exist){
 	if(window.location.hash=="#my"){
 	  $("#list").append(_i18n('message.cliplist_null.my'));
@@ -262,18 +274,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp:nextpage",function(){
+  ClipList.nextpage = function(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
       loading = true;
       start += App.ClipApp.Url.page;
-      end =start + App.ClipApp.Url.page-1;
+      end = start + App.ClipApp.Url.page-1;
       url = App.util.unique_url(base_url + "/" + start + ".." + end);
       var contentType = "application/json; charset=utf-8";
-      if(!data){
-	contentType = null;
-      }
+      if(!data){ contentType = null; }
       collection.fetch({
 	url:url,
 	type:type,
@@ -285,7 +295,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  loading = false;
 	},
 	success :function(col,res){
-	  if(res.length>=App.ClipApp.Url.page){
+	  if(res.length >= App.ClipApp.Url.page){
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;
@@ -296,13 +306,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
       });
     }
-  });
+  };
 
-  App.vent.bind("app.clipapp.cliplist:add",function(addmodel){
+
+  ClipList.add = function(addmodel){
+    var model = new ClipPreviewModel();
     var uid = App.util.getMyUid();
     var id = uid+":"+addmodel.id;
-    var model = new ClipPreviewModel();
-    var clip = {};
     var clipid = addmodel.id;
     var tag = addmodel.get("tag");
     var note = addmodel.get("note");
@@ -320,21 +330,28 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     start++;
     collection_length++;
     $("#list").masonry("reload");
-  });
+  };
 
-  App.vent.bind("app.clipapp.cliplist:remove",function(model_id){
+  ClipList.edit =  function(content,model_id){
+    var collection = clipListView.collection;
+    var model = collection.get(model_id);
+    var newcontent = App.util.getPreview(content, 100);
+    model.set({content:newcontent});
+  };
+
+  ClipList.remove = function(model_id){
     var model = clipListView.collection.get(model_id);
     clipListView.collection.remove(model);
     $("#list").masonry("reload");
     start--;
     collection_length--;
     if(collection_length == 0){
-      App.vent.trigger("app.clipapp:nextpage");
+      ClipList.nextpage();
     }
-  });
+  };
 
   // 评论总数以及转载总数的同步
-  App.vent.bind("app.clipapp.cliplist:refresh",function(args){
+  ClipList.refresh = function(args){
     if(!args || !args.model_id){
       return;
     }else{
@@ -351,15 +368,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	model.set({"reprint_count":reprint_count});
       }
     }
-  });
-
-  App.vent.bind("app.clipapp.cliplist:edit", function(content,model_id){
-    var collection = clipListView.collection;
-    var model = collection.get(model_id);
-    var newcontent = App.util.getPreview(content, 100);
-    model.set({content:newcontent});
-  });
+  };
 
   return ClipList;
-
 })(App, Backbone, jQuery);

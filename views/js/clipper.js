@@ -34,7 +34,6 @@ $(function() {
       if(!clip || !clip.content){
 	socket.postMessage(JSON.stringify(["cancel"]));
       }else{
-	App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
 	App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
 	App.vent.bind("app.clipapp.message:sure",function(){
 	  socket.postMessage(JSON.stringify(["cancel"]));

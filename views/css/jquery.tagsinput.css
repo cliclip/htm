@@ -69,6 +69,7 @@ span.error{
   overflow-x:hidden;
   overflow-y:auto;
   padding-left:6px;
+  padding-right: 0;
 }
 div.taglistDiv span {
   cursor: pointer;
@@ -76,7 +77,7 @@ div.taglistDiv span {
   height: 22px;
   line-height: 22px;
   padding: 0 0 0 2px;
-  min-width: 89px;
+  min-width: 70px;
 }
 .tags_clear {
   clear: both; 

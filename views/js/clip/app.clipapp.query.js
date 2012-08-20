@@ -14,8 +14,6 @@ App.ClipApp.Query = (function(App,Backbone,$){
       "click .search_btn" : "query",
       "click .text":"inputAction"
     },
-    initialize:function(){
-    },
     addClip: function(){
       App.vent.trigger("app.clipapp:clipadd");
     },

@@ -41,6 +41,10 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click .masker"    :"masker",
       "click .close_w"   :"cancel"
     },
+    initialize:function(){
+      this.flag = false;
+      this.bind("closeView", close);
+    },
     foucsAction:function(e){
       this.cleanError(e);
       $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('comment.defaultText') ? "" :
@@ -51,8 +55,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('comment.defaultText') :
       $(e.currentTarget).val() );
     },
-  /*
-    maintagAction:function(e){
+    /*maintagAction:function(e){
       // 取得评论框中的文本并转为数组，去除掉数组中的默认值和空值。
       $("#comm_text").focus();
       var arr_text = _.compact(_.without($("#comm_text").val().split(","),_i18n('comment.defaultText')));
@@ -66,8 +69,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	this.tag_list = _.without(this.tag_list,tag);
 	$("#comm_text").val((_.without(arr_text,tag)).join(","));
       }
-    },
-*/
+    },*/
     comment : function(e){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
@@ -96,7 +98,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	}
       });
     },
-
     shortcut_comment : function(e){
       if(e.ctrlKey&&e.keyCode==13){
 	$("#submit").click();
@@ -105,18 +106,16 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	return true;
       }
     },
-
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
     },
-
     cancel : function(e){
       e.preventDefault();
       var text = $.trim($("#comm_text").val());
       if(text == _i18n('comment.defaultText')) text = "";
-      App.vent.trigger("app.clipapp.comment:@close",text);
+      this.trigger("closeView",text);
     }
   });
 
@@ -137,7 +136,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       App.popRegion.close();
       mid = null;
     }else{
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "comment_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
@@ -146,9 +144,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.comment:@close", function(text){
+  var close =  function(text){
     Comment.close(text);
-  });
+  };
 
   return Comment;
 })(App, Backbone, jQuery);

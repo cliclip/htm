@@ -226,38 +226,6 @@ App.util = (function(){
     App.vent.trigger("app.clipapp:clipadd");
     return ;
   };
-  App.vent.bind("app.clipapp:showpage",function(length){
-/*    var paddingTop = 0 + "px";
-    $(window).unbind("scroll");
-    util.remove_fixed(paddingTop);
-    $(window).scroll(function() {
-      var st = $(window).scrollTop();
-      //var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
-      var shifting =$(".user_head").height() ? $(".user_head").height()+15 :0;
-      var mt = $(".clearfix").offset().top + shifting;
-      //mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
-      //if($("#list").height()<=$(".left").height())return;
-      if(st>0){
-	$(".return_top").show();
-      }else{
-	$(".return_top").hide();
-      }
-      if(st > mt ){
-	//console.info("锁定气泡组件",st,mt);
-	util.fixed(paddingTop);
-      } else {
-	//console.info("解除锁定气泡组件",st,mt);
-	util.remove_fixed(paddingTop);
-      }
-      // loader while scroll down to the page end
-      var wh = window.innerHeight;
-      var lt = $(".loader").offset().top;
-      if(st + wh > lt){
-	App.vent.trigger("app.clipapp:nextpage");
-      }
-    });
-*/
-  });
 
   util.img_load = function(img){
     img.onload = null;
