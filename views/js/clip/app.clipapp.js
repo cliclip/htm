@@ -2,6 +2,13 @@
 
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
+  function isLoggedIn(){
+    return App.util.getMyUid() != null ? true : false;
+  };
+
+  function isOwner(uid1, uid2){
+    return uid1 == uid2;
+  };
 
   ClipApp.siteShow = function(tag){
     ClipApp.Face.show();
@@ -114,6 +121,15 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
+  ClipApp.showEditClip = function(clipId){
+    if(!isLoggedIn()){
+      showLogin();
+    }else{
+      if (isOwner(clipId.split(":")[0], App.util.getMyUid())) {
+	ClipApp.ClipEdit.show(clipId);
+      }
+    }
+  };
 
   /*ClipApp.myRecommend = function(tag){
     var uid = App.util.getMyUid();
@@ -144,7 +160,8 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:login", function(callback){
-    ClipApp.Login.show(callback);
+    // ClipApp.showLogin = function(callback){};
+    App.login = ClipApp.Login.show(callback);
   });
 
   App.vent.bind("app.clipapp.login:success", function(res, remember){
