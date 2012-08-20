@@ -131,7 +131,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   var saveFailed = function(error){
     App.vent.trigger("app.clipapp.message:confirm", error);
-    App.vent.unbind("app.clipapp.message:sure");
     App.vent.bind("app.clipapp.message:sure", function(){
       App.ClipApp.Editor.focus("editor");
     });
@@ -185,7 +184,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     if(!clip || !clip.content){
       App.viewRegion.close();
     }else{
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();

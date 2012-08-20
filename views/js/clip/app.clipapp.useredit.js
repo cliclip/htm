@@ -100,7 +100,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var address = e.currentTarget.id;
       var view = this;
       App.vent.trigger("app.clipapp.message:alert", "delemail", address);
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.bind("app.clipapp.message:sure",function(){
 	view.trigger("delEmail",address);
       });

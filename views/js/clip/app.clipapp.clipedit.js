@@ -158,7 +158,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     if(!n_content || n_content == old_content){
       App.viewRegion.close();
     }else{
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "clipedit_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.viewRegion.close();
@@ -174,7 +173,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 
   var editFailed = function(error){ // 可以弹出错误对话框，提示错误信息
     App.vent.trigger("app.clipapp.message:confirm", error);
-    App.vent.unbind("app.clipapp.message:sure");
     App.vent.bind("app.clipapp.message:sure", function(){
       App.ClipApp.Editor.focus("editor");
     });

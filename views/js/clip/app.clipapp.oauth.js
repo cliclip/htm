@@ -19,7 +19,6 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	delete res.name;
 	App.vent.trigger("app.clipapp.login:success", res);
       }else{
-	App.vent.unbind("app.clipapp.message:sure");
 	App.vent.unbind("app.clipapp.message:cancel");
 	App.vent.trigger("app.clipapp.message:alert", "oauth_fail");
 	App.vent.bind("app.clipapp.message:sure",function(){

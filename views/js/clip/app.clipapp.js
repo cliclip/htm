@@ -132,6 +132,10 @@ App.ClipApp = (function(App, Backbone, $){
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
   };
 
+  App.vent.bind("all", function(eventName){
+    console.log(eventName);
+  });
+
   App.vent.bind("app.clipapp:login", function(callback){
     ClipApp.Login.show(callback);
   });
@@ -173,7 +177,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.TwitterEdit.show();
     ClipApp.UserEdit.showPassEdit();
   });
-
 
   App.vent.bind("app.clipapp.useredit:rename", function(){
     ClipApp.UserEdit.rename();
@@ -365,6 +368,16 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:followset", function(follow){
     ClipApp.Face.followSet(follow);
+  });
+
+  App.vent.bind("app.clipapp.message:alert", function(key, value){
+    App.vent.unbind("app.clipapp.message:sure");
+    ClipApp.Message.alert(key, value);
+  });
+
+  App.vent.bind("app.clipapp.message:confirm", function(key, value){
+    App.vent.unbind("app.clipapp.message:sure");
+    ClipApp.Message.confirm(key, value);
   });
 
   App.vent.bind("app.clipapp.versions:change",function(lang){

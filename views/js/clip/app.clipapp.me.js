@@ -184,7 +184,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
   var hasname = function(){
     if(!Me.me.get("name")){
       App.vent.trigger("app.clipapp.message:alert", "no_name");
-      App.vent.unbind("app.clipapp.message:sure");
       App.vent.bind("app.clipapp.message:sure", function(){
 	App.vent.trigger("app.clipapp.useredit:show");
 	App.vent.trigger("app.clipapp.useredit:rename");

@@ -24,7 +24,6 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
       var name = $.trim($("#name_"+uid).text());
       var view = this;
       App.vent.trigger("app.clipapp.message:alert", "deloauth", name);
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.bind("app.clipapp.message:sure",function(){
 	view.trigger("delete",uid);
       });

@@ -208,7 +208,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       if(flag){
 	App.popRegion.close();
       }else{
-	App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
 	App.vent.trigger("app.clipapp.message:alert", "memo_save");
 	App.vent.bind("app.clipapp.message:sure",function(){
 	  App.popRegion.close();

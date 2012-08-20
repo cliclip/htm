@@ -67,7 +67,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
     }
   });
 
-  Message.show = function(type, message){
+  function show(type, message){
     var messageModel = new MessageModel({message:message});
     if(type == "warning"){
       var view = new WarningView({model: messageModel});
@@ -86,7 +86,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
     App.setpopRegion.close();
   };
 
-  App.vent.bind("app.clipapp.message:success", function(key, value){
+  Message.success = function(key, value){
     var message = null;
     if(typeof(key)=="string"){
       message = _i18n('message.'+key, value);
@@ -95,10 +95,10 @@ App.ClipApp.Message = (function(App, Backbone, $){
 	message = _i18n('message'+'.'+k+'.'+key[k], value);
       }
     }
-    Message.show("success", message);
-  });
+    show("success", message);
+  };
 
-  App.vent.bind("app.clipapp.message:confirm", function(key, value){
+  Message.confirm = function(key, value){
     var message = null;
     if(typeof(key)=="string"){
       message = _i18n('message.'+key, value);
@@ -107,10 +107,10 @@ App.ClipApp.Message = (function(App, Backbone, $){
 	message = _i18n('message'+'.'+k+'.'+key[k], value);
       }
     }
-    Message.show("confirm", message);
-  });
+    show("confirm", message);
+  };
 
-  App.vent.bind("app.clipapp.message:alert", function(key, value){
+  Message.alert = function(key, value){
     var message = null;
     if(typeof(key)=="string"){
       message = _i18n('warning.'+key, value);
@@ -119,8 +119,8 @@ App.ClipApp.Message = (function(App, Backbone, $){
 	message = _i18n('warning'+'.'+k+'.'+key[k], value);
       }
     }
-    Message.show("warning", message);
-  });
+    show("warning", message);
+  };
 
   return Message;
 })(App, Backbone, jQuery);
