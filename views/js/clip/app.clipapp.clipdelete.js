@@ -21,11 +21,11 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     },
     masker : function(e){
       if($(e.target).attr("class") == "masker"){
-	this.trigger("close");
+	this.trigger("closeView");
       };
     },
     cancelClick : function(e){
-      this.trigger("close");
+      this.trigger("closeView");
     }
    });
 

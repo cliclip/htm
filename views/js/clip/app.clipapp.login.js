@@ -171,6 +171,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   };
 
   Login.success = function(res, remember){
+    Login.close();
     if(remember){
       var data = new Date();
       data.setTime(data.getTime() +12*30*24*60*60*1000);
@@ -179,10 +180,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
       document.cookie = "token="+res.token;
     }
     // 用户登录成功 页面跳转
-    Login.close();
     if(typeof fun == "function"){
       fun();
-      App.vent.trigger("app.clipapp.bubb:getUserTags",res.token.split(":")[0]);
     }else{
       Backbone.history.navigate("my",true);
     }

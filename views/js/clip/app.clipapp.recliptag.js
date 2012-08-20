@@ -117,7 +117,6 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     if(!params||(params.clip.tag.length==0&&params.clip['public']!='false')){
       App.popRegion.close();
     }else{
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "reclip_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
@@ -152,7 +151,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   };
 
   //user 为用户名为cliclip 的user_id tag为新手,帮助或newbie
-  App.vent.bind("app.clipapp.reclip_tag:xinshou", function(user,tag){
+  ReclipTag.help = function(user,tag){
     var model_get = new ReclipTagModel(); //此model只用于取数据
     model_get.fetch({
       type: "GET",
@@ -184,8 +183,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	console.info(res);
       }
     });
-
-  });
+  };
 
   return ReclipTag;
 })(App, Backbone, jQuery);

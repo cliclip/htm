@@ -80,12 +80,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },
     switch_my:function(){
       App.util.current_page("my");
-      if(!(/my/.test(window.location.hash))){
-        Backbone.history.navigate("my",true);
-	App.vent.trigger("app.clipapp.face:reset",this.model.id);
-      }else{
-	Backbone.history.navigate("my",true);
-      }
+      Backbone.history.navigate("my",true);
     },/*
     switch_at_me:function(){
       App.util.current_page("@me");
@@ -98,12 +93,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },*/
     switch_expert:function(){
       App.util.current_page("interest");
-      if(!(/my/.test(window.location.hash))){
-        Backbone.history.navigate("my/interest",true);
-	App.vent.trigger("app.clipapp.face:reset",this.model.id);
-      }else{
-	Backbone.history.navigate("my/interest",true);
-      }
+      Backbone.history.navigate("my/interest",true);
     },
     showLanguage: function(e){
       $("#show_language").toggle();
@@ -194,20 +184,12 @@ App.ClipApp.Me = (function(App, Backbone, $){
   var hasname = function(){
     if(!Me.me.get("name")){
       App.vent.trigger("app.clipapp.message:alert", "no_name");
-      App.vent.unbind("app.clipapp.message:sure");
       App.vent.bind("app.clipapp.message:sure", function(){
 	App.vent.trigger("app.clipapp.useredit:show");
 	App.vent.trigger("app.clipapp.useredit:rename");
       });
     }
   };
-  App.vent.bind("app.clipapp.userbind:bindok", function(){
-    Me.me.fetch();
-  });
-
-  App.vent.bind("app.clipapp.register:success", function(){
-    Me.me.fetch();
-  });
 
   App.addInitializer(function(){
     Me.me = new MyInfoModel();

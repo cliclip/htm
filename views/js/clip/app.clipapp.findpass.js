@@ -25,9 +25,12 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
       "click #cancel"   :  "cancel",
       "click .close_w"  :  "cancel"
     },
+    initialize:function(){
+      this.bind("success", success);
+      this.bind("cancel", cancel);
+    },
     clearmsg:function(e){
       this.cleanError(e);
-      
     },
     keydownAction : function(e){
       $('#address').unbind("keydown");
@@ -43,7 +46,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
       this.model.save({address:address},{
 	type:"POST",
 	success:function(model,res){
-	  App.vent.trigger("app.clipapp.findpass:success",res.address);
+	  that.trigger("success",res.address);
 	},
 	error:function(model, res){
 	  that.showError('findpass',res);
@@ -52,7 +55,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     },
     cancel:function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.findpass:cancel");
+      this.trigger("cancel");
     }
   });
   FindPass.show=function(){
@@ -64,17 +67,18 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.findpass:success",function(address){
+  var success = function(address){
     Backbone.history.navigate("",true);
-    App.vent.trigger("app.clipapp.message:success", "go_resetpass",address);
+    App.vent.trigger("app.clipapp.message:confirm", "go_resetpass",address);
     FindPass.close();
-  });
+  };
 
-  App.vent.bind("app.clipapp.findpass:cancel",function(){
+  var cancel = function(){
     FindPass.close();
     Backbone.history.navigate("",true);
     App.vent.trigger("app.clipapp:login");
-  });
+  };
+
  //App.bind("initialize:after", function(){ FindPass.show(); });
   return FindPass;
 })(App,Backbone,jQuery);

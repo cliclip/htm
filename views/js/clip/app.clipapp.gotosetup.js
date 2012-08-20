@@ -10,29 +10,25 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
     },
     initialize : function(){
       this.flag = false;
+      this.bind("setup", setup);
     },
     go : function(e){
       e.preventDefault();
-
-      App.vent.trigger("app.clipapp.gotosetup:go");
+      this.trigger("setup");
      }
    });
 
-   GotoSetup.show = function(text){
+   GotoSetup.show = function(key, arg){
+     var text = _i18n(key, arg);
      var gotoSetupModel = new GotoSetupModel({text: text});
      var gotoSetupView = new GotoSetupView({model : gotoSetupModel});
      App.popRegion.show(gotoSetupView);
    };
 
-   App.vent.bind("app.clipapp.gotosetup:show", function(key, email){
-     var message = _i18n(key, email);
-     GotoSetup.show(message);
-   });
-
-  App.vent.bind("app.clipapp.gotosetup:go", function(){
+  var setup = function(){
     App.popRegion.close();
     App.vent.trigger("app.clipapp.useredit:show");
-  });
+  };
 
   return  GotoSetup;
 })(App, Backbone, jQuery);

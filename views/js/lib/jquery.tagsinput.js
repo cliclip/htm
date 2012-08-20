@@ -262,7 +262,7 @@
 	  });
 	  setTimeout(function(){
 	    if(sflag){
-	      App.vent.trigger("app.clipapp:taglist.close");
+	      App.vent.trigger("app.clipapp.taglist:close");
 	      $(".taglistDiv").hide();
 	    }
 	  },200);

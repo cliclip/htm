@@ -7,6 +7,14 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
+    var now =new Date().getTime();
+    var page_load_time=now-window.performance.timing.fetchStart;
+    var hourInMillis = 1000 * 60 * 60;
+    if(0 < page_load_time && page_load_time < hourInMillis){ // avoid sending bad data
+      _gaq.push(['_trackTiming', 'Home_page',"Load Home_page",page_load_time]);
+    }
+    _gaq.push(['_trackPageview', '/']);
+    _gaq.push(['_trackPageLoadTime']);
   };
 
   ClipApp.siteQuery = function(word, tag){
@@ -132,18 +140,35 @@ App.ClipApp = (function(App, Backbone, $){
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
   };
 
+  App.vent.bind("all", function(eventName){
+    console.log(eventName);
+  });
+
   App.vent.bind("app.clipapp:login", function(callback){
     ClipApp.Login.show(callback);
   });
 
-
   App.vent.bind("app.clipapp.login:success", function(res, remember){
     ClipApp.Login.success(res, remember);
     ClipApp.Me.me.fetch();
+    ClipApp.Bubb.getUserTags(res.token.split(":")[0]);
   });
 
   App.vent.bind("app.clipapp:register", function(){
     ClipApp.Register.show();
+  });
+
+  App.vent.bind("app.clipapp.register:success", function(key, res){
+    ClipApp.Register.success(key, res);
+    ClipApp.Me.me.fetch();
+    if(key == "register_success"){ // invite的情况不需要触发gotosetup
+      ClipApp.GotoSetup.show(key, res.email);
+    }
+    if(/language=en/.test(document.cookie)){ //cliclip的uid为72
+      ReclipTag.help(72,["helper","newbie"]);
+    }else{
+      ReclipTag.help(72,["帮助","新手"]);
+    }
   });
 
   App.vent.bind("app.clipapp:logout", function(){
@@ -161,9 +186,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.UserEdit.showPassEdit();
   });
 
-
   App.vent.bind("app.clipapp.useredit:rename", function(){
     ClipApp.UserEdit.rename();
+  });
+
+  App.vent.bind("app.clipapp.userbind:show",function(oauth,fun,remember){
+    UserBind.show(oauth, fun, remember);
   });
 
   App.vent.bind("app.clipapp.face:reset", function(){
@@ -307,11 +335,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Bubb.showUserTags(uid);
   });
 
-  App.vent.bind("app.clipapp.bubb:getUserTags", function(uid){
-    ClipApp.Bubb.getUserTags(uid);
-    ClipApp.Me.me.fetch();
-  });
-
   App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
     ClipApp.Bubb.refresh(uid, follow, new_tags);
   });
@@ -353,6 +376,16 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:followset", function(follow){
     ClipApp.Face.followSet(follow);
+  });
+
+  App.vent.bind("app.clipapp.message:alert", function(key, value){
+    App.vent.unbind("app.clipapp.message:sure");
+    ClipApp.Message.alert(key, value);
+  });
+
+  App.vent.bind("app.clipapp.message:confirm", function(key, value){
+    App.vent.unbind("app.clipapp.message:sure");
+    ClipApp.Message.confirm(key, value);
   });
 
   App.vent.bind("app.clipapp.versions:change",function(lang){
