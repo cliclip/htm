@@ -66,7 +66,8 @@ App.versions = (function($){
 	following   : "ta追谁",
 	follow      : "谁追ta",
 	mysearch    : "搜我的摘录",
-	search      : "搜ta的摘录"
+	search      : "搜ta的摘录",
+	tsearch      : "搜索"
       },
 
       bubb : {
@@ -540,7 +541,8 @@ App.versions = (function($){
 	following   : "Following",
 	follow      : "Followed by",
 	mysearch    : "search my clip",
-	search      : "search his clip"
+	search      : "search his clip",
+	tsearch     : "Search"
       },
 
       bubb : {
