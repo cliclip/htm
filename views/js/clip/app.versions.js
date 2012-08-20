@@ -132,7 +132,8 @@ App.versions = (function($){
 
       emailEdit : {
 	title       : "邮件摘录",
-	add         : "增加邮箱"
+	add         : "增加邮箱",
+	del         : "删除"
       },
 
       emailAdd : {
@@ -605,7 +606,8 @@ App.versions = (function($){
 
       emailEdit : {
 	add         : "Add",
-	title       : "Recognized emails"
+	title       : "Recognized emails",
+	del         : "Delete"
       },
 
       emailAdd : {
