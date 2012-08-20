@@ -388,6 +388,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Message.confirm(key, value);
   });
 
+  App.vent.bind("app.clipapp.message:success", function(key, value){
+    ClipApp.Message.success(key, value);
+  });
+
   App.vent.bind("app.clipapp.versions:change",function(lang){
     App.versions.setLanguage(lang);
   });
