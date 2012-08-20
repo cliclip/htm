@@ -195,7 +195,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
-      if(uid == my){
+      if(uid == my){ // 触发mytag:update事件
 	App.vent.trigger("app.clipapp.taglist:mytag",bubb.tag);
       }else if(my){
 	App.vent.trigger("app.clipapp:followset", bubb.follow);

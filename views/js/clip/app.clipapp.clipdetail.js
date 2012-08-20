@@ -29,7 +29,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       this.flag = true;
       this.bind("comment", detailComment);
       this.bind("closeView", detailClose);
-      this.bind("resetUrl", resetUrl);
     },
     Operate: function(e){
       e.preventDefault();
@@ -50,7 +49,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'modify':
-	  this.trigger("resetUrl", hist, offset);
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
@@ -64,18 +62,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     Close: function(e){
       this.trigger("closeView");
     },
-    editDetail:function(e){
-      e.preventDefault();
-      var self = App.util.getMyUid();
-      if(!self){
-	App.vent.trigger("app.clipapp:login");
-      }else{
-	if(self == this.model.get("user")){
-	  var cid = this.model.id;
-	  this.trigger("resetUrl", hist, offset);
-	  App.vent.trigger("app.clipapp:clipedit", cid);
-	}
-      }
+    editDetial: function(e){
+      this.trigger("closeView");
+      App.ClipApp.showEditClip(this.model.id);
     }
   });
 
@@ -335,7 +324,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       ClipDetail.addCommRegion.close();
     }
     App.popRegion.close();
-    App.viewRegion.currentView.trigger("resetUrl", hist, offset);
+    resetUrl(hist, offset);
     App.viewRegion.close();
     mid = null;
   };

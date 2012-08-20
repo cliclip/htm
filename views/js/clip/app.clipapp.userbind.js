@@ -1,6 +1,7 @@
 App.ClipApp.UserBind = (function(App, Backbone, $){
 
   var UserBind = {};
+  var P = App.ClipApp.Url.base;
   App.Model.UserBindModel = App.Model.extend({
     url:function(){
       var my = App.util.getMyUid();
