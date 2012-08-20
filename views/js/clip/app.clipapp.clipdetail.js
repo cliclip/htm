@@ -49,6 +49,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'modify':
+	  this.trigger("closeView");
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
@@ -62,7 +63,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     Close: function(e){
       this.trigger("closeView");
     },
-    editDetial: function(e){
+    editDetail: function(e){
       this.trigger("closeView");
       App.ClipApp.showEditClip(this.model.id);
     }
