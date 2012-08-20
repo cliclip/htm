@@ -57,7 +57,6 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
 	error:function(model,res){
 	  if(res.link){
 	    App.vent.trigger("app.clipapp.message:confirm",res);
-	    App.vent.unbind("app.clipapp.message:sure");
 	    App.vent.bind("app.clipapp.message:sure",function(){
 	      ResetPass.close();
 	      Backbone.history.navigate("",true);

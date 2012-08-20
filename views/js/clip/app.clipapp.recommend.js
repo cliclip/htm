@@ -273,7 +273,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       mid = null;
       uid = null;
     }else{
-      App.vent.unbind("app.clipapp.message:sure");// 解决请求多次的问题
       App.vent.trigger("app.clipapp.message:alert", "recommend_save");
       App.vent.bind("app.clipapp.message:sure",function(){
 	App.popRegion.close();
