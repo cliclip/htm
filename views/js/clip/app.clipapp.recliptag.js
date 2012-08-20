@@ -152,7 +152,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   };
 
   //user 为用户名为cliclip 的user_id tag为新手,帮助或newbie
-  App.vent.bind("app.clipapp.reclip_tag:xinshou", function(user,tag){
+  ReclipTag.help = function(user,tag){
     var model_get = new ReclipTagModel(); //此model只用于取数据
     model_get.fetch({
       type: "GET",
@@ -184,8 +184,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	console.info(res);
       }
     });
-
-  });
+  };
 
   return ReclipTag;
 })(App, Backbone, jQuery);
