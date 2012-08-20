@@ -40,9 +40,9 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp.userbind:ok",function(){
+  /*App.vent.bind("app.clipapp.userbind:ok",function(){
     WeiboEdit.show();
-  });
+  });*/
 
   var delWeibo = function(uid){
     var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid});
