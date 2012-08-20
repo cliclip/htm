@@ -144,9 +144,10 @@ App.Routing = (function(App, Backbone){
   Routing.showRoute = function(){
     var route = getRoutePath(arguments);
     Backbone.history.navigate(route, false);
+    _gaq.push(['_trackPageview', "/#"+route]);
+    _gaq.push(['_trackPageLoadTime']);
   };
   function getRoutePath(routeParts){
-    //console.info(routeParts);
     var base = routeParts[0];
     var length = routeParts.length;
     var route = base;

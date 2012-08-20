@@ -7,6 +7,14 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
+    var now =new Date().getTime();
+    var page_load_time=now-window.performance.timing.fetchStart;
+    var hourInMillis = 1000 * 60 * 60;
+    if(0 < page_load_time && page_load_time < hourInMillis){ // avoid sending bad data
+      _gaq.push(['_trackTiming', 'Home_page',"Load Home_page",page_load_time]);
+    }
+    _gaq.push(['_trackPageview', '/']);
+    _gaq.push(['_trackPageLoadTime']);
   };
 
   ClipApp.siteQuery = function(word, tag){

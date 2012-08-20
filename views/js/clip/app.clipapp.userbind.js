@@ -175,7 +175,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 
  // TEST
 
-    App.bind("initialize:after", function(){ UserBind.show({info:"ll",provider:"dd"}); });
+   // App.bind("initialize:after", function(){ UserBind.show({info:"ll",provider:"dd"}); });
 
  return UserBind;
 })(App, Backbone, jQuery);
