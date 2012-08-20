@@ -256,16 +256,22 @@
 	});
 
 	$(data.fake_input).bind('blur',data,function(event) {
+	  var sflag = true;
+	  $(".taglistDiv").scroll(function(){
+	    sflag = false;
+	  });
 	  setTimeout(function(){
-	    App.vent.trigger("app.clipapp.taglist:close");
-	    $(".taglistDiv").hide();
+	    if(sflag){
+	      App.vent.trigger("app.clipapp.taglist:close");
+	      $(".taglistDiv").hide();
+	    }
 	  },200);
 	});
 
 	App.vent.unbind("app.clipapp.taglist:gettag");// 解决请求多次的问题
 	App.vent.bind("app.clipapp.taglist:gettag",function(tag){
 	  if(tag){
-	    $(data.real_input).addTag(tag,{focus:true,unique:(settings.unique)});
+	    $(data.real_input).addTag(tag,{focus:false,unique:(settings.unique)});
 	  }
 	});
 
