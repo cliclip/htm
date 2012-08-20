@@ -136,14 +136,27 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Login.show(callback);
   });
 
-
   App.vent.bind("app.clipapp.login:success", function(res, remember){
     ClipApp.Login.success(res, remember);
     ClipApp.Me.me.fetch();
+    ClipApp.Bubb.getUserTags(res.token.split(":")[0]);
   });
 
   App.vent.bind("app.clipapp:register", function(){
     ClipApp.Register.show();
+  });
+
+  App.vent.bind("app.clipapp.register:success", function(key, res){
+    ClipApp.Register.success(key, res);
+    ClipApp.Me.me.fetch();
+    if(key == "register_success"){ // invite的情况不需要触发gotosetup
+      ClipApp.GotoSetup.show(key, res.email);
+    }
+    if(/language=en/.test(document.cookie)){ //cliclip的uid为72
+      ReclipTag.help(72,["helper","newbie"]);
+    }else{
+      ReclipTag.help(72,["帮助","新手"]);
+    }
   });
 
   App.vent.bind("app.clipapp:logout", function(){
@@ -164,6 +177,10 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.useredit:rename", function(){
     ClipApp.UserEdit.rename();
+  });
+
+  App.vent.bind("app.clipapp.userbind:show",function(oauth,fun,remember){
+    UserBind.show(oauth, fun, remember);
   });
 
   App.vent.bind("app.clipapp.face:reset", function(){
@@ -305,11 +322,6 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
     ClipApp.Bubb.showUserTags(uid);
-  });
-
-  App.vent.bind("app.clipapp.bubb:getUserTags", function(uid){
-    ClipApp.Bubb.getUserTags(uid);
-    ClipApp.Me.me.fetch();
   });
 
   App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
