@@ -21,6 +21,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     },
     initialize: function(){
       this.flag = false;
+      this.bind("submit", reclipSave);
+      this.bind("closeView", close);
     },
     maintagAction:function(e){
       $(e.currentTarget).toggleClass("white_48");
@@ -44,12 +46,11 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
       if($(".error").length == 0){
-	App.vent.trigger("app.clipapp.reclip:@submit", params,mid);
+	this.trigger("submit", params,mid);
       }else{
 	$(e.currentTarget).attr("disabled",false);
       }
     },
-
     shortcut_submit : function(e){
       if(e.ctrlKey&&e.keyCode==13){
 	$("#submit").click();
@@ -58,19 +59,17 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
 	return true;
       }
     },
-
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
 	this.cancel(e);
       }
     },
-
     cancel : function(e){
       e.preventDefault();
       var params = loadData(this.$el);
       params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
-      App.vent.trigger("app.clipapp.reclip:@close",params,mid);
+      this.trigger("closeView",params,mid);
     }
   });
 
@@ -138,7 +137,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       success: function(model, res){
 	App.vent.trigger("app.clipapp.message:success", {reclip:"success"});
 	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
-	App.vent.trigger("app.clipapp.taglist:taglistRefresh",params.clip.tag);
+	App.vent.trigger("app.clipapp.taglist:mytag",params.clip.tag);
 	Reclip.close();
       },
       error:function(model, res){
@@ -148,17 +147,14 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     });
   }
 
-  App.vent.bind("app.clipapp.reclip:@submit", function(params,mid){
-    reclipSave(params,mid);
-  });
 
   App.vent.bind("app.clipapp.reclip:sync", function(params,mid){
     reclipSave(params,mid);
   });
 
-  App.vent.bind("app.clipapp.reclip:@close",function(params,mid){
+  var close = function(params,mid){
     Reclip.close(params,mid);
-  });
+  };
 
    // TEST
    // App.bind("initialize:after", function(){ Reclip.show("1:1"); });

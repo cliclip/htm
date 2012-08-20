@@ -45,6 +45,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "mouseout  .lang-list": "MouseOut",
       "click .lang-list" : "ChangeLang"
     },
+    initialize: function(){
+      this.bind("hasname", hasname);
+    },
     showMysetup: function(){
       $("#show_mysetup").toggle(); // css("display","block");
     },
@@ -159,17 +162,17 @@ App.ClipApp.Me = (function(App, Backbone, $){
       $("." + opt).css({"z-index":0});
     }*/
   });
+
   Me.show = function(){
+    var meView = null;
     if(!App.util.getMyUid()){
-      var meView = new View();
+      meView = new View();
       App.mineRegion.show(meView);
     }
     Me.me.onChange(function(meModel){
-      App.vent.trigger("app.clipapp.me:@hasname");
-      //console.info("onChange :: "+Me.me.get("id"));
-      var meView = new View({
-	model: meModel
-      });
+      // console.info("onChange :: "+Me.me.get("id"));
+      meView = new View({ model: meModel });
+      meView.trigger("hasname");
       if(meModel.get("lang")){
 	App.vent.trigger("app.clipapp.versions:change",meModel.get("lang"));
       }
@@ -188,7 +191,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp.me:@hasname", function(){
+  var hasname = function(){
     if(!Me.me.get("name")){
       App.vent.trigger("app.clipapp.message:alert", "no_name");
       App.vent.unbind("app.clipapp.message:sure");
@@ -197,20 +200,12 @@ App.ClipApp.Me = (function(App, Backbone, $){
 	App.vent.trigger("app.clipapp.useredit:rename");
       });
     }
-  });
+  };
   App.vent.bind("app.clipapp.userbind:bindok", function(){
     Me.me.fetch();
   });
 
-  App.vent.bind("app.clipapp.login:success", function(){
-    Me.me.fetch();
-  });
-
   App.vent.bind("app.clipapp.register:success", function(){
-    Me.me.fetch();
-  });
-
-  App.vent.bind("app.clipapp.face:reset", function(){
     Me.me.fetch();
   });
 

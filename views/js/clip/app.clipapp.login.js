@@ -39,6 +39,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
       this.flag = false;
+      this.bind("cancel", cancel);
     },
     blurName: function(e){
       var that = this;
@@ -68,7 +69,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     gotoRegister:function(e){
       e.preventDefault();
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
       App.vent.trigger("app.clipapp:register");
     },
     loginAction : function(e){
@@ -104,18 +105,18 @@ App.ClipApp.Login = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.clipper:cancel");
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
     },
     openWeibo : function(e){
       var remember = false;
       if($("#remember").attr("checked")){
 	remember = true;
       }
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
       window.location.href="/oauth/req/weibo";
     },
     openTwitter : function(e){
-      App.vent.trigger("app.clipapp.login:@cancel");
+      this.trigger("cancel");
       window.location.href="/oauth/req/twitter";
     }
   });
@@ -169,7 +170,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  App.vent.bind("app.clipapp.login:success", function(res, remember){
+  Login.success = function(res, remember){
     if(remember){
       var data = new Date();
       data.setTime(data.getTime() +12*30*24*60*60*1000);
@@ -180,16 +181,16 @@ App.ClipApp.Login = (function(App, Backbone, $){
     // 用户登录成功 页面跳转
     Login.close();
     if(typeof fun == "function"){
-      App.vent.trigger("app.clipapp.bubb:getusertags",res.token.split(":")[0]);
       fun();
+      App.vent.trigger("app.clipapp.bubb:getUserTags",res.token.split(":")[0]);
     }else{
       Backbone.history.navigate("my",true);
     }
-  });
+  };
 
-  App.vent.bind("app.clipapp.login:@cancel", function(){
+  var cancel = function(){
     Login.close();
-  });
+  };
 
  // TEST
 

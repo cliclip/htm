@@ -27,6 +27,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     },
     clearmsg:function(e){
       this.cleanError(e);
+      
     },
     keydownAction : function(e){
       $('#address').unbind("keydown");
@@ -37,7 +38,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     },
     submit:function(e){
       e.preventDefault();
-      that = this;
+      var that = this;
       var address = this.$("#address").val();
       this.model.save({address:address},{
 	type:"POST",

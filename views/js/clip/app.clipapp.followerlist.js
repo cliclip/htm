@@ -82,7 +82,6 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       setTimeout(function(){//IE8兼容性问题marionate也作了更改
    	if(flag) $(".empty_user").css("display","none");
       },0);
-      App.vent.trigger("app.clipapp:showpage");
     });
   };
 
@@ -103,7 +102,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:nextpage",function(){
+  FollowerList.nextpage = function(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="follow-item"&&new_page){
@@ -130,7 +129,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
 	}
       });
     }
-  });
+  };
 
   return FollowerList;
 })(App,Backbone,jQuery);

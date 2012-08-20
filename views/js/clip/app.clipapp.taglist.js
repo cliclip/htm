@@ -16,7 +16,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     events:{
       "click .li-list"          :  "getTagAction",
       "mouseover .li-list"      :  "MouseOver",
-      "mouseout  .li-list"       :  "MouseOut"
+      "mouseout  .li-list"      :  "MouseOut"
     },
     getTagAction:function(e){
       var id=e.target.id;
@@ -35,56 +35,48 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     }
   });
 
-
   var TagList = {};
-  var myTag = App.util.getObjTags();
-  TagList.myTag = myTag;
-  TagList.show = function(tags,str){
+  var bubs = App.util.getBubbs();
+  var baseTag = App.util.getObjTags();
+
+  TagList.show = function(str){
     TagList.tagListRegion = new App.Region({el:".taglistDiv"});
-    var obj_tags = [];
-    var obj_tag = _.difference(TagList.myTag,tags);
+    var myTags = [];
+    var tags = _.compact($("#obj_tag").val().split(","));
+    var obj_tag = _.difference(baseTag, tags);
     if(str){
       var len = str.length;
       _(obj_tag).each(function(tag){
 	if(tag.substring(0,len) == str){
-	  obj_tags.push(tag);
+	  myTags.push(tag);
 	}
       });
     }else{
-      obj_tags = obj_tag;
+      myTags = obj_tag;
     }
-    var model = new TagListModel({taglist:obj_tags});
+    var model = new TagListModel({taglist:myTags});
     var view = new TagListView({model:model});
     TagList.tagListRegion.show(view);
   };
 
-  App.vent.bind("app.clipapp.bubb:mytag",function(tags){
-    TagList.myTag  = _.difference(_.union(tags,myTag),App.util.getBubbs());
-  });
+  TagList.setbaseTag = function(tags){
+    baseTag = _.difference(_.union(tags,baseTag), bubs);
+  };
 
-  App.vent.bind("app.tagsinput:taglist",function(str){
-    var obj_tag = _.compact($("#obj_tag").val().split(","));
-    TagList.show(obj_tag,str);
-  });
-
-  App.vent.bind("app.clipapp.taglist:close",function(){
+  TagList.close = function(){
     if(TagList.tagListRegion){
       TagList.tagListRegion.close();
     }
-  });
+  };
 
-  App.vent.bind("app.clipapp.taglist:taglistRefresh",function(tags){
-    if(tags){
-      TagList.myTag  = _.difference(_.union(tags,TagList.myTag),App.util.getBubbs());
-    }
-  });
 
   App.bind("initialize:after", function(){
-    if(App.util.getMyUid()){
-      var tagModel =  new TagListModel({id:App.util.getMyUid()});
+    var my = App.util.getMyUid();
+    if(my){
+      var tagModel =  new TagListModel({id: my});
       tagModel.fetch();
       tagModel.onChange(function(model){
-	TagList.myTag = _.difference(_.union(model.get("tag"),TagList.myTag),App.util.getBubbs());
+	baseTag = _.difference(_.union(model.get("tag"), baseTag), bubs);
       });
     }
   });
