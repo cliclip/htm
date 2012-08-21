@@ -1,5 +1,6 @@
 window._gaq = [];
-_gaq.push(['_setAccount', 'UA-34124176-1']);
+_gaq.push(['_setAccount', 'UA-34226123-1']);
+_gaq.push(['_setDomainName', 'cliclip.com']);
 _gaq.push(['_addOrganic', 'google', 'as_q']);
 _gaq.push(['_addOrganic', 'baidu', 'word']);
 _gaq.push(['_addOrganic', 'baidu', 'w']);
