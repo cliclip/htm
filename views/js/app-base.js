@@ -8,6 +8,7 @@ App.Model = Backbone.Model.extend({
     Backbone.Model.prototype.constructor.apply(this, args);
     this.onChangeCallbacks = new Backbone.Marionette.Callbacks();
     this.on("change", this.runOnChangeCallbacks, this);
+    this.on("alert", this.alert);
   },
   onChange: function(callback){
     // console.info(callback);
@@ -15,6 +16,17 @@ App.Model = Backbone.Model.extend({
   },
   runOnChangeCallbacks: function(){
     this.onChangeCallbacks.run(this, this);
+  },
+  alert: function(msg){
+    if(msg.auth == "no_name"){
+      App.vent.trigger("app.clipapp.message:alert", msg);
+      App.vent.bind("app.clipapp.message:sure", function(){
+	App.vent.trigger("app.clipapp.useredit:show");
+	App.vent.trigger("app.clipapp.useredit:rename");
+      });
+    }else if(msg.auth == "not_login" || msg.auth == "not_self"){
+      App.vent.trigger("app.clipapp:login");
+    }
   },
   // override to parse [0, res] | [1, err] structure
   sync: function(method, model, options){
@@ -26,7 +38,7 @@ App.Model = Backbone.Model.extend({
 	if(success) success.apply(model, [resp[1], status, xhr]);
       } else {
 	if("auth" in resp[1]){
-	  Backbone.Events.trigger("alert", resp[1]);
+	  model.trigger("alert", resp[1]);
 	}else{
 	  if(error) error.apply(model, [resp[1], status, xhr]);
 	}
@@ -264,18 +276,6 @@ App.bind("initialize:after", function(){
 	  time_gap = true;
 	},500);
       }
-    }
-  });
-
-  Backbone.Events.on("alert", function(msg){
-    if(msg.auth == "no_name"){
-      App.vent.trigger("app.clipapp.message:alert", msg);
-      App.vent.bind("app.clipapp.message:sure", function(){
-	App.vent.trigger("app.clipapp.useredit:show");
-	App.vent.trigger("app.clipapp.useredit:rename");
-      });
-    }else if(msg.auth == "not_login" || msg.auth == "not_self"){
-      App.vent.trigger("app.clipapp:login");
     }
   });
 
