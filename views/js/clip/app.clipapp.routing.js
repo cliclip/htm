@@ -110,10 +110,6 @@ App.Routing.ClipRouting = (function(App, Backbone){
       }
     });
 
-    ClipRouting.router.bind("app.clipapp.routing:myquery",function(word){
-      if($.browser.safari){word = encodeURI(word);}
-    });
-
     ClipRouting.router.bind("app.clipapp.routing:interest",function(tag){
       if(tag){
 	if($.browser.safari){tag = encodeURI(tag);}
