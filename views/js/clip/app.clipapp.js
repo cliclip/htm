@@ -124,7 +124,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.showEditClip = function(clipId){
     if(!isLoggedIn()){
-      showLogin();
+      ClipApp.showLogin();
     }else{
       if (ClipApp.isOwner(clipId.split(":")[0], App.util.getMyUid())) {
 	ClipApp.ClipEdit.show(clipId);
@@ -156,13 +156,16 @@ App.ClipApp = (function(App, Backbone, $){
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
   };
 
+  ClipApp.showLogin = function(callback){
+    ClipApp.Login.show(callback);
+  };
+
   App.vent.bind("all", function(eventName){
     console.log(eventName);
   });
 
   App.vent.bind("app.clipapp:login", function(callback){
-    // ClipApp.showLogin = function(callback){};
-    App.login = ClipApp.Login.show(callback);
+    ClipApp.Login.show(callback);
   });
 
   App.vent.bind("app.clipapp.login:success", function(res, remember){
