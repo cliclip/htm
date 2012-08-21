@@ -6,7 +6,7 @@ App.ClipApp = (function(App, Backbone, $){
     return App.util.getMyUid() != null ? true : false;
   };
 
-  function isOwner(uid1, uid2){
+  ClipApp.isOwner = function(uid1, uid2){
     return uid1 == uid2;
   };
 
@@ -121,11 +121,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
+
   ClipApp.showEditClip = function(clipId){
     if(!isLoggedIn()){
       showLogin();
     }else{
-      if (isOwner(clipId.split(":")[0], App.util.getMyUid())) {
+      if (ClipApp.isOwner(clipId.split(":")[0], App.util.getMyUid())) {
 	ClipApp.ClipEdit.show(clipId);
       }
     }

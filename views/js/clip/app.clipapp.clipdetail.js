@@ -64,8 +64,11 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       this.trigger("closeView");
     },
     editDetail: function(e){
-      this.trigger("closeView");
-      App.ClipApp.showEditClip(this.model.id);
+      var clipId = this.model.id;
+      if (App.ClipApp.isOwner(clipId.split(":")[0], App.util.getMyUid())) {
+	this.trigger("closeView"); // 如果是自己的才要关闭detail
+      }
+      App.ClipApp.showEditClip(clipId);
     }
   });
 
