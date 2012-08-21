@@ -2,7 +2,7 @@
 
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
-  function isLoggedIn(){
+  ClipApp.isLoggedIn = function(){
     return App.util.getMyUid() != null ? true : false;
   };
 
@@ -115,16 +115,6 @@ App.ClipApp = (function(App, Backbone, $){
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
 
-  ClipApp.showEditClip = function(clipId){
-    if(!isLoggedIn()){
-      ClipApp.showLogin();
-    }else{
-      if (ClipApp.isOwner(clipId.split(":")[0], App.util.getMyUid())) {
-	ClipApp.ClipEdit.show(clipId);
-      }
-    }
-  };
-
   /*ClipApp.myRecommend = function(tag){
     var uid = App.util.getMyUid();
     ClipApp.Face.show(uid);
@@ -149,8 +139,38 @@ App.ClipApp = (function(App, Backbone, $){
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
   };
 
+
   ClipApp.showLogin = function(callback){
     ClipApp.Login.show(callback);
+  };
+
+  // 对于那些直接点击修改按钮的部分，有些多余
+  ClipApp.showEditClip = function(clipId){
+    if(!ClipApp.isLoggedIn()){
+      ClipApp.showLogin();
+    }else{
+      if (ClipApp.isOwner(clipId.split(":")[0], App.util.getMyUid())) {
+	if(/clip\/([0-9]+)\/([0-9]+)/.test(Backbone.history.fragment))
+	  ClipApp.ClipDetail.close();
+	ClipApp.ClipEdit.show(clipId);
+      }
+    }
+  };
+
+  ClipApp.showSuccess = function(key, value){
+    ClipApp.Message.success(key, value);
+  };
+
+  ClipApp.showAlert = function(key, value, fun){
+    ClipApp.Message.alert(key, value);
+    if(typeof(fun) == "function"){
+      App.vent.unbind("app.clipapp.message:sure");
+      App.vent.bind("app.clipapp.message:sure", fun);
+    }
+  };
+
+  ClipApp.showConfirm = function(key, value){
+    ClipApp.Message.confirm(key, value);
   };
 
   App.vent.bind("all", function(eventName){
@@ -316,10 +336,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipMemo.show(cid);
   });
 
-  App.vent.bind("app.clipapp:clipedit", function(clipid){
-    ClipApp.ClipEdit.show(clipid);
-  });
-
   App.vent.bind("app.clipapp:clipadd", function(){
     var uid = App.util.getMyUid(); // 当前登录用户
     if(!uid){
@@ -369,8 +385,12 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   // 更新转载和评论次数
-  App.vent.bind("app.clipapp.cliplist:refresh",function(args){
-    ClipApp.ClipList.refresh(args);
+  App.vent.bind("app.clipapp.comment:success", function(args){
+    ClipList.refresh(args);
+  });
+
+  App.vent.bind("app.clipapp.reclip:success", function(args){
+    ClipList.refresh(args);
   });
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
