@@ -69,8 +69,9 @@ App.Routing.ClipRouting = (function(App, Backbone){
       if(tag){
 	if($.browser.safari){tag = encodeURI(tag);}
 	App.Routing.showRoute("tag", tag);
+      }else{
+	App.Routing.showRoute("");
       }
-      App.Routing.showRoute("");
     });
 
     ClipRouting.router.bind("app.clipapp.routing:usershow", function(uid, tag){

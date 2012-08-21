@@ -14,6 +14,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:siteshow",tag);
     App.vent.trigger("app.clipapp.ga:track_homepage");
   };
 

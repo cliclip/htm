@@ -127,7 +127,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.get("cid");
       var id = e.target.id;
       App.vent.trigger("app.clipapp.message:alert", "del_comment");
-      App.vent.trigger("app.clipapp.message:sure",function(){
+      App.vent.bind("app.clipapp.message:sure",function(){
 	view.trigger("delComment", cid, id);
       });
     },
