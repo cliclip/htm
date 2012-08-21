@@ -192,8 +192,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == "" ? _i18n('comment.defaultText') : text);
     },
-    /*
-    maintagAction:function(e){
+    /*maintagAction:function(e){
       $("#comm_text").focus();
       var id = e.target.id;
       $(e.currentTarget).toggleClass("original");
@@ -210,8 +209,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	this.tag_list = _.without(this.tag_list,$("#"+id).val());
 	$("#comm_text").val(_.without($("#comm_text").val().split(","),$("#"+id).val()));
       }
-    },
-     */
+    },*/
     comment : function(e){
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
@@ -281,6 +279,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   function showAddComm (cid, focus){
+    regionClose("replyCommRegion"); // 关闭回复评论框
     var model = new App.Model.CommentModel({cid: cid});
     var addCommView = new AddCommView({model: model});
     ClipDetail.addCommRegion = new App.Region({el:".input_textarea"});
@@ -289,21 +288,28 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
-  var detailComment = function(cid){
-    // 当点击clipdetail的评时
-    if(!App.ClipApp.isLoggedIn()){ // 已经登录
-      regionClose("replyCommRegion");
-      showAddComm(cid, true);
-    }else{
+  var detailClose = function(){
+    ClipDetail.close();
+  };
+
+  var detailComment = function(cid){ // 当点击clipdetail的评时
+    if(!App.ClipApp.isLoggedIn()){
       App.ClipApp.showLogin(function(){
-	regionClose("replyCommRegion");
 	showAddComm(cid, true);
       });
+    }else{
+      showAddComm(cid, true);
     }
   };
 
-  var detailClose = function(){
-    ClipDetail.close();
+  var showReply = function(cid, pid){
+    if(!App.ClipApp.isLoggedIn()){
+      App.ClipApp.showLogin(function(){
+	showReplyComm(cid, pid);
+      });
+    }else{
+      showReplyComm(cid, pid);
+    }
   };
 
   var delComment = function(cid, comm_id){
@@ -311,6 +317,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     model.destroy({
       success:function(model, res){ // 删除评论成功，重新加载comment
 	showComment(cid);
+	showAddComm(cid);
       },
       error:function(model, res){}
     });
@@ -323,16 +330,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       $(document.body).scrollTop(offset);
     }else{
       $(window).scrollTop(offset);
-    }
-  };
-
-  var showReply = function(cid, pid){
-    if(!App.ClipApp.isLoggedIn()){
-      App.ClipApp.showLogin(function(){
-	showReplyComm(cid, pid);
-      });
-    }else{
-      showReplyComm(cid, pid);
     }
   };
 

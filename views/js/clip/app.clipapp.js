@@ -386,11 +386,11 @@ App.ClipApp = (function(App, Backbone, $){
 
   // 更新转载和评论次数
   App.vent.bind("app.clipapp.comment:success", function(args){
-    ClipList.refresh(args);
+    ClipApp.ClipList.refresh(args);
   });
 
   App.vent.bind("app.clipapp.reclip:success", function(args){
-    ClipList.refresh(args);
+    ClipApp.ClipList.refresh(args);
   });
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
