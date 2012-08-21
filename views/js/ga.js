@@ -1,6 +1,5 @@
 window._gaq = [];
 _gaq.push(['_setAccount', 'UA-34124176-1']);
-_gaq.push(['_trackPageview']);
 _gaq.push(['_addOrganic', 'google', 'as_q']);
 _gaq.push(['_addOrganic', 'baidu', 'word']);
 _gaq.push(['_addOrganic', 'baidu', 'w']);
@@ -31,6 +30,6 @@ _gaq.push(['_addOrganic', 'sogou', 'query']);
       _gaq.push(['_trackTiming', '/#', "Load Home_page", page_load_time]);
     }
   });
-  
+
 })(App, Backbone, jQuery);
 */

@@ -51,7 +51,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
 	TwitterEdit.show();
       },
       error: function(model, res){
-	console.info(res);
+	App.vent.trigger("app.clipapp.message:alert","del_oauth_fail");
       }
     });
   };
