@@ -293,7 +293,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     ClipDetail.addCommRegion.show(addCommView);
     $(".cancel").css("display","none");
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
-
   };
 
   ClipDetail.show = function(cid,model_id,recommend){ // cid等于detailModel.id
@@ -358,6 +357,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(model, res){
 	// 删除评论成功，重新加载comment
 	showComment(cid);
+	showAddComm(cid);
       },
       error:function(model, res){}
     });
