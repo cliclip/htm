@@ -135,7 +135,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	App.vent.trigger("app.clipapp.message:success", {reclip:"success"});
-	App.vent.trigger("app.clipapp.cliplist:refresh",{type:"reclip",model_id:mid});
+	App.vent.trigger("app.clipapp.reclip:success", {type:"reclip",model_id:mid});
 	App.vent.trigger("app.clipapp.taglist:mytag",params.clip.tag);
 	Reclip.close();
       },

@@ -117,7 +117,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'note'://注
 	  App.vent.trigger("app.clipapp:clipmemo",cid);break;
 	case 'modify'://改
-	  App.vent.trigger("app.clipapp:clipedit",cid);break;
+	  App.ClipApp.showEditClip(cid); break;
 	case 'del'://删
 	  App.vent.trigger("app.clipapp:clipdelete",cid);break;
       }

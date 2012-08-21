@@ -2,7 +2,7 @@
 App.ClipApp.Comment = (function(App, Backbone, $){
   var number_limit =  140;
   var P = App.ClipApp.Url.base;
-			 
+
   // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
     url:function(){
@@ -88,9 +88,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	  }*/
-	  App.vent.trigger("app.clipapp.cliplist:refresh",{type:"comment",pid:params.pid,model_id:mid});
-	  App.vent.trigger("app.clipapp.message:success","comment");
 	  Comment.close();
+	  App.ClipApp.showSuccess("comment");
+	  App.vent.trigger("app.clipapp.comment:success", {type:"comment",pid:params.pid,model_id:mid});
 	},
 	error:function(model, res){
 	  if(res.comm_text == "is_null")
