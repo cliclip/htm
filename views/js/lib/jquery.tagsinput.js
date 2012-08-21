@@ -256,18 +256,10 @@
 	});
 
 	$(data.fake_input).bind('blur',data,function(event) {
-	  var sflag = true;
-	  if($(".taglistDiv").children().length){
-	    $(".taglistDiv").scroll(function(){
-	      sflag = false;
-	    });
-	    setTimeout(function(){
-	      if(sflag){
-		App.vent.trigger("app.clipapp.taglist:close");
-		$(".taglistDiv").hide();
-	      }
-	    },200);
-	  }
+	  setTimeout(function(){
+	    App.vent.trigger("app.clipapp.taglist:close");
+	    $(".taglistDiv").hide();
+	  },200);
 	});
 
 	App.vent.unbind("app.clipapp.taglist:gettag");// 解决请求多次的问题

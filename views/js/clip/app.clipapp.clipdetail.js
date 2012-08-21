@@ -49,6 +49,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'note':
 	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
 	case 'modify':
+	  this.trigger("closeView");
 	  App.vent.trigger("app.clipapp:clipedit", cid);break;
 	case 'del':
 	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
@@ -62,9 +63,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     Close: function(e){
       this.trigger("closeView");
     },
-    editDetial: function(e){
-      this.trigger("closeView");
-      App.ClipApp.showEditClip(this.model.id);
+    editDetail: function(e){
+      var clipId = this.model.id;
+      if (App.ClipApp.isOwner(clipId.split(":")[0], App.util.getMyUid())) {
+	this.trigger("closeView"); // 如果是自己的才要关闭detail
+      }
+      App.ClipApp.showEditClip(clipId);
     }
   });
 
@@ -123,7 +127,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.get("cid");
       var id = e.target.id;
       App.vent.trigger("app.clipapp.message:alert", "del_comment");
-      App.vent.trigger("app.clipapp.message:sure",function(){
+      App.vent.bind("app.clipapp.message:sure",function(){
 	view.trigger("delComment", cid, id);
       });
     },

@@ -6,7 +6,7 @@ App.ClipApp = (function(App, Backbone, $){
     return App.util.getMyUid() != null ? true : false;
   };
 
-  function isOwner(uid1, uid2){
+  ClipApp.isOwner = function(uid1, uid2){
     return uid1 == uid2;
   };
 
@@ -14,6 +14,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:siteshow",tag);
   };
 
   ClipApp.siteQuery = function(word, tag){
@@ -113,11 +114,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.showUserInterest(uid, tag);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
+
   ClipApp.showEditClip = function(clipId){
     if(!isLoggedIn()){
-      showLogin();
+      ClipApp.showLogin();
     }else{
-      if (isOwner(clipId.split(":")[0], App.util.getMyUid())) {
+      if (ClipApp.isOwner(clipId.split(":")[0], App.util.getMyUid())) {
 	ClipApp.ClipEdit.show(clipId);
       }
     }
@@ -147,13 +149,16 @@ App.ClipApp = (function(App, Backbone, $){
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
   };
 
+  ClipApp.showLogin = function(callback){
+    ClipApp.Login.show(callback);
+  };
+
   App.vent.bind("all", function(eventName){
     console.log(eventName);
   });
 
   App.vent.bind("app.clipapp:login", function(callback){
-    // ClipApp.showLogin = function(callback){};
-    App.login = ClipApp.Login.show(callback);
+    ClipApp.Login.show(callback);
   });
 
   App.vent.bind("app.clipapp.login:success", function(res, remember){

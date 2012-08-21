@@ -1,7 +1,8 @@
 // app.comment.js
 App.ClipApp.Comment = (function(App, Backbone, $){
   var number_limit =  140;
-
+  var P = App.ClipApp.Url.base;
+			 
   // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
     url:function(){
