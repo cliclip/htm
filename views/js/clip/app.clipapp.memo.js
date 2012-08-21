@@ -2,7 +2,7 @@
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   var MemoModel = App.Model.extend({});
-
+  var P = App.ClipApp.Url.base;
   // 把没有必要的事件改为函数调用
   /*
    * 使用事件的场景：

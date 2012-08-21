@@ -36,6 +36,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     initialize: function(e){
       this.bind("followSet", this.followSet);
+      this.model.bind("change", this.render, this);
     },
     followSet: function(follow){
       if(_.isEmpty(follow)){
@@ -54,9 +55,11 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     followAction: function(){
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
+      this.model.set("follower", this.model.get("follower") + 1);
     },
     stopAction: function(){
       App.vent.trigger("app.clipapp:unfollow",this.model.id,'*');
+      this.model.set("follower", this.model.get("follower") - 1);
     },
     following: function(){
       App.vent.trigger("app.clipapp:showfollowing", user_id);
