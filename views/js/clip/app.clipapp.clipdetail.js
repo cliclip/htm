@@ -41,7 +41,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	    rid : this.model.get("rid"),
 	    user: this.model.get("ruser")
 	  };
-	  App.vent.trigger("app.clipapp:reclip", cid,mid,recommend,pub);break;
+	  App.ClipApp.showReclip(cid, mid, recommend, pub); break;
 	// case 'recommend':
 	  //App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
 	case 'comment':
@@ -51,7 +51,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'modify':
 	  App.ClipApp.showEditClip(cid); break;
 	case 'del':
-	  App.vent.trigger("app.clipapp:clipdelete", cid);break;
+	  App.ClipApp.showClipDelete(cid); break;
       }
     },
     Masker: function(e){
@@ -348,7 +348,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
-	App.vent.trigger("app.clipapp.comment:success", {type:"comment",pid:params.pid,model_id:mid});
+	App.ClipApp.showSuccess({type:"comment",pid:params.pid,model_id:mid});
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")

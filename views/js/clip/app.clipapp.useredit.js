@@ -65,15 +65,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       this.flag = false;
-      this.bind("closeView", close);
+      this.bind("@closeView", close);
     },
     cancel : function(e){
       e.preventDefault();
-      this.trigger("closeView");
+      this.trigger("@closeView");
     },
     masker_close:function(e){
       if($(e.target).attr("class") == "masker"){
-	this.trigger("closeView");
+	this.trigger("@closeView");
       }
     }
   });
@@ -106,6 +106,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
+  var passChanged = function(res){
+    UserEdit.showPassEdit();
+    App.ClipApp.showSuccess("passwd_success");
+    document.cookie = "token="+res.token;
+  };
+
   var PassView = App.ItemView.extend({
     tagName: "div",
     className: "passEdit",
@@ -125,6 +131,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "mouseover .lang-list": "MouseOver",
       "mouseout  .lang-list": "MouseOut",
       "click .lang-list" : "lang_save"
+    },
+    initialize:function(){
+      this.bind("@passChanged", passChanged);
     },
     focusAction:function(e){
       var id = e.currentTarget.id;
@@ -162,9 +171,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       passModel.save(data,{
 	type: 'PUT',
   	success: function(model, res){
-	  UserEdit.showPassEdit();
-	  App.ClipApp.showSuccess("passwd_success");
-	  document.cookie = "token="+res.token;
+	  view.trigger("@passChanged", res);
   	},
   	error:function(model, res){
 	  view.showError('passEdit',res);
@@ -221,7 +228,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  type:'PUT',
 	  url : App.util.unique_url(P+"/user/"+my+"/lang/"+lang),
 	  success:function(model,res){
-	    App.vent.trigger("app.clipapp.useredit:versions_change",lang);
+	    App.vent.trigger("app.versions:version_change", lang);
 	  },
 	  error:function(model,error){
 	    App.ClipApp.showConfirm(error);
@@ -272,10 +279,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click .edit_name" : "setName",
+      "click .edit_name": "setName",
       "error": "showError",
       "focus #name": "cleanError",
-      "click #confirm_face" : "submitFace"
+      "click #confirm_face": "submitFace"
     },
     initialize:function(){
       this.model.bind("change", this.render, this);
@@ -351,10 +358,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	$("#confirm_face").show();
 	sender.select();
 	sender.blur();
-	var src = document.selection.createRange().text;
 	document.getElementById("head_img").innerHTML= "<div id='head'></div>";
 	var obj = document.getElementById("head");
 	var obj1 =  document.getElementById("preview_size_fake");
+	var src = document.selection.createRange().text;
 	obj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\"" + src + "\")";
 	obj1.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='image',src=\"" + src + "\")";
 	setTimeout(function(){
@@ -412,19 +419,19 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   }
   //ff chrome 之外的其他浏览器本地预览头像
   function preview_face(sender){
-      var reader = new FileReader();
-      reader.onload = function(evt){
-	var img = new Image();
-	img.src = evt.target.result;
-	img.onload=function(){
-	  if(img.complete ||img.readyState=="complete"||img.readyState=="loaded"){
-	    $("#myface").attr("src",img.src);
-	    var style = resize_img(img.width,img.height);
-	    $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
-	  }
-	};
+    var reader = new FileReader();
+    reader.onload = function(evt){
+      var img = new Image();
+      img.src = evt.target.result;
+      img.onload=function(){
+	if(img.complete||img.readyState=="complete"||img.readyState=="loaded"){
+	  $("#myface").attr("src",img.src);
+	  var style = resize_img(img.width,img.height);
+	  $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
+	}
       };
-      reader.readAsDataURL(sender.files[0]);
+    };
+    reader.readAsDataURL(sender.files[0]);
   };
 
   function set_preview_size( objPre, originalWidth, originalHeight ){

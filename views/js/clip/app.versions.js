@@ -986,6 +986,11 @@ App.versions = (function($){
     }
   };
 
+  App.vent.bind("app.versions:version_change", function(lang){
+    versions.setLanguage(lang);
+  });
+
+
   versions.setLanguage = function(lang){
     if(versions.getLanguage() != lang){
       setCookieLang(lang);
