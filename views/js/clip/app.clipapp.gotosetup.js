@@ -27,7 +27,7 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
 
   var setup = function(){
     App.popRegion.close();
-    App.vent.trigger("app.clipapp.useredit:show");
+    App.ClipApp.showUserEdit();
   };
 
   return  GotoSetup;
