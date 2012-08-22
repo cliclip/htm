@@ -289,7 +289,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   //reclip 用户一个clip
-  App.vent.bind("app.clipapp:reclip", function(clipid, model_id, rid, pub){
+  ClipApp.showReclip = function(clipid, model_id, rid, pub){
     var uid = App.util.getMyUid();
     // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
     if(!uid)
@@ -297,7 +297,7 @@ App.ClipApp = (function(App, Backbone, $){
 	App.ClipApp.Reclip.show(clipid,model_id,rid,pub);
       });
     else ClipApp.Reclip.show(clipid,model_id,rid,pub);
-  });
+  };
 
   //对 user's tag下的clip的reclip
   App.vent.bind("app.clipapp:reclip_tag", function(user,tag){
@@ -343,7 +343,7 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:comment", function(cid,model_id){
+  ClipApp.showComment = function(cid, model_id){
     var uid = App.util.getMyUid();
     if(!uid){
       ClipApp.Login.show(function(){
@@ -352,7 +352,7 @@ App.ClipApp = (function(App, Backbone, $){
     }else{
       ClipApp.Comment.show(cid,model_id);
     }
-  });
+  };
 
   App.vent.bind("app.clipapp:clipdetail", function(clipid,model_id,recommend){
     //model_id为model的id，用来当detail的model改变时，改变list的model的数据
@@ -410,9 +410,9 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.route(uid, url, tag);
   });
 
-  App.vent.bind("app.clipapp:clipdelete", function(clipid){
+  ClipApp.showClipDelete = function(clipid){
     ClipApp.ClipDelete.show(clipid);
-  });
+  };
 
   App.vent.bind("app.clipapp:query", function(word, tag){
     ClipApp.siteQuery(word, tag);
