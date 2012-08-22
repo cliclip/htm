@@ -44,7 +44,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     },
     initialize:function(){
       this.flag = false;
-      this.bind("closeView", close);
+      this.bind("@closeView", close);
     },
     foucsAction:function(e){
       this.cleanError(e);
@@ -88,9 +88,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	  }*/
-	  Comment.close();
 	  App.ClipApp.showSuccess("comment");
 	  App.vent.trigger("app.clipapp.comment:success", {type:"comment",pid:params.pid,model_id:mid});
+	  Comment.close();
 	},
 	error:function(model, res){
 	  if(res.comm_text == "is_null")
@@ -116,7 +116,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       e.preventDefault();
       var text = $.trim($("#comm_text").val());
       if(text == _i18n('comment.defaultText')) text = "";
-      this.trigger("closeView",text);
+      this.trigger("@closeView",text);
     }
   });
 
@@ -137,11 +137,8 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       App.popRegion.close();
       mid = null;
     }else{
-      App.vent.trigger("app.clipapp.message:alert", "comment_save");
-      App.vent.bind("app.clipapp.message:sure",function(){
-	App.popRegion.close();
-	mid = null;
-      });
+      var fun = function(){App.popRegion.close();mid = null;};
+      App.ClipApp.showAlert("comment_save", null, fun);
     }
   };
 
