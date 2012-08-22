@@ -251,10 +251,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.useredit:set_success", function(){
     ClipApp.Me.me.fetch();
-      console.log(window.location.hash);
     if(/my/.test(window.location.hash)){
-      console.log("dddddddddddddddddddddaaaaaaaaaafasd");
-      console.log(ClipApp.Me.me);
       ClipApp.Face.show(ClipApp.Me.me.get("id"));
     }
 
