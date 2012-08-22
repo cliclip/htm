@@ -76,7 +76,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:logout");
     },
     mysetupAction: function(){
-      App.vent.trigger("app.clipapp.useredit:show",this.model.get("id"));
+      App.ClipApp.showUserEdit();
     },
     switch_my:function(){
       App.util.current_page("my");
@@ -185,7 +185,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     if(!Me.me.get("name")){
       App.vent.trigger("app.clipapp.message:alert", "no_name");
       App.vent.bind("app.clipapp.message:sure", function(){
-	App.vent.trigger("app.clipapp.useredit:show");
+	App.ClipApp.showUserEdit();
 	App.vent.trigger("app.clipapp.useredit:rename");
       });
     }
