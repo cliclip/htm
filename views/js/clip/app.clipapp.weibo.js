@@ -40,9 +40,6 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
     });
   };
 
-  /*App.vent.bind("app.clipapp.userbind:ok",function(){
-    WeiboEdit.show();
-  });*/
 
   var delWeibo = function(uid){
     var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid});
@@ -51,7 +48,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 	WeiboEdit.show();
       },
       error: function(model, res){
-	console.info(res);
+	App.vent.trigger("app.clipapp.message:alert","del_oauth_fail");
       }
     });
   };

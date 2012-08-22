@@ -443,6 +443,7 @@ App.versions = (function($){
 	delemail       : "您真的要删除 %s 邮件地址吗？",
 	deloauth       : "您真的要删除 %s 账号关联吗？",
 	oauth_fail     : "认证失败，请重新认证！",
+	del_oauth_fail : "解除关联出问题啦，再试一次吧",
 	memo_save      : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	clipedit_save  : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	reclip_save    : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
@@ -450,7 +451,6 @@ App.versions = (function($){
 	comment_save   : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	clipadd_save   : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	emailadd_save  : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
-	oauth_fail   : "认证失败，请重新认证!",
 	del_comment    : "您真的要删除这条评论吗？",
 	auth:{
 	  no_name     : "请先设置您的用户名",
@@ -920,6 +920,7 @@ App.versions = (function($){
 	delemail       : "Do you really want to delete this email %s?",
 	deloauth       : "Do you really want to delete this account %s?",
 	oauth_fail   : "Authentication failed. Please try again",
+	del_oauth_fail : "Delete account occur problem. Please try again",
 	del_comment    : "Do you really want to delete this comment?",
 	memo_save     :"If you close the window, what you entered will be lost. Are you sure?",
 	clipedit_save :"If you close the window, what you entered will be lost. Are you sure?",

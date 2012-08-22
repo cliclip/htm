@@ -14,7 +14,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
-    App.vent.trigger("app.clipapp.ga:track_homepage");
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:siteshow",tag);
   };
 
   ClipApp.siteQuery = function(word, tag){
@@ -215,6 +215,17 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show();
   });
 
+  ClipApp.showUserEdit = function(){
+    ClipApp.UserEdit.showUserEdit();
+    ClipApp.UserEdit.showFace();
+    ClipApp.UserEdit.showEmail();
+    ClipApp.RuleEdit.show();
+    ClipApp.WeiboEdit.show();
+    ClipApp.TwitterEdit.show();
+    ClipApp.UserEdit.showPassEdit();
+  };
+
+/*
   App.vent.bind("app.clipapp.useredit:show", function(){
     ClipApp.UserEdit.showUserEdit();
     ClipApp.UserEdit.showFace();
@@ -224,7 +235,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.TwitterEdit.show();
     ClipApp.UserEdit.showPassEdit();
   });
-
+*/
   App.vent.bind("app.clipapp.useredit:rename", function(){
     ClipApp.UserEdit.rename();
   });
@@ -233,16 +244,20 @@ App.ClipApp = (function(App, Backbone, $){
     UserBind.show(oauth, fun, remember);
   });
 
-  App.vent.bind("app.clipapp.face:reset", function(){
+  App.vent.bind("app.clipapp.useredit:set_success", function(){
     ClipApp.Me.me.fetch();
     if(/my/.test(window.location.hash))
       ClipApp.Face.show(ClipApp.Me.me.get("id"));
   });
 
+  ClipApp.showEmailAdd = function(uid){
+    ClipApp.EmailAdd.show(uid);
+  };
+/*
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     ClipApp.EmailAdd.show(uid);
   });
-
+*/
   App.vent.bind("app.clipapp:nextpage", function(){
     ClipApp.ClipList.nextpage();
     ClipApp.FollowerList.nextpage();
@@ -377,6 +392,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.reclip:success", function(args){
     ClipApp.ClipList.refresh(args);
+    ClipApp.TagList.setbaseTag(args.tag);
   });
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
@@ -414,19 +430,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Message.success(key, value);
   });
 
-  App.vent.bind("app.clipapp.versions:change",function(lang){
+  App.vent.bind("app.clipapp.useredit:versions_change",function(lang){
     App.versions.setLanguage(lang);
-  });
-  App.vent.bind("app.clipapp.ga:track_homepage",function(){
-    var now =new Date().getTime();
-    var page_load_time=now-window.performance.timing.fetchStart;
-    var hourInMillis = 1000 * 60 * 60;
-    if(0 < page_load_time && page_load_time < hourInMillis){ // avoid sending bad data
-      _gaq.push(['_trackTiming', 'Home_page',"Load Home_page",page_load_time]);
-    }
-    _gaq.push(['_setSiteSpeedSampleRate', 100]);//采样比例，访问量过大应减小
-    _gaq.push(['_trackPageview', '/']);
-    _gaq.push(['_trackPageLoadTime']);
   });
 
   return ClipApp;
