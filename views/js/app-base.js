@@ -25,7 +25,7 @@ App.Model = Backbone.Model.extend({
 	App.vent.trigger("app.clipapp.useredit:rename");
       });
     }else if(msg.auth == "not_login" || msg.auth == "not_self"){
-      App.vent.trigger("app.clipapp:login");
+      App.ClipApp.showLogin();
     }
   },
   // override to parse [0, res] | [1, err] structure

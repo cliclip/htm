@@ -120,17 +120,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserRecommend(uid, tag);
-    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:recommend", tag);
-  };
-  ClipApp.mySetup = function(){
-    var uid = App.util.getMyUid();
-    ClipApp.UserEdit.showUserEdit();
-    ClipApp.UserEdit.showFace(false);
-    ClipApp.UserEdit.showEmail();
-    ClipApp.RuleEdit.show();
-    ClipApp.WeiboEdit.show();
-    ClipApp.TwitterEdit.show();
-    ClipApp.UserEdit.showPassEdit();
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:recommend",tag);
   };*/
 
   // 为detail页面添加网址
@@ -141,6 +131,10 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.showLogin = function(callback){
     ClipApp.Login.show(callback);
+  };
+
+  ClipApp.showRegister = function(){
+    ClipApp.Register.show();
   };
 
   ClipApp.showMemo = function(args){
@@ -438,10 +432,6 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.message:success", function(key, value){
     ClipApp.Message.success(key, value);
-  });
-
-  App.vent.bind("app.clipapp.useredit:versions_change",function(lang){
-    App.versions.setLanguage(lang);
   });
 
   return ClipApp;

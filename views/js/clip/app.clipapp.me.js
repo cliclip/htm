@@ -46,7 +46,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "click .lang-list" : "ChangeLang"
     },
     initialize: function(){
-      this.bind("hasname", hasname);
+      this.bind("@hasname", hasname);
     },
     showMysetup: function(){
       $("#show_mysetup").toggle(); // css("display","block");
@@ -67,10 +67,10 @@ App.ClipApp.Me = (function(App, Backbone, $){
       $("#show_mysetup").css("display","none");
     },
     loginAction: function(){
-      App.vent.trigger("app.clipapp:login");
+      App.ClipApp.showLogin();
     },
     registerAction: function(){
-       App.vent.trigger("app.clipapp:register");
+      App.ClipApp.showRegister();
     },
     logoutAction: function(){
       App.vent.trigger("app.clipapp:logout");
@@ -84,12 +84,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },/*
     switch_at_me:function(){
       App.util.current_page("@me");
-      if(!(/my/.test(window.location.hash))){
-        Backbone.history.navigate("my/recommend",true);
-	App.vent.trigger("app.clipapp.face:reset",this.model.id);
-      }else{
-	Backbone.history.navigate("my/recommend",true);
-      }
+      Backbone.history.navigate("my/recommend",true);
     },*/
     switch_expert:function(){
       App.util.current_page("interest");
@@ -129,7 +124,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },
     ChangeLang:function(e){
       var lang = e.currentTarget.id;
-      App.vent.trigger("app.clipapp.versions:change",lang);
+      App.vent.trigger("app.versions:version_change",lang);
     },
     MouseOver:function(e){
       var div = $("#show_language").children();
@@ -162,9 +157,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.me.onChange(function(meModel){
       // console.info("onChange :: "+Me.me.get("id"));
       meView = new View({ model: meModel });
-      meView.trigger("hasname");
+      meView.trigger("@hasname");
       if(meModel.get("lang")){
-	App.vent.trigger("app.clipapp.versions:change",meModel.get("lang"));
+	App.vent.trigger("app.versions:version_change",meModel.get("lang"));
       }
       App.mineRegion.show(meView);
       if((/my\/recommend/.test(window.location.hash))){
@@ -183,8 +178,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   var hasname = function(){
     if(!Me.me.get("name")){
-      App.vent.trigger("app.clipapp.message:alert", "no_name");
-      App.vent.bind("app.clipapp.message:sure", function(){
+      App.ClipApp.showAlert("no_name", null, function(){
 	App.ClipApp.showUserEdit();
 	App.vent.trigger("app.clipapp.useredit:rename");
       });
