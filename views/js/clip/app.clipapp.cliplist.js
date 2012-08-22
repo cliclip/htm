@@ -109,17 +109,17 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	    rid : this.model.get("recommend").rid,
 	    user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
 	  };
-	  App.vent.trigger("app.clipapp:reclip",cid,mid,recommend,pub);break;
+	  App.ClipApp.showReclip(cid, mid, recommend, pub); break;
 	//case 'recommend'://转
 	  //App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
 	case 'comment'://评
-	  App.vent.trigger("app.clipapp:comment",cid,mid);break;
+	  App.ClipApp.showComment(cid, mid); break;
 	case 'note'://注
 	  App.ClipApp.showMemo(cid); break;
 	case 'modify'://改
 	  App.ClipApp.showEditClip(cid); break;
 	case 'del'://删
-	  App.vent.trigger("app.clipapp:clipdelete",cid);break;
+	  App.ClipApp.showClipDelete(cid); break;
       }
     }
   });
