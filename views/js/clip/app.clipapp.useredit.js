@@ -5,16 +5,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var face_remote_flag = false;
   var submit_face = false;
   var flag = false;
-  var my = App.util.getMyUid();
+
   var EditModel = App.Model.extend({});
   var FaceModel = App.Model.extend({
     url:function(){
-      return P+"/user/"+my+"/face";
+      return P+"/user/" + App.util.getMyUid() + "/face";
     }
   });
   var PassEditModel = App.Model.extend({
     url:function(){
-      return P+"/user/" + my + "/passwd";
+      return P+"/user/" + App.util.getMyUid() + "/passwd";
     },
     validate:function(attrs){
       var error = {};
@@ -33,7 +33,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
   var NameModel = App.Model.extend({
     url:function(){
-      return  P + "/user/" + my + "/name";
+      return  P + "/user/" + App.util.getMyUid() + "/name";
     },
     validate:function(attrs){
       if(!attrs.name || attrs.name == ""){
@@ -49,9 +49,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var EmailEditModel = App.Model.extend({
     url:function(){
       if(this.get("address")){
-	return P+"/user/"+ my +"/email/"+this.get("address");
+	return P+"/user/"+ App.util.getMyUid() +"/email/"+this.get("address");
       }
-      return App.util.unique_url(P+"/user/"+ my +"/email");
+      return App.util.unique_url(P+"/user/"+ App.util.getMyUid() +"/email");
     }
   });
 
@@ -98,16 +98,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var view = this;
       var fun = function(){view.trigger("@delEmail", address);};
       App.ClipApp.showAlert("delemail", address, fun);
-      /*
-      App.vent.trigger("app.clipapp.message:alert", "delemail", address);
-      App.vent.bind("app.clipapp.message:sure",function(){
-	view.trigger("delEmail",address);
-      });*/
     }
   });
 
   var passChanged = function(res){
-    UserEdit.showPassEdit();
+    showPassEdit();
     App.ClipApp.showSuccess("passwd_success");
     document.cookie = "token="+res.token;
   };
@@ -238,42 +233,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showEmail = function(){
-    var emailModel = new EmailEditModel();
-    UserEdit.emailRegion = new App.Region({el:"#email"});
-    emailModel.fetch();
-    emailModel.onChange(function(emailModel){
-      var emailView = new EmailView({model: emailModel});
-      UserEdit.emailRegion.show(emailView);
-    });
-  };
-
-  UserEdit.showPassEdit = function(){
-    var passModel = new PassEditModel();
-    var passView = new PassView({model: passModel});
-    UserEdit.passeditRegion = new App.Region({el:"#modify_pass"});
-    UserEdit.passeditRegion.show(passView);
-  };
-
-  UserEdit.showUserEdit = function(){
-    var editModel = new EditModel();
-    var editView = new EditView({model: editModel});
-    App.popRegion.close();
-    App.viewRegion.close();
-    App.mysetRegion.show(editView);
-    /*var iframe=document.getElementById("post_frame_face");
-    iframe.onload = function(){
-      if(submit_face){
-	console.info(iframe);
-	submit_face = false;
-	if($(iframe.contentWindow.document.body).text()[1]!=="0"){//取得图片上传的结果：成功或失败
-
-	}
-      }
-    };*/
-  };
-
-
   var FaceView = App.ItemView.extend({
     tagName: "div",
     className: "faceEdit",
@@ -335,14 +294,83 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  UserEdit.showFace = function(){//设置页面显示用户名和头像
+    var close = function(){
+    UserEdit.close();
+  };
+
+  var delEmail = function(address){
+    var delModel = new EmailEditModel({id:1, address:address});
+    delModel.destroy({ // destroy要求model必须要有id
+      success: function(model, res){
+	UserEdit.showEmail();
+      },
+      error: function(model, res){}
+    });
+  };
+
+  function showEmail(){
+    var emailModel = new EmailEditModel();
+    UserEdit.emailRegion = new App.Region({el:"#email"});
+    emailModel.fetch();
+    emailModel.onChange(function(emailModel){
+      var emailView = new EmailView({model: emailModel});
+      UserEdit.emailRegion.show(emailView);
+    });
+  };
+
+  function showPassEdit(){
+    var passModel = new PassEditModel();
+    var passView = new PassView({model: passModel});
+    UserEdit.passeditRegion = new App.Region({el:"#modify_pass"});
+    UserEdit.passeditRegion.show(passView);
+  };
+
+  function showUserEdit(){
+    var editModel = new EditModel();
+    var editView = new EditView({model: editModel});
+    App.popRegion.close();
+    App.viewRegion.close();
+    App.mysetRegion.show(editView);
+    /*var iframe=document.getElementById("post_frame_face");
+    iframe.onload = function(){
+      if(submit_face){
+	console.info(iframe);
+	submit_face = false;
+	if($(iframe.contentWindow.document.body).text()[1]!=="0"){//取得图片上传的结果：成功或失败
+
+	}
+      }
+    };*/
+  };
+
+  function showFace(){//设置页面显示用户名和头像
     var face = App.util.getMyFace();
     var faceModel = new FaceModel(face);
     UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
     var faceView = new FaceView({model: faceModel});
     UserEdit.faceRegion.show(faceView);
-    faceLoad(face.face,my);
+    faceLoad(face.face, App.util.getMyUid());
   };
+
+  UserEdit.show = function(){
+    showUserEdit();
+    showFace();
+    showEmail();
+    showPassEdit();
+  };
+
+  UserEdit.close = function(){
+    if(face_change_flag){
+      App.vent.trigger("app.clipapp.useredit:set_success");
+      face_change_flag = false;
+    }
+    App.mysetRegion.close();
+  };
+
+  App.vent.bind("app.clipapp.useredit:rename", function(){
+    if(UserEdit.faceRegion === undefined) App.ClipApp.showUserEdit();
+    UserEdit.faceRegion.currentView.trigger("@rename");
+  });
 
   UserEdit.onUploadImgChange = function(sender){
     if( !sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i)){
@@ -395,7 +423,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    var facemodel = new FaceModel({face:currentFace});
 	    facemodel.save({},{
 	      success:function(model,res){
-		if(face_remote_flag){
+		if(face_remote_flag){ // 次标记的作用是什么
 		  $("#myface").attr("src",App.util.face_url(returnObj[1][0]),240);
 		  $("#confirm_face").show();
 		}else{
@@ -458,32 +486,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     //console.info(_width,_height,_top,_left );
     return { width:_width, height:_height, top:_top, left:_left };
   }
-
-  UserEdit.close = function(){
-    if(face_change_flag){
-      App.vent.trigger("app.clipapp.useredit:set_success",my);
-      face_change_flag = false;
-    }
-    App.mysetRegion.close();
-  };
-
-  UserEdit.rename = function(){
-    UserEdit.faceRegion.currentView.trigger("@rename");
-  };
-
-  var close = function(){
-    UserEdit.close();
-  };
-
-  var delEmail = function(address){
-    var delModel = new EmailEditModel({id:1, address:address});
-    delModel.destroy({ // destroy要求model必须要有id
-      success: function(model, res){
-	UserEdit.showEmail();
-      },
-      error: function(model, res){}
-    });
-  };
 
   // App.bind("initialize:after", function(){ UserEdit.showUserEdit();});
 

@@ -187,25 +187,19 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Login.show(callback);
   });
 
-  App.vent.bind("app.clipapp.login:success", function(res, remember){
-    ClipApp.Login.success(res, remember);
-    ClipApp.Me.me.fetch();
-  });
-
   App.vent.bind("app.clipapp:register", function(){
     ClipApp.Register.show();
   });
 
   App.vent.bind("app.clipapp.register:success", function(key, res){
     ClipApp.Register.success(key, res);
-    ClipApp.Me.me.fetch();
     if(key == "register_success"){ // invite的情况不需要触发gotosetup
       ClipApp.GotoSetup.show(key, res.email);
     }
     if(/language=en/.test(document.cookie)){ //cliclip的uid为72
-      ReclipTag.help(72,["helper","newbie"]);
+      ClipApp.ReclipTag.help(72,["helper","newbie"]);
     }else{
-      ReclipTag.help(72,["帮助","新手"]);
+      ClipApp.ReclipTag.help(72,["帮助","新手"]);
     }
   });
 
@@ -215,29 +209,11 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   ClipApp.showUserEdit = function(){
-    ClipApp.UserEdit.showUserEdit();
-    ClipApp.UserEdit.showFace();
-    ClipApp.UserEdit.showEmail();
+    ClipApp.UserEdit.show();
     ClipApp.RuleEdit.show();
     ClipApp.WeiboEdit.show();
     ClipApp.TwitterEdit.show();
-    ClipApp.UserEdit.showPassEdit();
   };
-
-/*
-  App.vent.bind("app.clipapp.useredit:show", function(){
-    ClipApp.UserEdit.showUserEdit();
-    ClipApp.UserEdit.showFace();
-    ClipApp.UserEdit.showEmail();
-    ClipApp.RuleEdit.show();
-    ClipApp.WeiboEdit.show();
-    ClipApp.TwitterEdit.show();
-    ClipApp.UserEdit.showPassEdit();
-  });
-*/
-  App.vent.bind("app.clipapp.useredit:rename", function(){
-    ClipApp.UserEdit.rename();
-  });
 
   App.vent.bind("app.clipapp.userbind:show",function(oauth,fun,remember){
     ClipApp.UserBind.show(oauth, fun, remember);
@@ -245,13 +221,9 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.useredit:set_success", function(){
     ClipApp.Me.me.fetch();
-      console.log(window.location.hash);
     if(/my/.test(window.location.hash)){
-      console.log("dddddddddddddddddddddaaaaaaaaaafasd");
-      console.log(ClipApp.Me.me);
       ClipApp.Face.show(ClipApp.Me.me.get("id"));
     }
-
   });
 
   ClipApp.showEmailAdd = function(uid){
@@ -305,8 +277,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   // 当前用户追某用户的tag uid一直与face的保持一致
   App.vent.bind("app.clipapp:follow", function(uid, tag){
-    var me = App.util.getMyUid();
-    if(!me){
+    if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
 	App.ClipApp.Bubb.followUserBubs(uid, tag);
       });
@@ -315,9 +286,9 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
+  // 需要判断是因为可能出现token过期现象
   App.vent.bind("app.clipapp:unfollow", function(uid, tag){
-    var me = App.util.getMyUid(); // 需要判断是因为可能出现token过期现象
-    if(!me){
+    if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
 	App.ClipApp.Bubb.unfollowUserBubs(uid, tag);
       });
@@ -327,8 +298,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:recommend", function(cid,model_id,pub){
-    var uid = App.util.getMyUid();
-    if(!uid){
+    if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
 	App.ClipApp.Recommend.show(cid,model_id,pub);
       });
@@ -338,8 +308,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   ClipApp.showComment = function(cid, model_id){
-    var uid = App.util.getMyUid();
-    if(!uid){
+    if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
 	App.ClipApp.Comment.show(cid, model_id);
       });
@@ -358,8 +327,7 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:clipadd", function(){
-    var uid = App.util.getMyUid(); // 当前登录用户
-    if(!uid){
+    if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
 	App.ClipApp.ClipAdd.show();
       });
@@ -414,10 +382,6 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:userquery", function(uid, word, tag){
     ClipApp.userQuery(uid, word, tag);
-  });
-
-  App.vent.bind("app.clipapp:followset", function(follow){
-    ClipApp.Face.followSet(follow);
   });
 
   App.vent.bind("app.clipapp.message:alert", function(key, value){

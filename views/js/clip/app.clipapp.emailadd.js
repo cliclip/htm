@@ -31,8 +31,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       "click #emailadd_cancel":"EmailAddclose",
       "click .masker_layer"   :"EmailAddclose",
       "click .close_w"        :"EmailAddclose",
-      "focus #email"          :"cleanError",
-      "error" : "showError"
+      "focus #email"          :"cleanError"
     },
     initialize: function(){
       this.bind("@closeView", close);
@@ -52,11 +51,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	  view.trigger("@closeView");
 	},
 	error:function(model, res){
-	  if(res.email == "no_uname"){
-	    App.ClipApp.showConfirm(res);
-	  }else{
-	    view.showError('emailAdd',res);
-	  }
+	  view.showError('emailAdd',res);
 	}
       });
     }

@@ -35,16 +35,19 @@ App.ClipApp.Face = (function(App, Backbone, $){
       "click .search_btn"    : "queryUser"
     },
     initialize: function(e){
-      this.bind("followSet", this.followSet);
       this.model.bind("change", this.render, this);
+      this.bind("@followSet", this.followSet);
     },
     followSet: function(follow){
+      var follower = this.model.get("follower");
       if(_.isEmpty(follow)){
 	$(this.$('.user_i').children('i')).attr('id','user_zhui');
 	$(this.$('.user_i').children('i')).attr('class',_i18n('userface.zhui'));
+	this.model.set("follower", follower > 0 ? follower - 1 : 0);
       }else{
 	$(this.$('.user_i').children('i')).attr('id', 'user_stop');
 	$(this.$('.user_i').children('i')).attr('class', _i18n('userface.stop'));
+	this.model.set("follower", follower > 0 ? follower + 1 : 1);
       }
     },
     mouseEnter: function(e){
@@ -55,11 +58,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     followAction: function(){
       App.vent.trigger("app.clipapp:follow",this.model.id,'*');
-      this.model.set("follower", this.model.get("follower") + 1);
     },
     stopAction: function(){
       App.vent.trigger("app.clipapp:unfollow",this.model.id,'*');
-      this.model.set("follower", this.model.get("follower") - 1);
     },
     following: function(){
       App.vent.trigger("app.clipapp:showfollowing", user_id);
@@ -129,6 +130,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
 	  App.faceRegion.show(faceView);
 	});
       }else{
+	console.log(App.ClipApp.Me.me);
 	faceView = new FaceView({model: App.ClipApp.Me.me});
 	App.faceRegion.show(faceView);
       }
@@ -142,11 +144,11 @@ App.ClipApp.Face = (function(App, Backbone, $){
     return user_id;
   };
 
-  Face.followSet = function(follow){
+  App.vent.bind("app.clipapp:followset", function(follow){
     if(faceView){
-      faceView.trigger("followSet", follow);
+      faceView.trigger("@followSet", follow);
     }
-  };
+  });
 
   return Face;
 })(App, Backbone, jQuery);

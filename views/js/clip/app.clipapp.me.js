@@ -46,7 +46,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "click .lang-list" : "ChangeLang"
     },
     initialize: function(){
-      this.bind("@hasname", hasname);
+      this.bind("@changeShow", changeShow);
     },
     showMysetup: function(){
       $("#show_mysetup").toggle(); // css("display","block");
@@ -136,9 +136,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     MouseOut:function(e){
       $(e.currentTarget).css("background-color","");
     }
-
-    /*
-    mouseEnter: function(e){
+    /*mouseEnter: function(e){
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       $("." + opt).css({"z-index":2});
     },
@@ -153,37 +151,30 @@ App.ClipApp.Me = (function(App, Backbone, $){
     if(!App.util.getMyUid()){
       meView = new View();
       App.mineRegion.show(meView);
-    }
-    Me.me.onChange(function(meModel){
-      // console.info("onChange :: "+Me.me.get("id"));
-      meView = new View({ model: meModel });
-      meView.trigger("@hasname");
-      if(meModel.get("lang")){
-	App.vent.trigger("app.versions:version_change",meModel.get("lang"));
-      }
-      App.mineRegion.show(meView);
-      if((/my\/recommend/.test(window.location.hash))){
-	App.util.current_page("@me");
-      }else if(/my\/interest/.test(window.location.hash)){
-	App.util.current_page("interest");
-      }else if(/my\/follow/.test(window.location.hash)){
-	App.util.current_page("follow");
-      }else if(/my/.test(window.location.hash)){
-	App.util.current_page("my");
-      }else{
-	App.util.current_page("");
-      }
-    });
-  };
-
-  var hasname = function(){
-    if(!Me.me.get("name")){
-      App.ClipApp.showAlert("no_name", null, function(){
-	App.ClipApp.showUserEdit();
-	App.vent.trigger("app.clipapp.useredit:rename");
+    }else{
+      Me.me.onChange(function(meModel){
+	if((/my\/recommend/.test(window.location.hash))){
+	  App.util.current_page("@me");
+	}else if(/my\/interest/.test(window.location.hash)){
+	  App.util.current_page("interest");
+	}else if(/my\/follow/.test(window.location.hash)){
+	  App.util.current_page("follow");
+	}else if(/my/.test(window.location.hash)){
+	  App.util.current_page("my");
+	}else{
+	  App.util.current_page("");
+	}
+	meView = new View({ model: meModel });
+	App.mineRegion.show(meView);
+	meView.trigger("@changeShow", meModel);
       });
     }
   };
+
+  App.vent.bind("app.clipapp.login:success", function(){
+    Me.me.fetch();
+    Me.show();
+  });
 
   App.addInitializer(function(){
     Me.me = new MyInfoModel();
@@ -193,6 +184,17 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.bind("initialize:after", function(){
     Me.show();
   });
+
+  function changeShow(model){
+    /*if(!model.get("name")){
+      App.ClipApp.showAlert("no_name", null, function(){
+	App.vent.trigger("app.clipapp.useredit:rename");
+      });
+    }
+    if(model.get("lang")){
+      App.vent.trigger("app.versions:version_change",meModel.get("lang"));
+    }*/
+  };
 
   return Me;
 })(App, Backbone, jQuery);
