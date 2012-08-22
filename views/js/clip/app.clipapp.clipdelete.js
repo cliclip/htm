@@ -1,4 +1,3 @@
-// app.delete.js
 App.ClipApp.ClipDelete = (function(App, Backbone, $){
   var ClipDelete = {};
   var DeleteView = App.ItemView.extend({
@@ -13,36 +12,30 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
     },
     initialize:function(){
       this.flag = false;
-      this.bind("ok", ok);
-      this.bind("closeView", close);
+      this.bind("@ok", ok);
+      this.bind("@closeView", close);
     },
     okClick : function(e){
-      this.trigger("ok",this.model);
+      this.trigger("@ok",this.model);
     },
     masker : function(e){
       if($(e.target).attr("class") == "masker"){
-	this.trigger("closeView");
+	this.trigger("@closeView");
       };
     },
     cancelClick : function(e){
-      this.trigger("closeView");
+      this.trigger("@closeView");
     }
    });
 
    var ok = function(deleteModel){
      deleteModel.destroy({
        success: function(model, res){
-	 App.vent.trigger("app.clipapp.cliplist:remove",model.id);
-	 //在删clip时不能根据删除clip的tag来refresh   bubbs。所以重新load
 	 ClipDelete.close();
-	 if(/my/.test(window.location.hash))
-	   App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
-	 if(App.viewRegion.$el){ // 从detail来，需要关闭viewRegion
-	   App.vent.trigger("app.clipapp.clipdetail:close");
-	 }
+	 App.vent.trigger("app.clipapp.clipdelete:success", model.id);
        },
        error: function(model, error){
-	 App.vent.trigger("app.clipapp.message:confirm",error);
+	 App.ClipApp.showConfirm(error);
        }
      });
    };

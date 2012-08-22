@@ -115,7 +115,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	case 'comment'://评
 	  App.vent.trigger("app.clipapp:comment",cid,mid);break;
 	case 'note'://注
-	  App.vent.trigger("app.clipapp:clipmemo",cid);break;
+	  App.ClipApp.showMemo(cid); break;
 	case 'modify'://改
 	  App.ClipApp.showEditClip(cid); break;
 	case 'del'://删
@@ -308,38 +308,55 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   };
 
+  App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
+    if(data && App.util.self(JSON.parse(data).user)){ // 是自己的
+      var model = new ClipPreviewModel();
+      var uid = App.util.getMyUid();
+      var id = uid+":"+addmodel.id;
+      var clipid = addmodel.id;
+      var tag = addmodel.get("tag");
+      var note = addmodel.get("note");
+      var _public = addmodel.get("public");
+      var user = {id : uid};
+      var content = App.util.getPreview(addmodel.get("content"), 100);
+      //clip本身的id为自己的id，model的id为uid:cid
+      model.set({"public":_public,"content":content,"id":id,"clipid":clipid,"tag":tag,"note":note,"user":user,"recommend":""});
+      var fn = clipListView.appendHtml;
+      clipListView.appendHtml = function(collectionView, itemView){
+	collectionView.$el.prepend(itemView.el);
+	clipListView.appendHtml = fn;
+      };
+      clipListView.collection.add(model,{at:0});
+      start++;
+      collection_length++;
+      $("#list").masonry("reload");
+    }else{ // 要进行myshow
+      Backbone.history.navigate("my", true);
+    }
+  });
 
-  ClipList.add = function(addmodel){
-    var model = new ClipPreviewModel();
-    var uid = App.util.getMyUid();
-    var id = uid+":"+addmodel.id;
-    var clipid = addmodel.id;
-    var tag = addmodel.get("tag");
-    var note = addmodel.get("note");
-    var _public = addmodel.get("public");
-    var user = {id : uid};
-    var content = App.util.getPreview(addmodel.get("content"), 100);
-    //clip本身的id为自己的id，model的id为uid:cid
-    model.set({"public":_public,"content":content,"id":id,"clipid":clipid,"tag":tag,"note":note,"user":user,"recommend":""});
-    var fn = clipListView.appendHtml;
-    clipListView.appendHtml = function(collectionView, itemView){
-      collectionView.$el.prepend(itemView.el);
-      clipListView.appendHtml = fn;
-    };
-    clipListView.collection.add(model,{at:0});
-    start++;
-    collection_length++;
-    $("#list").masonry("reload");
-  };
-
-  ClipList.edit =  function(content,model_id){
+  App.vent.bind("app.clipapp.clipedit:success",function(content,model_id){
     var collection = clipListView.collection;
     var model = collection.get(model_id);
     var newcontent = App.util.getPreview(content, 100);
     model.set({content:newcontent});
-  };
+  });
 
-  ClipList.remove = function(model_id){
+  App.vent.bind("app.clipapp.clipdelete:success", function(model_id){
+    remove(model_id);
+  });
+
+  App.vent.bind("app.clipapp.clipmemo:success", function(model){
+    var json = JSON.parse(data);
+    var user = json.user;
+    if(App.util.self(user) && json.tag){
+      var tag = json.tag[0];
+      var flag = _.find(model.get("tag"), function(t){ return t == tag; });
+      if(flag === undefined) remove(user+":"+model.get("clipid"));
+    }
+  });
+
+  function remove(model_id){
     var model = clipListView.collection.get(model_id);
     clipListView.collection.remove(model);
     $("#list").masonry("reload");
@@ -359,12 +376,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var clip=model.get("clip");
       if(args.type == "comment"){
 	if(args.pid == 0){
-	  var reply_count = model.get("reply_count") ? model.get("reply_count")+1 : 1;
+	  var reply_count = model.get("reply_count");
+	  reply_count = reply_count ? reply_count + 1 : 1;
 	  model.set({"reply_count":reply_count});
 	}
       }
       if(args.type == "reclip"){
-	var reprint_count = model.get("reprint_count") ? model.get("reprint_count")+1 : 1;
+	var reprint_count = model.get("reprint_count");
+	reprint_count = reprint_count ? reprint_count + 1 : 1;
 	model.set({"reprint_count":reprint_count});
       }
     }

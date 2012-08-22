@@ -47,7 +47,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'comment':
 	  this.trigger("@detailComment", cid);break;
 	case 'note':
-	  App.vent.trigger("app.clipapp:clipmemo", cid);break;
+	  App.ClipApp.showMemo(cid); break;
 	case 'modify':
 	  App.ClipApp.showEditClip(cid); break;
 	case 'del':
@@ -385,6 +385,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }
     });
   };
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(){
+    if(ClipDetail.addCommRegion || ClipDetail.replyCommRegion){
+      ClipDetail.close();
+    }
+  });
 
   ClipDetail.close = function(){
     regionClose("commentRegion");

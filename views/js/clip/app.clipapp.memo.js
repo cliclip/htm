@@ -26,9 +26,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     },
     initialize:function(){
       this.flag = false;
-      this.bind("ok", ok);
-      this.bind("error", error);
-      this.bind("closeView", close);
+      this.bind("@ok", ok);
+      this.bind("@closeView", close);
     },
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
@@ -43,14 +42,13 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       $(e.currentTarget).val() );
     },*/
     okClick:function(e){
-      var view = this;
       e.preventDefault();
       $(e.currentTarget).attr("disabled",true);
       var data = loadData(this.$el);
       // clip在update时需要clip的id
       // data["id"] = this.model.id;
       if($(".error").length == 0){
-	view.trigger("ok", data, this.model.id);
+	this.trigger("@ok", data, this.model.id);
       }else{
 	$(e.currentTarget).attr("disabled",false);
       }
@@ -71,7 +69,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     cancelClick:function(e){
       e.preventDefault();
       var n_data = loadData(this.$el);
-      this.trigger("closeView",n_data);
+      this.trigger("@closeView",n_data);
     }
   });
 
@@ -84,12 +82,11 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       }
     };
     var obj_tag = $("#obj_tag", el).val().split(",");
-    var tag_list = _.union(main_tag,obj_tag);
-    tag_list = _.compact(tag_list); // 去除掉数组中的空值
-    _data.tag = tag_list;
+    _data.tag = _.compact(_.union(main_tag,obj_tag));
+
     /* 注释的note部分
-    var text = "";
-    if($.trim($("#organize_text", el).val())!=defaultNote){//过滤defaultNote默认值
+    var text = ""; //过滤defaultNote默认值
+    if($.trim($("#organize_text", el).val())!=defaultNote){
       text = $.trim($("#organize_text", el).val());
     }
     _data.note = [{text: text}];
@@ -106,6 +103,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var id = clip.id;
     var pub = clip["public"];
     var tags = clip.tag?clip.tag:[];
+    var bubs = App.util.getBubbs();
     //var note = clip.note?clip.note:"";
     //var text = "";
     tags = _(tags).map(function(e){return e.toLocaleLowerCase();});
@@ -119,10 +117,10 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     }
     */
     o_data = {tag:tags,"public":pub};
-    var tag_main = _(_(App.util.getBubbs()).map(function(e){
+    var tag_main = _(_(bubs).map(function(e){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
-    var tag_obj = _.difference(tags,App.util.getBubbs());
+    var tag_obj = _.difference(tags, bubs);
     return {id:id,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
   };
 
@@ -134,20 +132,10 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	type:'PUT',
 	url: P+"/clip/"+cid,
 	success: function(model, res){
-	  if(/my/.test(window.location.hash)){
-	    App.vent.trigger("app.clipapp.bubb:showUserTags",App.util.getMyUid());
-	  }
-	  if(/my/.test(window.location.hash) && /tag/.test(window.location.hash)){
-	    var str = "#my/tag/";
-	    var tag = window.location.hash.split(str)[1];
-	    var flag = _.find(data.tag,function(t){return t == tag;});
-	    if(!flag)App.vent.trigger("app.clipapp.cliplist:remove",cid);
-	  }
 	  ClipMemo.close();
+	  App.vent.trigger("app.clipapp.clipmemo:success", model);
 	},
-	error:function(model,res){
-	  this.trigger("error",model,res);
-	}
+	error:function(model,res){}
       });
     }else if(memoType == "add"){
       App.vent.trigger("app.clipapp.clipadd:memo", data);
@@ -157,10 +145,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   var close = function(n_data){
     ClipMemo.close(n_data);
-  };
-
-  var error= function(model,error){
-    //console.info(error);
   };
 
   var ClipMemo = {};
@@ -208,8 +192,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       if(flag){
 	App.popRegion.close();
       }else{
-	App.vent.trigger("app.clipapp.message:alert", "memo_save");
-	App.vent.bind("app.clipapp.message:sure",function(){
+	App.ClipApp.showAlert("memo_save", null, function(){
 	  App.popRegion.close();
 	});
       }

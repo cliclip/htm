@@ -139,9 +139,12 @@ App.ClipApp = (function(App, Backbone, $){
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
   };
 
-
   ClipApp.showLogin = function(callback){
     ClipApp.Login.show(callback);
+  };
+
+  ClipApp.showMemo = function(args){
+    ClipApp.ClipMemo.show(args);
   };
 
   // 对于那些直接点击修改按钮的部分，有些多余
@@ -169,8 +172,12 @@ App.ClipApp = (function(App, Backbone, $){
     }
   };
 
-  ClipApp.showConfirm = function(key, value){
+  ClipApp.showConfirm = function(key, value, fun){
     ClipApp.Message.confirm(key, value);
+    if(typeof(fun) == "function"){
+      App.vent.unbind("app.clipapp.message:sure");
+      App.vent.bind("app.clipapp.message:sure", fun);
+    }
   };
 
   App.vent.bind("all", function(eventName){
@@ -184,7 +191,6 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.login:success", function(res, remember){
     ClipApp.Login.success(res, remember);
     ClipApp.Me.me.fetch();
-    ClipApp.Bubb.getUserTags(res.token.split(":")[0]);
   });
 
   App.vent.bind("app.clipapp:register", function(){
@@ -332,10 +338,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.close();
   });
 
-  App.vent.bind("app.clipapp:clipmemo", function(cid){
-    ClipApp.ClipMemo.show(cid);
-  });
-
   App.vent.bind("app.clipapp:clipadd", function(){
     var uid = App.util.getMyUid(); // 当前登录用户
     if(!uid){
@@ -366,22 +368,6 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.bubb:showUserTags", function(uid){
     ClipApp.Bubb.showUserTags(uid);
-  });
-
-  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
-    ClipApp.Bubb.refresh(uid, follow, new_tags);
-  });
-
-  App.vent.bind("app.clipapp.cliplist:add",function(addmodel){
-    ClipApp.ClipList.add(addmodel);
-  });
-
-  App.vent.bind("app.clipapp.cliplist:edit",function(content, model_id){
-    ClipApp.ClipList.edit(content, model_id);
-  });
-
-  App.vent.bind("app.clipapp.cliplist:remove",function(model_id){
-    ClipApp.ClipList.remove(model_id);
   });
 
   // 更新转载和评论次数

@@ -76,7 +76,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     followUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
-	Bubb.refresh(uid, ['*']);
+	refresh(uid, ['*']);
       }else{
 	iframe_call('bubbles', "followTag", tag);
 	last.follows.push(tag);
@@ -96,7 +96,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
-	Bubb.refresh(uid, []);
+	refresh(uid, []);
       }else{
 	iframe_call('bubbles', "unfollowTag", tag);
       }
@@ -127,13 +127,37 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     last = tags;
   };
 
-  Bubb.refresh = function (uid, follow, new_tags){
+  App.vent.bind("app.clipapp.clipadd:success",function(addmodel){
+    if(App.util.self(_uid)){
+      refresh(App.util.getMyUid(), null, addmodel.get("tag"));
+    }
+  });
+
+  App.vent.bind("app.clipapp.clipedit:success", function(){
+    if(App.util.self(_uid)){
+      Bubb.showUserTags(_uid);
+    }
+  });
+
+  App.vent.bind("app.clipapp.clipmemo:success", function(){
+     if(App.util.self(_uid)){
+      Bubb.showUserTags(_uid);
+    }
+  });
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(){
+    if(App.util.self(_uid)){
+      Bubb.showUserTags(_uid);
+    }
+  });
+
+  function refresh(uid, follow, new_tags){
     _uid = uid;
     self = App.util.self(uid);
     if(follow){
       showTags(mkTag(last.tags, follow, null, self));
-    }else if(new_tags){
-      showTags(mkTag(_.union(last.tags,new_tags), follow, null, self));
+    }else if(!_.isEmpty(new_tags)){
+      showTags(mkTag(_.union(last.tags, new_tags), follow, null, self));
     }
   };
 
@@ -190,14 +214,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
-    var my = App.util.getMyUid();
     var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..0");
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
-      if(uid == my){ // 触发mytag:update事件
-	App.vent.trigger("app.clipapp.taglist:mytag",bubb.tag);
-      }else if(my){
+      if(App.util.getMyUid()){ // 如果登录了
 	App.vent.trigger("app.clipapp:followset", bubb.follow);
       }
       if(callback)callback(bubb.tag.slice(0,19), bubb.follow);
