@@ -330,8 +330,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	event.preventDefault();
 	App.ClipApp.showSuccess("faceUp_success");
 	face_remote_flag = false;
-	// face_change_flag = true;
-	// 直接触发face设置成功
+	face_change_flag = true;
       }
     }
   });
