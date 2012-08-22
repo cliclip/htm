@@ -13,7 +13,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
       "click .oauth_del":"TwitterCut"
     },
     initialize: function(){
-      this.bind("delete", delTwitter);
+      this.bind("@delete", delTwitter);
     },
     TwitterAdd:function(e){
       window.location.href="/oauth/req/twitter?force_login=true";
@@ -23,9 +23,8 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
       var uid = e.currentTarget.id;
       var name = $.trim($("#name_"+uid).text());
       var view = this;
-      App.vent.trigger("app.clipapp.message:alert", "deloauth", name);
-      App.vent.bind("app.clipapp.message:sure",function(){
-	view.trigger("delete",uid);
+      App.ClipApp.showAlert("deloauth",name,function(){
+	view.trigger("@delete",uid);
       });
     }
   });
@@ -40,10 +39,6 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
     });
   };
 
-  /*App.vent.bind("app.clipapp.userbind:ok",function(){
-    WeiboEdit.show();
-   });*/
-
   var delTwitter = function(uid){
   var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
     model.destroy({ // destroy要求model必须要有id
@@ -51,7 +46,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
 	TwitterEdit.show();
       },
       error: function(model, res){
-	App.vent.trigger("app.clipapp.message:alert","del_oauth_fail");
+	App.ClipApp.showAlert("del_oauth_fail");
       }
     });
   };

@@ -24,10 +24,6 @@ App.util = (function(){
     if (token) uid = token.split(":")[0];
     return uid;
   };
-  util.isLoggedIn = function(){
-    return util.getMyUid() != null ? true : false;
-  };
-
 
   util.getMyFace = function(){
     return {

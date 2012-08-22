@@ -92,7 +92,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   // 更新“谁追我”列表
   FollowerList.refresh = function(){
     if(App.listRegion.currentView.className =='follow-item'){
-      if(util.isLoggedIn()){
+      if(App.ClipApp.isLoggedIn()){
 	var id = App.ClipApp.Face.getUserId();
 	FollowerList.showUserFollower(id);
       }else App.vent.trigger("app.clipapp:login");

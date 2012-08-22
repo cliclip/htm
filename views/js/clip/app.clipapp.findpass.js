@@ -26,8 +26,8 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
       "click .close_w"  :  "cancel"
     },
     initialize:function(){
-      this.bind("success", success);
-      this.bind("cancel", cancel);
+      this.bind("@success", success);
+      this.bind("@cancel", cancel);
     },
     clearmsg:function(e){
       this.cleanError(e);
@@ -46,7 +46,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
       this.model.save({address:address},{
 	type:"POST",
 	success:function(model,res){
-	  that.trigger("success",res.address);
+	  that.trigger("@success",res.address);
 	},
 	error:function(model, res){
 	  that.showError('findpass',res);
@@ -55,7 +55,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
     },
     cancel:function(e){
       e.preventDefault();
-      this.trigger("cancel");
+      this.trigger("@cancel");
     }
   });
   FindPass.show=function(){
@@ -69,7 +69,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
 
   var success = function(address){
     Backbone.history.navigate("",true);
-    App.vent.trigger("app.clipapp.message:confirm", "go_resetpass",address);
+    App.ClipApp.showConfirm("go_resetpass",address);
     FindPass.close();
   };
 

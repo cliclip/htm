@@ -13,7 +13,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
       "click .oauth_del":"WeiboCut"
     },
     initialize:function(){
-      this.bind("delete", delWeibo);
+      this.bind("@delete", delWeibo);
     },
     WeiboAdd:function(e){
       window.location.href="/oauth/req/weibo?forcelogin=true";
@@ -23,9 +23,8 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
       var uid = e.currentTarget.id;
       var name = $.trim($("#name_"+uid).text());
       var view = this;
-      App.vent.trigger("app.clipapp.message:alert", "deloauth", name);
-      App.vent.bind("app.clipapp.message:sure",function(){
-	view.trigger("delete",uid);
+      App.ClipApp.showAlert("deloauth",name,function(){
+	view.trigger("@delete",uid);
       });
     }
   });
@@ -48,7 +47,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 	WeiboEdit.show();
       },
       error: function(model, res){
-	App.vent.trigger("app.clipapp.message:alert","del_oauth_fail");
+	App.ClipApp.showAlert("del_oauth_fail");
       }
     });
   };

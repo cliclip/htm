@@ -5,27 +5,24 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
   Oauth.process=function(){
     checkUser(function(err,res){
       if(err&&err.hasbind_err){
-	App.vent.trigger("app.clipapp.message:confirm", "account_hasbind");
+	App.ClipApp.showConfirm("account_hasbind");
 	Backbone.history.navigate("my",true);
       }else if(res&&res.oauth){
 	App.vent.trigger("app.clipapp.userbind:show",res.oauth,"");
       }else if(res&&res.token){
 	if(res.provider == "weibo"){
-	  App.vent.trigger("app.clipapp.message:confirm", "weibo_sucmsg",res.name);
+	  App.ClipApp.showConfirm("weibo_sucmsg",res.name);
 	}else if(res.provider == "twitter"){
-	  App.vent.trigger("app.clipapp.message:confirm", "twitter_sucmsg",res.name);
+	  App.ClipApp.showConfirm("twitter_sucmsg",res.name);
 	}
 	delete res.provider;
 	delete res.name;
 	App.vent.trigger("app.clipapp.login:success", res);
       }else{
-	App.vent.unbind("app.clipapp.message:cancel");
-	App.vent.trigger("app.clipapp.message:alert", "oauth_fail");
-	App.vent.bind("app.clipapp.message:sure",function(){
-	  if(util.isLoggedIn())  Backbone.history.navigate("my",true);
+	App.ClipApp.showAlert("oauth_fail",null,function(){
+	  if(App.ClipApp.isLoggedIn())  Backbone.history.navigate("my",true);
 	  else    Backbone.history.navigate("register",true);
-	});
-	App.vent.bind("app.clipapp.message:cancel",function(){
+	},function(){
 	  Backbone.history.navigate("",true);
 	});
       }

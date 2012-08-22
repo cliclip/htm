@@ -161,16 +161,24 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Message.success(key, value);
   };
 
-  ClipApp.showAlert = function(key, value, fun){
+  ClipApp.showAlert = function(key, value, fun, cancel_fun){
     ClipApp.Message.alert(key, value);
     if(typeof(fun) == "function"){
       App.vent.unbind("app.clipapp.message:sure");
       App.vent.bind("app.clipapp.message:sure", fun);
     }
+    if(typeof(cancel_fun) == "function"){
+      App.vent.unbind("app.clipapp.message:cancel");
+      App.vent.bind("app.clipapp.message:cancel", cancel_fun);
+    }
   };
 
-  ClipApp.showConfirm = function(key, value){
+  ClipApp.showConfirm = function(key, value,fun){
     ClipApp.Message.confirm(key, value);
+    if(typeof(fun) == "function"){
+      App.vent.unbind("app.clipapp.message:sure");
+      App.vent.bind("app.clipapp.message:sure", fun);
+    }
   };
 
   App.vent.bind("all", function(eventName){
@@ -224,13 +232,18 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.userbind:show",function(oauth,fun,remember){
-    UserBind.show(oauth, fun, remember);
+    ClipApp.UserBind.show(oauth, fun, remember);
   });
 
   App.vent.bind("app.clipapp.face:reset", function(){
     ClipApp.Me.me.fetch();
-    if(/my/.test(window.location.hash))
+      console.log(window.location.hash);
+    if(/my/.test(window.location.hash)){
+      console.log("dddddddddddddddddddddaaaaaaaaaafasd");
+      console.log(ClipApp.Me.me);
       ClipApp.Face.show(ClipApp.Me.me.get("id"));
+    }
+
   });
 
   App.vent.bind("app.clipapp.emailadd:show",function(uid){

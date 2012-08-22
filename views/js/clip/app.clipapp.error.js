@@ -3,13 +3,12 @@ App.ClipApp.Error=(function(App,Backbone,$){
  Error.process=function(message){
    // console.log(typeof(message));
    if(message == "InternalOAuthError"){
-     App.vent.trigger("app.clipapp.message:confirm", message);
+     App.ClipApp.showConfirm(message);
    }else{
-     App.vent.trigger("app.clipapp.message:confirm", "error_message");
+     App.ClipApp.showConfirm("error_message");
    }
-   var my=App.util.getMyUid();
-   if(my)  Backbone.history.navigate("my",true);
-   else    Backbone.history.navigate("register",true);
+  if(App.ClipApp.isLoggedIn())  Backbone.history.navigate("my",true);
+  else Backbone.history.navigate("register",true);
   };
   return Error;
 })(App,Backbone,jQuery);

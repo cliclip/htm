@@ -28,8 +28,8 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
-      this.bind("cancel", cancel);
-      this.bind("success", success);
+      this.bind("@cancel", cancel);
+      this.bind("@success", success);
     },
     blurName: function(e){
       var that = this;
@@ -56,7 +56,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	  url: App.ClipApp.Url.base+"/login",
 	  type: "POST",
   	  success: function(model, res){
-  	    that.trigger("success", res);
+  	    that.trigger("@success", res);
   	  },
   	  error:function(model, res){
 	    that.showError('bind',res);
@@ -67,7 +67,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	  url : App.ClipApp.Url.base+"/register",
 	  type: "POST",
 	  success:function(model, res){
-	    that.trigger("success", res);
+	    that.trigger("@success", res);
 	  },
 	  error:function(model,error){
 	    that.showError('bind',error);
@@ -87,7 +87,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      this.trigger("cancel");
+      this.trigger("@cancel");
     }
   });
 
@@ -97,7 +97,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     bindOauth = oauth;
     fun = fun;
     remember = remember;
-    var model = new App.Model.UserBindModel({info:auth.info,provider:auth.provider});
+    var model = new App.Model.UserBindModel({info:oauth.info,provider:oauth.provider});
     var view = new UserBindView({model : model});
     App.popRegion.show(view);
   };
@@ -124,28 +124,19 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     }
   };
 
-  /* //bind 设置里面增加微博绑定
-  App.vent.bind("app.clipapp.userbind:bind",function(oauth){
-    saveOauth(oauth,function(err,reply){
-      if(reply){
-	App.vent.trigger("app.clipapp.userbind:ok");
-      }
-    });
-  });*/
-
   var success = function(res){
-    if(remember){
+    if(remember){ //关联现在还没有传递“保持登录”,fun 等参数
       var data = new Date();
-      data.setTime(data.getTime() + 30*24*60*60*1000);
+      data.setTime(data.getTime() + 12*30*24*60*60*1000);
       document.cookie = "token="+res.token+";expires=" + data.toGMTString();
     }else{
       document.cookie = "token="+res.token;
     }
     saveOauth(bindOauth,function(err,reply){
       if(bindOauth.provider == "weibo"){
-	App.vent.trigger("app.clipapp.message:confirm", "weibo_sucmsg",bindOauth.info.name);
+	App.ClipApp.showConfirm("weibo_sucmsg",bindOauth.info.name);
       }else if(bindOauth.provider == "twitter"){
-	App.vent.trigger("app.clipapp.message:confirm", "twitter_sucmsg",bindOauth.info.name);
+	App.ClipApp.showConfirm("twitter_sucmsg",bindOauth.info.name);
       }
       // App.vent.trigger("app.clipapp.userbind:bindok"); 动作为 Me.me.fetch;
       if(reply){
@@ -154,7 +145,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	  // App.ClipApp.Bubb.getUserTags(res.token.split(":")[0]);
 	  fun();
 	}else{
-	  Backbone.history.navigate("my",true);
+	  App.vent.trigger("app.clipapp.login:success",res);
 	}
 	UserBind.close();
       }
