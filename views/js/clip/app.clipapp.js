@@ -139,9 +139,12 @@ App.ClipApp = (function(App, Backbone, $){
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
   };
 
-
   ClipApp.showLogin = function(callback){
     ClipApp.Login.show(callback);
+  };
+
+  ClipApp.showMemo = function(args){
+    ClipApp.ClipMemo.show(args);
   };
 
   // 对于那些直接点击修改按钮的部分，有些多余
@@ -173,7 +176,8 @@ App.ClipApp = (function(App, Backbone, $){
     }
   };
 
-  ClipApp.showConfirm = function(key, value,fun){
+
+  ClipApp.showConfirm = function(key, value, fun){
     ClipApp.Message.confirm(key, value);
     if(typeof(fun) == "function"){
       App.vent.unbind("app.clipapp.message:sure");
@@ -192,7 +196,6 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.login:success", function(res, remember){
     ClipApp.Login.success(res, remember);
     ClipApp.Me.me.fetch();
-    ClipApp.Bubb.getUserTags(res.token.split(":")[0]);
   });
 
   App.vent.bind("app.clipapp:register", function(){
@@ -217,6 +220,17 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Logout.show();
   });
 
+  ClipApp.showUserEdit = function(){
+    ClipApp.UserEdit.showUserEdit();
+    ClipApp.UserEdit.showFace();
+    ClipApp.UserEdit.showEmail();
+    ClipApp.RuleEdit.show();
+    ClipApp.WeiboEdit.show();
+    ClipApp.TwitterEdit.show();
+    ClipApp.UserEdit.showPassEdit();
+  };
+
+/*
   App.vent.bind("app.clipapp.useredit:show", function(){
     ClipApp.UserEdit.showUserEdit();
     ClipApp.UserEdit.showFace();
@@ -226,7 +240,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.TwitterEdit.show();
     ClipApp.UserEdit.showPassEdit();
   });
-
+*/
   App.vent.bind("app.clipapp.useredit:rename", function(){
     ClipApp.UserEdit.rename();
   });
@@ -235,7 +249,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.UserBind.show(oauth, fun, remember);
   });
 
-  App.vent.bind("app.clipapp.face:reset", function(){
+  App.vent.bind("app.clipapp.useredit:set_success", function(){
     ClipApp.Me.me.fetch();
       console.log(window.location.hash);
     if(/my/.test(window.location.hash)){
@@ -246,10 +260,14 @@ App.ClipApp = (function(App, Backbone, $){
 
   });
 
+  ClipApp.showEmailAdd = function(uid){
+    ClipApp.EmailAdd.show(uid);
+  };
+/*
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     ClipApp.EmailAdd.show(uid);
   });
-
+*/
   App.vent.bind("app.clipapp:nextpage", function(){
     ClipApp.ClipList.nextpage();
     ClipApp.FollowerList.nextpage();
@@ -345,10 +363,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.close();
   });
 
-  App.vent.bind("app.clipapp:clipmemo", function(cid){
-    ClipApp.ClipMemo.show(cid);
-  });
-
   App.vent.bind("app.clipapp:clipadd", function(){
     var uid = App.util.getMyUid(); // 当前登录用户
     if(!uid){
@@ -381,22 +395,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Bubb.showUserTags(uid);
   });
 
-  App.vent.bind("app.clipapp.bubb:refresh",function(uid,follow,new_tags){
-    ClipApp.Bubb.refresh(uid, follow, new_tags);
-  });
-
-  App.vent.bind("app.clipapp.cliplist:add",function(addmodel){
-    ClipApp.ClipList.add(addmodel);
-  });
-
-  App.vent.bind("app.clipapp.cliplist:edit",function(content, model_id){
-    ClipApp.ClipList.edit(content, model_id);
-  });
-
-  App.vent.bind("app.clipapp.cliplist:remove",function(model_id){
-    ClipApp.ClipList.remove(model_id);
-  });
-
   // 更新转载和评论次数
   App.vent.bind("app.clipapp.comment:success", function(args){
     ClipApp.ClipList.refresh(args);
@@ -404,6 +402,7 @@ App.ClipApp = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.reclip:success", function(args){
     ClipApp.ClipList.refresh(args);
+    ClipApp.TagList.setbaseTag(args.tag);
   });
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
@@ -441,7 +440,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Message.success(key, value);
   });
 
-  App.vent.bind("app.clipapp.versions:change",function(lang){
+  App.vent.bind("app.clipapp.useredit:versions_change",function(lang){
     App.versions.setLanguage(lang);
   });
 

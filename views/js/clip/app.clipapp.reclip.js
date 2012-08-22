@@ -21,8 +21,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     },
     initialize: function(){
       this.flag = false;
-      this.bind("submit", reclipSave);
-      this.bind("closeView", close);
+      this.bind("@submit", reclipSave);
+      this.bind("@closeView", close);
     },
     maintagAction:function(e){
       $(e.currentTarget).toggleClass("white_48");
@@ -46,7 +46,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
       if($(".error").length == 0){
-	this.trigger("submit", params,mid);
+	this.trigger("@submit", params,mid);
       }else{
 	$(e.currentTarget).attr("disabled",false);
       }
@@ -69,7 +69,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
-      this.trigger("closeView",params,mid);
+      this.trigger("@closeView",params,mid);
     }
   });
 
@@ -105,7 +105,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     var ruser = recommend.user;
     if(pub == "false" && ruser != cid.split(':')[0]){
       // 是没公开的，并且不是clip_owner进行的操作
-      App.vent.trigger("app.clipapp.message:confirm", {reclip: "no_pub"});
+      App.ClipApp.showConfirm({reclip:"no_pub"});
     }else{
       var model = new ReclipModel({id:cid,rid:rid});
       var reclipView = new ReclipView({model : model});
@@ -121,11 +121,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       App.popRegion.close();
       mid = null;
     }else{
-      App.vent.trigger("app.clipapp.message:alert", "reclip_save");
-      App.vent.bind("app.clipapp.message:sure",function(){
-	App.popRegion.close();
-	mid = null;
-      });
+      var fun = function(){ App.popRegion.close(); mid=null; };
+      App.ClipApp.showAlert("reclip_save", null, fun);
     }
   };
 
@@ -134,23 +131,24 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     model.save({},{
       type: "POST",
       success: function(model, res){
-	App.vent.trigger("app.clipapp.message:success", {reclip:"success"});
-	App.vent.trigger("app.clipapp.reclip:success", {type:"reclip",model_id:mid});
-	App.vent.trigger("app.clipapp.taglist:mytag",params.clip.tag);
+	App.ClipApp.showSuccess({reclip:"success"});
+	var arg = {type:"reclip",model_id:mid,tag:params.clip.tag};
+	App.vent.trigger("app.clipapp.reclip:success", arg);
 	Reclip.close();
       },
       error:function(model, res){
 	Reclip.close();
-	App.vent.trigger("app.clipapp.message:confirm",res);
+	App.ClipApp.showConfirm(res);
       }
     });
   }
 
-
+/*
   App.vent.bind("app.clipapp.reclip:sync", function(params,mid){
     reclipSave(params,mid);
   });
-
+*/
+			
   var close = function(params,mid){
     Reclip.close(params,mid);
   };

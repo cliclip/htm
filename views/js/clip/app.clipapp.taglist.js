@@ -59,6 +59,19 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     TagList.tagListRegion.show(view);
   };
 
+  App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
+    TagList.setbaseTag(addmodel.get("tag"));
+  });
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(){
+    resetBase();
+  });
+
+  App.vent.bind("app.clipapp.login:success", function(){
+    resetBase();
+  });
+
+
   TagList.setbaseTag = function(tags){
     baseTag = _.difference(_.union(tags,baseTag), bubs);
   };
@@ -69,8 +82,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     }
   };
 
-
-  App.bind("initialize:after", function(){
+  function resetBase(){
     var my = App.util.getMyUid();
     if(my){
       var tagModel =  new TagListModel({id: my});
@@ -79,6 +91,10 @@ App.ClipApp.TagList=(function(App,Backbone,$){
 	baseTag = _.difference(_.union(model.get("tag"), baseTag), bubs);
       });
     }
+  };
+
+  App.bind("initialize:after", function(){
+    resetBase();
   });
 
   return TagList;

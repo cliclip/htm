@@ -35,11 +35,11 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       "error" : "showError"
     },
     initialize: function(){
-      this.bind("closeView", close);
+      this.bind("@closeView", close);
     },
     EmailAddclose: function(){
       var data = this.getInput();
-      this.trigger("closeView",data.email);
+      this.trigger("@closeView",data.email);
     },
     EmailAddcommit: function(){
       var view = this;
@@ -48,12 +48,12 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       this.model.save(data,{
 	type:"POST",
 	success: function(model, res){
-	  App.vent.trigger("app.clipapp.message:confirm", "addemail", model.get("email"));
-	  view.trigger("closeView");
+	  App.ClipApp.showConfirm("addemail", model.get("email"));
+	  view.trigger("@closeView");
 	},
 	error:function(model, res){
 	  if(res.email == "no_uname"){
-	    App.vent.trigger("app.clipapp.message:confirm", res);
+	    App.ClipApp.showConfirm(res);
 	  }else{
 	    view.showError('emailAdd',res);
 	  }
@@ -79,10 +79,10 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       url: App.ClipApp.Url.base+"/active/"+key,
       type: "POST",
       success:function(model,response){ // 不只是弹出提示框这么简单
-	App.vent.trigger("app.clipapp.message:confirm", {active:"email"}, response.email);
+	App.ClipApp.showConfirm({active:"email"},response.email);
       },
       error:function(model,error){ // 则显示该链接不能再点击
-	App.vent.trigger("app.clipapp.message:confirm", error);
+	App.ClipApp.showConfirm(error);
       }
     });
   };
@@ -91,10 +91,8 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     if(!address)
       App.popRegion.close();
     else{
-      App.vent.trigger("app.clipapp.message:alert", "emailadd_save");
-      App.vent.bind("app.clipapp.message:sure",function(){
-	App.popRegion.close();
-      });
+      var fun = function(){App.popRegion.close();};
+      App.ClipApp.showAlert("emailadd_save", null, fun);
     }
   };
 

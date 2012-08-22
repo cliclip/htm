@@ -21,7 +21,7 @@ App.Model = Backbone.Model.extend({
     if(msg.auth == "no_name"){
       App.vent.trigger("app.clipapp.message:alert", msg);
       App.vent.bind("app.clipapp.message:sure", function(){
-	App.vent.trigger("app.clipapp.useredit:show");
+	App.ClipApp.showUserEdit();
 	App.vent.trigger("app.clipapp.useredit:rename");
       });
     }else if(msg.auth == "not_login" || msg.auth == "not_self"){

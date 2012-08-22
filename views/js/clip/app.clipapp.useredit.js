@@ -5,16 +5,15 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var face_remote_flag = false;
   var submit_face = false;
   var flag = false;
+  var my = App.util.getMyUid();
   var EditModel = App.Model.extend({});
   var FaceModel = App.Model.extend({
     url:function(){
-      var my = App.util.getMyUid();
       return P+"/user/"+my+"/face";
     }
   });
   var PassEditModel = App.Model.extend({
     url:function(){
-      var my = App.util.getMyUid();
       return P+"/user/" + my + "/passwd";
     },
     validate:function(attrs){
@@ -34,7 +33,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
   var NameModel = App.Model.extend({
     url:function(){
-      var my = App.util.getMyUid();
       return  P + "/user/" + my + "/name";
     },
     validate:function(attrs){
@@ -50,7 +48,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   var EmailEditModel = App.Model.extend({
     url:function(){
-      var my = App.util.getMyUid();
       if(this.get("address")){
 	return P+"/user/"+ my +"/email/"+this.get("address");
       }
@@ -90,19 +87,22 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click .email_address":"emailCut"
     },
     initialize: function(){
-      this.bind("delEmail", delEmail);
+      this.bind("@delEmail", delEmail);
     },
     emailAdd:function(e){
-      App.vent.trigger("app.clipapp.emailadd:show",this.model.id);
+      App.ClipApp.showEmailAdd(this.model.id);
     },
     emailCut:function(e){
       e.preventDefault();
       var address = e.currentTarget.id;
       var view = this;
+      var fun = function(){view.trigger("@delEmail", address);};
+      App.ClipApp.showAlert("delemail", address, fun);
+      /*
       App.vent.trigger("app.clipapp.message:alert", "delemail", address);
       App.vent.bind("app.clipapp.message:sure",function(){
 	view.trigger("delEmail",address);
-      });
+      });*/
     }
   });
 
@@ -163,7 +163,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	type: 'PUT',
   	success: function(model, res){
 	  UserEdit.showPassEdit();
-	  App.vent.trigger("app.clipapp.message:success", "passwd_success");
+	  App.ClipApp.showSuccess("passwd_success");
 	  document.cookie = "token="+res.token;
   	},
   	error:function(model, res){
@@ -215,17 +215,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     lang_save: function(e){
       var lang = e.currentTarget.id;
-      var uid = App.util.getMyUid();
       if(lang){
 	var model = new EditModel();
 	model.save({},{
 	  type:'PUT',
-	  url : App.util.unique_url(P+"/user/"+uid+"/lang/"+lang),
+	  url : App.util.unique_url(P+"/user/"+my+"/lang/"+lang),
 	  success:function(model,res){
-	    App.vent.trigger("app.clipapp.versions:change",lang);
+	    App.vent.trigger("app.clipapp.useredit:versions_change",lang);
 	  },
 	  error:function(model,error){
-	    App.vent.trigger("app.clipapp.message:confirm",error);
+	    App.ClipApp.showConfirm(error);
 	  }
 	});
       }
@@ -280,7 +279,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     },
     initialize:function(){
       this.model.bind("change", this.render, this);
-      this.bind("rename", this.rename);
+      this.bind("@rename", this.rename);
     },
     rename: function(){
       $(".edit_name").click(); // 触发设置用户名的动作
@@ -301,8 +300,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  type: 'PUT',
 	  success:function(model,res){
 	    view.model.set("name", res.name);
-	    App.vent.trigger("app.clipapp.message:success","rename_success");
-	    App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
+	    App.ClipApp.showSuccess("rename_success");
+	    App.vent.trigger("app.clipapp.useredit:set_success");
 	  },
 	  error:function(model,res){
 	    view.showError('faceEdit',res);
@@ -322,7 +321,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $("#confirm_face").hide();
       if(face_remote_flag){
 	event.preventDefault();
-	App.vent.trigger("app.clipapp.message:success","faceUp_success");
+	App.ClipApp.showSuccess("faceUp_success");
 	face_remote_flag = false;
 	face_change_flag = true;
       }
@@ -331,17 +330,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   UserEdit.showFace = function(){//设置页面显示用户名和头像
     var face = App.util.getMyFace();
-    var uid = App.util.getMyUid();
     var faceModel = new FaceModel(face);
     UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
     var faceView = new FaceView({model: faceModel});
     UserEdit.faceRegion.show(faceView);
-    faceLoad(face.face,uid);
+    faceLoad(face.face,my);
   };
 
   UserEdit.onUploadImgChange = function(sender){
     if( !sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i)){
-      App.vent.trigger("app.clipapp.message:confirm","imageUp_error");
+      App.ClipApp.showConfirm("imageUp_error");
       return false;
     }else{
       if(sender.files && sender.files[0]&&Modernizr.filereader){
@@ -394,7 +392,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 		  $("#myface").attr("src",App.util.face_url(returnObj[1][0]),240);
 		  $("#confirm_face").show();
 		}else{
-		  App.vent.trigger("app.clipapp.message:success","faceUp_success");
+		  App.ClipApp.showSuccess("faceUp_success");
 		  face_change_flag = true;
 		}
 	      },
@@ -405,7 +403,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  }
 	}else{//上传失败
 	  if(submit_face){//flag 作用判断是刚刚打开设置页面还是正在更新头像
-	    App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
+	    App.ClipApp.showConfirm("imageUp_fail");
 	  }
 	}
       }
@@ -456,14 +454,14 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   UserEdit.close = function(){
     if(face_change_flag){
-      App.vent.trigger("app.clipapp.face:reset",App.util.getMyUid());
+      App.vent.trigger("app.clipapp.useredit:set_success",my);
       face_change_flag = false;
     }
     App.mysetRegion.close();
   };
 
   UserEdit.rename = function(){
-    UserEdit.faceRegion.currentView.trigger("rename");
+    UserEdit.faceRegion.currentView.trigger("@rename");
   };
 
   var close = function(){

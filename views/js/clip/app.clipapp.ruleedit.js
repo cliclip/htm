@@ -54,7 +54,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     },
     initialize:function(){
       this.tmpmodel = new RuleModel();
-      this.bind("showrule", showrule);
+      this.bind("@showrule", showrule);
     },
     openRule:function(e){
       var checked = $("#open_rule").attr("checked");
@@ -108,8 +108,8 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       }else{
 	this.tmpmodel.save(data,{
 	  success: function(model, res){
-  	    view.trigger("showrule", model.id);
-	    App.vent.trigger("app.clipapp.message:success", "setRule_success");
+  	    view.trigger("@showrule", model.id);
+	    App.ClipApp.showSuccess("setRule_success");
 	    o_data = data;
 	  },
 	  error:function(model, res){

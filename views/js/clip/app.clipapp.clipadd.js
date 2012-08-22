@@ -41,9 +41,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     initialize:function(){
       clip = {};
       this.flag = true; // falg跟滚动条有关
-      this.bind("success", saveSuccess);
-      this.bind("error", saveFailed);
-      this.bind("cancel", saveCanceled);
+      this.bind("@success", saveSuccess);
+      this.bind("@error", saveFailed);
+      this.bind("@cancel", saveCanceled);
     },
     extImg:function(evt){
       $(".masker_layer1").show();
@@ -86,7 +86,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       if(clipper){
 	App.vent.trigger("app.clipapp.clipper:cancel", clip);
       }else{
-	this.trigger("cancel", clip);
+	this.trigger("@cancel", clip);
       }
     },
     savecliper:function(e){
@@ -99,11 +99,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model
 	  if(clipper) App.vent.trigger("app.clipapp.clipper:save");
-	  else view.trigger("success", model);
+	  else view.trigger("@success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
 	  target.attr("disabled",false);
-	  view.trigger("error", error);
+	  view.trigger("@error", error);
 	}
       });
     },
@@ -111,27 +111,17 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp.clipper:empty");
     },
     remark_clip: function(){ // 此全局变量就是为了clip的注操作
-      App.vent.trigger("app.clipapp:clipmemo", clip);
+      App.ClipApp.showMemo(clip);
     }
   });
 
   var saveSuccess = function(model){
     ClipAdd.close();
-    var uid = App.util.getMyUid();
-    if(Backbone.history){
-      if(Backbone.history.fragment == "my"){
-	App.vent.trigger("app.clipapp.cliplist:add", model);
-	App.vent.trigger("app.clipapp.bubb:refresh",uid,null,model.get("tag"));
-	App.vent.trigger("app.clipapp.taglist:mytag",model.get("tag"));
-      }else{
-	Backbone.history.navigate("/my", true);
-      }// 重新设置taglist
-    }
+    App.vent.trigger("app.clipapp.clipadd:success", model);
   };
 
   var saveFailed = function(error){
-    App.vent.trigger("app.clipapp.message:confirm", error);
-    App.vent.bind("app.clipapp.message:sure", function(){
+    App.ClipApp.showConfirm(error, null, function(){
       App.ClipApp.Editor.focus("editor");
     });
   };
@@ -143,7 +133,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   ClipAdd.image_change = function(sender){ // 在view中直接绑定
     var change = App.util.isImage("formUpload");
     if(!change){
-      App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
+      view.trigger("@error", "imageUp_fail");
     }else{
       /*if( sender.files &&sender.files[0] ){//图片本地预览代码
        var img = new Image();
@@ -155,7 +145,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(img_src){
-	// console.info("after submit",img_src);
 	// img_list.push(img_src);
 	if(img_src)
 	  App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
@@ -184,8 +173,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     if(!clip || !clip.content){
       App.viewRegion.close();
     }else{
-      App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
-      App.vent.bind("app.clipapp.message:sure",function(){
+      App.ClipApp.showAlert("clipadd_save", null, function(){
 	App.viewRegion.close();
       });
     }
