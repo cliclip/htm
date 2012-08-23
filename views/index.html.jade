@@ -81,6 +81,7 @@ html
           a(href="javascript:scroll(0,0)")
             div.return_top#return_top
         div.loader
+    div.feed
     div#view
       // **** 增
       //-include jade/dialog_add
@@ -106,7 +107,7 @@ html
       // **** 邮件确认
       //-include jade/dialog_mail
       // ****
-
+    div#feedback			       
     //- 程序控制组件插入的要素
       #mine
       #myset
@@ -116,6 +117,7 @@ html
       #view
       #pop
       #setpop
+      #feedback
      //- #query
 
     // **** 程序代码插入点

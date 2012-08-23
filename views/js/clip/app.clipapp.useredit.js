@@ -46,7 +46,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  var EmailEditModel = App.Model.extend({
+  App.Model.EmailEditModel = App.Model.extend({
     url:function(){
       if(this.get("address")){
 	return P+"/user/"+ my +"/email/"+this.get("address");
@@ -239,7 +239,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   UserEdit.showEmail = function(){
-    var emailModel = new EmailEditModel();
+    var emailModel = new App.Model.EmailEditModel();
     UserEdit.emailRegion = new App.Region({el:"#email"});
     emailModel.fetch();
     emailModel.onChange(function(emailModel){
@@ -476,7 +476,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   var delEmail = function(address){
-    var delModel = new EmailEditModel({id:1, address:address});
+    var delModel = new App.Model.EmailEditModel({id:1, address:address});
     delModel.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	UserEdit.showEmail();

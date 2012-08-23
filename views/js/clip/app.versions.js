@@ -134,7 +134,7 @@ App.versions = (function($){
       emailEdit : {
 	title       : "邮件摘录",
 	add         : "增加邮箱",
-	del         : "删除"
+	del         : "删除邮箱"
       },
 
       emailAdd : {
@@ -152,11 +152,13 @@ App.versions = (function($){
 
       weiboEdit : {
 	title       : "微博摘录",
-	add         : "增加微博帐号"
+	add         : "关联微博帐号",
+	del         : "删除微博账号"
       },
       twitterEdit : {
-	title       : "twitter摘录",
-	add         : "增加twitter帐号"
+	title       : "Twitter摘录",
+	add         : "关联Twitter帐号",
+	del         : "删除Twitter账号"
       },
 
       clipmemo : {
@@ -347,8 +349,23 @@ App.versions = (function($){
       },
 
       queryclip:{
-	add         : "添加摘录",
+	add         : "新建摘录",
 	search      : "搜索"
+      },
+
+      feed:{
+	feedback    : "意见反馈"
+      },
+
+      feedback:{
+	title       : "意见反馈",
+	ok          : "确定",
+	cancel      : "取消",
+	defaultText : "描述你的建议：(140字以内)",
+	feedback_text   : {
+	  is_null   : "评论内容为空",
+	  word_limit :"请把文字长度限制在140字以内"
+	}
       },
 
       message : {
@@ -373,6 +390,8 @@ App.versions = (function($){
 	reclip_tag     : "您成功转摘了 %s 条摘录",
 	comment        : "评论成功",
 	recomm         : "转发成功",
+	feedback_ok    : "发送成功",
+	feedback_fail  : "发送失败",
 	go_resetpass   : "找回密码邮件已经发送至 %s 邮箱，请在30分钟内从邮件中获取链接重置密码",
 	link:{
 	  expired: "此链接已过期",
@@ -609,7 +628,7 @@ App.versions = (function($){
       emailEdit : {
 	add         : "Add",
 	title       : "Recognized emails",
-	del         : "Delete"
+	del         : "Delete Email"
       },
 
       emailAdd : {
@@ -626,12 +645,14 @@ App.versions = (function($){
       },
 
       weiboEdit : {
-	title       : "Recognized weibo accounts",
-	add         : "Add"
+	title       : "Recognized Weibo accounts",
+	add         : "Add",
+	del         : "Delete Weibo account"
       },
       twitterEdit : {
 	title       : "Recognized twitter accounts",
-	add         : "Add"
+	add         : "Add",
+	del         : "Delete Twitter account"
       },
 
       clipmemo : {
@@ -827,6 +848,21 @@ App.versions = (function($){
 	search      : "Search"
       },
 
+      feed:{
+	feedback    : "feedback"
+      },
+
+      feedback:{
+	title       : "feedback",
+	ok          : "OK",
+	cancel      : "Cancel",
+	defaultText : "Describe your suggestion (limited to 140 characters)",
+	feedback_text   : {
+	  is_null : "Please enter comments",
+	  word_limit :"Please limited your comments to 140 characters"
+	}
+      },
+
       message : {
 	title         : "Notice",
 	ok            : "OK",
@@ -859,6 +895,8 @@ App.versions = (function($){
 	},
 	recomm         : "Clip was forwarded(@) successfully",
 	comment        : "Commented successfully",
+	feedback_ok    : "Send successfully",
+	feedback_fail  : "Send Fail",
 	account_hasbind:"This account has been used before. Please enter another account",
 	weibo_sucmsg:"Connect Sina Weibo account %s successfully. Now you can reclip clips from Sina Weibo(except comments), just @cliclip, <a href='http://weibo.com' target='_blank'>enjoy</a>!",
 	twitter_sucmsg:"Connect Twitter account %s successfully. Now you can reclip clips from Twitter Favorite(except comments), <a href='http://twitter.com' target='_blank'>enjoy</a>!",

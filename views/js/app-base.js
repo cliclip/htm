@@ -183,6 +183,8 @@ App.addRegions({
   listRegion: "#list",
   viewRegion: "#view",
   popRegion: "#pop",
+  feedRegion: ".feed",
+  feedbackRegion: "#feedback",
   setpopRegion:"#setpop",
   searchRegion:".search"
 });
