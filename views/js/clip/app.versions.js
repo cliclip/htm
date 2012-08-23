@@ -61,10 +61,10 @@ App.versions = (function($){
       userface : {
 	zhui        : "zhui",
 	stop        : "stop",
-	mfollowing  : "我追谁",
-	mfollow     : "谁追我",
-	following   : "ta追谁",
-	follow      : "谁追ta",
+	mfollowing  : "我追的",
+	mfollow     : "追我的",
+	following   : "ta追的",
+	follow      : "追ta的",
 	mysearch    : "搜我的摘录",
 	search      : "搜ta的摘录",
 	tsearch      : "搜索"
@@ -285,19 +285,19 @@ App.versions = (function($){
       },
 
       follower : {
-	mfollower   : "追我的人",
-	mfollowing  : "我追的人",
-	follower    : "追ta的人",
-	following   : "ta追的人",
+	mfollower   : "追我的",
+	mfollowing  : "我追的",
+	follower    : "追ta的",
+	following   : "ta追的",
 	p           : "还没有人追你哟",
 	all         : "所有"
       },
 
       following : {
-	mfollower   : "追我的人",
-	mfollowing  : "我追的人",
-	follower    : "追ta的人",
-	following   : "ta追的人",
+	mfollower   : "追我的",
+	mfollowing  : "我追的",
+	follower    : "追ta的",
+	following   : "ta追的",
 	p           : "你还没有追任何人哟",
 	all         : "所有"
       },
