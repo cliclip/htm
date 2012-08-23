@@ -17,7 +17,10 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	}
 	delete res.provider;
 	delete res.name;
-	App.vent.trigger("app.clipapp.login:success", res);
+	App.vent.trigger("app.clipapp.login:success",res);
+	setTimeout(function(){
+	  App.ClipApp.showUserEdit();
+	},0);
       }else{
 	App.ClipApp.showAlert("oauth_fail",null,function(){
 	  if(App.ClipApp.isLoggedIn())  Backbone.history.navigate("my",true);
