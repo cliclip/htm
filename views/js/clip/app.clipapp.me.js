@@ -169,7 +169,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 	});
       }
       if(Me.me.get("lang")){
-	App.vent.trigger("app.versions:version_change",meModel.get("lang"));
+	App.vent.trigger("app.versions:version_change",Me.me.get("lang"));
       }
     }, 0);
   };

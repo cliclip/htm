@@ -41,7 +41,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/interest/tag/:tag":"myInterest",
       // "my/setup":"mySetup",
 
-      "clip/:uid/:clipid":"showDetail"
+      "clip/:uid/:clipid":"clipDetail"
 
     }
   });
@@ -125,7 +125,12 @@ App.Routing.ClipRouting = (function(App, Backbone){
 	App.Routing.showRoute("my/recommend");
       }
     });
+
+    ClipRouting.router.bind("app.clipapp.routing:clipdetail",function(uid,cid){
+      App.Routing.showRoute("clip", uid, cid);
+    });
   });
+
 
   return ClipRouting;
 })(App, Backbone);

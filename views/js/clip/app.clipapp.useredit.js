@@ -46,7 +46,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  App.Model.EmailEditModel = App.Model.extend({
+  var EmailEditModel = App.Model.extend({
     url:function(){
       if(this.get("address")){
 	return P+"/user/"+ App.util.getMyUid() +"/email/"+this.get("address");
@@ -221,7 +221,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	var model = new EditModel();
 	model.save({},{
 	  type:'PUT',
-	  url : App.util.unique_url(P+"/user/"+my+"/lang/"+lang),
+	  url : App.util.unique_url(P+"/user/"+App.util.getMyUid()+"/lang/"+lang),
 	  success:function(model,res){
 	    App.vent.trigger("app.versions:version_change", lang);
 	  },

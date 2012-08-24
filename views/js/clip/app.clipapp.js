@@ -118,6 +118,15 @@ App.ClipApp = (function(App, Backbone, $){
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
 
+
+  // 为detail页面添加网址
+  ClipApp.clipDetail = function(uid, clipid, model_id, recommend){
+    if(uid) ClipApp.ClipList.showUserClips(uid);
+    else ClipApp.ClipList.showSiteClips();
+    App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:clipdetail", uid, clipid);
+  };
+
   /*ClipApp.myRecommend = function(tag){
     var uid = App.util.getMyUid();
     ClipApp.Face.show(uid);
@@ -126,12 +135,6 @@ App.ClipApp = (function(App, Backbone, $){
     App.util.current_page("@me");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:recommend",tag);
   };*/
-
-  // 为detail页面添加网址
-  ClipApp.showDetail = function(uid, clipid){
-    ClipApp.siteShow();
-    App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
-  };
 
   ClipApp.showLogin = function(callback){
     ClipApp.Login.show(callback);
