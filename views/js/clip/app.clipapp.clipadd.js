@@ -144,10 +144,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
        }};}*/
 
       $("#img_form").submit();
-      App.util.get_imgid("post_frame",function(img_src){
+      App.util.get_imgid("post_frame",function(err, img_src){
 	// img_list.push(img_src);
-	if(img_src)
-	  App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
+	if(!err && img_src){
+	  App.ClipApp.Editor.insertImage("editor",{url: img_src,ieRange:ieRange});
+	}else{
+	  App.ClipApp.showConfirm("imageUp_fail");
+	}
       });
       //解决ie 789 无法连续上传相同的图片，需要清空上传控件中的数据
       App.util.clearFileInput(sender);

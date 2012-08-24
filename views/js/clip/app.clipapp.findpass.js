@@ -76,7 +76,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
   var cancel = function(){
     FindPass.close();
     Backbone.history.navigate("",true);
-    App.vent.trigger("app.clipapp:login");
+    App.ClipApp.showLogin();
   };
 
  //App.bind("initialize:after", function(){ FindPass.show(); });

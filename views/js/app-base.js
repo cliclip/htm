@@ -19,8 +19,9 @@ App.Model = Backbone.Model.extend({
   },
   alert: function(msg){
     if(msg.auth == "no_name"){
-      var fun = function(){ App.vent.trigger("app.clipapp.useredit:rename");};
-      App.ClipApp.showAlert(msg, null, fun);
+      App.ClipApp.showAlert(msg, null, function(){
+	App.vent.trigger("app.clipapp.useredit:rename");
+      });
     }else if(msg.auth == "not_login" || msg.auth == "not_self"){
       App.ClipApp.showLogin();
     }
@@ -83,11 +84,7 @@ App.Collection = Backbone.Collection.extend({
 	  success.apply(model, [resp[1], status, xhr]);
 	}
       } else {
-	if("auth" in resp[1]){
-	  Backbone.Events.trigger("alert", resp[1]);
-	}else{
-	  if(error) error.apply(model, [resp[1], status, xhr]);
-	}
+	if(error) error.apply(model, [resp[1], status, xhr]);
       }
     };
     Backbone.sync.apply(Backbone, [method, model, options]);

@@ -89,9 +89,10 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
   var success = function(res){
     ResetPass.close();
     document.cookie = "token="+res.token;
+    App.ClipApp.showSuccess("resetpwd_success");
     App.vent.trigger("app.clipapp.login:success",res);
-    App.vent.trigger("app.clipapp.message:success","resetpwd_success");
   };
+			 
   var cancel = function(){
     ResetPass.close();
     Backbone.history.navigate("",true);
