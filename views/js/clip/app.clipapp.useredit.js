@@ -343,7 +343,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   function showFace(){//设置页面显示用户名和头像
-    var face = App.util.getMyFace();
+    var face = App.ClipApp.getMyFace();
     var faceModel = new FaceModel(face);
     UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
     var faceView = new FaceView({model: faceModel});
