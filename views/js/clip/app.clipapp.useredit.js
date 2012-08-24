@@ -367,10 +367,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     App.mysetRegion.close();
   };
 
-  UserEdit.rename = function(){
-    UserEdit.faceRegion.currentView.trigger("@rename");
-  };
-
   App.vent.bind("app.clipapp.useredit:rename", function(){
     if(UserEdit.faceRegion === undefined) App.ClipApp.showUserEdit();
     UserEdit.faceRegion.currentView.trigger("@rename");
