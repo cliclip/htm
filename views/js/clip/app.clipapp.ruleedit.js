@@ -57,11 +57,13 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       this.bind("@showrule", showrule);
     },
     openRule:function(e){
+      e.preventDefault();
       var checked = $("#open_rule").attr("checked");
       if(checked){
 	o_data.enable = true;
 	this.tmpmodel.save(o_data,{
 	  success: function(model, res){
+	    $("#open_rule").attr("checked",true);
 	    $(".rule_input").show();
 	  },
 	  error:function(model, error){
@@ -72,6 +74,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	o_data.enable = false;
 	this.tmpmodel.save(o_data,{
 	  success: function(model, res){
+	    $("#open_rule").attr("checked",false);
 	    $(".rule_input").hide();
 	  },
 	  error:function(model, error){
