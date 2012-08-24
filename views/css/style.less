@@ -1897,6 +1897,57 @@ section.follow_frame{
 	
 }
 
+//帮助界面CSS 
+section.help_frame{
+	width:750px;
+	padding:30px 0;
+	margin:0 auto;
+	//position: relative;
+	border:3px solid #fff;
+	position: absolute;
+	left:50%;
+	top:100px;
+	margin-left:-400px;
+	background:#d9d9d9;
+	.pop_title{
+		height:45px;
+		line-height:45px;
+		margin:-31px 5px 0px;
+		font-size:24px;
+		color:#333333;
+		border-bottom:1px solid #f0f0f0;
+		padding-left:35px;
+	}
+	ul.pop_body{
+		padding:10px 25px;
+		min-height:170px;   
+		margin:0;
+		li.title {
+			 list-style-type:none;
+			 height:auto;
+			 padding-top:16px;
+			 font-size:20px;
+			 span.hide{	
+			 	display:none;
+			 	position:relative;
+				left:20px;	
+				font-size:16px;	
+			}
+			span.current{	
+			 	position:relative;
+				left:20px;	
+				font-size:16px;	
+			}		 
+		}
+	}
+	.close_w {
+		 top: -18px;
+		 right: -18px;
+	}
+	
+}
+
+
 //设置界面 最外层
 section.edit {
   .masker_layer { z-index:2; }

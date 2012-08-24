@@ -26,12 +26,14 @@ App.ClipApp.Me = (function(App, Backbone, $){
     events:{
       "click #login_button": "loginAction",
       "click #register_button": "registerAction",
+      "click #help_button":"helpAction",
       "click .my_info":"showMysetup",
       "mouseout .my_info":"closeMysetup",
       "mouseover #show_mysetup":"keepOpenMysetup",
       "mouseout #show_mysetup":"closeMysetupMust",
       "click #logout": "logoutAction",
       "click #mysetup": "mysetupAction",
+      "click #help":"helpAction",
       // "mouseenter .navigate": "mouseEnter",
       // "mouseleave .navigate": "mouseLeave",
       "click .my": "switch_my",
@@ -71,6 +73,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },
     registerAction: function(){
       App.ClipApp.showRegister();
+    },
+    helpAction:function(){
+      Backbone.history.navigate("help/1",true);
     },
     logoutAction: function(){
       App.vent.trigger("app.clipapp:logout");

@@ -24,6 +24,11 @@ App.ClipApp = (function(App, Backbone, $){
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
   };
 
+  ClipApp.help = function(item){
+    ClipApp.Help.show(item);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:help",item);
+  };
+
   ClipApp.register = function(){
     ClipApp.Login.show();
   };

@@ -1,0 +1,23 @@
+[0,{
+   "item_1": {
+      "title": "Copy, Paste & Clip"
+    , "description": "<br><p>Your new clip can simply be created via copy and paste functions.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;1. Copy the contents that you want to clip.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;2. Click on the new clip button (the red button with a plus sign), a new clip window will pop up.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;3. Paste it.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;4. Clicking on “Confirm” button, your new clip is created!</p><p>Tips: You can create a new clip by writing directly in the new clip window.</p>"
+  },
+  "item_2": {
+      "title": "Bookmark & Clip"
+    , "description": "<br><p>First, drag [this bookmarklet link] to the bookmark area of your web browser. Now you are ready to create new clip via bookmark. </p><p>During web browsing, when you see something you want to clip, click “clip” button on your browser. Contents of current browsing webpage will appear in the new clip window. You can modify the contents as you want. </p><p>Clicking on “Confirm” button, your new clip is created!</p><p>Tips：</p><p>&nbsp;&nbsp;&nbsp;&nbsp;1. You can highlight any sections on a webpage and click on the “clip” button on your browser to create a new clip. </p><p>&nbsp;&nbsp;&nbsp;&nbsp;2. You can repeat the highlight and clip steps until you have clipped all the contents that you want. </p>"
+  },
+  "item_3": {
+      "title": "Email & Clip"
+    , "description": "<br><p>Want to clip what you just browsed through “google reader”?</p><p>Need to clip something in your mobile devices (your cell phone, ipad, etc.)? </p><p>And like to save the contents that you just read in an app?</p><p>Or too much trouble of copy & paste?</p><p>⋯⋯</p><p>No problem! Send an email enclosing your favorite contents/links to 1@cliclip.com and they are clipped!</p><p>Try it now. </p><p>Tips: Contents clipped via email is set to be private by default.</p>"
+  },
+  "item_4": {
+      "title": "Weibo & Clip"
+    , "description": "<br><p>Want to clip an interesting weibo post but don’t like to cut and paste?</p><p>That is easy. </p><p>Link your weibo account in settings. Then forward the post to @cliclip, you are all set!</p><p>Tips: Clipped contents are set to be public in this way.</p><p>Want it to be private? Then try Email & Clip.</p>"
+  },
+  "item_5": {
+      "title": "Twitter & Clip"
+    , "description": "<br><p>We can import your favorites from your twitter page. </p><p>First, in settings, link your twitter account to us.</p><p>Then, each time when you click on “fav” to collect a tweet, it is clipped. </p><p>Tips: Clip imported from twitter’s “fav” is public</p>"
+  }
+
+}]

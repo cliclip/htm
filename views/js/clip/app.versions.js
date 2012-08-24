@@ -57,7 +57,9 @@ App.versions = (function($){
 	  is_null     : "密码尚未填写"
 	}
       },
-
+      help :{
+	title       :"帮助"
+      },
       userface : {
 	zhui        : "zhui",
 	stop        : "stop",
@@ -532,7 +534,9 @@ App.versions = (function($){
 	  not_match   : "Password is incorrect"
 	}
       },
-
+      help :{
+	title       :"help"
+      },
       userface : {
 	zhui        : "ezhui",
 	stop        : "estop",

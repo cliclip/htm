@@ -10,6 +10,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "home":"siteShow",
       "tag/:tag":"siteShow",
       "query/:word":"siteQuery",
+      "help/:item":"help",
 
       "register": "register",
       "invite/:key" : "invite",
@@ -63,6 +64,10 @@ App.Routing.ClipRouting = (function(App, Backbone){
       }else{
 	App.Routing.showRoute("query",word);
       }
+    });
+
+    ClipRouting.router.bind("app.clipapp.routing:help",function(item){
+      App.Routing.showRoute("help/"+item);
     });
 
     ClipRouting.router.bind("app.clipapp.routing:siteshow", function(tag){
