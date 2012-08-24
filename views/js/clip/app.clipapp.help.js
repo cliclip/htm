@@ -1,5 +1,6 @@
 App.ClipApp.Help=(function(App,Backbone,$){
   var Help={};
+  var hist,offset;
   var HelpModel = App.Model.extend({
     url:function(){
       return "/help/help_"+this.get("lang")+".json";
@@ -15,6 +16,7 @@ App.ClipApp.Help=(function(App,Backbone,$){
       "click .title"    :"toggle"
     },
     initialize: function(){
+      this.flag = false;
       this.bind("@closeView",close);
     },
     cancel:function(e){
@@ -51,17 +53,13 @@ App.ClipApp.Help=(function(App,Backbone,$){
 
   Help.close = function(){
     App.popRegion.close();
+    $(history.go(-1));
   };
 
-  var close = function(){
+ var close = function(){
     Help.close();
   };
 
+
   return Help;
 })(App,Backbone,jQuery);
- //{item_1:item_1,item_2:item_2,item_3:item_3,item_4:item_4,item_5:item_5}
- // console.log(helpModel.get("item_1"));
-/* success:function(model,res){
-	//console.log(res);
-      },
-      error:function(model,error){}*/

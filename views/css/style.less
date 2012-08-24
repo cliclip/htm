@@ -147,6 +147,47 @@ html body {
 	top:-15px;
 	cursor: pointer;
 }
+// 重构了用户头像下面的样式
+.glyphicons-halflings (@x:0, @y:0) {
+  background: url(../img/glyphicons-halflings-white.png) no-repeat;
+  background-position: @x @y;
+  display: block;
+}
+.user_action{
+	width:70px;
+	height:72px;
+	top:56px;
+	background-color:#5E5E5E;
+	position: absolute;
+	bottom:-57px;
+	list-style:none;
+	margin:0;
+	padding:5px 0;
+	z-index: 2;
+	li{
+		height:24px;
+		width:5px;
+		padding-left:25px;
+		line-height:24px;
+		.glyphicons-halflings(-422px,5px);
+		font-size:12px;
+		margin:0 -4px;
+		a{
+			display: block;
+			height:24px;
+			width:46px;
+			color:#fff;
+			text-decoration:none;
+			outline:none;
+		}
+	}
+	li.logout{
+		.glyphicons-halflings(-374px,5px);
+	}
+	li.help{
+		.glyphicons-halflings(-86px,-91px);
+	}
+}
 
 // 页面整体布局 layout.less
 .layout{
@@ -1954,6 +1995,10 @@ section.help_frame{
 	top:100px;
 	margin-left:-400px;
 	background:#d9d9d9;
+ 	.bottom{
+		margin-top:0px;
+		height:80px;
+	  }
 	.pop_title{
 		height:45px;
 		line-height:45px;

@@ -58,7 +58,8 @@ App.versions = (function($){
 	}
       },
       help :{
-	title       :"帮助"
+	title       :"帮助",
+	title_small :"&nbsp;&nbsp;帮助"
       },
       userface : {
 	zhui        : "zhui",
@@ -555,7 +556,8 @@ App.versions = (function($){
 	}
       },
       help :{
-	title       :"help"
+	title          :"help",
+	title_small    :"&nbsp;&nbsp;help"
       },
       userface : {
 	zhui        : "ezhui",
