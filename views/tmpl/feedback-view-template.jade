@@ -1,0 +1,17 @@
+script(type='text/template',id='feed-view-template')
+  div.feed
+
+script(type='text/template',id='feedback-view-template')
+  div.masker_layer
+  div.masker
+    section.small_pop
+      span.close_w
+      .email_add
+        h2
+          <%=_i18n('feedback.title')%>
+        ul.pop_body
+            li.input_text.
+              <textarea id="feedback_text"><%=_i18n('feedback.defaultText')%></textarea>
+            li.btn_group.clearfix.
+              <input type="button" class="verify" value="<%=_i18n('feedback.ok')%>" id="feedback_ok" />
+              <input type="button" class="cancel" value="<%=_i18n('feedback.cancel')%>" id="feedback_cancel" />
