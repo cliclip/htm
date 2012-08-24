@@ -66,7 +66,7 @@
       var uid = App.util.getMyUid();
       var name = null;
       if(uid){
-	name = App.util.getMyFace().name;
+	name = App.ClipApp.getMyFace().name;
 	params = {text:text,uid:uid,name:name,lang:lang};
       }else{
 	params = {text:text,uid:uid,name:name,lang:lang};

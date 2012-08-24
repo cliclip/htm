@@ -166,6 +166,14 @@ App.ClipApp.Me = (function(App, Backbone, $){
     }
   };
 
+  Me.getFace = function(){
+    return {
+      name: Me.me.get("name"),
+      face: Me.me.get("face"),
+      lang: Me.me.get("lang")
+    };
+  };
+
   var changeShow = function(){
     setTimeout(function(){
       if(!Me.me.get("name")){
@@ -181,6 +189,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.login:success", function(){
     Me.me.fetch();
+    Me.show();
   });
 
   App.vent.bind("app.clipapp.register:success", function(){

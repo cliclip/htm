@@ -23,8 +23,8 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     },
     initialize:function(){
       this.flag = false;
-      this.bind("submit", submit);
-      this.bind("closeView", close);
+      this.bind("@submit", submit);
+      this.bind("@closeView", close);
     },
     maintagAction:function(e){
       $(e.currentTarget).toggleClass("white_48");
@@ -46,7 +46,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["id"] = this.model.get("user");
       params["tag"] = this.model.get("tag");
-      this.trigger("submit", params, this.model.get("count"));
+      this.trigger("@submit", params, this.model.get("count"));
     },
     masker : function(e){
       if($(e.target).attr("class") == "masker"){
@@ -58,7 +58,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["id"] = this.model.get("user");
       params["tag"] = this.model.get("tag");
-      this.trigger("closeView",params, this.model.get('count'));
+      this.trigger("@closeView",params, this.model.get('count'));
     }
   });
 
@@ -87,8 +87,6 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
   }
 
   ReclipTag.show = function(user, tag){
-    //console.log("user :: " +user+ " tag :: " + tag);
-    if(!user) user = 2; // 系统用户
     var model = new ReclipTagModel(); //此model只用于取数据
     model.fetch({
       type: "GET",
@@ -96,7 +94,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       success: function(model, res){
 	if(!res.count){
 	  // 现在只是公用该事件，事件名称有待改进
-	  App.vent.trigger("app.clipapp.message:confirm","reclip_null");
+	  App.ClipApp.showConfirm("reclip_null");
 	}else{
 	  // 有count表示可以收到数据
 	  model.set({user:user,tag:tag,count:res.count});
@@ -117,8 +115,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     if(!params||(params.clip.tag.length==0&&params.clip['public']!='false')){
       App.popRegion.close();
     }else{
-      App.vent.trigger("app.clipapp.message:alert", "reclip_save");
-      App.vent.bind("app.clipapp.message:sure",function(){
+      App.ClipApp.showAlert("reclip_save", null, function(){
 	App.popRegion.close();
       });
     }
@@ -130,18 +127,18 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       type: "POST",
       success: function(model, res){
 	if(res.reclip_tag == count){
-	  App.vent.trigger("app.clipapp.message:success","reclip_tag_success");
+	  App.ClipApp.showSuccess("reclip_tag_success");
 	} else if(res.reclip_tag == 0){
-	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag_fail");
+	  App.ClipApp.showConfirm("reclip_tag_fail");
 	}else{
-	  App.vent.trigger("app.clipapp.message:confirm","reclip_tag",res.reclip_tag);
+	  App.ClipApp.showConfirm("reclip_tag",res.reclip_tag);
 	}
-	App.vent.trigger("app.clipapp.taglist:mytag",model.get("clip").tag);
-	ReclipTag.close();
+	ReclipTag.close(); // 返回的model是什么有待测试
+	App.vent.trigger("app.clipapp.recliptag:success",model.get("clip").tag);
       },
       error:function(model, res){
 	ReclipTag.close();
-	App.vent.trigger("app.clipapp.message:confirm",res);
+	App.ClipApp.showConfirm(res);
       }
     });
   };
@@ -158,8 +155,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       url: App.util.unique_url(P+"/user/"+user+"/clip/tag/"+encodeURIComponent(tag[0])),
       success: function(model, res){
 	if(!res.count){
-	  // 现在只是公用该事件，事件名称有待改进
-	  //App.vent.trigger("app.clipapp.message:confirm","reclip_null");
+	  // App.ClipApp.showConfirm("reclip_null");
 	}else{
 	  // 有count表示可以收到数据
 	  var params = {clip:{"public":"false","tag":tag},id:user,tag:tag[0]};
@@ -167,10 +163,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	  model_post.save({}, {
 	    type: "POST",
 	    success: function(model, res){
-	      App.vent.trigger("app.clipapp.taglist:mytag",tag);
-	      var uid = App.util.getMyUid();
-	      App.ClipApp.Bubb.showUserTags(uid);
-	      App.ClipApp.ClipList.showUserClips(uid);
+	      App.vent.trigger("app.clipapp.recliptag:success",tag);
 	      //console.info(res);
 	    },
 	    error:function(model, res){

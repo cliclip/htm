@@ -71,7 +71,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     gotoRegister:function(e){
       e.preventDefault();
       this.trigger("@cancel");
-      App.vent.trigger("app.clipapp:register");
+      App.ClipApp.showRegister();
     },
     loginAction : function(e){
       var that = this;

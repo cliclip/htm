@@ -34,8 +34,7 @@ $(function() {
       if(!clip || !clip.content){
 	socket.postMessage(JSON.stringify(["cancel"]));
       }else{
-	App.vent.trigger("app.clipapp.message:alert", "clipadd_save");
-	App.vent.bind("app.clipapp.message:sure",function(){
+	App.ClipApp.showAlert("clipadd_save", null, function(){
 	  socket.postMessage(JSON.stringify(["cancel"]));
 	});
       }

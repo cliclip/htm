@@ -59,20 +59,8 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     TagList.tagListRegion.show(view);
   };
 
-  App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
-    TagList.setbaseTag(addmodel.get("tag"));
-  });
 
-  App.vent.bind("app.clipapp.clipdelete:success", function(){
-    resetBase();
-  });
-
-  App.vent.bind("app.clipapp.login:success", function(){
-    resetBase();
-  });
-
-
-  TagList.setbaseTag = function(tags){
+  function setbaseTag(tags){
     baseTag = _.difference(_.union(tags,baseTag), bubs);
   };
 
@@ -92,6 +80,26 @@ App.ClipApp.TagList=(function(App,Backbone,$){
       });
     }
   };
+
+  App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
+    setbaseTag(addmodel.get("tag"));
+  });
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(){
+    resetBase();
+  });
+
+  App.vent.bind("app.clipapp.login:success", function(){
+    resetBase();
+  });
+
+  App.vent.bind("app.clipapp.recliptag:success", function(tag){
+    setbaseTag(args.tag);
+  });
+
+  App.vent.bind("app.clipapp.reclip:success", function(args){
+    setbaseTag(args.tag);
+  });
 
   App.bind("initialize:after", function(){
     resetBase();

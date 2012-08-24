@@ -89,7 +89,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     gotoLogin : function(e){
       e.preventDefault();
       this.trigger("cancel");
-      App.vent.trigger("app.clipapp:login");
+      App.ClipApp.showLogin();
     },
     submit: function(e){
       e.preventDefault();
@@ -141,10 +141,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
       url : App.ClipApp.Url.base+"/invite/"+key,
       type: "POST",
       success:function(model,response){
-	App.vent.trigger("app.clipapp.register:success", 'invite', response);
+	App.ClipApp.showSuccess('invite', response);
       },
       error:function(model,error){
-	App.vent.trigger("app.clipapp.message:confirm", error);
+	App.ClipApp.showConfirm(error);
       }
     });
   };

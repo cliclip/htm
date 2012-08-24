@@ -8,7 +8,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	App.ClipApp.showConfirm("account_hasbind");
 	Backbone.history.navigate("my",true);
       }else if(res&&res.oauth){
-	App.vent.trigger("app.clipapp.userbind:show",res.oauth,"");
+	App.ClipApp.showUserBind(res.oauth);
       }else if(res&&res.token){
 	if(res.provider == "weibo"){
 	  App.ClipApp.showConfirm("weibo_sucmsg",res.name);

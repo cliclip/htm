@@ -69,7 +69,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}else{
           this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
-	  //STRANGE若不加延时则所有clip无图片,在翻页时最后一个clip不产生动态布局效果
+	  //STRANGE若不加延时则所有clip无图片
+	  // 在翻页时最后一个clip不产生动态布局效果
 	  setTimeout(function(){
 	    $container.masonry("reload");
 	  },0);
@@ -89,7 +90,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
       };
       var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
-      App.vent.trigger("app.clipapp:clipdetail",clipid,this.model.id,recommend);
+      App.ClipApp.showDetail(clipid,this.model.id,recommend);
     },
     mouseEnter: function(e){
       $(e.currentTarget).children(".master").children("#opt").show();
@@ -111,7 +112,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  };
 	  App.ClipApp.showReclip(cid, mid, recommend, pub); break;
 	//case 'recommend'://转
-	  //App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
+	  //App.ClipApp.showRecommend(cid,mid,pub);break;
 	case 'comment'://评
 	  App.ClipApp.showComment(cid, mid); break;
 	case 'note'://注
@@ -266,13 +267,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}else{
 	  $("#list").append(_i18n('message.cliplist_null.all'));
 	}
-      }/*else{
-	if(!/#my/.test(window.location.hash)){
-	  App.util.current_page();
-	}else if(/#my\/query/.test(window.location.hash)){
-	  App.util.current_page("my");
-	}
-      }*/
+      }
     });
   };
 
@@ -349,7 +344,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.clipmemo:success", function(model){
-    var json = JSON.parse(data);
+    var json = JSON.parse(data); // 此处的data是标识list的全局变量
     var user = json.user;
     if(App.util.self(user) && json.tag){
       var tag = json.tag[0];
@@ -369,8 +364,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   };
 
+  App.vent.bind("app.clipapp.comment:success", function(args){
+    refresh(args);
+  });
+
+  App.vent.bind("app.clipapp.reclip:success", function(args){
+    refresh(args);
+  });
+			  
   // 评论总数以及转载总数的同步
-  ClipList.refresh = function(args){
+  function refresh(args){
     if(!args || !args.model_id){
       return;
     }else{

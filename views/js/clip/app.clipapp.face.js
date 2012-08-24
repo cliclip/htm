@@ -110,7 +110,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
       if(App.util.self(user_id))def = _i18n('userface.mysearch');
       else def = _i18n('userface.search');
       if(word == def) word = null;
-      App.vent.trigger("app.clipapp:userquery", user_id, word);
+      App.ClipApp.userQuery(user_id, word);
     }
   });
 
