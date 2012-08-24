@@ -127,10 +127,13 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
        }};}*/
 
       $("#img_form").submit();
-      App.util.get_imgid("post_frame",function(img_src){
+      App.util.get_imgid("post_frame",function(err, img_src){
 	//img_list.push(img_src);
-	if(img_src)
+	if(!err && img_src){
 	  App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
+	}else{
+	  App.ClipApp.showConfirm("imageUp_fail");
+	}
       });
       App.util.clearFileInput(sender);
     }

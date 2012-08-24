@@ -45,7 +45,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
     query : function(){
       var word = this.$(".text").val();
       this.$(".text").val("");
-      App.vent.trigger("app.clipapp:query", word, null);
+      App.ClipApp.siteQuery(word, null);
     },
     inputAction: function(){
       $(".text").unbind("keydown");

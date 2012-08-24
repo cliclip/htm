@@ -104,7 +104,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       if(data.title) data.title = data.title.replace(/"/g, '&#34;');
       // 如果没有设置rule, 则在fetch时候不会触发onChange事件"
       if(data.title==o_data.title&&((data.to==o_data.to)||(data.to&&o_data.to&&data.to.join()==o_data.to.join()))&&((data.cc==o_data.cc)||(data.cc&&o_data.cc&&data.cc.join()==o_data.cc.join()))){
-	App.vent.trigger("app.clipapp.message:confirm", {rule:"not_update"});
+	App.ClipApp.showConfirm({rule:"not_update"});
       }else{
 	this.tmpmodel.save(data,{
 	  success: function(model, res){
@@ -161,10 +161,10 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
   var o_data;
   RuleEdit.show = function(){
     var ruleModel = new RuleModel();
-    RuleEdit.ruleRegion = new App.Region({el:"#rule"});
     ruleModel.fetch();
     ruleModel.onChange(function(ruleModel){
       var ruleView = new RuleView({model: ruleModel});
+      RuleEdit.ruleRegion = new App.Region({el:"#rule"});
       RuleEdit.ruleRegion.show(ruleView);
       if(!ruleModel.get("enable")){
 	$(".rule_input").hide();

@@ -26,12 +26,14 @@ App.ClipApp.Me = (function(App, Backbone, $){
     events:{
       "click #login_button": "loginAction",
       "click #register_button": "registerAction",
+      "click #help_button":"helpAction",
       "click .my_info":"showMysetup",
       "mouseout .my_info":"closeMysetup",
       "mouseover #show_mysetup":"keepOpenMysetup",
       "mouseout #show_mysetup":"closeMysetupMust",
       "click #logout": "logoutAction",
       "click #mysetup": "mysetupAction",
+      "click #help":"helpAction",
       // "mouseenter .navigate": "mouseEnter",
       // "mouseleave .navigate": "mouseLeave",
       "click .my": "switch_my",
@@ -72,6 +74,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },
     registerAction: function(){
       App.ClipApp.showRegister();
+    },
+    helpAction:function(){
+      Backbone.history.navigate("help/1",true);
     },
     logoutAction: function(){
       App.vent.trigger("app.clipapp:logout");
@@ -161,6 +166,14 @@ App.ClipApp.Me = (function(App, Backbone, $){
     }
   };
 
+  Me.getFace = function(){
+    return {
+      name: Me.me.get("name"),
+      face: Me.me.get("face"),
+      lang: Me.me.get("lang")
+    };
+  };
+
   var changeShow = function(){
     setTimeout(function(){
       if(!Me.me.get("name")){
@@ -176,6 +189,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.login:success", function(){
     Me.me.fetch();
+    Me.show();
   });
 
   App.vent.bind("app.clipapp.register:success", function(){

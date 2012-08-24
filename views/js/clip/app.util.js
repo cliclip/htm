@@ -4,10 +4,11 @@ App.util = (function(){
 
   util.name_pattern = /^[a-zA-Z0-9][a-zA-Z0-9\.]{3,18}[a-zA-Z0-9]$/;
   util.email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
+
   util.getCookie = function(name){
     var start = document.cookie.indexOf( name+"=" );
     var len = start + name.length + 1;
-    if ( ( !start ) && ( name != document.cookie.substring( 0, name.length ) ) ) {
+    if ((!start) && (name != document.cookie.substring(0, name.length))){
       return null;
     }
     if ( start == -1 )
@@ -23,14 +24,6 @@ App.util = (function(){
     var token = util.getCookie("token");
     if (token) uid = token.split(":")[0];
     return uid;
-  };
-
-  util.getMyFace = function(){
-    return {
-      name: App.ClipApp.Me.me.get("name"),
-      face: App.ClipApp.Me.me.get("face"),
-      lang: App.ClipApp.Me.me.get("lang")
-    };
   };
 
   // main_tag 部分从这取,
@@ -70,7 +63,8 @@ App.util = (function(){
     var now = new Date();
     return url + "?now=" + now.getTime();
   };
-  //clip列表时取得img 的 url 为裁剪后的图片
+  // TODO 此处理适合在 api 的 getPreview 逻辑里完成
+  // clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
     var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
     var pattern1 = /http:\/\//;
@@ -79,6 +73,9 @@ App.util = (function(){
     }else return image_url;
   };
 
+  // TODO 此处理适合在 api 的 getUserInfo 逻辑里完成
+  // if (!face) userInfo.face = default_face;
+  // userInfo.icon = userInfo.face + '/42'
   util.face_url = function(imageid,size){
     var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face/;
     if(imageid == ""){
@@ -98,19 +95,22 @@ App.util = (function(){
     return App.ClipApp.Convert.ubbToHtml(content);
   };
 
-  util.cleanComment = function(comment){ // 对comment的内容进行html过滤，防止脚本注入
+  // 对comment的内容进行html过滤，防止脚本注入
+  util.cleanComment = function(comment){
     comment = App.ClipApp.Convert.cleanHtml(comment);
     comment = comment.replace(/<\/?div[^>]*>/ig, "");
     comment = comment.replace(/<\/?div[^>]*>/ig, "");
     return comment;
   };
 
+  // TODO 合并到某个代码里？
   util.commentToHtml = function(comment){
     comment = comment.replace(/\n{2,}/ig, "<\/p><p>");
     comment = comment.replace(/\n/ig, "<\/br>");
     return comment;
   };
 
+  // contentToPreview
   util.getPreview = function(content, length){
     var data = {};
     var reg = /\[img\].*?\[\/img\]/;
@@ -157,6 +157,8 @@ App.util = (function(){
       return true;
     }
   };
+
+  // need refactor
   util.current_page = function(str){
     setTimeout(function(){ // 如果没有延时去不到东西
       if(str=="my"){
@@ -225,9 +227,14 @@ App.util = (function(){
     }
     return returnVal;
   };
+
   util.clip_add = function(){
     App.vent.trigger("app.clipapp:clipadd");
     return ;
+  };
+
+  util.isIE = function(){
+    return isIE=$('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
   };
 
   util.img_load = function(img){
@@ -249,10 +256,6 @@ App.util = (function(){
     };
   };
 
-  util.isIE = function(){
-    return isIE=$('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
-  };
-
   util.get_imgid = function(frameid,callback){
     $("#" + frameid).unbind("load");
     $("#" + frameid).load(function(){ // 加载图片
@@ -269,12 +272,9 @@ App.util = (function(){
 	  var uid = imgids.split(":")[0];
 	  var imgid = imgids.split(":")[1];
 	  var url = P+"/user/"+ uid +"/image/" +imgid;
-	  //App.ClipApp.Editor.insertImage("editor", {url: url});
-	  //}
-	  callback(url);
+	  callback(null, url);
 	}else{//上传图片失败
-	  App.vent.trigger("app.clipapp.message:confirm","imageUp_fail");
-	  callback(null);
+	  callback("imageUp_fail", null);
 	}
       }
     });

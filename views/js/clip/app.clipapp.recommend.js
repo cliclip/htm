@@ -49,8 +49,8 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       setTimeout(function(){
 	this.$("#recomm_name").focus();
       },500);
-      this.bind("lookup", lookup);
-      this.bind("closeView", close);
+      this.bind("@lookup", lookup);
+      this.bind("@closeView", close);
     },
     getUserAction:function(e){
       $("#imgId").css("display","none");
@@ -67,7 +67,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       var clip_owner = this.model.get("clipid").split(":")[0];//clip的拥有者
       var params = {q:str};
       //查询friend
-      this.trigger("lookup",params,clip_owner);
+      this.trigger("@lookup",params,clip_owner);
     },
     nameBlur:function(){
       var view = this;
@@ -102,7 +102,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	var flag = true;
 	var div = $("#name_listDiv").children().children();
 	for(var i=0;i<div.length;i++){
-	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	  if(flag && $(div[i]).css("background-color") == "rgb(136,136,136)"){
 	    $(div[i]).css("background-color","");
 	    $(div[i+1]).css("background-color","#888");
 	    $("#recomm_name").val($.trim($(div[i+1]).text()));
@@ -117,7 +117,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	var flag = true;
 	var div = $("#name_listDiv").children().children();
 	for(var i=0;i<div.length;i++){
-	  if(flag && $(div[i]).css("background-color") == "rgb(136, 136, 136)"){
+	  if(flag && $(div[i]).css("background-color") == "rgb(136,136,136)"){
 	    $(div[i]).css("background-color","");
 	    $(div[i-1]).css("background-color","#888");
 	    $("#recomm_name").val($.trim($(div[i-1]).text()));
@@ -153,8 +153,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     MouseOver:function(e){
       var div = $("#name_listDiv").children().children();
       for(var i=0;i<div.length;i++){
-	if($(div[i]).css("background-color") ==
-	"rgb(136, 136, 136)"){
+	if($(div[i]).css("background-color") == "rgb(136, 136, 136)"){
 	  $(div[i]).css("background-color","");
 	}
       }
@@ -187,7 +186,9 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  success:function(model,res){
 	    uid = null;
 	    Recommend.close();
-	    App.vent.trigger("app.clipapp.message:success","recomm");
+	    App.ClipApp.showSuccess("recomm");
+	    // 目前没有响应事件
+	    App.vent.trigger("app.clipapp.recommend:success");
 	  },
 	  error:function(model,res){
 	    view.showError('recommend',res);
@@ -222,7 +223,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     },
     cancelAction:function(e){
       var text = this.tmpmodel.get('text');
-      this.trigger("closeView",text);
+      this.trigger("@closeView",text);
     }
   });
 
@@ -249,7 +250,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     var clip_owner = that.model.get("clipid").split(":")[0];
     if(pub == "false" && !App.util.self(clip_owner)){
       // 是非public并且不是clip_owner进行的操作
-      App.vent.trigger("app.clipapp.message:confrim", {recommend: "no_pub"});
+      App.ClipApp.showConfirm({recommend: "no_pub"});
     }else{
       mid = model_id;
       App.popRegion.show(recommView);
@@ -260,7 +261,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 	  var str = $.trim(that.$("#recomm_name").val());
 	  var params = {q:str};
 	  //查询friend
-	  recommView.trigger("lookup",params,clip_owner);
+	  recommView.trigger("@lookup",params,clip_owner);
 	}
 	document.getElementById('recomm_name').onpropertychange=nameListAction;
       }
@@ -273,8 +274,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
       mid = null;
       uid = null;
     }else{
-      App.vent.trigger("app.clipapp.message:alert", "recommend_save");
-      App.vent.bind("app.clipapp.message:sure",function(){
+      App.ClipApp.showAlert("recommend_save", null, function(){
 	App.popRegion.close();
 	mid = null;
 	uid = null;
@@ -308,9 +308,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     Recommend.close(text);
   };
 
-  App.bind("initialize:after", function(){
-  });
-
+  App.bind("initialize:after", function(){});
 
   return Recommend;
 

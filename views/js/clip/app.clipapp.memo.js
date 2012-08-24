@@ -138,8 +138,8 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	error:function(model,res){}
       });
     }else if(memoType == "add"){
-      App.vent.trigger("app.clipapp.clipadd:memo", data);
       ClipMemo.close();
+      App.vent.trigger("app.clipapp.clipadd:memo", data);
     }
   };
 

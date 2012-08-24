@@ -267,7 +267,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  success:function(model,res){
 	    view.model.set("name", res.name);
 	    App.ClipApp.showSuccess("rename_success");
-	    App.vent.trigger("app.clipapp.useredit:set_success");
+	    App.vent.trigger("app.clipapp.face:changed");
 	  },
 	  error:function(model,res){
 	    view.showError('faceEdit',res);
@@ -337,7 +337,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	console.info(iframe);
 	submit_face = false;
 	if($(iframe.contentWindow.document.body).text()[1]!=="0"){//取得图片上传的结果：成功或失败
-
 	}
       }
     };*/
@@ -361,14 +360,17 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   UserEdit.close = function(){
     if(face_change_flag){
-      App.vent.trigger("app.clipapp.useredit:set_success");
+      App.vent.trigger("app.clipapp.face:changed");
       face_change_flag = false;
     }
+    UserEdit.emailRegion.close();
+    UserEdit.passeditRegion.close();
+    UserEdit.faceRegion.close();
     App.mysetRegion.close();
   };
 
   App.vent.bind("app.clipapp.useredit:rename", function(){
-    if(UserEdit.faceRegion === undefined) App.ClipApp.showUserEdit();
+    if(UserEdit.faceRegion === undefined || UserEdit.faceRegion.currentView === undefined) App.ClipApp.showUserEdit();
     UserEdit.faceRegion.currentView.trigger("@rename");
   });
 
@@ -486,7 +488,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     //console.info(_width,_height,_top,_left );
     return { width:_width, height:_height, top:_top, left:_left };
   }
-  // App.bind("initialize:after", function(){ UserEdit.showUserEdit();});
+  // App.bind("initialize:after", function(){ App.ClipApp.showUserEdit();});
 
   return UserEdit;
 })(App, Backbone, jQuery);
