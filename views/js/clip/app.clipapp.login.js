@@ -39,7 +39,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
       this.flag = false;
-      this.bind("cancel", cancel);
+      this.bind("@cancel", cancel);
+      this.bind("@success", success);
     },
     blurName: function(e){
       var that = this;
@@ -69,7 +70,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     gotoRegister:function(e){
       e.preventDefault();
-      this.trigger("cancel");
+      this.trigger("@cancel");
       App.vent.trigger("app.clipapp:register");
     },
     loginAction : function(e){
@@ -83,7 +84,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	url: App.ClipApp.Url.base+"/login",
 	type: "POST",
   	success: function(model, res){
-  	  App.vent.trigger("app.clipapp.login:success", res, remember); // fetch Me.me
+	  that.trigger("@success", res, remember);
   	},
   	error:function(model, res){
 	  that.showError('login',res);
@@ -105,23 +106,23 @@ App.ClipApp.Login = (function(App, Backbone, $){
     cancel : function(e){
       e.preventDefault();
       App.vent.trigger("app.clipapp.clipper:cancel");
-      this.trigger("cancel");
+      this.trigger("@cancel");
     },
     openWeibo : function(e){
       var remember = false;
       if($("#remember").attr("checked")){
 	remember = true;
       }
-      this.trigger("cancel");
+      this.trigger("@cancel");
       window.location.href="/oauth/req/weibo";
     },
     openTwitter : function(e){
-      this.trigger("cancel");
+      this.trigger("@cancel");
       window.location.href="/oauth/req/twitter";
     }
   });
 
-   function checkUser(callback){ //weibo、twitter的信息与本系统进行验证
+  function checkUser(callback){ //weibo、twitter的信息与本系统进行验证
     var model = new App.Model.UserBindModel(params);
     model.save({},{
       url : App.ClipApp.Url.base+"/user/oauth_info",
@@ -170,7 +171,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  Login.success = function(res, remember){
+  var cancel = function(){
+    Login.close();
+  };
+  var success = function(res, remember){ // 用户登录成功 页面跳转
     Login.close();
     if(remember){
       var data = new Date();
@@ -179,16 +183,12 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }else{
       document.cookie = "token="+res.token;
     }
-    // 用户登录成功 页面跳转
+    App.vent.trigger("app.clipapp.login:success", res, remember);
     if(typeof fun == "function"){
       fun();
     }else{
-      Backbone.history.navigate("my",true);
+      Backbone.history.navigate("my", true);
     }
-  };
-
-  var cancel = function(){
-    Login.close();
   };
 
  // TEST

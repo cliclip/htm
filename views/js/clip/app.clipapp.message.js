@@ -23,9 +23,6 @@ App.ClipApp.Message = (function(App, Backbone, $){
       }
     },
     MessageSure: function(){
-      if(this.model.get("message") == _i18n('message.email.no_uname')){
-	App.vent.trigger("app.clipapp.useredit:rename");
-      }
       Message.close();
       App.vent.trigger("app.clipapp.message:sure");
     }
