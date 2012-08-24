@@ -50,11 +50,11 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     },
     followingOpen:function(e){
       var uid = App.ClipApp.Face.getUserId();
-      App.vent.trigger("app.clipapp:showfollowing", uid);
+      App.ClipApp.showFollowing(uid);
     },
     followerOpen:function(e){
       var uid = App.ClipApp.Face.getUserId();
-      App.vent.trigger("app.clipapp:showfollower", uid);
+      App.ClipApp.showFollower(uid);
     }
   });
 

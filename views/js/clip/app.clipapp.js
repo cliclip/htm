@@ -14,6 +14,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
+    App.util.current_page();
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:siteshow",tag);
   };
 
@@ -21,11 +22,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
+    App.util.current_page();
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
-  };
-
-  ClipApp.register = function(){
-    ClipApp.Login.show();
   };
 
   ClipApp.invite = function(key){ // 接受处理用户的激活注册
@@ -62,6 +60,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
+    if(App.util.self(uid)) App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow", uid, tag);
   };
 
@@ -69,6 +68,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
+    if(App.util.self(uid)) App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word, uid);
   };
 
@@ -95,6 +95,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
+    App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow",uid, tag);
   };
 
@@ -103,6 +104,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
+    App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
   };
 
@@ -112,6 +114,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserInterest(uid, tag);
+    App.util.current_page("interest");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
 
@@ -120,6 +123,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserRecommend(uid, tag);
+    App.util.current_page("@me");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:recommend",tag);
   };*/
 
@@ -203,11 +207,6 @@ App.ClipApp = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp:logout", function(){
-    var uid = App.util.getMyUid();
-    ClipApp.Logout.show();
-  });
-
   ClipApp.showUserEdit = function(){
     ClipApp.UserEdit.show();
     ClipApp.RuleEdit.show();
@@ -229,6 +228,16 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.showEmailAdd = function(uid){
     ClipApp.EmailAdd.show(uid);
   };
+
+  ClipApp.showFollowing = function(uid){
+    ClipApp.FollowingList.showUserFollowing(uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollowing", uid);
+  };
+
+  ClipApp.showFollower = function(uid){
+    ClipApp.FollowerList.showUserFollower(uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollower", uid);
+  };
 /*
   App.vent.bind("app.clipapp.emailadd:show",function(uid){
     ClipApp.EmailAdd.show(uid);
@@ -238,20 +247,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipList.nextpage();
     ClipApp.FollowerList.nextpage();
     ClipApp.FollowingList.nextpage();
-  });
-
-  App.vent.bind("app.clipapp:showfollowing", function(uid){
-    ClipApp.FollowingList.showUserFollowing(uid);
-    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollowing", uid);
-  });
-
-  App.vent.bind("app.clipapp.followerlist:refresh", function(){
-    ClipApp.FollowerList.refresh();
-  });
-
-  App.vent.bind("app.clipapp:showfollower", function(uid){
-    ClipApp.FollowerList.showUserFollower(uid);
-    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:userfollower", uid);
   });
 
   //reclip 用户一个clip
@@ -275,11 +270,11 @@ App.ClipApp = (function(App, Backbone, $){
     else ClipApp.ReclipTag.show(user,tag);
   });
 
-  // 当前用户追某用户的tag uid一直与face的保持一致
+  // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
   App.vent.bind("app.clipapp:follow", function(uid, tag){
-    if(!ClipApp.isLoggedIn()){
-      ClipApp.Login.show(function(){
-	App.ClipApp.Bubb.followUserBubs(uid, tag);
+    if(!App.ClipApp.isLoggedIn()){
+      App.ClipApp.Login.show(function(){
+	ClipApp.Bubb.followUserBubs(uid, tag);
       });
     }else{
       ClipApp.Bubb.followUserBubs(uid, tag);
@@ -367,11 +362,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.TagList.setbaseTag(args.tag);
   });
 
-  // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
-  App.vent.bind("app.clipapp.cliplist:route", function(uid, url, tag){
-    ClipApp.ClipList.route(uid, url, tag);
-  });
-
   ClipApp.showClipDelete = function(clipid){
     ClipApp.ClipDelete.show(clipid);
   };
@@ -397,6 +387,20 @@ App.ClipApp = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.message:success", function(key, value){
     ClipApp.Message.success(key, value);
   });
-
+/*
+  App.vent.bind("app.clipapp.util:current_page", function(str){
+    if((/my\/recommend/.test(window.location.hash))){
+      App.util.current_page("@me");
+    }else if(/my\/interest/.test(window.location.hash)){
+      App.util.current_page("interest");
+    }else if(/my\/follow/.test(window.location.hash)){
+      App.util.current_page("follow");
+    }else if(/my/.test(window.location.hash)){
+      App.util.current_page("my");
+    }else{
+      App.util.current_page("");
+    }
+  });
+*/
   return ClipApp;
 })(App, Backbone, jQuery);

@@ -410,7 +410,8 @@ App.versions = (function($){
 	  no_change    : "摘录内容没有变化"
 	},
 	follow:{
-	  all          : "您已经追了该用户的全部标签"
+	  all          : "您已经追了该用户的全部标签",
+	  cannot_follow_self : "您不能追自己"
 	},
 	error:{
 	  "link 已作废": "此链接已过期",
@@ -886,7 +887,8 @@ App.versions = (function($){
 	  no_change    : "Content dose't change"
 	},
 	follow:{
-	  all          : "You have already followed all tags of this user"
+	  all          : "You have already followed all tags of this user",
+	  cannot_follow_self : "You can't follow youself"
 	},
 	error:{
 	  "link 已作废": "Link expired",

@@ -1,5 +1,4 @@
 // app.clipapp.face.js
-
 App.ClipApp.Face = (function(App, Backbone, $){
   var Face = {};
   var user_id = null;
@@ -11,7 +10,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
       id:"",
       following:"",
       follower:"",
-      face:""
+      face:"",
+      relation:[]
     },
     url:function(){
       return App.util.unique_url(P+"/user/"+ this.id + "/info");
@@ -36,18 +36,26 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     initialize: function(e){
       this.model.bind("change", this.render, this);
-      this.bind("@followSet", this.followSet);
+      this.bind("@show", this.show);
+      this.bind("@change", this.change);
     },
-    followSet: function(follow){
+    change: function(follow){
+      var relation = this.model.get("relation");
       var follower = this.model.get("follower");
-      if(_.isEmpty(follow)){
-	$(this.$('.user_i').children('i')).attr('id','user_zhui');
-	$(this.$('.user_i').children('i')).attr('class',_i18n('userface.zhui'));
-	this.model.set("follower", follower > 0 ? follower - 1 : 0);
-      }else{
-	$(this.$('.user_i').children('i')).attr('id', 'user_stop');
-	$(this.$('.user_i').children('i')).attr('class', _i18n('userface.stop'));
+      if(_.isEmpty(relation) && !_.isEmpty(follow)){ // follow 成功 表示非空
+	this.model.set("relation", follow);
 	this.model.set("follower", follower > 0 ? follower + 1 : 1);
+      }else if(!_.isEmpty(relation) && _.isEmpty(follow)){
+	this.model.set("relation", []);
+	this.model.set("follower", follower > 0 ? follower - 1 : 0);
+      }
+    },
+    show: function(follow){
+      var relation = this.model.get("relation");
+      if(_.isEmpty(relation) && !_.isEmpty(follow)){ // follow 成功 表示非空
+	this.model.set("relation", follow);
+      }else if(!_.isEmpty(relation) && _.isEmpty(follow)){
+	this.model.set("relation", []);
       }
     },
     mouseEnter: function(e){
@@ -63,10 +71,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
       App.vent.trigger("app.clipapp:unfollow",this.model.id,'*');
     },
     following: function(){
-      App.vent.trigger("app.clipapp:showfollowing", user_id);
+      App.ClipApp.showFollowing(user_id);
     },
     follower: function(){
-      App.vent.trigger("app.clipapp:showfollower", user_id);
+      App.ClipApp.showFollower(user_id);
     },
     cleanDefault: function(e){
       var def = null;
@@ -130,7 +138,6 @@ App.ClipApp.Face = (function(App, Backbone, $){
 	  App.faceRegion.show(faceView);
 	});
       }else{
-	console.log(App.ClipApp.Me.me);
 	faceView = new FaceView({model: App.ClipApp.Me.me});
 	App.faceRegion.show(faceView);
       }
@@ -144,10 +151,28 @@ App.ClipApp.Face = (function(App, Backbone, $){
     return user_id;
   };
 
-  App.vent.bind("app.clipapp:followset", function(follow){
+  function change(follow){
     if(faceView){
-      faceView.trigger("@followSet", follow);
+      faceView.trigger("@change", follow);
     }
+  };
+
+  function show(follow){
+    if(faceView){
+      faceView.trigger("@show", follow);
+    }
+  }
+
+  App.vent.bind("app.clipapp.follow:success", function(follow){
+    change(follow);
+  });
+
+  App.vent.bind("app.clipapp.unfollow:success", function(follow){
+    change(follow);
+  });
+
+  App.vent.bind("app.clipapp.follow:get", function(follow){
+    show(follow);
   });
 
   return Face;
