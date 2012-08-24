@@ -1,6 +1,5 @@
 App.ClipApp.Help=(function(App,Backbone,$){
   var Help={};
-  var hist,offset;
   var HelpModel = App.Model.extend({
     url:function(){
       return "/help/help_"+this.get("lang")+".json";
@@ -53,7 +52,10 @@ App.ClipApp.Help=(function(App,Backbone,$){
 
   Help.close = function(){
     App.popRegion.close();
-    $(history.go(-1));
+    var hist = Backbone.history.fragment;
+    if(/help\/([0-9]+)/.test(hist)){
+      $(history.go(-1));
+    }
   };
 
  var close = function(){

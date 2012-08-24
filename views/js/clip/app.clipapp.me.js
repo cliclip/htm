@@ -76,7 +76,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       App.ClipApp.showRegister();
     },
     helpAction:function(){
-      Backbone.history.navigate("help/1",true);
+      App.ClipApp.Help.show(1);
     },
     logoutAction: function(){
       App.vent.trigger("app.clipapp:logout");
