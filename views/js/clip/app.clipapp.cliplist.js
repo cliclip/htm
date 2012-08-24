@@ -81,7 +81,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //ie-7 8 无getSelection()只有document.selection  ie9 两个对象都有
       if(document.selection&&document.selection.createRange().htmlText){
 	return;
-      }else if(window.getSelection && $.trim(window.getSelection().toString())){
+      }else if(window.getSelection&&$.trim(window.getSelection().toString())){
 	return;
       }
       var recommend = {
@@ -192,10 +192,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     init_page();
   };
 
-  ClipList.route = function(uid, url, tag){
-    if(/interest/.test(url)){
+
+  // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
+  App.vent.bind("app.clipapp.bubb:open", function(uid, tag){
+    if(/interest/.test(base_url)){
       ClipList.showUserInterest(uid, tag);
-    }else if(/recommend/.test(url)){
+    }else if(/recommend/.test(base_url)){
       ClipList.showUserRecommend(uid, tag);
     }else{
       if(!uid){
@@ -204,7 +206,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	ClipList.showUserClips(uid, tag);
       }
     }
-  };
+  });
 
   function collection_filter(collection,hide_list){
     collection_length -= hide_list.length;
@@ -264,13 +266,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}else{
 	  $("#list").append(_i18n('message.cliplist_null.all'));
 	}
-      }else{
+      }/*else{
 	if(!/#my/.test(window.location.hash)){
 	  App.util.current_page();
 	}else if(/#my\/query/.test(window.location.hash)){
 	  App.util.current_page("my");
 	}
-      }
+      }*/
     });
   };
 

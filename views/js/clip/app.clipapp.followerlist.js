@@ -52,11 +52,11 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     },
     followingOpen:function(evt){
       var uid = App.ClipApp.Face.getUserId();
-      App.vent.trigger("app.clipapp:showfollowing", uid);
+      App.ClipApp.showFollowing(uid);
     },
     followerOpen:function(evt){
       var uid = App.ClipApp.Face.getUserId();
-      App.vent.trigger("app.clipapp.showfollower",uid);
+      App.ClipApp.showFollower(uid);
     }
   });
 
@@ -90,12 +90,15 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   };
 
   // 更新“谁追我”列表
-  FollowerList.refresh = function(){
+  App.vent.bind("app.clipapp.unfollow:success", function(){ refresh(); });
+  App.vent.bind("app.clipapp.follow:success", function(){ refresh(); });
+
+  function refresh(){
     if(App.listRegion.currentView.className =='follow-item'){
       if(App.ClipApp.isLoggedIn()){
 	var id = App.ClipApp.Face.getUserId();
 	FollowerList.showUserFollower(id);
-      }else App.vent.trigger("app.clipapp:login");
+      }else App.ClipApp.showLogin();
     }
   };
 

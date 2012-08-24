@@ -175,7 +175,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     var data = new Date();
     data.setTime(data.getTime() + 7*24*60*60*1000);
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
-    Backbone.history.navigate("my",true);
+    Backbone.history.navigate("my", true);
   };
 
   var cancel = function(){
