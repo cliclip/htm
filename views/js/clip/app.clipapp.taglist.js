@@ -71,6 +71,9 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     resetBase();
   });
 
+  App.vent.bind("app.clipapp.clipmemo:success", function(){
+    resetBase();
+  });
 
   TagList.setbaseTag = function(tags){
     baseTag = _.difference(_.union(tags,baseTag), bubs);
