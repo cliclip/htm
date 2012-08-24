@@ -246,6 +246,51 @@ html body {
 	}
 }
 
+.feed{
+	position:fixed;
+	top:40%;
+	width:30px;	
+	height:90px;	
+	right: 0;
+    	z-index: 10000;
+	cursor: pointer;
+}
+
+.feed-zh{
+	background: url("../img/feedback-zh.png");
+}
+
+.feed-en{
+	background: url("../img/feedback-en.png");
+}
+
+.feed:hover{
+	//margin-right:2px;
+}
+
+#feedback{
+	z-index: 10003;
+  	.masker_layer{ z-index: 10001; }
+  	.masker{z-index:10002}
+	textarea {
+    		 border: 1px solid #CCCCCC;
+    		 height: 72px;
+    		 margin-bottom: 0;
+    		 resize: none;
+    		 width: 270px;
+	}
+	textarea.error{
+		border:1px solid #f00;
+	}
+	span.error{
+		right:25px;
+		margin-top:45px;
+		max-width:500px;
+		min-width:110px;
+		padding:6px;
+	}
+}
+
 //页面的最上边logo部分
 .header{
 	height:99px;

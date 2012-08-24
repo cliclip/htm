@@ -157,6 +157,7 @@ $(function() {
 	return {
 	  "text":    "oops",
 	  "self": false,
+	  "user": null,
 	  "current": false,
 	  "size":    48,
 	  "sink":   false,
@@ -168,10 +169,10 @@ $(function() {
       }
     });
 
-    function fire(event, value){
+    function fire(event, uid, value){
       // console.log(event, value);
       var App = window.top.App;
-      if(App) App.vent.trigger('app.clipapp.bubb:'+event, value);
+      if(App) App.vent.trigger('app.clipapp:'+event, uid, value);
     }
 
     var BallView = Backbone.View.extend({
@@ -238,19 +239,19 @@ $(function() {
       open: function(){
 	// this.model.set("current", true);
 	// game.open(this.$(".bub span").text());
-	fire("open", this.$(".bub span").text());
+	fire("open", this.model.get("user"), this.$(".bub span").text());
 	//parent.window.location.href="javascript:scroll(0,100)";
       },
       follow: function(){
 	// this.model.set("follow", true);
-	fire("follow", this.$(".bub span").text());
+	fire("follow", this.model.get("user"), this.$(".bub span").text());
       },
       unfollow: function(){
 	// this.model.set("follow", false);
-	fire("unfollow", this.$(".bub span").text());
+	fire("unfollow", this.model.get("user"), this.$(".bub span").text());
       },
       reclip: function(){
-	fire("reclip", this.$(".bub span").text());
+	fire("reclip_tag", this.model.get("user"), this.$(".bub span").text());
       }
     });
 
@@ -532,6 +533,7 @@ $(function() {
 	    var ball = new BallModel({
 	      "text": e,
 	      "self": options.self,
+	      "user": options.user,
 	      "size": size,
 	      "body": body,
 	      "current": ( options.current && options.current == e ),

@@ -12,7 +12,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "query/:word":"siteQuery",
       "help/:item":"help",
 
-      "register": "register",
+      "register": "showRegister",
       "invite/:key" : "invite",
       "active/:key": "active",
       "password/find":"findpasswd",
@@ -42,7 +42,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/interest/tag/:tag":"myInterest",
       // "my/setup":"mySetup",
 
-      "clip/:uid/:clipid":"showDetail"
+      "clip/:uid/:clipid":"clipDetail"
 
     }
   });
@@ -81,7 +81,6 @@ App.Routing.ClipRouting = (function(App, Backbone){
 
     ClipRouting.router.bind("app.clipapp.routing:usershow", function(uid, tag){
       if(App.util.self(uid)){
-	App.util.current_page("my");
 	if(tag){
 	  if($.browser.safari){tag = encodeURI(tag);}
 	  App.Routing.showRoute("my", "tag", tag);
@@ -89,7 +88,6 @@ App.Routing.ClipRouting = (function(App, Backbone){
 	  App.Routing.showRoute("my");
 	}
       }else{
-	App.util.current_page("");
 	if(tag){
 	  if($.browser.safari){tag = encodeURI(tag);}
 	  App.Routing.showRoute("user", uid, "tag", tag);
@@ -132,7 +130,12 @@ App.Routing.ClipRouting = (function(App, Backbone){
 	App.Routing.showRoute("my/recommend");
       }
     });
+
+    ClipRouting.router.bind("app.clipapp.routing:clipdetail",function(uid,cid){
+      App.Routing.showRoute("clip", uid, cid);
+    });
   });
+
 
   return ClipRouting;
 })(App, Backbone);
