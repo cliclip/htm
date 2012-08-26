@@ -78,7 +78,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     cleanDefault: function(e){
       var def = null;
-      if(App.util.self(user_id)){
+      if(App.ClipApp.isSelf(user_id)){
 	def = _i18n('userface.mysearch');
       }else{
 	def = _i18n('userface.search');
@@ -87,7 +87,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     blurAction:function(e){
       var def = null;
-      if(App.util.self(user_id)){
+      if(App.ClipApp.isSelf(user_id)){
 	def = _i18n('userface.mysearch');
       }else{
 	def = _i18n('userface.search');
@@ -107,7 +107,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     queryUser: function(){
       var word = $.trim(this.$("#input_keyword").val());
       var def = null;
-      if(App.util.self(user_id))def = _i18n('userface.mysearch');
+      if(App.ClipApp.isSelf(user_id))def = _i18n('userface.mysearch');
       else def = _i18n('userface.search');
       if(word == def) word = null;
       App.ClipApp.userQuery(user_id, word);
@@ -116,7 +116,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
 
   var getUser=function(uid,callback){
     var url = "";
-    if(uid == App.util.getMyUid()){
+    if(uid == App.ClipApp.getMyUid()){
       // url中带上随机数 防止ie的缓存导致不能向服务器发出请求
       url = P + "/my/info";
     }else{
@@ -132,7 +132,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
   Face.show = function(uid){
     user_id = uid;
     if(uid){
-      if(App.util.getMyUid() != uid){
+      if(App.ClipApp.getMyUid() != uid){
 	getUser(uid, function(user){
 	  faceView = new FaceView({model: user});
 	  App.faceRegion.show(faceView);
@@ -173,6 +173,12 @@ App.ClipApp.Face = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp.follow:get", function(follow){
     show(follow);
+  });
+
+  App.vent.bind("app.clipapp.face:changed", function(){
+    if(/my/.test(window.location.hash)){
+      ClipApp.Face.show(ClipApp.getMyUid("id"));
+    }
   });
 
   return Face;

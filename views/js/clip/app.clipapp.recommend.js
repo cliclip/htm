@@ -248,7 +248,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     var recommView=new RecommView({model:recommModel});
     //clip的拥有者
     var clip_owner = that.model.get("clipid").split(":")[0];
-    if(pub == "false" && !App.util.self(clip_owner)){
+    if(pub == "false" && !App.ClipApp.isSelf(clip_owner)){
       // 是非public并且不是clip_owner进行的操作
       App.ClipApp.showConfirm({recommend: "no_pub"});
     }else{

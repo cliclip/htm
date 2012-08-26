@@ -4,7 +4,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   App.Model.UserBindModel = App.Model.extend({
     url:function(){
-      var my = App.util.getMyUid();
+      var my = App.ClipApp.getMyUid();
       if(this.get("oauth_id")){
 	return P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id");
       }else{

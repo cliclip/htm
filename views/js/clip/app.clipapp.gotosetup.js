@@ -30,5 +30,11 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
     App.ClipApp.showUserEdit();
   };
 
+  App.vent.bind("app.clipapp.register:login", function(key){
+    if(key == "register_success"){ // invite的情况不需要触发gotosetup
+      ClipApp.GotoSetup.show(key, res.email);
+    }
+  });
+
   return  GotoSetup;
 })(App, Backbone, jQuery);

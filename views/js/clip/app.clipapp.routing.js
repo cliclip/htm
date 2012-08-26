@@ -56,7 +56,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
     ClipRouting.router.bind("app.clipapp.routing:query",function(word, uid){
       if($.browser.safari){word = encodeURI(word);}
       if(uid){
-	if(App.util.self(uid)){
+	if(App.ClipApp.isSelf(uid)){
 	  App.Routing.showRoute("my/query",word);
 	}else{
 	  App.Routing.showRoute("user", uid, "query",word);
@@ -80,7 +80,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
     });
 
     ClipRouting.router.bind("app.clipapp.routing:usershow", function(uid, tag){
-      if(App.util.self(uid)){
+      if(App.ClipApp.isSelf(uid)){
 	if(tag){
 	  if($.browser.safari){tag = encodeURI(tag);}
 	  App.Routing.showRoute("my", "tag", tag);
@@ -98,7 +98,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
     });
 
     ClipRouting.router.bind("app.clipapp.routing:userfollowing",function(uid){
-      if(App.util.self(uid)){
+      if(App.ClipApp.isSelf(uid)){
 	App.Routing.showRoute("my","following");
       }else{
 	App.Routing.showRoute("user",uid, "following");
@@ -106,7 +106,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
     });
 
     ClipRouting.router.bind("app.clipapp.routing:userfollower",function(uid){
-      if(App.util.self(uid)){
+      if(App.ClipApp.isSelf(uid)){
 	App.Routing.showRoute("my","follower");
       }else{
 	App.Routing.showRoute("user",uid, "follower");

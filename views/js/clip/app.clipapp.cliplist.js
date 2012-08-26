@@ -195,7 +195,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
-  App.vent.bind("app.clipapp.bubb:open", function(uid, tag){
+  App.vent.bind("app.clipapp:open_bubb", function(uid, tag){
     if(/interest/.test(base_url)){
       ClipList.showUserInterest(uid, tag);
     }else if(/recommend/.test(base_url)){
@@ -306,9 +306,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
-    if(data && App.util.self(JSON.parse(data).user)){ // 是自己的
+    if(data && App.ClipApp.isSelf(JSON.parse(data).user)){ // 是自己的
       var model = new ClipPreviewModel();
-      var uid = App.util.getMyUid();
+      var uid = App.ClipApp.getMyUid();
       var id = uid+":"+addmodel.id;
       var clipid = addmodel.id;
       var tag = addmodel.get("tag");
@@ -346,7 +346,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.clipmemo:success", function(model){
     var json = JSON.parse(data); // 此处的data是标识list的全局变量
     var user = json.user;
-    if(App.util.self(user) && json.tag){
+    if(App.ClipApp.isSelf(user) && json.tag){
       var tag = json.tag[0];
       var flag = _.find(model.get("tag"), function(t){ return t == tag; });
       if(flag === undefined) remove(user+":"+model.get("clipid"));
@@ -364,14 +364,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   };
 
-  App.vent.bind("app.clipapp.comment:success", function(args){
-    refresh(args);
-  });
-
-  App.vent.bind("app.clipapp.reclip:success", function(args){
-    refresh(args);
-  });
-			  
   // 评论总数以及转载总数的同步
   function refresh(args){
     if(!args || !args.model_id){
@@ -393,6 +385,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
   };
+
+  App.vent.bind("app.clipapp.comment:success", function(args){
+    refresh(args);
+  });
+
+  App.vent.bind("app.clipapp.reclip:success", function(args){
+    refresh(args);
+  });
+
+  App.vent.bind("app.clipapp:nextpage", function(){
+    ClipList.nextpage();
+  });
 
   return ClipList;
 })(App, Backbone, jQuery);

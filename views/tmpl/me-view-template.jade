@@ -1,5 +1,5 @@
 script(type='text/template',id='me-view-template')
-  <% if (App.util.getMyUid()) { %>
+  <% if (App.ClipApp.isLoggedIn()) { %>
   nav
     span.my
       //- .navigate#my

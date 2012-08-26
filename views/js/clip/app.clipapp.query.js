@@ -15,7 +15,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
       "click .text":"inputAction"
     },
     addClip: function(){
-      App.vent.trigger("app.clipapp:clipadd");
+      App.ClipApp.showClipAdd();
     },
     showMore:function(){
       if(/language=en/.test(document.cookie)){

@@ -9,7 +9,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       enable: ""
     },
     url:function(){
-      var my = App.util.getMyUid();
+      var my = App.ClipApp.getMyUid();
       return App.util.unique_url(P+"/user/"+my+"/rule");
     },
     validate: function(attrs){

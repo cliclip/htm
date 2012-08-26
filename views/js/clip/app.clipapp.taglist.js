@@ -36,10 +36,36 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   });
 
   var TagList = {};
-  var bubs = App.util.getBubbs();
-  var baseTag = App.util.getObjTags();
 
-  TagList.show = function(str){
+  function getDefaultTags(){
+    var lang = App.versions.getLanguage(); // 用户语言设置
+    if(lang == "en"){
+      return ["music","novel","film","technology","handy"];
+    }else{
+      return ["音乐", "小说", "电影", "港台","牛叉", "技术", "好用"];
+    }
+  };
+
+  var bubs = App.ClipApp.getDefaultBubbs();
+  var baseTag = getDefaultTags();
+
+  function setbaseTag(tags){
+    baseTag = _.difference(_.union(tags,baseTag), bubs);
+  };
+
+  function resetBase(){
+    var my = App.ClipApp.getMyUid();
+    if(my){
+      var tagModel =  new TagListModel({id: my});
+      tagModel.fetch();
+      tagModel.onChange(function(model){
+	baseTag = _.difference(_.union(model.get("tag"), baseTag), bubs);
+      });
+    }
+  };
+
+
+  App.vent.bind("app.tagsinput:taglist",function(str){
     TagList.tagListRegion = new App.Region({el:".taglistDiv"});
     var myTags = [];
     var tags = _.compact($("#obj_tag").val().split(","));
@@ -57,29 +83,13 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     var model = new TagListModel({taglist:myTags});
     var view = new TagListView({model:model});
     TagList.tagListRegion.show(view);
-  };
+  });
 
-
-  function setbaseTag(tags){
-    baseTag = _.difference(_.union(tags,baseTag), bubs);
-  };
-
-  TagList.close = function(){
+  App.vent.bind("app.clipapp.taglist:close",function(){
     if(TagList.tagListRegion){
       TagList.tagListRegion.close();
     }
-  };
-
-  function resetBase(){
-    var my = App.util.getMyUid();
-    if(my){
-      var tagModel =  new TagListModel({id: my});
-      tagModel.fetch();
-      tagModel.onChange(function(model){
-	baseTag = _.difference(_.union(model.get("tag"), baseTag), bubs);
-      });
-    }
-  };
+  });
 
   App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
     setbaseTag(addmodel.get("tag"));
@@ -99,6 +109,10 @@ App.ClipApp.TagList=(function(App,Backbone,$){
 
   App.vent.bind("app.clipapp.reclip:success", function(args){
     setbaseTag(args.tag);
+  });
+
+  App.vent.bind("app.clipapp.clipmemo:success", function(){
+    resetBase();
   });
 
   App.bind("initialize:after", function(){

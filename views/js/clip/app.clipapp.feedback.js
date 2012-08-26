@@ -62,9 +62,9 @@
       var params = {};
       var text = $("#feedback_text").val();
       var lang = App.versions.getLanguage();
-      text = App.util.cleanComment(text); // 过滤一下内容，防止脚本注入
-      var uid = App.util.getMyUid();
+      var uid = App.ClipApp.getMyUid();
       var name = null;
+      text = App.util.cleanComment(text); // 过滤一下内容，防止脚本注入
       if(uid){
 	name = App.ClipApp.getMyFace().name;
 	params = {text:text,uid:uid,name:name,lang:lang};

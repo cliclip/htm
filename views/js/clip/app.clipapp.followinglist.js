@@ -88,7 +88,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     App.listRegion.close();
   };
 
-  FollowingList.nextpage = function(){
+  App.vent.bind("app.clipapp:nextpage", function(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="following-item"&&new_page){
@@ -115,7 +115,8 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
 	}
       });
     }
-  };
+  });
+
   return FollowingList;
 
 })(App,Backbone,jQuery);

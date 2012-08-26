@@ -102,7 +102,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     }
   };
 
-  FollowerList.nextpage = function(){
+  App.vent.bind("app.clipapp:nextpage", function(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="follow-item"&&new_page){
@@ -129,7 +129,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
 	}
       });
     }
-  };
+  });
 
   return FollowerList;
 })(App,Backbone,jQuery);
