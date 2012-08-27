@@ -65,7 +65,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       if(url == "http://" || !url )return;
       $(".masker_layer1").hide();
       $(".img_upload_span").hide();
-      App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
+      App.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },
     upFormat:function(){ // 进行正文抽取
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
@@ -79,7 +79,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var target = $(e.currentTarget);
       target.attr("disabled",true);
       var cid = this.model.id;
-      var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+      var content = App.Editor.getContent("editor"); // 参数为编辑器id
       if(content == old_content){
 	view.trigger("@cancel");
 	App.ClipApp.showSuccess({"content": "no_change"});
@@ -106,7 +106,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       }
     },
     abandonUpdate: function(){
-      var content = App.ClipApp.Editor.getContent("editor"); // 参数为编辑器id
+      var content = App.Editor.getContent("editor"); // 参数为编辑器id
       view.trigger("@cancel", content);
     }
   });
@@ -123,14 +123,14 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
        img.src = App.util.get_img_src(sender.files[0]);
        img.onload=function(){
        if(img.complete){
-       App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
+       App.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
        }};}*/
 
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(err, img_src){
 	//img_list.push(img_src);
 	if(!err && img_src){
-	  App.ClipApp.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
+	  App.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
 	}else{
 	  App.ClipApp.showConfirm("imageUp_fail");
 	}
@@ -146,11 +146,11 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
       var html = App.util.contentToHtml(editModel.toJSON().content);
-      App.ClipApp.Editor.init();
+      App.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
-      App.ClipApp.Editor.setContent("editor", html);
+      App.Editor.setContent("editor", html);
       setTimeout(function(){
-	old_content = App.ClipApp.Editor.getContent("editor"); //参数为编辑器id
+	old_content = App.Editor.getContent("editor"); //参数为编辑器id
       },200);
       $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
 	if(e.ctrlKey&&e.keyCode==13){
@@ -177,7 +177,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 
   var editFailed = function(error){ // 可以弹出错误对话框，提示错误信息
     App.ClipApp.showConfirm(error, null, function(){
-      App.ClipApp.Editor.focus("editor");
+      App.Editor.focus("editor");
     });
   };
 

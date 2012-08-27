@@ -6,7 +6,7 @@ script(type="text/template",id="reclip-view-template")
       h2.subject_put <%=_i18n('reclip.title')%>
       ul.pop_body
         li.tag_box.
-          <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+          <% var main_tag = App.ClipApp.getDefaultBubbs();for(var i=0;i<main_tag.length;i++){ %> 
           <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i]%></span><% } %>
         li
           text.obj_tag(type="text",id="obj_tag")
@@ -33,7 +33,7 @@ script(type="text/template",id="reclipTag-view-template")
         <% }  %>
       ul.pop_body
         li.tag_box.
-          <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+          <% var main_tag = App.ClipApp.getDefaultBubbs();for(var i=0;i<main_tag.length;i++){ %> 
           <span class="size48 white_48" id="main_tag_<%=i%>"><%=main_tag[i]%></span><% } %>
         li
           text.obj_tag(type="text",id="obj_tag")

@@ -19,50 +19,19 @@ App.util = (function(){
     return unescape(document.cookie.substring( len, end ));
   };
 
-  util.getMyUid = function(){
-    var uid = null;
-    var token = util.getCookie("token");
-    if (token) uid = token.split(":")[0];
-    return uid;
+  util.getImg_upUrl = function(uid){
+    return P + '/user/'+uid+'/image';
   };
 
-  // main_tag 部分从这取,
-  util.getBubbs = function(){
-    var lang = App.versions.getLanguage(); // 用户语言设置
-    if(lang == "en"){
-      return ["pretty","funny","musical","cool","tasty","wish"];
-    }{
-      return ["好看", "有趣","好听", "真赞", "好吃",  "想要"];
-    }
-  };
-
-  util.getObjTags = function(){
-    var lang = App.versions.getLanguage(); // 用户语言设置
-    if(lang == "en"){
-      return ["music","novel","film","technology","handy"];
-    }else{
-      return ["音乐", "小说", "电影", "港台","牛叉", "技术", "好用"];
-    }
-  };
-
-  // 判断当前的用户和传过来的参数是否是同一人
-  util.self = function(uid){
-    // return util.getMyUid() == uid || App.ClipApp.Me.me.get("name") == uid;
-    return util.getMyUid() == uid;
-  };
-
-  util.getImg_upUrl = function(){
-    return P + '/user/'+util.getMyUid()+'/image';
-  };
-
-  util.getFace_upUrl = function(){
-    return P+"/user/" + util.getMyUid() + "/upload_face";
+  util.getFace_upUrl = function(uid){
+    return P+"/user/" + uid + "/upload_face";
   };
 
   util.unique_url = function(url){
     var now = new Date();
     return url + "?now=" + now.getTime();
   };
+
   // TODO 此处理适合在 api 的 getPreview 逻辑里完成
   // clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
@@ -92,23 +61,23 @@ App.util = (function(){
 
   // 将content内容转换为，可用于显示的html
   util.contentToHtml = function(content){
-    return App.ClipApp.Convert.ubbToHtml(content);
+    return App.Convert.ubbToHtml(content);
   };
 
   // 对comment的内容进行html过滤，防止脚本注入
   util.cleanComment = function(comment){
-    comment = App.ClipApp.Convert.cleanHtml(comment);
+    comment = App.Convert.cleanHtml(comment);
     comment = comment.replace(/<\/?div[^>]*>/ig, "");
     comment = comment.replace(/<\/?div[^>]*>/ig, "");
     return comment;
   };
 
-  // TODO 合并到某个代码里？
-  util.commentToHtml = function(comment){
+  // TODO 合并到某个代码里？可以直接不要了
+  /*util.commentToHtml = function(comment){
     comment = comment.replace(/\n{2,}/ig, "<\/p><p>");
     comment = comment.replace(/\n/ig, "<\/br>");
     return comment;
-  };
+  };*/
 
   // contentToPreview
   util.getPreview = function(content, length){
@@ -130,7 +99,7 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return App.ClipApp.Convert.ubbToHtml(content);
+    return App.Convert.ubbToHtml(content);
   };
 
   function trim(content, length){
@@ -226,11 +195,6 @@ App.util = (function(){
       returnVal = Math.round(dtime/(60*60*24*30*6*12)) + _i18n('util.time.year');
     }
     return returnVal;
-  };
-
-  util.clip_add = function(){
-    App.vent.trigger("app.clipapp:clipadd");
-    return ;
   };
 
   util.isIE = function(){

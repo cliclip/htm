@@ -8,7 +8,7 @@ script(type="text/template",id="detail-view-template")
           span.breadcrumbs
             //|<%=_i18n('detail.route')%>
         div.pop_right.
-          <% if(!App.util.self(user)) {%>
+          <% if(!App.ClipApp.isSelf(user)) {%>
             <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
             <!--<i class="recommend operate" title="<%=_i18n('detail.recommend')%>"></i>-->
             <i class="reclip operate" title="<%=_i18n('detail.reclip')%>"></i>
@@ -54,10 +54,10 @@ script(type="text/template",id="showcomment-view-template")
     span.username
       <a href="#user/<%=user.id%>"><%=user.name%> :</a>
     span.text
-      <a class="marking"><% if(has_child) {%> <%=_i18n('showcomment.pack')%> <%}%></a><span class="comment_text"><%= App.util.commentToHtml(text)%></span><span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
+      <a class="marking"><% if(has_child) {%> <%=_i18n('showcomment.pack')%> <%}%></a><span class="comment_text"><%= text%></span><span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
   dd.comment_con.
     <div class="comm_link" id="<%= id %>" style="float:right;">
-    <% auth = App.util.getMyUid(); if(user.id == auth || auth == clip_owner){%>
+    <% auth = App.ClipApp.getMyUid(); if(user.id == auth || auth == clip_owner){%>
     <span id="reply_<%=id%>" style="display:none; float:left;" >
     <a href="javascript:void(0)" class="del_comment" id="<%= id %>"><%=_i18n('showcomment.delete')%></a>&nbsp;|<% } %>
     </span>
@@ -70,9 +70,9 @@ script(type="text/template",id="addcomm-view-template")
   |<textarea id="comm_text"><%=_i18n('comment.defaultText')%></textarea>
   // 注释掉tag和“同时收”
     div
-      <% var main_tag = App.util.getBubbs();for(var i=0;i<main_tag.length;i++){ %> 
+      <% var main_tag = App.ClipApp.getDefaultBubbs();for(var i=0;i<main_tag.length;i++){ %> 
       <input type="button" class="main_tag original" id="maintag_<%=i%>" value="<%=main_tag[i]%>" /><% } %>
-    <% if(!App.util.self(cid.split(":")[0])){ %>
+    <% if(!App.ClipApp.isSelf(cid.split(":")[0])){ %>
     .input_checkbox
       span
         input(type="checkbox",id="reclip")

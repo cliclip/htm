@@ -153,17 +153,11 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   Me.show = function(){
-    var meView = null;
-    if(!App.util.getMyUid()){
-      meView = new View({model: Me.me});
-      App.mineRegion.show(meView);
-    }else{
-      Me.me.onChange(function(meModel){
-	meView = new View({ model: meModel });
-	App.mineRegion.show(meView);
-	meView.trigger("@change", meView.model);
-      });
-    }
+    var meView = new View({model: Me.me});
+    App.mineRegion.show(meView);
+    Me.me.onChange(function(meModel){ // onChange 之后进行有无用户名的判断
+      meView.trigger("@change", meView.model);
+    });
   };
 
   Me.getFace = function(){
@@ -172,6 +166,13 @@ App.ClipApp.Me = (function(App, Backbone, $){
       face: Me.me.get("face"),
       lang: Me.me.get("lang")
     };
+  };
+
+  Me.getUid = function(){
+    var uid = null;
+    var token = App.util.getCookie("token");
+    if (token) uid = token.split(":")[0];
+    return uid;
   };
 
   var changeShow = function(){
@@ -201,6 +202,10 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.unfollow:success", function(){
+    Me.me.fetch();
+  });
+
+  App.vent.bind("app.clipapp.face:changed", function(){
     Me.me.fetch();
   });
 

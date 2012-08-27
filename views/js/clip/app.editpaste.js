@@ -1,4 +1,4 @@
-App.ClipApp.Editor = (function(App, Backbone, $){
+App.Editor = (function(App, Backbone, $){
   var Editor = {};
   var isIE = App.util.isIE();
   Editor.init = function(){
@@ -24,7 +24,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
   Editor.getContent = function(editorId){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     var data = objEditor.contentWindow.document.body.innerHTML;
-    return App.ClipApp.Convert.toUbb(data); // 此处的内容会提交到api层去
+    return App.Convert.toUbb(data); // 此处的内容会提交到api层去
   };
 
   // 与getContent对称 该js内部实现 [没有必要]
@@ -123,7 +123,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
       objEditor.contentWindow.focus();
       newData=ifmTemp.contentWindow.document.body.innerHTML;
       //filter the pasted data
-      newData =  App.ClipApp.Convert.filter(newData);
+      newData =  App.Convert.filter(newData);
       // ifmTemp.contentWindow.document.body.innerHTML=newData;
       // paste the data into the editor
       orRange.pasteHTML(newData);
@@ -180,7 +180,7 @@ App.ClipApp.Editor = (function(App, Backbone, $){
 	  setRange(getSel(w),or);
 	}
 	edDoc.body.removeChild(divTemp);
-	newData =  App.ClipApp.Convert.filter(newData);
+	newData =  App.Convert.filter(newData);
 	// divTemp.innerHTML=newData;
 	// paste the new data to the editor
 	objEditor.contentWindow.document.execCommand('inserthtml',false,newData );
