@@ -39,7 +39,6 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   var bubs = App.ClipApp.getDefaultBubbs();
   var baseTag = getDefaultTags();
 
-
   function getDefaultTags(){
     var lang = App.versions.getLanguage(); // 用户语言设置
     if(lang == "en"){

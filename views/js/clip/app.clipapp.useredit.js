@@ -253,7 +253,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     setName: function(e){
       e.preventDefault();
       var view = this;
-      var uid = this.model.id;
       if(!$(e.currentTarget).hasClass("set_ok")){$("#set-name").empty();}
       $(".edit_name").addClass("set_ok").val(_i18n("faceEdit.ok"));
       $(".set_ok").unbind("click");
@@ -424,7 +423,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    var facemodel = new FaceModel({face:currentFace});
 	    facemodel.save({},{
 	      success:function(model,res){
-		if(face_remote_flag){ // 次标记的作用是什么
+		if(face_remote_flag){ // 此标记的作用是什么
 		  $("#myface").attr("src",App.util.face_url(returnObj[1][0]),240);
 		  $("#confirm_face").show();
 		}else{

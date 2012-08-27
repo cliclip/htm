@@ -249,7 +249,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.listRegion.show(clipListView);
       current_page(current);
       if(collection.length<10){ // 去重之后不够十条继续请求
-	ClipList.nextpage();
+	nextpage();
       }
       if(!clips_exist){
 	if(window.location.hash=="#my"){
@@ -289,7 +289,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }, 200);
   };
 
-  ClipList.nextpage = function(){
+  function nextpage(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
@@ -358,7 +358,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     start--;
     collection_length--;
     if(collection_length == 0){
-      ClipList.nextpage();
+      nextpage();
     }
   };
 
@@ -414,7 +414,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:nextpage", function(){
-    ClipList.nextpage();
+    nextpage();
   });
 
   // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定

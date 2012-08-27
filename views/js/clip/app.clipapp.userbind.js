@@ -140,13 +140,9 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       }
       // App.vent.trigger("app.clipapp.userbind:bindok"); 动作为 Me.me.fetch;
       if(reply){
-	if(typeof fun == "function"){
-	  // 获取用户的tag 作用是什么
-	  // App.ClipApp.Bubb.getUserTags(res.token.split(":")[0]);
-	  fun();
-	}else{
-	  App.vent.trigger("app.clipapp.login:success",res);
-	}
+	if(typeof fun == "function"){ fun(); }
+	// else{ App.vent.trigger("app.clipapp.login:success",res); }
+	App.vent.trigger("app.clipapp.login:success",res);
 	UserBind.close();
       }
     });
@@ -157,9 +153,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     UserBind.close();
   };
 
-
  // App.bind("initialize:after", function(){ UserBind.show({info:"ll",provider:"dd"}); });
-
 
  return UserBind;
 })(App, Backbone, jQuery);

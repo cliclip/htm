@@ -48,6 +48,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'note':
 	  App.ClipApp.showMemo(cid); break;
 	case 'modify':
+	  this.trigger("@detailClose");
 	  App.ClipApp.showEditClip(cid); break;
 	case 'del':
 	  App.ClipApp.showClipDelete(cid); break;
@@ -62,6 +63,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       this.trigger("@detailClose");
     },
     editDetail: function(e){
+      this.trigger("@detailClose");
       App.ClipApp.showEditClip(this.model.id);
     }
   });
@@ -216,7 +218,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = $.trim($("#comm_text").val());
-      text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
+      text = App.util.cleanInput(text); // 过滤一下评论内容，防止脚本注入
       var params = {clipid: cid, text: text, pid: pid};
       /*var params1 = null;
       if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量
@@ -384,12 +386,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp.clipdelete:success", function(){
-    if(ClipDetail.addCommRegion || ClipDetail.replyCommRegion){
-      ClipDetail.close();
-    }
-  });
-
   ClipDetail.close = function(){
     regionClose("commentRegion");
     regionClose("replyCommRegion");
@@ -399,6 +395,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     App.viewRegion.close();
     mid = null;
   };
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(){
+    if(ClipDetail.addCommRegion || ClipDetail.replyCommRegion){
+      ClipDetail.close();
+    }
+  });
 
   return ClipDetail;
 })(App, Backbone, jQuery);

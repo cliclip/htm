@@ -111,11 +111,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   });
 
   ClipEdit.image_change = function(sender){
-    var that = view;
-    var uid = that.model.get("user");
     var change = App.util.isImage("formUpload");
     if(!change){
-      that.trigger("@error", "imageUp_fail");
+      view.trigger("@error", "imageUp_fail");
     }else{
       /*if( sender.files &&sender.files[0] ){
        var img = new Image();
@@ -124,7 +122,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
        if(img.complete){
        App.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
        }};}*/
-
       $("#img_form").submit();
       App.util.get_imgurl("post_frame",function(err, img_src){
 	//img_list.push(img_src);

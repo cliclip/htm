@@ -1,4 +1,6 @@
 App.ClipApp.Reclip = (function(App, Backbone, $){
+  var Reclip = {};
+  var mid,o_pub;
 
   var ReclipModel = App.Model.extend({
     url: function(){
@@ -45,7 +47,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
       if($(".error").length == 0){
-	this.trigger("@submit", params,mid);
+	this.trigger("@submit", params, mid);
       }else{
 	$(e.currentTarget).attr("disabled",false);
       }
@@ -68,7 +70,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       var params = loadData(this.$el);
       params["rid"] = this.model.get("rid");
       params["id"] = this.model.id;
-      this.trigger("@closeView",params,mid);
+      this.trigger("@closeView",params);
     }
   });
 
@@ -94,27 +96,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     return params;
   }
 
-
-  var Reclip = {};
-  var mid,o_pub;
-
-  Reclip.show = function(cid,model_id,recommend,pub){
-    mid = model_id;
-    var rid = recommend.rid;
-    var ruser = recommend.user;
-    if(pub == "false" && ruser != cid.split(':')[0]){
-      // 是没公开的，并且不是clip_owner进行的操作
-      App.ClipApp.showConfirm({reclip:"no_pub"});
-    }else{
-      var model = new ReclipModel({id:cid,rid:rid});
-      var reclipView = new ReclipView({model : model});
-      App.popRegion.show(reclipView);
-      o_pub = pub;
-      if(pub == "false") $("#checkbox").attr("checked",true);
-      $('#obj_tag').tagsInput({});
-    }
-  };
-
   Reclip.close = function(params){
     if(!params||(params.clip.tag.length==0&&params.clip['public']==o_pub)){
       App.popRegion.close();
@@ -124,6 +105,8 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       App.ClipApp.showAlert("reclip_save", null, fun);
     }
   };
+
+  var close = Reclip.close;
 
   function reclipSave(params,mid){
     var model = new ReclipModel(params);
@@ -142,15 +125,28 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     });
   }
 
+  Reclip.show = function(cid,model_id,recommend,pub){
+    mid = model_id;
+    var rid = recommend.rid;
+    var ruser = recommend.user;
+    if(pub == "false" && ruser != cid.split(':')[0]){
+      // 是没公开的，并且不是clip_owner进行的操作
+      App.ClipApp.showConfirm({reclip:"no_pub"});
+    }else{
+      var model = new ReclipModel({id:cid,rid:rid});
+      var reclipView = new ReclipView({model : model});
+      App.popRegion.show(reclipView);
+      o_pub = pub;
+      if(pub == "false") $("#checkbox").attr("checked",true);
+      $('#obj_tag').tagsInput({});
+    }
+  };
+
 /*
   App.vent.bind("app.clipapp.reclip:sync", function(params,mid){
     reclipSave(params,mid);
   });
 */
-
-  var close = function(params,mid){
-    Reclip.close(params,mid);
-  };
 
    // TEST
    // App.bind("initialize:after", function(){ Reclip.show("1:1"); });

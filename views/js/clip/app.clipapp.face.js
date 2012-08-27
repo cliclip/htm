@@ -107,7 +107,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     queryUser: function(){
       var word = $.trim(this.$("#input_keyword").val());
       var def = null;
-      if(App.ClipApp.isSelf(user_id))def = _i18n('userface.mysearch');
+      if(App.ClipApp.isSelf(user_id)) def = _i18n('userface.mysearch');
       else def = _i18n('userface.search');
       if(word == def) word = null;
       App.ClipApp.userQuery(user_id, word);

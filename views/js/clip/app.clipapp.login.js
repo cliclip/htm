@@ -121,36 +121,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
   });
 
-  function checkUser(callback){ //weibo、twitter的信息与本系统进行验证
-    var model = new App.Model.UserBindModel(params);
-    model.save({},{
-      url : App.ClipApp.Url.base+"/user/oauth_info",
-      type: "POST",
-      success:function(model,res){
-	callback(null,res);
-      },
-      error:function(model,error){
-	callback(null,null);
-      }
-    });
-  };
-
-  function closeUI(){
-    socket.destroy();
-    //window.scroll(0, savedScrollTop);
-    //document.body.removeChild(popupIframe);
-  }
-
-  function cleanSelection(){
-    if (window.getSelection) {  // all browsers, except ie < 9
-      var sel = window.getSelection ();
-      sel.removeAllRanges();
-    } else if (document.selection.createRange) { // ie
-      document.selection.createRange();
-      document.selection.empty();
-    }
-  }
-
   Login.show = function(callback){
     fun = callback;
     var loginModel = new App.Model.LoginModel();
@@ -173,6 +143,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   var cancel = function(){
     Login.close();
   };
+
   var success = function(res, remember){ // 用户登录成功 页面跳转
     Login.close();
     if(remember){
@@ -191,7 +162,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
   };
 
  // TEST
-
  App.bind("initialize:after", function(){
    //console.info(document.cookie);
  });

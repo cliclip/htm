@@ -49,12 +49,10 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       "click #follower" : "followerOpen"
     },
     followingOpen:function(e){
-      var uid = App.ClipApp.Face.getUserId();
-      App.ClipApp.showFollowing(uid);
+      App.ClipApp.showFollowing(App.ClipApp.getFaceUid());
     },
     followerOpen:function(e){
-      var uid = App.ClipApp.Face.getUserId();
-      App.ClipApp.showFollower(uid);
+      App.ClipApp.showFollower(App.ClipApp.getFaceUid());
     }
   });
 
@@ -84,6 +82,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       },0);
     });
   };
+			     
   FollowingList.close=function(){
     App.listRegion.close();
   };

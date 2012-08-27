@@ -480,7 +480,8 @@ App.versions = (function($){
 	  not_login   : "请您先登录",
 	  not_self    : "您的登录以过期，请从新登录",
 	  not_owner   : "您的登录以过期，请从新登录"
-	}
+	},
+	feedback_save  : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>"
       },
       util : {
 	time:{
@@ -982,7 +983,8 @@ App.versions = (function($){
 	  not_login   : "Please log in first",
 	  not_self    : "Your login expired,login in again",
 	  not_owner   : "Your login expired,login in again"
-	}
+	},
+	feedback_save : "If you close the window,what you entered will be lost. Are you sure?"
       },
       util : {
 	time:{

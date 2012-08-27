@@ -20,6 +20,10 @@ App.ClipApp = (function(App, Backbone, $){
     return ClipApp.Me.getUid();
   };
 
+  ClipApp.getFaceUid = function(){
+    return ClipApp.Face.getUserId();
+  };
+
   ClipApp.isSelf = function(uid){
     return uid == ClipApp.getMyUid();
   };
@@ -195,15 +199,11 @@ App.ClipApp = (function(App, Backbone, $){
     if(!ClipApp.isLoggedIn()){
       ClipApp.showLogin(function(){
 	if (ClipApp.isOwner(clipId.split(":")[0], ClipApp.getMyUid())) {
-	  if(/clip\/([0-9]+)\/([0-9]+)/.test(Backbone.history.fragment))
-	    ClipApp.ClipDetail.close();
 	  ClipApp.ClipEdit.show(clipId);
 	}
       });
     }else{
       if (ClipApp.isOwner(clipId.split(":")[0], ClipApp.getMyUid())) {
-	if(/clip\/([0-9]+)\/([0-9]+)/.test(Backbone.history.fragment))
-	  ClipApp.ClipDetail.close();
 	ClipApp.ClipEdit.show(clipId);
       }
     }

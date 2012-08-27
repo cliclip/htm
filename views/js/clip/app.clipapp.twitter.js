@@ -40,7 +40,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
   };
 
   var delTwitter = function(uid){
-  var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
+    var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
     model.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	TwitterEdit.show();

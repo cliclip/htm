@@ -25,8 +25,11 @@
     events:{
       "click .feed"  :  "feedbackShow"
     },
+    initialize: function(){
+      this.bind("@show", show);
+    },
     feedbackShow : function(e){
-      feedbackShow();
+      this.trigger("@show");
     }
   });
 
@@ -44,7 +47,6 @@
       "click .masker"         : "masker"
     },
     initialize:function(){
-      this.flag = false;
       this.bind("@closeView", close);
     },
     focusAction : function(e){
@@ -64,19 +66,14 @@
       var lang = App.versions.getLanguage();
       var uid = App.ClipApp.getMyUid();
       var name = null;
-      text = App.util.cleanComment(text); // 过滤一下内容，防止脚本注入
-      if(uid){
-	name = App.ClipApp.getMyFace().name;
-	params = {text:text,uid:uid,name:name,lang:lang};
-      }else{
-	params = {text:text,uid:uid,name:name,lang:lang};
-      }
+      if(uid) name = App.ClipApp.getMyFace().name;
+      text = App.util.cleanInput(text); // 过滤一下内容，防止脚本注入
+      params = {text:text,uid:uid,name:name,lang:lang};
       var tmpmodel = new FeedBackModel();
       tmpmodel.save(params,{
 	success:function(model,res){
 	  view.trigger("@closeView");
 	  App.ClipApp.showSuccess("feedback_ok");
-
 	},
 	error:function(model,error){
 	  if(error.feedback_text == "is_null")
@@ -86,7 +83,9 @@
       });
     },
     feedbackClose : function(e){
-      this.trigger("@closeView");
+      var text = $("#feedback_text").val();
+      if(text == _i18n('feedback.defaultText')) text = "";
+      this.trigger("@closeView", text);
     },
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
@@ -95,8 +94,20 @@
     }
   });
 
+  var show = function(){
+    var feedbackModel = new FeedBackModel();
+    var feedbackView = new FeedBackView({model: feedbackModel});
+    App.feedbackRegion.show(feedbackView);
+  };
+
   var close =  function(text){
-    App.feedbackRegion.close();
+    if(!text || text == ""){
+      App.feedbackRegion.close();
+    }else{
+      App.ClipApp.showAlert("feedback_save", null, function(){
+	App.feedbackRegion.close();
+      });
+    }
   };
 
   function feedShow(){
@@ -110,12 +121,6 @@
       $(".feed").addClass("feed-en");
     }
   }
-
-   function feedbackShow(){
-     var feedbackModel = new FeedBackModel();
-     var feedbackView = new FeedBackView({model: feedbackModel});
-     App.feedbackRegion.show(feedbackView);
-   }
 
   App.bind("initialize:after", function(){
     feedShow();

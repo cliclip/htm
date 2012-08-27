@@ -75,7 +75,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).attr("disabled",true);
       var view = this;
       var text = $.trim($("#comm_text").val());
-      text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
+      text = App.util.cleanInput(text); // 过滤一下评论内容，防止脚本注入
       var params = {text: text, pid: 0};
       var params1 = null;
       /*if($("#reclip_box").attr("checked")){
@@ -87,9 +87,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	  }*/
+	  view.trigger("@closeView");
 	  App.ClipApp.showSuccess("comment");
 	  App.vent.trigger("app.clipapp.comment:success", {type:"comment",pid:params.pid,model_id:mid});
-	  Comment.close();
 	},
 	error:function(model, res){
 	  if(res.comm_text == "is_null")

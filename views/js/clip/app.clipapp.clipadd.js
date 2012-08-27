@@ -40,7 +40,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     initialize:function(){
       clip = {};
-      this.bind("@success", saveSuccess);
       this.bind("@error", saveFailed);
       this.bind("@cancel", saveCanceled);
       this.bind("@closeRegion", closeRegion);
@@ -99,8 +98,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       this.model.save(clip, {
 	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model
+	  view.trigger("@closeRegion");
 	  if(clipper) App.vent.trigger("app.clipapp.clipper:save");
-	  else view.trigger("@success", model);
+	  else App.vent.trigger("app.clipapp.clipadd:success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
 	  target.attr("disabled",false);
@@ -109,18 +109,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       });
     },
     emptycliper:function(){
-      this.trigger("closeRegion");
+      this.trigger("@closeRegion");
       App.vent.trigger("app.clipapp.clipper:empty");
     },
     remark_clip: function(){ // 此全局变量就是为了clip的注操作
       App.ClipApp.showMemo(clip);
     }
   });
-
-  var saveSuccess = function(model){
-    ClipAdd.close();
-    App.vent.trigger("app.clipapp.clipadd:success", model);
-  };
 
   var saveFailed = function(error){
     App.ClipApp.showConfirm(error, null, function(){
@@ -136,7 +131,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     App.viewRegion.close();
   };
 
-  ClipAdd.image_change = function(sender){ // 在view中直接绑定
+  // 在template中直接绑定
+  ClipAdd.image_change = function(sender){
     var change = App.util.isImage("formUpload");
     if(!change){
       view.trigger("@error", "imageUp_fail");

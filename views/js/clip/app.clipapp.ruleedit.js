@@ -85,13 +85,13 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     },
     setCC:function(e){
       var key = e.keyCode;
-      dealEmail(e);
+      addSeparator(e);
       if(key==188||key==59||key==32) return false;
       else return true;
     },
     setTO:function(e){
       var key = e.keyCode;
-      dealEmail(e);
+      addSeparator(e);
       if(key==188||key==59||key==32) return false;
       else return true;
     },
@@ -143,7 +143,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     }
   });
 
-  function dealEmail(e){
+  function addSeparator(e){
     var key = e.keyCode;
     var str = $.trim($(e.currentTarget).val());
     //按键为 tab 空格 , ; 时处理输入框中的字符串
@@ -157,9 +157,12 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 	//在取出无用数据后（空字符串等），再放回输入框
 	$(e.currentTarget).val(_.compact(arr).join(";")+";");
       }
-
     }
   }
+
+  var showrule = function(uid){
+    RuleEdit.show(uid);
+  };
 
   var o_data;
   RuleEdit.show = function(){
@@ -180,10 +183,6 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
 
   RuleEdit.close = function(){
     App.popRegion.close();
-  };
-
-  var showrule = function(uid){
-    RuleEdit.show(uid);
   };
 
   return RuleEdit;

@@ -71,8 +71,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 */
-  Bubb.followUserBubs = function(uid, tag){
-    if(!uid) uid = App.ClipApp.Face.getUserId();;
+  function followUserBubs(uid, tag){
+    if(!uid) uid = App.ClipApp.getFaceUid();
     followUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
@@ -86,8 +86,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
-  Bubb.unfollowUserBubs = function(uid, tag){
-    if(!uid) uid = App.ClipApp.Face.getUserId();
+  function unfollowUserBubs(uid, tag){
+    if(!uid) uid = App.ClipApp.getFaceUid();
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
@@ -138,7 +138,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function getSiteBubs(callback){
     getSiteTags(function(tags, follows){
-      var tags2 = _.intersection(tags,bubs);
+      var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
     });
@@ -305,7 +305,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   }
 
-    App.vent.bind("app.clipapp.clipadd:success",function(addmodel){
+  App.vent.bind("app.clipapp.clipadd:success",function(addmodel){
     if(App.ClipApp.isSelf(_uid)){
       refresh(App.ClipApp.getMyUid(), null, addmodel.get("tag"));
     }
@@ -333,10 +333,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:follow", function(uid, tag){
     if(!App.ClipApp.isLoggedIn()){
       App.ClipApp.showLogin(function(){
-	Bubb.followUserBubs(uid, tag);
+	followUserBubs(uid, tag);
       });
     }else{
-      Bubb.followUserBubs(uid, tag);
+      followUserBubs(uid, tag);
     }
   });
 
@@ -344,10 +344,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
     if(!App.ClipApp.isLoggedIn()){
       App.ClipApp.showLogin(function(){
-	Bubb.unfollowUserBubs(uid, tag);
+	unfollowUserBubs(uid, tag);
       });
     }else{
-      Bubb.unfollowUserBubs(uid, tag);
+      unfollowUserBubs(uid, tag);
     }
   });
 
