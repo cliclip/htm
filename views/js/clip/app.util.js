@@ -127,30 +127,6 @@ App.util = (function(){
     }
   };
 
-  // need refactor
-  util.current_page = function(str){
-    setTimeout(function(){ // 如果没有延时去不到东西
-      if(str=="my"){
-	$(".my").css({"z-index":2,"top":"-3px","height":"33px"});
-	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
-	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-      }else if(str=="@me"){
-	$(".my").css({"z-index":1,"top":"0px","height":"30px"});
-	$(".at_me").css({"z-index":1,"top":"-3px","height":"33px"});
-	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-      }else if(str=="interest"){
-	//ie7 此处层次关系导致次数必须设成0,2,2，0,0,1和0,1,2 效果不正确
-	$(".my").css({"z-index":0,"top":"0px","height":"30px"});
-	$(".at_me").css({"z-index":2,"top":"0px","height":"30px"});
-	$(".expert").css({"z-index":2,"top":"-3px","height":"33px"});
-      }else {
-	$(".my").css({"z-index":2,"top":"0px","height":"30px"});
-	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
-	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-      }
-    }, 200);
-  };
-
   util.generatePastTime = function(time){
     if(!time) return null;
     var ftime = new Date(time);
@@ -218,30 +194,6 @@ App.util = (function(){
     img.onload = function(){
       $("#list").masonry("reload");
     };
-  };
-
-  util.get_imgid = function(frameid,callback){
-    $("#" + frameid).unbind("load");
-    $("#" + frameid).load(function(){ // 加载图片
-      if(util.isIE()){
-	var returnVal = this.contentWindow.document.documentElement.innerText;
-      }else{
-	var returnVal = this.contentDocument.documentElement.textContent;
-      }
-      if(returnVal != null && returnVal != ""){
-	var returnObj = eval(returnVal);
-	if(returnObj[0] == 0){
-	  var imgids = returnObj[1][0];
-	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	  var uid = imgids.split(":")[0];
-	  var imgid = imgids.split(":")[1];
-	  var url = P+"/user/"+ uid +"/image/" +imgid;
-	  callback(null, url);
-	}else{//上传图片失败
-	  callback("imageUp_fail", null);
-	}
-      }
-    });
   };
 
   util.clearFileInput = function(file){

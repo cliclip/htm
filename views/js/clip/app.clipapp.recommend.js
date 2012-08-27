@@ -20,7 +20,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     }
   });
 
-  var RecommView = App.ItemView.extend({
+  var RecommView = App.DialogView.extend({
     tagName:"div",
     className:"",
     template:"#recommend-view-template",
@@ -45,7 +45,6 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
     initialize:function(){
       that = this;
       this.tmpmodel= new RecommModel();
-      this.falg = false;
       setTimeout(function(){
 	this.$("#recomm_name").focus();
       },500);

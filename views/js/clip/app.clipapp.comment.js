@@ -27,7 +27,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     }
   }); //和api层进行交互
 
-  var CommentView = App.ItemView.extend({
+  var CommentView = App.DialogView.extend({
     tagName : "div",
     className : "comment-view",
     template : "#comment-view-template",
@@ -43,7 +43,6 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       "click .close_w"   :"cancel"
     },
     initialize:function(){
-      this.flag = false;
       this.bind("@closeView", close);
     },
     foucsAction:function(e){

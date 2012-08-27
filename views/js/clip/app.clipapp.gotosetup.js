@@ -1,7 +1,7 @@
 App.ClipApp.GotoSetup = (function(App, Backbone, $){
   var GotoSetup = {};
   var GotoSetupModel = App.Model.extend({});
-  var GotoSetupView = App.ItemView.extend({
+  var GotoSetupView = App.DialogView.extend({
     tagName : "div",
     className : "gotosetup-view",
     template : "#gotosetup-view-template",
@@ -9,12 +9,11 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
       "click .login_btn"  : "go"
     },
     initialize : function(){
-      this.flag = false;
-      this.bind("setup", setup);
+      this.bind("@setup", setup);
     },
     go : function(e){
       e.preventDefault();
-      this.trigger("setup");
+      this.trigger("@setup");
      }
    });
 
@@ -30,7 +29,7 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
     App.ClipApp.showUserEdit();
   };
 
-  App.vent.bind("app.clipapp.register:login", function(key){
+  App.vent.bind("app.clipapp.register:success", function(key){
     if(key == "register_success"){ // invite的情况不需要触发gotosetup
       ClipApp.GotoSetup.show(key, res.email);
     }

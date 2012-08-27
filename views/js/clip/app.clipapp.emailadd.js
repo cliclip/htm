@@ -22,7 +22,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     }
   });
 
-  var EmailAddView = App.ItemView.extend({
+  var EmailAddView = App.DialogView.extend({
     tagName: "div",
     className: "emailadd-view",
     template: "#emailAdd-view-template",

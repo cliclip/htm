@@ -1,6 +1,6 @@
 App.ClipApp.ClipDelete = (function(App, Backbone, $){
   var ClipDelete = {};
-  var DeleteView = App.ItemView.extend({
+  var DeleteView = App.DialogView.extend({
     tagName : "div",
     className : "delete-view",
     template : "#delete-view-template",
@@ -11,7 +11,6 @@ App.ClipApp.ClipDelete = (function(App, Backbone, $){
       "click .close_w"       : "cancelClick"
     },
     initialize:function(){
-      this.flag = false;
       this.bind("@ok", ok);
       this.bind("@closeView", close);
     },

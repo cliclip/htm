@@ -14,7 +14,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
       else return error;
     }
   });
-  var FindPassView=App.ItemView.extend({
+  var FindPassView=App.DialogView.extend({
     tagName:"div",
     className:"findpass-view",
     template:"#findpass-view-template",
@@ -23,6 +23,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
       "keydown #address": "keydownAction",
       "click #submit"   :  "submit",
       "click #cancel"   :  "cancel",
+      "click .masker"   :  "masker",
       "click .close_w"  :  "cancel"
     },
     initialize:function(){
@@ -53,24 +54,31 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
 	}
       });
     },
+    masker: function(e){
+      if($(e.target).attr("class") == "masker"){
+	this.trigger("@cancel");
+      }
+    },
     cancel:function(e){
       e.preventDefault();
       this.trigger("@cancel");
     }
   });
+
   FindPass.show=function(){
     var findPassModel=new FindPassModel();
     var findPassView=new FindPassView({model:findPassModel});
     App.popRegion.show(findPassView);
   };
+
   FindPass.close=function(){
     App.popRegion.close();
   };
 
   var success = function(address){
     Backbone.history.navigate("",true);
-    App.ClipApp.showConfirm("go_resetpass",address);
     FindPass.close();
+    App.ClipApp.showConfirm("go_resetpass",address);
   };
 
   var cancel = function(){

@@ -10,7 +10,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
    * 2，需要多于一个以上的处理
    * 3，在 view 里，与 view 之外的部分通讯，比如，需要知道 region （1的延伸）
    */
-  var MemoView=App.ItemView.extend({
+  var MemoView=App.DialogView.extend({
     tagName:"div",
     className:"organize-view",
     template:"#organize-view-template",
@@ -25,7 +25,6 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "click .close_w"         :"cancelClick"
     },
     initialize:function(){
-      this.flag = false;
       this.bind("@ok", ok);
       this.bind("@closeView", close);
     },

@@ -5,7 +5,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       return App.ClipApp.Url.base+"/clip/"+this.id+"/reclip";
     }
   });
-  var ReclipView = App.ItemView.extend({
+  var ReclipView = App.DialogView.extend({
     tagName : "div",
     className : "reclip-view",
     template : "#reclip-view-template",
@@ -20,7 +20,6 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
       "click .close_w"     : "cancel"
     },
     initialize: function(){
-      this.flag = false;
       this.bind("@submit", reclipSave);
       this.bind("@closeView", close);
     },
@@ -148,7 +147,7 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     reclipSave(params,mid);
   });
 */
-			
+
   var close = function(params,mid){
     Reclip.close(params,mid);
   };

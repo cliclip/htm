@@ -19,7 +19,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   });
 
-  var AddClipView = App.ItemView.extend({
+  var AddClipView = App.DialogView.extend({
     tagName: "div",
     className: "addClip-view",
     template: "#addClip-view-template",
@@ -40,7 +40,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     initialize:function(){
       clip = {};
-      this.flag = true; // falg跟滚动条有关
       this.bind("@success", saveSuccess);
       this.bind("@error", saveFailed);
       this.bind("@cancel", saveCanceled);
@@ -150,7 +149,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
        App.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
        }};}*/
       $("#img_form").submit();
-      App.util.get_imgid("post_frame",function(err, img_src){
+      App.ClipApp.get_imgid("post_frame",function(err, img_src){
 	// img_list.push(img_src);
 	if(!err && img_src){
 	  App.Editor.insertImage("editor",{url: img_src,ieRange:ieRange});

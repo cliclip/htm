@@ -65,10 +65,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
       $(e.currentTarget).children(".user_i").hide();
     },
     followAction: function(){
-      App.vent.trigger("app.clipapp:follow",this.model.id,'*');
+      App.vent.trigger("app.clipapp.bubb:follow",this.model.id,'*');
     },
     stopAction: function(){
-      App.vent.trigger("app.clipapp:unfollow",this.model.id,'*');
+      App.vent.trigger("app.clipapp.bubb:unfollow",this.model.id,'*');
     },
     following: function(){
       App.ClipApp.showFollowing(user_id);

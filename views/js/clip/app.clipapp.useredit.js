@@ -55,7 +55,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   });
 
-  var EditView = App.ItemView.extend({
+  var EditView = App.DialogView.extend({
     tagName: "section",
     className: "edit",
     template: "#editUser-view-template",
@@ -64,7 +64,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click .masker":"masker_close"
     },
     initialize: function(){
-      this.flag = false;
       this.bind("@closeView", close);
     },
     cancel : function(e){
