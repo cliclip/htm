@@ -1,5 +1,6 @@
 App.ClipApp.TagList=(function(App,Backbone,$){
 
+  var TagList = {};
   var TagListModel = App.Model.extend({
     url : function(){
       return  App.ClipApp.Url.base+"/user/"+this.id+"/meta/0..19";
@@ -35,7 +36,9 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     }
   });
 
-  var TagList = {};
+  var bubs = App.ClipApp.getDefaultBubbs();
+  var baseTag = getDefaultTags();
+
 
   function getDefaultTags(){
     var lang = App.versions.getLanguage(); // 用户语言设置
@@ -45,9 +48,6 @@ App.ClipApp.TagList=(function(App,Backbone,$){
       return ["音乐", "小说", "电影", "港台","牛叉", "技术", "好用"];
     }
   };
-
-  var bubs = App.ClipApp.getDefaultBubbs();
-  var baseTag = getDefaultTags();
 
   function setbaseTag(tags){
     baseTag = _.difference(_.union(tags,baseTag), bubs);
@@ -100,6 +100,10 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   });
 
   App.vent.bind("app.clipapp.login:success", function(){
+    resetBase();
+  });
+
+  App.vent.bind("app.clipapp.clipmemo:success", function(){
     resetBase();
   });
 

@@ -82,7 +82,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var content = App.Editor.getContent("editor"); // 参数为编辑器id
       if(content == old_content){
 	view.trigger("@cancel");
-	App.ClipApp.showSuccess({"content": "no_change"});
+	//App.ClipApp.showSuccess({"content": "no_change"}); 没发生变化直接关闭
       }else{
 	var editModel = new EditModel({});
 	// 不用this.mode因为this.model中有 录线图

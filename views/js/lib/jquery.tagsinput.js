@@ -255,17 +255,33 @@
 	  App.vent.trigger("app.tagsinput:taglist",str);
 	});
 
-	$(data.fake_input).bind('blur',data,function(event) {
-	  setTimeout(function(){
-	    App.vent.trigger("app.clipapp.taglist:close");
-	    $(".taglistDiv").hide();
-	  },200);
+	var hide_dropdownlist=true;
+	$(".taglistDiv").bind('mouseover', function(event){
+	  hide_dropdownlist=false;
+	});
+
+	$(".taglistDiv").bind('mouseout', function(event){
+	  hide_dropdownlist=true;
+	});
+
+	$(data.fake_input).bind('blur',function(event) {
+	  if (hide_dropdownlist) {
+	    setTimeout(function(){
+	      App.vent.trigger("app.clipapp.taglist:close");
+	      $(".taglistDiv").hide();
+	    },200);
+	  } else {
+	    //event.stopPropagation();
+	    //hide_dropdownlist = true;
+	    $(data.fake_input).focus();
+	  }
 	});
 
 	App.vent.unbind("app.clipapp.taglist:gettag");// 解决请求多次的问题
 	App.vent.bind("app.clipapp.taglist:gettag",function(tag){
 	  if(tag){
 	    $(data.real_input).addTag(tag,{focus:true,unique:(settings.unique)});
+	    App.vent.trigger("app.tagsinput:taglist");
 	  }
 	});
 
