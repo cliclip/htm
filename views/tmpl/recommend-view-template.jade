@@ -14,7 +14,7 @@ script(type="text/template",id="recommend-view-template")
         li.input_textarea
           |<textarea id="recomm_text" name="text"><%=_i18n('recommend.defaultText')%></textarea>
         // 注释
-          <% if(!App.util.self(clipid.split(":")[0])) {%>
+          <% if(!App.ClipApp.isSelf(clipid.split(":")[0])) {%>
           li.input_checkbox
             label
               input(type="checkbox",id="reclip_box")

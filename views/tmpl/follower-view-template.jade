@@ -1,8 +1,8 @@
 script(type="text/template",id="follow-view-template")
   section.follow_frame 
     ul.tab_frame
-      li(class="tab",id="follower")<%if(App.util.getMyUid()==App.ClipApp.Face.getUserId()){%><%=_i18n('follower.mfollower')%><%}else{%><%=_i18n('follower.follower')%><%}%>
-      li(id="following")<%if(App.util.getMyUid()==App.ClipApp.Face.getUserId()){%><%=_i18n('follower.mfollowing')%><%}else{%><%=_i18n('follower.following')%><%}%>
+      li(class="tab",id="follower")<%if(App.ClipApp.getMyUid()==App.ClipApp.Face.getUserId()){%><%=_i18n('follower.mfollower')%><%}else{%><%=_i18n('follower.follower')%><%}%>
+      li(id="following")<%if(App.ClipApp.getMyUid()==App.ClipApp.Face.getUserId()){%><%=_i18n('follower.mfollowing')%><%}else{%><%=_i18n('follower.following')%><%}%>
     ul.empty_user
       div.msg
         p <%=_i18n('follower.p')%>

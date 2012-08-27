@@ -44,6 +44,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       this.bind("@success", saveSuccess);
       this.bind("@error", saveFailed);
       this.bind("@cancel", saveCanceled);
+      this.bind("@closeRegion", closeRegion);
     },
     extImg:function(evt){
       $(".masker_layer1").show();
@@ -61,7 +62,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       if(url == "http://" || !url )return;
       $(".masker_layer1").hide();
       $(".img_upload_span").hide();
-      App.ClipApp.Editor.insertImage("editor", {url: url,ieRange:ieRange});
+      App.Editor.insertImage("editor", {url: url,ieRange:ieRange});
     },
     save_range:function(){//IE插入图片到光标指定位置，暂存光标位置信息
       var win=document.getElementById('editor').contentWindow;
@@ -74,6 +75,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       }
     },
     okcliper:function(){
+      this.trigger("@closeRegion");
       App.vent.trigger("app.clipapp.clipper:ok");
     },
     masker:function(e){
@@ -82,7 +84,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       }
     },
     cancelcliper:function(){
-      clip.content = App.ClipApp.Editor.getContent("editor");
+      clip.content = App.Editor.getContent("editor");
       if(clipper){
 	App.vent.trigger("app.clipapp.clipper:cancel", clip);
       }else{
@@ -94,7 +96,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var target = $(e.currentTarget);
       var view = this;
       target.attr("disabled",true);
-      clip.content = App.ClipApp.Editor.getContent("editor");
+      clip.content = App.Editor.getContent("editor");
       this.model.save(clip, {
 	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model
@@ -108,6 +110,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       });
     },
     emptycliper:function(){
+      this.trigger("closeRegion");
       App.vent.trigger("app.clipapp.clipper:empty");
     },
     remark_clip: function(){ // 此全局变量就是为了clip的注操作
@@ -122,12 +125,16 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   var saveFailed = function(error){
     App.ClipApp.showConfirm(error, null, function(){
-      App.ClipApp.Editor.focus("editor");
+      App.Editor.focus("editor");
     });
   };
 
   var saveCanceled = function(clip){
     ClipAdd.close(clip);
+  };
+
+  var closeRegion = function(){
+    App.viewRegion.close();
   };
 
   ClipAdd.image_change = function(sender){ // 在view中直接绑定
@@ -140,14 +147,13 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
        img.src = App.util.get_img_src(sender.files[0]);
        img.onload=function(){
        if(img.complete){
-       App.ClipApp.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
+       App.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
        }};}*/
-
       $("#img_form").submit();
       App.util.get_imgid("post_frame",function(err, img_src){
 	// img_list.push(img_src);
 	if(!err && img_src){
-	  App.ClipApp.Editor.insertImage("editor",{url: img_src,ieRange:ieRange});
+	  App.Editor.insertImage("editor",{url: img_src,ieRange:ieRange});
 	}else{
 	  App.ClipApp.showConfirm("imageUp_fail");
 	}
@@ -162,8 +168,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
-    App.ClipApp.Editor.init();
-    App.ClipApp.Editor.focus("editor");
+    App.Editor.init();
+    App.Editor.focus("editor");
     //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
     $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
       if(e.ctrlKey&&e.keyCode==13){
@@ -182,11 +188,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   };
 
-  ClipAdd.memo = function(data){
+  App.vent.bind("app.clipapp.clipadd:memo",function(data){
     clip.note = data.note;
     clip.tag = data.tag;
     clip["public"] = data["public"];
-  };
+  });
 
   return ClipAdd;
 })(App, Backbone, jQuery);

@@ -9,7 +9,7 @@ script(type="text/template",id="addClip-view-template")
             iframe(name="post_frame",id="post_frame")
             span.note_clip.
               <button class="note" title="<%=_i18n('addClip.note_message')%>"></button>
-            |<form method="POST" id="img_form" action="<%= App.util.getImg_upUrl()%>" target="post_frame" enctype="multipart/form-data">
+            |<form method="POST" id="img_form" action="<%= App.ClipApp.img_upUrl()%>" target="post_frame" enctype="multipart/form-data">
             |<span class="file">
             |<button class="upload_img" id="localImg" title="<%=_i18n('addClip.upload')%>"></button>
             |<input id="formUpload" class="hifile" type="file" title="<%=_i18n('addClip.upload')%>" name="image" onchange="return App.ClipApp.ClipAdd.image_change(this)">

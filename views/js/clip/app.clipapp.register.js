@@ -43,7 +43,8 @@ App.ClipApp.Register = (function(App, Backbone, $){
     initialize: function(){
       this.tmpmodel = new App.Model.RegisterModel();
       this.flag = false;
-      this.bind("cancel", cancel);
+      this.bind("@cancel", cancel);
+      this.bind("@success", success);
     },
     blurName: function(e){
       var that = this;
@@ -88,7 +89,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     gotoLogin : function(e){
       e.preventDefault();
-      this.trigger("cancel");
+      this.trigger("@cancel");
       App.ClipApp.showLogin();
     },
     submit: function(e){
@@ -103,7 +104,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	    url : App.ClipApp.Url.base+"/register",
 	    type: "POST",
 	    success:function(model,response){
-	      App.vent.trigger("app.clipapp.register:success","register_success",response);
+	      that.trigger("@success","register_success",response);
 	    },
 	    error:function(model,error){
 	      that.showError('register',error);
@@ -117,11 +118,11 @@ App.ClipApp.Register = (function(App, Backbone, $){
       }
     },
     openWeibo : function(e){
-      this.trigger("cancel");
+      this.trigger("@cancel");
       window.location.href="/oauth/req/weibo";
     },
     openTwitter : function(e){
-      this.trigger("cancel");
+      this.trigger("@cancel");
       window.location.href="/oauth/req/twitter";
     },
     masker: function(e){
@@ -131,7 +132,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     cancel : function(e){
       e.preventDefault();
-      this.trigger("cancel");
+      this.trigger("@cancel");
     }
   });
 
@@ -142,6 +143,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
       type: "POST",
       success:function(model,response){
 	App.ClipApp.showSuccess('invite', response);
+	success("invite", response);
       },
       error:function(model,error){
 	App.ClipApp.showConfirm(error);
@@ -170,12 +172,13 @@ App.ClipApp.Register = (function(App, Backbone, $){
     $(".reg_btn").attr("disabled",true);
   };
 
-  Register.success = function(key, res){
+  var success = function(key, res){
     Register.close();
     var data = new Date();
     data.setTime(data.getTime() + 7*24*60*60*1000);
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
     Backbone.history.navigate("my", true);
+    App.vent.trigger("app.clipapp.register:success", key, res);
   };
 
   var cancel = function(){

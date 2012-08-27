@@ -10,23 +10,15 @@ $(function() {
       switch(r[0]){
 	case 'init' : // for caller to set content // TODO
           // 先通过cleanHtml toUbb toHtml的转换在显示在editor上
-	  r[1] = App.ClipApp.Convert.filter(r[1]);
-          if(App.util.getMyUid()){
-            App.ClipApp.ClipAdd.show("clipper");
-            App.ClipApp.Editor.setContent("editor", r[1]);
-          }else{
-            App.ClipApp.Login.show(function(){
-	      App.ClipApp.ClipAdd.show("clipper");
-	      App.ClipApp.Editor.setContent("editor", r[1]);
-	    });
-	  }
+	  r[1] = App.Convert.filter(r[1]);
+          App.ClipApp.showClipAdd("clipper");
+          App.Editor.setContent("editor", r[1]);
           break;
         }
       }
     });
 
     App.vent.bind("app.clipapp.clipper:ok",function(){
-      App.ClipApp.ClipAdd.close();
       socket.postMessage(JSON.stringify(["ok",r[1]]));
     });
 
@@ -47,7 +39,6 @@ $(function() {
     });
 
     App.vent.bind("app.clipapp.clipper:empty", function(){
-      App.ClipApp.ClipAdd.close();
       socket.postMessage(JSON.stringify(["close"]));
     });
 

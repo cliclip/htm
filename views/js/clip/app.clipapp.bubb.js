@@ -30,7 +30,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     zh: ["讨厌"],
     en: ["hate"]
   };
-  var bubs = App.util.getBubbs();
+  var bubs = App.ClipApp.getDefaultBubbs();
   // exports
   Bubb.showSiteTags = function(tag){
     _uid = null;
@@ -52,7 +52,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   Bubb.showUserTags = function(uid, tag){
     _uid = uid;
-    self = App.util.self(uid);
+    self = App.ClipApp.isSelf(uid);
     homepage = false;
     getUserTags(uid, function(tags, follows){
       showTags(mkTag(_uid, tags, follows, tag, self));
@@ -66,7 +66,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   Bubb.showUserBubs = function(uid, tag){
     _uid = uid;
     getUserBubs(uid, function(tags, follows){
-      self = App.util.self(uid);
+      self = App.ClipApp.isSelf(uid);
       showTags(mkTag(_uid, tags, follows, tag, self));
     });
   };
@@ -115,48 +115,15 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     last = tags;
   };
 
-  App.vent.bind("app.clipapp.clipadd:success",function(addmodel){
-    if(App.util.self(_uid)){
-      refresh(App.util.getMyUid(), null, addmodel.get("tag"));
-    }
-  });
-
-  App.vent.bind("app.clipapp.clipedit:success", function(){
-    if(App.util.self(_uid)){
-      Bubb.showUserTags(_uid);
-    }
-  });
-
-  App.vent.bind("app.clipapp.clipmemo:success", function(){
-     if(App.util.self(_uid)){
-      Bubb.showUserTags(_uid);
-    }
-  });
-
-  App.vent.bind("app.clipapp.clipdelete:success", function(){
-    if(App.util.self(_uid)){
-      Bubb.showUserTags(_uid);
-    }
-  });
-
   function refresh(uid, follow, new_tags){
     _uid = uid;
-    self = App.util.self(uid);
+    self = App.ClipApp.isSelf(uid);
     if(follow){
       showTags(mkTag(_uid, last.tags, follow, null, self));
     }else if(!_.isEmpty(new_tags)){
       showTags(mkTag(_uid, _.union(last.tags, new_tags), follow, null, self));
     }
   };
-
-  //高版本的marionette 设为false也可直接刷新 但是提交上去的数据是乱码
-  App.vent.bind("app.clipapp:open", function(uid, tag){
-    // console.log("open %s", tag + "  " +uid);
-    iframe_call('bubbles', "openTag", tag); // 更新bubb显示
-    var url = mkUrl(tag);
-    Backbone.history.navigate(url, false);
-    App.vent.trigger("app.clipapp.bubb:open", uid, tag);
-  });
 
   // service api
   function getSiteTags(callback){
@@ -338,6 +305,61 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   }
 
+    App.vent.bind("app.clipapp.clipadd:success",function(addmodel){
+    if(App.ClipApp.isSelf(_uid)){
+      refresh(App.ClipApp.getMyUid(), null, addmodel.get("tag"));
+    }
+  });
+
+  App.vent.bind("app.clipapp.clipedit:success", function(){
+    if(App.ClipApp.isSelf(_uid)){
+      Bubb.showUserTags(_uid);
+    }
+  });
+
+  App.vent.bind("app.clipapp.clipmemo:success", function(){
+     if(App.ClipApp.isSelf(_uid)){
+      Bubb.showUserTags(_uid);
+    }
+  });
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(){
+    if(App.ClipApp.isSelf(_uid)){
+      Bubb.showUserTags(_uid);
+    }
+  });
+
+    // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
+  App.vent.bind("app.clipapp.bubb:follow", function(uid, tag){
+    if(!App.ClipApp.isLoggedIn()){
+      App.ClipApp.Login.show(function(){
+	ClipApp.Bubb.followUserBubs(uid, tag);
+      });
+    }else{
+      ClipApp.Bubb.followUserBubs(uid, tag);
+    }
+  });
+
+    // 需要判断是因为可能出现token过期现象
+  App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
+    if(!ClipApp.isLoggedIn()){
+      ClipApp.Login.show(function(){
+	App.ClipApp.Bubb.unfollowUserBubs(uid, tag);
+      });
+    }else{
+      ClipApp.Bubb.unfollowUserBubs(uid, tag);
+    }
+  });
+
+
+  //高版本的marionette 设为false也可直接刷新 但是提交上去的数据是乱码
+  App.vent.bind("app.clipapp.bubb:open", function(uid, tag){
+    // console.log("open %s", tag + "  " +uid);
+    iframe_call('bubbles', "openTag", tag); // 更新bubb显示
+    var url = mkUrl(tag);
+    Backbone.history.navigate(url, false);
+    App.vent.trigger("app.clipapp:open_bubb", uid, tag);
+  });
 
   // return
   return Bubb;

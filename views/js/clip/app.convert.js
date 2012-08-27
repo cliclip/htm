@@ -1,4 +1,4 @@
-App.ClipApp.Convert = (function(App, Backbone, $){
+App.Convert = (function(App, Backbone, $){
   var Convert = {};
   // filter facility
 

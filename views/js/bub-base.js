@@ -172,7 +172,7 @@ $(function() {
     function fire(event, uid, value){
       // console.log(event, value);
       var App = window.top.App;
-      if(App) App.vent.trigger('app.clipapp:'+event, uid, value);
+      if(App) App.vent.trigger('app.clipapp.bubb:'+event, uid, value);
     }
 
     var BallView = Backbone.View.extend({

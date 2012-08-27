@@ -4,7 +4,7 @@ script(type='text/template',id='userface-view-template')
       <a class="user_list" href="#user/<%=id%>">
         <img class="face-image" id="big_face"  src="<%=App.util.face_url(face)%>"/>
       </a>
-      <% if(id && App.util.getMyUid() !=id){ %>
+      <% if(id && App.ClipApp.getMyUid() !=id){ %>
       <% if(_.isEmpty(relation)){ %>
       <b class="user_i" style="display:none;"><i class="<%=_i18n('userface.zhui')%>" id="user_zhui"/>
       </b>
@@ -25,7 +25,7 @@ script(type='text/template',id='userface-view-template')
           span.icon_follow
             div.
               <a class="following">
-                <% if(id == App.util.getMyUid()){%>
+                <% if(id == App.ClipApp.getMyUid()){%>
                 <%=_i18n('userface.mfollowing')%>(<%=following%>)<% }else{ %>
                 <%=_i18n('userface.following')%>(<%=following%>)
                 <% } %>
@@ -33,14 +33,14 @@ script(type='text/template',id='userface-view-template')
           span.icon_block
             div.
               <a class="follower">
-                <% if(id == App.util.getMyUid()){%>
+                <% if(id == App.ClipApp.getMyUid()){%>
                 <%=_i18n('userface.mfollow')%>(<%=follower%>)<% }else{ %>
                 <%=_i18n('userface.follow')%>(<%=follower%>)
                 <% } %>
               </a>
         div#query.input.
           <input class="text" id="input_keyword" type="text" value=
-          "<%if(id == App.util.getMyUid()){%> 
+          "<%if(id == App.ClipApp.getMyUid()){%> 
           <%=_i18n('userface.mysearch')%> 
           <%} else { %> <%=_i18n('userface.search')%> 
           <%}%>" />
