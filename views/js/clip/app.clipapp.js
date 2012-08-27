@@ -32,30 +32,6 @@ App.ClipApp = (function(App, Backbone, $){
     return App.util.getFace_upUrl(ClipApp.getMyUid());
   };
 
-  ClipApp.get_imgid = function(frameid,callback){
-    $("#" + frameid).unbind("load");
-    $("#" + frameid).load(function(){ // 加载图片
-      if(util.isIE()){
-	var returnVal = this.contentWindow.document.documentElement.innerText;
-      }else{
-	var returnVal = this.contentDocument.documentElement.textContent;
-      }
-      if(returnVal != null && returnVal != ""){
-	var returnObj = eval(returnVal);
-	if(returnObj[0] == 0){
-	  var imgids = returnObj[1][0];
-	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	  var uid = imgids.split(":")[0];
-	  var imgid = imgids.split(":")[1];
-	  var url = P+"/user/"+ uid +"/image/" +imgid;
-	  callback(null, url);
-	}else{//上传图片失败
-	  callback("imageUp_fail", null);
-	}
-      }
-    });
-  };
-
   // main_tag 部分从这取
   ClipApp.getDefaultBubbs = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
@@ -179,7 +155,7 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   // 为detail页面添加网址
-  ClipApp.clipDetail = function(uid, clipid, model_id, recommend){
+  ClipApp.clipDetail = function(uid, clipid){
     ClipApp.userShow(uid);
     App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:clipdetail", uid, clipid);
@@ -217,7 +193,13 @@ App.ClipApp = (function(App, Backbone, $){
   // 对于那些直接点击修改按钮的部分，有些多余
   ClipApp.showEditClip = function(clipId){
     if(!ClipApp.isLoggedIn()){
-      ClipApp.showLogin();
+      ClipApp.showLogin(function(){
+	if (ClipApp.isOwner(clipId.split(":")[0], ClipApp.getMyUid())) {
+	  if(/clip\/([0-9]+)\/([0-9]+)/.test(Backbone.history.fragment))
+	    ClipApp.ClipDetail.close();
+	  ClipApp.ClipEdit.show(clipId);
+	}
+      });
     }else{
       if (ClipApp.isOwner(clipId.split(":")[0], ClipApp.getMyUid())) {
 	if(/clip\/([0-9]+)\/([0-9]+)/.test(Backbone.history.fragment))
@@ -235,7 +217,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.showClipAdd = function(clipper){
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	App.ClipApp.ClipAdd.show(clipper);
+	ClipApp.ClipAdd.show(clipper);
       });
     }else{
       ClipApp.ClipAdd.show(clipper);
@@ -247,7 +229,7 @@ App.ClipApp = (function(App, Backbone, $){
     // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
     if(!ClipApp.isLoggedIn())
       ClipApp.Login.show(function(){
-	App.ClipApp.Reclip.show(clipid,model_id,rid,pub);
+	ClipApp.Reclip.show(clipid,model_id,rid,pub);
       });
     else ClipApp.Reclip.show(clipid,model_id,rid,pub);
   };
@@ -256,7 +238,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.showReclipTag = function(user,tag){
     if(!ClipApp.isLoggedIn())
       ClipApp.Login.show(function(){
-	App.ClipApp.ReclipTag.show(user, tag);
+	ClipApp.ReclipTag.show(user, tag);
       });
     else ClipApp.ReclipTag.show(user,tag);
   };
@@ -264,7 +246,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.showRecommend =  function(cid,model_id,pub){
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	App.ClipApp.Recommend.show(cid,model_id,pub);
+	ClipApp.Recommend.show(cid,model_id,pub);
       });
     }else{
       ClipApp.Recommend.show(cid,model_id,pub);
@@ -274,7 +256,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.showComment = function(cid, model_id){
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	App.ClipApp.Comment.show(cid, model_id);
+	ClipApp.Comment.show(cid, model_id);
       });
     }else{
       ClipApp.Comment.show(cid,model_id);
@@ -282,10 +264,19 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.showUserEdit = function(){
-    ClipApp.UserEdit.show();
-    ClipApp.RuleEdit.show();
-    ClipApp.WeiboEdit.show();
-    ClipApp.TwitterEdit.show();
+    if(!ClipApp.isLoggedIn()){
+      ClipApp.Login.show(function(){
+	ClipApp.UserEdit.show();
+	ClipApp.RuleEdit.show();
+	ClipApp.WeiboEdit.show();
+	ClipApp.TwitterEdit.show();
+      });
+    }else{
+      ClipApp.UserEdit.show();
+      ClipApp.RuleEdit.show();
+      ClipApp.WeiboEdit.show();
+      ClipApp.TwitterEdit.show();
+    }
   };
 
   ClipApp.showUserBind = function(oauth, fun, remember){
@@ -394,7 +385,6 @@ App.ClipApp = (function(App, Backbone, $){
 	  var last_top = $("#list .clip").last()[0].offsetTop;
 	}
 	//console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
-
 	if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
 	  time_gap = false;
 	  App.vent.trigger("app.clipapp:nextpage");

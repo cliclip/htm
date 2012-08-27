@@ -177,6 +177,30 @@ App.util = (function(){
     return isIE=$('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
   };
 
+  util.get_imgurl = function(frameid,callback){
+    $("#" + frameid).unbind("load");
+    $("#" + frameid).load(function(){ // 加载图片
+      if(App.util.isIE()){
+	var returnVal = this.contentWindow.document.documentElement.innerText;
+      }else{
+	var returnVal = this.contentDocument.documentElement.textContent;
+      }
+      if(returnVal != null && returnVal != ""){
+	var returnObj = eval(returnVal);
+	if(returnObj[0] == 0){
+	  var imgids = returnObj[1][0];
+	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	  var uid = imgids.split(":")[0];
+	  var imgid = imgids.split(":")[1];
+	  var url = P+"/user/"+ uid +"/image/" +imgid;
+	  callback(null, url);
+	}else{//上传图片失败
+	  callback("imageUp_fail", null);
+	}
+      }
+    });
+  };
+
   util.img_load = function(img){
     img.onload = null;
     if(img.readyState=="complete"||img.readyState=="loaded"||img.complete){

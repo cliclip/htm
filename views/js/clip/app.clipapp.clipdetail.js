@@ -347,7 +347,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
-	App.ClipApp.showSuccess({type:"comment",pid:params.pid,model_id:mid});
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")

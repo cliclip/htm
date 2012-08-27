@@ -301,7 +301,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var delModel = new EmailEditModel({id:1, address:address});
     delModel.destroy({ // destroy要求model必须要有id
       success: function(model, res){
-	UserEdit.showEmail();
+	showEmail();
       },
       error: function(model, res){}
     });

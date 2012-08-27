@@ -265,6 +265,30 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     });
   };
 
+  // need refactor 不互相压着是否z-index就没有关系呢
+  function current_page(str){
+    setTimeout(function(){ // 如果没有延时去不到东西
+      if(str=="my"){
+	$(".my").css({"z-index":2,"top":"-3px","height":"33px"});
+	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
+	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+      }else if(str=="@me"){
+	$(".my").css({"z-index":1,"top":"0px","height":"30px"});
+	$(".at_me").css({"z-index":1,"top":"-3px","height":"33px"});
+	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+      }else if(str=="interest"){
+	//ie7 此处层次关系导致次数必须设成0,2,2，0,0,1和0,1,2 效果不正确
+	$(".my").css({"z-index":0,"top":"0px","height":"30px"});
+	$(".at_me").css({"z-index":2,"top":"0px","height":"30px"});
+	$(".expert").css({"z-index":2,"top":"-3px","height":"33px"});
+      }else {
+	$(".my").css({"z-index":2,"top":"0px","height":"30px"});
+	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
+	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+      }
+    }, 200);
+  };
+
   ClipList.nextpage = function(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
@@ -300,7 +324,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
-    if(data && App.ClipApp.isSelf(JSON.parse(data).user)){ // 是自己的
+    var json = data ? JSON.parse(data) : null;
+      if(json && App.ClipApp.isSelf(json.user) && (!json.tag || _.intersection(json.tag,addmodel.get("tag")).length > 0) ){ //是my或my/tag tag in addmodel
       var model = new ClipPreviewModel();
       var uid = App.ClipApp.getMyUid();
       var id = uid+":"+addmodel.id;
@@ -357,30 +382,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	model.set({"reprint_count":reprint_count});
       }
     }
-  };
-
-  // need refactor 不互相压着是否z-index就没有关系呢
-  function current_page(str){
-    setTimeout(function(){ // 如果没有延时去不到东西
-      if(str=="my"){
-	$(".my").css({"z-index":2,"top":"-3px","height":"33px"});
-	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
-	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-      }else if(str=="@me"){
-	$(".my").css({"z-index":1,"top":"0px","height":"30px"});
-	$(".at_me").css({"z-index":1,"top":"-3px","height":"33px"});
-	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-      }else if(str=="interest"){
-	//ie7 此处层次关系导致次数必须设成0,2,2，0,0,1和0,1,2 效果不正确
-	$(".my").css({"z-index":0,"top":"0px","height":"30px"});
-	$(".at_me").css({"z-index":2,"top":"0px","height":"30px"});
-	$(".expert").css({"z-index":2,"top":"-3px","height":"33px"});
-      }else {
-	$(".my").css({"z-index":2,"top":"0px","height":"30px"});
-	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
-	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
-      }
-    }, 200);
   };
 
   App.vent.bind("app.clipapp.clipedit:success",function(content,model_id){

@@ -5,7 +5,7 @@ App.ClipApp.Help=(function(App,Backbone,$){
       return "/help/help_"+this.get("lang")+".json";
     }
   });
-  var HelpView =  App.ItemView.extend({
+  var HelpView =  App.DialogView.extend({
     tagName : "div",
     className : "help-view",
     template:"#help-view-template",
@@ -15,7 +15,6 @@ App.ClipApp.Help=(function(App,Backbone,$){
       "click .title"    :"toggle"
     },
     initialize: function(){
-      this.flag = false;
       this.bind("@closeView",close);
     },
     cancel:function(e){
@@ -39,6 +38,7 @@ App.ClipApp.Help=(function(App,Backbone,$){
       $(e.currentTarget).children().toggle();
     }
   });
+
   Help.show = function(item){
     var lang=App.versions.getLanguage();
     var help = new HelpModel({item:item,lang:lang});
@@ -61,7 +61,6 @@ App.ClipApp.Help=(function(App,Backbone,$){
  var close = function(){
     Help.close();
   };
-
 
   return Help;
 })(App,Backbone,jQuery);

@@ -126,7 +126,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
        }};}*/
 
       $("#img_form").submit();
-      App.ClipApp.get_imgid("post_frame",function(err, img_src){
+      App.util.get_imgurl("post_frame",function(err, img_src){
 	//img_list.push(img_src);
 	if(!err && img_src){
 	  App.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});

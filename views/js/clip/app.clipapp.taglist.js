@@ -64,7 +64,6 @@ App.ClipApp.TagList=(function(App,Backbone,$){
     }
   };
 
-
   App.vent.bind("app.tagsinput:taglist",function(str){
     TagList.tagListRegion = new App.Region({el:".taglistDiv"});
     var myTags = [];
@@ -113,10 +112,6 @@ App.ClipApp.TagList=(function(App,Backbone,$){
 
   App.vent.bind("app.clipapp.reclip:success", function(args){
     setbaseTag(args.tag);
-  });
-
-  App.vent.bind("app.clipapp.clipmemo:success", function(){
-    resetBase();
   });
 
   App.bind("initialize:after", function(){
