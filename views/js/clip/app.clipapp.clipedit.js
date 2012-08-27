@@ -15,7 +15,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       }
     }
   });
-  var EditView = App.ItemView.extend({
+  var EditView = App.DialogView.extend({
     tagName: "div",
     className: "editDetail-view",
     template: "#editDetail-view-template",
@@ -35,7 +35,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     },
     initialize: function(){
       view = this;
-      view.flag = true;
       view.bind("@success", editSuccess);
       view.bind("@error", editFailed);
       view.bind("@cancel", editCanceled);
@@ -127,7 +126,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
        }};}*/
 
       $("#img_form").submit();
-      App.util.get_imgid("post_frame",function(err, img_src){
+      App.ClipApp.get_imgid("post_frame",function(err, img_src){
 	//img_list.push(img_src);
 	if(!err && img_src){
 	  App.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
@@ -164,7 +163,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     if(!n_content || n_content == old_content){
       App.viewRegion.close();
     }else{
-      App.ClipApp.showAlert("clipedit_save", function(){
+      App.ClipApp.showAlert("clipedit_save", null, function(){
 	App.viewRegion.close();
       });
     }

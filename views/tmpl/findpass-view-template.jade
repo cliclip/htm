@@ -1,12 +1,13 @@
 script(type="text/template",id="findpass-view-template")
   div.masker_layer
-  section.small_pop
-    span.close_w
-    h2.pop_title <%=_i18n('findpass.title')%>
-    ul.pop_body
-      h3 <%=_i18n('findpass.email')%>
-      li.input_text
-        | <input type="text" id="address" />
-      li.btn_group
-        <input type="button" class="verify" value="<%=_i18n('findpass.ok')%>" id="submit" />
-        <input type="button" class="cancel" value="<%=_i18n('findpass.cancel')%>" id="cancel" />
+  div.masker
+    section.small_pop
+      span.close_w
+      h2.pop_title <%=_i18n('findpass.title')%>
+      ul.pop_body
+        h3 <%=_i18n('findpass.email')%>
+        li.input_text
+          | <input type="text" id="address" />
+        li.btn_group
+          <input type="button" class="verify" value="<%=_i18n('findpass.ok')%>" id="submit" />
+          <input type="button" class="cancel" value="<%=_i18n('findpass.cancel')%>" id="cancel" />

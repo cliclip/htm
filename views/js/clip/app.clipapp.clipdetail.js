@@ -14,7 +14,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   });
 
-  var DetailView = App.ItemView.extend({
+  var DetailView = App.DialogView.extend({
     tagName: "div",
     className: "Detail-view",
     template: "#detail-view-template",
@@ -26,7 +26,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "dblclick .content": "editDetail"
     },
     initialize: function(){
-      this.flag = true;
       this.bind("@detailComment", detailComment);
       this.bind("@detailClose", detailClose);
     },

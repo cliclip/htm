@@ -20,7 +20,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
   });
 
   // 会在不同的区域进行显示
-  var RegisterView = App.ItemView.extend({
+  var RegisterView = App.DialogView.extend({
     tagName: "div",
     className: "register-view",
     template: "#register-view-template",
@@ -42,7 +42,6 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     initialize: function(){
       this.tmpmodel = new App.Model.RegisterModel();
-      this.flag = false;
       this.bind("@cancel", cancel);
       this.bind("@success", success);
     },
@@ -127,7 +126,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     },
     masker: function(e){
       if($(e.target).attr("class") == "masker"){
-	this.cancel(e);
+	this.trigger("@cancel");
       }
     },
     cancel : function(e){

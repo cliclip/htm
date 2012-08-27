@@ -8,7 +8,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     }
   });
 
-  var ReclipTagView = App.ItemView.extend({
+  var ReclipTagView = App.DialogView.extend({
     tagName : "div",
     className : "reclipTag-view",
     template : "#reclipTag-view-template",
@@ -22,7 +22,6 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
       "click .close_w"     : "cancel"
     },
     initialize:function(){
-      this.flag = false;
       this.bind("@submit", submit);
       this.bind("@closeView", close);
     },

@@ -4,7 +4,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var clips_exist = true;
   var hide_clips = [];
   var clipListView = {};
-  var collection = {},start, end;
+  var collection = {},start, end, current;
   var url = "",base_url = "",data = "",type = "",collection_length,new_page;
   var loading = false;
   var ClipPreviewModel = App.Model.extend({
@@ -133,6 +133,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   ClipList.flag_show_user = true; //clippreview是否显示用户名和用户头像
   ClipList.showSiteClips = function(tag){
+    current = null;
     ClipList.flag_show_user = true;
     base_url = App.ClipApp.Url.base+"/query";
     // 起始时间设置为，endTime前推一个月
@@ -140,74 +141,65 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     data = {"startTime":date-86400000*30,"endTime":date+10000};
     if(tag) data.tag = [tag];
     type = "POST";
-    init_page();
+    init_page(current);
   };
 
   ClipList.showUserClips = function(uid, tag){
+    current = null;
     ClipList.flag_show_user = false;
     base_url = App.ClipApp.Url.base+"/user/"+uid+"/query";
     data = {user: uid,"startTime":Date.parse('March 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
-    init_page();
+    if(App.ClipApp.isSelf(uid)) current = "my";
+    init_page(current);
   };
 
   // 这两个Query对结果是没有要求的，按照关键字相关度
   ClipList.showSiteQuery = function(word, tag){
+    current = null;
     ClipList.flag_show_user = true;
     base_url = App.ClipApp.Url.base + "/query";
     var date = (new Date()).getTime();
     data = {text: word, "startTime":date-86400000*30,"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
-    init_page();
+    init_page(current);
   };
 
   // 是否public以及originality 都在api层进行判断
   ClipList.showUserQuery = function(uid, word, tag){
+    current = null;
     ClipList.flag_show_user = false;
     base_url = App.ClipApp.Url.base + "/user/"+uid+"/query";
     data = {text: word, user: uid, "startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
-    init_page();
+    if(App.ClipApp.isSelf(uid)) current = "my";
+    init_page(current);
   };
 
   ClipList.showUserInterest = function(uid, tag){
+    current = "interest";
     ClipList.flag_show_user = true;
     base_url = "/user/" + uid + "/interest";
     if(tag) base_url += "/tag/" + encodeURIComponent(tag);
     base_url = App.ClipApp.Url.base + base_url;
     data = null;
     type = "GET";
-    init_page();
+    init_page(current);
   };
 
   ClipList.showUserRecommend = function(uid, tag){
+    current = "@me";
     ClipList.flag_show_user = true;
     base_url = "/user/"+uid+"/recomm";
     if(tag) base_url += "/tag/"+encodeURIComponent(tag);
     base_url = App.ClipApp.Url.base + base_url;
     data = null;
     type = "GET";
-    init_page();
+    init_page(current);
   };
-
-
-  // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
-  App.vent.bind("app.clipapp:open_bubb", function(uid, tag){
-    if(/interest/.test(base_url)){
-      ClipList.showUserInterest(uid, tag);
-    }else if(/recommend/.test(base_url)){
-      ClipList.showUserRecommend(uid, tag);
-    }else{
-      if(!uid){
-	ClipList.showSiteClips(tag);
-      }else {
-	ClipList.showUserClips(uid, tag);
-      }
-    }
-  });
 
   function collection_filter(collection,hide_list){
     collection_length -= hide_list.length;
@@ -215,7 +207,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       collection.remove(collection.get(hide_list[i]));
     }
   };
-  function init_page(){
+
+  function init_page(current){
     var clips = new ClipPreviewList();
     collection = clips;
     start = 1;
@@ -254,6 +247,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	window.location.href="javascript:scroll(0,99)";
       }
       App.listRegion.show(clipListView);
+      current_page(current);
       if(collection.length<10){ // 去重之后不够十条继续请求
 	ClipList.nextpage();
       }
@@ -332,27 +326,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   });
 
-  App.vent.bind("app.clipapp.clipedit:success",function(content,model_id){
-    var collection = clipListView.collection;
-    var model = collection.get(model_id);
-    var newcontent = App.util.getPreview(content, 100);
-    model.set({content:newcontent});
-  });
-
-  App.vent.bind("app.clipapp.clipdelete:success", function(model_id){
-    remove(model_id);
-  });
-
-  App.vent.bind("app.clipapp.clipmemo:success", function(model){
-    var json = JSON.parse(data); // 此处的data是标识list的全局变量
-    var user = json.user;
-    if(App.ClipApp.isSelf(user) && json.tag){
-      var tag = json.tag[0];
-      var flag = _.find(model.get("tag"), function(t){ return t == tag; });
-      if(flag === undefined) remove(user+":"+model.get("clipid"));
-    }
-  });
-
   function remove(model_id){
     var model = clipListView.collection.get(model_id);
     clipListView.collection.remove(model);
@@ -386,6 +359,51 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   };
 
+  // need refactor 不互相压着是否z-index就没有关系呢
+  function current_page(str){
+    setTimeout(function(){ // 如果没有延时去不到东西
+      if(str=="my"){
+	$(".my").css({"z-index":2,"top":"-3px","height":"33px"});
+	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
+	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+      }else if(str=="@me"){
+	$(".my").css({"z-index":1,"top":"0px","height":"30px"});
+	$(".at_me").css({"z-index":1,"top":"-3px","height":"33px"});
+	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+      }else if(str=="interest"){
+	//ie7 此处层次关系导致次数必须设成0,2,2，0,0,1和0,1,2 效果不正确
+	$(".my").css({"z-index":0,"top":"0px","height":"30px"});
+	$(".at_me").css({"z-index":2,"top":"0px","height":"30px"});
+	$(".expert").css({"z-index":2,"top":"-3px","height":"33px"});
+      }else {
+	$(".my").css({"z-index":2,"top":"0px","height":"30px"});
+	$(".at_me").css({"z-index":1,"top":"0px","height":"30px"});
+	$(".expert").css({"z-index":0,"top":"0px","height":"30px"});
+      }
+    }, 200);
+  };
+
+  App.vent.bind("app.clipapp.clipedit:success",function(content,model_id){
+    var collection = clipListView.collection;
+    var model = collection.get(model_id);
+    var newcontent = App.util.getPreview(content, 100);
+    model.set({content:newcontent});
+  });
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(model_id){
+    remove(model_id);
+  });
+
+  App.vent.bind("app.clipapp.clipmemo:success", function(model){
+    var json = JSON.parse(data); // 此处的data是标识list的全局变量
+    var user = json.user;
+    if(App.ClipApp.isSelf(user) && json.tag){
+      var tag = json.tag[0];
+      var flag = _.find(model.get("tag"), function(t){ return t == tag; });
+      if(flag === undefined) remove(user+":"+model.get("clipid"));
+    }
+  });
+
   App.vent.bind("app.clipapp.comment:success", function(args){
     refresh(args);
   });
@@ -396,6 +414,21 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   App.vent.bind("app.clipapp:nextpage", function(){
     ClipList.nextpage();
+  });
+
+  // 牵扯太多的路由所以在 bubb中使用history.navigate进行路由的设定
+  App.vent.bind("app.clipapp:open_bubb", function(uid, tag){
+    if(/interest/.test(base_url)){
+      ClipList.showUserInterest(uid, tag);
+    }else if(/recommend/.test(base_url)){
+      ClipList.showUserRecommend(uid, tag);
+    }else{
+      if(!uid){
+	ClipList.showSiteClips(tag);
+      }else {
+	ClipList.showUserClips(uid, tag);
+      }
+    }
   });
 
   return ClipList;

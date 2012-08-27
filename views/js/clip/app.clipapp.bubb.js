@@ -332,22 +332,22 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // 因为当前用户是否登录，对follow有影响 所以触发app.clipapp.js中绑定的事件
   App.vent.bind("app.clipapp.bubb:follow", function(uid, tag){
     if(!App.ClipApp.isLoggedIn()){
-      App.ClipApp.Login.show(function(){
-	ClipApp.Bubb.followUserBubs(uid, tag);
+      App.ClipApp.showLogin(function(){
+	Bubb.followUserBubs(uid, tag);
       });
     }else{
-      ClipApp.Bubb.followUserBubs(uid, tag);
+      Bubb.followUserBubs(uid, tag);
     }
   });
 
     // 需要判断是因为可能出现token过期现象
   App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
-    if(!ClipApp.isLoggedIn()){
-      ClipApp.Login.show(function(){
-	App.ClipApp.Bubb.unfollowUserBubs(uid, tag);
+    if(!App.ClipApp.isLoggedIn()){
+      App.ClipApp.showLogin(function(){
+	Bubb.unfollowUserBubs(uid, tag);
       });
     }else{
-      ClipApp.Bubb.unfollowUserBubs(uid, tag);
+      Bubb.unfollowUserBubs(uid, tag);
     }
   });
 

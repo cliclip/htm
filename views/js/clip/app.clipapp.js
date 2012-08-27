@@ -3,6 +3,7 @@
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
 
+  // util methods
   ClipApp.isLoggedIn = function(){
     return ClipApp.getMyUid() != null ? true : false;
   };
@@ -31,6 +32,30 @@ App.ClipApp = (function(App, Backbone, $){
     return App.util.getFace_upUrl(ClipApp.getMyUid());
   };
 
+  ClipApp.get_imgid = function(frameid,callback){
+    $("#" + frameid).unbind("load");
+    $("#" + frameid).load(function(){ // 加载图片
+      if(util.isIE()){
+	var returnVal = this.contentWindow.document.documentElement.innerText;
+      }else{
+	var returnVal = this.contentDocument.documentElement.textContent;
+      }
+      if(returnVal != null && returnVal != ""){
+	var returnObj = eval(returnVal);
+	if(returnObj[0] == 0){
+	  var imgids = returnObj[1][0];
+	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	  var uid = imgids.split(":")[0];
+	  var imgid = imgids.split(":")[1];
+	  var url = P+"/user/"+ uid +"/image/" +imgid;
+	  callback(null, url);
+	}else{//上传图片失败
+	  callback("imageUp_fail", null);
+	}
+      }
+    });
+  };
+
   // main_tag 部分从这取
   ClipApp.getDefaultBubbs = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
@@ -47,7 +72,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags(tag);
     ClipApp.ClipList.showSiteClips(tag);
-    App.util.current_page();
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:siteshow",tag);
   };
 
@@ -55,7 +79,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteBubs(tag);
     ClipApp.ClipList.showSiteQuery(word, tag);
-    App.util.current_page();
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
   };
 
@@ -102,7 +125,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    if(App.ClipApp.isSelf(uid)) App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow", uid, tag);
   };
 
@@ -110,7 +132,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
-    if(App.ClipApp.isSelf(uid)) App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word, uid);
   };
 
@@ -137,7 +158,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
-    App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow",uid, tag);
   };
 
@@ -146,7 +166,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
-    App.util.current_page("my");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
   };
 
@@ -156,7 +175,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserInterest(uid, tag);
-    App.util.current_page("interest");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:interest", tag);
   };
 
@@ -172,7 +190,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.cleanTags();
     ClipApp.ClipList.showUserRecommend(uid, tag);
-    App.util.current_page("@me");
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:recommend",tag);
   };*/
 
@@ -320,22 +337,6 @@ App.ClipApp = (function(App, Backbone, $){
   });
 
   //对 user's tag下的clip的reclip
-/*
-  App.vent.bind("app.clipapp.util:current_page", function(str){
-    if((/my\/recommend/.test(window.location.hash))){
-      App.util.current_page("@me");
-    }else if(/my\/interest/.test(window.location.hash)){
-      App.util.current_page("interest");
-    }else if(/my\/follow/.test(window.location.hash)){
-      App.util.current_page("follow");
-    }else if(/my/.test(window.location.hash)){
-      App.util.current_page("my");
-    }else{
-      App.util.current_page("");
-    }
-  });
-*/
-
   App.bind("initialize:after", function(){
     var fixed = function(paddingTop){
       $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});

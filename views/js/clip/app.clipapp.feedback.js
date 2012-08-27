@@ -30,7 +30,7 @@
     }
   });
 
-  var FeedBackView=App.ItemView.extend({
+  var FeedBackView=App.DialogView.extend({
     tagName:"div",
     className:"feedback-view",
     template:"#feedback-view-template",

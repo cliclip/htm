@@ -19,7 +19,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     }
   });
 
-  var LoginView = App.ItemView.extend({
+  var LoginView = App.DialogView.extend({
     tagName : "div",
     className : "login-view",
     template : "#login-view-template",
@@ -38,7 +38,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
-      this.flag = false;
       this.bind("@cancel", cancel);
       this.bind("@success", success);
     },

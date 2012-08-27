@@ -5,16 +5,13 @@ App.ClipApp.Message = (function(App, Backbone, $){
     defaults:{message:""}
   });
 
-  var MessageView = App.ItemView.extend({
+  var MessageView = App.DialogView.extend({
     tagName: "div",
     className: "message-view",
     template: "#message-view-template",
     events: {
       "click .masker":"Masker",
       "click #sure": "MessageSure"
-    },
-    initialize: function(){
-      this.flag = false;
     },
     Masker: function(e){
       e.preventDefault();
@@ -34,7 +31,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
     template: "#success-view-template"
   });
 
-  var WarningView = App.ItemView.extend({
+  var WarningView = App.DialogView.extend({
     tagName: "div",
     className: "message-view",
     template: "#warning-view-template",
@@ -42,9 +39,6 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click .masker":"Masker",
       "click #sure": "MessageSure",
       "click #cancel":"MessageClose"
-    },
-    initialize: function(){
-      this.flag = false;
     },
     MessageSure: function(e){
       e.preventDefault();
@@ -121,4 +115,3 @@ App.ClipApp.Message = (function(App, Backbone, $){
 
   return Message;
 })(App, Backbone, jQuery);
-
