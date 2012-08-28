@@ -8,6 +8,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
     events:{
       "click .add": "addClip",
       "click .more": "showMore",
+      "click li"   :"showHelp",
       "mouseout .more":"closeMysetup",
       "mouseover ul.options":"keepOpenMysetup",
       "mouseout ul.options":"closeMysetupMust",
@@ -26,6 +27,13 @@ App.ClipApp.Query = (function(App,Backbone,$){
 	$("ul.options").addClass("zh");
       }
       $("ul.options").toggle();
+    },
+    showHelp:function(e){//重写url打开的方式
+      e.preventDefault();
+      var id = (e.currentTarget.id).split("_")[1];
+      hist = Backbone.history.fragment;
+      App.ClipApp.Help.show(id,hist);
+      Backbone.history.navigate("help/"+id, false);
     },
     keepOpenMysetup: function(){
       flag = true;
