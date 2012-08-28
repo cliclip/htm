@@ -9,7 +9,7 @@
   },
   "item_3": {
       "title": "Email & Clip"
-    , "description": "<p>Want to clip what you just browsed through “google reader”?</p><p>Need to clip something in your mobile devices (your cell phone, ipad, etc.)? </p><p>And like to save the contents that you just read in an app?</p><p>Or too much trouble of copy & paste?</p><p>⋯⋯</p><p>No problem! Send an email enclosing your favorite contents/links to 1@cliclip.com and they are clipped!</p><p>Try it now. </p><p>Tips: Contents clipped via email is set to be private by default.</p>"
+    , "description": "<p>Want to clip what you just browsed through “google reader”?</p><p>Need to clip something in your mobile devices (your cell phone, ipad, etc.)? </p><p>And like to save the contents that you just read in an app?</p><p>Or too much trouble of copy & paste?</p><p>No problem! Send an email enclosing your favorite contents/links to 1@cliclip.com and they are clipped!</p><p>Try it now. </p><p>Tips: Contents clipped via email is set to be private by default.</p>"
   },
   "item_4": {
       "title": "Weibo & Clip"
@@ -25,11 +25,11 @@
   },
   "item_7": {
       "title": "How to reclip and comment other’s clip?"
-    , "description": "<p>Like to have other’s clip?</p><p>Well, click on the reclip button and it is all yours.<img src='/_2_/user/72/image/5896cf8135ad9b7a669da71070dc82fb'></p><p>You can also forward his/her public clip to your linked weibo(s) to share with other people.</p><p>You can also comment on other’s clip. Please obey the rule of courtesy. </p>"
+    , "description": "<p>Like to have other’s clip?</p><p>Well, click on the reclip button and it is all yours.<img src='img/reclip_en.jpg'></p><p>You can also forward his/her public clip to your linked weibo(s) to share with other people.</p><p>You can also comment on other’s clip. Please obey the rule of courtesy. </p>"
   },
   "item_8": {
       "title": "Can others view my clips?"
-    , "description": "<p>If you are followed by someone, your public clips will appear in his/her “friends” pages. But your private clips won’t.</p><p>Do not want a clip to be seen by others? By clicking the label, you can choose to whether to publish this clip.</p><p><img src='/_2_/user/72/image/dd677ec6cecab2f57704e4f69cfbf5a6'></p><p>Clips created via emails are set to be private by default.</p><p>Clips created via weibo are set to be public by default.</p><p>Not the default rule that you like? Feel free to set your own privacy rules by click settings button.</p>"
+    , "description": "<p>If you are followed by someone, your public clips will appear in his/her “friends” pages. But your private clips won’t.</p><p>Do not want a clip to be seen by others? By clicking the label, you can choose to whether to publish this clip.</p><p><img src='img/private_en.jpg'></p><p>Clips created via emails are set to be private by default.</p><p>Clips created via weibo are set to be public by default.</p><p>Not the default rule that you like? Feel free to set your own privacy rules by click settings button.</p>"
   },
   "item_9": {
       "title": "How to follow friends’ status updates?"
