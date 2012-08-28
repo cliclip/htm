@@ -1,5 +1,5 @@
 App.ClipApp.Help=(function(App,Backbone,$){
-  var Help={};
+  var Help={},hist;
   var HelpModel = App.Model.extend({
     url:function(){
       return "/help/help_"+this.get("lang")+".json";
@@ -39,8 +39,9 @@ App.ClipApp.Help=(function(App,Backbone,$){
     }
   });
 
-  Help.show = function(item){
+  Help.show = function(item,history){
     var lang=App.versions.getLanguage();
+    hist=history;
     var help = new HelpModel({item:item,lang:lang});
     help.fetch({});
     help.onChange(function(helpModel){
@@ -52,10 +53,8 @@ App.ClipApp.Help=(function(App,Backbone,$){
 
   Help.close = function(){
     App.popRegion.close();
-    var hist = Backbone.history.fragment;
-    if(/help\/([0-9]+)/.test(hist)){
-      $(history.go(-1));
-    }
+    if(/help\/([0-9]+)/.test(hist))  hist = "";
+    Backbone.history.navigate(hist, false);
   };
 
  var close = function(){

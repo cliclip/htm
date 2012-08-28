@@ -3,15 +3,15 @@ script(type="text/template",id="queryclip-view-template")
     |<b class="add" title="<%=_i18n('queryclip.add')%>" />
     b.more
     ul.options
-      li.copy
+      li.copy(id="help_1")
         a(href="#help/1") copy
-      li.bookmark
+      li.bookmark(id="help_2")
         a(href="#help/2") bookmark
-      li.email
+      li.email(id="help_3")
         a(href="#help/3") email
-      li.weibo
+      li.weibo(id="help_4")
         a(href="#help/4") weibo
-      li.twitter
+      li.twitter(id="help_5")
         a(href="#help/5") twitter
   div#query.input
     input.text#input_keyword(type="text")
