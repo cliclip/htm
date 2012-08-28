@@ -14,7 +14,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
       relation:[]
     },
     url:function(){
-      return App.util.unique_url(P+"/user/"+ this.id + "/info");
+      return App.ClipApp.encodeURI(P+"/user/"+ this.id + "/info");
     }
   });
 
@@ -107,7 +107,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     queryUser: function(){
       var word = $.trim(this.$("#input_keyword").val());
       var def = null;
-      if(App.ClipApp.isSelf(user_id))def = _i18n('userface.mysearch');
+      if(App.ClipApp.isSelf(user_id)) def = _i18n('userface.mysearch');
       else def = _i18n('userface.search');
       if(word == def) word = null;
       App.ClipApp.userQuery(user_id, word);
@@ -118,12 +118,12 @@ App.ClipApp.Face = (function(App, Backbone, $){
     var url = "";
     if(uid == App.ClipApp.getMyUid()){
       // url中带上随机数 防止ie的缓存导致不能向服务器发出请求
-      url = P + "/my/info";
+      url = App.ClipApp.encodeURI(P + "/my/info");
     }else{
-      url = P + "/user/"+ uid + "/info";
+      url = App.ClipApp.encodeURI(P + "/user/"+ uid + "/info");
     }
     var user=new UserModel();
-    user.fetch({url:App.util.unique_url(url)});
+    user.fetch({url: url});
     user.onChange(function(user){
       callback(user);
     });
@@ -132,14 +132,14 @@ App.ClipApp.Face = (function(App, Backbone, $){
   Face.show = function(uid){
     user_id = uid;
     if(uid){
-      if(App.ClipApp.getMyUid() != uid){
+      if(App.ClipApp.Me.me.id == uid){
+	faceView = new FaceView({model: App.ClipApp.Me.me});
+	App.faceRegion.show(faceView);
+      }else{
 	getUser(uid, function(user){
 	  faceView = new FaceView({model: user});
 	  App.faceRegion.show(faceView);
 	});
-      }else{
-	faceView = new FaceView({model: App.ClipApp.Me.me});
-	App.faceRegion.show(faceView);
       }
     }else{
       faceView = null;
@@ -175,9 +175,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
     show(follow);
   });
 
+  // 当me改变之后face的modle有change事件会自动render
   App.vent.bind("app.clipapp.face:changed", function(){
     if(/my/.test(window.location.hash)){
-      ClipApp.Face.show(ClipApp.getMyUid("id"));
+      App.ClipApp.Face.show(App.ClipApp.getMyUid("id"));
     }
   });
 

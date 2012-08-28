@@ -2,13 +2,10 @@
 App.ClipApp.FollowerList=(function(App, Backbone, $){
   var precliplength=0;
   var collection = {};
-  var start = 1;
-  var end = App.ClipApp.Url.page;
-  var url = "";
-  var base_url = "";
-  var new_page;
-  var collection_length;
-  var loading = false;
+  var page = App.ClipApp.Url.page;
+  var start = 1, end = page;
+  var base_url = "", url = "";
+  var collection_length, new_page, loading = false;
   var FollowerModel=App.Model.extend({
     defaults:{
       uid:"",
@@ -39,7 +36,6 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       var position = "-"+(left/545)*(widths-545)+"px";
       this.$(".items").css({left:position});
     }
-
   });
   var FollowerListView=App.CompositeView.extend({
     tagName:"div",
@@ -51,12 +47,10 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       "click #follower" : "followerOpen"
     },
     followingOpen:function(evt){
-      var uid = App.ClipApp.Face.getUserId();
-      App.ClipApp.showFollowing(uid);
+      App.ClipApp.showFollowing(App.ClipApp.getFaceUid());
     },
     followerOpen:function(evt){
-      var uid = App.ClipApp.Face.getUserId();
-      App.ClipApp.showFollower(uid);
+      App.ClipApp.showFollower(App.ClipApp.getFaceUid());
     }
   });
 
@@ -64,14 +58,14 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     var flag=false;
     collection=new FollowerList({id:uid});
     start = 1;
-    end = App.ClipApp.Url.page;
-    base_url =App.ClipApp.Url.base+"/user/"+uid+"/follow";
-    url=App.util.unique_url(base_url+"/"+start+".."+end);
+    end = page;
+    base_url = App.ClipApp.Url.base +"/user/"+uid+"/follow";
+    url=App.ClipApp.encodeURI(base_url+"/"+start+".."+end);
     collection.fetch({url:url});
     collection.onReset(function(followerlist){
       if(!_.isEmpty(followerlist.toJSON())) flag=true;
       collection_length = collection.length;
-      new_page = collection.length==App.ClipApp.Url.page ? true :false;
+      new_page = collection.length == page ? true :false;
       var followerlistView = new FollowerListView({collection:followerlist});
       $("#list").css({height:"auto"});
       App.listRegion.show(followerlistView);
@@ -95,10 +89,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
 
   function refresh(){
     if(App.listRegion.currentView.className =='follow-item'){
-      if(App.ClipApp.isLoggedIn()){
-	var id = App.ClipApp.Face.getUserId();
-	FollowerList.showUserFollower(id);
-      }else App.ClipApp.showLogin();
+      FollowerList.showUserFollower(App.ClipApp.getFaceUid());
     }
   };
 
@@ -107,9 +98,9 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="follow-item"&&new_page){
       loading = true;
-      start += App.ClipApp.Url.page;
-      end += App.ClipApp.Url.page;
-      url = App.util.unique_url(base_url + "/" + start + ".." + end);
+      start += page;
+      end += page;
+      url = App.ClipApp.encodeURI(base_url + "/" + start + ".." + end);
       collection.fetch({
 	url:url,
 	add:true,
@@ -118,7 +109,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
 	  loading = false;
 	},
 	success :function(){
-	  if(collection.length-collection_length>=App.ClipApp.Url.page){
+	  if(collection.length-collection_length >= page){
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;

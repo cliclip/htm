@@ -4,7 +4,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 
   var ReclipTagModel = App.Model.extend({
     url: function(){
-      return P+"/user/"+this.id+"/reclip/tag/"+encodeURIComponent(this.get("tag"));
+      return App.ClipApp.encodeURI(P+"/user/"+this.id+"/reclip/tag/"+this.get("tag"));
     }
   });
 
@@ -61,7 +61,6 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     }
   });
 
-
   function loadData(el){
     /*
     var text = "";
@@ -85,31 +84,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     return params;
   }
 
-  ReclipTag.show = function(user, tag){
-    var model = new ReclipTagModel(); //此model只用于取数据
-    model.fetch({
-      type: "GET",
-      url: App.util.unique_url(P+"/user/"+user+"/clip/tag/"+encodeURIComponent(tag)),
-      success: function(model, res){
-	if(!res.count){
-	  // 现在只是公用该事件，事件名称有待改进
-	  App.ClipApp.showConfirm("reclip_null");
-	}else{
-	  // 有count表示可以收到数据
-	  model.set({user:user,tag:tag,count:res.count});
-	  var view = new ReclipTagView({model : model});
-	  App.popRegion.show(view);
-	  $('#obj_tag').tagsInput({
-	    //autocomplete_url:'test/fake_json_endpoint.html'
-	  });
-	}
-      },
-      error:function(model, res){
-	//console.info(res);
-      }
-    });
-  };
-
+  var close = ReclipTag.close;
   ReclipTag.close = function(params, count){
     if(!params||(params.clip.tag.length==0&&params.clip['public']!='false')){
       App.popRegion.close();
@@ -132,47 +107,37 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 	}else{
 	  App.ClipApp.showConfirm("reclip_tag",res.reclip_tag);
 	}
-	ReclipTag.close(); // 返回的model是什么有待测试
+	close(); // 返回的model是什么有待测试
 	App.vent.trigger("app.clipapp.recliptag:success",model.get("clip").tag);
       },
       error:function(model, res){
-	ReclipTag.close();
+	close();
 	App.ClipApp.showConfirm(res);
       }
     });
   };
 
-  var close = function(params, count){
-    ReclipTag.close(params, count);
-  };
-
-  //user 为用户名为cliclip 的user_id tag为新手,帮助或newbie
-  ReclipTag.help = function(user,tag){
-    var model_get = new ReclipTagModel(); //此model只用于取数据
-    model_get.fetch({
-      type: "GET",
-      url: App.util.unique_url(P+"/user/"+user+"/clip/tag/"+encodeURIComponent(tag[0])),
+  ReclipTag.show = function(user, tag){
+    var model = new ReclipTagModel({id:user, tag:tag}); //此model只用于取数据
+    model.fetch({
+      // type: "GET",
+      // url: App.util.unique_url(P+"/user/"+user+"/clip/tag/"+tag),
       success: function(model, res){
 	if(!res.count){
-	  // App.ClipApp.showConfirm("reclip_null");
+	  // 现在只是公用该事件，事件名称有待改进
+	  App.ClipApp.showConfirm("reclip_null");
 	}else{
 	  // 有count表示可以收到数据
-	  var params = {clip:{"public":"false","tag":tag},id:user,tag:tag[0]};
-	  var model_post = new ReclipTagModel(params);
-	  model_post.save({}, {
-	    type: "POST",
-	    success: function(model, res){
-	      App.vent.trigger("app.clipapp.recliptag:success",tag);
-	      //console.info(res);
-	    },
-	    error:function(model, res){
-	      //console.info(res);
-	    }
+	  model.set({user:user,tag:tag,count:res.count});
+	  var view = new ReclipTagView({model : model});
+	  App.popRegion.show(view);
+	  $('#obj_tag').tagsInput({
+	    //autocomplete_url:'test/fake_json_endpoint.html'
 	  });
 	}
       },
       error:function(model, res){
-	console.info(res);
+	//console.info(res);
       }
     });
   };

@@ -129,7 +129,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       var model = new MemoModel(data);
       model.save({}, {
 	type:'PUT',
-	url: P+"/clip/"+cid,
+	url: App.ClipApp.encodeURI(P+"/clip/"+cid),
 	success: function(model, res){
 	  ClipMemo.close();
 	  App.vent.trigger("app.clipapp.clipmemo:success", model);

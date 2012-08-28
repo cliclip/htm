@@ -65,7 +65,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
     }
   });
 
-  Query.show = function(){
+  function show(){
     var queryModel = new QueryModel();
     var queryView = new QueryView({
       model: queryModel
@@ -74,7 +74,7 @@ App.ClipApp.Query = (function(App,Backbone,$){
   };
 
   App.bind("initialize:after", function(){
-    Query.show();
+    show();
   });
 
   return Query;

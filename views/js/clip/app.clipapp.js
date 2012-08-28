@@ -20,6 +20,14 @@ App.ClipApp = (function(App, Backbone, $){
     return ClipApp.Me.getUid();
   };
 
+  ClipApp.getMyName = function(){
+    return ClipApp.Me.getFace().name;
+  };
+
+  ClipApp.getFaceUid = function(){
+    return ClipApp.Face.getUserId();
+  };
+
   ClipApp.isSelf = function(uid){
     return uid == ClipApp.getMyUid();
   };
@@ -30,6 +38,14 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.face_upUrl = function(){
     return App.util.getFace_upUrl(ClipApp.getMyUid());
+  };
+
+  ClipApp.encodeURI = function(url){ //公共调用
+    var base = url;
+    var arr = base ? base.split("/") : [];
+    _.map(arr, function(a){ return encodeURIComponent(a);});
+    url = App.util.unique_url(arr.join("/")); // 加上时间戳
+    return url;
   };
 
   // main_tag 部分从这取
@@ -142,7 +158,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
-    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word, uid);
   };
 
   // interest和recommend 只需要显示 主观tag就可以了
@@ -195,15 +211,11 @@ App.ClipApp = (function(App, Backbone, $){
     if(!ClipApp.isLoggedIn()){
       ClipApp.showLogin(function(){
 	if (ClipApp.isOwner(clipId.split(":")[0], ClipApp.getMyUid())) {
-	  if(/clip\/([0-9]+)\/([0-9]+)/.test(Backbone.history.fragment))
-	    ClipApp.ClipDetail.close();
 	  ClipApp.ClipEdit.show(clipId);
 	}
       });
     }else{
       if (ClipApp.isOwner(clipId.split(":")[0], ClipApp.getMyUid())) {
-	if(/clip\/([0-9]+)\/([0-9]+)/.test(Backbone.history.fragment))
-	  ClipApp.ClipDetail.close();
 	ClipApp.ClipEdit.show(clipId);
       }
     }
@@ -259,7 +271,7 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.Comment.show(cid, model_id);
       });
     }else{
-      ClipApp.Comment.show(cid,model_id);
+      ClipApp.Comment.show(cid, model_id);
     }
   };
 
@@ -352,7 +364,7 @@ App.ClipApp = (function(App, Backbone, $){
     }
     tmp.scroll(function() {
       if($("#editor").length > 0){
-      // console.log("编辑器的滚动事件，nextpage不用响应");
+	// console.log("编辑器的滚动事件，nextpage不用响应");
 	return;
       }else{
 	remove_fixed(paddingTop);

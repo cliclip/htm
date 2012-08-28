@@ -13,6 +13,9 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click .masker":"Masker",
       "click #sure": "MessageSure"
     },
+    initialize:function(){
+      this.bind("@closeView", close);
+    },
     Masker: function(e){
       e.preventDefault();
       if($(e.target).attr("class") == "masker"){
@@ -20,7 +23,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
       }
     },
     MessageSure: function(){
-      Message.close();
+      this.trigger("@closeView");
       App.vent.trigger("app.clipapp.message:sure");
     }
   });
@@ -40,9 +43,12 @@ App.ClipApp.Message = (function(App, Backbone, $){
       "click #sure": "MessageSure",
       "click #cancel":"MessageClose"
     },
+    initialize:function(){
+      this.bind("@closeView", close);
+    },
     MessageSure: function(e){
       e.preventDefault();
-      Message.close();
+      this.trigger("@closeView");
       App.vent.trigger("app.clipapp.message:sure");
     },
     Masker: function(e){
@@ -53,7 +59,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
     },
     MessageClose: function(e){
       e.preventDefault();
-      Message.close();
+      this.trigger("@closeView");
       App.vent.trigger("app.clipapp.message:cancel");
     }
   });
@@ -67,13 +73,13 @@ App.ClipApp.Message = (function(App, Backbone, $){
     }else{
       var view = new SuccessView({model : messageModel});
       setTimeout(function(){
-	Message.close();
+	close();
       },1000);
     }
     App.setpopRegion.show(view);
   };
 
-  Message.close = function(){
+  var close = function(){
     App.setpopRegion.close();
   };
 
