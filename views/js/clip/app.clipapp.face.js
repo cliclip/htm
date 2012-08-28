@@ -132,16 +132,14 @@ App.ClipApp.Face = (function(App, Backbone, $){
   Face.show = function(uid){
     user_id = uid;
     if(uid){
-      if(App.ClipApp.getMyUid() != uid){
+      if(App.ClipApp.Me.me.id == uid){
+	faceView = new FaceView({model: App.ClipApp.Me.me});
+	App.faceRegion.show(faceView);
+      }else{
 	getUser(uid, function(user){
 	  faceView = new FaceView({model: user});
 	  App.faceRegion.show(faceView);
 	});
-      }else{
-	setTimeout(function(){
-	  faceView = new FaceView({model: App.ClipApp.Me.me});
-	  App.faceRegion.show(faceView);
-	},50);
       }
     }else{
       faceView = null;
@@ -178,11 +176,11 @@ App.ClipApp.Face = (function(App, Backbone, $){
   });
 
   // 当me改变之后face的modle有change事件会自动render
-  /*App.vent.bind("app.clipapp.face:changed", function(){
+  App.vent.bind("app.clipapp.face:changed", function(){
     if(/my/.test(window.location.hash)){
       App.ClipApp.Face.show(App.ClipApp.getMyUid("id"));
     }
-  });*/
+  });
 
   return Face;
 })(App, Backbone, jQuery);

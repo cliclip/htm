@@ -20,6 +20,10 @@ App.ClipApp = (function(App, Backbone, $){
     return ClipApp.Me.getUid();
   };
 
+  ClipApp.getMyName = function(){
+    return ClipApp.Me.getFace().name;
+  };
+
   ClipApp.getFaceUid = function(){
     return ClipApp.Face.getUserId();
   };

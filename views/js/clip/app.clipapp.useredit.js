@@ -89,7 +89,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       this.bind("@delEmail", delEmail);
     },
     emailAdd:function(e){
-      App.ClipApp.showEmailAdd(this.model.id);
+      if(!App.ClipApp.getMyName()){
+	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
+	  App.vent.trigger("app.clipapp.useredit:rename");
+	});
+      }else{
+	App.ClipApp.showEmailAdd(this.model.id);
+      }
     },
     emailCut:function(e){
       e.preventDefault();
@@ -346,7 +352,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.faceRegion = new App.Region({el:"#set_user_info"});
     var faceView = new FaceView({model: faceModel});
     UserEdit.faceRegion.show(faceView);
-    faceLoad(face.face, App.ClipApp.getMyUid());
+    faceLoad();
   };
 
   UserEdit.show = function(){
@@ -406,7 +412,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     }
   };
 
-  function faceLoad(originalFace,uid){
+  function faceLoad(){
     $("#post_frame_face").unbind("load");
     $("#post_frame_face").load(function(){ // 加载图片
       if(App.util.isIE()){ // 保证是ie
