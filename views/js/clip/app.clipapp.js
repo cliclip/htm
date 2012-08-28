@@ -154,7 +154,7 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);
-    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:query", word, uid);
   };
 
   // interest和recommend 只需要显示 主观tag就可以了
@@ -267,7 +267,7 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.Comment.show(cid, model_id);
       });
     }else{
-      ClipApp.Comment.show(cid,model_id);
+      ClipApp.Comment.show(cid, model_id);
     }
   };
 
@@ -363,7 +363,6 @@ App.ClipApp = (function(App, Backbone, $){
 	// console.log("编辑器的滚动事件，nextpage不用响应");
 	return;
       }else{
-	console.log("nextpage响应");
 	remove_fixed(paddingTop);
 	var st = $(window).scrollTop();
 	var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;

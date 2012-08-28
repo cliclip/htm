@@ -10,14 +10,14 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
       }else if(res&&res.oauth){
 	App.ClipApp.showUserBind(res.oauth);
       }else if(res&&res.token){
-	if(res.provider == "weibo"){
+	/*if(res.provider == "weibo"){ // 已经绑定成功直接登录就好
 	  App.ClipApp.showConfirm("weibo_sucmsg",res.name);
 	}else if(res.provider == "twitter"){
 	  App.ClipApp.showConfirm("twitter_sucmsg",res.name);
-	}
+	}*/
 	delete res.provider;
 	delete res.name;
-	App.vent.trigger("app.clipapp.login:success",res);
+	App.vent.trigger("app.clipapp.login:getedToken",res);
 	setTimeout(function(){
 	  App.ClipApp.showUserEdit();
 	},0);
@@ -31,6 +31,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
       }
     });
   };
+
   function checkUser(callback){
     var model = new App.Model.UserBindModel();
     model.save({},{
@@ -43,7 +44,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	callback(error,null);
       }
     });
-
   };
+
  return Oauth;
 })(App, Backbone, jQuery);

@@ -138,8 +138,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
 	  App.faceRegion.show(faceView);
 	});
       }else{
-	faceView = new FaceView({model: App.ClipApp.Me.me});
-	App.faceRegion.show(faceView);
+	setTimeout(function(){
+	  faceView = new FaceView({model: App.ClipApp.Me.me});
+	  App.faceRegion.show(faceView);
+	},50);
       }
     }else{
       faceView = null;

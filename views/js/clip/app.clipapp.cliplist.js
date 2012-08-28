@@ -414,7 +414,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:nextpage", function(){
-    console.log("nextpage 事件");
     nextpage();
   });
 

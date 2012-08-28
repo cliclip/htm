@@ -153,9 +153,13 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   Me.show = function(){
-    var meView = new View({model: Me.me});
-    App.mineRegion.show(meView);
+    if(!App.ClipApp.isLoggedIn()){
+      var meView = new View({model: Me.me});
+      App.mineRegion.show(meView);
+    }
     Me.me.onChange(function(meModel){ // onChange 之后进行有无用户名的判断
+      var meView = new View({model: meModel});
+      App.mineRegion.show(meView);
       meView.trigger("@change", meView.model);
     });
   };

@@ -141,8 +141,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       // App.vent.trigger("app.clipapp.userbind:bindok"); 动作为 Me.me.fetch;
       if(reply){
 	if(typeof fun == "function"){ fun(); }
-	// else{ App.vent.trigger("app.clipapp.login:success",res); }
-	App.vent.trigger("app.clipapp.login:success",res);
+	App.vent.trigger("app.clipapp.login:getedToken",res);
 	UserBind.close();
       }
     });
