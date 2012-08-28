@@ -1,23 +1,46 @@
 [0,{
    "item_1": {
       "title": "Copy, Paste & Clip"
-    , "description": "<br><p>Your new clip can simply be created via copy and paste functions.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;1. Copy the contents that you want to clip.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;2. Click on the new clip button (the red button with a plus sign), a new clip window will pop up.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;3. Paste it.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;4. Clicking on “Confirm” button, your new clip is created!</p><p>Tips: You can create a new clip by writing directly in the new clip window.</p>"
+    , "description": "<p>Your new clip can simply be created via copy and paste functions.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;1. Copy the contents that you want to clip.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;2. Click on the new clip button (the red button with a plus sign), a new clip window will pop up.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;3. Paste it.</p><p>&nbsp;&nbsp;&nbsp;&nbsp;4. Clicking on “Confirm” button, your new clip is created!</p><p>Tips: You can create a new clip by writing directly in the new clip window.</p>"
   },
   "item_2": {
       "title": "Bookmark & Clip"
-    , "description": "<br><p>First, drag [this bookmarklet link] to the bookmark area of your web browser. Now you are ready to create new clip via bookmark. </p><p>During web browsing, when you see something you want to clip, click “clip” button on your browser. Contents of current browsing webpage will appear in the new clip window. You can modify the contents as you want. </p><p>Clicking on “Confirm” button, your new clip is created!</p><p>Tips：</p><p>&nbsp;&nbsp;&nbsp;&nbsp;1. You can highlight any sections on a webpage and click on the “clip” button on your browser to create a new clip. </p><p>&nbsp;&nbsp;&nbsp;&nbsp;2. You can repeat the highlight and clip steps until you have clipped all the contents that you want. </p>"
+    , "description": "<p>First, drag [this bookmarklet link] to the bookmark area of your web browser. Now you are ready to create new clip via bookmark. </p><p>During web browsing, when you see something you want to clip, click “clip” button on your browser. Contents of current browsing webpage will appear in the new clip window. You can modify the contents as you want. </p><p>Clicking on “Confirm” button, your new clip is created!</p><p>Tips：</p><p>&nbsp;&nbsp;&nbsp;&nbsp;1. You can highlight any sections on a webpage and click on the “clip” button on your browser to create a new clip. </p><p>&nbsp;&nbsp;&nbsp;&nbsp;2. You can repeat the highlight and clip steps until you have clipped all the contents that you want. </p>"
   },
   "item_3": {
       "title": "Email & Clip"
-    , "description": "<br><p>Want to clip what you just browsed through “google reader”?</p><p>Need to clip something in your mobile devices (your cell phone, ipad, etc.)? </p><p>And like to save the contents that you just read in an app?</p><p>Or too much trouble of copy & paste?</p><p>⋯⋯</p><p>No problem! Send an email enclosing your favorite contents/links to 1@cliclip.com and they are clipped!</p><p>Try it now. </p><p>Tips: Contents clipped via email is set to be private by default.</p>"
+    , "description": "<p>Want to clip what you just browsed through “google reader”?</p><p>Need to clip something in your mobile devices (your cell phone, ipad, etc.)? </p><p>And like to save the contents that you just read in an app?</p><p>Or too much trouble of copy & paste?</p><p>⋯⋯</p><p>No problem! Send an email enclosing your favorite contents/links to 1@cliclip.com and they are clipped!</p><p>Try it now. </p><p>Tips: Contents clipped via email is set to be private by default.</p>"
   },
   "item_4": {
       "title": "Weibo & Clip"
-    , "description": "<br><p>Want to clip an interesting weibo post but don’t like to cut and paste?</p><p>That is easy. </p><p>Link your weibo account in settings. Then forward the post to @cliclip, you are all set!</p><p>Tips: Clipped contents are set to be public in this way.</p><p>Want it to be private? Then try Email & Clip.</p>"
+    , "description": "<p>Want to clip an interesting weibo post but don’t like to cut and paste?</p><p>That is easy. </p><p>Link your weibo account in settings. Then forward the post to @cliclip, you are all set!</p><p>Tips: Clipped contents are set to be public in this way.</p><p>Want it to be private? Then try Email & Clip.</p>"
   },
   "item_5": {
       "title": "Twitter & Clip"
-    , "description": "<br><p>We can import your favorites from your twitter page. </p><p>First, in settings, link your twitter account to us.</p><p>Then, each time when you click on “fav” to collect a tweet, it is clipped. </p><p>Tips: Clip imported from twitter’s “fav” is public</p>"
+    , "description": "<p>We can import your favorites from your twitter page. </p><p>First, in settings, link your twitter account to us.</p><p>Then, each time when you click on “fav” to collect a tweet, it is clipped. </p><p>Tips: Clip imported from twitter’s “fav” is public</p>"
+  },
+  "item_6": {
+      "title": "What is clip?"
+    , "description": "<p>Thank you! This is the best question!</p><p>All things you are interested in, including texts, images, music, videos, files, etc., can be clipped.</p><p>Those nicest things happening all around the world, written in texts, photographed in an image, played by a music talent, and captured by a videographer, should not flash just for seconds as you embrace them first time and then be missed thereafter.</p><p>Our task is to store them for you so you can revisit them later, anytime you want, any machine you want (mobile devices, personal computer, public computer), and share them with your friends.</p><p>We are working on clipping music and video files…and they are coming soon!</p>"
+  },
+  "item_7": {
+      "title": "How to reclip and comment other’s clip?"
+    , "description": "<p>Like to have other’s clip?</p><p>Well, click on the reclip button and it is all yours.<img src='/_2_/user/72/image/5896cf8135ad9b7a669da71070dc82fb'></p><p>You can also forward his/her public clip to your linked weibo(s) to share with other people.</p><p>You can also comment on other’s clip. Please obey the rule of courtesy. </p>"
+  },
+  "item_8": {
+      "title": "Can others view my clips?"
+    , "description": "<p>If you are followed by someone, your public clips will appear in his/her “friends” pages. But your private clips won’t.</p><p>Do not want a clip to be seen by others? By clicking the label, you can choose to whether to publish this clip.</p><p><img src='/_2_/user/72/image/dd677ec6cecab2f57704e4f69cfbf5a6'></p><p>Clips created via emails are set to be private by default.</p><p>Clips created via weibo are set to be public by default.</p><p>Not the default rule that you like? Feel free to set your own privacy rules by click settings button.</p>"
+  },
+  "item_9": {
+      "title": "How to follow friends’ status updates?"
+    , "description": "<p>Find your friends on cliclip (he/she must also be a cliclip user).</p><p>Click on his/her avatar, and select “follow”. Now you are following him/her. Select “stop” if you no longer want to follow him/her.</p><p>Now you can see your friends’ public clips (not private clips) under the “friends” tag.He/she is a load of claptrap?</p><p>You can just follow one of his/her bubbles by clicking on it (see figures below). Thus, other “trash talks” will be filtered out. </p>"
+  },
+  "item_10": {
+      "title": "What is a bub?"
+    , "description": "<p>Everything is useless until it has been categorized. – A Chinese proverb.</p><p>But categorizing can be a boring, sometimes even challenging, work. How to categorize images of beauties? Should that be categorized to “images”, “beauties” or something else?</p><p>Or we just categorize them into “eye pleasing”?</p><p>Many default categories are readily created for you on the left side of screen. No need to type, just click on one of those bubs and your clip is going there.</p><p>Categorized contents can be found later by clicking on the corresponding bub.</p><p>If you prefer different description of a bub, you can edit description texts by yourself.</p><p>Most recently created category/bub will appear in top lists of the queue, so you can select it by clicking, therefore no need to type.</p><p>Frequently used labels will appear as a candidate list in the text box once you click ‘add bub”, and turn into new category/bub automatically, while rarely used ones will disappear eventually.</p><p>If you feel the pulse to delete a category/bub immediately, please know that we are working hard to make sure the delete tool will be available soon. </p>"
+  },
+  "item_11": {
+      "title": "Operations that you should be cautious of:"
+    , "description": "<p>1. (Un) register email address.</p><p>2. (Un)link weibo.</p><p>3. (Un)link twitter.</p><p>4. (Dis)associate cell phone.</p><p>5. Change login info (username and password).</p><p>6. Export data: All clips are you personal properties. You can export them to XXX format files and please keep them in appropriate places.</p><p>7. Close your account. We will definitely miss you! Come back and check our latest improvement! </p>"
   }
-
 }]

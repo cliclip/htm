@@ -3,21 +3,39 @@ script(type="text/template",id="help-view-template")
   div.masker
     section.help_frame
       span.close_w
-      div.pop_title <%=_i18n('help.title')%>
+      h2.pop_title <%=_i18n('help.title')%>
       ul.pop_body
         li
-          span.title#item_1 <%=item_1.title%>
-          span.hide#descrp_1 <%=item_1.description%>
+          |<span class="<%=lang%>_1 title" id="item_1"></span>
+          div.hide#descrp_1 <%=item_1.description%>
         li
-          span.title#item_2 <%=item_2.title%>
-          span.hide#descrp_2 <%=item_2.description%>
+          |<span class="<%=lang%>_2 title" id="item_2"></span>
+          div.hide#descrp_2 <%=item_2.description%>
         li
-          span.title#item_3 <%=item_3.title%>
-          span.hide#descrp_3 <%=item_3.description%>
+          |<span class="<%=lang%>_3 title" id="item_3"></span>
+          div.hide#descrp_3 <%=item_3.description%>
         li
-          span.title#item_4 <%=item_4.title%>
-          span.hide#descrp_4 <%=item_4.description%>
+          |<span class="<%=lang%>_4 title" id="item_4"></span>
+          div.hide#descrp_4 <%=item_4.description%>
         li
-          span.title#item_5 <%=item_5.title%>
-          span.hide#descrp_5 <%=item_5.description%>
+          |<span class="<%=lang%>_5 title" id="item_5"></span>
+          div.hide#descrp_5 <%=item_5.description%>
+        li
+          |<span class="<%=lang%>_6 title" id="item_6"><%=item_6.title%></span>
+          div.hide#descrp_6 <%=item_6.description%>
+        li
+          |<span class="<%=lang%>_7 title" id="item_7"><%=item_7.title%></span>
+          div.hide#descrp_7 <%=item_7.description%>
+        li
+          |<span class="<%=lang%>_8 title" id="item_8"><%=item_8.title%></span>
+          div.hide#descrp_8 <%=item_8.description%>
+        li
+          |<span class="<%=lang%>_9 title" id="item_9"><%=item_9.title%></span>
+          div.hide#descrp_9 <%=item_9.description%>
+        li
+          |<span class="<%=lang%>_10 title" id="item_10"><%=item_10.title%></span>
+          div.hide#descrp_10 <%=item_10.description%>
+        li
+          |<span class="<%=lang%>_11 title" id="item_11"><%=item_11.title%></span>
+          div.hide#descrp_11 <%=item_11.description%>
       div.bottom

@@ -29,12 +29,14 @@ App.ClipApp.Help=(function(App,Backbone,$){
     toggle : function(e){
       e.preventDefault();
       var id = e.currentTarget.id.split("_")[1];
-      for(i=1;i<=5;i++){
+      Backbone.history.navigate("help/"+id, false);
+      for(i=1;i<=11;i++){
 	if(i != id){
 	  $("#descrp_"+i).hide();
 	}
       }
       $("#descrp_"+id).toggle();
+      //console.info($(e.currentTarget));
       //$(e.currentTarget).nextAll().toggle();
     }
   });
@@ -42,6 +44,7 @@ App.ClipApp.Help=(function(App,Backbone,$){
   Help.show = function(item,history){
     var lang=App.versions.getLanguage();
     hist=history;
+    console.info(lang);
     var help = new HelpModel({item:item,lang:lang});
     help.fetch({});
     help.onChange(function(helpModel){

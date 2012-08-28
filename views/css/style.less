@@ -6,6 +6,22 @@
   background-position: @x @y;
   display: block;
 }
+// 重构了用户头像下面的样式
+.glyphicons-halflings (@x:0, @y:0) {
+  background: url(../img/glyphicons-halflings-white.png) no-repeat;
+  background-position: @x @y;
+  display: block;
+}
+.help-menu-en (@x:0, @y:0) {
+  background: url(../img/menu_en.png) no-repeat;
+  background-position: @x @y;
+  display: block;
+}
+.help-menu-zh (@x:0, @y:0) {
+  background: url(../img/menu_zh.png) no-repeat;
+  background-position: @x @y;
+  display: block;
+}
 .box-shadow (@x: 0px, @y: 0px, @blur: 1px, @color: #ccc) {
   box-shadow: @arguments;
   -moz-box-shadow: @arguments;
@@ -147,12 +163,6 @@ html body {
 	top:-15px;
 	cursor: pointer;
 }
-// 重构了用户头像下面的样式
-.glyphicons-halflings (@x:0, @y:0) {
-  background: url(../img/glyphicons-halflings-white.png) no-repeat;
-  background-position: @x @y;
-  display: block;
-}
 
 // 页面整体布局 layout.less
 .layout{
@@ -258,7 +268,6 @@ html body {
 	width:30px;	
 	height:90px;	
 	right: 0;
-    	z-index: 10000;
 	cursor: pointer;
 }
 
@@ -1985,23 +1994,68 @@ section.help_frame{
 		min-height:170px;   
 		margin:0;
 		li{
-			 list-style-type:none;
-			 height:auto;
-			 padding-top:16px;
-			 span.title{
+			list-style-type:none;
+			height:auto;
+			padding-top:10px;
+			padding-bottom:5px;
+			margin-top:2px;
+			background-color:#cacaca;
+			.title{
 			 	font-size:20px;
 			 	cursor:pointer;
-			 }
-			 span.hide{	
+				height:42px;
+				padding-left:20px;
+			}
+			.zh_1{
+				.help-menu-zh(0px,0px);
+			}
+			.zh_2{
+				.help-menu-zh(0px,-44px);
+			}
+			.zh_3{
+				.help-menu-zh(0px,-88px);
+			}
+			.zh_4{
+				.help-menu-zh(0px,-132px);
+			}
+			.zh_5{
+				.help-menu-zh(0px,-176px);
+			}
+			.en_1{
+				.help-menu-en(0px,0px);
+			}
+			.en_2{
+				.help-menu-en(0px,-44px);
+			}
+			.en_3{
+				.help-menu-en(0px,-88px);
+			}
+			.en_4{
+				.help-menu-en(0px,-132px);
+			}
+			.en_5{
+				.help-menu-en(0px,-176px);
+			}
+			.hide{	
 			 	display:none;
 			 	position:relative;
 				left:20px;	
 				font-size:16px;	
+				padding:15px;
+				background-color:#eeeeee;
+				border:2px solid thistle;
+				width:630px;
+				margin-top:5px;
 			}
-			span.current{	
+			.current{	
 			 	position:relative;
 				left:20px;	
 				font-size:16px;	
+				padding:15px;
+				background-color:#eeeeee;
+				border:2px solid thistle;
+				width:630px;
+				margin-top:5px;
 			}		 
 		}
 	}
