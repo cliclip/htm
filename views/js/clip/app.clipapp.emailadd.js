@@ -18,7 +18,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     },
     url:function(){
       var my = App.ClipApp.getMyUid();
-      return P+"/user/"+my+"/email";
+      return App.ClipApp.encodeURI(P+"/user/"+my+"/email");
     }
   });
 
@@ -71,7 +71,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
   EmailAdd.active = function(key){
     var model = new App.Model();
     model.save({},{
-      url: App.ClipApp.Url.base+"/active/"+key,
+      url: App.ClipApp.encodeURI(P+"/active/"+key),
       type: "POST",
       success:function(model,response){ // 不只是弹出提示框这么简单
 	App.ClipApp.showConfirm({active:"email"},response.email);

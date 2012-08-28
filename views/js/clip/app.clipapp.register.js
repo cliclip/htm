@@ -1,9 +1,10 @@
 App.ClipApp.Register = (function(App, Backbone, $){
   var Register = {};
+  var P = App.ClipApp.Url.base;
 
   App.Model.RegisterModel = App.Model.extend({
     url: function(){
-      return App.ClipApp.Url.base+"/register";
+      return App.ClipApp.encodeURI(P + "/register");
     },
     validate: function(attrs){
       var err = {};
@@ -49,7 +50,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
       var that = this;
       var name = $("#name").val();
       this.tmpmodel.save({name:name},{
-	url : App.ClipApp.Url.base+"/user/check/"+name,
+	url : App.ClipApp.encodeURI(P+"/user/check/"+name),
 	type: "GET",
 	success:function(model,response){
 	  if($("#pass").val() && $(".error").length == 0 && $("#agree").attr("checked")){
@@ -100,7 +101,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
       if($(".error").length == 0){
 	if($("#agree").attr("checked")){
 	  model.save({},{
-	    url : App.ClipApp.Url.base+"/register",
+	    url : App.ClipApp.encodeURI(P+"/register"),
 	    type: "POST",
 	    success:function(model,response){
 	      that.trigger("@success","register_success",response);
@@ -138,7 +139,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
   Register.invite = function(key){
     var model = new App.Model(); // 不能用RegisterModel
     model.save({},{
-      url : App.ClipApp.Url.base+"/invite/"+key,
+      url : App.ClipApp.encodeURI(P+"/invite/"+key),
       type: "POST",
       success:function(model,response){
 	App.ClipApp.showSuccess('invite', response);

@@ -7,9 +7,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   App.Model.CommentModel = App.Model.extend({
     url:function(){
       if(this.id){
-	return App.util.unique_url(P+"/clip/"+this.get("cid")+"/comment/"+this.id);
+	return App.ClipApp.encodeURI(P+"/clip/"+this.get("cid")+"/comment/"+this.id);
       }else{
-	return App.util.unique_url(P+"/clip/"+this.get("cid")+"/comment");
+	return App.ClipApp.encodeURI(P+"/clip/"+this.get("cid")+"/comment");
       }
     }
   });
@@ -82,7 +82,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};}*/
       var tmpmodel = new App.Model.CommModel();
       tmpmodel.save(params,{
-	url: P+"/clip/"+clipid+"/comment",
+	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+"/comment"),
 	success: function(model, res){
 	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);

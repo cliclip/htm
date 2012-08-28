@@ -34,7 +34,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
   function checkUser(callback){
     var model = new App.Model.UserBindModel();
     model.save({},{
-      url : App.ClipApp.Url.base+"/user/oauth_info",
+      url : App.ClipApp.encodeURI(App.ClipApp.Url.base+"/user/oauth_info"),
       type: "POST",
       success:function(model,res){
 	callback(null,res);

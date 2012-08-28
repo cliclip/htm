@@ -6,9 +6,9 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     url:function(){
       var my = App.ClipApp.getMyUid();
       if(this.get("oauth_id")){
-	return P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id");
+	return App.ClipApp.encodeURI(P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id"));
       }else{
-	return App.util.unique_url(P+"/user/"+ my +"/provider/"+this.get("provider"));
+	return App.ClipApp.encodeURI(P+"/user/"+ my +"/provider/"+this.get("provider"));
       }
     }
   });
@@ -53,7 +53,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
       var id = $('.tab')[0].id;
       if(id == "user_have"){
 	this.tmpmodel.save({}, {
-	  url: App.ClipApp.Url.base+"/login",
+	  url: App.ClipApp.encodeURI(P+"/login"),
 	  type: "POST",
   	  success: function(model, res){
   	    that.trigger("@success", res);
@@ -64,7 +64,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 	});
       }else if(id == "user_not"){
 	this.tmpmodel.save({},{
-	  url : App.ClipApp.Url.base+"/register",
+	  url : App.ClipApp.encodeURI(P+"/register"),
 	  type: "POST",
 	  success:function(model, res){
 	    that.trigger("@success", res);

@@ -3,7 +3,7 @@ App.ClipApp.FindPass=(function(App,Backbone,$){
 
   var FindPassModel = App.Model.extend({
     url: function(){
-      return App.ClipApp.Url.base+"/password/find";
+      return App.ClipApp.encodeURI(App.ClipApp.Url.base+"/password/find");
     },
     validate:function(attrs){
       var error = {};

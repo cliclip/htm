@@ -9,12 +9,12 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var EditModel = App.Model.extend({});
   var FaceModel = App.Model.extend({
     url:function(){
-      return P+"/user/" + App.ClipApp.getMyUid() + "/face";
+      return App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/face");
     }
   });
   var PassEditModel = App.Model.extend({
     url:function(){
-      return P+"/user/" + App.ClipApp.getMyUid() + "/passwd";
+      return App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/passwd");
     },
     validate:function(attrs){
       var error = {};
@@ -33,7 +33,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
   var NameModel = App.Model.extend({
     url:function(){
-      return  P + "/user/" + App.ClipApp.getMyUid() + "/name";
+      return  App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/name");
     },
     validate:function(attrs){
       if(!attrs.name || attrs.name == ""){
@@ -49,9 +49,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   var EmailEditModel = App.Model.extend({
     url:function(){
       if(this.get("address")){
-	return P+"/user/"+ App.ClipApp.getMyUid() +"/email/"+this.get("address");
+	return App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/email/"+this.get("address"));
       }
-      return App.util.unique_url(P+"/user/"+ App.ClipApp.getMyUid() +"/email");
+      return App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/email");
     }
   });
 
@@ -220,7 +220,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	var model = new EditModel();
 	model.save({},{
 	  type:'PUT',
-	  url : App.util.unique_url(P+"/user/"+App.ClipApp.getMyUid()+"/lang/"+lang),
+	  url : App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/lang/"+lang),
 	  success:function(model,res){
 	    App.vent.trigger("app.versions:version_change", lang);
 	  },

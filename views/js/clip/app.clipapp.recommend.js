@@ -8,12 +8,12 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
   var NameListModel=App.Model.extend({});
   var NameList=App.Collection.extend({
     model : NameListModel,
-    url   : App.ClipApp.Url.base+"/lookup/0..5"
+    url   : App.ClipApp.encodeURI(P +"/lookup/0..5)")
   });
 
   var RecommModel = App.Model.extend({
     url:function(){
-      return P+"/user/"+uid+"/recomm";
+      return App.ClipApp.encodeURI(P+"/user/"+uid+"/recomm");
     },
     initialize:function(){
       uid = null;

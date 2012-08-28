@@ -1,13 +1,10 @@
 //app.clipapp.followinglist.js
 App.ClipApp.FollowingList=(function(App, Backbone, $){
   var collection = {};
-  var start = 1;
-  var end = App.ClipApp.Url.page;
-  var url = "";
-  var base_url = "";
-  var new_page;
-  var collection_length;
-  var loading = false;
+  var page = App.ClipApp.Url.page;
+  var start = 1, end = page;
+  var base_url = "", url = "";
+  var collection_length, new_page, loading = false;
   var FollowingModel=App.Model.extend({
       defaults:{
 	user:[]
@@ -60,14 +57,14 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     var flag=false;
     collection=new FollowingList();
     start = 1;
-    end = App.ClipApp.Url.page;
+    end = page;
     base_url = App.ClipApp.Url.base+"/user/"+uid+"/following";
-    url=App.util.unique_url(base_url+"/"+start+".."+end);
+    url=App.ClipApp.encodeURI(base_url+"/"+start+".."+end);
     collection.fetch({url:url});
     collection.onReset(function(followinglist){
       if(!_.isEmpty(followinglist.toJSON())) flag=true;
       collection_length = collection.length;
-      new_page = collection.length==App.ClipApp.Url.page ? true :false;
+      new_page = collection.length == page ? true :false;
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
@@ -82,7 +79,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       },0);
     });
   };
-			     
+
   FollowingList.close=function(){
     App.listRegion.close();
   };
@@ -92,9 +89,9 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="following-item"&&new_page){
       loading = true;
-      start += App.ClipApp.Url.page;
-      end += App.ClipApp.Url.page;
-      url = App.util.unique_url(base_url + "/" + start + ".." + end);
+      start += page;
+      end += page;
+      url = App.ClipApp.encodeURI(base_url + "/" + start + ".." + end);
       collection.fetch({
 	url:url,
 	add:true,
@@ -103,7 +100,7 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
 	  loading = false;
 	},
 	success :function(){
-	  if(collection.length-collection_length>=App.ClipApp.Url.page){
+	  if(collection.length-collection_length >= page){
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;

@@ -5,8 +5,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
 
   App.Model.DetailModel = App.Model.extend({
-    url: function(){
-      return App.util.unique_url(P+"/clip/"+this.id)+"&rid="+this.get("rid");
+    url:function(){
+      return App.ClipApp.encodeURI(P+"/clip/"+this.id)+"&rid="+this.get("rid");
     },
     parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
       resp.id = resp.user+":"+resp.id;
@@ -342,7 +342,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var saveaddComm = function(params, mid){
     var model = new App.Model.CommModel();
     model.save({pid:params.pid, text:params.text},{
-      url : P+"/clip/"+params.clipid+"/comment",
+      url : App.ClipApp.encodeURI(P+"/clip/"+params.clipid+"/comment"),
       success:function(comment,response){
 	/*if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);

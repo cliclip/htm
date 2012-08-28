@@ -6,8 +6,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ieRange = false, isIE = App.util.isIE();
 
   App.Model.ClipModel = App.Model.extend({
-    url:function(){
-      return P+"/clip";
+    url: function(){
+      return App.ClipApp.encodeURI(P+"/clip");
     },
     validate: function(attrs){
       var content = attrs.content;

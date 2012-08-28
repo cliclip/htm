@@ -1,6 +1,5 @@
 App.ClipApp.WeiboEdit = (function(App, Backbone, $){
   var WeiboEdit = {};
-  var P = App.ClipApp.Url.base;
 
   var WeiboEditModel = App.Model.extend({});
 

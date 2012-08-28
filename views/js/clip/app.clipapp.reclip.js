@@ -1,10 +1,11 @@
 App.ClipApp.Reclip = (function(App, Backbone, $){
   var Reclip = {};
+  var P = App.ClipApp.Url.base;
   var mid,o_pub;
 
   var ReclipModel = App.Model.extend({
     url: function(){
-      return App.ClipApp.Url.base+"/clip/"+this.id+"/reclip";
+      return App.ClipApp.encodeURI(P+"/clip/"+this.id+"/reclip");
     }
   });
   var ReclipView = App.DialogView.extend({

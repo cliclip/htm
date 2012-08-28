@@ -14,7 +14,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
       relation:[]
     },
     url:function(){
-      return App.util.unique_url(P+"/user/"+ this.id + "/info");
+      return App.ClipApp.encodeURI(P+"/user/"+ this.id + "/info");
     }
   });
 
@@ -118,12 +118,12 @@ App.ClipApp.Face = (function(App, Backbone, $){
     var url = "";
     if(uid == App.ClipApp.getMyUid()){
       // url中带上随机数 防止ie的缓存导致不能向服务器发出请求
-      url = P + "/my/info";
+      url = App.ClipApp.encodeURI(P + "/my/info");
     }else{
-      url = P + "/user/"+ uid + "/info";
+      url = App.ClipApp.encodeURI(P + "/user/"+ uid + "/info");
     }
     var user=new UserModel();
-    user.fetch({url:App.util.unique_url(url)});
+    user.fetch({url: url});
     user.onChange(function(user){
       callback(user);
     });
@@ -175,11 +175,12 @@ App.ClipApp.Face = (function(App, Backbone, $){
     show(follow);
   });
 
-  App.vent.bind("app.clipapp.face:changed", function(){
+  // 当me改变之后face的modle有change事件会自动render
+  /*App.vent.bind("app.clipapp.face:changed", function(){
     if(/my/.test(window.location.hash)){
-      ClipApp.Face.show(ClipApp.getMyUid("id"));
+      App.ClipApp.Face.show(App.ClipApp.getMyUid("id"));
     }
-  });
+  });*/
 
   return Face;
 })(App, Backbone, jQuery);

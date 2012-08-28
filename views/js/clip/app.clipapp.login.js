@@ -80,7 +80,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 	remember = true;
       }
       this.tmpmodel.save({}, {
-  	url: App.ClipApp.Url.base+"/login",
+  	url: App.ClipApp.encodeURI(App.ClipApp.Url.base+"/login"),
 	type: "POST",
   	success: function(model, res){
 	  that.trigger("@success", res, remember);

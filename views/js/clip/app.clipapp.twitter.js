@@ -1,7 +1,5 @@
 App.ClipApp.TwitterEdit = (function(App, Backbone, $){
   var TwitterEdit = {};
-  var P = App.ClipApp.Url.base;
-
   var TwitterEditModel = App.Model.extend({});
 
   var TwitterView = App.ItemView.extend({

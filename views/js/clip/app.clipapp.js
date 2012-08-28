@@ -36,6 +36,14 @@ App.ClipApp = (function(App, Backbone, $){
     return App.util.getFace_upUrl(ClipApp.getMyUid());
   };
 
+  ClipApp.encodeURI = function(url){ //公共调用
+    var base = url;
+    var arr = base ? base.split("/") : [];
+    _.map(arr, function(a){ return encodeURIComponent(a);});
+    url = App.util.unique_url(arr.join("/")); // 加上时间戳
+    return url;
+  };
+
   // main_tag 部分从这取
   ClipApp.getDefaultBubbs = function(){
     var lang = App.versions.getLanguage(); // 用户语言设置
@@ -352,9 +360,10 @@ App.ClipApp = (function(App, Backbone, $){
     }
     tmp.scroll(function() {
       if($("#editor").length > 0){
-      // console.log("编辑器的滚动事件，nextpage不用响应");
+	// console.log("编辑器的滚动事件，nextpage不用响应");
 	return;
       }else{
+	console.log("nextpage响应");
 	remove_fixed(paddingTop);
 	var st = $(window).scrollTop();
 	var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;

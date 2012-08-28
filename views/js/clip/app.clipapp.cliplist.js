@@ -6,7 +6,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   var clipListView = {};
   var collection = {},start, end, current;
   var url = "",base_url = "",data = "",type = "",collection_length,new_page;
-  var loading = false;
+  var loading = false, P = App.ClipApp.Url.base;
   var ClipPreviewModel = App.Model.extend({
     defaults:{
       recommend:"",//列表推荐的clip时有此属性
@@ -135,7 +135,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showSiteClips = function(tag){
     current = null;
     ClipList.flag_show_user = true;
-    base_url = App.ClipApp.Url.base+"/query";
+    base_url = P+"/query";
     // 起始时间设置为，endTime前推一个月
     var date = (new Date()).getTime();
     data = {"startTime":date-86400000*30,"endTime":date+10000};
@@ -147,7 +147,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserClips = function(uid, tag){
     current = null;
     ClipList.flag_show_user = false;
-    base_url = App.ClipApp.Url.base+"/user/"+uid+"/query";
+    base_url = P+"/user/"+uid+"/query";
     data = {user: uid,"startTime":Date.parse('March 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
@@ -159,7 +159,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showSiteQuery = function(word, tag){
     current = null;
     ClipList.flag_show_user = true;
-    base_url = App.ClipApp.Url.base + "/query";
+    base_url = P + "/query";
     var date = (new Date()).getTime();
     data = {text: word, "startTime":date-86400000*30,"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
@@ -171,7 +171,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserQuery = function(uid, word, tag){
     current = null;
     ClipList.flag_show_user = false;
-    base_url = App.ClipApp.Url.base + "/user/"+uid+"/query";
+    base_url = P + "/user/"+uid+"/query";
     data = {text: word, user: uid, "startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
@@ -183,8 +183,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     current = "interest";
     ClipList.flag_show_user = true;
     base_url = "/user/" + uid + "/interest";
-    if(tag) base_url += "/tag/" + encodeURIComponent(tag);
-    base_url = App.ClipApp.Url.base + base_url;
+    if(tag) base_url += "/tag/" + tag;
+    base_url = P + base_url;
     data = null;
     type = "GET";
     init_page(current);
@@ -194,8 +194,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     current = "@me";
     ClipList.flag_show_user = true;
     base_url = "/user/"+uid+"/recomm";
-    if(tag) base_url += "/tag/"+encodeURIComponent(tag);
-    base_url = App.ClipApp.Url.base + base_url;
+    if(tag) base_url += "/tag/"+tag;
+    base_url = P + base_url;
     data = null;
     type = "GET";
     init_page(current);
@@ -213,7 +213,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     collection = clips;
     start = 1;
     end = App.ClipApp.Url.page;
-    url = App.util.unique_url(base_url + "/" + start+".."+ end);
+    url = App.ClipApp.encodeURI(base_url + "/" + start+".."+ end);
     if(data){
       data = JSON.stringify(data);
       var contentType = "application/json; charset=utf-8";
@@ -296,7 +296,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       loading = true;
       start += App.ClipApp.Url.page;
       end = start + App.ClipApp.Url.page-1;
-      url = App.util.unique_url(base_url + "/" + start + ".." + end);
+      url = App.ClipApp.encodeURI(base_url + "/" + start + ".." + end);
       var contentType = "application/json; charset=utf-8";
       if(!data){ contentType = null; }
       collection.fetch({
@@ -414,6 +414,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp:nextpage", function(){
+    console.log("nextpage 事件");
     nextpage();
   });
 
