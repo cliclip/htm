@@ -28,14 +28,14 @@ App.ClipApp.Help=(function(App,Backbone,$){
     },
     toggle : function(e){
       e.preventDefault();
-      var target  = $(e.currentTarget).children("span")[0];
-      var id = e.currentTarget.id;
+      var id = e.currentTarget.id.split("_")[1];
       for(i=1;i<=5;i++){
-	if("item_"+i != id){
-	  $("#descrp_"+i).attr("style","display:none");
+	if(i != id){
+	  $("#descrp_"+i).hide();
 	}
       }
-      $(e.currentTarget).children().toggle();
+      $("#descrp_"+id).toggle();
+      //$(e.currentTarget).nextAll().toggle();
     }
   });
 

@@ -5,19 +5,19 @@ script(type="text/template",id="help-view-template")
       span.close_w
       div.pop_title <%=_i18n('help.title')%>
       ul.pop_body
-        li(class = "title",id="item_1")
-          <%=item_1.title%>
-          span.hide(id = "descrp_1" ) <%=item_1.description%>
-        li(class = "title",id="item_2")
-          <%=item_2.title%>
-          span.hide(id = "descrp_2" ) <%=item_2.description%>
-        li(class = "title",id="item_3")
-          <%=item_3.title%>
-          span.hide(id = "descrp_3" ) <%=item_3.description%>
-        li(class = "title",id="item_4")
-          <%=item_4.title%>
-          span.hide(id = "descrp_4" ) <%=item_4.description%>
-        li(class = "title",id="item_5")
-          <%=item_5.title%>
-          span.hide(id = "descrp_5" ) <%=item_5.description%>
+        li
+          span.title#item_1 <%=item_1.title%>
+          span.hide#descrp_1 <%=item_1.description%>
+        li
+          span.title#item_2 <%=item_2.title%>
+          span.hide#descrp_2 <%=item_2.description%>
+        li
+          span.title#item_3 <%=item_3.title%>
+          span.hide#descrp_3 <%=item_3.description%>
+        li
+          span.title#item_4 <%=item_4.title%>
+          span.hide#descrp_4 <%=item_4.description%>
+        li
+          span.title#item_5 <%=item_5.title%>
+          span.hide#descrp_5 <%=item_5.description%>
       div.bottom

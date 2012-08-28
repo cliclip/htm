@@ -153,41 +153,6 @@ html body {
   background-position: @x @y;
   display: block;
 }
-.user_action{
-	width:70px;
-	height:72px;
-	top:56px;
-	background-color:#5E5E5E;
-	position: absolute;
-	bottom:-57px;
-	list-style:none;
-	margin:0;
-	padding:5px 0;
-	z-index: 2;
-	li{
-		height:24px;
-		width:5px;
-		padding-left:25px;
-		line-height:24px;
-		.glyphicons-halflings(-422px,5px);
-		font-size:12px;
-		margin:0 -4px;
-		a{
-			display: block;
-			height:24px;
-			width:46px;
-			color:#fff;
-			text-decoration:none;
-			outline:none;
-		}
-	}
-	li.logout{
-		.glyphicons-halflings(-374px,5px);
-	}
-	li.help{
-		.glyphicons-halflings(-86px,-91px);
-	}
-}
 
 // 页面整体布局 layout.less
 .layout{
@@ -423,10 +388,12 @@ html body {
 				height:43px;
 			}
 		}
-		.action{
+		.user_action{
+			.border-radius(5px);
 			width:70px;
-			height:48px;
-			.sprites(-440px,-140px);
+			height:72px;
+			top:56px;
+			background-color:#585858;
 			position: absolute;
 			bottom:-57px;
 			list-style:none;
@@ -435,21 +402,26 @@ html body {
 			z-index: 2;
 			li{
 				height:24px;
+				width:5px;
 				padding-left:25px;
 				line-height:24px;
-				.sprites(-430px,-80px);
+				.glyphicons-halflings(-422px,5px);
 				font-size:12px;
 				margin:0 -4px;
 				a{
 					display: block;
 					height:24px;
+					width:46px;
 					color:#fff;
 					text-decoration:none;
 					outline:none;
 				}
 			}
 			li.logout{
-				.sprites(-430px,-105px)
+				.glyphicons-halflings(-374px,5px);
+			}
+			li.help{
+				.glyphicons-halflings(-86px,-91px);
 			}
 		}
 	}
@@ -2012,11 +1984,14 @@ section.help_frame{
 		padding:10px 25px;
 		min-height:170px;   
 		margin:0;
-		li.title {
+		li{
 			 list-style-type:none;
 			 height:auto;
 			 padding-top:16px;
-			 font-size:20px;
+			 span.title{
+			 	font-size:20px;
+			 	cursor:pointer;
+			 }
 			 span.hide{	
 			 	display:none;
 			 	position:relative;
