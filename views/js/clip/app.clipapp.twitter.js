@@ -1,7 +1,5 @@
 App.ClipApp.TwitterEdit = (function(App, Backbone, $){
   var TwitterEdit = {};
-  var P = App.ClipApp.Url.base;
-
   var TwitterEditModel = App.Model.extend({});
 
   var TwitterView = App.ItemView.extend({
@@ -16,7 +14,13 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
       this.bind("@delete", delTwitter);
     },
     TwitterAdd:function(e){
-      window.location.href="/oauth/req/twitter?force_login=true";
+      if(!App.ClipApp.getMyName()){
+	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
+	  App.vent.trigger("app.clipapp.useredit:rename");
+	});
+      }else{
+	window.location.href="/oauth/req/twitter?force_login=true";
+      }
     },
     TwitterCut:function(e){
       e.preventDefault();
@@ -40,7 +44,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
   };
 
   var delTwitter = function(uid){
-  var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
+    var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
     model.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	TwitterEdit.show();

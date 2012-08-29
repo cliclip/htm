@@ -71,8 +71,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 */
-  Bubb.followUserBubs = function(uid, tag){
-    if(!uid) uid = App.ClipApp.Face.getUserId();;
+  function followUserBubs(uid, tag){
+    if(!uid) uid = App.ClipApp.getFaceUid();
     followUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
@@ -86,8 +86,8 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     });
   };
 
-  Bubb.unfollowUserBubs = function(uid, tag){
-    if(!uid) uid = App.ClipApp.Face.getUserId();
+  function unfollowUserBubs(uid, tag){
+    if(!uid) uid = App.ClipApp.getFaceUid();
     unfollowUserTag(uid, tag, function(){
       // 更新bubb显示
       if(tag == '*'){
@@ -138,7 +138,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 
   function getSiteBubs(callback){
     getSiteTags(function(tags, follows){
-      var tags2 = _.intersection(tags,bubs);
+      var tags2 = _.intersection(tags, bubs);
       var follows2 = _.intersection(follows, bubs);
       callback(tags2, follows2);
     });
@@ -150,7 +150,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
     // GET $HOST/$BASE/_/user/:id/tag/0..19
     var bubbModel = new BubbModel({id: uid});
-    var url = App.util.unique_url(P+"/user/"+uid+"/meta/0..0");
+    var url = App.ClipApp.encodeURI(P+"/user/"+uid+"/meta/0..0");
     bubbModel.fetch({url: url});
     bubbModel.onChange(function(bubbs){
       var bubb = bubbs.toJSON();
@@ -169,7 +169,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 */
   function followUserTag(uid, tag, callback){
     if(!uid) uid = _uid;
-    var url = url = P+"/user/"+uid+"/follow";
+    var url = App.ClipApp.encodeURI(P+"/user/"+uid+"/follow");
     if(tag == '*') {
       tag = "all";
     }else{
@@ -193,11 +193,11 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
       uid = _uid ? _uid : 2;
     }
     if(tag == '*') {
-      url = P+"/user/"+uid+"/follow";
+      url = App.ClipApp.encodeURI(P+"/user/"+uid+"/follow");
     }else{
       //encodeURIComponent() 函数可把字符串作为 URI 组件进行编码。
       //该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： - _ . ! ~ * ' ( ) 。其他字符（比如 ：;/?:@&=+$,# 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。此方法会编码URI中的特殊字符
-      url  = P+"/user/"+uid+"/follow/"+encodeURIComponent(tag);
+      url  = App.ClipApp.encodeURI(P+"/user/"+uid+"/follow/"+tag);
     }
     var bubbModel = new BubbModel({id: uid});
     bubbModel.destroy({
@@ -270,12 +270,12 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
 	 else if(url.indexOf("my/recommend") >= 0)
 	 return "/my/recommend/tag/"+encode_tag; */
 	if(url.indexOf("my") >= 0)
-	  return "/my/tag/"+encode_tag;
+	  return url = "/my/tag/"+encode_tag;
 	else
-	  return "/user/"+_uid+"/tag/"+encode_tag;
+	  return url = "/user/"+_uid+"/tag/"+encode_tag;
       }
     }else{
-      return "/tag/"+encode_tag;
+      return url = "/tag/"+encode_tag;
     }
   };
 
@@ -305,7 +305,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
     }
   }
 
-    App.vent.bind("app.clipapp.clipadd:success",function(addmodel){
+  App.vent.bind("app.clipapp.clipadd:success",function(addmodel){
     if(App.ClipApp.isSelf(_uid)){
       refresh(App.ClipApp.getMyUid(), null, addmodel.get("tag"));
     }
@@ -333,10 +333,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:follow", function(uid, tag){
     if(!App.ClipApp.isLoggedIn()){
       App.ClipApp.showLogin(function(){
-	Bubb.followUserBubs(uid, tag);
+	followUserBubs(uid, tag);
       });
     }else{
-      Bubb.followUserBubs(uid, tag);
+      followUserBubs(uid, tag);
     }
   });
 
@@ -344,10 +344,10 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.bubb:unfollow", function(uid, tag){
     if(!App.ClipApp.isLoggedIn()){
       App.ClipApp.showLogin(function(){
-	Bubb.unfollowUserBubs(uid, tag);
+	unfollowUserBubs(uid, tag);
       });
     }else{
-      Bubb.unfollowUserBubs(uid, tag);
+      unfollowUserBubs(uid, tag);
     }
   });
 

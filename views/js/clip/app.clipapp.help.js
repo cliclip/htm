@@ -2,7 +2,7 @@ App.ClipApp.Help=(function(App,Backbone,$){
   var Help={},hist;
   var HelpModel = App.Model.extend({
     url:function(){
-      return "/help/help_"+this.get("lang")+".json";
+      return App.ClipApp.encodeURI("/help/help_"+this.get("lang")+".json");
     }
   });
   var HelpView =  App.DialogView.extend({

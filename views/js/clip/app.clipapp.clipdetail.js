@@ -5,8 +5,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
 
   App.Model.DetailModel = App.Model.extend({
-    url: function(){
-      return App.util.unique_url(P+"/clip/"+this.id)+"&rid="+this.get("rid");
+    url:function(){
+      return App.ClipApp.encodeURI(P+"/clip/"+this.id)+"&rid="+this.get("rid");
     },
     parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
       resp.id = resp.user+":"+resp.id;
@@ -48,6 +48,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	case 'note':
 	  App.ClipApp.showMemo(cid); break;
 	case 'modify':
+	  this.trigger("@detailClose");
 	  App.ClipApp.showEditClip(cid); break;
 	case 'del':
 	  App.ClipApp.showClipDelete(cid); break;
@@ -62,6 +63,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       this.trigger("@detailClose");
     },
     editDetail: function(e){
+      this.trigger("@detailClose");
       App.ClipApp.showEditClip(this.model.id);
     }
   });
@@ -216,7 +218,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var cid = this.model.get("cid");
       var pid = this.model.get("pid") ? this.model.get("pid") : 0;
       var text = $.trim($("#comm_text").val());
-      text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
+      text = App.util.cleanInput(text); // 过滤一下评论内容，防止脚本注入
       var params = {clipid: cid, text: text, pid: pid};
       /*var params1 = null;
       if($("#reclip").attr("checked")){ // checked 、tag_list都是全局变量
@@ -340,13 +342,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var saveaddComm = function(params, mid){
     var model = new App.Model.CommModel();
     model.save({pid:params.pid, text:params.text},{
-      url : P+"/clip/"+params.clipid+"/comment",
+      url : App.ClipApp.encodeURI(P+"/clip/"+params.clipid+"/comment"),
       success:function(comment,response){
 	/*if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
 	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
+	App.vent.trigger("app.clipapp.comment:success",  {type:"comment",pid:params.pid,model_id:mid});
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")
@@ -384,12 +387,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     });
   };
 
-  App.vent.bind("app.clipapp.clipdelete:success", function(){
-    if(ClipDetail.addCommRegion || ClipDetail.replyCommRegion){
-      ClipDetail.close();
-    }
-  });
-
   ClipDetail.close = function(){
     regionClose("commentRegion");
     regionClose("replyCommRegion");
@@ -399,6 +396,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     App.viewRegion.close();
     mid = null;
   };
+
+  App.vent.bind("app.clipapp.clipdelete:success", function(){
+    if(ClipDetail.addCommRegion || ClipDetail.replyCommRegion){
+      ClipDetail.close();
+    }
+  });
 
   return ClipDetail;
 })(App, Backbone, jQuery);

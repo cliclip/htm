@@ -65,7 +65,7 @@ App.util = (function(){
   };
 
   // 对comment的内容进行html过滤，防止脚本注入
-  util.cleanComment = function(comment){
+  util.cleanInput = function(comment){
     comment = App.Convert.cleanHtml(comment);
     comment = comment.replace(/<\/?div[^>]*>/ig, "");
     comment = comment.replace(/<\/?div[^>]*>/ig, "");

@@ -1,8 +1,8 @@
 script(type="text/template",id="follow-view-template")
   section.follow_frame 
     ul.tab_frame
-      li(class="tab",id="follower")<%if(App.ClipApp.getMyUid()==App.ClipApp.Face.getUserId()){%><%=_i18n('follower.mfollower')%><%}else{%><%=_i18n('follower.follower')%><%}%>
-      li(id="following")<%if(App.ClipApp.getMyUid()==App.ClipApp.Face.getUserId()){%><%=_i18n('follower.mfollowing')%><%}else{%><%=_i18n('follower.following')%><%}%>
+      li(class="tab",id="follower")<%if(App.ClipApp.getMyUid()==App.ClipApp.getFaceUid()){%><%=_i18n('follower.mfollower')%><%}else{%><%=_i18n('follower.follower')%><%}%>
+      li(id="following")<%if(App.ClipApp.getMyUid()==App.ClipApp.getFaceUid()){%><%=_i18n('follower.mfollowing')%><%}else{%><%=_i18n('follower.following')%><%}%>
     ul.empty_user
       div.msg
         p <%=_i18n('follower.p')%>
@@ -12,7 +12,7 @@ script(type="text/template",id="follower-view-template")
       li.user
         div.tag_line.tag_box
           span.size48.blue_48
-            | <%if(tag== "*"){%> <a href="#user/<%=App.ClipApp.Face.getUserId()%>"><%=_i18n('follower.all')%><%}else{%><a href="#user/<%=App.ClipApp.Face.getUserId()%>/tag/<%=tag%>"><%=tag%><%}%></a>	
+            | <%if(tag== "*"){%> <a href="#user/<%=App.ClipApp.getFaceUid()%>"><%=_i18n('follower.all')%><%}else{%><a href="#user/<%=App.ClipApp.getFaceUid()%>/tag/<%=tag%>"><%=tag%><%}%></a>	
         div.tags
           div.box
             div.items

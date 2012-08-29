@@ -87,7 +87,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	// 不用this.mode因为this.model中有 录线图
 	editModel.save({content: content}, {
 	  type:'PUT',
-	  url: P+"/clip/"+cid,
+	  url: App.ClipApp.encodeURI(P+"/clip/"+cid),
 	  success:function(model, res){
 	    var content = model.get("content");
 	    view.trigger("@success", content, cid);
@@ -111,11 +111,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   });
 
   ClipEdit.image_change = function(sender){
-    var that = view;
-    var uid = that.model.get("user");
     var change = App.util.isImage("formUpload");
     if(!change){
-      that.trigger("@error", "imageUp_fail");
+      view.trigger("@error", "imageUp_fail");
     }else{
       /*if( sender.files &&sender.files[0] ){
        var img = new Image();
@@ -124,7 +122,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
        if(img.complete){
        App.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
        }};}*/
-
       $("#img_form").submit();
       App.util.get_imgurl("post_frame",function(err, img_src){
 	//img_list.push(img_src);

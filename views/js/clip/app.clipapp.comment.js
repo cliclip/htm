@@ -7,9 +7,9 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   App.Model.CommentModel = App.Model.extend({
     url:function(){
       if(this.id){
-	return App.util.unique_url(P+"/clip/"+this.get("cid")+"/comment/"+this.id);
+	return App.ClipApp.encodeURI(P+"/clip/"+this.get("cid")+"/comment/"+this.id);
       }else{
-	return App.util.unique_url(P+"/clip/"+this.get("cid")+"/comment");
+	return App.ClipApp.encodeURI(P+"/clip/"+this.get("cid")+"/comment");
       }
     }
   });
@@ -75,21 +75,21 @@ App.ClipApp.Comment = (function(App, Backbone, $){
       $(e.currentTarget).attr("disabled",true);
       var view = this;
       var text = $.trim($("#comm_text").val());
-      text = App.util.cleanComment(text); // 过滤一下评论内容，防止脚本注入
+      text = App.util.cleanInput(text); // 过滤一下评论内容，防止脚本注入
       var params = {text: text, pid: 0};
       var params1 = null;
       /*if($("#reclip_box").attr("checked")){
 	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};}*/
       var tmpmodel = new App.Model.CommModel();
       tmpmodel.save(params,{
-	url: P+"/clip/"+clipid+"/comment",
+	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+"/comment"),
 	success: function(model, res){
 	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	  }*/
-	  App.ClipApp.showSuccess("comment");
 	  App.vent.trigger("app.clipapp.comment:success", {type:"comment",pid:params.pid,model_id:mid});
-	  Comment.close();
+	  App.ClipApp.showSuccess("comment");
+	  view.trigger("@closeView");
 	},
 	error:function(model, res){
 	  if(res.comm_text == "is_null")

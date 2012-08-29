@@ -1,9 +1,10 @@
 App.ClipApp.TagList=(function(App,Backbone,$){
 
   var TagList = {};
+  var P = App.ClipApp.Url.base;
   var TagListModel = App.Model.extend({
     url : function(){
-      return  App.ClipApp.Url.base+"/user/"+this.id+"/meta/0..19";
+      return  App.ClipApp.encodeURI(P+"/user/"+this.id+"/meta/0..19");
     },
     defaults : {
       taglist : []
@@ -38,7 +39,6 @@ App.ClipApp.TagList=(function(App,Backbone,$){
 
   var bubs = App.ClipApp.getDefaultBubbs();
   var baseTag = getDefaultTags();
-
 
   function getDefaultTags(){
     var lang = App.versions.getLanguage(); // 用户语言设置
