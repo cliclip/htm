@@ -72,7 +72,7 @@ script(type="text/template",id="emailEdit-view-template")
           <span/>
           <%=_i18n('emailEdit.add')%>
         </button> 	
-        |<%=_i18n('emailEdit.title')%>
+        <%=_i18n('emailEdit.title')%>
       |<% if(email){ for(i=0;i<email.length;i++) { if(email[i]){ %>
       |<li class="mail_line">
       |<span class="email_address" id="<%=email[i]%>" title="<%=_i18n('emailEdit.del')%>"></span>
@@ -107,7 +107,7 @@ script(type="text/template",id="emailAdd-view-template")
   section.small_pop
     span.close_w
     .email_add
-      h2
+      h2.
         <%=_i18n('emailAdd.title')%>
       ul.pop_body
           li.input_text.
@@ -125,7 +125,7 @@ script(type="text/template",id="weiboEdit-view-template")
           <span/>
           <%=_i18n('weiboEdit.add')%> 	
         </button>
-        |<%=_i18n('weiboEdit.title')%>
+        <%=_i18n('weiboEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="oauth_li">
       |<span class="oauth_del" id="<%=info[i].uid%>" title="<%=_i18n('emailEdit.del')%>"></span>
@@ -142,7 +142,7 @@ script(type="text/template",id="twitterEdit-view-template")
           <span/>
           <%=_i18n('twitterEdit.add')%> 
         </button>	
-        |<%=_i18n('twitterEdit.title')%>
+        <%=_i18n('twitterEdit.title')%>
       |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
       |<li class="oauth_li">
       |<span class="oauth_del" id="<%=info[i].uid%>" title="<%=_i18n('emailEdit.del')%>"></span>
