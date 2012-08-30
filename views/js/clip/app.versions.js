@@ -1040,7 +1040,7 @@ App.versions = (function($){
 
 
   versions.setLanguage = function(lang){
-    if(versions.getLanguage() != lang){
+    if(lang && versions.getLanguage() != lang){
       setCookieLang(lang);
       window.location.reload();
     }

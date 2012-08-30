@@ -29,9 +29,13 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
     App.ClipApp.showUserEdit();
   };
 
-  App.vent.bind("app.clipapp.register:success", function(key){
+  App.vent.bind("app.clipapp.register:success", function(key, res){
     if(key == "register_success"){ // invite的情况不需要触发gotosetup
-      ClipApp.GotoSetup.show(key, res.email);
+      GotoSetup.show(key);
+    }else if(key == 'invite'){
+      App.ClipApp.showConfirm("invite", res.email, function(){
+	App.vent.trigger("app.clipapp.useredit:rename");
+      });
     }
   });
 

@@ -48,7 +48,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
       "click .lang-list" : "ChangeLang"
     },
     initialize: function(){
-      this.bind("@change", changeShow);
       this.model.bind("change", this.render, this);
     },
     showMysetup: function(){
@@ -160,7 +159,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     Me.me.onChange(function(meModel){ // onChange 之后进行有无用户名的判断
       var meView = new View({model: meModel});
       App.mineRegion.show(meView);
-      meView.trigger("@change", meView.model);
+      App.vent.trigger("app.versions:version_change",Me.me.get("lang"));
     });
   };
 
@@ -178,20 +177,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     if (token) uid = token.split(":")[0];
     return uid;
   };
-
-  var changeShow = function(){
-    setTimeout(function(){
-      if(!Me.me.get("name")){
-	App.ClipApp.showAlert("no_name", null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }
-      if(Me.me.get("lang")){
-	App.vent.trigger("app.versions:version_change",Me.me.get("lang"));
-      }
-    }, 0);
-  };
-
+		    
   App.vent.bind("app.clipapp.login:success", function(){
     Me.me.fetch();
     Me.show();

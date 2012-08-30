@@ -82,7 +82,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   	url: App.ClipApp.encodeURI(App.ClipApp.Url.base+"/login"),
 	type: "POST",
   	success: function(model, res){
-	  App.vent.trigger("app.clipapp.login:getedToken", res, remember);
+	  App.vent.trigger("app.clipapp.login:gotToken", res, remember);
   	},
   	error:function(model, res){
 	  that.showError('login',res);
@@ -144,7 +144,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   };
 
   // 用户登录成功 页面跳转
-  App.vent.bind("app.clipapp.login:getedToken", function(res, remember){
+  App.vent.bind("app.clipapp.login:gotToken", function(res, remember){
     Login.close();
     if(remember){
       var data = new Date();
