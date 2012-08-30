@@ -110,7 +110,7 @@
       }
     });
     win.scroll(0, 0);
-    socket.postMessage(JSON.stringify(["init",win[hash].val.model+html]));
+    socket.postMessage(JSON.stringify(["init", html]));
   }
 
   function closeUI(hash){
@@ -140,7 +140,9 @@
   (function(){
      // after load entry
      function scriptOnLoad(){
-       if (isLoaded || typeof easyXDM === "undefined" || typeof JSON === "undefined") {	return;}
+       if (isLoaded || typeof easyXDM === "undefined" || typeof JSON === "undefined") {
+	 return;
+       }
        isLoaded = true;
        main();
      }

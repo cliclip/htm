@@ -1,10 +1,10 @@
 $(function() {
   var r ;
   var socket = new easyXDM.Socket({
-    // swf: 'http://cliclip.com/img/easyxdm.swf',
+    swf: 'http://cliclip.com/img/easyxdm.swf',
     // swf: 'http://cliclip.com:4000/img/easyxdm.swf',
     // swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
-    swf: 'http://192.168.1.3:8000/img/easyxdm.swf',
+    // swf: 'http://192.168.1.3:8000/img/easyxdm.swf',
     swfNoThrottle: true,
     onMessage: function(message, origin){
       r = JSON.parse(message);
@@ -23,14 +23,8 @@ $(function() {
       socket.postMessage(JSON.stringify(["ok",r[1]]));
     });
 
-    App.vent.bind("app.clipapp.clipper:cancel", function(clip){
-      if(!clip || !clip.content){
-	socket.postMessage(JSON.stringify(["cancel"]));
-      }else{
-	App.ClipApp.showAlert("clipadd_save", null, function(){
-	  socket.postMessage(JSON.stringify(["cancel"]));
-	});
-      }
+    App.vent.bind("app.clipapp.clipper:cancel", function(){
+      socket.postMessage(JSON.stringify(["cancel"]));
     });
 
     App.vent.bind("app.clipapp.clipper:save", function(){
