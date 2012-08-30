@@ -94,12 +94,11 @@ App.ClipApp.Register = (function(App, Backbone, $){
     submit: function(e){
       e.preventDefault();
       var that = this;
-      var name = $("#name").val();
-      var pass = $("#pass").val();
-      var model = new App.Model.RegisterModel({name:name,pass:pass});
+      var data = that.getInput();
+      var model = new App.Model.RegisterModel();
       if($(".error").length == 0){
 	if($("#agree").attr("checked")){
-	  model.save({},{
+	  model.save(data,{
 	    url : App.ClipApp.encodeURI(P+"/register"),
 	    type: "POST",
 	    success:function(model,response){
