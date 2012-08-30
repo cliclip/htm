@@ -246,6 +246,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       if($(window).scrollTop()>99){
 	window.location.href="javascript:scroll(0,99)";
       }
+      $("#list").show();
+      $("#follow").hide();
       App.listRegion.show(clipListView);
       current_page(current);
       if(collection.length<10){ // 去重之后不够十条继续请求

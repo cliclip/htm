@@ -67,12 +67,13 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       collection_length = collection.length;
       new_page = collection.length == page ? true :false;
       var followerlistView = new FollowerListView({collection:followerlist});
-      $("#list").css({height:"auto"});
-      App.listRegion.show(followerlistView);
+      $("#follow").show();
+      $("#list").hide();
+      App.followRegion.show(followerlistView);
       if( $(window).scrollTop()>99){
 	window.location.href="javascript:scroll(0,99)";
       }
-      //console.info(App.listRegion.currentView.$el[0].className);
+      //console.info(App.followRegion.currentView.$el[0].className);
       setTimeout(function(){//IE8兼容性问题marionate也作了更改
    	if(flag) $(".empty_user").css("display","none");
       },0);
@@ -80,7 +81,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   };
 
   FollowerList.close=function(){
-    App.listRegion.close();
+    App.followRegion.close();
   };
 
   // 更新“谁追我”列表
@@ -88,15 +89,15 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   App.vent.bind("app.clipapp.follow:success", function(){ refresh(); });
 
   function refresh(){
-    if(App.listRegion.currentView.className =='follow-item'){
+    if(App.followRegion.currentView.className =='follow-item'){
       FollowerList.showUserFollower(App.ClipApp.getFaceUid());
     }
   };
 
   App.vent.bind("app.clipapp:nextpage", function(){
     if(loading)return;
-    if(!App.listRegion.currentView)return;
-    if(App.listRegion.currentView.$el[0].className=="follow-item"&&new_page){
+    if(!App.followRegion.currentView)return;
+    if(App.followRegion.currentView.$el[0].className=="follow-item"&&new_page){
       loading = true;
       start += page;
       end += page;

@@ -180,7 +180,8 @@ App.addRegions({
   feedRegion: ".feed",
   feedbackRegion: "#feedback",
   setpopRegion:"#setpop",
-  searchRegion:".search"
+  searchRegion:".search",
+  followRegion:"#follow"
 });
 
 if(typeof console !="object"){

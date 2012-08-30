@@ -73,10 +73,12 @@
       remote: 'http://cliclip.com/clipper.html?r='+Math.random()*9999999,
       // remote: 'http://cliclip.com:4000/clipper.html?r='+Math.random()*9999999,
       // remote: 'http://192.168.1.3:5000/clipper.html?r='+Math.random()*9999999,
+      // remote: 'http://192.168.1.3:8000/clipper.html?r='+Math.random()*9999999,
       container: doc.body,
       swf: 'http://cliclip.com/img/easyxdm.swf',
       // swf: 'http://cliclip.com:4000/img/easyxdm.swf',
       // swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
+      // swf: 'http://192.168.1.3:8000/img/easyxdm.swf',
       swfNoThrottle: true,
       onLoad: function(e){ // hack, style set
 	var iframe = e.target;
@@ -150,6 +152,7 @@
        s1.src = "http://cliclip.com/js/lib/easyXDM.debug.js";
        // s1.src = "http://cliclip.com:4000/js/lib/easyXDM.debug.js";
        // s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.debug.js";
+       // s1.src = "http://192.168.1.3:8000/js/lib/easyXDM.debug.js";
        s1.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
 	   scriptOnLoad();
@@ -165,6 +168,7 @@
        s2.src = "http://cliclip.com/js/lib/json2.js";
        // s2.src = "http://cliclip.com:4000/js/lib/json2.js";
        // s2.src = "http://192.168.1.3:5000/js/lib/json2.js";
+       // s2.src = "http://192.168.1.3:8000/js/lib/json2.js";
        s2.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
 	   scriptOnLoad();
