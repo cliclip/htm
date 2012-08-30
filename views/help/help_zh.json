@@ -5,7 +5,7 @@
   },
   "item_2": {
       "title": "书签摘录"
-    , "description": "<p>将［这个链接］拖拽到浏览器的书签栏。</p><p>之后，在浏览网页时，如果想要摘录当前网页的内容，就点书签栏里的按钮。</p><p>当前浏览网页里的内容会出现在新增摘录的窗口里。</p><p>如有必要，可以进行修改。</p><p>点击确定，即可将这些内容保存为摘录。</p><p>Tips：</p><p>1 先选中想要摘录的部分，再点击书签栏里的摘录按钮，能更精确地进行摘录哦。</p><p>2 一次没摘完？没关系，可以点 back 回到原始网页，继续选中内容，补充摘录，摘满意了再确定。</p>"
+    , "description": "<p>将<a href=\"javascript:void((function() {var%20e=document.createElement('script');e.setAttribute('type', 'text/javascript');e.setAttribute('charset', 'UTF-8');e.setAttribute('src', 'http://cliclip.com/js/loader.js?r=' + Math.random() * 99999999);document.body.appendChild(e);})());\">cliclip</a>拖拽到浏览器的书签栏。</p><p>之后，在浏览网页时，如果想要摘录当前网页的内容，就点书签栏里的按钮。</p><p>当前浏览网页里的内容会出现在新增摘录的窗口里。</p><p>如有必要，可以进行修改。</p><p>点击确定，即可将这些内容保存为摘录。</p><p>Tips：</p><p>1 先选中想要摘录的部分，再点击书签栏里的摘录按钮，能更精确地进行摘录哦。</p><p>2 一次没摘完？没关系，可以点 back 回到原始网页，继续选中内容，补充摘录，摘满意了再确定。</p>"
   },
   "item_3": {
       "title": "邮件摘录"

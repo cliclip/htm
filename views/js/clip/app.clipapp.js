@@ -13,19 +13,19 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.getMyFace = function(){
-    return ClipApp.Me.getFace();
+    return App.ClipApp.Me.getFace();
   };
 
   ClipApp.getMyUid = function(){
-    return ClipApp.Me.getUid();
+    return App.ClipApp.Me.getUid();
   };
 
   ClipApp.getMyName = function(){
-    return ClipApp.Me.getFace().name;
+    return App.ClipApp.Me.getFace().name;
   };
 
   ClipApp.getFaceUid = function(){
-    return ClipApp.Face.getUserId();
+    return App.ClipApp.Face.getUserId();
   };
 
   ClipApp.isSelf = function(uid){

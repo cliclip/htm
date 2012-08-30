@@ -68,12 +68,13 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       var followinglistView=new FollowingListView({
 	collection:followinglist
       });
-      $("#list").css({height:"auto"});
-      App.listRegion.show(followinglistView);
+      $("#follow").show();
+      $("#list").hide();
+      App.followRegion.show(followinglistView);
       if( $(window).scrollTop()>99){
 	window.location.href="javascript:scroll(0,99)";
       }
-      //console.info(App.listRegion.currentView.$el[0].className);
+      //console.info(App.followRegion.currentView.$el[0].className);
       setTimeout(function(){//IE8兼容性问题marionate也作了更改
 	if(flag) $(".empty_user").css("display","none");
       },0);
@@ -81,13 +82,13 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
   };
 
   FollowingList.close=function(){
-    App.listRegion.close();
+    App.followRegion.close();
   };
 
   App.vent.bind("app.clipapp:nextpage", function(){
     if(loading)return;
-    if(!App.listRegion.currentView)return;
-    if(App.listRegion.currentView.$el[0].className=="following-item"&&new_page){
+    if(!App.followRegion.currentView)return;
+    if(App.followRegion.currentView.$el[0].className=="following-item"&&new_page){
       loading = true;
       start += page;
       end += page;
