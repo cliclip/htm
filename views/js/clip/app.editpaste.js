@@ -5,7 +5,6 @@ App.Editor = (function(App, Backbone, $){
     var ifrm=document.getElementById("editor");
     ifrm.contentWindow.document.designMode = "On";
     ifrm.contentWindow.document.write("<body style=\"font-size:16px;color:#333;line-height: 1.7;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
-    //ifrm.contentWindow.document.write("<body style=\"font-size:20px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0;min-height:20px\"></body>");
     ifrm.contentWindow.document.close();
     if(isIE){
       ifrm.contentWindow.document.documentElement.attachEvent("onpaste", function(e){
@@ -35,7 +34,7 @@ App.Editor = (function(App, Backbone, $){
 	objEditor.contentWindow.focus();
 	var range = objEditor.contentWindow.document.selection.createRange();
 	range.pasteHTML(data);
-	range.moveStart("character", 0);
+	range.moveStart("character", -data.length);
 	range.collapse(true); // 将插入点移动到当前范围的开始
 	range.select(); // 将当前选中区置为当前对象
       },200);
@@ -97,7 +96,6 @@ App.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId);
     var edDoc=objEditor.contentWindow.document;
     if(isIE){
-      var orRange=objEditor.contentWindow.document.selection.createRange();
       var ifmTemp=document.getElementById("ifmTemp");
       if(!ifmTemp){
 	ifmTemp=document.createElement("IFRAME");
@@ -116,23 +114,19 @@ App.Editor = (function(App, Backbone, $){
       }else{
 	ifmTemp.contentWindow.document.body.innerHTML="";
       }
-      originText=objEditor.contentWindow.document.body.innerText;
       ifmTemp.contentWindow.focus();
+      // 用剪贴板中的内容覆盖当前选取
       ifmTemp.contentWindow.document.execCommand("Paste",false,null);
+
       objEditor.contentWindow.focus();
+      var orRange=objEditor.contentWindow.document.selection.createRange();
       newData=ifmTemp.contentWindow.document.body.innerHTML;
       //filter the pasted data
       newData =  App.Convert.filter(newData);
-      ifmTemp.contentWindow.document.body.innerHTML=newData;
       // paste the data into the editor
       orRange.pasteHTML(newData);
-
-      orRange.moveStart("character", 0);
-      orRange.collapse(false); // 将插入点移动到当前范围的开始
-      orRange.select();
-      
       //block default paste
-      if(e){
+      if(e){ // 取消默认的粘贴事件
 	e.returnValue = false;
 	if(e.preventDefault)
 	  e.preventDefault();
