@@ -56,13 +56,18 @@ img{
 #view {
         z-index: 10;
         .masker_layer { z-index: 2;}	
-        .masker{z-index:3}	
+        .masker{ z-index:3; }	
 }
 // clipdetail上边的
 #pop{
 	z-index: 20;
   	.masker_layer{ z-index: 12; }
-  	.masker{z-index:13}
+  	.masker{ z-index:13; }
+}
+#myset{
+	z-index:30;
+	.masker_layer{ z-index: 15; }
+	.masker{ z-index: 16; }
 }
 #setpop{
         left: 50%;
@@ -1481,9 +1486,10 @@ section.follow_frame{
 .big_pop{
         .pop_right{
 		i{
-			width:45px;
-			height:45px;
+			width:40px;
+			height:40px;
 			float:right;
+			margin-right:10px;
 		}
 		i.reclip{
 			.sprites(-590px,-163px);
@@ -2094,7 +2100,7 @@ section.edit_frame{
 	//position: relative;
 	border:3px solid #fff;
 	position: absolute;
-	left:50%;
+	left:52%;
 	top:100px;
 	margin-left:-400px;
 	background:#d9d9d9;

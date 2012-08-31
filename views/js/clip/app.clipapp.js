@@ -239,20 +239,36 @@ App.ClipApp = (function(App, Backbone, $){
   //reclip 用户一个clip
   ClipApp.showReclip = function(clipid, model_id, rid, pub){
     // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
-    if(!ClipApp.isLoggedIn())
+    if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
 	ClipApp.Reclip.show(clipid,model_id,rid,pub);
       });
-    else ClipApp.Reclip.show(clipid,model_id,rid,pub);
+    }else{
+      if(!ClipApp.getMyName()){
+	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
+	  App.vent.trigger("app.clipapp.useredit:rename");
+	});
+      }else{
+	ClipApp.Reclip.show(clipid,model_id,rid,pub);
+      }
+    }
   };
 
   /*
   ClipApp.showReclipTag = function(user,tag){
-    if(!ClipApp.isLoggedIn())
+    if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
 	ClipApp.ReclipTag.show(user, tag);
       });
-    else ClipApp.ReclipTag.show(user,tag);
+    }else{
+      if(!ClipApp.getMyName()){
+	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
+	  App.vent.trigger("app.clipapp.useredit:rename");
+	});
+      }else{
+        ClipApp.ReclipTag.show(user,tag);
+      }
+    }
   };
 
   ClipApp.showRecommend =  function(cid,model_id,pub){
@@ -271,7 +287,13 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.Comment.show(cid, model_id);
       });
     }else{
-      ClipApp.Comment.show(cid, model_id);
+      if(!ClipApp.getMyName()){
+	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
+	  App.vent.trigger("app.clipapp.useredit:rename");
+	});
+      }else{
+	ClipApp.Comment.show(cid, model_id);
+      }
     }
   };
 
@@ -296,7 +318,13 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.showEmailAdd = function(uid){
-    ClipApp.EmailAdd.show(uid);
+    if(!ClipApp.getMyName()){
+      App.ClipApp.showAlert({auth: "no_name"}, null, function(){
+	App.vent.trigger("app.clipapp.useredit:rename");
+      });
+    }else{
+      ClipApp.EmailAdd.show(uid);
+    }
   };
 
   ClipApp.showFollowing = function(uid){

@@ -173,8 +173,9 @@ App.util = (function(){
     return returnVal;
   };
 
+  // 之前的判断对ie9判断错误
   util.isIE = function(){
-    return isIE=$('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
+    return isIE= $('html').hasClass("gt-ie8") || $('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
   };
 
   util.get_imgurl = function(frameid,callback){

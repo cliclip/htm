@@ -13,7 +13,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
       }else if(res && res.oauth){
 	App.ClipApp.showUserBind(res.oauth);
       }else if(res && res.token){
-	App.vent.trigger("app.clipapp.login:getedToken",res);
+	App.vent.trigger("app.clipapp.login:gotToken",res);
       }else{
 	var sure = function(){
 	  App.ClipApp.showUserEdit();

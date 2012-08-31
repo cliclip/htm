@@ -42,7 +42,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     blurName: function(e){
       var that = this;
-      // this.model.set({name:$("#name").val()},{
       this.tmpmodel.set({name:$("#name").val()}, {
 	error:function(model, error){
 	  if($("#name").val() == "")
@@ -53,7 +52,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
     },
     blurPass: function(e){
       var that = this;
-      // this.model.set({pass:$("#pass").val()},{
       this.tmpmodel.set({pass:$("#pass").val()},{
 	error:function(model, error){
 	  that.showError("login",error);
@@ -74,15 +72,16 @@ App.ClipApp.Login = (function(App, Backbone, $){
     loginAction : function(e){
       var that = this;
       e.preventDefault();
+      var data = that.getInput();
       var remember = false;
       if($("#remember").attr("checked")){
 	remember = true;
       }
-      this.tmpmodel.save({}, {
+      this.tmpmodel.save(data, {
   	url: App.ClipApp.encodeURI(App.ClipApp.Url.base+"/login"),
 	type: "POST",
   	success: function(model, res){
-	  App.vent.trigger("app.clipapp.login:getedToken", res, remember);
+	  App.vent.trigger("app.clipapp.login:gotToken", res, remember);
   	},
   	error:function(model, res){
 	  that.showError('login',res);
@@ -144,7 +143,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
   };
 
   // 用户登录成功 页面跳转
-  App.vent.bind("app.clipapp.login:getedToken", function(res, remember){
+  App.vent.bind("app.clipapp.login:gotToken", function(res, remember){
     Login.close();
     if(remember){
       var data = new Date();

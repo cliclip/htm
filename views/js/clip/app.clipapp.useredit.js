@@ -89,13 +89,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       this.bind("@delEmail", delEmail);
     },
     emailAdd:function(e){
-      if(!App.ClipApp.getMyName()){
-	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else{
-	App.ClipApp.showEmailAdd(this.model.id);
-      }
+      App.ClipApp.showEmailAdd(this.model.id);
     },
     emailCut:function(e){
       e.preventDefault();
@@ -332,8 +326,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   function showUserEdit(){
     var editModel = new EditModel();
     var editView = new EditView({model: editModel});
-    App.popRegion.close();
-    App.viewRegion.close();
     App.mysetRegion.show(editView);
     /*var iframe=document.getElementById("post_frame_face");
     iframe.onload = function(){
