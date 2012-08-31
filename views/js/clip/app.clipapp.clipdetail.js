@@ -185,6 +185,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     focusAction:function(e){
       this.$(".verify").attr("disabled",false);
+      e.currentTarget.createTextRange().select();//将光标定位到当前选中元素
       this.cleanError(e);
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == _i18n('comment.defaultText') ? "" : text);
