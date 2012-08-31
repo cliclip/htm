@@ -114,6 +114,7 @@ App.Editor = (function(App, Backbone, $){
       }else{
 	ifmTemp.contentWindow.document.body.innerHTML="";
       }
+      originText=objEditor.contentWindow.document.body.innerText;
       ifmTemp.contentWindow.focus();
       // 用剪贴板中的内容覆盖当前选取
       ifmTemp.contentWindow.document.execCommand("Paste",false,null);

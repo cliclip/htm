@@ -238,7 +238,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#faceEdit-view-template",
     events: {
       "click .edit_name": "setName",
-      "error": "showError",
       "focus #name": "cleanError",
       "click #confirm_face": "submitFace"
     },

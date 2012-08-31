@@ -184,8 +184,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       this.bind("@canceladdComm", canceladdComm);
     },
     focusAction:function(e){
+      this.$(".verify").attr("disabled",false);
       this.cleanError(e);
-      $(".verify").attr("disabled",false);
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == _i18n('comment.defaultText') ? "" : text);
     },
@@ -226,10 +226,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }*/
       if(!App.ClipApp.isLoggedIn()){
 	App.ClipApp.showLogin(function(){
-	  view.trigger("@saveaddComm", params, mid);
+	  view.trigger("@saveaddComm",this, params, mid);
 	});
       }else{
-	view.trigger("@saveaddComm", params, mid);
+	view.trigger("@saveaddComm", this, params, mid);
       }
     },
     shortcut_comment : function(e){
@@ -339,7 +339,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     showAddComm(cid);
   };
 
-  var saveaddComm = function(params, mid){
+  var saveaddComm = function(view, params, mid){
     var model = new App.Model.CommModel();
     model.save({pid:params.pid, text:params.text},{
       url : App.ClipApp.encodeURI(P+"/clip/"+params.clipid+"/comment"),
