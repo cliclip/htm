@@ -49,8 +49,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
       "blur #to" : "blurAction",
       "focus #to": "cleanError",
       "focus #cc": "cleanError",
-      "click #open_rule" : "openRule",
-      "error": "showError"
+      "click #open_rule" : "openRule"
     },
     initialize:function(){
       this.tmpmodel = new RuleModel();
