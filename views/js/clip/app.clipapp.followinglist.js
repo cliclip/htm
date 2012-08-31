@@ -73,6 +73,8 @@ App.ClipApp.FollowingList=(function(App, Backbone, $){
       App.followRegion.show(followinglistView);
       if( $(window).scrollTop()>99){
 	window.location.href="javascript:scroll(0,99)";
+	if($('html').hasClass("lt-ie8"))
+	  $(document.body).scrollTop(0);
       }
       //console.info(App.followRegion.currentView.$el[0].className);
       setTimeout(function(){//IE8兼容性问题marionate也作了更改

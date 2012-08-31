@@ -341,6 +341,10 @@ App.ClipApp = (function(App, Backbone, $){
 
   //对 user's tag下的clip的reclip
   App.bind("initialize:after", function(){
+    $("#return_top").click(function(){
+      if($('html').hasClass("lt-ie8"))
+	$(document.body).scrollTop(0);
+    });
     var fixed = function(paddingTop){
       $(".user_detail").addClass("fixed").css({"margin-top": "0px", "top": paddingTop});
       var y = $(".user_detail").height()+5;
@@ -368,7 +372,7 @@ App.ClipApp = (function(App, Backbone, $){
 	return;
       }else{
 	remove_fixed(paddingTop);
-	var st = $(window).scrollTop();
+	var st = tmp.scrollTop();
 	var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
 	var mt = $(".clearfix").offset().top + shifting;
 	//console.info(shifting+"shifting");
@@ -396,10 +400,17 @@ App.ClipApp = (function(App, Backbone, $){
 	if(obj && obj.last()&& obj.last()[0]){
 	  var last_top = $("#list .clip").last()[0].offsetTop;
 	}
-	//console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+	// console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
 	if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
 	  time_gap = false;
-	  App.vent.trigger("app.clipapp:nextpage");
+	  setTimeout(function(){
+	    var st1 = tmp.scrollTop();
+	    // 再次判断是为了兼容ie7，
+	    // ie7详情窗口关闭时st会瞬间取得一个过大的值导致请求下一页的代码被执行
+	    if(st1 + wh - 300 > last_top || st1 + wh > lt ){
+	      App.vent.trigger("app.clipapp:nextpage");
+	    }
+	  },50);
 	  setTimeout(function(){
 	    time_gap = true;
 	  },500);

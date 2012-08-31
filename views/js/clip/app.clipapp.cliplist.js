@@ -245,6 +245,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       //页面头部的紫色区域高度为99px；$(".header").height()==99
       if($(window).scrollTop()>99){
 	window.location.href="javascript:scroll(0,99)";
+	if($('html').hasClass("lt-ie8")){
+	  $(document.body).scrollTop(99);
+	}
       }
       $("#list").show();
       $("#follow").hide();

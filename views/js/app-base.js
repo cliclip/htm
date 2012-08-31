@@ -183,7 +183,7 @@ App.addRegions({
   searchRegion:".search",
   followRegion:"#follow"
 });
-
+/*
 if(typeof console !="object"){
   var console = {
     log:function(){},
@@ -191,7 +191,7 @@ if(typeof console !="object"){
     dir:function(){}
   };
 }
-
+*/
 App.bind("initialize:before", function(){
   Modernizr.addTest('filereader', function () {
     return !!(window.File && window.FileList && window.FileReader);

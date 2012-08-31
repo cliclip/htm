@@ -14,7 +14,7 @@
       }
     },
     url:function(){
-      return App.encodeURI(P+"/feedback");
+      return App.ClipApp.encodeURI(P+"/feedback");
     }
   });
 

@@ -42,7 +42,7 @@ App.versions = (function($){
 	title       : "用户注册" ,
 	register_ok : "注 册",
 	login       : "登 录",
-	register_state : "同意<a href='#'>户用协议</a>",
+	register_state : "同意<a href='#'>用户协议</a>",
 	register    : "嫌麻烦？直接发邮件到<a href='mailto:1@cliclip.com'>1@cliclip.com</a>也可注册",
 	name : {
 	  name      : "用户名",
