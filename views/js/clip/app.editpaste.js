@@ -30,15 +30,14 @@ App.Editor = (function(App, Backbone, $){
   // 与getContent对称 该js内部实现 [没有必要]
   Editor.setContent = function(editorId, data){
     var objEditor = document.getElementById(editorId);
-    if(isIE){
+    if(isIE){ // 光标设置不管用
       setTimeout(function(){
-	// ie 在列表页多次点击，会将要编辑的内容加到页面的最上边 [还需测试]
 	objEditor.contentWindow.focus();
 	var range = objEditor.contentWindow.document.selection.createRange();
 	range.pasteHTML(data);
 	range.moveStart("character", 0);
-	range.collapse(true);
-	range.select();
+	range.collapse(true); // 将插入点移动到当前范围的开始
+	range.select(); // 将当前选中区置为当前对象
       },200);
     }else{
       objEditor.contentWindow.document.execCommand('inserthtml', false, data);
@@ -124,9 +123,14 @@ App.Editor = (function(App, Backbone, $){
       newData=ifmTemp.contentWindow.document.body.innerHTML;
       //filter the pasted data
       newData =  App.Convert.filter(newData);
-      // ifmTemp.contentWindow.document.body.innerHTML=newData;
+      ifmTemp.contentWindow.document.body.innerHTML=newData;
       // paste the data into the editor
       orRange.pasteHTML(newData);
+
+      orRange.moveStart("character", 0);
+      orRange.collapse(false); // 将插入点移动到当前范围的开始
+      orRange.select();
+      
       //block default paste
       if(e){
 	e.returnValue = false;
