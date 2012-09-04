@@ -40,6 +40,7 @@
     events:{
       "focus #feedback_text"  : "focusAction",
       "blur  #feedback_text"  : "blurAction",
+      "keydown #feedback_text":"shortcut_submit",
       "click #feedback_ok"    : "okClick",
       "click #feedback_cancel": "feedbackClose",
       "click .masker_layer"   : "feedbackClose",
@@ -58,6 +59,14 @@
     blurAction:function(e){
       $(e.currentTarget).val( $(e.currentTarget).val() == "" ? _i18n('feedback.defaultText') :
       $(e.currentTarget).val() );
+    },
+    shortcut_submit : function(e){
+      if(e.ctrlKey&&e.keyCode==13){
+	$("#feedback_ok").click();
+	return false;
+      }else{
+	return true;
+      }
     },
     okClick : function(e){
       var view = this;

@@ -1,0 +1,30 @@
+html {
+  background: url() fixed;
+}
+html body {
+  margin: 0px;
+  padding: 0px;
+}
+html .masker {
+  position: absolute;
+  left: expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth);
+  top: expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+}
+.masker {
+  position: absolute;
+}
+.masker_layer {
+  position: absolute;
+}
+.masker_layer1 {
+  position: absolute;
+  position: absolute;
+  left: expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth);
+  top: expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+}
+.header hgroup.search .select b {
+  display: inline;
+}
+.article_photo img {
+  width: 270px;
+}

@@ -12,6 +12,7 @@ App.versions = (function($){
 	logout    : "&nbsp;&nbsp;登出",
 	login     : "登 录",
 	register  : "注 册",
+	help      : "帮 助",
 	ok        : "确 定"
       },
 
@@ -509,6 +510,7 @@ App.versions = (function($){
 	logout    : "Logout",
 	login     : "Login",
 	register  : "Register",
+	help      : "Help",
 	ok        : "OK"
       },
 
