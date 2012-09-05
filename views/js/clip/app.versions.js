@@ -366,7 +366,7 @@ App.versions = (function($){
 	cancel      : "取消",
 	defaultText : "描述你的建议：(140字以内)",
 	feedback_text   : {
-	  is_null   : "评论内容为空",
+	  is_null   : "意见反馈为空",
 	  word_limit :"请把文字长度限制在140字以内"
 	}
       },
@@ -866,7 +866,7 @@ App.versions = (function($){
 	cancel      : "Cancel",
 	defaultText : "Describe your suggestion (limited to 140 characters)",
 	feedback_text   : {
-	  is_null : "Please enter comments",
+	  is_null : "Please enter idea",
 	  word_limit :"Please limited your comments to 140 characters"
 	}
       },
