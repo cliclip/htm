@@ -40,7 +40,7 @@ module.exports = function(grunt) {
       "tmp/views/js/app_tmp.js":[
 	"views/js/lib/backbone.marionette.js",
 	"views/js/app-base.js",
-	"views/js/ga.js",
+	//"views/js/ga.js",
         "views/js/lib/modernizr.js",
 	"views/js/lib/jquery.printf.js",
 	"views/js/lib/jquery.masonry.js",
@@ -102,20 +102,6 @@ module.exports = function(grunt) {
       "tmp/views/js/lib/png.js":["views/js/lib/png.js"]
      },
     jade: {
-     /* debug: {
-	options: {
-	  data: {
-	    debug: true
-	  }
-	},
-	files: {
-	  "tmp/index.html": "index.html.jade",
-	  "tmp/bub.html":"bub.html.jade",
-	  "tmp/clipper.html":" clipper.html.jade"
-	  //"tmp/error_page.html":"error_page.jade",
-	  //"tmp/callback_page.html":"callback_page.jade"
-	}
-      },*/
       release: {
 	options: {
 	  data: {
@@ -138,7 +124,7 @@ module.exports = function(grunt) {
 	  "release/img":"tmp/views/img/*",
 	  "release/help":"tmp/views/help/*",
 	  "release":["tmp/views/index.html","tmp/views/bub.html","tmp/views/clipper.html"],
-	  "release/js":["tmp/views/js/app.js","tmp/views/js/bub.js"],
+	  "release/js":["tmp/views/js/app.js","tmp/views/js/bub.js","views/js/ga.js"],
 	  "release/css":["tmp/views/css/app.css","tmp/views/css/clipper.css","tmp/views/css/ie7.css","tmp/views/css/ie8.css"],
 	  "release/js/lib":"tmp/views/js/lib/*"
 	}
