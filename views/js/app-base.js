@@ -28,6 +28,20 @@ App.Model = Backbone.Model.extend({
   },
   // override to parse [0, res] | [1, err] structure
   sync: function(method, model, options){
+    /*
+    var methodMap = {
+      'create': 'POST',
+      'update': 'PUT',
+      'delete': 'DELETE',
+      'read':   'GET'
+    };
+    console.log(method);
+    options.data = model.toJSON();
+    options.data._method = options.type || methodMap[method];
+    options.type = 'GET';
+    options.dataType = 'jsonp';
+    options.processData = true;
+    */
     var success = options.success;
     var error = options.error;
     options.success = function(resp, status, xhr){

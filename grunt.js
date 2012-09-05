@@ -6,11 +6,11 @@ module.exports = function(grunt) {
     img:{
       task1: {
 	 src: ['views/img/*.jpg'],
-	 dest:'debug/views/img-min'
+	 dest:'tmp/views/img'
       },
       task2: {
 	src: ['views/img/*.png'],
-	dest:'debug/views/img-min'
+	dest:'tmp/views/img'
       }/*,
       task3: {
 	src: ['views/img/*.gif'],
@@ -20,24 +20,24 @@ module.exports = function(grunt) {
     less: {
       compile: {
 	options: {
-	  paths: ["views/css"]
+	  paths: ["tmp/views/css","views/css"]
 	},
 	files: {
-	  "debug/views/css/ie7.css":"views/css/ie7.less",
-	  "debug/views/css/ie6.css":"views/css/ie6.less",
-	  "debug/views/css/app.css":"views/css/style.less",
-	  "debug/views/css/clipper.css":"views/css/bookmark.less"
+	  "tmp/views/css/ie7.css":"views/css/ie7.less",
+	  "tmp/views/css/ie6.css":"views/css/ie6.less",
+	  "tmp/views/css/app.css":"views/css/style.less",
+	  "tmp/views/css/clipper.css":"views/css/bookmark.less"
 	}
       }
     },
     mincss: {
-      "debug/views/css/clipper.min.css": ["views/css/uploadImage.css","views/css/jquery.tagsinput.css","views/css/clipper.css"],
-      "debug/views/css/app.min.css": ["views/css/uploadImage.css","views/css/jquery.tagsinput.css","views/css/app.css"],
-      "debug/views/css/ie7.min.css":["views/css/ie7.css"],
-      "debug/views/css/ie6.min.css":["views/css/ie6.css"]
+      "tmp/views/css/clipper.css": ["views/css/uploadImage.css","views/css/jquery.tagsinput.css","views/css/clipper.css"],
+      "tmp/views/css/app.css": ["views/css/uploadImage.css","views/css/jquery.tagsinput.css","tmp/views/css/app.css"],
+      "tmp/views/css/ie7.css":["tmp/views/css/ie7.css"],
+      "tmp/views/css/ie6.css":["tmp/views/css/ie6.css"]
     },
     concat: {
-      "debug/views/js/app.js":[
+      "tmp/views/js/app_tmp.js":[
 	"views/js/lib/backbone.marionette.js",
 	"views/js/app-base.js",
 	"views/js/ga.js",
@@ -89,18 +89,18 @@ module.exports = function(grunt) {
 	"views/js/clip/app.clipapp.message.js",
 	"views/js/clip/app.clipapp.taglist.js"
       ],
-      "debug/views/js/bub.js":[
+      "tmp/views/js/bub_tmp.js":[
 	"views/js/lib/protoclass.js",
 	"views/js/lib/box2d.js",
 	"views/js/bub-base.js"
       ]
     },
     min: {
-      "debug/views/js/app.min.js":["views/js/app.js"],
-      "debug/views/js/bub.min.js":["views/js/bub.js"],
-      "debug/views/js/lib-min/html5.min.js":["views/js/lib/html5.js"],
-      "debug/views/js/lib-min/png.min.js":["views/js/lib/png.js"]
-    },
+      "tmp/views/js/app.js":["tmp/views/js/app_tmp.js"],
+      "tmp/views/js/bub.js":["tmp/views/js/bub_tmp.js"],
+      "tmp/views/js/lib/html5.js":["views/js/lib/html5.js"],
+      "tmp/views/js/lib/png.js":["views/js/lib/png.js"]
+     },
     jade: {
      /* debug: {
 	options: {
@@ -109,11 +109,11 @@ module.exports = function(grunt) {
 	  }
 	},
 	files: {
-	  "debug/index.html": "index.html.jade",
-	  "debug/bub.html":"bub.html.jade",
-	  "debug/clipper.html":" clipper.html.jade"
-	  //"debug/error_page.html":"error_page.jade",
-	  //"debug/callback_page.html":"callback_page.jade"
+	  "tmp/index.html": "index.html.jade",
+	  "tmp/bub.html":"bub.html.jade",
+	  "tmp/clipper.html":" clipper.html.jade"
+	  //"tmp/error_page.html":"error_page.jade",
+	  //"tmp/callback_page.html":"callback_page.jade"
 	}
       },*/
       release: {
@@ -123,9 +123,9 @@ module.exports = function(grunt) {
           }
 	},
 	files: {
-	  "debug/views/index.html": "views/index.html.jade",
-	  "debug/views/bub.html":"views/bub.html.jade",
-	  "debug/views/clipper.html":"views/clipper.html.jade"
+	  "tmp/views/index.html": "views/index.html.jade",
+	  "tmp/views/bub.html":"views/bub.html.jade",
+	  "tmp/views/clipper.html":"views/clipper.html.jade"
 	  //"callback_page.html":"callback_page.jade",
 	  //"error_page.html":"error_page.jade"
 	}
@@ -134,18 +134,18 @@ module.exports = function(grunt) {
     copy:{
       dist: {
 	files: {
-	  "debug/views/img-min":"debug/views/img/*.gif",
-	  "release/img":"debug/views/img-min/*",
-	  "release/help":"debug/views/help/*",
-	  "release":["debug/views/index.html","debug/views/bub.html","debug/views/clipper.html"],
-	  "release/js":["debug/views/js/app.min.js","debug/views/js/bub.min.js"],
-	  "release/css":["debug/views/css/app.min.css","debug/views/css/clipper.min.css","debug/views/css/ie7.min.css","debug/views/css/ie8.min.css"],
-	  "release/js/lib":"debug/views/js/lib-min/*"
+	  "tmp/views/img":"views/img/*.gif",
+	  "release/img":"tmp/views/img/*",
+	  "release/help":"tmp/views/help/*",
+	  "release":["tmp/views/index.html","tmp/views/bub.html","tmp/views/clipper.html"],
+	  "release/js":["tmp/views/js/app.js","tmp/views/js/bub.js"],
+	  "release/css":["tmp/views/css/app.css","tmp/views/css/clipper.css","tmp/views/css/ie7.css","tmp/views/css/ie8.css"],
+	  "release/js/lib":"tmp/views/js/lib/*"
 	}
       }
     },
-   clean: ["debug/*","release/*"]
-   // clean: ["views/debug/*", "views/index.html",'views/bub.html','views/clipper.html','views/css/app.css','views/css/ie6.css','views/css/ie7.css','views/css/clipper.css',"views/css/index.css","views/css/index_clipper.css","views/img-min/*","views/js/lib-min/*","release/*"]
+   clean: ["tmp/*","release/*"]
+   // clean: ["views/tmp/*", "views/index.html",'views/bub.html','views/clipper.html','views/css/app.css','views/css/ie6.css','views/css/ie7.css','views/css/clipper.css',"views/css/index.css","views/css/index_clipper.css","views/img-min/*","views/js/lib-min/*","release/*"]
   });
   grunt.loadNpmTasks('grunt-contrib');
   grunt.loadNpmTasks('grunt-img');
