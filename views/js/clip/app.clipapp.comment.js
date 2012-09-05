@@ -33,7 +33,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     template : "#comment-view-template",
     tag_list: [],
     events : {
-      "focus #comm_text" :"foucsAction",
+      "focus #comm_text" :"focusAction",
       "blur #comm_text"  :"blurAction",
      // "click .size48"    :"maintagAction",
       "keydown #comm_text":"shortcut_comment",
@@ -45,7 +45,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
     initialize:function(){
       this.bind("@closeView", close);
     },
-    foucsAction:function(e){
+    focusAction:function(e){
       this.cleanError(e);
       $(e.currentTarget).val( $(e.currentTarget).val() == _i18n('comment.defaultText') ? "" :
       $(e.currentTarget).val() );
