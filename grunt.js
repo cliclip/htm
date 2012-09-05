@@ -122,7 +122,7 @@ module.exports = function(grunt) {
 	files: {
 	  "tmp/views/img":"views/img/*.gif",
 	  "release/img":"tmp/views/img/*",
-	  "release/help":"tmp/views/help/*",
+	  "release/help":"views/help/*",
 	  "release":["tmp/views/index.html","tmp/views/bub.html","tmp/views/clipper.html"],
 	  "release/js":["tmp/views/js/app.js","tmp/views/js/bub.js","views/js/ga.js"],
 	  "release/css":["tmp/views/css/app.css","tmp/views/css/clipper.css","tmp/views/css/ie7.css","tmp/views/css/ie8.css"],
