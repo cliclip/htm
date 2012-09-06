@@ -1,3 +1,4 @@
+//- kick start
 $(function() {
   var r ;
   var socket = new easyXDM.Socket({

@@ -19,16 +19,17 @@ html
     link(rel="apple-touch-icon",href="images/apple-touch-icon.png")
     link(rel="apple-touch-icon",sizes="72x72",href="images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
-    //- pack :: css
+
+    //- application :: css
     link(rel="stylesheet",href="css/app.css")
 
     //- ie png fix
     //if lt IE 7
-      link(rel="stylesheet",href="css/ie6.less")
+      link(rel="stylesheet",href="css/ie6.css")
       script(src="js/lib/png.js")
       script DD_belatedPNG.fix('.logo,.input,.select,.add,.more,.comer_topleft,.comer_topright,.comer_bottomleft,.comer_bottomright,.pages_top,.pages_right,.pages_bottom,.biezhen,.search_btn,.my_info,.icon_biezhen,.icon_quote,.user_i,.zhui,.stop,.user_more,.all,.no_tag,.yet_del,.upload_img,.link_img,.format,.url_text,.subject_put,.subject_note,.subject_comment,.subject_forward,.subject_del,.verify,.cancel,.my,.at_me,.expert');
     //if IE 7
-      link(rel="stylesheet",href="css/ie7.less")
+      link(rel="stylesheet",href="css/ie7.css")
     //if lt IE 8
       script(type="text/javascript")
         window.location.hash = window.location.hash;    
@@ -43,71 +44,27 @@ html
       header.header
         div.center
           div#mine
-            // **** 当前登录用户的信息 TODO 未登录显示 “注册 ｜ 登录”
-            //-include jade/my_info
-            // ****
           div.logo
             a(href="")
           hgroup.search
-            // **** 新建clip 查找clip 相关介绍的下拉列表
       div#myset
       div#setpop
       section.clearfix
         aside.left
           div#face
-            // **** 用户信息
-            //-include jade/user_info
-            // ****
           div#bubb
-            // **** 气泡
-            //-include jade/bubb
-            // ****
         div.right.clearfix
           div.left_shadow.clearfix
             div.left_shadow_top
             div#follow
             div#list.content_container
-              // **** clip 列表 A风格，转
-              //-include jade/clip_a_c
-              // **** clip 列表 A风格
-              //-include jade/clip_a
-              // **** clip 列表 B风格，转
-              //-include jade/clip_b_c
-              // **** clip 列表 B风格
-              //-include jade/clip_b
-              // **** 谁追我／我追谁 TODO 展开
-              //-include jade/follow_me
-              // ****
           div.add#add_right
           a(href="javascript:scroll(0,0)")
             div.return_top#return_top
         div.loader
     div.feed
     div#view
-      // **** 增
-      //-include jade/dialog_add
-      // **** 改
-      //-include jade/edit_profile
-      //-include jade/dialog_edit
-      // **** clip 详情
-      //-include jade/dialog_favo
-      // ****
     div#pop
-      // **** 收
-      //-include jade/dialog_reclip
-      // **** 转
-      //-include jade/dialog_recommend
-      // **** 评
-      //-include jade/dialog_comment
-      // **** 注
-      //-include jade/dialog_note
-      // **** 删
-      //-include jade/dialog_del
-      // **** 登录
-      //-include jade/dialog_login
-      // **** 邮件确认
-      //-include jade/dialog_mail
-      // ****
     div#feedback			       
     //- 程序控制组件插入的要素
       #mine
@@ -121,34 +78,60 @@ html
       #feedback
      //- #query
 
-    // **** 程序代码插入点
-    include tmpl/app
+    //- application :: templates
+    include tmpl/login-view-template
+    include tmpl/register-view-template
+    include tmpl/me-view-template
+    include tmpl/userface-view-template
+    include tmpl/bind-view-template
+    include tmpl/help-view-template
 
+    include tmpl/editUser-view-template
 
-    // ****
-    //- pack ::
-    //- script(src="/js/lib.js")
-    //- pack :: use js cdn instead
-    script(src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js")
+    include tmpl/detail-view-template
+    include tmpl/editDetail-view-template
+    include tmpl/addclip-view-template
+    include tmpl/comment-view-template
+
+    include tmpl/delete-view-template
+    include tmpl/reclip-view-template
+    include tmpl/recommend-view-template
+    include tmpl/clipmemo-view-template
+
+    include tmpl/clippreview-view-template
+    include tmpl/queryclip-view-template
+
+    include tmpl/following-view-template
+    include tmpl/follower-view-template
+
+    include tmpl/findpass-view-template
+    include tmpl/resetpass-view-template
+    include tmpl/gotosetup-view-template
+
+    include tmpl/message-view-template
+    include tmpl/taglist-view-template
+    include tmpl/feedback-view-template
+
+    //- :: depends - use cdn first
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.min.js")
+    //- script(src="js/lib/json2.min.js")
     script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js")
-    script(src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js")
+    //- script(src="js/lib/jquery.min.js")
     script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js")
+    //- script(src="js/lib/underscore.min.js")
     script(src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.1/backbone-min.js")
+    //- script(src="js/lib/backbone.min.js")
     script(src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.1/modernizr.min.js")
-    //- script(src="js/lib/json2.js")
-    //- script(src="js/lib/jquery.js")
-    //- script(src="js/lib/jquery-ui.min.js")
-    //- script(src="js/lib/underscore.js")
-    //- script(src="js/lib/modernizr.js")
-    //- script(src="js/lib/backbone.js")
-
-    //- pack :: app with depends
-    //- script(src="js/lib/backbone.marionette.js")
-    //- script(src="js/app-base.js")
+    //- script(src="js/lib/modernizr.min.js")
+    //- :: depends - has not cdn : use local
+    script(src="js/lib/backbone.marionette.min.js")
+    script(src="js/lib/jquery.printf.min.js")
+    script(src="js/lib/jquery.tagsinput.min.js")
+    script(src="js/lib/jquery.masonry.min.js")		
+    script(src="js/lib/easyXDM.min.js")
+    
+    //- application
     script(src="js/app.js")
-
-    //- kick start
-    script $(function(){ App.start(); });
-
+    
     //- google analystics
     script(src="js/ga.js")

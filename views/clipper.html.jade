@@ -3,22 +3,20 @@ html
     meta(http-equiv="Content-Type",content="text/html; charset=utf-8")
     meta(http-equiv="X-UA-Compatible",content="chrome=1")
     meta(name="viewport",content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0")
+
     link(rel="shortcut icon",href="images/favicon.ico")
     link(rel="apple-touch-icon",href="images/apple-touch-icon.png")
     link(rel="apple-touch-icon",sizes="72x72",href="images/apple-touch-icon-72x72.png")
     link(rel="apple-touch-icon",sizes="114x114",href="images/apple-touch-icon-114x114.png")
-    //- pack :: css
+    
+    //- application :: css
     link(rel="stylesheet",href="css/clipper.css")
+
     //if lt IE 7
-      link(rel="stylesheet",href="css/ie6.less")
+      link(rel="stylesheet",href="css/ie6.css")
     //if IE 7
-      link(rel="stylesheet",href="css/ie7.less")
-    script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js")
-    script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js")
-    script(src="/js/bookmark.js") // 引用文件
-    script(src="/js/lib/json2.js")
-    script(src="/js/lib/easyXDM.debug.js")
-    script(src="js/clipper.js")  // vent事件以及socket消息发送
+      link(rel="stylesheet",href="css/ie7.css")
+
     style
       body {
         margin: 0px;
@@ -39,8 +37,28 @@ html
       div#small-pop
       div#view
       div#setpop
+    
+    //- :: application templates
     include tmpl/addclip-view-template.jade
     include tmpl/login-view-template.jade
     include tmpl/clipmemo-view-template.jade
     include tmpl/taglist-view-template.jade
     include tmpl/message-view-template.jade
+
+    //- :: depends - use cdn first
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.min.js")
+    //- script(src="js/lib/json2.min.js")
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js")
+    //- script(src="js/lib/jquery.min.js")
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js")
+    //- script(src="js/lib/underscore.min.js")
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.1/backbone-min.js")
+    //- script(src="js/lib/backbone.min.js")
+    //- :: depends - has not cdn
+    script(src="js/lib/backbone.marionette.min.js")
+    script(src="js/lib/jquery.printf.min.js")
+    script(src="js/lib/jquery.tagsinput.min.js")
+    script(src="js/lib/easyXDM.min.js")
+    
+    //- :: application
+    script(src="js/clipper.js")
