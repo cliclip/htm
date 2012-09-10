@@ -1,5 +1,21 @@
 //- kick start
 $(function() {
+
+  App.addRegions({
+    mineRegion: "#mine",
+    mysetRegion: "#myset",
+    faceRegion: "#face",
+    bubbRegion: "#bubb",
+    listRegion: "#list",
+    viewRegion: "#view",
+    popRegion: "#pop",
+    feedRegion: ".feed",
+    feedbackRegion: "#feedback",
+    setpopRegion:"#setpop",
+    searchRegion:".search",
+    followRegion:"#follow"
+  });
+
   var r ;
   var socket = new easyXDM.Socket({
     swf: 'http://cliclip.com/img/easyxdm.swf',

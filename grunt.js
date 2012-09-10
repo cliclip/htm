@@ -63,7 +63,11 @@ module.exports = function(grunt) {
     min: {
       "tmp/js/app.js":["tmp/js/app.js.raw"],
       "tmp/js/clipper.js":["tmp/js/clipper.js.raw"],
-      "tmp/js/bub.js":["tmp/js/bub.js.raw"]
+      "tmp/js/bub.js":["tmp/js/bub.js.raw"],
+      // THE BOOKMARKLET LOADER
+      "tmp/js/loader.js":["views/js/loader.js"],
+      // THE GOOGLE ANALYSTICS
+      "tmp/js/ga.js":["views/js/ga.js"]
     },
     // image
     img:{
@@ -98,17 +102,16 @@ module.exports = function(grunt) {
 	    "tmp/css/*.css"                      // THE BUILD CSS
 	  ],
 	  "release/js":[
-	    "tmp/js/*.js",                       // THE BUILD JS
-	    "views/js/ga.js"                     // THE GOOGLE ANALYSTICS
+	    "tmp/js/*.js"                        // THE BUILD JS
 	  ],
 	  "release/js/lib":
-	    "views/js/lib/*.min.js",
+	    "views/js/lib/*.min.js",             // THE DEPEND LIBS
 	  "release/img":[
 	    "tmp/img/*",
 	    "views/img/*.gif"                    // TODO THE LEFT GIF
 	  ],
 	  "release/help":
-	    "views/help/*.json"                  // TODO THE STAIC HELP JSON
+	    "views/help/*.json"                  // TODO THE HELP JSON
 	}
       }
     }
