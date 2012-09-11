@@ -401,13 +401,17 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     remove(model_id);
   });
 
-  App.vent.bind("app.clipapp.clipmemo:success", function(model){
+  App.vent.bind("app.clipapp.clipmemo:success", function(model, mid){
     var json = JSON.parse(data); // 此处的data是标识list的全局变量
     var user = json.user;
     if(App.ClipApp.isSelf(user) && json.tag){
       var tag = json.tag[0];
       var flag = _.find(model.get("tag"), function(t){ return t == tag; });
       if(flag === undefined) remove(user+":"+model.get("clipid"));
+    }else if(model.get("public")){ 
+      var collection = clipListView.collection;
+      var tmp = collection.get(mid);
+      tmp.set("public", model.get("public"));
     }
   });
 
