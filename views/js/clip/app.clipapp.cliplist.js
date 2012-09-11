@@ -14,7 +14,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       content:{},
       reprint_count:"",
       reply_count:"",
-      hide:false
+      hide:false,
+      "public": true
     }
   });
 
