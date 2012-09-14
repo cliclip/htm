@@ -35,12 +35,21 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
   });
 
   WeiboEdit.show = function(){
-    var weiboModel = new App.Model.UserBindModel({provider:"weibo"});
+    var weiboModel = new App.Model.UserBindModel();
     var weiboRegion = new App.Region({el:"#weibo"});
-    weiboModel.fetch();
-    weiboModel.onChange(function(model){
-      var view = new WeiboView({model: model});
-      weiboRegion.show(view);
+    weiboModel.fetch({
+      success:function(model, res){
+	var list  = model.get("list");
+	var result = [];
+	list.forEach(function(v){
+	  if(v.provider == 'weibo') result.push(v);
+	});
+	console.log(result);
+	var _model =  new WeiboEditModel({info:result});
+	var view = new WeiboView({model: _model});
+	weiboRegion.show(view);
+      },
+      error:function(model, error){}
     });
   };
 
