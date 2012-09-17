@@ -36,10 +36,18 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
   TwitterEdit.show = function(){
     var twitterModel = new App.Model.UserBindModel({provider:"twitter"});
     var twitterRegion = new App.Region({el:"#twitter"});
-    twitterModel.fetch();
-    twitterModel.onChange(function(model){
-      var view = new TwitterView({model: model});
-      twitterRegion.show(view);
+    twitterModel.fetch({
+      success:function(model, res){
+	var list  = model.get("list");
+	var result = [];
+	list.forEach(function(v){
+	  if(v.provider == 'twitter') result.push(v);
+	});
+	var _model =  new TwitterEditModel({info:result});
+	var view = new TwitterView({model: _model});
+	twitterRegion.show(view);
+      },
+      error:function(model, error){}
     });
   };
 

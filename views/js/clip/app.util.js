@@ -193,7 +193,8 @@ App.util = (function(){
 	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 	  var uid = imgids.split(":")[0];
 	  var imgid = imgids.split(":")[1];
-	  var url = P+"/user/"+ uid +"/image/" +imgid;
+	 // var url = P+"/user/"+ uid +"/image/" +imgid;
+	  var url = returnObj[1];
 	  callback(null, url);
 	}else{//上传图片失败
 	  callback("imageUp_fail", null);
