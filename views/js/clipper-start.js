@@ -2,24 +2,14 @@
 $(function() {
 
   App.addRegions({
-    mineRegion: "#mine",
-    mysetRegion: "#myset",
-    faceRegion: "#face",
-    bubbRegion: "#bubb",
-    listRegion: "#list",
     viewRegion: "#view",
-    popRegion: "#pop",
-    feedRegion: ".feed",
-    feedbackRegion: "#feedback",
-    setpopRegion:"#setpop",
-    searchRegion:".search",
-    followRegion:"#follow"
+    popRegion: "#pop"
   });
 
   var r ;
   var socket = new easyXDM.Socket({
     swf: 'http://cliclip.com/img/easyxdm.swf',
-    // swf: 'http://cliclip.com:4000/img/easyxdm.swf',
+    // swf: 'http://192.168.1.3:3000/img/easyxdm.swf',
     // swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
     // swf: 'http://192.168.1.3:8000/img/easyxdm.swf',
     swfNoThrottle: true,
@@ -29,8 +19,7 @@ $(function() {
 	case 'init' : // for caller to set content // TODO
           // 先通过cleanHtml toUbb toHtml的转换在显示在editor上
 	  r[1] = App.Convert.filter(r[1]);
-          App.ClipApp.showClipAdd("clipper");
-          App.Editor.setContent("editor", r[1]);
+	  App.ClipApp.showClipAdd("clipper",r[1]);
           break;
         }
       }

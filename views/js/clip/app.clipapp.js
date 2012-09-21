@@ -226,13 +226,13 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
-  ClipApp.showClipAdd = function(clipper){
+  ClipApp.showClipAdd = function(clipper,clipper_content){
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	ClipApp.ClipAdd.show(clipper);
+	App.ClipApp.ClipAdd.show(clipper,clipper_content);
       });
     }else{
-      ClipApp.ClipAdd.show(clipper);
+      ClipApp.ClipAdd.show(clipper,clipper_content);
     }
   };
 

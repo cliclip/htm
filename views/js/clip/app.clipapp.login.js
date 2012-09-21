@@ -131,7 +131,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
       $("#note_img").removeClass("note_img_en");
       $("#note_img").addClass("note_img_zh");
     }
-    //$("#name").focus();
+    // $("#name").focus();
+    // fun();
   };
 
   Login.close = function(){
