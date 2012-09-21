@@ -43,10 +43,6 @@ script(type="text/template",id="detail-view-template")
 
 script(type="text/template",id="showcomment-view-template")
   | <div class="comment_show" id="<%= id %>">
-  <% if (text == "is_del"){ %>
-  dd.comment_con.del_comm.
-    <%=_i18n('showcomment.text') %><%= App.util.generatePastTime(date)%>
-    <% } else {%>
   div.user_head
     <a class="userhead" href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
   dt
@@ -62,7 +58,6 @@ script(type="text/template",id="showcomment-view-template")
     </span>
     <span>&nbsp;<a href="javascript:void(0)" class="reply_comment" id="<%= id %>"><%=_i18n('showcomment.reply')%></a></span>
     </div>
-  <%}%>
   | </div>
         
 script(type="text/template",id="addcomm-view-template")

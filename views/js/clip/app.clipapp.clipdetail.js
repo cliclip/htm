@@ -95,6 +95,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     reply_comment : function(e){
       e.preventDefault();
       var cid = this.model.get("cid"); // 取得当前detail的id
+      var user = this.model.get("user");
       this.trigger("@reply", cid, user);
     },
     del_comment : function(e){
