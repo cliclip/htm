@@ -151,10 +151,10 @@
      if (typeof easyXDM === "undefined" || !easyXDM) {
        var s1 = document.createElement("script");
        s1.type = "text/javascript";
-       s1.src = "http://cliclip.com/js/lib/easyXDM.debug.js";
-       // s1.src = "http://192.168.1.3:3000/js/lib/easyXDM.debug.js";
-       // s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.debug.js";
-       // s1.src = "http://192.168.1.3:8000/js/lib/easyXDM.debug.js";
+       s1.src = "http://cliclip.com/js/lib/easyXDM.min.js";
+       // s1.src = "http://192.168.1.3:3000/js/lib/easyXDM.min.js";
+       // s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.min.js";
+       // s1.src = "http://192.168.1.3:8000/js/lib/easyXDM.min.js";
        s1.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
 	   scriptOnLoad();
