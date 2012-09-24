@@ -87,7 +87,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);
 	  }*/
-	  App.vent.trigger("app.clipapp.comment:success", {type:"comment",pid:params.pid,model_id:mid});
+	  App.vent.trigger("app.clipapp.comment:success", {type: "comment", model_id:mid});
 	  App.ClipApp.showSuccess("comment");
 	  view.trigger("@closeView");
 	},

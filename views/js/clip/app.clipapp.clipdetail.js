@@ -288,7 +288,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
-	App.vent.trigger("app.clipapp.comment:success",  {type:"comment",pid:params.pid,model_id:mid});
+	App.vent.trigger("app.clipapp.comment:success",  {type: "comment", model_id:mid});
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")

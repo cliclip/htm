@@ -34,8 +34,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].clipid = resp[i].clip.id;
 	  resp[i].user = resp[i].clip.user;
 	  resp[i].content = resp[i].clip.content;
-	  resp[i].reprint_count = resp[i].clip.reprint_count? resp[i].clip.reprint_count:0;
-	  resp[i].reply_count = resp[i].clip.reply_count? resp[i].clip.reply_count:0;
+	  resp[i].refby = resp[i].clip.refby? resp[i].clip.refby:0;
+	  resp[i].reply = resp[i].clip.reply? resp[i].clip.reply:0;
 	  resp[i]["public"] = resp[i].clip["public"];
 	  delete resp[i].clip;
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
@@ -370,17 +370,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   // 评论总数以及转载总数的同步
   function refresh(args){
+
     if(!args || !args.model_id){
       return;
     }else{
       var model=App.listRegion.currentView.collection.get(args.model_id);
       var clip=model.get("clip");
       if(args.type == "comment"){
-	if(args.pid == 0){
-	  var reply = model.get("reply");
-	  reply = reply ? reply + 1 : 1;
-	  model.set({"reply_count":reply_count});
-	}
+	var reply = model.get("reply");
+	reply = reply ? reply + 1 : 1;
+	model.set({"reply":reply});
       }
       if(args.type == "reclip"){
 	var refby = model.get("refby");
