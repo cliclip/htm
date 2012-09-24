@@ -278,7 +278,7 @@ App.versions = (function($){
       },
 
       clippreview : {
-	reprint     : "转摘",
+	refby     : "转摘",
 	reply       : "评论",
 	comment     : "评论",
 	recommend   : "转发",
@@ -779,7 +779,7 @@ App.versions = (function($){
       },
 
       clippreview : {
-	reprint     : "reclip(s)",
+	refby     : "reclip(s)",
 	reply       : "comment(s)",
 	comment     : "Comment",
 	recommend   : "@",
