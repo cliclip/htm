@@ -12,9 +12,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       recommend:"",//列表推荐的clip时有此属性
       user :{},
       content:{},
-      reprint_count:"",
-      reply_count:"",
-      hide:false
+      refby:"",
+      reply:"",
+      hide:false,
+      "public": true
     }
   });
 
@@ -376,15 +377,15 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var clip=model.get("clip");
       if(args.type == "comment"){
 	if(args.pid == 0){
-	  var reply_count = model.get("reply_count");
-	  reply_count = reply_count ? reply_count + 1 : 1;
+	  var reply = model.get("reply");
+	  reply = reply ? reply + 1 : 1;
 	  model.set({"reply_count":reply_count});
 	}
       }
       if(args.type == "reclip"){
-	var reprint_count = model.get("reprint_count");
-	reprint_count = reprint_count ? reprint_count + 1 : 1;
-	model.set({"reprint_count":reprint_count});
+	var refby = model.get("refby");
+	refby = refby ? refby + 1 : 1;
+	model.set({refby: refby});
       }
     }
   };
@@ -400,13 +401,17 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     remove(model_id);
   });
 
-  App.vent.bind("app.clipapp.clipmemo:success", function(model){
+  App.vent.bind("app.clipapp.clipmemo:success", function(model, mid){
     var json = JSON.parse(data); // 此处的data是标识list的全局变量
     var user = json.user;
     if(App.ClipApp.isSelf(user) && json.tag){
       var tag = json.tag[0];
       var flag = _.find(model.get("tag"), function(t){ return t == tag; });
       if(flag === undefined) remove(user+":"+model.get("clipid"));
+    }else if(model.get("public")){
+      var collection = clipListView.collection;
+      var tmp = collection.get(mid);
+      tmp.set("public", model.get("public"));
     }
   });
 

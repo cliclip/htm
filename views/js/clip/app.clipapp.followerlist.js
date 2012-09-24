@@ -92,7 +92,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
   App.vent.bind("app.clipapp.follow:success", function(){ refresh(); });
 
   function refresh(){
-    if(App.followRegion.currentView.className =='follow-item'){
+    if(App.followRegion.currentView && App.followRegion.currentView.$el[0].className.className =='follow-item'){
       FollowerList.showUserFollower(App.ClipApp.getFaceUid());
     }
   };

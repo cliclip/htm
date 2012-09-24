@@ -18,7 +18,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   });
   // private
   var _uid  = null;
-  var last = null;
+  var last = {};
   var old_self = null;
   var self = true;
   var lang = App.versions.getLanguage(); // 用户语言设置

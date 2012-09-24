@@ -152,16 +152,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
   };
 
   function change(follow){
-    if(faceView){
-      faceView.trigger("@change", follow);
-    }
+    setTimeout(function(){
+      if(faceView){ faceView.trigger("@change", follow); }
+    }, 200);
   };
-
-  function show(follow){
-    if(faceView){
-      faceView.trigger("@show", follow);
-    }
-  }
 
   App.vent.bind("app.clipapp.follow:success", function(follow){
     change(follow);
@@ -172,7 +166,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.follow:get", function(follow){
-    show(follow);
+    setTimeout(function(){
+      if(faceView){ faceView.trigger("@show", follow); }
+    }, 200);
   });
 
   // 当me改变之后face的modle有change事件会自动render

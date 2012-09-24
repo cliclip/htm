@@ -132,7 +132,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	url: App.ClipApp.encodeURI(P+"/clip/"+cid),
 	success: function(model, res){
 	  ClipMemo.close();
-	  App.vent.trigger("app.clipapp.clipmemo:success", model);
+	  App.vent.trigger("app.clipapp.clipmemo:success", model, cid);
 	},
 	error:function(model,res){}
       });

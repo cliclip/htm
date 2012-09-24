@@ -22,6 +22,21 @@ script(type="text/template",id="clippreview-view-template")
       <%}%>
       </div>
       <%}%>
+    <% if(public == "false"){ %>
+    header#header.type_self
+      <dt class="type_text">仅自己可见</dt>
+      <% if(content && content.image) {%>
+      | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/_wait.gif"/>
+      div.article_photo
+        | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.url(content.image)%>"/>
+      <% }if(content && content.text){%>
+      div.article_con
+        <%if(!content.image){ %>
+        br
+        <%}%>
+        | <%= content.text %>
+      <%}%>
+    <% }else{ %>
     header#header
       <% if(content && content.image) {%>
       | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/_wait.gif"/>
@@ -34,12 +49,13 @@ script(type="text/template",id="clippreview-view-template")
         <%}%>
         | <%= content.text %>
       <%}%>
+    <%}%>
     footer.master
       div.metas
         span.icon_block
-          | <%=reprint_count?reprint_count:0%>&nbsp; <%=_i18n('clippreview.reprint')%>
+          | <%=refby ? refby : 0%>&nbsp; <%=_i18n('clippreview.repby')%>
         span.icon_block
-          | <%=reply_count?reply_count:0%>&nbsp; <%=_i18n('clippreview.reply')%>
+          | <%=reply ? reply : 0%>&nbsp; <%=_i18n('clippreview.reply')%>
       div.user_info_small
         <% if(user && App.ClipApp.ClipList.flag_show_user){ %>
         div.user_more
