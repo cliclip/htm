@@ -41,10 +41,11 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
       success:function(model, res){
 	var list  = model.get("list");
 	var result = [];
-	list.forEach(function(v){
-	  if(v.provider == 'weibo') result.push(v);
-	});
-	console.log(result);
+	if(list){
+	  list.forEach(function(v){
+	    if(v.provider == 'weibo') result.push(v);
+	  });
+	}
 	var _model =  new WeiboEditModel({info:result});
 	var view = new WeiboView({model: _model});
 	weiboRegion.show(view);
@@ -55,7 +56,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 
 
   var delWeibo = function(uid){
-    var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid});
+    var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid,account:uid+"@weibo"});
     model.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	WeiboEdit.show();

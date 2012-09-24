@@ -40,9 +40,11 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
       success:function(model, res){
 	var list  = model.get("list");
 	var result = [];
-	list.forEach(function(v){
-	  if(v.provider == 'twitter') result.push(v);
-	});
+	if(list){
+	  list.forEach(function(v){
+	    if(v.provider == 'twitter') result.push(v);
+	  });
+	}
 	var _model =  new TwitterEditModel({info:result});
 	var view = new TwitterView({model: _model});
 	twitterRegion.show(view);
@@ -52,7 +54,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
   };
 
   var delTwitter = function(uid){
-    var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
+    var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid,account:uid+"@twitter"});
     model.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	TwitterEdit.show();
