@@ -35,7 +35,7 @@ App.util = (function(){
   // TODO 此处理适合在 api 的 getPreview 逻辑里完成
   // clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
-    var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
+    var pattern = /user\/\d\/image\/.*?/;
     var pattern1 = /http:\/\//;
     if(image_url && pattern.test(image_url)&&!pattern1.test(image_url)){
       return image_url + "/270";
