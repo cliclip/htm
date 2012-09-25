@@ -263,6 +263,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(model, res){ // 删除评论成功，重新加载comment
 	showComment(cid);
 	showAddComm(cid);
+	App.vent.trigger("app.clipapp.delComment:success",  {model_id:mid});
       },
       error:function(model, res){}
     });
@@ -288,7 +289,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
-	App.vent.trigger("app.clipapp.comment:success",  {type:"comment",pid:params.pid,model_id:mid});
+	App.vent.trigger("app.clipapp.comment:success",  {model_id:mid});
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")
