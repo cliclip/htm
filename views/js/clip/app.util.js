@@ -46,7 +46,7 @@ App.util = (function(){
   // if (!face) userInfo.face = default_face;
   // userInfo.icon = userInfo.face + '/42'
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]{1,}:face/;
+    var pattern = /^[0-9]{1,}:face_[0-9]{13}.*/;
     if(imageid == ""){
       return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){

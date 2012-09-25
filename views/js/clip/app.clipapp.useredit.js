@@ -415,13 +415,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	var returnObj = eval(returnVal);
 	//console.info(returnObj);
 	if(returnObj[0] == 0){//上传成功
-	  var currentFace = returnObj[1][0];
+	  var currentFace = returnObj[1];
 	  if(currentFace){
 	    var facemodel = new FaceModel({face:currentFace});
 	    facemodel.save({},{
 	      success:function(model,res){
 		if(face_remote_flag){ // 此标记的作用是什么
-		  $("#myface").attr("src",App.util.face_url(returnObj[1][0]),240);
+		  $("#myface").attr("src",App.util.face_url(returnObj[1]),240);
 		  $("#confirm_face").show();
 		}else{
 		  App.ClipApp.showSuccess("faceUp_success");
