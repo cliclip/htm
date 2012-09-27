@@ -8,8 +8,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
     defaults:{
       name:"",
       id:"",
-      following:"",
-      follower:"",
+      follow:0,
+      followby:0,
       face:"",
       relation:[]
     },
