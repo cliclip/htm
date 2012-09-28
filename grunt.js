@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib');
   grunt.loadNpmTasks('grunt-img');
   grunt.registerTask('build', 'jade less mincss min img copy');
+  grunt.registerTask('debug', 'jade less mincss concat img copy');
   grunt.registerTask('default', 'clean build');
   grunt.initConfig({
     // clean
@@ -60,7 +61,16 @@ module.exports = function(grunt) {
       "tmp/css/ie7.css":["tmp/css/ie7.css.raw"]
     },
     // javascript
-    min: {
+    concat: { // for deug only, same as min
+      "tmp/js/app.js":["tmp/js/app.js.raw"],
+      "tmp/js/clipper.js":["tmp/js/clipper.js.raw"],
+      "tmp/js/bub.js":["tmp/js/bub.js.raw"],
+      // THE BOOKMARKLET LOADER
+      "tmp/js/loader.js":["views/js/loader.js"],
+      // THE GOOGLE ANALYSTICS
+      "tmp/js/ga.js":["views/js/ga.js"]
+    },
+    min: { // for release only, same as concat
       "tmp/js/app.js":["tmp/js/app.js.raw"],
       "tmp/js/clipper.js":["tmp/js/clipper.js.raw"],
       "tmp/js/bub.js":["tmp/js/bub.js.raw"],
@@ -106,6 +116,7 @@ module.exports = function(grunt) {
 	  ],
 	  "release/js/lib":
 	    "views/js/lib/*.min.js",             // THE DEPEND LIBS
+	    //"views/js/lib/*.js",             // THE DEPEND LIBS
 	  "release/img":[
 	    "tmp/img/*",
 	    "views/img/*.gif"                    // TODO THE LEFT GIF
