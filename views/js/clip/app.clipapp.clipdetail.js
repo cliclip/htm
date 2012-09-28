@@ -73,32 +73,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
-      "click .text" : "toggleChildren",
       "mouseover .comment_show" : "discoloration",
       "mouseout .comment_show" : "resume",
       "click .reply_comment" : "reply_comment",
       "click .del_comment" : "del_comment"
     },
-    initialize: function(){
+    initialize : function(){
       this.bind("@reply", showReply);
       this.bind("@delComment", delComment);
-    },
-    toggleChildren : function(e){
-      e.preventDefault();
-      var curr = $(e.target).attr("class");
-      var open = _i18n('showcomment.open');
-      var pack = _i18n('showcomment.pack');
-      if(curr == "marking"){
-	var marking = $(e.target).text();
-	if(marking)
-	  $(e.target).text(marking == open ? pack : open);
-      }else{
-	var marking = $(e.target).siblings(".marking").text();
-	if(marking)
-	  $(e.target).siblings(".marking").text(marking == open ? pack : open);
-      }
-      var div = $($(e.currentTarget).parent()[0]).parent();
-      $(div).siblings(".children").toggle();
     },
     discoloration : function(e){
       e.preventDefault();
@@ -113,11 +95,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     reply_comment : function(e){
       e.preventDefault();
       var cid = this.model.get("cid"); // 取得当前detail的id
-      var pid = e.target.id;   // 取得当前评论的id
-      if($("#reply_Comm_showDiv"))  // 首先在被点击的评论下添加 评论框的div
-	$("#reply_Comm_showDiv").remove(); // 保证detail页面只有一个评论回复框
-      $("#"+pid).append('<div id="reply_Comm_showDiv"></div>');
-      this.trigger("@reply", cid, pid);
+      var user = this.model.get("user");
+      this.trigger("@reply", cid, user);
     },
     del_comment : function(e){
       e.preventDefault();
@@ -127,43 +106,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       App.ClipApp.showAlert("del_comment", null, function(){
 	view.trigger("@delComment", cid, id);
       });
-    },
-    render:function(_model){  // 针对commetModel进行处理显示
-      var that = this;
-      var model = _model ? _model.toJSON() :  this.model.toJSON();
-      var res = [];
-      for(var i in model){ // 将拿到的model对象变为数组
-	if(i != "cid" ) res.push(model[i]);
-      }
-      var clip_owner = model.cid.split(":")[0];
-      var template = this.getTemplateSelector();
-      // 远程调用template,我们用的是本地调用 TODO
-      var templateRetrieval = App.TemplateCache.get(template);
-      $.when(templateRetrieval).then(function(template){
-	function render_tree(commentList, html){
-	  var e = commentList.shift();
-	  // console.log("render_tree :: %j %s", e, html);
-	  if(!e) {
-	    return html;
-	  } else {
-	    e.clip_owner = clip_owner;
-	    if(e.children && e.children.length <= 0){ e.has_child = false;}
-	    else{e.has_child = true;} // has_child 用于显示控制
-	    var str = _.template(template, e);
-	    if (e.children && e.children.length > 0) {
-	      str += "<ul class='children'>";
-	      str += render_tree(e.children, "");
-	      str += "</ul>";
-	    }
-	    str = '<div>'+str+'</div>';
-	  };
-	  return render_tree(commentList, html+str);
-	}
-      that.$el.html(render_tree(res, ""));
-      /*if (that.onRender){that.onRender();}*/
-      return this;
-     });
     }
+  });
+
+  var CommentList = App.CollectionView.extend({
+     tagName: "div",
+     className: "comments",
+     itemView: CommentView
   });
 
   var AddCommView = App.ItemView.extend({
@@ -176,12 +125,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "blur #comm_text"  : "blurAction",
       //"click .main_tag"  : "maintagAction",
       "keydown #comm_text":"shortcut_comment",
-      "click .verify"    : "comment",
-      "click .cancel"    : "cancel"
+      "click .verify"    : "comment"
     },
     initialize:function(){
       this.bind("@saveaddComm", saveaddComm);
-      this.bind("@canceladdComm", canceladdComm);
     },
     focusAction:function(e){
       e.currentTarget.select();//将光标定位到当前选中元
@@ -240,9 +187,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       }else{
 	return true;
       }
-    },
-    cancel : function(){
-      this.trigger("@canceladdComm",this.model.get("cid"));
     }
   });
 
@@ -258,30 +202,35 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   };
 
+  var CommentModel = App.Model.extend({
+    defaults:{
+      cid:'',
+      id: '',
+      user: '',
+      date: '',
+      text: ''
+    }
+  });
+
+  var commCollection = App.Collection.extend({
+    model : CommentModel
+  });
+
   // 获取comment内容，需要对得到的数据进行显示
   function showComment (cid){
-    var comment = new App.Model.CommentModel({cid: cid});
-    comment.fetch();
-    comment.onChange(function(commentModel){ // rename CommentsView
-      var commentView = new CommentView({model: commentModel});
+    var list = new commCollection();
+    list.fetch({url:App.ClipApp.encodeURI(P+"/clip/"+cid+"/comment")});
+    list.onReset(function(commentCollection){ // rename CommentsView
+      commentCollection.models.forEach(function(model){
+	model.set('cid', cid);
+      });
+      var commentList = new CommentList({collection: commentCollection});
       ClipDetail.commentRegion = new App.Region({el:".comments"});
-      ClipDetail.commentRegion.show(commentView);
+      ClipDetail.commentRegion.show(commentList);
     });
-  };
-
-  function showReplyComm (cid, pid){
-    regionClose("addCommRegion"); // 关闭最下边的评论框区域
-    var model = new App.Model.CommentModel({cid : cid, pid: pid});
-    var replyView = new AddCommView({model: model});
-    ClipDetail.replyCommRegion = new App.Region({
-      el: "#reply_Comm_showDiv"
-    });
-    ClipDetail.replyCommRegion.show(replyView);
-    $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
   function showAddComm (cid, focus){
-    regionClose("replyCommRegion"); // 关闭回复评论框
     var model = new App.Model.CommentModel({cid: cid});
     var addCommView = new AddCommView({model: model});
     ClipDetail.addCommRegion = new App.Region({el:".input_textarea"});
@@ -290,27 +239,21 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(focus) $("#comm_text").focus(); // 如果是弹出的回复对话框就要聚焦
   };
 
+  function showReply (cid, user){
+    var uname = user.name;
+    showAddComm(cid, true);
+    $("#comm_text").val("@"+uname);
+  };
+
   var detailClose = function(){
     ClipDetail.close();
   };
 
   var detailComment = function(cid){ // 当点击clipdetail的评时
     if(!App.ClipApp.isLoggedIn()){
-      App.ClipApp.showLogin(function(){
-	showAddComm(cid, true);
-      });
+      App.ClipApp.showLogin(function(){ showAddComm(cid, true); });
     }else{
       showAddComm(cid, true);
-    }
-  };
-
-  var showReply = function(cid, pid){
-    if(!App.ClipApp.isLoggedIn()){
-      App.ClipApp.showLogin(function(){
-	showReplyComm(cid, pid);
-      });
-    }else{
-      showReplyComm(cid, pid);
     }
   };
 
@@ -320,6 +263,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(model, res){ // 删除评论成功，重新加载comment
 	showComment(cid);
 	showAddComm(cid);
+	App.vent.trigger("app.clipapp.delComment:success",  {model_id:mid});
       },
       error:function(model, res){}
     });
@@ -335,11 +279,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   };
 
-  var canceladdComm = function(cid){
-    regionClose("replyCommRegion");
-    showAddComm(cid);
-  };
-
   var saveaddComm = function(view, params, mid){
     var model = new App.Model.CommModel();
     model.save({pid:params.pid, text:params.text},{
@@ -350,7 +289,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	}*/
 	showComment(params.clipid);
 	showAddComm(params.clipid);
-	App.vent.trigger("app.clipapp.comment:success",  {type:"comment",pid:params.pid,model_id:mid});
+	App.vent.trigger("app.clipapp.comment:success",  {model_id:mid});
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")
@@ -390,7 +329,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   ClipDetail.close = function(){
     regionClose("commentRegion");
-    regionClose("replyCommRegion");
     regionClose("addCommRegion");
     App.popRegion.close();
     resetUrl(hist, offset);
@@ -399,7 +337,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.clipdelete:success", function(){
-    if(ClipDetail.addCommRegion || ClipDetail.replyCommRegion){
+    if(ClipDetail.addCommRegion){
       ClipDetail.close();
     }
   });

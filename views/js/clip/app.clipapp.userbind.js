@@ -5,10 +5,11 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
   App.Model.UserBindModel = App.Model.extend({
     url:function(){
       var my = App.ClipApp.getMyUid();
-      if(this.get("oauth_id")){
-	return App.ClipApp.encodeURI(P+"/user/"+ my +"/provider/"+this.get("provider")+"/oauth_id/"+this.get("oauth_id"));
+       console.log(this.get("account"));
+      if(this.get("account")){
+	return App.ClipApp.encodeURI(P+"/user/"+ my +"/oauth/"+this.get("account"));
       }else{
-	return App.ClipApp.encodeURI(P+"/user/"+ my +"/provider/"+this.get("provider"));
+	return App.ClipApp.encodeURI(P+"/user/"+ my +"/oauth/");
       }
     }
   });

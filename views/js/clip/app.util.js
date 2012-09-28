@@ -35,7 +35,7 @@ App.util = (function(){
   // TODO 此处理适合在 api 的 getPreview 逻辑里完成
   // clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
-    var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
+    var pattern = /user\/\d\/image\/.*?/;
     var pattern1 = /http:\/\//;
     if(image_url && pattern.test(image_url)&&!pattern1.test(image_url)){
       return image_url + "/270";
@@ -46,7 +46,7 @@ App.util = (function(){
   // if (!face) userInfo.face = default_face;
   // userInfo.icon = userInfo.face + '/42'
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face/;
+    var pattern = /^[0-9]{1,}:face_[0-9]{13}.*/;
     if(imageid == ""){
       return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){
@@ -194,6 +194,7 @@ App.util = (function(){
 	  var uid = imgids.split(":")[0];
 	  var imgid = imgids.split(":")[1];
 	  var url = P+"/user/"+ uid +"/image/" +imgid;
+	  // var url = returnObj[1];
 	  callback(null, url);
 	}else{//上传图片失败
 	  callback("imageUp_fail", null);
