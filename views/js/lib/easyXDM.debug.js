@@ -49,10 +49,10 @@
 //
 
 var global = this;
-var channelId = Math.floor(Math.random() * 10000); // randomize the initial id in case of multiple closures loaded 
+var channelId = Math.floor(Math.random() * 10000); // randomize the initial id in case of multiple closures loaded
 var emptyFn = Function.prototype;
-var reURI = /^((http.?:)\/\/([^:\/\s]+)(:\d+)*)/; // returns groups for protocol (2), domain (3) and port (4) 
-var reParent = /[\-\w]+\/\.\.\//; // matches a foo/../ expression 
+var reURI = /^((http.?:)\/\/([^:\/\s]+)(:\d+)*)/; // returns groups for protocol (2), domain (3) and port (4)
+var reParent = /[\-\w]+\/\.\.\//; // matches a foo/../ expression
 var reDoubleSlash = /([^:])\/\//g; // matches // anywhere but in the protocol
 var namespace = ""; // stores namespace under which easyXDM object is stored on the page (empty if object is global)
 var easyXDM = {};
@@ -86,31 +86,16 @@ function isArray(o){
 
 // end
 function hasFlash(){
-    var name = "Shockwave Flash", mimeType = "application/x-shockwave-flash";
-    
-    if (!undef(navigator.plugins) && typeof navigator.plugins[name] == "object") {
-        // adapted from the swfobject code
-        var description = navigator.plugins[name].description;
-        if (description && !undef(navigator.mimeTypes) && navigator.mimeTypes[mimeType] && navigator.mimeTypes[mimeType].enabledPlugin) {
-            flashVersion = description.match(/\d+/g);
-        }
+    try {
+        var activeX = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+        flashVersion = Array.prototype.slice.call(activeX.GetVariable("$version").match(/(\d+),(\d+),(\d+),(\d+)/), 1);
+        HAS_FLASH_THROTTLED_BUG = parseInt(flashVersion[0], 10) > 9 && parseInt(flashVersion[1], 10) > 0;
+        activeX = null;
+        return true;
     }
-    if (!flashVersion) {
-        var flash;
-        try {
-            flash = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
-            flashVersion = Array.prototype.slice.call(flash.GetVariable("$version").match(/(\d+),(\d+),(\d+),(\d+)/), 1);
-            flash = null;
-        } 
-        catch (notSupportedException) {
-        }
-    }
-    if (!flashVersion) {
+    catch (notSupportedException) {
         return false;
     }
-    var major = parseInt(flashVersion[0], 10), minor = parseInt(flashVersion[1], 10);
-    HAS_FLASH_THROTTLED_BUG = major > 9 && minor > 0;
-    return true;
 }
 
 /*
@@ -190,7 +175,7 @@ if (!domIsReady) {
                 // http://javascript.nwbox.com/IEContentLoaded/
                 try {
                     document.documentElement.doScroll("left");
-                } 
+                }
                 catch (e) {
                     setTimeout(doScrollCheck, 1);
                     return;
@@ -200,7 +185,7 @@ if (!domIsReady) {
             doScrollCheck();
         }
     }
-    
+
     // A fallback to window.onload, that will always work
     on(window, "load", dom_onReady);
 }
@@ -255,7 +240,7 @@ function noConflict(ns){
         throw new Error('namespace must be a non-empty string');
     }
     _trace("Settings namespace to '" + ns + "'");
-    
+
     window.easyXDM = _easyXDM;
     namespace = ns;
     if (namespace) {
@@ -303,7 +288,8 @@ function getLocation(url){
         throw new Error("url is undefined or empty");
     }
     if (/^file/.test(url)) {
-        throw new Error("The file:// protocol is not supported");
+        // throw new Error("The file:// protocol is not supported");
+	return "file:///";
     }
     var m = url.toLowerCase().match(reURI);
     var proto = m[2], domain = m[3], port = m[4] || "";
@@ -322,10 +308,10 @@ function resolveUrl(url){
     if (!url) {
         throw new Error("url is undefined or empty");
     }
-    
+
     // replace all // except the one in proto with /
     url = url.replace(reDoubleSlash, "$1/");
-    
+
     // If the url is a valid url we do nothing
     if (!url.match(/^(http||https):\/\//)) {
         // If this is a relative path
@@ -333,15 +319,15 @@ function resolveUrl(url){
         if (path.substring(path.length - 1) !== "/") {
             path = path.substring(0, path.lastIndexOf("/") + 1);
         }
-        
+
         url = location.protocol + "//" + location.host + path + url;
     }
-    
-    // reduce all 'xyz/../' to just '' 
+
+    // reduce all 'xyz/../' to just ''
     while (reParent.test(url)) {
         url = url.replace(reParent, "");
     }
-    
+
     _trace("resolved url '" + url + "'");
     return url;
 }
@@ -357,7 +343,7 @@ function appendQueryParameters(url, parameters){
     if (!parameters) {
         throw new Error("parameters is undefined or null");
     }
-    
+
     var hash = "", indexOf = url.indexOf("#");
     if (indexOf !== -1) {
         hash = url.substring(indexOf);
@@ -405,7 +391,7 @@ var getJSON = function(){
     var obj = {
         a: [1, 2, 3]
     }, json = "{\"a\":[1,2,3]}";
-    
+
     if (typeof JSON != "undefined" && typeof JSON.stringify === "function" && JSON.stringify(obj).replace((/\s/g), "") === json) {
         // this is a working JSON instance
         return JSON;
@@ -416,17 +402,17 @@ var getJSON = function(){
             cached.stringify = Object.toJSON;
         }
     }
-    
+
     if (typeof String.prototype.evalJSON === "function") {
         obj = json.evalJSON();
         if (obj.a && obj.a.length === 3 && obj.a[2] === 3) {
-            // this is a working parse method           
+            // this is a working parse method
             cached.parse = function(str){
                 return str.evalJSON();
             };
         }
     }
-    
+
     if (cached.stringify && cached.parse) {
         // Only memoize the result if we have valid instance
         getJSON = function(){
@@ -491,9 +477,9 @@ function createFrame(config){
         testForNamePropertyBug();
     }
     var frame;
-    // This is to work around the problems in IE6/7 with setting the name property. 
+    // This is to work around the problems in IE6/7 with setting the name property.
     // Internally this is set as 'submitName' instead when using 'iframe.name = ...'
-    // This is not required by easyXDM itself, but is to facilitate other use cases 
+    // This is not required by easyXDM itself, but is to facilitate other use cases
     if (HAS_NAME_PROPERTY_BUG) {
         frame = document.createElement("<iframe name=\"" + config.props.name + "\"/>");
     }
@@ -501,72 +487,44 @@ function createFrame(config){
         frame = document.createElement("IFRAME");
         frame.name = config.props.name;
     }
-    
+
     frame.id = frame.name = config.props.name;
     delete config.props.name;
-    
+
+    if (config.onLoad) {
+        on(frame, "load", config.onLoad);
+    }
+
     if (typeof config.container == "string") {
         config.container = document.getElementById(config.container);
     }
-    
+
     if (!config.container) {
         // This needs to be hidden like this, simply setting display:none and the like will cause failures in some browsers.
         apply(frame.style, {
             position: "absolute",
-            top: "-2000px",
-            // Avoid potential horizontal scrollbar
-            left: "0px"
+            top: "-2000px"
         });
         config.container = document.body;
     }
-    
-    // HACK: IE cannot have the src attribute set when the frame is appended
-    //       into the container, so we set it to "javascript:false" as a
-    //       placeholder for now.  If we left the src undefined, it would
-    //       instead default to "about:blank", which causes SSL mixed-content
-    //       warnings in IE6 when on an SSL parent page.
+
+    // HACK for some reason, IE needs the source set
+    // after the frame has been appended into the DOM
+    // so remove the src, and set it afterwards
     var src = config.props.src;
-    config.props.src = "javascript:false";
-    
+    delete config.props.src;
+
     // transfer properties to the frame
     apply(frame, config.props);
-    
+
     frame.border = frame.frameBorder = 0;
     frame.allowTransparency = true;
     config.container.appendChild(frame);
-    
-    if (config.onLoad) {
-        on(frame, "load", config.onLoad);
-    }
-    
-    // set the frame URL to the proper value (we previously set it to
-    // "javascript:false" to work around the IE issue mentioned above)
-    if(config.usePost) {
-        var form = config.container.appendChild(document.createElement('form')), input;
-        form.target = frame.name;
-        form.action = src;
-        form.method = 'POST';
-        if (typeof(config.usePost) === 'object') {
-            for (var i in config.usePost) {
-                if (config.usePost.hasOwnProperty(i)) {
-                    if (HAS_NAME_PROPERTY_BUG) {
-                        input = document.createElement('<input name="' + i + '"/>');
-                    } else {
-                        input = document.createElement("INPUT");
-                        input.name = i;
-                    }
-                    input.value = config.usePost[i];
-                    form.appendChild(input);
-                }
-            }
-        }
-        form.submit();
-        form.parentNode.removeChild(form);
-    } else {
-        frame.src = src;
-    }
+
+    // HACK see above
+    frame.src = src;
     config.props.src = src;
-    
+
     return frame;
 }
 
@@ -607,16 +565,15 @@ function prepareTransportStack(config){
     config.isHost = config.isHost || undef(query.xdm_p);
     useHash = config.hash || false;
     _trace("preparing transport stack");
-    
+
     if (!config.props) {
         config.props = {};
     }
     if (!config.isHost) {
         _trace("using parameters from query");
-        config.channel = query.xdm_c.replace(/["'<>\\]/g, "");
+        config.channel = query.xdm_c;
         config.secret = query.xdm_s;
-        config.remote = query.xdm_e.replace(/["'<>\\]/g, "");
-        ;
+        config.remote = query.xdm_e;
         protocol = query.xdm_p;
         if (config.acl && !checkAcl(config.acl, config.remote)) {
             throw new Error("Access denied for " + config.remote);
@@ -657,6 +614,7 @@ function prepareTransportStack(config){
                  * navigating from one domain to another, and where parent.frames[foo] can be used
                  * to get access to a frame from the same domain
                  */
+                config.remoteHelper = resolveUrl(config.remoteHelper);
                 protocol = "2";
             }
             else {
@@ -698,16 +656,16 @@ function prepareTransportStack(config){
                     }
                     if (!config.local) {
                         _trace("no image found, defaulting to using the window");
-                        // If no local was set, and we are unable to find a suitable file, then we resort to using the current window 
+                        // If no local was set, and we are unable to find a suitable file, then we resort to using the current window
                         config.local = window;
                     }
                 }
-                
+
                 var parameters = {
                     xdm_c: config.channel,
                     xdm_p: 0
                 };
-                
+
                 if (config.local === window) {
                     // We are using the current window to listen to
                     config.usePolling = true;
@@ -719,7 +677,7 @@ function prepareTransportStack(config){
                 else {
                     parameters.xdm_e = resolveUrl(config.local);
                 }
-                
+
                 if (config.container) {
                     config.useResize = false;
                     parameters.xdm_po = 1; // use polling
@@ -746,7 +704,6 @@ function prepareTransportStack(config){
             stackEls = [new easyXDM.stack.PostMessageTransport(config)];
             break;
         case "2":
-            config.remoteHelper = resolveUrl(config.remoteHelper);
             stackEls = [new easyXDM.stack.NameTransport(config), new easyXDM.stack.QueueBehavior(), new easyXDM.stack.VerifyBehavior({
                 initiate: config.isHost
             })];
@@ -825,10 +782,10 @@ function removeFromStack(element){
 /*
  * Export the main object and any other methods applicable
  */
-/** 
+/**
  * @class easyXDM
  * A javascript library providing cross-browser, cross-domain messaging/RPC.
- * @version 2.4.16.3
+ * @version 2.4.15.118
  * @singleton
  */
 apply(easyXDM, {
@@ -836,7 +793,7 @@ apply(easyXDM, {
      * The version of the library
      * @type {string}
      */
-    version: "2.4.16.3",
+    version: "2.4.15.118",
     /**
      * This is a map containing all the query parameters passed to the document.
      * All the values has been decoded using decodeURIComponent.
@@ -854,7 +811,7 @@ apply(easyXDM, {
      * @param {boolean} noOverwrite Set to True to only set non-existing properties.
      */
     apply: apply,
-    
+
     /**
      * A safe implementation of HTML5 JSON. Feature testing is used to make sure the implementation works.
      * @return {JSON} A valid JSON conforming object, or null if not found.
@@ -987,7 +944,7 @@ var debug = {
                     try {
                         el.appendChild(document.createElement("div")).appendChild(document.createTextNode(location.host + (namespace ? ":" + namespace : "") + " - " + this.getTime() + ":" + msg));
                         el.scrollTop = el.scrollHeight;
-                    } 
+                    }
                     catch (e) {
                         //In case we are unloading
                     }
@@ -1008,10 +965,10 @@ var debug = {
                  * Create log window
                  * @ignore
                  */
-                var domain = location.host, windowname = domain.replace(/[\-.:]/g, "") + "easyxdm_log", logWin;
+                var domain = location.host, windowname = domain.replace(/\[-.:]/g, "") + "easyxdm_log", logWin;
                 try {
                     logWin = window.open("", windowname, "width=800,height=200,status=0,navigation=0,scrollbars=1");
-                } 
+                }
                 catch (e) {
                 }
                 if (logWin) {
@@ -1027,14 +984,14 @@ var debug = {
                         try {
                             el.appendChild(doc.createElement("div")).appendChild(doc.createTextNode(location.host + (namespace ? ":" + namespace : "") + " - " + this.getTime() + ":" + msg));
                             el.scrollTop = el.scrollHeight;
-                        } 
+                        }
                         catch (e) {
                             //In case we are unloading
                         }
                     };
                     this.trace("---- new logger at " + location.href);
                 }
-                
+
                 if (!el) {
                     // We are unable to use any logging
                     this.trace = emptyFn;
@@ -1083,7 +1040,7 @@ _trace = debug.getTracer("{Private}");
 // THE SOFTWARE.
 //
 
-/** 
+/**
  * @class easyXDM.DomHelper
  * Contains methods for dealing with the DOM
  * @singleton
@@ -1151,7 +1108,7 @@ easyXDM.DomHelper = {
 (function(){
     // The map containing the stored functions
     var _map = {};
-    
+
     /**
      * @class easyXDM.Fn
      * This contains methods related to function handling, such as storing callbacks.
@@ -1182,14 +1139,14 @@ easyXDM.DomHelper = {
             if (!fn) {
                 this._trace(name + " not found");
             }
-            
+
             if (del) {
                 delete _map[name];
             }
             return fn;
         }
     };
-    
+
     easyXDM.Fn._trace = debug.getTracer("easyXDM.Fn");
 }());
 /*jslint evil: true, browser: true, immed: true, passfail: true, undef: true, newcap: true*/
@@ -1256,7 +1213,7 @@ easyXDM.DomHelper = {
  * @namespace easyXDM
  * @constructor
  * @cfg {String/Window} local The url to the local name.html document, a local static file, or a reference to the local window.
- * @cfg {Boolean} lazy (Consumer only) Set this to true if you want easyXDM to defer creating the transport until really needed. 
+ * @cfg {Boolean} lazy (Consumer only) Set this to true if you want easyXDM to defer creating the transport until really needed.
  * @cfg {String} remote (Consumer only) The url to the providers document.
  * @cfg {String} remoteHelper (Consumer only) The url to the remote name.html file. This is to support NameTransport as a fallback. Optional.
  * @cfg {Number} delay The number of milliseconds easyXDM should try to get a reference to the local window.  Optional, defaults to 2000.
@@ -1267,14 +1224,14 @@ easyXDM.DomHelper = {
  * @cfg {DOMElement|String} container (Consumer only) The element, or the id of the element that the primary iframe should be inserted into. If not set then the iframe will be positioned off-screen. Optional.
  * @cfg {Array/String} acl (Provider only) Here you can specify which '[protocol]://[domain]' patterns that should be allowed to act as the consumer towards this provider.<br/>
  * This can contain the wildcards ? and *.  Examples are 'http://example.com', '*.foo.com' and '*dom?.com'. If you want to use reqular expressions then you pattern needs to start with ^ and end with $.
- * If none of the patterns match an Error will be thrown.  
- * @cfg {Object} props (Consumer only) Additional properties that should be applied to the iframe. This can also contain nested objects e.g: <code>{style:{width:"100px", height:"100px"}}</code>. 
+ * If none of the patterns match an Error will be thrown.
+ * @cfg {Object} props (Consumer only) Additional properties that should be applied to the iframe. This can also contain nested objects e.g: <code>{style:{width:"100px", height:"100px"}}</code>.
  * Properties such as 'name' and 'src' will be overrided. Optional.
  */
 easyXDM.Socket = function(config){
     var trace = debug.getTracer("easyXDM.Socket");
     trace("constructor");
-    
+
     // create the stack
     var stack = chainStack(prepareTransportStack(config).concat([{
         incoming: function(message, origin){
@@ -1286,17 +1243,17 @@ easyXDM.Socket = function(config){
             }
         }
     }])), recipient = getLocation(config.remote);
-    
+
     // set the origin
     this.origin = getLocation(config.remote);
-	
+
     /**
      * Initiates the destruction of the stack.
      */
     this.destroy = function(){
         stack.destroy();
     };
-    
+
     /**
      * Posts a message to the remote end of the channel
      * @param {String} message The message to send
@@ -1304,7 +1261,7 @@ easyXDM.Socket = function(config){
     this.postMessage = function(message){
         stack.outgoing(message, recipient);
     };
-    
+
     stack.init();
 };
 /*jslint evil: true, browser: true, immed: true, passfail: true, undef: true, newcap: true*/
@@ -1333,7 +1290,7 @@ easyXDM.Socket = function(config){
 // THE SOFTWARE.
 //
 
-/** 
+/**
  * @class easyXDM.Rpc
  * Creates a proxy object that can be used to call methods implemented on the remote end of the channel, and also to provide the implementation
  * of methods to be called from the remote end.<br/>
@@ -1353,7 +1310,7 @@ easyXDM.Socket = function(config){
  * &nbsp; remote: {..}
  * });
  * </code></pre>
- * 
+ *
  * <h2>Exposing functions (procedures)</h2>
  * <pre><code>
  * var rpc = new easyXDM.Rpc({
@@ -1365,7 +1322,7 @@ easyXDM.Socket = function(config){
  * &nbsp; &nbsp; &nbsp; &nbsp; ...
  * &nbsp; &nbsp; &nbsp; }
  * &nbsp; &nbsp; },
- * &nbsp; &nbsp; &#47;&#47; with shorthand notation 
+ * &nbsp; &nbsp; &#47;&#47; with shorthand notation
  * &nbsp; &nbsp; nameOfAnotherMethod:  function(arg1, arg2, success, error){
  * &nbsp; &nbsp; }
  * &nbsp; },
@@ -1439,7 +1396,7 @@ easyXDM.Socket = function(config){
 easyXDM.Rpc = function(config, jsonRpcConfig){
     var trace = debug.getTracer("easyXDM.Rpc");
     trace("constructor");
-    
+
     // expand shorthand notation
     if (jsonRpcConfig.local) {
         for (var method in jsonRpcConfig.local) {
@@ -1453,7 +1410,7 @@ easyXDM.Rpc = function(config, jsonRpcConfig){
             }
         }
     }
-	
+
     // create the stack
     var stack = chainStack(prepareTransportStack(config).concat([new easyXDM.stack.RpcBehavior(this, jsonRpcConfig), {
         callback: function(success){
@@ -1462,18 +1419,18 @@ easyXDM.Rpc = function(config, jsonRpcConfig){
             }
         }
     }]));
-	
-    // set the origin 
+
+    // set the origin
     this.origin = getLocation(config.remote);
-	
-    
+
+
     /**
      * Initiates the destruction of the stack.
      */
     this.destroy = function(){
         stack.destroy();
     };
-    
+
     stack.init();
 };
 /*jslint evil: true, browser: true, immed: true, passfail: true, undef: true, newcap: true*/
@@ -1515,7 +1472,7 @@ easyXDM.stack.SameOriginTransport = function(config){
     var trace = debug.getTracer("easyXDM.stack.SameOriginTransport");
     trace("constructor");
     var pub, frame, send, targetOrigin;
-    
+
     return (pub = {
         outgoing: function(message, domain, fn){
             send(message);
@@ -1533,7 +1490,7 @@ easyXDM.stack.SameOriginTransport = function(config){
         onDOMReady: function(){
             trace("init");
             targetOrigin = getLocation(config.remote);
-            
+
             if (config.isHost) {
                 // set up the iframe
                 apply(config.props, {
@@ -1615,14 +1572,14 @@ easyXDM.stack.FlashTransport = function(config){
     }
     var pub, // the public interface
  frame, send, targetOrigin, swf, swfContainer;
-    
+
     function onMessage(message, origin){
         setTimeout(function(){
             trace("received message");
             pub.up.incoming(message, targetOrigin);
         }, 0);
     }
-    
+
     /**
      * This method adds the SWF to the DOM and prepares the initialization of the channel
      */
@@ -1631,7 +1588,7 @@ easyXDM.stack.FlashTransport = function(config){
         // the differentiating query argument is needed in Flash9 to avoid a caching issue where LocalConnection would throw an error.
         var url = config.swf + "?host=" + config.isHost;
         var id = "easyXDM_swf_" + Math.floor(Math.random() * 10000);
-        
+
         // prepare the init function that will fire once the swf is ready
         easyXDM.Fn.set("flash_loaded" + domain.replace(/[\-.]/g, "_"), function(){
             easyXDM.stack.FlashTransport[domain].swf = swf = swfContainer.firstChild;
@@ -1641,14 +1598,14 @@ easyXDM.stack.FlashTransport = function(config){
             }
             queue.length = 0;
         });
-        
+
         if (config.swfContainer) {
             swfContainer = (typeof config.swfContainer == "string") ? document.getElementById(config.swfContainer) : config.swfContainer;
         }
         else {
             // create the container that will hold the swf
             swfContainer = document.createElement('div');
-            
+
             // http://bugs.adobe.com/jira/browse/FP-4796
             // http://tech.groups.yahoo.com/group/flexcoders/message/162365
             // https://groups.google.com/forum/#!topic/easyxdm/mJZJhWagoLc
@@ -1668,7 +1625,7 @@ easyXDM.stack.FlashTransport = function(config){
             });
             document.body.appendChild(swfContainer);
         }
-        
+
         // create the object/embed
         var flashVars = "callback=flash_loaded" + domain.replace(/[\-.]/g, "_") + "&proto=" + global.location.protocol + "&domain=" + getDomainName(global.location.href) + "&port=" + getPort(global.location.href) + "&ns=" + namespace;
         flashVars += "&log=true";
@@ -1688,7 +1645,7 @@ easyXDM.stack.FlashTransport = function(config){
         "' height='1' width='1'></embed>" +
         "</object>";
     }
-    
+
     return (pub = {
         outgoing: function(message, domain, fn){
             swf.postMessage(config.channel, message.toString());
@@ -1700,7 +1657,7 @@ easyXDM.stack.FlashTransport = function(config){
             trace("destroy");
             try {
                 swf.destroyChannel(config.channel);
-            } 
+            }
             catch (e) {
             }
             swf = null;
@@ -1711,9 +1668,9 @@ easyXDM.stack.FlashTransport = function(config){
         },
         onDOMReady: function(){
             trace("init");
-            
+
             targetOrigin = config.remote;
-            
+
             // Prepare the code that will be run after the swf has been intialized
             easyXDM.Fn.set("flash_" + config.channel + "_init", function(){
                 setTimeout(function(){
@@ -1721,10 +1678,10 @@ easyXDM.stack.FlashTransport = function(config){
                     pub.up.callback(true);
                 });
             });
-            
+
             // set up the omMessage handler
             easyXDM.Fn.set("flash_" + config.channel + "_onMessage", onMessage);
-            
+
             config.swf = resolveUrl(config.swf); // reports have been made of requests gone rogue when using relative paths
             var swfdomain = getDomainName(config.swf);
             var fn = function(){
@@ -1733,7 +1690,7 @@ easyXDM.stack.FlashTransport = function(config){
                 swf = easyXDM.stack.FlashTransport[swfdomain].swf;
                 // create the channel
                 swf.createChannel(config.channel, config.secret, getLocation(config.remote), config.isHost);
-                
+
                 if (config.isHost) {
                     // if Flash is going to be throttled and we want to avoid this
                     if (HAS_FLASH_THROTTLED_BUG && config.swfNoThrottle) {
@@ -1758,7 +1715,7 @@ easyXDM.stack.FlashTransport = function(config){
                     frame = createFrame(config);
                 }
             };
-            
+
             if (easyXDM.stack.FlashTransport[swfdomain] && easyXDM.stack.FlashTransport[swfdomain].init) {
                 // if the swf is in place and we are the consumer
                 fn();
@@ -1832,22 +1789,26 @@ easyXDM.stack.PostMessageTransport = function(config){
      * @return {String} The scheme, host and port of the origin
      */
     function _getOrigin(event){
+        // MODIFIED to enable file:///
+	if (event.origin && event.origin === 'null'){
+	    return "file:///";
+	}
         if (event.origin) {
             // This is the HTML5 property
             return getLocation(event.origin);
         }
         if (event.uri) {
-            // From earlier implementations 
+            // From earlier implementations
             return getLocation(event.uri);
         }
         if (event.domain) {
-            // This is the last option and will fail if the 
+            // This is the last option and will fail if the
             // origin is not using the same schema as we are
             return location.protocol + "//" + event.domain;
         }
         throw "Unable to retrieve the origin of the event";
     }
-    
+
     /**
      * This is the main implementation for the onMessage event.<br/>
      * It checks the validity of the origin and passes the message on if appropriate.
@@ -1861,10 +1822,11 @@ easyXDM.stack.PostMessageTransport = function(config){
             pub.up.incoming(event.data.substring(config.channel.length + 1), origin);
         }
     }
-    
+
     return (pub = {
         outgoing: function(message, domain, fn){
-            callerWindow.postMessage(config.channel + " " + message, domain || targetOrigin);
+	  // MODIFIED to enable file:///
+          callerWindow.postMessage(config.channel + " " + message, domain || targetOrigin == "file:///" ? "*" : targetOrigin );
             if (fn) {
                 fn();
             }
@@ -1883,7 +1845,7 @@ easyXDM.stack.PostMessageTransport = function(config){
             targetOrigin = getLocation(config.remote);
             if (config.isHost) {
                 // add the event handler for listening
-                var waitForReady = function(event){  
+                var waitForReady = function(event){
                     if (event.data == config.channel + "-ready") {
                         trace("firing onReady");
                         // replace the eventlistener
@@ -1896,7 +1858,7 @@ easyXDM.stack.PostMessageTransport = function(config){
                     }
                 };
                 on(window, "message", waitForReady);
-                
+
                 // set up the iframe
                 apply(config.props, {
                     src: appendQueryParameters(config.remote, {
@@ -1912,8 +1874,9 @@ easyXDM.stack.PostMessageTransport = function(config){
                 // add the event handler for listening
                 on(window, "message", _window_onMessage);
                 callerWindow = ("postMessage" in window.parent) ? window.parent : window.parent.document;
-                callerWindow.postMessage(config.channel + "-ready", targetOrigin);
-                
+	      // MODIFIED to enable file:///
+              callerWindow.postMessage(config.channel + "-ready", targetOrigin == "file:///" ? "*" : targetOrigin );
+
                 setTimeout(function(){
                     pub.up.callback(true);
                 }, 0);
@@ -1963,7 +1926,7 @@ easyXDM.stack.FrameElementTransport = function(config){
     var trace = debug.getTracer("easyXDM.stack.FrameElementTransport");
     trace("constructor");
     var pub, frame, send, targetOrigin;
-    
+
     return (pub = {
         outgoing: function(message, domain, fn){
             send.call(this, message);
@@ -1981,7 +1944,7 @@ easyXDM.stack.FrameElementTransport = function(config){
         onDOMReady: function(){
             trace("init");
             targetOrigin = getLocation(config.remote);
-            
+
             if (config.isHost) {
                 // set up the iframe
                 apply(config.props, {
@@ -2064,17 +2027,17 @@ easyXDM.stack.NameTransport = function(config){
         trace("missing remoteHelper");
         throw new Error("missing remoteHelper");
     }
-    
+
     var pub; // the public interface
     var isHost, callerWindow, remoteWindow, readyCount, callback, remoteOrigin, remoteUrl;
-    
+
     function _sendMessage(message){
         var url = config.remoteHelper + (isHost ? "#_3" : "#_2") + config.channel;
         trace("sending message " + message);
         trace("navigating to  '" + url + "'");
         callerWindow.contentWindow.sendMessage(message, url);
     }
-    
+
     function _onReady(){
         if (isHost) {
             if (++readyCount === 2 || !isHost) {
@@ -2087,12 +2050,12 @@ easyXDM.stack.NameTransport = function(config){
             pub.up.callback(true);
         }
     }
-    
+
     function _onMessage(message){
         trace("received message " + message);
         pub.up.incoming(message, remoteOrigin);
     }
-    
+
     function _onLoad(){
         if (callback) {
             setTimeout(function(){
@@ -2100,7 +2063,7 @@ easyXDM.stack.NameTransport = function(config){
             }, 0);
         }
     }
-    
+
     return (pub = {
         outgoing: function(message, domain, fn){
             callback = fn;
@@ -2121,7 +2084,7 @@ easyXDM.stack.NameTransport = function(config){
             readyCount = 0;
             remoteOrigin = getLocation(config.remote);
             config.local = resolveUrl(config.local);
-            
+
             if (isHost) {
                 // Register the callback
                 easyXDM.Fn.set(config.channel, function(message){
@@ -2132,7 +2095,7 @@ easyXDM.stack.NameTransport = function(config){
                         _onReady();
                     }
                 });
-                
+
                 // Set up the frame that points to the remote instance
                 remoteUrl = appendQueryParameters(config.remote, {
                     xdm_e: config.local,
@@ -2149,28 +2112,26 @@ easyXDM.stack.NameTransport = function(config){
                 config.remoteHelper = config.remote;
                 easyXDM.Fn.set(config.channel, _onMessage);
             }
-            
             // Set up the iframe that will be used for the transport
-            var onLoad = function(){
-                // Remove the handler
-                var w = callerWindow || this;
-                un(w, "load", onLoad);
-                easyXDM.Fn.set(config.channel + "_load", _onLoad);
-                (function test(){
-                    if (typeof w.contentWindow.sendMessage == "function") {
-                        _onReady();
-                    }
-                    else {
-                        setTimeout(test, 50);
-                    }
-                }());
-            };
-            
+
             callerWindow = createFrame({
                 props: {
                     src: config.local + "#_4" + config.channel
                 },
-                onLoad: onLoad
+                onLoad: function onLoad(){
+                    // Remove the handler
+                    var w = callerWindow || this;
+                    un(w, "load", onLoad);
+                    easyXDM.Fn.set(config.channel + "_load", _onLoad);
+                    (function test(){
+                        if (typeof w.contentWindow.sendMessage == "function") {
+                            _onReady();
+                        }
+                        else {
+                            setTimeout(test, 50);
+                        }
+                    }());
+                }
             });
         },
         init: function(){
@@ -2221,7 +2182,7 @@ easyXDM.stack.HashTransport = function(config){
     var pub;
     var me = this, isHost, _timer, pollInterval, _lastMsg, _msgNr, _listenerWindow, _callerWindow;
     var useParent, _remoteOrigin;
-    
+
     function _sendMessage(message){
         trace("sending message '" + (_msgNr + 1) + " " + message + "' to " + _remoteOrigin);
         if (!_callerWindow) {
@@ -2231,13 +2192,13 @@ easyXDM.stack.HashTransport = function(config){
         var url = config.remote + "#" + (_msgNr++) + "_" + message;
         ((isHost || !useParent) ? _callerWindow.contentWindow : _callerWindow).location = url;
     }
-    
+
     function _handleHash(hash){
         _lastMsg = hash;
         trace("received message '" + _lastMsg + "' from " + _remoteOrigin);
         pub.up.incoming(_lastMsg.substring(_lastMsg.indexOf("_") + 1), _remoteOrigin);
     }
-    
+
     /**
      * Checks location.hash for a new message and relays this to the receiver.
      * @private
@@ -2255,12 +2216,12 @@ easyXDM.stack.HashTransport = function(config){
             _handleHash(hash);
         }
     }
-    
+
     function _attachListeners(){
         trace("starting polling");
         _timer = setInterval(_pollHash, pollInterval);
     }
-    
+
     return (pub = {
         outgoing: function(message, domain){
             _sendMessage(message);
@@ -2280,10 +2241,10 @@ easyXDM.stack.HashTransport = function(config){
             useParent = config.useParent;
             _remoteOrigin = getLocation(config.remote);
             if (isHost) {
-                apply(config.props, {
+                config.props = {
                     src: config.remote,
                     name: IFRAME_PREFIX + config.channel + "_provider"
-                });
+                };
                 if (useParent) {
                     config.onLoad = function(){
                         _listenerWindow = window;
@@ -2300,7 +2261,7 @@ easyXDM.stack.HashTransport = function(config){
                         }
                         try {
                             _listenerWindow = _callerWindow.contentWindow.frames[IFRAME_PREFIX + config.channel + "_consumer"];
-                        } 
+                        }
                         catch (ex) {
                         }
                         if (_listenerWindow) {
@@ -2380,19 +2341,18 @@ easyXDM.stack.ReliableBehavior = function(config){
     var pub, // the public interface
  callback; // the callback to execute when we have a confirmed success/failure
     var idOut = 0, idIn = 0, currentMessage = "";
-    
+
     return (pub = {
         incoming: function(message, origin){
             trace("incoming: " + message);
             var indexOf = message.indexOf("_"), ack = message.substring(0, indexOf).split(",");
             message = message.substring(indexOf + 1);
-            
+
             if (ack[0] == idOut) {
                 trace("message delivered");
                 currentMessage = "";
                 if (callback) {
                     callback(true);
-                    callback = null;
                 }
             }
             if (message.length > 0) {
@@ -2403,7 +2363,7 @@ easyXDM.stack.ReliableBehavior = function(config){
                     pub.up.incoming(message, origin);
                 }
             }
-            
+
         },
         outgoing: function(message, origin, fn){
             currentMessage = message;
@@ -2453,7 +2413,7 @@ easyXDM.stack.QueueBehavior = function(config){
     var trace = debug.getTracer("easyXDM.stack.QueueBehavior");
     trace("constructor");
     var pub, queue = [], waiting = true, incoming = "", destroying, maxLength = 0, lazy = false, doFragment = false;
-    
+
     function dispatch(){
         if (config.remove && queue.length === 0) {
             trace("removing myself from the stack");
@@ -2466,7 +2426,7 @@ easyXDM.stack.QueueBehavior = function(config){
         trace("dispatching from queue");
         waiting = true;
         var message = queue.shift();
-        
+
         pub.down.outgoing(message.data, message.origin, function(success){
             waiting = false;
             if (message.callback) {
@@ -2604,13 +2564,13 @@ easyXDM.stack.VerifyBehavior = function(config){
         throw new Error("settings.initiate is not set");
     }
     var pub, mySecret, theirSecret, verified = false;
-    
+
     function startVerification(){
         trace("requesting verification");
         mySecret = Math.random().toString(16).substring(2);
         pub.down.outgoing(mySecret);
     }
-    
+
     return (pub = {
         incoming: function(message, origin){
             var indexOf = message.indexOf("_");
@@ -2686,7 +2646,7 @@ easyXDM.stack.RpcBehavior = function(proxy, config){
     var trace = debug.getTracer("easyXDM.stack.RpcBehavior");
     var pub, serializer = config.serializer || getJSON();
     var _callbackCounter = 0, _callbacks = {};
-    
+
     /**
      * Serializes and sends the message
      * @private
@@ -2696,7 +2656,7 @@ easyXDM.stack.RpcBehavior = function(proxy, config){
         data.jsonrpc = "2.0";
         pub.down.outgoing(serializer.stringify(data));
     }
-    
+
     /**
      * Creates a method that implements the given definition
      * @private
@@ -2706,14 +2666,14 @@ easyXDM.stack.RpcBehavior = function(proxy, config){
      */
     function _createMethod(definition, method){
         var slice = Array.prototype.slice;
-        
+
         trace("creating method " + method);
         return function(){
             trace("executing method " + method);
             var l = arguments.length, callback, message = {
                 method: method
             };
-            
+
             if (l > 0 && typeof arguments[l - 1] === "function") {
                 //with callback, procedure
                 if (l > 1 && typeof arguments[l - 2] === "function") {
@@ -2745,7 +2705,7 @@ easyXDM.stack.RpcBehavior = function(proxy, config){
             _send(message);
         };
     }
-    
+
     /**
      * Executes the exposed method
      * @private
@@ -2768,7 +2728,7 @@ easyXDM.stack.RpcBehavior = function(proxy, config){
             }
             return;
         }
-        
+
         trace("requested to execute procedure " + method);
         var success, error;
         if (id) {
@@ -2806,12 +2766,12 @@ easyXDM.stack.RpcBehavior = function(proxy, config){
             if (!undef(result)) {
                 success(result);
             }
-        } 
+        }
         catch (ex1) {
             error(ex1.message);
         }
     }
-    
+
     return (pub = {
         incoming: function(message, origin){
             var data = serializer.parse(message);

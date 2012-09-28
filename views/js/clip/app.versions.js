@@ -1014,7 +1014,7 @@ App.versions = (function($){
       if(str[names[i]]) {
 	str = str[names[i]];
       }else{
-	console.info(name+"  未定义!!!");
+	//console.info(name+"  未定义!!!");
 	str = names.pop();
       }
     }

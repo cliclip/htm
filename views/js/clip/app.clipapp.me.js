@@ -160,6 +160,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       var meView = new View({model: meModel});
       App.mineRegion.show(meView);
       App.vent.trigger("app.versions:version_change",Me.me.get("lang"));
+
     });
   };
 
@@ -198,7 +199,13 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.face:changed", function(){
-    Me.me.fetch();
+    face_changed = true;
+    Me.me.fetch({
+      success:function(model,res){
+      },
+      error:function(model,res){
+      }
+    });
   });
 
   App.addInitializer(function(){
@@ -207,7 +214,13 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   App.bind("initialize:after", function(){
-    Me.me.fetch();
+    Me.me.fetch({
+      success:function(model,res){
+      },
+      error:function(model,res){
+      }
+
+    });
     Me.show();
   });
 

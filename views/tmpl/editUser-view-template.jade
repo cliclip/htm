@@ -24,19 +24,18 @@ script(type="text/template",id="faceEdit-view-template")
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
       <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>" title="<%=_i18n('faceEdit.set_name')%>"/>
       <%}%>
-  .head_link
-    iframe(name="post_frame_face",id="post_frame_face")
-    | <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
-    | <div class="btn_frame">
-    | <button class="verify" type="submit" id="confirm_face" title="<%=_i18n('faceEdit.ok')%>"><%=_i18n('faceEdit.ok')%></button>
-    | <div class="button_frame">
-    | <span class="file" title="<%=_i18n('faceEdit.upload')%>">
-    | <button class="upload" ><%=_i18n('faceEdit.upload')%></button>
-    | <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
-    | </span>
-    | </div>
-    | </div>
-    | </form>
+  .head_link.
+    <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="upload_target" enctype="multipart/form-data">
+    <div class="btn_frame">
+    <button class="verify" type="submit" id="confirm_face" title="<%=_i18n('faceEdit.ok')%>"><%=_i18n('faceEdit.ok')%></button>
+    <div class="button_frame">
+    <span class="file" title="<%=_i18n('faceEdit.upload')%>">
+    <button class="upload" ><%=_i18n('faceEdit.upload')%></button>
+    <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
+    </span>
+    </div>
+    </div>
+    </form>
   .preview.
     <img id="preview_size_fake" />
 

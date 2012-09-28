@@ -2,7 +2,6 @@
 
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
-
   // util methods
   ClipApp.isLoggedIn = function(){
     return ClipApp.getMyUid() != null ? true : false;

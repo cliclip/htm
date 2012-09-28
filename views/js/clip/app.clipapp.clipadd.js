@@ -128,6 +128,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   };
 
   var closeRegion = function(){
+    App.vent.unbind("app.clipapp:upload");
     App.viewRegion.close();
   };
 
@@ -137,22 +138,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     if(!change){
       view.trigger("@error", "imageUp_fail");
     }else{
-      /*if( sender.files &&sender.files[0] ){//图片本地预览代码
-       var img = new Image();
-       img.src = App.util.get_img_src(sender.files[0]);
-       img.onload=function(){
-       if(img.complete){
-       App.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
-       }};}*/
       $("#img_form").submit();
-      App.util.get_imgurl("post_frame",function(err, img_src){
-	// img_list.push(img_src);
-	if(!err && img_src){
-	  App.Editor.insertImage("editor",{url: img_src,ieRange:ieRange});
-	}else{
-	  App.ClipApp.showConfirm("imageUp_fail");
-	}
-      });
       //解决ie 789 无法连续上传相同的图片，需要清空上传控件中的数据
       App.util.clearFileInput(sender);
     }
@@ -163,6 +149,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
+
     App.Editor.init();
     App.Editor.focus("editor");
     if(clipper_content){App.Editor.setContent("editor", clipper_content);}
@@ -172,9 +159,21 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	$("#save").click();
       }
     });
+
+    //接收上传图片返回的信息
+    App.vent.bind("app.clipapp:upload",function(returnVal){
+      App.util.get_imgurl(returnVal,function(err, img_src){
+	if(!err && img_src){
+	  App.Editor.insertImage("editor",{url: img_src,ieRange:ieRange});
+	}else{
+	  App.ClipApp.showConfirm("imageUp_fail");
+	}
+      });
+    });
   };
 
   ClipAdd.close = function(clip){
+    App.vent.unbind("app.clipapp:upload");
     if(!clip || !clip.content){
       App.viewRegion.close();
     }else{

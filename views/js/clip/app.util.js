@@ -6,6 +6,9 @@ App.util = (function(){
   util.email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
 
   util.getCookie = function(name){
+    if(App.Local){
+      return App.Local[name];
+    }
     var start = document.cookie.indexOf( name+"=" );
     var len = start + name.length + 1;
     if ((!start) && (name != document.cookie.substring(0, name.length))){
@@ -18,13 +21,14 @@ App.util = (function(){
       end = document.cookie.length;
     return unescape(document.cookie.substring( len, end ));
   };
-
+  // url后面加上_token的原因是本地文件跨域访问时无法传递token参数，
+  // 且上传图片时不走app-base.js的sync方法，所以需要手动加入参数
   util.getImg_upUrl = function(uid){
-    return P + '/user/'+uid+'/image';
+    return P + "/user/"+uid+"/image?_token=" + App.util.getCookie("token");
   };
 
   util.getFace_upUrl = function(uid){
-    return P+"/user/" + uid + "/upload_face";
+    return P+"/user/" + uid + "/upload_face?_token=" + App.util.getCookie("token");
   };
 
   util.unique_url = function(url){
@@ -178,28 +182,20 @@ App.util = (function(){
     return isIE= $('html').hasClass("gt-ie8") || $('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
   };
 
-  util.get_imgurl = function(frameid,callback){
-    $("#" + frameid).unbind("load");
-    $("#" + frameid).load(function(){ // 加载图片
-      if(App.util.isIE()){
-	var returnVal = this.contentWindow.document.documentElement.innerText;
-      }else{
-	var returnVal = this.contentDocument.documentElement.textContent;
+  util.get_imgurl = function(returnVal,callback){
+    if(returnVal != null && returnVal != ""){
+      var returnObj = eval(returnVal);
+      if(returnObj[0] == 0){
+	var imgids = returnObj[1][0];
+	//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	var uid = imgids.split(":")[0];
+	var imgid = imgids.split(":")[1];
+	var url = P+"/user/"+ uid +"/image/" +imgid;
+	callback(null, url);
+      }else{//上传图片失败
+	callback("imageUp_fail", null);
       }
-      if(returnVal != null && returnVal != ""){
-	var returnObj = eval(returnVal);
-	if(returnObj[0] == 0){
-	  var imgids = returnObj[1][0];
-	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	  var uid = imgids.split(":")[0];
-	  var imgid = imgids.split(":")[1];
-	  var url = P+"/user/"+ uid +"/image/" +imgid;
-	  callback(null, url);
-	}else{//上传图片失败
-	  callback("imageUp_fail", null);
-	}
-      }
-    });
+    }
   };
 
   util.img_load = function(img){

@@ -1,8 +1,12 @@
 (function(win, doc, nav, opt){
 
-  // **** utils
-
+  var url_base = "http://cliclip.com";
+  // var url_base = "http://192.168.1.3:8000";
+  // var url_base = "http://192.168.1.3:3000";
+  // var url_base = "http://192.168.1.3:5000";
   // caculate page hash
+
+  // **** utils
   function pageHash(){
     // TODO change to sha page fingerprint
     return "$$__cliclip__$$";
@@ -70,15 +74,9 @@
       doc.documentElement.style.overflowY = "hidden ";
     }
     socket = new easyXDM.Socket({
-      remote: 'http://cliclip.com/clipper.html?r='+Math.random()*9999999,
-      // remote: 'http://192.168.1.3:3000/clipper.html?r='+Math.random()*9999999,
-      // remote: 'http://192.168.1.3:5000/clipper.html?r='+Math.random()*9999999,
-      // remote: 'http://192.168.1.3:8000/clipper.html?r='+Math.random()*9999999,
+      remote: url_base + '/clipper.html?r='+Math.random()*9999999,
       container: doc.body,
-      swf: 'http://cliclip.com/img/easyxdm.swf',
-      // swf: 'http://192.168.1.3:3000/img/easyxdm.swf',
-      // swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
-      // swf: 'http://192.168.1.3:8000/img/easyxdm.swf',
+      swf: url_base + '/img/easyxdm.swf',
       swfNoThrottle: true,
       onLoad: function(e){ // hack, style set
 	var iframe = e.target;
@@ -151,10 +149,7 @@
      if (typeof easyXDM === "undefined" || !easyXDM) {
        var s1 = document.createElement("script");
        s1.type = "text/javascript";
-       s1.src = "http://cliclip.com/js/lib/easyXDM.min.js";
-       // s1.src = "http://192.168.1.3:3000/js/lib/easyXDM.min.js";
-       // s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.min.js";
-       // s1.src = "http://192.168.1.3:8000/js/lib/easyXDM.min.js";
+       s1.src = url_base + "/js/lib/easyXDM.min.js";
        s1.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
 	   scriptOnLoad();
@@ -167,10 +162,7 @@
      if (typeof JSON === "undefined" || !JSON) {
        var s2 = document.createElement("script");
        s2.type = "text/javascript";
-       s2.src = "http://cliclip.com/js/lib/json2.js";
-       // s2.src = "http://192.168.1.3:3000/js/lib/json2.js";
-       // s2.src = "http://192.168.1.3:5000/js/lib/json2.js";
-       // s2.src = "http://192.168.1.3:8000/js/lib/json2.js";
+       s2.src = url_base + "/js/lib/json2.js";
        s2.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
 	   scriptOnLoad();
