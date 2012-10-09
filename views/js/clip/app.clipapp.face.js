@@ -131,7 +131,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
 
   Face.show = function(uid){
     user_id = uid;
-    if(uid){
+    if(uid && uid !== undefined){
       if(App.ClipApp.Me.me.id == uid){
 	faceView = new FaceView({model: App.ClipApp.Me.me});
 	App.faceRegion.show(faceView);
