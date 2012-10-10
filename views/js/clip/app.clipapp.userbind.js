@@ -97,7 +97,7 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     bindOauth = oauth;
     fun = fun;
     remember = remember;
-    var model = new App.Model.UserBindModel({info:oauth.info,provider:oauth.provider});
+    var model = new App.Model.UserBindModel({info:oauth, provider:oauth.provider});
     var view = new UserBindView({model : model});
     App.popRegion.show(view);
   };
@@ -110,6 +110,8 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
 
   function saveOauth(oauth,callback){
     if(oauth){
+      var account = oauth.uid+"@"+oauth.provider;
+      oauth.account = account;
       var model = new App.Model.UserBindModel(oauth);
       model.save({},{
 	type: "POST",
@@ -134,9 +136,9 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     }
     saveOauth(bindOauth,function(err,reply){
       if(bindOauth.provider == "weibo"){
-	App.ClipApp.showConfirm("weibo_sucmsg",bindOauth.info.name);
+	App.ClipApp.showConfirm("weibo_sucmsg",bindOauth.name);
       }else if(bindOauth.provider == "twitter"){
-	App.ClipApp.showConfirm("twitter_sucmsg",bindOauth.info.name);
+	App.ClipApp.showConfirm("twitter_sucmsg",bindOauth.name);
       }
       // App.vent.trigger("app.clipapp.userbind:bindok"); 动作为 Me.me.fetch;
       if(reply){
