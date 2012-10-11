@@ -17,13 +17,9 @@ script(type="text/template",id="faceEdit-view-template")
     .head_img#head_img.
       <img id="myface" src="<%=App.util.face_url(face)%>" />
     .user_name
-      <% if(name && name!=""){%>
-      <span class="name"><%=name%></span>
-      <% }else{%>
-      <span id="set-name" class="name"><%=_i18n('faceEdit.no_name')%></span>
+      <span id="set-name" class="name"><%=name%></span>
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
       <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>" title="<%=_i18n('faceEdit.set_name')%>"/>
-      <%}%>
   .head_link
     iframe(name="post_frame_face",id="post_frame_face")
     | <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
