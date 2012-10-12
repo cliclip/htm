@@ -34,7 +34,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
       "click .masker"            : "masker",
       "click .close_w"           : "cancel",
       "click .weibo"             : "openWeibo",
-      "click .twitter"           : "openTwitter"
+      "click .twitter"           : "openTwitter",
+      "click .dropbox"           : "openDropbox"
     },
     initialize:function(){
       this.tmpmodel = new App.Model.LoginModel();
@@ -116,6 +117,10 @@ App.ClipApp.Login = (function(App, Backbone, $){
     openTwitter : function(e){
       this.trigger("@cancel");
       window.location.href="/oauth/req/twitter";
+    },
+    openDropbox : function(e){
+      this.trigger("@cancel");
+      window.location.href="/oauth/req/dropbox";
     }
   });
 

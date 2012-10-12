@@ -239,6 +239,8 @@ App.util = (function(){
 	return name.split("@")[0]+" <img width ='17px' src =' http://ww3.sinaimg.cn/large/69ae757egw1divzpcj539j.jpg'>";
       }else if(provider == "twitter"){
 	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "dropbox"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
       }else if(provider == "gmail.com"){
 	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
       }else if(provider == "126.com"){

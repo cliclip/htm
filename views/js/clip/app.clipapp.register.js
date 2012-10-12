@@ -37,6 +37,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
       "click .reg_btn" : "submit",
       "click .weibo"   : "openWeibo",
       "click .twitter" : "openTwitter",
+      "click .dropbox" : "openDropbox",
       "click .masker"  : "masker",
       "click .close_w" : "cancel"
     },
@@ -123,6 +124,10 @@ App.ClipApp.Register = (function(App, Backbone, $){
     openTwitter : function(e){
       this.trigger("@cancel");
       window.location.href="/oauth/req/twitter";
+    },
+    openDropbox : function(e){
+      this.trigger("@cancel");
+      window.location.href="/oauth/req/dropbox";
     },
     masker: function(e){
       if($(e.target).attr("class") == "masker"){

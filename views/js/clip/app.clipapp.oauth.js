@@ -17,6 +17,8 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	  App.ClipApp.showConfirm("weibo_sucmsg", res.name);
 	}else if(res.provider == "twitter"){
 	  App.ClipApp.showConfirm("twitter_sucmsg", res.name);
+	}else if(res.provider == "dropbox"){
+	  App.ClipApp.showConfirm("dropbox_sucmsg", res.name);
 	}
 	App.vent.trigger("app.clipapp.login:gotToken",res);
       }else{

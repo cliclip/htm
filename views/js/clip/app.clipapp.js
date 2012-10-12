@@ -304,12 +304,14 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.RuleEdit.show();
 	ClipApp.WeiboEdit.show();
 	ClipApp.TwitterEdit.show();
+	ClipApp.DropboxEdit.show();
       });
     }else{
       ClipApp.UserEdit.show();
       ClipApp.RuleEdit.show();
       ClipApp.WeiboEdit.show();
       ClipApp.TwitterEdit.show();
+      ClipApp.DropboxEdit.show();
     }
   };
 
