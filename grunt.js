@@ -115,8 +115,8 @@ module.exports = function(grunt) {
 	    "tmp/js/*.js"                        // THE BUILD JS
 	  ],
 	  "release/js/lib":
-	    "views/js/lib/*.min.js",             // THE DEPEND LIBS
-	    //"views/js/lib/*.js",             // THE DEPEND LIBS
+	    "views/js/lib/*.js"             // THE DEPEND LIB
+	  ,
 	  "release/img":[
 	    "tmp/img/*",
 	    "views/img/*.gif"                    // TODO THE LEFT GIF

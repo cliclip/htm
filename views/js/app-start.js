@@ -35,7 +35,7 @@ $(function(){
   });
 
   App.rpc = rpc;
-  
+
   App.bind("initialize:before", function(){
     Modernizr.addTest('filereader', function () {
       return !!(window.File && window.FileList && window.FileReader);

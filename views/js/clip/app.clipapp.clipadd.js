@@ -6,6 +6,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ieRange = false, isIE = App.util.isIE();
 
   App.Model.ClipModel = App.Model.extend({
+    //localStorage: new Store("clipdetail"),
     url: function(){
       return App.ClipApp.encodeURI(P+"/clip");
     },

@@ -28,7 +28,7 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.isSelf = function(uid){
-    return uid == ClipApp.getMyUid();
+    return uid == App.ClipApp.getMyUid();
   };
 
   ClipApp.img_upUrl = function(){

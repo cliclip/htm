@@ -12,8 +12,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       recommend:"",//列表推荐的clip时有此属性
       user :{},
       content:{},
-      reprint_count:"",
-      reply_count:"",
+      refby:"",
+      reply:"",
       hide:false,
       "public": true
     }
@@ -24,13 +24,16 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   // 不同用户转载给我相同的数据
   var ClipPreviewList = App.Collection.extend({
     model : ClipPreviewModel,
+    //localStorage: new Store("clippreview"),
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	if(!resp[i].clip){
-	  resp[i].clipid = resp[i].id;
-	  resp[i].id = resp[i].user.id+":"+resp[i].id;
-	}else{ // 表示是别人推荐的clip
+	if(!resp[i].clip){//TODO review
+	  if(!/:/.test(resp[i].id))
+	    resp[i].clipid = resp[i].id;
+	  if(!/:/.test(resp[i].id))//user.id-->user
+	    resp[i].id = resp[i].user+":"+resp[i].id;
+      	}else{ // 表示是别人推荐的clip
 	  resp[i].clipid = resp[i].clip.id;
 	  resp[i].user = resp[i].clip.user;
 	  resp[i].content = resp[i].clip.content;
@@ -95,8 +98,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	rid: this.model.get("recommend").rid,
 	user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
       };
-      var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
-      App.ClipApp.showDetail(clipid,this.model.id,recommend);
+      //var clipid = this.model.get("user") + ":" + this.model.get("clipid");
+      App.ClipApp.showDetail(this.model.clipid,this.model.id,recommend);
     },
     mouseEnter: function(e){
       $(e.currentTarget).children(".master").children("#opt").show();
@@ -107,7 +110,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var cid = this.model.get("user").id + ":" + this.model.get("clipid");
+      var cid = this.model.get("user") + ":" + this.model.get("clipid");
       var pub = this.model.get("public");
       var mid = this.model.id;
       switch(opt){
@@ -237,6 +240,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
       collection_filter(clips,hide_clips);
       clipListView = new ClipListView({collection:clips});
+      console.info("new cliplistview.................");
       $('#list').masonry({
 	itemSelector : '.clip',
 	columnWidth : 330,

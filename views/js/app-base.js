@@ -60,11 +60,13 @@ App = (function(Backbone, $){
       var success = options.success;
       var error = options.error;
       options.success = function(resp, status, xhr){
+	console.info(resp);
 	if(resp[0] == 0){
 	  // console.info("sync:");console.dir(resp);
 	  if(success) success.apply(model, [resp[1], status, xhr]);
 	} else {
 	  if("auth" in resp[1]){
+	  //if(false){
 	    model.trigger("alert", resp[1]);
 	  }else{
 	    if(error) error.apply(model, [resp[1], status, xhr]);
@@ -72,6 +74,7 @@ App = (function(Backbone, $){
 	}
       };
       if(App.rpc){
+	console.info("rpc");
 	App.rpc.request({
 	    url:options.url||model.get("url")||model.url(),
 	    method:options.type||methodMap[method],
@@ -84,6 +87,8 @@ App = (function(Backbone, $){
 	  }
 	);
       }else{
+	options.url  =  options.url||model.get("url")||model.url();
+	console.info(options.url);
 	Backbone.sync.apply(Backbone, [method, model, options]);
       }
     }
@@ -141,6 +146,7 @@ App = (function(Backbone, $){
 	}
       };
       if(App.rpc){
+	console.info("rpc");
 	App.rpc.request({
 	    url:options.url||model.get("url")||model.url(),
 	    method:options.type||methodMap[method],
@@ -152,7 +158,10 @@ App = (function(Backbone, $){
 	    console.dir(resp);
 	  }
 	);
+	//Backbone.sync.apply(Backbone, [method, model, options]);
       }else{
+	options.url  =  options.url||model.get("url")||model.url();
+	console.info(options.url);
 	Backbone.sync.apply(Backbone, [method, model, options]);
       }
     }

@@ -5,6 +5,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
   var Me = {};
   var flag = false;
   var MyInfoModel = App.Model.extend({
+    //localStorage: new Store("myinfo"),
     defaults:{
       id:"",
       name:"",
