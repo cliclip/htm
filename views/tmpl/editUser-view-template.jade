@@ -18,7 +18,7 @@ script(type="text/template",id="faceEdit-view-template")
     .head_img#head_img.
       <img id="myface" src="<%=App.util.face_url(face)%>" />
     .user_name
-      <span id="set-name" class="name"><%=name%></span>
+      <div id="set-name" class="name"><%=name%></div>
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
       <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>" title="<%=_i18n('faceEdit.set_name')%>"/>
   .head_link
