@@ -67,7 +67,7 @@ script(type="text/template",id="clippreview-view-template")
           </a>
         <%}%>
       div.action#opt(style="display:none;").
-        <% if( App.ClipApp.isSelf(user) ) {%>
+        <% if( App.ClipApp.isSelf(user.id||user) ) {%>
           <i class="note operate" title="<%=_i18n('clippreview.memo')%>" id="<%=user.id%>:<%=id%>"></i>
           <i class="modify operate" title="<%=_i18n('clippreview.update')%>" id="<%=user.id%>:<%=id%>"></i>
           <i class="del operate" title="<%=_i18n('clippreview.delete')%>" id="<%=user.id%>:<%=id%>"></i>

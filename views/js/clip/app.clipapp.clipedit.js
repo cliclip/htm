@@ -150,7 +150,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       });
     });
   };
-			  
+
   ClipEdit.close = function(n_content){
     App.vent.unbind("app.clipapp:upload");
     if(!n_content || n_content == old_content){

@@ -21,7 +21,6 @@ script(type="text/template",id="faceEdit-view-template")
       <div id="set-name" class="name"><%=name%></div>
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
       <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>" title="<%=_i18n('faceEdit.set_name')%>"/>
-      <%}%>
   .head_link.
     <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="upload_target" enctype="multipart/form-data">
     <div class="btn_frame">

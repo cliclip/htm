@@ -9,7 +9,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       return App.ClipApp.encodeURI(P+"/clip/"+this.id)+"&rid="+this.get("rid");
     },
     parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
-      //resp.id = resp.user+":"+resp.id;
+      if(!/:/.test(resp.id)){
+	resp.id = resp.user+":"+resp.id;
+      }
       //本地访问服务器时为图片的url加上域名
       resp.content = resp.content.replace(/\[img\]\/_2_/ig,"[img]"+App.ClipApp.Url.base);
       return resp;
