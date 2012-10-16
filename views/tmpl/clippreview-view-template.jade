@@ -53,9 +53,9 @@ script(type="text/template",id="clippreview-view-template")
     footer.master
       div.metas
         span.icon_block
-          | <%=reprint_count?reprint_count:0%>&nbsp; <%=_i18n('clippreview.reprint')%>
+          | <%=refby ? refby : 0%>&nbsp; <%=_i18n('clippreview.repby')%>
         span.icon_block
-          | <%=reply_count?reply_count:0%>&nbsp; <%=_i18n('clippreview.reply')%>
+          | <%=reply ? reply : 0%>&nbsp; <%=_i18n('clippreview.reply')%>
       div.user_info_small
         <% if(user && App.ClipApp.ClipList.flag_show_user){ %>
         div.user_more
@@ -63,7 +63,7 @@ script(type="text/template",id="clippreview-view-template")
           |   <img src="<%=App.util.face_url(user.face,50)%>"/>
           dl.name
             dt.
-              <%=user.name === undefined ? "" : user.name%>
+              <%=App.util.showName(user.name)%>
           </a>
         <%}%>
       div.action#opt(style="display:none;").

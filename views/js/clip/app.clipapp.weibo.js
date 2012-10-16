@@ -35,24 +35,38 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
   });
 
   WeiboEdit.show = function(){
-    var weiboModel = new App.Model.UserBindModel({provider:"weibo"});
+    var weiboModel = new App.Model.UserBindModel();
     var weiboRegion = new App.Region({el:"#weibo"});
-    weiboModel.fetch();
-    weiboModel.onChange(function(model){
-      var view = new WeiboView({model: model});
-      weiboRegion.show(view);
+    weiboModel.fetch({
+      success:function(model, res){
+	var list  = model.get("list");
+	var result = [];
+	if(list){
+	  list.forEach(function(v){
+	    if(v.provider == 'weibo') result.push(v);
+	  });
+	}
+	var _model =  new WeiboEditModel({info:result});
+	var view = new WeiboView({model: _model});
+	weiboRegion.show(view);
+      },
+      error:function(model, error){}
     });
   };
 
 
   var delWeibo = function(uid){
-    var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid});
+    var model = new App.Model.UserBindModel({id:uid,provider:"weibo",oauth_id:uid,account:uid+"@weibo"});
     model.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	WeiboEdit.show();
       },
       error: function(model, res){
-	App.ClipApp.showAlert("del_oauth_fail");
+	if(res.unbind == "cannot_unbind"){
+	  App.ClipApp.showConfirm("cannot_unbind", null, function(){});
+	}else{
+	  App.ClipApp.showAlert("del_oauth_fail");
+	}
       }
     });
   };

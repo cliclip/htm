@@ -36,21 +36,35 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
   TwitterEdit.show = function(){
     var twitterModel = new App.Model.UserBindModel({provider:"twitter"});
     var twitterRegion = new App.Region({el:"#twitter"});
-    twitterModel.fetch();
-    twitterModel.onChange(function(model){
-      var view = new TwitterView({model: model});
-      twitterRegion.show(view);
+    twitterModel.fetch({
+      success:function(model, res){
+	var list  = model.get("list");
+	var result = [];
+	if(list){
+	  list.forEach(function(v){
+	    if(v.provider == 'twitter') result.push(v);
+	  });
+	}
+	var _model =  new TwitterEditModel({info:result});
+	var view = new TwitterView({model: _model});
+	twitterRegion.show(view);
+      },
+      error:function(model, error){}
     });
   };
 
   var delTwitter = function(uid){
-    var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid});
+    var model = new App.Model.UserBindModel({id:uid,provider:"twitter",oauth_id:uid,account:uid+"@twitter"});
     model.destroy({ // destroy要求model必须要有id
       success: function(model, res){
 	TwitterEdit.show();
       },
       error: function(model, res){
-	App.ClipApp.showAlert("del_oauth_fail");
+	if(res.unbind == "cannot_unbind"){
+	  App.ClipApp.showConfirm("cannot_unbind", null, function(){});
+	}else{
+	  App.ClipApp.showAlert("del_oauth_fail");
+	}
       }
     });
   };

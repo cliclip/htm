@@ -74,7 +74,6 @@ App = (function(Backbone, $){
 	}
       };
       if(App.rpc){
-	console.info("rpc");
 	App.rpc.request({
 	    url:options.url||model.get("url")||model.url(),
 	    method:options.type||methodMap[method],

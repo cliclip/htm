@@ -10,8 +10,8 @@ App.ClipApp.Me = (function(App, Backbone, $){
       id:"",
       name:"",
       face:"",
-      following:"",
-      follower:"",
+      follow:0,
+      followby:0,
       token:""
     },
     url:function(){

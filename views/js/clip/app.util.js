@@ -39,7 +39,7 @@ App.util = (function(){
   // TODO 此处理适合在 api 的 getPreview 逻辑里完成
   // clip列表时取得img 的 url 为裁剪后的图片
   util.url = function(image_url){
-    var pattern = /user\/\d\/image\/[a-z0-9]{32}/;
+    var pattern = /user\/\d\/image\/.*?/;
     var pattern1 = /http:\/\//;
     if(image_url && pattern.test(image_url)&&!pattern1.test(image_url)){
       return image_url + "/270";
@@ -50,7 +50,7 @@ App.util = (function(){
   // if (!face) userInfo.face = default_face;
   // userInfo.icon = userInfo.face + '/42'
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]{1,}:[a-z0-9]{32}_face/;
+    var pattern = /^[0-9]{1,}:face_[0-9]{13}.*/;
     if(imageid == ""){
       return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){
@@ -181,7 +181,26 @@ App.util = (function(){
   util.isIE = function(){
     return isIE= $('html').hasClass("gt-ie8") || $('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
   };
+/*
+=======
+      if(returnVal != null && returnVal != ""){
+	var returnObj = eval(returnVal);
+	if(returnObj[0] == 0){
+	  var imgids = returnObj[1][0];
+	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	  var uid = imgids.split(":")[0];
+	  var imgid = imgids.split(":")[1];
+	  var url = P+"/user/"+ uid +"/image/" +imgid;
+	  // var url = returnObj[1];
+	  callback(null, url);
+	}else{//上传图片失败
+	  callback("imageUp_fail", null);
+	}
+      }
+    });
+>>>>>>> team/dev
 
+ */
   util.get_imgurl = function(returnVal,callback){
     if(returnVal != null && returnVal != ""){
       var returnObj = eval(returnVal);
@@ -227,6 +246,33 @@ App.util = (function(){
     pos.parentNode.insertBefore(file,pos);
     document.body.removeChild(form);
   };
+  util.showName = function(name){
+    if(name.match("@")){
+      var provider = name.split("@")[1];
+      if(provider == "weibo"){
+	return name.split("@")[0]+" <img width ='17px' src =' http://ww3.sinaimg.cn/large/69ae757egw1divzpcj539j.jpg'>";
+      }else if(provider == "twitter"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "dropbox"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "gmail.com"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "126.com"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "163.com"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }
+    }else{
+      return name;
+    }
+  };
+ util.showPrefixName = function(name){
+   if(name.match("@")){
+     return name.split('@')[0];
+   }else{
+     return name;
+   }
+ };
 
   return util;
 })();

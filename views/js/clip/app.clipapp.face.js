@@ -8,8 +8,8 @@ App.ClipApp.Face = (function(App, Backbone, $){
     defaults:{
       name:"",
       id:"",
-      following:"",
-      follower:"",
+      follow:0,
+      followby:0,
       face:"",
       relation:[]
     },
@@ -41,13 +41,13 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     change: function(follow){
       var relation = this.model.get("relation");
-      var follower = this.model.get("follower");
+      var followby = this.model.get("followby");
       if(_.isEmpty(relation) && !_.isEmpty(follow)){ // follow 成功 表示非空
 	this.model.set("relation", follow);
-	this.model.set("follower", follower > 0 ? follower + 1 : 1);
+	this.model.set("followby", followby > 0 ? followby + 1 : 1);
       }else if(!_.isEmpty(relation) && _.isEmpty(follow)){
 	this.model.set("relation", []);
-	this.model.set("follower", follower > 0 ? follower - 1 : 0);
+	this.model.set("followby", followby > 0 ? followby - 1 : 0);
       }
     },
     show: function(follow){
@@ -131,7 +131,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
 
   Face.show = function(uid){
     user_id = uid;
-    if(uid){
+    if(uid && uid !== undefined){
       if(App.ClipApp.Me.me.id == uid){
 	faceView = new FaceView({model: App.ClipApp.Me.me});
 	App.faceRegion.show(faceView);
@@ -152,16 +152,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
   };
 
   function change(follow){
-    if(faceView){
-      faceView.trigger("@change", follow);
-    }
+    setTimeout(function(){
+      if(faceView){ faceView.trigger("@change", follow); }
+    }, 200);
   };
-
-  function show(follow){
-    if(faceView){
-      faceView.trigger("@show", follow);
-    }
-  }
 
   App.vent.bind("app.clipapp.follow:success", function(follow){
     change(follow);
@@ -172,7 +166,9 @@ App.ClipApp.Face = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.follow:get", function(follow){
-    show(follow);
+    setTimeout(function(){
+      if(faceView){ faceView.trigger("@show", follow); }
+    }, 200);
   });
 
   // 当me改变之后face的model有change事件会自动render

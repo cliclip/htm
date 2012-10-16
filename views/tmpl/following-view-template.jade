@@ -15,7 +15,7 @@ script(type="text/template",id="following-view-template")
           | <img src="<%=App.util.face_url(face,50)%>"/>
           | </a>
           p
-            | <a href="#user/<%=id%>"><%=name%></a>
+            | <a href="#user/<%=id%>"><%=App.util.showPrefixName(name)%></a>
         div.tags.tag_box
           div.box
             div.items
