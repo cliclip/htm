@@ -23,7 +23,8 @@ App.Convert = (function(App, Backbone, $){
   Convert.ubbToHtml = _ubbToHtml;
 
   function isWord(strValue) {
-    var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
+    // var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
+    var re = /(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig;
     return re.test(strValue);
   }
 
