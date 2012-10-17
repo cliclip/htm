@@ -16,14 +16,15 @@
   // return doc.getElementsByTagName('body').item(0).getAttribute('innerHTML');
   // get page content html
   function getPage(callback){
-    console.log('getPage :: currentPage is %j', window.location.href);
+    // console.log('getPage :: currentPage is %j', window.location.href);
     var html = '', url = window.location.href;
     var pages = {};
-    var readable = new Readability();
+    var readable = new Readability({pageURL: url});
     readable.setSkipLevel(3);
     saxParser(doc.childNodes[doc.childNodes.length-1], readable);
     var article = readable.getArticle();
     html += article.html;
+    // console.log('article.nextPage :: %j', article);
     if(article.nextPage && article.nextPage != url){
       pages[url] = 1;
       getNextPage(pages, article.nextPage, html, function(err, res){
@@ -63,7 +64,7 @@
 
   function getNextPage(pages, url, html, callback){
     var timeoutEvent = null;
-    var readable = new Readability({linksToSkip: pages});
+    var readable = new Readability({linksToSkip: pages, pageURL : url});
     readable.setSkipLevel(3);
     var article = null;
     $.ajax({
