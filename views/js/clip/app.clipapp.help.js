@@ -44,7 +44,6 @@ App.ClipApp.Help=(function(App,Backbone,$){
   Help.show = function(item,history){
     var lang=App.versions.getLanguage();
     hist=history;
-    console.info(lang);
     var help = new HelpModel({item:item,lang:lang});
     help.fetch({});
     help.onChange(function(helpModel){
