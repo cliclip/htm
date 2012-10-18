@@ -77,20 +77,17 @@ App.util = (function(){
   // contentToPreview
   util.getPreview = function(content, length){
     var data = {};
-    var reg = /\[img\].*?\[\/img\]/;
-    console.log('content :: %j', content);
+    var reg = /<\s*img[^>]*src=['"](.*?)['"][^>]*>/ig;
     var img = content.match(reg);
-    if(img) data.image = img[0].replace('[img]',"").replace('[/img]',"");
+    if(img) data.image = img[0].replace(reg,"$1");
     var text = getContentText(content);
     data.text = trim(text, length);
     return data;
   };
 
   function getContentText (content){
-    // 取得ubb中常用的标签之后留下的内容
-    // 去掉所有的ubb标签中的内容，只留下文本内容
-    var reg1 = /\[img\].*?\[\/img\]/gi;
-    var reg = /\[\/?[^\]].*?\]/gi;  //\[\/?[^].*?\]/gi;
+    var reg1 = /<\s*img[^>]*src=['"](.*?)['"][^>]*>/ig;
+    var reg = /<\/?[^>].*?>/gi;
     // 去除img标签
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
