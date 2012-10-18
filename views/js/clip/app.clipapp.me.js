@@ -179,6 +179,8 @@ App.ClipApp.Me = (function(App, Backbone, $){
   };
 
   App.vent.bind("app.clipapp.login:success", function(){
+    // 书签登陆时会报错加上此句定义Me.me
+    if(!Me.me){ Me.me = new MyInfoModel(); }
     Me.me.fetch();
     Me.show();
   });

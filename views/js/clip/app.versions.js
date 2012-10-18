@@ -26,6 +26,7 @@ App.versions = (function($){
 	register    : "注 册",
 	twitter     : "通过 Twitter 登录",
 	weibo       : "通过微博登录",
+	dropbox     : "通过Dropbox登录",
 	name : {
 	  name      : "用户名",
 	  is_null    : "用户名尚未填写",
@@ -163,6 +164,11 @@ App.versions = (function($){
 	title       : "Twitter摘录",
 	add         : "关联Twitter帐号",
 	del         : "删除Twitter账号"
+      },
+      dropboxEdit : {
+	title       : "同步至Dropbox",
+	add         : "关联Dropbox",
+	del         : "删除Dropbox账号"
       },
 
       clipmemo : {
@@ -404,7 +410,9 @@ App.versions = (function($){
 	},
 	weibo_sucmsg   : "恭喜您，微博帐号 %s 关联成功，在新浪微博中 @cliclip 就可以摘录到点忆(评论除外)，现在就去 @ 一条<a href='http://weibo.com' target='_blank'>试试</a>？",
 	twitter_sucmsg :"恭喜您，Twitter帐号 %s 已关联成功，您在 Twitter 的收藏(评论除外)可以直接摘录到点忆，现在就去收藏一条<a href='http://twitter.com' target='_blank'>试试</a>？",
+	dropbox_sucmsg :"恭喜您，Dropbox帐号 %s 已关联成功，您的摘录将会被自动同步到您的Dropbox啦",
 	InternalOAuthError:"认证失败，请重试",
+	cannot_unbind : "您现在只能通过第三方认证登录，若现在解除关联，您将不能登录此帐号，所以为了保证您以后正常使用，您需要更改用户名和密码才可以解除关联。",
 	reclip:{
 	  success: "转摘成功",
 	  no_pub: "作者没有公开该条摘录，您暂时不能转摘"
@@ -524,6 +532,7 @@ App.versions = (function($){
 	register      : "Register",
 	twitter       : "Login with Twitter",
 	weibo         : "Login with Weibo",
+	dropbox       : "Login with Dropbox",
 	name : {
 	  name        : "User name",
 	  is_null     : "User name is missing",
@@ -664,7 +673,11 @@ App.versions = (function($){
 	add         : "Add",
 	del         : "Delete Twitter account"
       },
-
+      dropboxEdit : {
+	title       : "Sync to Dropbox accounts",
+	add         : "Add",
+	del         : "Delete Dropbox account"
+      },
       clipmemo : {
 	title       : "Tag it",
 	memo        : "Type your note here",
@@ -909,7 +922,9 @@ App.versions = (function($){
 	feedback_fail  : "Send Fail",
 	weibo_sucmsg:"Connect Sina Weibo account %s successfully. Now you can reclip clips from Sina Weibo(except comments), just @cliclip, <a href='http://weibo.com' target='_blank'>enjoy</a>!",
 	twitter_sucmsg:"Connect Twitter account %s successfully. Now you can reclip clips from Twitter Favorite(except comments), <a href='http://twitter.com' target='_blank'>enjoy</a>!",
+	dropbox_sucmsg :"Connect Dropbox account %s successfully. Now your clips will Sync to your dropbox .",
 	InternalOAuthError:"Connection failed. Please try again.",
+	cannot_unbind : "This is the only way that you login, if you delete this account now, you cant't login this account in the future, so we suggest you change password immediately and set your own username.",
 	invite         : "Successful registration by sending email %s. We strongly suggest you change password immediately and set your own username",
 	addemail       : "You have added %s email. The activation link has been sent to this email account. Please check your email and click the activation link.",
 	cliplist_null:{

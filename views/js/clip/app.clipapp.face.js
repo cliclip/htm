@@ -41,13 +41,13 @@ App.ClipApp.Face = (function(App, Backbone, $){
     },
     change: function(follow){
       var relation = this.model.get("relation");
-      var follower = this.model.get("follower");
+      var followby = this.model.get("followby");
       if(_.isEmpty(relation) && !_.isEmpty(follow)){ // follow 成功 表示非空
 	this.model.set("relation", follow);
-	this.model.set("follower", follower > 0 ? follower + 1 : 1);
+	this.model.set("followby", followby > 0 ? followby + 1 : 1);
       }else if(!_.isEmpty(relation) && _.isEmpty(follow)){
 	this.model.set("relation", []);
-	this.model.set("follower", follower > 0 ? follower - 1 : 0);
+	this.model.set("followby", followby > 0 ? followby - 1 : 0);
       }
     },
     show: function(follow){
@@ -131,7 +131,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
 
   Face.show = function(uid){
     user_id = uid;
-    if(uid){
+    if(uid && uid !== undefined){
       if(App.ClipApp.Me.me.id == uid){
 	faceView = new FaceView({model: App.ClipApp.Me.me});
 	App.faceRegion.show(faceView);

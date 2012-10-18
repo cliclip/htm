@@ -16,7 +16,7 @@ script(type='text/template',id='userface-view-template')
       dt.
         <a class="user_list" href="#user/<%=id%>">
           <%if(name){%>
-          <%=name%>
+          <%=App.util.showName(name)%>
           <%} else {%>
           <%}%>
         </a>

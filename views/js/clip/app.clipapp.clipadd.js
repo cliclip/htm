@@ -158,13 +158,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   };
 
-  ClipAdd.show = function(isClipper){ // 是否为书签摘录
+  ClipAdd.show = function(isClipper,clipper_content){ // 是否为书签摘录
     clipper = isClipper;
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
     App.Editor.init();
     App.Editor.focus("editor");
+    if(clipper_content){App.Editor.setContent("editor", clipper_content);}
     //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
     $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
       if(e.ctrlKey&&e.keyCode==13){

@@ -63,7 +63,7 @@ script(type="text/template",id="clippreview-view-template")
           |   <img src="<%=App.util.face_url(user.face,50)%>"/>
           dl.name
             dt.
-              <%=user.name === undefined ? "" : user.name%>
+              <%=App.util.showName(user.name)%>
           </a>
         <%}%>
       div.action#opt(style="display:none;").
