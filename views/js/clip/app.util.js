@@ -84,7 +84,7 @@ App.util = (function(){
     var data = {};
     var reg = /\[img\].*?\[\/img\]/;
     var img = content.match(reg);
-    if(img) data.image = img[0].replace('[img]',"").replace('[/img]',"");
+    if(img) data.image = {src:img[0].replace('[img]',"").replace('[/img]',"")};
     var text = getContentText(content);
     data.text = trim(text, length);
     return data;
