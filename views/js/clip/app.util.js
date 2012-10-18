@@ -59,11 +59,6 @@ App.util = (function(){
     }else return imageid;
   };
 
-  // 将content内容转换为，可用于显示的html
-  util.contentToHtml = function(content){
-    return App.Convert.ubbToHtml(content);
-  };
-
   // 对comment的内容进行html过滤，防止脚本注入
   util.cleanInput = function(comment){
     comment = App.Convert.cleanHtml(comment);
@@ -83,6 +78,7 @@ App.util = (function(){
   util.getPreview = function(content, length){
     var data = {};
     var reg = /\[img\].*?\[\/img\]/;
+    console.log('content :: %j', content);
     var img = content.match(reg);
     if(img) data.image = img[0].replace('[img]',"").replace('[/img]',"");
     var text = getContentText(content);
@@ -99,7 +95,7 @@ App.util = (function(){
     while(reg1.test(content)) content = content.replace(reg1,"");
     // 去除其他标签
     while(reg.test(content)) content = content.replace(reg,"");
-    return App.Convert.ubbToHtml(content);
+    return content;
   };
 
   function trim(content, length){

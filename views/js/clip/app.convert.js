@@ -12,12 +12,12 @@ App.Convert = (function(App, Backbone, $){
     html = _ubbToHtml(html);
     return html;
   };
-
+/*
   Convert.toUbb = function(html){
     html = _htmlToUbb(html);
     return html;
   };
-
+*/
   Convert.cleanHtml = _cleanHtml;
   Convert.htmlToUbb = _htmlToUbb;
   Convert.ubbToHtml = _ubbToHtml;
