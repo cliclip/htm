@@ -171,7 +171,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
     }, 200);
   });
 
-  // 当me改变之后face的modle有change事件会自动render
+  // 当me改变之后face的model有change事件会自动render
   App.vent.bind("app.clipapp.face:changed", function(){
     if(/my/.test(window.location.hash)){
       App.ClipApp.Face.show(App.ClipApp.getMyUid("id"));

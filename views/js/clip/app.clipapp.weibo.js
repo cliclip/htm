@@ -20,7 +20,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.useredit:rename");
 	});
       }else{
-	window.location.href="/oauth/req/weibo?forcelogin=true";
+	window.location.href= App.ClipApp.Url.hostname + "/oauth/req/weibo?forcelogin=true";
       }
     },
     WeiboCut:function(e){

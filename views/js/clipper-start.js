@@ -1,6 +1,14 @@
 //- kick start
 $(function() {
 
+  if(typeof console !== "object"){
+    console = {
+      log:function(){},
+      info:function(){},
+      dir:function(){}
+    };
+  }
+
   App.addRegions({
     viewRegion: "#view",
     popRegion: "#pop"
@@ -9,7 +17,7 @@ $(function() {
   var r ;
   var socket = new easyXDM.Socket({
     swf: 'http://cliclip.com/img/easyxdm.swf',
-    // swf: 'http://192.168.1.3:3000/img/easyxdm.swf',
+    // swf: 'http://cliclip.com:4000/img/easyxdm.swf',
     // swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
     // swf: 'http://192.168.1.3:8000/img/easyxdm.swf',
     swfNoThrottle: true,
@@ -21,31 +29,31 @@ $(function() {
 	  r[1] = App.Convert.filter(r[1]);
 	  App.ClipApp.showClipAdd("clipper",r[1]);
           break;
-        }
       }
-    });
+    }
+  });
 
-    App.vent.bind("app.clipapp.clipper:ok",function(){
-      socket.postMessage(JSON.stringify(["ok",r[1]]));
-    });
+  App.vent.bind("app.clipapp.clipper:ok",function(){
+    socket.postMessage(JSON.stringify(["ok",r[1]]));
+  });
 
-    App.vent.bind("app.clipapp.clipper:cancel", function(){
-      socket.postMessage(JSON.stringify(["cancel"]));
-    });
+  App.vent.bind("app.clipapp.clipper:cancel", function(){
+    socket.postMessage(JSON.stringify(["cancel"]));
+  });
 
-    App.vent.bind("app.clipapp.clipper:save", function(){
-      setTimeout(function(){
-	socket.postMessage(JSON.stringify(["close"]));
-      }, 500);
-    });
-
-    App.vent.bind("app.clipapp.clipper:empty", function(){
+  App.vent.bind("app.clipapp.clipper:save", function(){
+    setTimeout(function(){
       socket.postMessage(JSON.stringify(["close"]));
-    });
+    }, 500);
+  });
 
-    App.vent.bind("app.clipapp.clipper:log", function(data){
-      socket.postMessage(JSON.stringify(["log", data]));
-    });
+  App.vent.bind("app.clipapp.clipper:empty", function(){
+    socket.postMessage(JSON.stringify(["close"]));
+  });
 
-    // setTimeout(function(){ socket.postMessage(["empty"]); },20000);
+  App.vent.bind("app.clipapp.clipper:log", function(data){
+    socket.postMessage(JSON.stringify(["log", data]));
+  });
+
+  // setTimeout(function(){ socket.postMessage(["empty"]); },20000);
 });

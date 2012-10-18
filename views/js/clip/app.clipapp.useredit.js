@@ -344,6 +344,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var faceView = new FaceView({model: faceModel});
     UserEdit.faceRegion.show(faceView);
     faceLoad();
+
   };
 
   UserEdit.show = function(){
@@ -354,6 +355,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   UserEdit.close = function(){
+    App.vent.unbind("app.clipapp:upload");
     if(face_change_flag){
       App.vent.trigger("app.clipapp.face:changed");
       face_change_flag = false;
@@ -404,13 +406,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   };
 
   function faceLoad(){
-    $("#post_frame_face").unbind("load");
-    $("#post_frame_face").load(function(){ // 加载图片
-      if(App.util.isIE()){ // 保证是ie
-	var returnVal = this.contentWindow.document.documentElement.innerText;
-      }else{
-	var returnVal = this.contentDocument.documentElement.textContent;
-      }
+    App.vent.bind("app.clipapp:upload",function(returnVal){
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
 	//console.info(returnObj);
@@ -442,6 +438,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       submit_face = false;
     });
   }
+
   //ff chrome 之外的其他浏览器本地预览头像
   function preview_face(sender){
     var reader = new FileReader();
@@ -483,6 +480,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     //console.info(_width,_height,_top,_left );
     return { width:_width, height:_height, top:_top, left:_left };
   }
+
   // App.bind("initialize:after", function(){ App.ClipApp.showUserEdit();});
 
   return UserEdit;

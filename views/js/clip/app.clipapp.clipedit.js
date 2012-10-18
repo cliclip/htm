@@ -115,22 +115,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     if(!change){
       view.trigger("@error", "imageUp_fail");
     }else{
-      /*if( sender.files &&sender.files[0] ){
-       var img = new Image();
-       img.src = App.util.get_img_src(sender.files[0]);
-       img.onload=function(){
-       if(img.complete){
-       App.Editor.insertImage("editor", {url: img.src,id:count++,ieRange:ieRange});
-       }};}*/
       $("#img_form").submit();
-      App.util.get_imgurl("post_frame",function(err, img_src){
-	//img_list.push(img_src);
-	if(!err && img_src){
-	  App.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
-	}else{
-	  App.ClipApp.showConfirm("imageUp_fail");
-	}
-      });
       App.util.clearFileInput(sender);
     }
   };
@@ -153,10 +138,21 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  $("#editClip_Save").click();
 	}
       });
-   });
+    });
+    //接受上传图片返回的信息
+    App.vent.bind("app.clipapp:upload",function(returnVal){
+      App.util.get_imgurl(returnVal,function(err, img_src){
+	if(!err && img_src){
+	  App.Editor.insertImage("editor", {url: img_src,ieRange:ieRange});
+	}else{
+	  App.ClipApp.showConfirm("imageUp_fail");
+	}
+      });
+    });
   };
 
   ClipEdit.close = function(n_content){
+    App.vent.unbind("app.clipapp:upload");
     if(!n_content || n_content == old_content){
       App.viewRegion.close();
     }else{
