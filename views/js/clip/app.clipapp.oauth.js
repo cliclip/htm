@@ -10,9 +10,14 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
 	};
 	var cancel = function(){ Backbone.history.navigate("my", true); };
 	App.ClipApp.showAlert("account_hasbind", null, sure, cancel);
-      }else if(res && res.oauth){
-	App.ClipApp.showUserBind(res.oauth);
+      }else if(res && res.authorized){
+	App.ClipApp.showUserBind(res);
       }else if(res && res.token){
+	if(res.provider == "weibo"){
+	  App.ClipApp.showConfirm("weibo_sucmsg", res.name);
+	}else if(res.provider == "twitter"){
+	  App.ClipApp.showConfirm("twitter_sucmsg", res.name);
+	}
 	App.vent.trigger("app.clipapp.login:gotToken",res);
       }else{
 	var sure = function(){
@@ -28,7 +33,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
   function checkUser(callback){
     var model = new App.Model.UserBindModel();
     model.save({},{
-      url : App.ClipApp.encodeURI(App.ClipApp.Url.base+"/user/oauth_info"),
+      url : App.ClipApp.encodeURI(App.ClipApp.Url.base+"/user/oauth"),
       type: "POST",
       success:function(model,res){
 	callback(null,res);

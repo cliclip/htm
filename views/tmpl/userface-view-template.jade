@@ -26,16 +26,16 @@ script(type='text/template',id='userface-view-template')
             div.
               <a class="following">
                 <% if(id == App.ClipApp.getMyUid()){%>
-                <%=_i18n('userface.mfollowing')%>(<%=following%>)<% }else{ %>
-                <%=_i18n('userface.following')%>(<%=following%>)
+                <%=_i18n('userface.mfollowing')%>(<%=follow%>)<% }else{ %>
+                <%=_i18n('userface.following')%>(<%=follow%>)
                 <% } %>
               </a> 
           span.icon_block
             div.
               <a class="follower">
                 <% if(id == App.ClipApp.getMyUid()){%>
-                <%=_i18n('userface.mfollow')%>(<%=follower%>)<% }else{ %>
-                <%=_i18n('userface.follow')%>(<%=follower%>)
+                <%=_i18n('userface.mfollow')%>(<%=followby%>)<% }else{ %>
+                <%=_i18n('userface.follow')%>(<%=followby%>)
                 <% } %>
               </a>
         div#query.input.

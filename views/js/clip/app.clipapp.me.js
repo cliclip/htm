@@ -9,8 +9,8 @@ App.ClipApp.Me = (function(App, Backbone, $){
       id:"",
       name:"",
       face:"",
-      following:"",
-      follower:"",
+      follow:0,
+      followby:0,
       token:""
     },
     url:function(){
@@ -177,7 +177,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
     if (token) uid = token.split(":")[0];
     return uid;
   };
-		    
+
   App.vent.bind("app.clipapp.login:success", function(){
     Me.me.fetch();
     Me.show();
