@@ -15,8 +15,78 @@
 
   // return doc.getElementsByTagName('body').item(0).getAttribute('innerHTML');
   // get page content html
-  function getPage(){
-    return doc.body.innerHTML;
+  function getPage(callback){
+    // console.log('getPage :: currentPage is %j', window.location.href);
+    var html = '', url = window.location.href;
+    var pages = {};
+    var readable = new Readability({pageURL: url});
+    readable.setSkipLevel(3);
+    saxParser(doc.childNodes[doc.childNodes.length-1], readable);
+    var article = readable.getArticle();
+    html += article.html;
+    // console.log('article.nextPage :: %j', article);
+    if(article.nextPage && article.nextPage != url){
+      pages[url] = 1;
+      getNextPage(pages, article.nextPage, html, function(err, res){
+	callback(err, res);
+	// if(err) callback(null, html+'本页地址'+url);
+	// else callback(null, res);
+      });
+    }else{
+      callback(null, html);
+    }
+  }
+
+  function parseDom(data){
+    /**
+     * Do some preprocessing to our HTML to make it ready for appending.
+     * • Remove any script tags. Swap and reswap newlines with a unicode character because multiline regex doesn't work in javascript.
+     * • Turn any noscript tags into divs so that we can parse them. This allows us to find any next page links hidden via javascript.
+     * • Turn all double br's into p's - was handled by prepDocument in the original view.
+     *   Maybe in the future abstract out prepDocument to work for both the original document and AJAX-added pages.
+     **/
+     var responseHtml = data.match(/<body>[\s\S]*<\/body>/gi, function(a){
+       return a;
+     });
+     // 获取body中的内容，再去掉body标签
+     responseHtml = responseHtml[0].replace(/<body>/, '');
+     responseHtml = responseHtml.replace(/<\/body>/, '');
+     //	过滤掉不适合放在innerHtml中的内容
+     responseHtml = responseHtml.replace(/\n/g,'\uffff').replace(/<script.*?>.*?<\/script>/gi, '');
+     responseHtml = responseHtml.replace(/\n/g,'\uffff').replace(/<script.*?>.*?<\/script>/gi, '');
+     responseHtml = responseHtml.replace(/\uffff/g,'\n').replace(/<(\/?)noscript/gi, '<$1div>');
+     responseHtml = responseHtml.replace(/(<br[^>]*>[ \n\r\t]*){2,}/gi, '</p><p>');
+     responseHtml = responseHtml.replace(/<(\/?)font[^>]*>/gi, '<$1span>');
+     var objE = document.createElement('div');
+     objE.innerHTML = responseHtml;
+     return objE;
+  }
+
+  function getNextPage(pages, url, html, callback){
+    var timeoutEvent = null;
+    var readable = new Readability({linksToSkip: pages, pageURL : url});
+    readable.setSkipLevel(3);
+    var article = null;
+    $.ajax({
+      url : url,
+      timeout: 10000, // 过期时间设置为10秒
+      success: function(data){
+	var nextDoc = parseDom(data);
+	saxParser(nextDoc, readable);
+	article = readable.getArticle();
+	html += article.html;
+	if(article && article.nextPage && article.nextPage != url){
+	  pages[url] = 1;
+	  getNextPage(pages, article.nextPage, html, callback);
+	}else{
+	  callback(null, html);
+	}
+      },
+      error: function(){
+	console.log('timeout url' + url);
+	callback('timeout', html);
+      }
+    });
   }
 
   // get selection content html
@@ -70,14 +140,14 @@
       doc.documentElement.style.overflowY = "hidden ";
     }
     socket = new easyXDM.Socket({
-      remote: 'http://cliclip.com/clipper.html?r='+Math.random()*9999999,
+      // remote: 'http://cliclip.com/clipper.html?r='+Math.random()*9999999,
       // remote: 'http://192.168.1.3:3000/clipper.html?r='+Math.random()*9999999,
-      // remote: 'http://192.168.1.3:5000/clipper.html?r='+Math.random()*9999999,
+      remote: 'http://192.168.1.3:5000/clipper.html?r='+Math.random()*9999999,
       // remote: 'http://192.168.1.3:8000/clipper.html?r='+Math.random()*9999999,
       container: doc.body,
-      swf: 'http://cliclip.com/img/easyxdm.swf',
+      // swf: 'http://cliclip.com/img/easyxdm.swf',
       // swf: 'http://192.168.1.3:3000/img/easyxdm.swf',
-      // swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
+      swf: 'http://192.168.1.3:5000/img/easyxdm.swf',
       // swf: 'http://192.168.1.3:8000/img/easyxdm.swf',
       swfNoThrottle: true,
       onLoad: function(e){ // hack, style set
@@ -117,10 +187,9 @@
     if(!win[hash].val.show) return;
     win[hash].val.show = false;
     socket.destroy();
-    doc.documentElement.style.overflowY   =   "auto ";
+    doc.documentElement.style.overflowY = "auto ";
     win.scroll(0, savedScrollTop);
   }
-
 
   // **** main entry
   function main(){
@@ -132,15 +201,21 @@
 	savedScrollTop : 0
       }
     };
-    var sel = getSelection();
-    openUI(hash, sel ? win[hash].val.model + sel : getPage(), getInfo());
+    var hasSelect = getSelection();
+    if(hasSelect){
+      openUI(hash, html, getInfo());
+    }else{
+      getPage(function(err, html){
+	openUI(hash, html, getInfo());
+      });
+    }
   }
 
   // load dependency
   (function(){
      // after load entry
      function scriptOnLoad(){
-       if (isLoaded || typeof easyXDM === "undefined" || typeof JSON === "undefined") {
+       if (isLoaded || typeof easyXDM === 'undefined'|| typeof JSON === 'undefined' || typeof Readability === 'undefined' || typeof saxParser === 'undefined' || typeof $ === 'undefined' || typeof $.ajax !== 'function'){
 	 return;
        }
        isLoaded = true;
@@ -148,12 +223,12 @@
      }
      var isLoaded = false, head = document.getElementsByTagName('head')[0];
      // load easyXDM
-     if (typeof easyXDM === "undefined" || !easyXDM) {
+     if (typeof easyXDM === 'undefined' || !easyXDM) {
        var s1 = document.createElement("script");
        s1.type = "text/javascript";
-       s1.src = "http://cliclip.com/js/lib/easyXDM.min.js";
+       // s1.src = "http://cliclip.com/js/lib/easyXDM.min.js";
        // s1.src = "http://192.168.1.3:3000/js/lib/easyXDM.min.js";
-       // s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.min.js";
+       s1.src = "http://192.168.1.3:5000/js/lib/easyXDM.min.js";
        // s1.src = "http://192.168.1.3:8000/js/lib/easyXDM.min.js";
        s1.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
@@ -164,12 +239,12 @@
        head.appendChild(s1);
      }
      // load JSON if needed
-     if (typeof JSON === "undefined" || !JSON) {
+     if (typeof JSON === 'undefined' || !JSON) {
        var s2 = document.createElement("script");
        s2.type = "text/javascript";
-       s2.src = "http://cliclip.com/js/lib/json2.js";
+       // s2.src = "http://cliclip.com/js/lib/json2.js";
        // s2.src = "http://192.168.1.3:3000/js/lib/json2.js";
-       // s2.src = "http://192.168.1.3:5000/js/lib/json2.js";
+       s2.src = "http://192.168.1.3:5000/js/lib/json2.js";
        // s2.src = "http://192.168.1.3:8000/js/lib/json2.js";
        s2.onreadystatechange = function(){
 	 if (this.readyState === "complete" || this.readyState === "loaded") {
@@ -178,6 +253,48 @@
        };
        s2.onload = scriptOnLoad;
        head.appendChild(s2);
+     }
+     if(typeof Readability === 'undefined' || !Readability){
+       var s3 = document.createElement("script");
+       s3.type = "text/javascript";
+       // s3.src = "http://cliclip.com/js/lib/readabilitySAX.js";
+       // s3.src = "http://192.168.1.3:3000/js/lib/readabilitySAX.js";
+       s3.src =	"http://192.168.1.3:5000/js/lib/readabilitySAX.js";
+       s3.onreadystatechange = function(){
+	 if (this.readyState === "complete" || this.readyState === "loaded") {
+	   scriptOnLoad();
+	 }
+       };
+       s3.onload = scriptOnLoad;
+       head.appendChild(s3);
+     }
+     if(typeof saxParser === 'undefined' || !saxParser){
+       var s4 = document.createElement("script");
+       s4.type = 'text/javascript';
+       // s4.src = "http://cliclip.com/js/lib/DOMasSAX.js";
+       // s4.src = "http://192.168.1.3:3000/js/lib/DOMasSAX.js";
+       s4.src = 'http://192.168.1.3:5000/js/lib/DOMasSAX.js';
+       s4.onreadystatechange = function(){
+	 if (this.readyState === "complete" || this.readyState === "loaded") {
+	   scriptOnLoad();
+	 }
+       };
+       s4.onload = scriptOnLoad;
+       head.appendChild(s4);
+     }
+     if(typeof $ === 'undefined' || typeof $.ajax !== 'function' || !$){
+       var s5 = document.createElement("script");
+       s5.type = 'text/javascript';
+       // s5.src = "http://cliclip.com/js/lib/jquery.min.js";
+       // s5.src = "http://192.168.1.3:3000/js/lib/jquery.min.js";
+       s5.src = 'http://192.168.1.3:5000/js/lib/jquery.min.js';
+       s5.onreadystatechange = function(){
+	 if (this.readyState === "complete" || this.readyState === "loaded") {
+	   scriptOnLoad();
+	 }
+       };
+       s5.onload = scriptOnLoad;
+       head.appendChild(s5);
      }
      scriptOnLoad(); // try invoke directly
    })();
