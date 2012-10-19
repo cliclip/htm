@@ -172,6 +172,18 @@ function load(key, val){
 	  });
 	}, error : function(key,error){ options.error([1,error]); }
       });
+    }else if(/info/.test(key)) {
+      js_load(key,{
+	success:function(key,data){
+	  if(data.face && /:/.test(data.face)){
+	    var prefix = location.protocol == "http:" ? "/_2_/" : "../";
+	    var opt = data.face.split(":");
+	    data.face = prefix + opt[0] + "/face." + opt[1].split(".")[1];
+	    console.info(data.face,opt);
+	  }
+	  options.success([0,data]);
+	},error:function(key,error){ options.error([1,error]); }
+      });
     }else{
       console.info("a common key ::",key);
       js_load(key,{
