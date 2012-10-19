@@ -126,7 +126,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     model.onChange(function(editModel){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
-      var html = App.util.contentToHtml(editModel.toJSON().content);
+      var html = editModel.toJSON().content;
       App.Editor.init();
       // 保证了api层接受的数据和返回的数据都是ubb格式的
       App.Editor.setContent("editor", html);

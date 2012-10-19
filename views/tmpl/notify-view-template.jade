@@ -1,0 +1,7 @@
+script(type='text/template',id='notify-view-template')
+  div.notify
+    a(href="javascript:void(0)",id="close_w",class="close_w")
+    ul.notify_list
+      li
+        span<%=count%><%=_i18n('notify.show')%>
+        a(href="javascript:void(0)",id="notify_num") <%=_i18n('notify.check')%>

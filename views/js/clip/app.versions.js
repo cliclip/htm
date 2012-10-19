@@ -63,6 +63,10 @@ App.versions = (function($){
 	title       :"帮 助",
 	title_small :"&nbsp;&nbsp;帮助"
       },
+      notify :{
+	check : "查看",
+	show  : "条消息,"
+      },
       userface : {
 	zhui        : "zhui",
 	stop        : "stop",
@@ -570,6 +574,10 @@ App.versions = (function($){
       help :{
 	title          :"Help",
 	title_small    :"Help"
+      },
+      notify :{
+	check : "Check",
+	show  : "&nbspMessage(s),"
       },
       userface : {
 	zhui        : "ezhui",
