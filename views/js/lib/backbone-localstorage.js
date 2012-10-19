@@ -3,9 +3,7 @@ var cache = {};
 var time = 5000;
 
 function load(key, val){
-  //console.info("load is running..........");
-  //console.info(callbacks[key]);
-  cache[key] = val;
+  cache[key] =/my_clips/.test(key) ? val.reverse() : val;
   var s = document.getElementById(key);
   if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
   _.each(callbacks[key],function(e){
@@ -16,28 +14,32 @@ function load(key, val){
 }
 
 (function(){
+  function get_uid(url){
+    var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
+    var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
+    var uid_cookie = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0][0]:null;
+    var uid_local = App.Local? App.Local.uid :null;
+    return uid || uid_clip || uid_cookie || uid_local;
+  }
 
   function get_key(url){
+    console.info(url);
     var key = "";
-    if(/my\/info/.test(url)){
-      key = "info";
-    }else if(/query/.test(url)){
-      key = "my_clips";
+    var uid = get_uid(url);
+    if(/info/.test(url)){
+      key = "/" + uid + "/info.json.js";
+    }else if(/user\/[0-9]+\/query/.test(url)){
+      key = "/" + uid + "/my_clips.json.js";
     }else if(/meta/.test(url)){
-      key = "meta";
-    }else if(/comment/.test(url)){
-      var str = url.match(/[0-9]+:[0-9]+/g);
-      var path = str[1].split(':');
-      key = "comment_"+path[1];
+      key = "/" + uid +"/meta";
     }else if(/clip/.test(url)){
       var str = url.match(/[0-9]+:[0-9]+/g);
-      // console.info(str[str.length-1]);
-      var path = str[1].split(':');
-      key = "clip_"+path[1] +"_detail";
+      var path = str[str.length-1].split(':');
+      key = "/" + uid +  "/clip_"+path[1] +".text.js";
     }else if(/help_zh/.test(url)){
-      key = "help_zh";
+      key = "help_zh.json.js";
     }else if(/help_en/.test(url)){
-      key = "help_en";
+      key = "help_en.json.js";
     }else{
       console.info("this url is not process:"+url);
       key = url;
@@ -45,28 +47,13 @@ function load(key, val){
     return key;
   }
 
+  // 根据协议类型为url添加前缀
   function get_file(key){
-    var file = '';
-    var uid = App.Local.uid;
-    if(key == "info"){
-      file = "../"+uid+"/info.json.js";
-    }else if(key == "my_clips"){
-      file = "../"+uid+"/my_clips.json.js";
-    }else if(/clip_[0-9]+_detail/.test(key)){
-      var list = key.split('_');
-      var path = list[1];
-      file = "../"+uid+"/clip_"+path +".text.js";
-    }else if(/clip_[0-9]+_preview/.test(key)){
-      var id = key.split('_');
-      file = "../"+uid+"/clip_" + id[1] + ".json.js";
-    }else if(/help_/.test(key)){
-      file = "help/" + key + ".json.js";
-    }else{
-      console.info("this key is not process:"+key);
-    }
-    return file;
+    return location.protocol == "http:" ? "/_2_" + key : ".." + key;
+    //TODO help 的目录存在问题
   }
 
+  // 加载js文件（ 添加script标签引入文件）
   function _js_load(key) {
     var file = get_file(key);
     var s = document.getElementById(key);
@@ -82,6 +69,7 @@ function load(key, val){
   }
 
   // js_load(key, {success:function(key,val){}, error:function(key,err){}})
+  // js 文件加载成功后，将数据存入缓存
   function js_load(key,options){
     //console.info(key,cache[key],options);
     var val = cache[key];
@@ -89,11 +77,9 @@ function load(key, val){
       options.success(key,val);
     } else {
       _js_load(key);
-      //console.info("js_load:::::::",key,options);
       callbacks[key] = callbacks[key]?callbacks[key]:[];
       options.timeout = setTimeout(function(){timeout(key);}, time);
       callbacks[key].push(options);
-      //console.info("callbacks[]:::::::",key,callbacks[key]);
     }
   };
 
@@ -109,134 +95,151 @@ function load(key, val){
     delete callbacks[key];
   }
 
-  //详情中图片的url转化为本地url
-  function expandConImgUrl(content){
-    var img_name = "";
-    console.info(content);
+  //详情中图片的url转化为实际url
+  function expandConImgUrl(uid,content){
+    var img_src = "";
+    var prefix = location.protocol == "http:" ? "/_2_/" : "../";
     var reg = /\[img\].*?\/image\/.*?\[\/img\]/gi;
     var src = content.match(reg);
     var list = [];
     if(src){
       for(var i=0;i<src.length;i++) {
-	img_name = src[i].split("image")[1];
-	img_name = "[img]../"+ App.Local.uid + img_name;
-	content = content.replace(src[i],img_name);
+	img_src = src[i].split("image")[1];
+	img_src = "[img]" + prefix + uid + img_src;
+	content = content.replace(src[i],img_src);
       }
     }
     return content;
   }
 
+  // 根据clip的id 或 uid 拼接获取user信息的key
+  function getUsersKey(ids){
+    var keys = [];
+    _.each(ids ,function(id){
+      var _id = /:/.test(id) ? id.split(":")[0] : id;
+      keys.push("/" + _id + "/info.json.js");
+    });
+    return keys.slice(0,4);
+  }
+
+  // 根据userkeys 批量获取user信息
+  var loadRoute = loadUsers;
+  function loadUsers(keys, options){
+    function loadOneUser(key,callback){
+      js_load(key,{
+	success:function(key,data){
+	  data = {face:data.face,name:data.name,id:data.id};
+	  callback(null,data);
+	}, error: function(key, err){
+	  callback(err);
+	}
+      });
+    }
+    mgetModel(keys, loadOneUser, options);
+  }
+
   function getModel(key, options){
     if(/meta/.test(key)) {
-      js_load("my_clips", {
+      js_load(key.replace("meta","my_clips.json.js"), {
 	error: options.error,
 	success: function(key,data){
-	  //console.info(cache);
-	  //console.info("----meta----",key,cache[key]);
 	  var tags = [];
-	  _.each(data[1],function(clip){
+	  _.each(data,function(clip){
 	    clip.tag ? tags.push(clip.tag) : function(){};
 	  });
 	  tags = _.uniq(tags);
-	  // console.info(tags,options);
-	  // cache["meta"] = [0,{tag:tags}];
 	  options.success([0,{tag:tags}]);
 	}
       });
-    } else if (/clip_[0-9]+_detail/.test(key)) {
+    } else if (/clip_[0-9]+\.text/.test(key)) {
       var ckey = key;
-      var pkey = key.replace("detail","preview");
+      var pkey = key.replace("text","json");
       js_load(pkey, {
 	success : function(key, pdata){
+	  console.info(key,pdata);
 	  js_load(ckey, {
 	    success : function(key, cdata){
 	      var clip = _.clone(pdata);
-	      clip.users = [];
-	      clip.content = expandConImgUrl(cdata.content);
-	      console.info(clip);
-	      options.success([0,clip]);
-	    }, error : options.error
+	      var uid = clip.user.id ? clip.user.id : clip.user;
+	      clip.content = expandConImgUrl(uid ,cdata);
+	      var keys = getUsersKey(clip.route);//获取路线图
+	      options._success = function(users){
+		clip.users = users;
+		options.success([0,clip]);
+	      };
+	      loadRoute(keys,options);
+	    }, error : function(key,error){ options.error([1,error]); }
 	  });
-	}, error : options.error
+	}, error : function(key,error){ options.error([1,error]); }
       });
-    }else if(/comment/.test(key)){
-
     }else{
-      //js_load(key, options);
+      console.info("a common key ::",key);
       js_load(key,{
-	success:function(key,data){
-	  options.success(data);
-	},
-	error:function(key,error){
-	  options.error(error);
-	}
+	success:function(key,data){ options.success([0,data]); },
+	error:function(key,error){ options.error([1,error]); }
       });
     }
   }
 
   //将preview中图片url转化为本地图片url
-  function expandPreImgUrl(content){
-    var img_name = "";
-    if(content.image && !/http:/.test(content.image)&&!/\.\.\/[0-9]+\/clip/.test(content.image)){
-      img_name = content.image.split("image")[1];
-      //img_name = img_name.replace(".","_270.");
-      content.image = "../"+ App.Local.uid + img_name;
+  function expandPreImgUrl(clip){
+    var img_src = "";
+    var image = clip.content.image;
+    var prefix = location.protocol == "http:" ? "/_2_/" : "../";
+    if(image && !image.src && /\/user\//.test(image)){//新的数据结构image{src:"",width:"",height:""}
+      img_src = image.split("image")[1];
+      img_src = img_src.replace(".","_270.");
+      clip.content.image = prefix + clip.user + img_src;
+    }else if(image && image.src && /\/user\//.test(image.src)){
+      img_src = image.src.split("image")[1];
+      img_src = img_src.replace(".","_270.");
+      clip.content.image.src = prefix + clip.user + img_src;
     }
-    return content;
+    return clip;
   }
 
   //根据查询条件过滤需要取得的cliplist
   function filter(key,url,data,options){
-    var keys = [];
-    var ids = [];
-    //console.info("--------filter::options-------",options.data);
-    var _filter = options.data;
-    //var _tag = _filter.tag[0] ? _filter.tag : null;
-    _.each(data[1],function(e){
+    var keys = [], ids = [], _filter = options.data;
+    var len = url.match(/[0-9]+\.\.[0-9]+/) ? url.match(/[0-9]+\.\.[0-9]+/)[0].split("..") : null;
+    _.each(data,function(e){
       if(_filter.tag && e.tag==_filter.tag[0] ||!_filter.tag){
-	var ids = e.cid.split(":");
-	keys.push("clip_"+ids[1]+"_preview");
+	var ids =e.cid ?  e.cid.split(":") : [e.user,e.id];
+	keys.push("/" + ids[0] + "/clip_"+ids[1]+".json.js");
       }
     });
-    var len = url.match(/[0-9]+\.\.[0-9]+/)[0].split("..");
-    // console.info(len,url);
-    keys = _.uniq(keys);
-    keys = keys.slice(len[0]-1,len[1]);
-    mgetModel(keys,options);
+    keys = _.uniq(keys).slice(len[0]-1,len[1]);
+    mgetModel(keys, loadOnePreview, options);
+    function loadOnePreview(key,callback){
+      js_load(key,{
+	success:function(key,data){
+	  data = expandPreImgUrl(data);
+	  callback(null,data);
+	}, error: function(key, err){
+	  callback(err);
+	}
+      });
+    };
   }
 
-  function loadOne(key,callback){
-    js_load(key,{
-      success:function(key,data){
-	data.content =  expandPreImgUrl(data.content);
-	callback(null,data);
-      }, error: function(key, err){
-	callback(err);
-      }
-    });
-  };
-
-  function mgetModel(keys,options){
-    async.map(keys,loadOne,function(err,result){
+  function mgetModel(keys, iterator, options){
+    async.map(keys, iterator, function(err, result){
       if(err) return options.error(err);
-      var data = _.sortBy(result,function(e){return e.id;});
-      options._success([0,data]);
+      options._success(result);
     });
   }
 
   var readModel = getModel;
-  function readCollection(key, url, options){	//key == "my_clips";
-    var re = /(\d+)\.\.(\d+)/;
-    var result = url.match(re);//»ñÈ¡·ÖÒ³Ìõ¼þ
-    var _options = _.clone(options);
-    _options._success = options.success;
-    _options.success=function(key,data){
-      filter(key,url,data,_options);
-    };
-    js_load(key,_options);
+  function readCollection(key, url, options){
+    if(/my_clips/.test(key)){
+      var _options = _.clone(options);
+      _options._success = function(clips){ options.success([0,clips]); };
+      _options.success=function(key,data){ filter(key,url,data,_options); };
+      js_load(key,_options);
+    }else {
+      console.info("************************");
+    }
   }
-
-
   // A simple module to replace `Backbone.sync` with *localStorage*-based
   // persistence. Models are given GUIDS, and saved into a JSON object. Simple
   // as that.
@@ -314,57 +317,14 @@ function load(key, val){
       // case "delete":resp = store.destroy(model);break;
       case "read":
 	if(model.models) { // load collection
-	  //console.info("-----------read collection----------");
-	  var key = "my_clips"; // my_clips
-	  var url = options.url;
-	  readCollection(key, url, options);
+	  console.info("-----------read collection----------");
+	  readCollection(get_key(options.url), options.url, options);
 	}else{ // load model
-	  //console.info("-----------read model----------");
-	  var key = get_key(options.url);
-	  readModel(key, options);
+	  console.info("-----------read model----------");
+	  readModel(get_key(options.url), options);
 	}
 	break;
-    }
-
-    if (resp) {
-      // options.success(resp);
-    } else {
-      // options.error("Record not found");
     }
   };
 
 })();
-/*
-	function mgetModel(keys, options){
-		//console.info(keys,"mgetModel............",options);
-		var result =[];// {};
-		var error = {};
-		var reduce_s = function(key,d){
-			//console.info(key,keys);
-			d.content =  preImageUrl(d.content);
-			result[key] = d;
-			result.push(d);
-			keys = _.without(keys, [key])//É¾³ýkeysÖÐµÄkeyÔªËØ
-			reduce_end();
-		};
-		var reduce_e = function(key,e){
-			error[key] = e;
-			_.without(keys, [key])//É¾³ýkeysÖÐµÄkeyÔªËØ
-			reduce_end();
-		}
-		var reduce_end = function(){
-			// console.info(keys);
-			if(keys.length!=0){return;}
-			if (!_.isEmpty(error)){
-				options.error(error);
-			} else {
-				//var data = _.values(result);
-				var data = _.sortBy(result,function(e){return e.id;})
-				options._success([0,data]);
-			}
-		}
-		_.each(keys,function(key){
-			js_load(key,{success:reduce_s,error:reduce_e});
-		});
-	};
-	*/

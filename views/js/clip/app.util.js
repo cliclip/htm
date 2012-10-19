@@ -266,13 +266,43 @@ App.util = (function(){
       return name;
     }
   };
- util.showPrefixName = function(name){
-   if(name.match("@")){
-     return name.split('@')[0];
-   }else{
-     return name;
-   }
- };
+
+  util.showPrefixName = function(name){
+    if(name.match("@")){
+      return name.split('@')[0];
+    }else{
+      return name;
+    }
+  };
+
+  function getMyUid(){
+    var uid_cookie = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0][0]:null;
+    var uid_local = App.Local? App.Local.uid :null;
+    return  uid_cookie || uid_local;
+  }
+
+  function getUrlUid(url){
+    var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
+    var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
+    return uid_clip || uid;
+  }
+
+  util.collectionByRpc = function(url, options){
+    var url_uid = getUrlUid(url);
+    var my_uid = getMyUid();
+    if(!my_uid) return true;
+    if(/user\/([0-9]+)\/query/.test(url)&&url_uid != my_uid)return true;
+    return /interest|comment/.test(url)||(/query/.test(url)&&options.data.text);
+  };
+
+  util.modelByRpc = function(method, url, options){
+    var url_uid = getUrlUid(url);
+    var my_uid = getMyUid();
+    if(/my\/info/.test(url))return false;
+    if(method != "GET" || !my_uid ) return true;
+    if(/meta|clip/.test(url)&& my_uid == url_uid)return false;
+    return true;
+  };
 
   return util;
 })();

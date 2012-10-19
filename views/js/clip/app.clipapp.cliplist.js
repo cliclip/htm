@@ -28,10 +28,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
+	console.info(resp[i]);
 	if(!resp[i].clip){//TODO review
-	  if(!/:/.test(resp[i].id))
+	  if(!/:/.test(resp[i].id)){
 	    resp[i].clipid = resp[i].id;
-	  if(!/:/.test(resp[i].id)){//user.id-->user
 	    var uid = resp[i].user.id||resp[i].user;
 	    resp[i].id = uid +":"+resp[i].id;
 	  }
@@ -103,7 +103,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       if((typeof this.model.get("user"))=="object"){
 	var clipid = this.model.get("user").id + ":"+this.model.get("clipid");
       }else{
-	var clipid = this.model.clipid;
+	var clipid = this.model.id;
       }
       //console.info(this.model,this.model.clipid);
       App.ClipApp.showDetail(clipid,this.model.id,recommend);
