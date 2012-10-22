@@ -50,7 +50,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
 	//数据库中图片的src到底应该怎样存储
 	//preview 的content中的图片url中没有保存域名，网页copy到本地时无法补全正确的域名，在此补全
-	if(resp[i].content.image&&!/http/.test(resp[i].content.image.src)){
+	if(resp[i].content.image && !/\.\./.test(resp[i].content.image.src)){
+
 	  resp[i].content.image.src =App.ClipApp.Url.hostname + resp[i].content.image.src;
 	}
       }
@@ -105,7 +106,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }else{
 	var clipid = this.model.id;
       }
-      //console.info(this.model,this.model.clipid);
+      // console.info(this.model,this.model.clipid);
       App.ClipApp.showDetail(clipid,this.model.id,recommend);
     },
     mouseEnter: function(e){

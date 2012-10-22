@@ -23,8 +23,8 @@ App.ClipApp.Notify=(function(App,Backbone,$){
   });
 
   Notify.show = function(){
-    fetch();
-    Loop = setInterval(fetch,5000);
+    //fetch();
+    //Loop = setInterval(fetch,5000);
   };
 
   var fetch = function(){

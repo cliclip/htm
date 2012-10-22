@@ -1,7 +1,7 @@
 var callbacks = {};
 var cache = {};
 var time = 5000;
-
+var NOOP = function(){};
 function load(key, val){
   cache[key] =/my_clips/.test(key) ? val.reverse() : val;
   var s = document.getElementById(key);
@@ -23,7 +23,7 @@ function load(key, val){
   }
 
   function get_key(url){
-    console.info(url);
+    // console.info(url);
     var key = "";
     var uid = get_uid(url);
     if(/info/.test(url)){
@@ -71,7 +71,7 @@ function load(key, val){
   // js_load(key, {success:function(key,val){}, error:function(key,err){}})
   // js 文件加载成功后，将数据存入缓存
   function js_load(key,options){
-    //console.info(key,cache[key],options);
+    // console.info(key,cache[key],options);
     var val = cache[key];
     if (val){
       options.success(key,val);
@@ -95,23 +95,12 @@ function load(key, val){
     delete callbacks[key];
   }
 
-  //详情中图片的url转化为实际url
-  function expandConImgUrl(uid,content){
-    var img_src = "";
-    var prefix = location.protocol == "http:" ? "/_2_/" : "../";
-    var reg = /\[img\].*?\/image\/.*?\[\/img\]/gi;
-    var src = content.match(reg);
-    var list = [];
-    if(src){
-      for(var i=0;i<src.length;i++) {
-	img_src = src[i].split("image")[1];
-	img_src = "[img]" + prefix + uid + img_src;
-	content = content.replace(src[i],img_src);
-      }
-    }
-    return content;
+  function expandImgSrc(src){
+    return location.protocol != "http:" && !/\.\./.test(src) ? src.replace("/_2_","..") : src;
   }
 
+  //详情中图片的url转化为实际url
+  var expandConImgUrl = expandImgSrc;
   // 根据clip的id 或 uid 拼接获取user信息的key
   function getUsersKey(ids){
     var keys = [];
@@ -156,12 +145,11 @@ function load(key, val){
       var pkey = key.replace("text","json");
       js_load(pkey, {
 	success : function(key, pdata){
-	  console.info(key,pdata);
 	  js_load(ckey, {
 	    success : function(key, cdata){
 	      var clip = _.clone(pdata);
 	      var uid = clip.user.id ? clip.user.id : clip.user;
-	      clip.content = expandConImgUrl(uid ,cdata);
+	      clip.content = expandConImgUrl(cdata);
 	      var keys = getUsersKey(clip.route);//获取路线图
 	      options._success = function(users){
 		clip.users = users;
@@ -179,13 +167,13 @@ function load(key, val){
 	    var prefix = location.protocol == "http:" ? "/_2_/" : "../";
 	    var opt = data.face.split(":");
 	    data.face = prefix + opt[0] + "/face." + opt[1].split(".")[1];
-	    console.info(data.face,opt);
+	    // console.info(data.face,opt);
 	  }
 	  options.success([0,data]);
 	},error:function(key,error){ options.error([1,error]); }
       });
     }else{
-      console.info("a common key ::",key);
+      // console.info("a common key ::",key);
       js_load(key,{
 	success:function(key,data){ options.success([0,data]); },
 	error:function(key,error){ options.error([1,error]); }
@@ -194,20 +182,12 @@ function load(key, val){
   }
 
   //将preview中图片url转化为本地图片url
-  function expandPreImgUrl(clip){
-    var img_src = "";
-    var image = clip.content.image;
-    var prefix = location.protocol == "http:" ? "/_2_/" : "../";
-    if(image && !image.src && /\/user\//.test(image)){//新的数据结构image{src:"",width:"",height:""}
-      img_src = image.split("image")[1];
-      img_src = img_src.replace(".","_270.");
-      clip.content.image = prefix + clip.user + img_src;
-    }else if(image && image.src && /\/user\//.test(image.src)){
-      img_src = image.src.split("image")[1];
-      img_src = img_src.replace(".","_270.");
-      clip.content.image.src = prefix + clip.user + img_src;
+  function expandPreImgUrl(content){
+    if(content.image&&!/_270/.test(content.image.src)){
+      var img_src = content.image.src.replace(".","_270.");
+      content.image.src = expandImgSrc(content.image.src);
     }
-    return clip;
+    return content;
   }
 
   //根据查询条件过滤需要取得的cliplist
@@ -225,7 +205,7 @@ function load(key, val){
     function loadOnePreview(key,callback){
       js_load(key,{
 	success:function(key,data){
-	  data = expandPreImgUrl(data);
+	  data.content = expandPreImgUrl(data.content);
 	  callback(null,data);
 	}, error: function(key, err){
 	  callback(err);
@@ -329,10 +309,10 @@ function load(key, val){
       // case "delete":resp = store.destroy(model);break;
       case "read":
 	if(model.models) { // load collection
-	  console.info("-----------read collection----------");
+	  // console.info("-----------read collection----------");
 	  readCollection(get_key(options.url), options.url, options);
 	}else{ // load model
-	  console.info("-----------read model----------");
+	  // console.info("-----------read model----------");
 	  readModel(get_key(options.url), options);
 	}
 	break;

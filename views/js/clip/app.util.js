@@ -49,16 +49,18 @@ App.util = (function(){
   // TODO 此处理适合在 api 的 getUserInfo 逻辑里完成
   // if (!face) userInfo.face = default_face;
   // userInfo.icon = userInfo.face + '/42'
+  // imageid: uid:imagename
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]{1,}:face_[0-9]{13}.*/;
+    var pattern = /^[0-9]{1,}:face*/;
     if(imageid == ""){
       return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){
       var ids = imageid.split(":");
+      var opt = ids[1].split(".");
       if(size){
-	return P + "/user/" + ids[0]+ "/image/" + ids[1] + "/" + size;
+	return P + "/" + ids[0]+ "/" +opt[0] + "_"+ size+ "." + opt[1];
       }else{
-	return P + "/user/" + ids[0]+ "/image/" + ids[1];
+	return P + "/" + ids[0]+ "/" + ids[1];
       }
     }else return imageid;
   };
@@ -183,7 +185,7 @@ App.util = (function(){
 	//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 	var uid = imgids.split(":")[0];
 	var imgid = imgids.split(":")[1];
-	var url = P+"/user/"+ uid +"/image/" +imgid;
+	var url = P+"/"+ uid +"/" +imgid;
 	callback(null, url);
       }else{//上传图片失败
 	callback("imageUp_fail", null);
@@ -249,30 +251,36 @@ App.util = (function(){
     }
   };
 
-  function getMyUid(){
+  // 获取当前用户的uid
+  util.getMyUid = _getMyUid;
+  function _getMyUid(){
     var uid_cookie = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0][0]:null;
     var uid_local = App.Local? App.Local.uid :null;
     return  uid_cookie || uid_local;
   }
 
+  // 获取url中含有的uid
   function getUrlUid(url){
     var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
     var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
     return uid_clip || uid;
   }
 
+  // 判断app-base.js中collection sync方法是否通过rpc向服务器发送请求
   util.collectionByRpc = function(url, options){
     var url_uid = getUrlUid(url);
-    var my_uid = getMyUid();
+    var my_uid = _getMyUid();
     if(!my_uid) return true;
     if(/user\/([0-9]+)\/query/.test(url)&& url_uid != my_uid)return true;
+    if(/follow/.test(url)) return true;
     if(/query/.test(url) && !url_uid) return true;
     return /interest|comment/.test(url)||(/query/.test(url) && options.data.text);
   };
 
+  // 判断app-base.js中model sync方法是否通过rpc向服务器发送请求
   util.modelByRpc = function(method, url, options){
     var url_uid = getUrlUid(url);
-    var my_uid = getMyUid();
+    var my_uid = _getMyUid();
     if(/my\/info/.test(url))return false;
     if(method != "GET" || !my_uid ) return true;
     if(/meta|clip/.test(url)&& my_uid == url_uid)return false;
