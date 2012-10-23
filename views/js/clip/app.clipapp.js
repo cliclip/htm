@@ -104,8 +104,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ResetPass.show(link);
   };
 
-  ClipApp.oauth = function(){
-    ClipApp.Oauth.process();
+  ClipApp.oauth = function(key){
+    ClipApp.Oauth.process(key);
   };
 
   ClipApp.error = function(message){
@@ -147,7 +147,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myShow = function(tag){
     var uid = ClipApp.getMyUid();
     ClipApp.Face.show(uid);
-    ClipApp.Notify.show();
+    ClipApp.Notify.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow",uid, tag);

@@ -1,8 +1,16 @@
 // app.clipapp.oauth.js
 App.ClipApp.Oauth = (function(App, Backbone, $){
   var Oauth = {};
-  Oauth.process=function(){
-    checkUser(function(err,res){
+
+  var P = App.ClipApp.Url.base;
+  var OauthModel = App.Model.extend({
+    url:function(){
+      return App.ClipApp.encodeURI(P+"/user/oauth");
+    }
+  });
+
+  Oauth.process=function(key){
+    checkUser(key, function(err,res){
       if(err && err.hasbind_err){
 	var sure = function(){
 	  Backbone.history.navigate("my", true);
@@ -32,10 +40,9 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
     });
   };
 
-  function checkUser(callback){
-    var model = new App.Model.UserBindModel();
-    model.save({},{
-      url : App.ClipApp.encodeURI(App.ClipApp.Url.base+"/user/oauth"),
+  function checkUser(key, callback){
+    var model = new OauthModel();
+    model.save({key: key},{
       type: "POST",
       success:function(model,res){
 	callback(null,res);
