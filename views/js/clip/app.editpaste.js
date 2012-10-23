@@ -23,7 +23,7 @@ App.Editor = (function(App, Backbone, $){
   Editor.getContent = function(editorId){
     var objEditor = document.getElementById(editorId); // 取得编辑器对象
     var data = objEditor.contentWindow.document.body.innerHTML;
-    return App.Convert.toUbb(data); // 此处的内容会提交到api层去
+    return data; // App.Convert.toUbb(data); // 此处的内容会提交到api层去
   };
 
   // 与getContent对称 该js内部实现 [没有必要]

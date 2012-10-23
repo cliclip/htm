@@ -13,17 +13,11 @@ App.Convert = (function(App, Backbone, $){
     return html;
   };
 
-  Convert.toUbb = function(html){
-    html = _htmlToUbb(html);
-    return html;
-  };
-
   Convert.cleanHtml = _cleanHtml;
-  Convert.htmlToUbb = _htmlToUbb;
-  Convert.ubbToHtml = _ubbToHtml;
 
   function isWord(strValue) {
-    var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
+    // var re = new RegExp(/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig);
+    var re = /(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/ig;
     return re.test(strValue);
   }
 
@@ -363,35 +357,3 @@ function decode(m, n) {
 return Convert;
 
 })(App, Backbone, jQuery);
-
-							   /*
-  var filterPasteText = function(str){
-    str = str.replace(/\r\n|\n|\r/ig, "");
-    //remove html body form
-    str = str.replace(/<\/?(html|body|form)(?=[\s\/>])[^>]*>/ig, "");
-    //remove doctype
-    str = str.replace(/<(!DOCTYPE)(\n|.)*?>/ig, "");
-    // Word comments like conditional comments etc
-    str = str.replace(/<!--[\s\S]*?-->/ig, "");
-    //remove xml tags
-    str = str.replace(/<(\/?(\?xml(:\w+)?|xml|\w+:\w+)(?=[\s\/>]))[^>]*>/gi,"");
-    //remove head
-    str = str.replace(/<head[^>]*>(\n|.)*?<\/head>/ig, "");
-    //remove <xxx />
-    str = str.replace(/<(script|style|link|title|meta|textarea|option|select|iframe|hr)(\n|.)*?\/>/ig, "");
-    //remove empty span
-    str = str.replace(/<span[^>]*?><\/span>/ig, "");
-    //remove <xxx>...</xxx>
-    str = str.replace(/<(head|script|style|textarea|button|select|option|iframe)[^>]*>(\n|.)*?<\/\1>/ig, "");
-    //remove table and <a> tag,<input> tag (this can help filter unclosed tag)
-    str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|input|iframe|div)[^>]*>/ig, "");
-    //remove table and <a> tag, <img> tag,<input> tag (this can help filter unclosed tag)
-    // str = str.replace(/<\/?(a|table|tr|td|tbody|thead|th|img|input|iframe|div)[^>]*>/ig, "");
-    //remove bad attributes
-    do {
-      len = str.length;
-      str = str.replace(/(<[a-z][^>]*\s)(?:id|name|language|type|class|on\w+|\w+:\w+)=(?:"[^"]*"|\w+)\s?/gi, "$1");
-    } while (len != str.length);
-    return str;
-  };
- */
