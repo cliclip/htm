@@ -36,32 +36,27 @@ App.util = (function(){
     return url + "?now=" + now.getTime();
   };
 
-  // TODO 此处理适合在 api 的 getPreview 逻辑里完成
-  // clip列表时取得img 的 url 为裁剪后的图片
-  util.url = function(image_url){
-    var pattern = /user\/\d\/image\/.*?/;
-    var pattern1 = /http:\/\//;
-    if(image_url && pattern.test(image_url)&&!pattern1.test(image_url)){
-      return image_url + "/270";
-    }else return image_url;
+  util.img_url = function(url,size){
+    if(url && !/http:/.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
+      var opt = url.split(".");
+      return opt[0] + "_270." + opt[1];
+    }else return url;
   };
 
   // TODO 此处理适合在 api 的 getUserInfo 逻辑里完成
   // if (!face) userInfo.face = default_face;
   // userInfo.icon = userInfo.face + '/42'
-  // imageid: uid:imagename
+  // imageid: [uid]:face_[time].jpg|gif
   util.face_url = function(imageid,size){
     var pattern = /^[0-9]{1,}:face*/;
     if(imageid == ""){
       return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){
       var ids = imageid.split(":");
-      var opt = ids[1].split(".");
-      if(size){
-	return P + "/" + ids[0]+ "/" +opt[0] + "_"+ size+ "." + opt[1];
-      }else{
-	return P + "/" + ids[0]+ "/" + ids[1];
-      }
+      var opt0 = ids[1].split("_");
+      var opt = opt0[1].split(".");
+      var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
+      return P + "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
     }else return imageid;
   };
 

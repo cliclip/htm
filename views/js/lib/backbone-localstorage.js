@@ -1,19 +1,23 @@
-var callbacks = {};
-var cache = {};
-var time = 5000;
-var NOOP = function(){};
-function load(key, val){
-  cache[key] =/my_clips/.test(key) ? val.reverse() : val;
-  var s = document.getElementById(key);
-  if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
-  _.each(callbacks[key],function(e){
-      clearTimeout(e.timeout);
-      e.success(key,val);
-  });
-  delete callbacks[key];
-}
-
 (function(){
+
+  var callbacks = {};
+  window.cache = {};
+  var time = 5000;
+  var NOOP = function(){};
+
+  //*.json.js文件中调用此方法，传入数据
+  window.load = function(key, val){
+    cache[key] =/my_clips/.test(key) ? val.reverse() : val;
+    var s = document.getElementById(key);
+    if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
+    _.each(callbacks[key],function(e){
+	clearTimeout(e.timeout);
+	e.success(key,val);
+    });
+    delete callbacks[key];
+  };
+
+  // 根据url，cookie ，App.local.js 获取用户id
   function get_uid(url){
     var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
     var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
@@ -22,6 +26,7 @@ function load(key, val){
     return uid || uid_clip || uid_cookie || uid_local;
   }
 
+  // 根据url 取得文件名称及目录
   function get_key(url){
     // console.info(url);
     var key = "";
@@ -95,12 +100,11 @@ function load(key, val){
     delete callbacks[key];
   }
 
+  //图片的url转化为实际url
   function expandImgSrc(src){
     return location.protocol != "http:" && !/\.\./.test(src) ? src.replace("/_2_","..") : src;
   }
 
-  //详情中图片的url转化为实际url
-  var expandConImgUrl = expandImgSrc;
   // 根据clip的id 或 uid 拼接获取user信息的key
   function getUsersKey(ids){
     var keys = [];
@@ -149,12 +153,13 @@ function load(key, val){
 	    success : function(key, cdata){
 	      var clip = _.clone(pdata);
 	      var uid = clip.user.id ? clip.user.id : clip.user;
-	      clip.content = expandConImgUrl(cdata);
+	      clip.content = expandImgSrc(cdata);
 	      var keys = getUsersKey(clip.route);//获取路线图
 	      options._success = function(users){
 		clip.users = users;
 		options.success([0,clip]);
 	      };
+	      // TODO 区分本地还是在线
 	      loadRoute(keys,options);
 	    }, error : function(key,error){ options.error([1,error]); }
 	  });
@@ -164,10 +169,7 @@ function load(key, val){
       js_load(key,{
 	success:function(key,data){
 	  if(data.face && /:/.test(data.face)){
-	    var prefix = location.protocol == "http:" ? "/_2_/" : "../";
-	    var opt = data.face.split(":");
-	    data.face = prefix + opt[0] + "/face." + opt[1].split(".")[1];
-	    // console.info(data.face,opt);
+	    data.face = expandImgSrc(data.face);
 	  }
 	  options.success([0,data]);
 	},error:function(key,error){ options.error([1,error]); }
@@ -232,6 +234,7 @@ function load(key, val){
       console.info("************************");
     }
   }
+/*
   // A simple module to replace `Backbone.sync` with *localStorage*-based
   // persistence. Models are given GUIDS, and saved into a JSON object. Simple
   // as that.
@@ -294,6 +297,7 @@ function load(key, val){
   }
 
   });
+*/
 
   // Override `Backbone.sync` to use delegate to the model or collection's
   // *localStorage* property, which should be an instance of `Store`.
@@ -303,7 +307,7 @@ function load(key, val){
     var resp;
     //var store = model.localStorage || model.collection.localStorage;
     switch (method) {
-      // case "read":resp = model.id ? store.find(model) : store.findAll(); break;
+      // case "read":resp = model.id?store.find(model):store.findAll();break;
       // case "create":resp = store.create(model);break;
       // case "update":resp = store.update(model);break;
       // case "delete":resp = store.destroy(model);break;

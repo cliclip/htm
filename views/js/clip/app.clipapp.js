@@ -16,7 +16,8 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.getMyUid = function(){
-    return App.ClipApp.Me.getUid();
+    //return App.ClipApp.Me.getUid();
+    return App.util.getMyUid();
   };
 
   ClipApp.getMyName = function(){

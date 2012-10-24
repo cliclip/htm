@@ -28,7 +28,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	console.info(resp[i]);
+	// console.info(resp[i]);
 	if(!resp[i].clip){//TODO review
 	  if(!/:/.test(resp[i].id)){
 	    resp[i].clipid = resp[i].id;
