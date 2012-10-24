@@ -21,20 +21,21 @@ App.ClipApp.Notify=(function(App,Backbone,$){
       this.trigger("@closeView");
     }
   });
-
-  Notify.show = function(){
-    //fetch();
-    //Loop = setInterval(fetch,5000);
+  Notify.show = function(uid){
+    if(uid){
+      fetch(uid);
+      Loop = setInterval(fetch,5000);
+    }
   };
 
-  var fetch = function(){
+  var fetch = function(uid){
     var uid = App.ClipApp.getMyUid();
     var notify = new NotifyModel({uid:uid, count:0});
-    notify.fetch({})
+    notify.fetch({});
     notify.onChange(function(notifyModel){
       var notifyView = new NotifyView({model:notifyModel});
       var count = notifyModel.get("count");
-      if(count)  App.notifyRegion.show(notifyView);
+      if(count != 0) App.notifyRegion.show(notifyView);
     });
   }
 
