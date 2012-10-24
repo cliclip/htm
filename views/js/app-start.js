@@ -17,12 +17,11 @@ $(function(){
     searchRegion:".search",
     followRegion:"#follow"
   });
-
+  var hostname = "http://192.168.1.3:8000";
   //easyXDM.Rpc
   var rpc = new easyXDM.Rpc({
-    remote: "http://192.168.1.3:8000/cors/",
-    //remote: "http://192.168.1.3:8000/upload.html",
-    swf: 'http://192.168.1.3:8000/img/easyxdm.swf'
+    remote: hostname + "/cors/",
+    swf: hostname + '/img/easyxdm.swf'
     //swfNoThrottle: true,
   },{
     local: {
@@ -42,7 +41,7 @@ $(function(){
       return !!(window.File && window.FileList && window.FileReader);
     });
     Modernizr.addTest('jsonp', function () {
-      return window.location.hostname!="192.168.1.3"&&window.location.hostname!="cliclip.com";
+      return window.location.protocol != "http:";
     });
     Modernizr.addTest('cssfilters', function() {
       var el = document.createElement('div');

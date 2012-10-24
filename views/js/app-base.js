@@ -59,7 +59,7 @@ App = (function(Backbone, $){
       var success = options.success;
       var error = options.error;
       options.success = function(resp, status, xhr){
-	console.info(resp);
+	// console.info(resp);
 	if(resp[0] == 0){
 	  // console.info("sync:");console.dir(resp);
 	  if(success) success.apply(model, [resp[1], status, xhr]);
@@ -88,7 +88,7 @@ App = (function(Backbone, $){
 	);
       }else{
 	options.url  =  options.url||model.get("url")||model.url();
-	console.info(options.url);
+	// console.info(options.url);
 	Backbone.sync.apply(Backbone, [method, model, options]);
       }
     }
@@ -162,7 +162,7 @@ App = (function(Backbone, $){
 	//Backbone.sync.apply(Backbone, [method, model, options]);
       }else{
 	options.url  = _url;
-	console.info(options.url);
+	// console.info(options.url);
 	Backbone.sync.apply(Backbone, [method, model, options]);
       }
     }

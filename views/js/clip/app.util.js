@@ -218,7 +218,7 @@ App.util = (function(){
     document.body.removeChild(form);
   };
   util.showName = function(name){
-    if(name.match("@")){
+    if(name && name.match("@")){
       var provider = name.split("@")[1];
       if(provider == "weibo"){
 	return name.split("@")[0]+" <img width ='17px' src =' http://ww3.sinaimg.cn/large/69ae757egw1divzpcj539j.jpg'>";
@@ -239,11 +239,7 @@ App.util = (function(){
   };
 
   util.showPrefixName = function(name){
-    if(name.match("@")){
-      return name.split('@')[0];
-    }else{
-      return name;
-    }
+    return name && name.match("@") ? name.split('@')[0] : name;
   };
 
   // 获取当前用户的uid

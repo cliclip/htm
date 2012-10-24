@@ -230,6 +230,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       });
       var commentList = new CommentList({collection: commentCollection});
       ClipDetail.commentRegion = new App.Region({el:".comments"});
+      console.info(commentList);
       ClipDetail.commentRegion.show(commentList);
     });
   };

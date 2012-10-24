@@ -4,7 +4,7 @@
   window.cache = {};
   var time = 5000;
   var NOOP = function(){};
-
+  var P = "/_2_";
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
     cache[key] =/my_clips/.test(key) ? val.reverse() : val;
@@ -54,7 +54,7 @@
 
   // 根据协议类型为url添加前缀
   function get_file(key){
-    return location.protocol == "http:" ? "/_2_" + key : ".." + key;
+    return location.protocol == "http:" ? P + key : ".." + key;
     //TODO help 的目录存在问题
   }
 
@@ -102,7 +102,7 @@
 
   //图片的url转化为实际url
   function expandImgSrc(src){
-    return location.protocol != "http:" && !/\.\./.test(src) ? src.replace("/_2_","..") : src;
+    return location.protocol != "http:" && !/\.\./.test(src) ? src.replace(P,"..") : src;
   }
 
   // 根据clip的id 或 uid 拼接获取user信息的key
