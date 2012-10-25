@@ -54,6 +54,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 单击clip就响应show_detail事件
+      "click .type_text" : "createClipShareLink",
       "click #header" : "show_detail",
       "click .operate" : "operate",
       "mouseenter .clip_item": "mouseEnter",
@@ -78,6 +79,28 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
       });
     },
+
+    createClipShareLink: function(e){
+      e.stopPropagation();
+      var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
+      var model = new App.Model();
+      if(document.selection&&document.selection.createRange().htmlText){
+	return;
+      }else if(window.getSelection&&$.trim(window.getSelection().toString())){
+	return;
+      }
+      model.save({},{
+	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+'/sharelink'),
+	type: "POST",
+	success:function(model,res){ // 不只是弹出提示框这么简单
+	  App.ClipApp.ClipDetail.show(clipid, null, {}, res);
+	},
+	error:function(model,error){ // 则显示该链接不能再点击
+	  App.ClipApp.showConfirm(error, null, function(){});
+	}
+      });
+    },
+
     show_detail: function(){
       //部分ff ie 选中clip preview 中内容会触发鼠标单击事件打开详情页
       //ie-7 8 无getSelection()只有document.selection  ie9 两个对象都有
@@ -112,7 +135,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	    user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
 	  };
 	  App.ClipApp.showReclip(cid, mid, recommend, pub); break;
-	//case 'recommend'://转
+	case 'recommend'://转
+	  //createClipShareLink(cid); break;
 	  //App.ClipApp.showRecommend(cid,mid,pub);break;
 	case 'comment'://评
 	  App.ClipApp.showComment(cid, mid); break;
@@ -125,6 +149,22 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
   });
+
+/*
+  function createClipShareLink(clipid){
+    var model = new App.Model();
+    model.save({},{
+      url: App.ClipApp.encodeURI(P+"/clip/"+clipid+'/sharelink'),
+      type: "POST",
+      success:function(model,res){ // 不只是弹出提示框这么简单
+	App.ClipApp.ClipDetail.show(clipid, null, {}, res);
+      },
+      error:function(model,error){ // 则显示该链接不能再点击
+	App.ClipApp.showConfirm(error, null, function(){});
+      }
+    });
+  }
+*/
 
   var ClipListView = App.CollectionView.extend({
     tagName: "div",

@@ -305,14 +305,15 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     }
   }
 
-  ClipDetail.show = function(cid,model_id,recommend){ // cid等于detailModel.id
+  ClipDetail.show = function(cid,model_id,recommend, link){ // cid等于detailModel.id
     var ids = cid.split(":");
     var model = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user});
     mid = model_id;
     // 获取当前页面的 url 以及 scrollTop
     hist = Backbone.history.fragment;
     offset = $(window).scrollTop() || $(document.body).scrollTop();
-    Backbone.history.navigate("clip/"+ids[0]+"/"+ids[1], false);
+    if(link) Backbone.history.navigate("link/"+link, false);
+    else Backbone.history.navigate("clip/"+ids[0]+"/"+ids[1], false);
     model.fetch({
       success:function(res,detailModel){
 	model.onChange(function(detailModel){
