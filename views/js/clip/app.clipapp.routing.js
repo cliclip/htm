@@ -15,6 +15,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "register": "showRegister",
       "invite/:key" : "invite",
       "active/:key": "active",
+      "link/:link": "consumeLink",
       "password/find":"findpasswd",
       "password/reset/:link":"resetpasswd",
       "oauth/callback/:key":"oauth",
