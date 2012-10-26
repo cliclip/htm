@@ -67,7 +67,6 @@
   }
 
   function getNextPage(pages, url, html, callback){
-    var timeoutEvent = null;
     var readable = new Readability({linksToSkip: pages, pageURL : url});
     readable.setSkipLevel(3);
     var article = null;
@@ -75,8 +74,8 @@
       url : url,
       timeout: 10000, // 过期时间设置为10秒
       success: function(data){
-	var nextDoc = parseDom(data);
-	saxParser(nextDoc, readable);
+	var nextDom = parseDom(data);
+	saxParser(nextDom, readable);
 	article = readable.getArticle();
 	html += article.html;
 	if(article && article.nextPage && article.nextPage != url){
