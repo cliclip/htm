@@ -19,7 +19,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.useredit:rename");
 	});
       }else{
-	window.location.href="/oauth/req/twitter?force_login=true";
+	window.location.href=App.ClipApp.Url.hostname +"/oauth/req/twitter?force_login=true";
       }
     },
     TwitterCut:function(e){
@@ -60,7 +60,11 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
 	TwitterEdit.show();
       },
       error: function(model, res){
-	App.ClipApp.showAlert("del_oauth_fail");
+	if(res.unbind == "cannot_unbind"){
+	  App.ClipApp.showConfirm("cannot_unbind", null, function(){});
+	}else{
+	  App.ClipApp.showAlert("del_oauth_fail");
+	}
       }
     });
   };

@@ -24,7 +24,7 @@ script(type="text/template",id="detail-view-template")
           <% for(var i = 0; i<users.length; i++){%>
           <li class="user_head">
             <a href="#user/<%= users[i].id%>">
-            <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
+            <img src="<%= App.util.face_url(users[i].face,50)%>" title="<%=App.util.showPrefixName(users[i].name)%>" alt="<%= App.util.showPrefixName(users[i].name)%>">
             </a>
             <% if(i < users.length-1){ %>
                <div class="join"></div>
@@ -47,7 +47,7 @@ script(type="text/template",id="showcomment-view-template")
     <a class="userhead" href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
   dt
     span.username
-      <a href="#user/<%=user.id%>"><%=user.name%> :</a>
+      <a href="#user/<%=user.id%>"><%=App.util.showName(user.name)%> :</a>
     span.text
      <span class="comment_text"><%= text%></span><span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
   dd.comment_con.

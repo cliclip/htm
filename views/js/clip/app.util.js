@@ -6,6 +6,9 @@ App.util = (function(){
   util.email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
 
   util.getCookie = function(name){
+    if(App.Local){
+      return App.Local[name];
+    }
     var start = document.cookie.indexOf( name+"=" );
     var len = start + name.length + 1;
     if ((!start) && (name != document.cookie.substring(0, name.length))){
@@ -18,13 +21,14 @@ App.util = (function(){
       end = document.cookie.length;
     return unescape(document.cookie.substring( len, end ));
   };
-
+  // url后面加上_token的原因是本地文件跨域访问时无法传递token参数，
+  // 且上传图片时不走app-base.js的sync方法，所以需要手动加入参数
   util.getImg_upUrl = function(uid){
-    return P + '/user/'+uid+'/image';
+    return P + "/user/"+uid+"/image?_token=" + App.util.getCookie("token");
   };
 
   util.getFace_upUrl = function(uid){
-    return P+"/user/" + uid + "/upload_face";
+    return P+"/user/" + uid + "/upload_face?_token=" + App.util.getCookie("token");
   };
 
   util.unique_url = function(url){
@@ -32,30 +36,27 @@ App.util = (function(){
     return url + "?now=" + now.getTime();
   };
 
-  // TODO 此处理适合在 api 的 getPreview 逻辑里完成
-  // clip列表时取得img 的 url 为裁剪后的图片
-  util.url = function(image_url){
-    var pattern = /user\/\d\/image\/.*?/;
-    var pattern1 = /http:\/\//;
-    if(image_url && pattern.test(image_url)&&!pattern1.test(image_url)){
-      return image_url + "/270";
-    }else return image_url;
+  util.img_url = function(url,size){
+    if(url && !/http:/.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
+      var opt = url.split(".");
+      return opt[0] + "_270." + opt[1];
+    }else return url;
   };
 
   // TODO 此处理适合在 api 的 getUserInfo 逻辑里完成
   // if (!face) userInfo.face = default_face;
   // userInfo.icon = userInfo.face + '/42'
+  // imageid: [uid]:face_[time].jpg|gif
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]{1,}:face_[0-9]{13}.*/;
+    var pattern = /^[0-9]{1,}:face*/;
     if(imageid == ""){
       return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){
       var ids = imageid.split(":");
-      if(size){
-	return P + "/user/" + ids[0]+ "/image/" + ids[1] + "/" + size;
-      }else{
-	return P + "/user/" + ids[0]+ "/image/" + ids[1];
-      }
+      var opt0 = ids[1].split("_");
+      var opt = opt0[1].split(".");
+      var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
+      return P + "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
     }else return imageid;
   };
 
@@ -171,30 +172,20 @@ App.util = (function(){
     return isIE= $('html').hasClass("gt-ie8") || $('html').hasClass("lt-ie9") || $('html').hasClass("lt-ie8") || $('html').hasClass("lt-ie7");
   };
 
-  util.get_imgurl = function(frameid,callback){
-    $("#" + frameid).unbind("load");
-    $("#" + frameid).load(function(){ // 加载图片
-      if(App.util.isIE()){
-	var returnVal = this.contentWindow.document.documentElement.innerText;
-      }else{
-	var returnVal = this.contentDocument.documentElement.textContent;
+  util.get_imgurl = function(returnVal,callback){
+    if(returnVal != null && returnVal != ""){
+      var returnObj = eval(returnVal);
+      if(returnObj[0] == 0){
+	var imgids = returnObj[1][0];
+	//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
+	var uid = imgids.split(":")[0];
+	var imgid = imgids.split(":")[1];
+	var url = P+"/"+ uid +"/" +imgid;
+	callback(null, url);
+      }else{//上传图片失败
+	callback("imageUp_fail", null);
       }
-      if(returnVal != null && returnVal != ""){
-	var returnObj = eval(returnVal);
-	if(returnObj[0] == 0){
-	  var imgids = returnObj[1][0];
-	  //for(var i=0;i<imgids.length;i++){ // 上传无需for循环
-	  var uid = imgids.split(":")[0];
-	  var imgid = imgids.split(":")[1];
-	  var url = P+"/"+ uid +"/" +imgid;
-	  //var url = P+"/user/"+ uid +"/image/" +imgid;
-	  // var url = returnObj[1];
-	  callback(null, url);
-	}else{//上传图片失败
-	  callback("imageUp_fail", null);
-	}
-      }
-    });
+    }
   };
 
   util.img_load = function(img){
@@ -225,6 +216,66 @@ App.util = (function(){
     form.reset();
     pos.parentNode.insertBefore(file,pos);
     document.body.removeChild(form);
+  };
+  util.showName = function(name){
+    if(name && name.match("@")){
+      var provider = name.split("@")[1];
+      if(provider == "weibo"){
+	return name.split("@")[0]+" <img width ='17px' src =' http://ww3.sinaimg.cn/large/69ae757egw1divzpcj539j.jpg'>";
+      }else if(provider == "twitter"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "dropbox"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "gmail.com"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "126.com"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }else if(provider == "163.com"){
+	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+      }
+    }else{
+      return name;
+    }
+  };
+
+  util.showPrefixName = function(name){
+    return name && name.match("@") ? name.split('@')[0] : name;
+  };
+
+  // 获取当前用户的uid
+  util.getMyUid = _getMyUid;
+  function _getMyUid(){
+    var uid_cookie = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0][0]:null;
+    var uid_local = App.Local? App.Local.uid :null;
+    return  uid_cookie || uid_local;
+  }
+
+  // 获取url中含有的uid
+  function getUrlUid(url){
+    var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
+    var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
+    return uid_clip || uid;
+  }
+
+  // 判断app-base.js中collection sync方法是否通过rpc向服务器发送请求
+  util.collectionByRpc = function(url, options){
+    var url_uid = getUrlUid(url);
+    var my_uid = _getMyUid();
+    if(!my_uid) return true;
+    if(/user\/([0-9]+)\/query/.test(url)&& url_uid != my_uid)return true;
+    if(/follow/.test(url)) return true;
+    if(/query/.test(url) && !url_uid) return true;
+    return /interest|comment/.test(url)||(/query/.test(url) && options.data.text);
+  };
+
+  // 判断app-base.js中model sync方法是否通过rpc向服务器发送请求
+  util.modelByRpc = function(method, url, options){
+    var url_uid = getUrlUid(url);
+    var my_uid = _getMyUid();
+    if(/my\/info/.test(url))return false;
+    if(method != "GET" || !my_uid ) return true;
+    if(/meta|clip/.test(url)&& my_uid == url_uid)return false;
+    return true;
   };
 
   return util;

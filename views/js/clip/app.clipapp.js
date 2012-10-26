@@ -2,7 +2,6 @@
 
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
-
   // util methods
   ClipApp.isLoggedIn = function(){
     return ClipApp.getMyUid() != null ? true : false;
@@ -17,7 +16,8 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.getMyUid = function(){
-    return App.ClipApp.Me.getUid();
+    //return App.ClipApp.Me.getUid();
+    return App.util.getMyUid();
   };
 
   ClipApp.getMyName = function(){
@@ -29,7 +29,7 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.isSelf = function(uid){
-    return uid == ClipApp.getMyUid();
+    return uid == App.ClipApp.getMyUid();
   };
 
   ClipApp.img_upUrl = function(){
@@ -109,8 +109,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ResetPass.show(link);
   };
 
-  ClipApp.oauth = function(){
-    ClipApp.Oauth.process();
+  ClipApp.oauth = function(key){
+    ClipApp.Oauth.process(key);
   };
 
   ClipApp.error = function(message){
@@ -152,6 +152,7 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.myShow = function(tag){
     var uid = ClipApp.getMyUid();
     ClipApp.Face.show(uid);
+    ClipApp.Notify.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserClips(uid, tag);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:usershow",uid, tag);
@@ -230,13 +231,13 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
-  ClipApp.showClipAdd = function(clipper){
+  ClipApp.showClipAdd = function(clipper,clipper_content){
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	ClipApp.ClipAdd.show(clipper);
+	App.ClipApp.ClipAdd.show(clipper,clipper_content);
       });
     }else{
-      ClipApp.ClipAdd.show(clipper);
+      ClipApp.ClipAdd.show(clipper,clipper_content);
     }
   };
 
@@ -308,12 +309,14 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.RuleEdit.show();
 	ClipApp.WeiboEdit.show();
 	ClipApp.TwitterEdit.show();
+	ClipApp.DropboxEdit.show();
       });
     }else{
       ClipApp.UserEdit.show();
       ClipApp.RuleEdit.show();
       ClipApp.WeiboEdit.show();
       ClipApp.TwitterEdit.show();
+      ClipApp.DropboxEdit.show();
     }
   };
 

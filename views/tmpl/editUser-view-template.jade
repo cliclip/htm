@@ -11,32 +11,28 @@ script(type="text/template",id="editUser-view-template")
         div(class="middle",id="email")
         div(class="middle",id="weibo")
         div(class="middle",id="twitter")
+        div(class="middle",id="dropbox")
       div.bottom
 script(type="text/template",id="faceEdit-view-template")
   .edit_head
     .head_img#head_img.
       <img id="myface" src="<%=App.util.face_url(face)%>" />
     .user_name
-      <% if(name && name!=""){%>
-      <span class="name"><%=name%></span>
-      <% }else{%>
-      <span id="set-name" class="name"><%=_i18n('faceEdit.no_name')%></span>
+      <div id="set-name" class="name"><%=name%></div>
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
       <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>" title="<%=_i18n('faceEdit.set_name')%>"/>
-      <%}%>
-  .head_link
-    iframe(name="post_frame_face",id="post_frame_face")
-    | <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="post_frame_face" enctype="multipart/form-data">
-    | <div class="btn_frame">
-    | <button class="verify" type="submit" id="confirm_face" title="<%=_i18n('faceEdit.ok')%>"><%=_i18n('faceEdit.ok')%></button>
-    | <div class="button_frame">
-    | <span class="file" title="<%=_i18n('faceEdit.upload')%>">
-    | <button class="upload" ><%=_i18n('faceEdit.upload')%></button>
-    | <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
-    | </span>
-    | </div>
-    | </div>
-    | </form>
+  .head_link.
+    <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="upload_target" enctype="multipart/form-data">
+    <div class="btn_frame">
+    <button class="verify" type="submit" id="confirm_face" title="<%=_i18n('faceEdit.ok')%>"><%=_i18n('faceEdit.ok')%></button>
+    <div class="button_frame">
+    <span class="file" title="<%=_i18n('faceEdit.upload')%>">
+    <button class="upload" ><%=_i18n('faceEdit.upload')%></button>
+    <input id="formUpload" class="hifile" type="file" name="image" onchange="return App.ClipApp.UserEdit.onUploadImgChange(this)">
+    </span>
+    </div>
+    </div>
+    </form>
   .preview.
     <img id="preview_size_fake" />
 
@@ -148,6 +144,22 @@ script(type="text/template",id="twitterEdit-view-template")
       |<span class="oauth_del" id="<%=info[i].uid%>" title="<%=_i18n('twitterEdit.del')%>"></span>
       |<a href="<%=info[i].url%>" target="_blank"><span class="info_face" id=""><img width="48px" heigth="48px" src="<%=App.util.face_url(info[i].face)%>"></img></span></a>
       |<a href="<%=info[i].url%>" target="_blank"><span class="info_name" id="name_<%=info[i].uid%>" ><%=info[i].name%></span></a>
+      |</li><% }} }%>
+
+
+script(type="text/template",id="dropboxEdit-view-template")
+  .mail_verify.fir
+    ul.mail_list
+      h3.
+        <button class="add_accountbind" type="button" id="info_add" title="<%=_i18n('dropboxEdit.add')%>">
+          <span/>
+          <%=_i18n('dropboxEdit.add')%> 	
+        </button>
+        <%=_i18n('dropboxEdit.title')%>
+      |<% if(info){ for(i=0;i<info.length;i++) { if(info[i]){ %>
+      |<li class="oauth_li">
+      |<span class="oauth_del" id="<%=info[i].uid%>" title="<%=_i18n('dropboxEdit.del')%>"></span>
+      |<span><%=info[i].email%></span>
       |</li><% }} }%>
   .mail_verify.sec
     ul.mail_list

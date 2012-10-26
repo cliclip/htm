@@ -1,5 +1,5 @@
-//- fall back console
 
+//- fall back console
 if(typeof console !== "object"){
   console = {
     log:function(){},
@@ -12,6 +12,12 @@ if(typeof console !== "object"){
 
 App = (function(Backbone, $){
 
+  var methodMap = {
+    'create': 'POST',
+    'update': 'PUT',
+    'delete': 'DELETE',
+    'read':   'GET'
+  };
   var App = new Backbone.Marionette.Application();
 
   App.Model = Backbone.Model.extend({
@@ -40,21 +46,51 @@ App = (function(Backbone, $){
     },
     // override to parse [0, res] | [1, err] structure
     sync: function(method, model, options){
+      options.crossDomain = true;
+      options.processData = true;
+      //options.contentType = 'application/x-www-form-urlencoded;charset=UTF-8';
+      options.data = model.toJSON();
+      if(options.data){
+	options.data = (typeof options.data === "string") ? JSON.parse(options.data) : options.data;
+      }else{
+	options.data = {};
+      }
+      options.data._token = App.util.getCookie("token");
       var success = options.success;
       var error = options.error;
       options.success = function(resp, status, xhr){
+	// console.info(resp);
 	if(resp[0] == 0){
-	  // console.info("sync success:");console.dir(resp[1]);
+	  // console.info("sync:");console.dir(resp);
 	  if(success) success.apply(model, [resp[1], status, xhr]);
 	} else {
 	  if("auth" in resp[1]){
+	  //if(false){
 	    model.trigger("alert", resp[1]);
 	  }else{
 	    if(error) error.apply(model, [resp[1], status, xhr]);
 	  }
 	}
       };
-      Backbone.sync.apply(Backbone, [method, model, options]);
+      var _url = options.url||model.get("url")||model.url();
+      var _method = options.type||methodMap[method];
+      if(App.util.modelByRpc(_method,_url,options)){
+	App.rpc.request({
+	    url:_url,
+	    method:_method,
+	    data:options.data
+	  }, function(resp){
+	    var returnObj = eval(resp.data);
+	    options.success(returnObj);
+	  }, function(resp){
+	    console.dir(resp);
+	  }
+	);
+      }else{
+	options.url  =  options.url||model.get("url")||model.url();
+	// console.info(options.url);
+	Backbone.sync.apply(Backbone, [method, model, options]);
+      }
     }
   });
 
@@ -87,6 +123,16 @@ App = (function(Backbone, $){
     },
     // override to parse [0, res] | [1, err] structure
     sync: function(method, model, options){
+      options.crossDomain = true;
+      options.processData = true;
+      //options.contentType ='application/x-www-form-urlencoded;charset=UTF-8';
+      if(options.data){
+	options.data = (typeof options.data === "string") ? JSON.parse(options.data) : options.data;
+	//options.data.tag = JSON.stringify(options.data.tag);
+      }else{
+	options.data = {};
+      }
+      options.data._token = App.util.getCookie("token");
       var success = options.success;
       var error = options.error;
       options.success = function(resp, status, xhr){
@@ -99,7 +145,26 @@ App = (function(Backbone, $){
 	  if(error) error.apply(model, [resp[1], status, xhr]);
 	}
       };
-      Backbone.sync.apply(Backbone, [method, model, options]);
+      var _url = options.url||model.get("url")||model.url();
+      var _method = options.type||methodMap[method];
+      if(App.util.collectionByRpc(_url, options)){
+	App.rpc.request({
+	    url:_url,
+	    method:_method,
+	    data:options.data
+	  }, function(resp){
+	    var returnObj = eval(resp.data);
+	    options.success(returnObj);
+	  }, function(resp){
+	    console.dir(resp);
+	  }
+	);
+	//Backbone.sync.apply(Backbone, [method, model, options]);
+      }else{
+	options.url  = _url;
+	// console.info(options.url);
+	Backbone.sync.apply(Backbone, [method, model, options]);
+      }
     }
   });
 
@@ -193,3 +258,39 @@ App = (function(Backbone, $){
 })(Backbone, jQuery);
 
 
+//model:sync:jsonp
+      /*if(Modernizr.jsonp){
+	var methodMap = {
+	  'create': 'POST',
+	  'update': 'PUT',
+	  'delete': 'DELETE',
+	  'read':   'GET'
+	};
+	options.data = model.toJSON();
+	options.data._method = options.type || methodMap[method];
+	options.type = 'GET';
+	options.dataType = 'jsonp';
+	// options.jsonp = 'callback';
+	// options.jsonpCallback = 'fun',
+	options.processData = true;
+      }*/
+//collection:sync:jsonp
+      /*if(Modernizr.jsonp){
+	var methodMap = {
+	  'create': 'POST',
+	  'update': 'PUT',
+	  'delete': 'DELETE',
+	  'read':   'GET'
+	};
+	if(options.data){
+	  options.data = (typeof options.data === "string") ? JSON.parse(options.data) : options.data;
+	}else{
+	  options.data = {};
+	}
+	options.data._method = options.type || methodMap[method];
+	options.type = 'GET';
+	options.dataType = 'jsonp';
+	// options.jsonp = 'callback';
+	// options.jsonpCallback = 'fun';
+	options.processData = true;
+      }*/

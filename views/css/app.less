@@ -856,6 +856,12 @@ article.clip{
 			dl.name{
 				margin-top: 20px;
 				margin-left:40px;
+				dt{
+					img{
+						width: 17px;
+						height:17px;
+					}	
+				}
 			}
 		}
 		.action{
@@ -1727,7 +1733,7 @@ section.follow_frame{
 				}
 				.out_link{
 					position:relative;
-					width:62px;
+					width:80px;
 					top:-41px;
 				}
 				input#remember{
@@ -2151,7 +2157,7 @@ section.edit_frame{
 		left:35px;
 		//头像的上传和名字的修改
 		.edit_head{
-			height:280px;
+			height:288px;
 			background:#fff;
 			padding:15px;
 			margin-bottom:10px;
@@ -2171,7 +2177,7 @@ section.edit_frame{
 				}
 			}
 			.user_name{
-				span.name{
+				div.name{
 					width:100px;
 					//border:none;
 					background:none;
@@ -2195,7 +2201,7 @@ section.edit_frame{
 					color:#fff;
 					position: relative;
 					display:inline;
-					margin-top:-5px;
+					margin-top:2px;
 					span{
 						width:2px;
 						height:25px;
@@ -2661,3 +2667,23 @@ section.edit_frame{
 		} 
 	}
 }		
+.notify{
+	width:165px;
+	height:22px;
+	position: absolute;
+	.sprites(-446px,-481px);
+	z-index:2;
+	right:40px;
+	a.close_w{.glyphicons-halflings(-304px,13px);}
+	ul.notify_list{
+		width:120px;
+		height:20px;
+		list-style: none outside none;
+		li{
+			position:relative;
+			left:-24px;
+			padding-left:3px;
+			line-height:20px;
+		}
+	}
+}	

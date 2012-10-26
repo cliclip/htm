@@ -24,13 +24,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   // 不同用户转载给我相同的数据
   var ClipPreviewList = App.Collection.extend({
     model : ClipPreviewModel,
+    //localStorage: new Store("clippreview"),
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
-	if(!resp[i].clip){
-	  resp[i].clipid = resp[i].id;
-	  resp[i].id = resp[i].user.id+":"+resp[i].id;
-	}else{ // 表示是别人推荐的clip
+	// console.info(resp[i]);
+	if(!resp[i].clip){//TODO review
+	  if(!/:/.test(resp[i].id)){
+	    resp[i].clipid = resp[i].id;
+	    var uid = resp[i].user.id||resp[i].user;
+	    resp[i].id = uid +":"+resp[i].id;
+	  }
+      	}else{ // 表示是别人推荐的clip
 	  resp[i].clipid = resp[i].clip.id;
 	  resp[i].user = resp[i].clip.user;
 	  resp[i].content = resp[i].clip.content;
@@ -42,6 +47,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
 	if(resp[i].hide){// 取interest数据的时候，该属性描述是否显示
 	  hide_clips.push(resp[i].id);
+	}
+	//数据库中图片的src到底应该怎样存储
+	//preview 的content中的图片url中没有保存域名，网页copy到本地时无法补全正确的域名，在此补全
+	if(resp[i].content.image && !/\.\./.test(resp[i].content.image.src)){
+
+	  resp[i].content.image.src =App.ClipApp.Url.hostname + resp[i].content.image.src;
 	}
       }
       return resp;
@@ -113,7 +124,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	rid: this.model.get("recommend").rid,
 	user: this.model.get("recommend").user ? this.model.get("recommend").user.id : null
       };
-      var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
+      if((typeof this.model.get("user"))=="object"){
+	var clipid = this.model.get("user").id + ":"+this.model.get("clipid");
+      }else{
+	var clipid = this.model.id;
+      }
+      // console.info(this.model,this.model.clipid);
       App.ClipApp.showDetail(clipid,this.model.id,recommend);
     },
     mouseEnter: function(e){
@@ -125,7 +141,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     operate: function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
-      var cid = this.model.get("user").id + ":" + this.model.get("clipid");
+      if((typeof this.model.get("user"))=="object"){
+	var cid = this.model.get("user").id + ":" + this.model.get("clipid");
+      }else{
+	var cid = this.model.get("user")+ ":" + this.model.get("clipid");
+      }
+
       var pub = this.model.get("public");
       var mid = this.model.id;
       switch(opt){

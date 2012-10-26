@@ -20,7 +20,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 	  App.vent.trigger("app.clipapp.useredit:rename");
 	});
       }else{
-	window.location.href="/oauth/req/weibo?forcelogin=true";
+	window.location.href= App.ClipApp.Url.hostname + "/oauth/req/weibo?forcelogin=true";
       }
     },
     WeiboCut:function(e){
@@ -62,7 +62,11 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 	WeiboEdit.show();
       },
       error: function(model, res){
-	App.ClipApp.showAlert("del_oauth_fail");
+	if(res.unbind == "cannot_unbind"){
+	  App.ClipApp.showConfirm("cannot_unbind", null, function(){});
+	}else{
+	  App.ClipApp.showAlert("del_oauth_fail");
+	}
       }
     });
   };

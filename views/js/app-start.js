@@ -4,6 +4,7 @@ $(function(){
 
   App.addRegions({
     mineRegion: "#mine",
+    notifyRegion :"#notify",
     mysetRegion: "#myset",
     faceRegion: "#face",
     bubbRegion: "#bubb",
@@ -16,10 +17,31 @@ $(function(){
     searchRegion:".search",
     followRegion:"#follow"
   });
+  var hostname = "http://192.168.1.3:8000";
+  //easyXDM.Rpc
+  var rpc = new easyXDM.Rpc({
+    remote: hostname + "/cors/",
+    swf: hostname + '/img/easyxdm.swf'
+    //swfNoThrottle: true,
+  },{
+    local: {
+      upload: function(returnVal){
+	App.vent.trigger("app.clipapp:upload", returnVal);
+      }
+    },
+    remote:{
+      request:{}
+    }
+  });
+
+  App.rpc = rpc;
 
   App.bind("initialize:before", function(){
     Modernizr.addTest('filereader', function () {
       return !!(window.File && window.FileList && window.FileReader);
+    });
+    Modernizr.addTest('jsonp', function () {
+      return window.location.protocol != "http:";
     });
     Modernizr.addTest('cssfilters', function() {
       var el = document.createElement('div');
