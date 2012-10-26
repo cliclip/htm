@@ -172,14 +172,14 @@ App.ClipApp.Me = (function(App, Backbone, $){
       lang: Me.me.get("lang")
     };
   };
-
+/*
   Me.getUid = function(){
     var uid = null;
     var token = App.util.getCookie("token");
     if (token) uid = token.split(":")[0];
     return uid;
   };
-
+*/
   App.vent.bind("app.clipapp.login:success", function(){
     // 书签登陆时会报错加上此句定义Me.me
     if(!Me.me){ Me.me = new MyInfoModel(); }

@@ -18,7 +18,6 @@ App = (function(Backbone, $){
     'delete': 'DELETE',
     'read':   'GET'
   };
-
   var App = new Backbone.Marionette.Application();
 
   App.Model = Backbone.Model.extend({
@@ -60,7 +59,7 @@ App = (function(Backbone, $){
       var success = options.success;
       var error = options.error;
       options.success = function(resp, status, xhr){
-	console.info(resp);
+	// console.info(resp);
 	if(resp[0] == 0){
 	  // console.info("sync:");console.dir(resp);
 	  if(success) success.apply(model, [resp[1], status, xhr]);
@@ -73,10 +72,12 @@ App = (function(Backbone, $){
 	  }
 	}
       };
-      if(App.rpc){
+      var _url = options.url||model.get("url")||model.url();
+      var _method = options.type||methodMap[method];
+      if(App.util.modelByRpc(_method,_url,options)){
 	App.rpc.request({
-	    url:options.url||model.get("url")||model.url(),
-	    method:options.type||methodMap[method],
+	    url:_url,
+	    method:_method,
 	    data:options.data
 	  }, function(resp){
 	    var returnObj = eval(resp.data);
@@ -87,7 +88,7 @@ App = (function(Backbone, $){
 	);
       }else{
 	options.url  =  options.url||model.get("url")||model.url();
-	console.info(options.url);
+	// console.info(options.url);
 	Backbone.sync.apply(Backbone, [method, model, options]);
       }
     }
@@ -144,10 +145,12 @@ App = (function(Backbone, $){
 	  if(error) error.apply(model, [resp[1], status, xhr]);
 	}
       };
-      if(App.rpc){
+      var _url = options.url||model.get("url")||model.url();
+      var _method = options.type||methodMap[method];
+      if(App.util.collectionByRpc(_url, options)){
 	App.rpc.request({
-	    url:options.url||model.get("url")||model.url(),
-	    method:options.type||methodMap[method],
+	    url:_url,
+	    method:_method,
 	    data:options.data
 	  }, function(resp){
 	    var returnObj = eval(resp.data);
@@ -158,8 +161,8 @@ App = (function(Backbone, $){
 	);
 	//Backbone.sync.apply(Backbone, [method, model, options]);
       }else{
-	options.url  =  options.url||model.get("url")||model.url();
-	console.info(options.url);
+	options.url  = _url;
+	// console.info(options.url);
 	Backbone.sync.apply(Backbone, [method, model, options]);
       }
     }

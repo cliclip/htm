@@ -13,7 +13,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	resp.id = resp.user+":"+resp.id;
       }
       //本地访问服务器时为图片的url加上域名
-      resp.content = resp.content.replace(/\[img\]\/_2_/ig,"[img]"+App.ClipApp.Url.base);
+      //resp.content = resp.content.replace(/\[img\]\/_2_/ig,"[img]"+App.ClipApp.Url.base);
       return resp;
     }
   });
@@ -230,6 +230,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       });
       var commentList = new CommentList({collection: commentCollection});
       ClipDetail.commentRegion = new App.Region({el:".comments"});
+      console.info(commentList);
       ClipDetail.commentRegion.show(commentList);
     });
   };

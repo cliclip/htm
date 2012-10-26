@@ -28,7 +28,7 @@ script(type="text/template",id="clippreview-view-template")
       <% if(content && content.image) {%>
       | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/_wait.gif"/>
       div.article_photo
-        | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.url(content.image.src)%>"/>
+        | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>"/>
       <% }if(content && content.text){%>
       div.article_con
         <%if(!content.image){ %>
@@ -41,7 +41,7 @@ script(type="text/template",id="clippreview-view-template")
       <% if(content && content.image) {%>
       | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/_wait.gif"/>
       div.article_photo
-        | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.url(content.image.src)%>"/>
+        | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>"/>
       <% }if(content && content.text){%>
       div.article_con
         <%if(!content.image){ %>
@@ -53,7 +53,7 @@ script(type="text/template",id="clippreview-view-template")
     footer.master
       div.metas
         span.icon_block
-          | <%=refby ? refby : 0%>&nbsp; <%=_i18n('clippreview.repby')%>
+          | <%=refby ? refby : 0%>&nbsp; <%=_i18n('clippreview.refby')%>
         span.icon_block
           | <%=reply ? reply : 0%>&nbsp; <%=_i18n('clippreview.reply')%>
       div.user_info_small

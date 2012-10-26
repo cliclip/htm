@@ -28,10 +28,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
 	// 使得resp中的每一项内容都是对象
+	// console.info(resp[i]);
 	if(!resp[i].clip){//TODO review
-	  if(!/:/.test(resp[i].id))
+	  if(!/:/.test(resp[i].id)){
 	    resp[i].clipid = resp[i].id;
-	  if(!/:/.test(resp[i].id)){//user.id-->user
 	    var uid = resp[i].user.id||resp[i].user;
 	    resp[i].id = uid +":"+resp[i].id;
 	  }
@@ -50,7 +50,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}
 	//数据库中图片的src到底应该怎样存储
 	//preview 的content中的图片url中没有保存域名，网页copy到本地时无法补全正确的域名，在此补全
-	if(resp[i].content.image&&!/http/.test(resp[i].content.image.src)){
+	if(resp[i].content.image && !/\.\./.test(resp[i].content.image.src)){
+
 	  resp[i].content.image.src =App.ClipApp.Url.hostname + resp[i].content.image.src;
 	}
       }
@@ -103,9 +104,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       if((typeof this.model.get("user"))=="object"){
 	var clipid = this.model.get("user").id + ":"+this.model.get("clipid");
       }else{
-	var clipid = this.model.clipid;
+	var clipid = this.model.id;
       }
-      //console.info(this.model,this.model.clipid);
+      // console.info(this.model,this.model.clipid);
       App.ClipApp.showDetail(clipid,this.model.id,recommend);
     },
     mouseEnter: function(e){

@@ -263,6 +263,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	nameModel.save(data ,{
 	  type: 'PUT',
 	  success:function(model,res){
+	    //更新缓存window.cache内容
+	    var uid = App.util.getMyUid();
+	    window.cache["/" + uid +"/info.json.js" ].name = res.name;
 	    view.model.set("name", res.name);
 	    if(is_randName) App.ClipApp.showConfirm("remindModifyPass");
 	    else  App.ClipApp.showSuccess("rename_success");
@@ -418,6 +421,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    var facemodel = new FaceModel({face:currentFace});
 	    facemodel.save({},{
 	      success:function(model,res){
+		//更新缓存window.cache内容
+		var uid = App.util.getMyUid();
+		window.cache["/" + uid +"/info.json.js" ].face = res.face;
 		if(face_remote_flag){ // 此标记的作用是什么
 		  $("#myface").attr("src",App.util.face_url(returnObj[1]),240);
 		  $("#confirm_face").show();

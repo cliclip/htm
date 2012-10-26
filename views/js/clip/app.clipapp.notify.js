@@ -21,7 +21,6 @@ App.ClipApp.Notify=(function(App,Backbone,$){
       this.trigger("@closeView");
     }
   });
-
   Notify.show = function(uid){
     if(uid){
       fetch(uid);
@@ -32,7 +31,7 @@ App.ClipApp.Notify=(function(App,Backbone,$){
   var fetch = function(uid){
     var uid = App.ClipApp.getMyUid();
     var notify = new NotifyModel({uid:uid, count:0});
-    notify.fetch({})
+    notify.fetch({});
     notify.onChange(function(notifyModel){
       var notifyView = new NotifyView({model:notifyModel});
       var count = notifyModel.get("count");
