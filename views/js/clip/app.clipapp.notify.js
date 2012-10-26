@@ -3,7 +3,7 @@ App.ClipApp.Notify=(function(App,Backbone,$){
   var P = App.ClipApp.Url.base;
   var NotifyModel = App.Model.extend({
     url:function(){
-      return App.ClipApp.encodeURI(P+"/user/"+this.get("uid")+"/notification/count");
+      return App.ClipApp.encodeURI(P+"/user/"+this.get("uid")+"/notice/count");
     }
   });
   var NotifyView =  App.ItemView.extend({
@@ -24,7 +24,7 @@ App.ClipApp.Notify=(function(App,Backbone,$){
   Notify.show = function(uid){
     if(uid){
       fetch(uid);
-      Loop = setInterval(fetch,5000);
+      // Loop = setInterval(fetch,5000);
     }
   };
 
@@ -37,7 +37,7 @@ App.ClipApp.Notify=(function(App,Backbone,$){
       var count = notifyModel.get("count");
       if(count != 0) App.notifyRegion.show(notifyView);
     });
-  }
+  };
 
   Notify.close = function(){
     App.notifyRegion.close();

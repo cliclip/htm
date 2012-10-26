@@ -5,13 +5,14 @@
 */
 App.ClipApp.Url = (function(){
   var Url = {};
-  Url.page = 10;
   var P = "/_2_";
-  Url.HOSTNAM = "http://192.168.1.3:8000";
+  Url.page = 10;
   //Url.HOSTNAM = "http://cliclip.com";
   if(location.protocol != "http:"){
-    Url.base = Url.HOSTNAME + P;
-    Url.hostname = Url.HOSTNAME;
+    var host= "http://192.168.1.3:8000";
+    Url.base = host + P;
+    Url.hostname = host;
+    Url.base_local = "..";
   }else{
     Url.base = P;
     Url.hostname = "";

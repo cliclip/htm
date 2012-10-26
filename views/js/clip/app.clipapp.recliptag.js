@@ -4,7 +4,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
 
   var ReclipTagModel = App.Model.extend({
     url: function(){
-      return App.ClipApp.encodeURI(P+"/user/"+this.id+"/reclip/tag/"+this.get("tag"));
+      return App.ClipApp.encodeURI(P+"/user/"+this.id+"/tag/"+this.get("tag")+"/reclip");
     }
   });
 
@@ -121,7 +121,7 @@ App.ClipApp.ReclipTag = (function(App, Backbone, $){
     var model = new ReclipTagModel({id:user, tag:tag}); //此model只用于取数据
     model.fetch({
       // type: "GET",
-      // url: App.util.unique_url(P+"/user/"+user+"/clip/tag/"+tag),
+      // url: App.util.unique_url(P+"/user/"+user+"/tag/"+tag+"/count"),
       success: function(model, res){
 	if(!res.count){
 	  // 现在只是公用该事件，事件名称有待改进

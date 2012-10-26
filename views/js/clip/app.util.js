@@ -28,7 +28,7 @@ App.util = (function(){
   };
 
   util.getFace_upUrl = function(uid){
-    return P+"/user/" + uid + "/upload_face?_token=" + App.util.getCookie("token");
+    return P+"/user/" + uid + "/face?_token=" + App.util.getCookie("token");
   };
 
   util.unique_url = function(url){
@@ -39,7 +39,8 @@ App.util = (function(){
   util.img_url = function(url,size){
     if(url && !/http:/.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
       var opt = url.split(".");
-      return opt[0] + "_270." + opt[1];
+      var _url = opt[opt.length-2] + "_270." + opt[opt.length-1];
+      return location.protocol == "http:" ?  _url : ".." + _url;
     }else return url;
   };
 
@@ -56,7 +57,8 @@ App.util = (function(){
       var opt0 = ids[1].split("_");
       var opt = opt0[1].split(".");
       var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
-      return P + "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
+      var url =  "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
+      return location.protocol == "http:" ? P + url : ".." + url;
     }else return imageid;
   };
 

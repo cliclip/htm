@@ -218,9 +218,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       var lang = e.currentTarget.id;
       if(lang){
 	var model = new EditModel();
-	model.save({},{
+	model.save({lang:lang},{
 	  type:'PUT',
-	  url : App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/lang/"+lang),
+	  url : App.ClipApp.encodeURI(P+"/user/"+App.ClipApp.getMyUid()+"/lang"),
 	  success:function(model,res){
 	    App.vent.trigger("app.versions:version_change", lang);
 	  },
@@ -329,15 +329,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var editModel = new EditModel();
     var editView = new EditView({model: editModel});
     App.mysetRegion.show(editView);
-    /*var iframe=document.getElementById("post_frame_face");
-    iframe.onload = function(){
-      if(submit_face){
-	console.info(iframe);
-	submit_face = false;
-	if($(iframe.contentWindow.document.body).text()[1]!=="0"){//取得图片上传的结果：成功或失败
-	}
-      }
-    };*/
   };
 
   function showFace(){//设置页面显示用户名和头像
@@ -347,7 +338,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     var faceView = new FaceView({model: faceModel});
     UserEdit.faceRegion.show(faceView);
     faceLoad();
-
   };
 
   UserEdit.show = function(){
@@ -412,28 +402,19 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     App.vent.bind("app.clipapp:upload",function(returnVal){
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
-	//console.info(returnObj);
 	if(returnObj[0] == 0){//上传成功
 	  var currentFace = returnObj[1];
 	  if(currentFace){
-	    var facemodel = new FaceModel({face:currentFace});
-	    facemodel.save({},{
-	      success:function(model,res){
-		//更新缓存window.cache内容
-		var uid = App.util.getMyUid();
-		window.cache["/" + uid +"/info.json.js" ].face = res.face;
-		if(face_remote_flag){ // 此标记的作用是什么
-		  $("#myface").attr("src",App.util.face_url(returnObj[1]),240);
-		  $("#confirm_face").show();
-		}else{
-		  App.ClipApp.showSuccess("faceUp_success");
-		  face_change_flag = true;
-		}
-	      },
-	      error:function(model,res){
-		//console.info("error!!!!!!!!!!");
-	      }
-	    });
+	    var uid = App.util.getMyUid();
+	    //更新缓存window.cache内容
+	    window.cache["/" + uid +"/info.json.js" ].face = currentFace;
+	    if(face_remote_flag){ // 此标记的作用是什么
+	      $("#myface").attr("src",App.util.face_url(returnObj[1]),240);
+	      $("#confirm_face").show();
+	    }else{
+	      App.ClipApp.showSuccess("faceUp_success");
+	      face_change_flag = true;
+	    }
 	  }
 	}else{//上传失败
 	  if(submit_face){//flag 作用判断是刚刚打开设置页面还是正在更新头像
