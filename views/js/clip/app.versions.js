@@ -407,6 +407,7 @@ App.versions = (function($){
 	feedback_ok    : "发送成功",
 	feedback_fail  : "发送失败",
 	go_resetpass   : "找回密码邮件已经发送至 %s 邮箱，请在30分钟内从邮件中获取链接重置密码",
+	remindModifyPass : "用户名修改成功，因为您此前的密码为随机密码，为了保证您以后可以正常使用此用户名登录，同时您需要修改您的密码",
 	link:{
 	  expired: "此链接已过期",
 	  not_exists: "此链接无效",
@@ -913,6 +914,7 @@ App.versions = (function($){
 	reclip_null    : "No clip under this tag",
 	reclip_tag_success : "Reclip successful",
 	go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",
+	remindModifyPass : "Your name has been changed, at the same time you should change your password to make sure you can use this name login",
 	link:{
 	  expired: "Link expired",
 	  not_exists: "Invalid link",
