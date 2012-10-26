@@ -97,6 +97,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.EmailAdd.active(key);
   };
 
+  ClipApp.consumeLink = function(link){ // 接受用户的邮件添加激活或者是合并激活
+    ClipApp.Link.consume(link);
+  };
+
   ClipApp.findpasswd = function(){
     ClipApp.FindPass.show();
   };
@@ -172,10 +176,10 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   // 为detail页面添加网址
-  ClipApp.clipDetail = function(uid, clipid){
+  ClipApp.clipDetail = function(uid, clipid, link){
     ClipApp.userShow(uid);
-    App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {});
-    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:clipdetail", uid, clipid);
+    App.ClipApp.ClipDetail.show(uid+":"+clipid, null, {}, link);
+    //App.Routing.ClipRouting.router.trigger("app.clipapp.routing:clipdetail", uid, clipid);
   };
 
   /*ClipApp.myRecommend = function(tag){
