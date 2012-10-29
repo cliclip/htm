@@ -94,8 +94,10 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       e.preventDefault();
       var target = $(e.currentTarget);
       var view = this;
+      var con = App.Editor.getContent("editor");
       target.attr("disabled",true);
-      clip.content = App.Editor.getContent("editor");
+      con = App.util.cleanConImgUrl(con);
+      clip.content = con;
       this.model.save(clip, {
 	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model

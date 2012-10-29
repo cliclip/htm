@@ -182,12 +182,60 @@ App.util = (function(){
 	//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 	var uid = imgids.split(":")[0];
 	var imgid = imgids.split(":")[1];
-	var url = P+"/"+ uid +"/" +imgid;
+	var url = P + "/" + imgid;
 	callback(null, url);
       }else{//上传图片失败
 	callback("imageUp_fail", null);
       }
     }
+  };
+
+  util.expandConImgUrl = function(content,user,id){
+    var cid = id,uid = user;
+    if(/:/.test(id)){
+      uid = id.split(":")[0];
+      cid = id.split(":")[1];
+    }
+    var pre =  P + "/clip/" + uid+ ":" + cid + "/";
+    var reg = /<img\ssrc=\'(\d+)\.(\w+)\'/g;
+    //var reg1 = /tmp_/g;
+    //content = content.replace(reg1,P + "/tmp_");
+    var imgs = content.match(reg);
+    if(!imgs)return content;
+    for(var i = 0; i<imgs.length; i++){
+      var opt = imgs[i].split("='");
+      content = content.replace(imgs[i], opt[0] + "='" + pre + opt[1]);
+    }
+    return content;
+  };
+
+  /**
+   * 向api提交数据时要去除图片src中的前缀部分
+   */
+  util.cleanConImgUrl = function(content){
+    var reg = /src=\"\/_2_\/tmp/g;
+    var reg1 = /\/_2_\/(\d+)\/clip_(\d+)_/g;
+    var con = content.replace(reg,'src="tmp');
+    return con.replace(reg1,"");
+  };
+
+  util.expandPreImgUrl = function(content,clipid){
+    if(!content.image) return content;
+    var src = content.image.src,uid,cid;
+    if(clipid){
+      uid = clipid.split(":")[0];
+      cid = clipid.split(":")[1];
+    }
+    //获取自己的clip的图片，在backbone-localstorage中已经组装完毕
+    if(/clip_/.test(src)){
+      // src = "../clip_" + cid + "_" + src ;
+    }else if(/tmp_/.test(content.image.src)&&!/\/tmp_/.test(content.image.src)){
+      src = P + "/" + src;
+    }else {
+      src = P + "/clip/" + clipid + "/" + src;
+    }
+    content.image.src = src;
+    return content;
   };
 
   util.img_load = function(img){

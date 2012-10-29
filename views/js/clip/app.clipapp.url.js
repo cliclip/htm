@@ -1,4 +1,4 @@
-/* 代码中需要更改域名和端口号的文件包括：
+/** 代码中需要更改域名和端口号的文件包括：
  * 1)loader.js,clipper-start.js bookmarklet.js书签相关
  * 2)app-start.js (必须修改)
  * 3)此文件
