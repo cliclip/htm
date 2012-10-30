@@ -4,11 +4,12 @@
   window.cache = {};
   var time = 5000;
   var NOOP = function(){};
-  var P = "/_2_";
+  var P = "/_3_";
   var _P = "..";
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
-    cache[key] =/my_clips/.test(key)&&val ? val.reverse() : val;
+    console.info(key,val);
+    cache[key] =/my_clips/.test(key) && _.isArray(val) ? val.reverse() : val;
     var s = document.getElementById(key);
     if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
     _.each(callbacks[key],function(e){
@@ -197,9 +198,11 @@
     }
     var prefix = location.protocol == "http:" ? P : _P ;
     var pre =  prefix + "/" + uid + "/clip_" + cid + "_";
-    var reg = /<img\ssrc=\'(\d+)\.(\w+)\'/g;
-    var reg1 = /\'tmp_/g;
-    content = content.replace(reg1,P + "\'/tmp_");
+    var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
+    var reg1 = /\"tmp_/g;
+    var reg2 = /\'tmp_/g;
+    content = content.replace(reg1, "\"" + P + "/tmp_");
+    content = content.replace(reg2, "'" + P + "/tmp_");
     var imgs = content.match(reg);
     if(!imgs) return content;
     for(var i = 0; i<imgs.length; i++){

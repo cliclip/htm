@@ -197,9 +197,7 @@ App.util = (function(){
       cid = id.split(":")[1];
     }
     var pre =  P + "/clip/" + uid+ ":" + cid + "/";
-    var reg = /<img\ssrc=\'(\d+)\.(\w+)\'/g;
-    //var reg1 = /tmp_/g;
-    //content = content.replace(reg1,P + "/tmp_");
+    var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
     var imgs = content.match(reg);
     if(!imgs)return content;
     for(var i = 0; i<imgs.length; i++){
@@ -213,9 +211,11 @@ App.util = (function(){
    * 向api提交数据时要去除图片src中的前缀部分
    */
   util.cleanConImgUrl = function(content){
-    var reg = /src=\"\/_2_\/tmp/g;
-    var reg1 = /\/_2_\/(\d+)\/clip_(\d+)_/g;
+    var reg = /src=\"\/_3_\/tmp/g;
+    var reg2 = /src=\'\/_3_\/tmp/g;
+    var reg1 = /\/_3_\/(\d+)\/clip_(\d+)_/g;
     var con = content.replace(reg,'src="tmp');
+    con = con.replace(reg,'src=\'tmp');
     return con.replace(reg1,"");
   };
 

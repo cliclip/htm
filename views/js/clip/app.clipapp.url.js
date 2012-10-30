@@ -5,7 +5,7 @@
 */
 App.ClipApp.Url = (function(){
   var Url = {};
-  var P = "/_2_";
+  var P = "/_3_";
   Url.page = 10;
   //Url.HOSTNAM = "http://cliclip.com";
   if(location.protocol != "http:"){

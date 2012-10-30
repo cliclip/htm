@@ -1,5 +1,5 @@
 (function(win, doc, nav, opt){
-
+  var P  = "/_3_";
   var url_base = "http://cliclip.com";
   // var url_base = "http://192.168.1.3:8000";
   // var url_base = "http://192.168.1.3:3000";
@@ -841,10 +841,10 @@
 })(window, document, navigator, {
 	key: "PIN_" + (new Date).getTime(),
 	checkpoint: {
-		url: "//192.168.1.3:2000/_2_/test"
+		url: "//192.168.1.3:2000" + P + "/test"
 	},
 	embed: "//pinterest.com/embed/?",
-	pin: "192.168.1.3:2000/_2_/echo",
+	pin: "192.168.1.3:2000" + P + "/echo",
 	minImgSize: 80,
 	thumbCellSize: 200,
 	check: ["meta", "iframe", "embed", "object", "img", "video", "a"],
