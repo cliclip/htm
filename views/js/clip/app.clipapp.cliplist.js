@@ -65,7 +65,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     template: "#clippreview-view-template",
     events: {
       // 单击clip就响应show_detail事件
-      "click .type_text" : "createClipShareLink",
+     // "click .type_text" : "createClipShareLink",
       "click #header" : "show_detail",
       "click .operate" : "operate",
       "mouseenter .clip_item": "mouseEnter",
@@ -93,7 +93,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
     createClipShareLink: function(e){
       e.stopPropagation();
-      var clipid = this.model.get("user").id + ":" + this.model.get("clipid");
+      var clipid = this.model.get("user") + ":" + this.model.get("clipid");
       var model = new App.Model();
       if(document.selection&&document.selection.createRange().htmlText){
 	return;
@@ -450,6 +450,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }else if(model.get("public")){
       var collection = clipListView.collection;
       var tmp = collection.get(mid);
+      window.cache["/" + user +"/clip_"+mid.split(":")[1]+".json.js" ].public = model.get("public"); //修改detail缓存
       tmp.set("public", model.get("public"));
     }
   });
