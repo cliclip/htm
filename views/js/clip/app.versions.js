@@ -260,6 +260,19 @@ App.versions = (function($){
 	memo        : "标注"
       },
 
+      snsShare :{
+	title_tsina  : "分享到新浪微博",
+	title_renren : "分享到人人网",
+	title_qzone  : "分享到QQ空间",
+	title_tqq    : "分享到腾讯微博",
+	title_fb     : "分享到Facebook",
+	title_twitter: "分享到Twitter",
+	summary      : "来自cliclip的分享"
+      },
+      private :{
+	title       : "私有分享，点击生成链接地址",
+	share       : "分享"
+      },
       showcomment : {
 	reply       : "回复",
 	delete      : "删除",
@@ -772,7 +785,19 @@ App.versions = (function($){
 	update      : "Edit",
 	memo        : "Tag"
       },
-
+      snsShare :{
+	title_tsina  : "Share to weibo",
+	title_renren : "Share to renren",
+	title_qzone  : "Share to qzone",
+	title_tqq    : "Share to tqq",
+	title_fb     : "Share to facebook",
+	title_twitter: "Share to twitter",
+	summary     : "Share from cliclip"
+      },
+      private :{
+	title       : "Private share,click here to get link",
+	share       : "Share"
+      },
       showcomment : {
 	reply       : "Reply",
 	delete      : "Delete",

@@ -5,6 +5,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
 
   App.Model.DetailModel = App.Model.extend({
+    defaults:{
+      "public": true
+    },
     url:function(){
       return App.ClipApp.encodeURI(P+"/clip/"+this.id)+"&rid="+this.get("rid");
     },
@@ -22,6 +25,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "Detail-view",
     template: "#detail-view-template",
     events: {
+      "click .share_private" : "createClipShareLink",
       "click .operate" : "Operate",
       "click .masker" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
@@ -57,6 +61,28 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.ClipApp.showClipDelete(cid); break;
       }
     },
+
+    createClipShareLink: function(e){ //私有分享
+      e.stopPropagation();
+      var clipid = this.model.id;
+      var model = new App.Model();
+      if(document.selection&&document.selection.createRange().htmlText){
+	return;
+      }else if(window.getSelection&&$.trim(window.getSelection().toString())){
+	return;
+      }
+      model.save({},{
+	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+'/sharelink'),
+	type: "POST",
+	success:function(model,res){
+	  Backbone.history.navigate("link/"+res, false);
+	},
+	error:function(model,error){ // 则显示该链接不能再点击
+	  App.ClipApp.showConfirm(error, null, function(){});
+	}
+      });
+    },
+
     Masker: function(e){
       if($(e.target).attr("class") == "masker"){
 	this.trigger("@detailClose");
@@ -311,7 +337,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   ClipDetail.show = function(cid,model_id,recommend, link){ // cid等于detailModel.id
     var ids = cid.split(":");
-    var model = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user});
+    var model = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user, shareTo:["tsina", "renren", "qzone","tqq","fb","twitter"]});
     mid = model_id;
     // 获取当前页面的 url 以及 scrollTop
     hist = Backbone.history.fragment;
