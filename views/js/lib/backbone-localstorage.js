@@ -4,10 +4,12 @@
   window.cache = {};
   var time = 5000;
   var NOOP = function(){};
-  var P = "/_2_";
+  var P = "/_3_";
+  var _P = "..";
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
-    cache[key] =/my_clips/.test(key) ? val.reverse() : val;
+    console.info(key,val);
+    cache[key] =/my_clips/.test(key) && _.isArray(val) ? val.reverse() : val;
     var s = document.getElementById(key);
     if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
     _.each(callbacks[key],function(e){
@@ -102,6 +104,7 @@
 
   //图片的url转化为实际url
   function expandImgSrc(src){
+    // console.info("backbone-localstorage",src);
     return location.protocol != "http:" && !/\.\./.test(src) ? src.replace(P,"..") : src;
   }
 
@@ -153,7 +156,7 @@
 	    success : function(key, cdata){
 	      var clip = _.clone(pdata);
 	      var uid = clip.user.id ? clip.user.id : clip.user;
-	      clip.content = expandImgSrc(cdata);
+	      clip.content = expandConImgUrl(cdata,clip.user,clip.id);
 	      var keys = getUsersKey(clip.route);//获取路线图
 	      options._success = function(users){
 		clip.users = users;
@@ -183,17 +186,59 @@
     }
   }
 
-  //将preview中图片url转化为本地图片url
-  function expandPreImgUrl(content){
-    if(content.image&&!/_270/.test(content.image.src)){
-      var img_src = content.image.src.replace(".","_270.");
-      content.image.src = expandImgSrc(content.image.src);
+  /**
+   *将content中图片url转化为本地图片url
+   * 只转化存在具体文件的img的url
+   */
+  function expandConImgUrl(content,user,id){
+    var cid = id,uid = user;
+    if(/:/.test(id)){
+      uid = id.split(":")[0];
+      cid = id.split(":")[1];
     }
+    var prefix = location.protocol == "http:" ? P : _P ;
+    var pre =  prefix + "/" + uid + "/clip_" + cid + "_";
+    var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
+    var reg1 = /\"tmp_/g;
+    var reg2 = /\'tmp_/g;
+    content = content.replace(reg1, "\"" + P + "/tmp_");
+    content = content.replace(reg2, "'" + P + "/tmp_");
+    var imgs = content.match(reg);
+    if(!imgs) return content;
+    for(var i = 0; i<imgs.length; i++){
+      var opt = imgs[i].split("='");
+      content = content.replace(imgs[i], opt[0] + "='" + pre + opt[1]);
+    }
+    return content;
+  }
+
+  /**
+   *将preview中图片url转化为本地图片url
+   * 只转化存在具体文件的img的url
+   */
+  function expandPreImgUrl(content,id,user){
+    if(!content.image) return content;
+    if(/tmp/.test(content.image.src)) return content;
+    if(!/_270/.test(content.image.src)){
+      content.image.src = content.image.src.replace(".","_270.");
+    }
+    var src = content.image.src;
+    if(!/clip/.test(src)){
+      var prefix = location.protocol == "http:" ? P : _P ;
+      if(/:/.test(id)){
+	var opt = id.split(":");
+	src = prefix + "/" + opt[0] + "/clip_" +opt[1] + "_" + src;
+      }else {
+	src = prefix + "/" + user + "/clip_" + id + "_" + src;
+      }
+    }
+    content.image.src = src;
     return content;
   }
 
   //根据查询条件过滤需要取得的cliplist
   function filter(key,url,data,options){
+
     var keys = [], ids = [], _filter = options.data;
     var len = url.match(/[0-9]+\.\.[0-9]+/) ? url.match(/[0-9]+\.\.[0-9]+/)[0].split("..") : null;
     _.each(data,function(e){
@@ -207,7 +252,7 @@
     function loadOnePreview(key,callback){
       js_load(key,{
 	success:function(key,data){
-	  data.content = expandPreImgUrl(data.content);
+	  data.content = expandPreImgUrl(data.content,data.id,data.user);
 	  callback(null,data);
 	}, error: function(key, err){
 	  callback(err);
@@ -302,8 +347,7 @@
   // Override `Backbone.sync` to use delegate to the model or collection's
   // *localStorage* property, which should be an instance of `Store`.
   Backbone.sync = function(method, model, options) {
-    //console.info("=========backbone-localstorage::sync=======");
-
+    // console.info("=========backbone-localstorage::sync=======");
     var resp;
     //var store = model.localStorage || model.collection.localStorage;
     switch (method) {

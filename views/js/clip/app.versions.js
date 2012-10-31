@@ -260,6 +260,19 @@ App.versions = (function($){
 	memo        : "标注"
       },
 
+      snsShare :{
+	title_tsina  : "分享到新浪微博",
+	title_renren : "分享到人人网",
+	title_qzone  : "分享到QQ空间",
+	title_tqq    : "分享到腾讯微博",
+	title_fb     : "分享到Facebook",
+	title_twitter: "分享到Twitter",
+	summary      : "来自cliclip的分享"
+      },
+      private :{
+	title       : "私有分享，点击生成链接地址",
+	share       : "分享"
+      },
       showcomment : {
 	reply       : "回复",
 	delete      : "删除",
@@ -407,6 +420,7 @@ App.versions = (function($){
 	feedback_ok    : "发送成功",
 	feedback_fail  : "发送失败",
 	go_resetpass   : "找回密码邮件已经发送至 %s 邮箱，请在30分钟内从邮件中获取链接重置密码",
+	remindModifyPass : "用户名修改成功，因为您此前的密码为随机密码，为了保证您以后可以正常使用此用户名登录，同时您需要修改您的密码",
 	link:{
 	  expired: "此链接已过期",
 	  not_exists: "此链接无效",
@@ -771,7 +785,19 @@ App.versions = (function($){
 	update      : "Edit",
 	memo        : "Tag"
       },
-
+      snsShare :{
+	title_tsina  : "Share to weibo",
+	title_renren : "Share to renren",
+	title_qzone  : "Share to qzone",
+	title_tqq    : "Share to tqq",
+	title_fb     : "Share to facebook",
+	title_twitter: "Share to twitter",
+	summary     : "Share from cliclip"
+      },
+      private :{
+	title       : "Private share,click here to get link",
+	share       : "Share"
+      },
       showcomment : {
 	reply       : "Reply",
 	delete      : "Delete",
@@ -913,6 +939,7 @@ App.versions = (function($){
 	reclip_null    : "No clip under this tag",
 	reclip_tag_success : "Reclip successful",
 	go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",
+	remindModifyPass : "Your name has been changed, at the same time you should change your password to make sure you can use this name login",
 	link:{
 	  expired: "Link expired",
 	  not_exists: "Invalid link",

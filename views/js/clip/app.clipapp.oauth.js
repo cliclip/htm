@@ -5,7 +5,7 @@ App.ClipApp.Oauth = (function(App, Backbone, $){
   var P = App.ClipApp.Url.base;
   var OauthModel = App.Model.extend({
     url:function(){
-      return App.ClipApp.encodeURI(P+"/user/oauth");
+      return App.ClipApp.encodeURI(P+"/authorized");
     }
   });
 
