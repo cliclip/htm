@@ -194,12 +194,16 @@ App.util = (function(){
    * 向api提交数据时要去除图片src中的前缀部分
    */
   util.cleanConImgUrl = function(content){
-    var reg = /src=\"\/_3_\/tmp/g;
+    var reg = /\/_3_\/(\d+)\/clip_(\d+)_/g;
+    var reg1 = /src=\"\/_3_\/tmp/g;
     var reg2 = /src=\'\/_3_\/tmp/g;
-    var reg1 = /\/_3_\/(\d+)\/clip_(\d+)_/g;
-    var con = content.replace(reg,'src="tmp');
-    con = con.replace(reg,'src=\'tmp');
-    return con.replace(reg1,"");
+    var reg3 = /src=\'http:\/\/192\.168\.1\.3:8000\/_3_\/tmp/g;
+    var reg4 = /src=\"http:\/\/192\.168\.1\.3:8000\/_3_\/tmp/g;
+    var con = content.replace(reg1,'src="tmp');
+    con = con.replace(reg2,'src=\'tmp');
+    con = con.replace(reg3,'src=\'tmp');
+    con = con.replace(reg4,'src=\"tmp');
+    return con.replace(reg,"");
   };
 
   util.expandConImgUrl = function(content,user,id){
@@ -338,7 +342,8 @@ App.util = (function(){
     if( !util.isLocal() ){ return true;}
     var url_uid = getUrlUid(url);
     var my_uid = _getMyUid();
-    if( /my\/info/.test(url) )return false;
+    console.info(url,url_uid,my_uid,"11111111111111111");
+    if( /user\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
     if( method != "GET" ) return true;
     if( !my_uid ) return true;
     if(/meta|clip/.test(url)&& my_uid == url_uid)return false;

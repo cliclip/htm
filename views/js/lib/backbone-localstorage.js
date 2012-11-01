@@ -8,7 +8,7 @@
   var _P = "..";
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
-    console.info(key,val);
+    // console.info(key,val);
     cache[key] =/my_clips/.test(key) && _.isArray(val) ? val.reverse() : val;
     var s = document.getElementById(key);
     if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
@@ -33,7 +33,7 @@
     // console.info(url);
     var key = "";
     var uid = get_uid(url);
-    if(/info/.test(url)){
+    if(/user\/(\d+)\?/.test(url)){
       key = "/" + uid + "/info.json.js";
     }else if(/user\/[0-9]+\/query/.test(url)){
       key = "/" + uid + "/my_clips.json.js";

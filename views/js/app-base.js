@@ -147,7 +147,7 @@ App = (function(Backbone, $){
       };
       var _url = options.url||model.get("url")||model.url();
       var _method = options.type||methodMap[method];
-      if(App.util.collectionByRpc(_url, options)){
+      if(App.util.collectionByRpc(_url, options)){ // protocol == http://
 	App.rpc.request({
 	    url:_url,
 	    method:_method,
@@ -160,7 +160,7 @@ App = (function(Backbone, $){
 	  }
 	);
 	//Backbone.sync.apply(Backbone, [method, model, options]);
-      }else{
+      }else{ // protocol == file://
 	options.url  = _url;
 	// console.info(options.url);
 	Backbone.sync.apply(Backbone, [method, model, options]);
