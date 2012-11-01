@@ -48,13 +48,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	if(resp[i].hide){// 取interest数据的时候，该属性描述是否显示
 	  hide_clips.push(resp[i].id);
 	}
-	//数据库中图片的src到底应该怎样存储
-	//preview 的content中的图片url中没有保存域名，网页copy到本地时无法补全正确的域名，在此补全
 	resp[i].content = App.util.expandPreImgUrl(resp[i].content,resp[i].id);
-	/*
-	if(resp[i].content.image && !/\.\./.test(resp[i].content.image.src)){
-	  resp[i].content.image.src = App.ClipApp.Url.hostname + resp[i].content.image.src;
-	}*/
       }
       return resp;
     }

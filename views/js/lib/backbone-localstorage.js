@@ -8,7 +8,7 @@
   var _P = "..";
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
-    console.info(key,val);
+    // console.info(key,val);
     cache[key] =/my_clips/.test(key) && _.isArray(val) ? val.reverse() : val;
     var s = document.getElementById(key);
     if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
@@ -33,7 +33,7 @@
     // console.info(url);
     var key = "";
     var uid = get_uid(url);
-    if(/info/.test(url)){
+    if(/user\/(\d+)\?/.test(url)){
       key = "/" + uid + "/info.json.js";
     }else if(/user\/[0-9]+\/query/.test(url)){
       key = "/" + uid + "/my_clips.json.js";
@@ -56,7 +56,7 @@
 
   // 根据协议类型为url添加前缀
   function get_file(key){
-    return location.protocol == "http:" ? P + key : ".." + key;
+    return App.util.isLocal() ? _P + key : P + key;
     //TODO help 的目录存在问题
   }
 
@@ -102,12 +102,6 @@
     delete callbacks[key];
   }
 
-  //图片的url转化为实际url
-  function expandImgSrc(src){
-    // console.info("backbone-localstorage",src);
-    return location.protocol != "http:" && !/\.\./.test(src) ? src.replace(P,"..") : src;
-  }
-
   // 根据clip的id 或 uid 拼接获取user信息的key
   function getUsersKey(ids){
     var keys = [];
@@ -120,7 +114,9 @@
 
   // 根据userkeys 批量获取user信息
   var loadRoute = loadUsers;
-  function loadUsers(keys, options){
+  function loadUsers(route, options){
+    var keys = getUsersKey(route);
+    mgetModel(keys, loadOneUser, options);
     function loadOneUser(key,callback){
       js_load(key,{
 	success:function(key,data){
@@ -131,7 +127,6 @@
 	}
       });
     }
-    mgetModel(keys, loadOneUser, options);
   }
 
   function getModel(key, options){
@@ -156,14 +151,14 @@
 	    success : function(key, cdata){
 	      var clip = _.clone(pdata);
 	      var uid = clip.user.id ? clip.user.id : clip.user;
-	      clip.content = expandConImgUrl(cdata,clip.user,clip.id);
-	      var keys = getUsersKey(clip.route);//获取路线图
+	      clip.content = cdata;
+	      // clip.content = expandConImgUrl(cdata,clip.user,clip.id);
 	      options._success = function(users){
 		clip.users = users;
 		options.success([0,clip]);
 	      };
 	      // TODO 区分本地还是在线
-	      loadRoute(keys,options);
+	      loadRoute(clip.route,options);
 	    }, error : function(key,error){ options.error([1,error]); }
 	  });
 	}, error : function(key,error){ options.error([1,error]); }
@@ -172,7 +167,7 @@
       js_load(key,{
 	success:function(key,data){
 	  if(data.face && /:/.test(data.face)){
-	    data.face = expandImgSrc(data.face);
+	    //data.face = expandImgSrc(data.face);
 	  }
 	  options.success([0,data]);
 	},error:function(key,error){ options.error([1,error]); }
@@ -186,17 +181,26 @@
     }
   }
 
+  /*
+  //图片的url转化为实际url
+  function expandImgSrc(src){
+    // console.info("backbone-localstorage",src);
+    return App.util.isLocal() && !/\.\./.test(src) ? src.replace(P,_P) : src;
+  }
+  */
+
   /**
    *将content中图片url转化为本地图片url
    * 只转化存在具体文件的img的url
    */
+  /*
   function expandConImgUrl(content,user,id){
     var cid = id,uid = user;
     if(/:/.test(id)){
       uid = id.split(":")[0];
       cid = id.split(":")[1];
     }
-    var prefix = location.protocol == "http:" ? P : _P ;
+    var prefix = App.util.isLocal() ? _P : P ;
     var pre =  prefix + "/" + uid + "/clip_" + cid + "_";
     var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
     var reg1 = /\"tmp_/g;
@@ -211,11 +215,12 @@
     }
     return content;
   }
-
+  */
   /**
    *将preview中图片url转化为本地图片url
    * 只转化存在具体文件的img的url
    */
+  /*
   function expandPreImgUrl(content,id,user){
     if(!content.image) return content;
     if(/tmp/.test(content.image.src)) return content;
@@ -224,7 +229,7 @@
     }
     var src = content.image.src;
     if(!/clip/.test(src)){
-      var prefix = location.protocol == "http:" ? P : _P ;
+      var prefix = App.util.isLocal() ? _P : P ;
       if(/:/.test(id)){
 	var opt = id.split(":");
 	src = prefix + "/" + opt[0] + "/clip_" +opt[1] + "_" + src;
@@ -235,6 +240,7 @@
     content.image.src = src;
     return content;
   }
+  */
 
   //根据查询条件过滤需要取得的cliplist
   function filter(key,url,data,options){
@@ -252,7 +258,7 @@
     function loadOnePreview(key,callback){
       js_load(key,{
 	success:function(key,data){
-	  data.content = expandPreImgUrl(data.content,data.id,data.user);
+	  // data.content = expandPreImgUrl(data.content,data.id,data.user);
 	  callback(null,data);
 	}, error: function(key, err){
 	  callback(err);

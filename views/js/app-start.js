@@ -18,9 +18,8 @@ $(function(){
     searchRegion:".search",
     followRegion:"#follow"
   });
-  var hostname = "http://192.168.1.3:3000";
-  // var hostname = 'http://cliclip.com:8888';
-  //easyXDM.Rpc
+  var hostname = App.ClipApp.Url.HOSTNAME;
+  // easyXDM.Rpc
   var rpc = new easyXDM.Rpc({
     remote: hostname + "/cors/",
     swf: hostname + '/img/easyxdm.swf'
