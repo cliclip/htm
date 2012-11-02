@@ -85,14 +85,16 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       }else{
 	var editModel = new EditModel({});
 	// 不用this.mode因为this.model中有 录线图
-	var content_show = content;
 	editModel.save({content: App.util.cleanConImgUrl(content,cid)}, {
 	  type:'PUT',
 	  url: App.ClipApp.encodeURI(P+"/clip/"+cid),
 	  success:function(model, res){
 	    var opt = cid.split(":");
 	    var content = model.get("content");
-	    window.cache["/"+opt[0]+"/clip_"+opt[1]+".text.js"] = content_show;
+	    // App.util.cacheSync("/clip_"+opt[1]+".text.js",content);
+	    if(App.util.isLocal()){
+	      window.cache["/"+opt[0]+"/clip_"+opt[1]+".text.js"] = content;
+	    }
 	    view.trigger("@success", content, cid);
 	  },
 	  error:function(model, error){  // 出现错误，触发统一事件

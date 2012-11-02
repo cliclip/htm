@@ -48,13 +48,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	if(resp[i].hide){// 取interest数据的时候，该属性描述是否显示
 	  hide_clips.push(resp[i].id);
 	}
-	//数据库中图片的src到底应该怎样存储
-	//preview 的content中的图片url中没有保存域名，网页copy到本地时无法补全正确的域名，在此补全
 	resp[i].content = App.util.expandPreImgUrl(resp[i].content,resp[i].id);
-	/*
-	if(resp[i].content.image && !/\.\./.test(resp[i].content.image.src)){
-	  resp[i].content.image.src = App.ClipApp.Url.hostname + resp[i].content.image.src;
-	}*/
       }
       return resp;
     }
@@ -436,7 +430,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var model = collection.get(model_id);
     var newcontent = App.util.getPreview(content, 100);
     //更新后的preview图片可能会更改，需要补全图片src的前缀
-    newcontent = App.util.expandPreImgUrl(newcontent);
+    newcontent = App.util.expandPreImgUrl(newcontent,model_id);
     model.set({content:newcontent});
   });
 
@@ -454,7 +448,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }else if(model.get("public")){
       var collection = clipListView.collection;
       var tmp = collection.get(mid);
-      window.cache["/" + user +"/clip_"+mid.split(":")[1]+".json.js" ].public = model.get("public"); //修改detail缓存
+      // App.util.cacheSync("/clip_"+mid.split(":")[1]+".json.js","public",model.get("public"));
+      if(App.util.isLocal()){
+	window.cache["/" + user +"/clip_"+mid.split(":")[1]+".json.js" ].public = model.get("public"); //修改detail缓存
+      }
       tmp.set("public", model.get("public"));
     }
   });

@@ -15,8 +15,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       token:""
     },
     url:function(){
-      //参数为了防止ie缓存导致的不能向服务器发送请求的问题
-      return App.ClipApp.encodeURI(P+"/my/info");
+      return App.ClipApp.encodeURI(P + "/user/" + App.util.getMyUid());
     }
   });
 
@@ -183,7 +182,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
   App.vent.bind("app.clipapp.login:success", function(){
     // 书签登陆时会报错加上此句定义Me.me
     if(!Me.me){ Me.me = new MyInfoModel(); }
-    Me.me.fetch();
+    if(App.util.getMyUid()){
+      Me.me.fetch();
+    }
     Me.show();
   });
 
@@ -200,7 +201,6 @@ App.ClipApp.Me = (function(App, Backbone, $){
   });
 
   App.vent.bind("app.clipapp.face:changed", function(){
-    face_changed = true;
     Me.me.fetch({
       success:function(model,res){
       },
@@ -211,17 +211,15 @@ App.ClipApp.Me = (function(App, Backbone, $){
 
   App.addInitializer(function(){
     Me.me = new MyInfoModel();
-    Me.me.fetch();
+    if(App.util.getMyUid()){
+      Me.me.fetch();
+    }
   });
 
   App.bind("initialize:after", function(){
-    Me.me.fetch({
-      success:function(model,res){
-      },
-      error:function(model,res){
-      }
-
-    });
+    if(App.util.getMyUid()){
+      Me.me.fetch();
+    }
     Me.show();
   });
 
