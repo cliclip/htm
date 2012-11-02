@@ -31,25 +31,26 @@
   // 根据url 取得文件名称及目录
   function get_key(url){
     // console.info(url);
+    var newurl = url.slice(url.indexOf(P)+P.length, url.length);
     var key = "";
-    var uid = get_uid(url);
-    if(/user\/(\d+)\?/.test(url)){
+    var uid = get_uid(newurl);
+    if(/user\/(\d+)\?/.test(newurl)){
       key = "/" + uid + "/info.json.js";
-    }else if(/user\/[0-9]+\/query/.test(url)){
+    }else if(/user\/[0-9]+\/query/.test(newurl)){
       key = "/" + uid + "/my_clips.json.js";
-    }else if(/meta/.test(url)){
+    }else if(/meta/.test(newurl)){
       key = "/" + uid +"/meta";
-    }else if(/clip/.test(url)){
-      var str = url.match(/[0-9]+:[0-9]+/g);
+    }else if(/clip/.test(newurl)){
+      var str = newurl.match(/[0-9]+:[0-9]+/g);
       var path = str[str.length-1].split(':');
       key = "/" + uid +  "/clip_"+path[1] +".text.js";
-    }else if(/help_zh/.test(url)){
+    }else if(/help_zh/.test(newurl)){
       key = "help_zh.json.js";
-    }else if(/help_en/.test(url)){
+    }else if(/help_en/.test(newurl)){
       key = "help_en.json.js";
     }else{
-      console.info("this url is not process:"+url);
-      key = url;
+      console.info("this url is not process:"+newurl);
+      key = newurl;
     }
     return key;
   }
@@ -63,6 +64,7 @@
   // 加载js文件（ 添加script标签引入文件）
   function _js_load(key) {
     var file = get_file(key);
+    console.log('file :: ' + file);
     var s = document.getElementById(key);
     if(!s){
       var oHead = document.getElementsByTagName('HEAD').item(0);
