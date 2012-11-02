@@ -4,8 +4,7 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
 
   var ResetPassModel = App.Model.extend({
     url:function(){
-      return App.ClipApp.encodeURI(P+"/password/reset");
-      //return App.ClipApp.encodeURI(P+"/password/reset/"+this.get("link"));
+      return App.ClipApp.encodeURI(P+"/resetpasswd");
     },
     validate:function(attrs){
       var error = {};
@@ -56,7 +55,6 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
       this.model.save({newpass:newpass,confirm:conpass},{
 	type:"PUT",
 	success:function(model,res){
-	  console.log(res);
 	  that.trigger("@success",res);
 	},
 	error:function(model,res){
