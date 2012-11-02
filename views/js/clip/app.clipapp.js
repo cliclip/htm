@@ -105,10 +105,6 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.FindPass.show();
   };
 
-  ClipApp.resetpasswd = function(link){
-    ClipApp.ResetPass.show(link);
-  };
-
   ClipApp.oauth = function(key){
     ClipApp.Oauth.process(key);
   };

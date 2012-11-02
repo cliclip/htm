@@ -265,7 +265,10 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  success:function(model,res){
 	    //更新缓存window.cache内容
 	    var uid = App.util.getMyUid();
-	    window.cache["/" + uid +"/info.json.js" ].name = res.name;
+	    // App.util.cacheSync("/info.json.js","name",res.name);
+	    if(App.util.isLocal()){
+	      window.cache["/" + uid +"/info.json.js" ].name = res.name;
+	    }
 	    view.model.set("name", res.name);
 	    if(is_randName) App.ClipApp.showConfirm("remindModifyPass");
 	    else  App.ClipApp.showSuccess("rename_success");
@@ -408,8 +411,11 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  var currentFace = returnObj[1];
 	  if(currentFace){
 	    var uid = App.util.getMyUid();
-	    //更新缓存window.cache内容
-	    window.cache["/" + uid +"/info.json.js" ].face = currentFace;
+	    // 更新缓存window.cache内容
+	    // App.util.cacheSync("/info.json.js","face",currentFace);
+	    if(App.util.isLocal()){
+	      window.cache["/" + uid +"/info.json.js" ].face = currentFace;
+	    }
 	    if(face_remote_flag){ // 此标记的作用是什么
 	      $("#myface").attr("src",App.util.face_url(returnObj[1]),240);
 	      $("#confirm_face").show();
