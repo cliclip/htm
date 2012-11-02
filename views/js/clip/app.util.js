@@ -2,6 +2,7 @@ App.util = (function(){
   var util = {};
   var P = App.ClipApp.Url.base;
   var _P = "..";
+  var NOOP = function(){};
   util.name_pattern = /^[a-zA-Z0-9][a-zA-Z0-9\.]{3,18}[a-zA-Z0-9]$/;
   util.email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
 
@@ -342,7 +343,6 @@ App.util = (function(){
     if( !util.isLocal() ){ return true;}
     var url_uid = getUrlUid(url);
     var my_uid = _getMyUid();
-    console.info(url,url_uid,my_uid,"11111111111111111");
     if( /user\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
     if( method != "GET" ) return true;
     if( !my_uid ) return true;
@@ -354,6 +354,18 @@ App.util = (function(){
   util.isLocal = function(){
     return location.protocol == "http:" ? false : true;
   };
-
+/*
+  util.cacheSync = function(name,filed,data){
+    if(!isLocal()) return;
+    var myUid = _getMyUid();
+    var key = "/" + myUid + name;
+    if(data){
+      window.cache[key][filed] = data ;
+    }else{
+      data = filed;
+      window.cache[key] = data ;
+    }
+  };
+*/
   return util;
 })();

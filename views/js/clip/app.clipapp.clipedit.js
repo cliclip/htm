@@ -91,7 +91,10 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	  success:function(model, res){
 	    var opt = cid.split(":");
 	    var content = model.get("content");
-	    window.cache["/"+opt[0]+"/clip_"+opt[1]+".text.js"] = content;
+	    // App.util.cacheSync("/clip_"+opt[1]+".text.js",content);
+	    if(App.util.isLocal()){
+	      window.cache["/"+opt[0]+"/clip_"+opt[1]+".text.js"] = content;
+	    }
 	    view.trigger("@success", content, cid);
 	  },
 	  error:function(model, error){  // 出现错误，触发统一事件

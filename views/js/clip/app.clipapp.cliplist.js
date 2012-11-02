@@ -430,7 +430,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     var model = collection.get(model_id);
     var newcontent = App.util.getPreview(content, 100);
     //更新后的preview图片可能会更改，需要补全图片src的前缀
-    newcontent = App.util.expandPreImgUrl(newcontent);
+    newcontent = App.util.expandPreImgUrl(newcontent,model_id);
     model.set({content:newcontent});
   });
 
@@ -448,7 +448,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }else if(model.get("public")){
       var collection = clipListView.collection;
       var tmp = collection.get(mid);
-      window.cache["/" + user +"/clip_"+mid.split(":")[1]+".json.js" ].public = model.get("public"); //修改detail缓存
+      // App.util.cacheSync("/clip_"+mid.split(":")[1]+".json.js","public",model.get("public"));
+      if(App.util.isLocal()){
+	window.cache["/" + user +"/clip_"+mid.split(":")[1]+".json.js" ].public = model.get("public"); //修改detail缓存
+      }
       tmp.set("public", model.get("public"));
     }
   });
