@@ -250,13 +250,15 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var list = new commCollection();
     list.fetch({url:App.ClipApp.encodeURI(P+"/clip/"+cid+"/comment")});
     list.onReset(function(commentCollection){ // rename CommentsView
-      commentCollection.models.forEach(function(model){
-	model.set('cid', cid);
-      });
-      var commentList = new CommentList({collection: commentCollection});
-      ClipDetail.commentRegion = new App.Region({el:".comments"});
-      // console.info(commentList);
-      ClipDetail.commentRegion.show(commentList);
+      var comms = commentCollection.toJSON();
+      if(comms.length!= 1 || comms[0].id){
+	commentCollection.models.forEach(function(model){
+	  model.set('cid', cid);
+	});
+	var commentList = new CommentList({collection: commentCollection});
+	ClipDetail.commentRegion = new App.Region({el:".comments"});
+	ClipDetail.commentRegion.show(commentList);
+      }
     });
   };
 
@@ -347,6 +349,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     model.fetch({
       success:function(res,detailModel){
 	model.onChange(function(detailModel){
+	  // 去掉图片标签中的width和height 与$(".content")预设的固定宽度冲突
+	  var content = detailModel.toJSON().content;
+	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/;
+	  detailModel.set("content",content.replace(reg,""));
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);

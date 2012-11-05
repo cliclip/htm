@@ -2,7 +2,7 @@
 
   var callbacks = {};
   window.cache = {};
-  var time = 5000;
+  var time = 2000;
   var NOOP = function(){};
   var P = "/_3_";
   var _P = "..";
@@ -95,6 +95,7 @@
     //delete options.timeout;
     var s = document.getElementById(key);
     if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
+    // console.info(callbacks[key]);
     _.each(callbacks[key],function(e){
       clearTimeout(e.timeout);
       e.error(key,'timeout');
