@@ -59,7 +59,7 @@ App.util = (function(){
       var opt = opt0[1].split(".");
       var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
       var url =  "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
-      return util.isLocal() ? _P + url : P + url;
+      return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : P + url;
     }else return imageid;
   };
 
@@ -207,6 +207,7 @@ App.util = (function(){
     return con.replace(reg,"");
   };
 
+
   util.expandConImgUrl = function(content,user,id){
     var cid = id,uid = user,pre;
     if(/:/.test(id)){
@@ -240,17 +241,17 @@ App.util = (function(){
       uid = clipid.split(":")[0];
       cid = clipid.split(":")[1];
     }
-    if(/tmp_/.test(content.image.src)){
+    if(/^tmp_/.test(content.image.src)){
       content.image.src = P + "/" + src;
-    } else {
-      if(!/_270/.test(content.image.src)){
-	content.image.src = content.image.src.replace(".","_270.");
-      }
+    } else if(/^(\d+)\.(\w+)$/.test(src)){
       if(_getMyUid() == uid){
 	var prefix = App.util.isLocal() ? _P : P ;
 	content.image.src = prefix + "/" + uid + "/clip_" + cid + "_" + src;
       }else {
 	content.image.src = P + "/clip/" + clipid + "/" + src;
+      }
+      if(!/_270/.test(content.image.src)){
+	content.image.src = content.image.src.replace(".","_270.");
       }
     }
     return content;
@@ -268,7 +269,11 @@ App.util = (function(){
 
   util.img_error = function(img){
     img.title = img.src;
-    //img.src='img/img_error.jpg';
+    if(App.util.isLocal()){
+     img.src = P + img.src.match(/\/(\d+)\/clip_*/)[0];
+    }else{
+      img.src='img/img_error.jpg';
+    }
     $(".fake_" + img.id).hide();
     $("." + img.id).show();
     img.onload = function(){
@@ -314,7 +319,8 @@ App.util = (function(){
   // 获取当前用户的uid
   util.getMyUid = _getMyUid;
   function _getMyUid(){
-    var uid_cookie = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0][0]:null;
+    var str = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0]: null ;
+    var uid_cookie = str ? str.match(/[0-9]+/)[0]:null;
     var uid_local = App.Local? App.Local.uid :null;
     return  uid_cookie || uid_local;
   }
@@ -356,7 +362,7 @@ App.util = (function(){
   };
 /*
   util.cacheSync = function(name,filed,data){
-    if(!isLocal()) return;
+    if(!util.isLocal()) return;
     var myUid = _getMyUid();
     var key = "/" + myUid + name;
     if(data){
