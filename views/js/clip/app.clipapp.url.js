@@ -11,7 +11,7 @@ App.ClipApp.Url = (function(){
   if(location.protocol != "http:"){
     Url.base = Url.HOSTNAME + P;
     Url.hostname = Url.HOSTNAME;
-    Url.base_local = "..";
+    // Url.base_local = "..";
   }else{
     Url.base = P;
     Url.hostname = "";

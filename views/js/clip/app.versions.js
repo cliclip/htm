@@ -122,8 +122,8 @@ App.versions = (function($){
 	title       : "修改密码",
 	update      : "更 改",
 	danger_operate : "高危操作",
-	export      : "导出摘录",
-	delete      : "删除账户",
+	"export"      : "导出摘录",
+	"delete"      : "删除账户",
 	is_null     : "密码尚未填写",
 	not_match   : "两次输入的密码不一致",
 	auth_success: "您的密码已更改",
@@ -195,7 +195,7 @@ App.versions = (function($){
 	cancel_title: "放 弃"
       },
 
-      delete : {
+      "delete" : {
 	title       : "删除",
 	h3          : "真的要删除吗？",
 	p           : "删除操作无法恢复",
@@ -255,7 +255,7 @@ App.versions = (function($){
 	comment     : "评论",
 	recommend   : "转发",
 	reclip      : "转摘",
-	delete      : "删除",
+	"delete"      : "删除",
 	update      : "修改",
 	memo        : "标注"
       },
@@ -269,13 +269,13 @@ App.versions = (function($){
 	title_twitter: "分享到Twitter",
 	summary      : "来自cliclip的分享"
       },
-      private :{
+      "private" :{
 	title       : "私有分享，点击生成链接地址",
 	share       : "分享"
       },
       showcomment : {
 	reply       : "回复",
-	delete      : "删除",
+	"delete"      : "删除",
 	text        : "此内容已被删除",
 	pack        : "(收起)",
 	open        : "(展开)"
@@ -306,7 +306,7 @@ App.versions = (function($){
 	comment     : "评论",
 	recommend   : "转发",
 	reclip      : "转摘",
-	delete      : "删除",
+	"delete"      : "删除",
 	update      : "修改",
 	memo        : "标注"
       },
@@ -648,8 +648,8 @@ App.versions = (function($){
 	title       : "Change password",
 	update      : "Change",
 	danger_operate : "High-risk operations",
-	export      : "Export clips",
-	delete      : "Close your account",
+	"export"      : "Export clips",
+	"delete"      : "Close your account",
 	is_null     : "Password is missing",
 	not_match   : "Password input not consistent",
 	auth_success: "Password changed successfully",
@@ -720,7 +720,7 @@ App.versions = (function($){
 	cancel_title: "Quit"
       },
 
-      delete : {
+      "delete" : {
 	title       : "Delete",
 	h3          : "Do you really want to delete?",
 	p           : "This clip will be deleted forever",
@@ -781,7 +781,7 @@ App.versions = (function($){
 	comment     : "Comment",
 	recommend   : "@",
 	reclip      : "Reclip",
-	delete      : "Delete",
+	"delete"      : "Delete",
 	update      : "Edit",
 	memo        : "Tag"
       },
@@ -794,13 +794,13 @@ App.versions = (function($){
 	title_twitter: "Share to twitter",
 	summary     : "Share from cliclip"
       },
-      private :{
+      "private" :{
 	title       : "Private share,click here to get link",
 	share       : "Share"
       },
       showcomment : {
 	reply       : "Reply",
-	delete      : "Delete",
+	"delete"      : "Delete",
 	text        : "The comment has been removed",
 	pack        : "(Collapse)",
 	open        : "(Expand)"
@@ -831,7 +831,7 @@ App.versions = (function($){
 	comment     : "Comment",
 	recommend   : "@",
 	reclip      : "Reclip",
-	delete      : "Delete",
+	"delete"      : "Delete",
 	update      : "Edit",
 	memo        : "Tag"
       },

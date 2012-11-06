@@ -4,12 +4,12 @@ script(type="text/template",id="clippreview-view-template")
     <% if(recommend){ %>
     hgroup.clearfix.
       <div class="user_info_small">
-        <a href="/#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
+        <a href="#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
           <img src="<%=App.util.face_url(recommend.user.face,50)%>" title="<%=recommend.user.name%>" onerror="this.src='img/f.jpg'"/>
         </a>
       </div>
       <dt class="username">
-        <a href="/#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
+        <a href="#user/<%=recommend.user.id%>" class="recommend",id="recommend_<%=recommend.user.id%>">
           <%= recommend.user.name === undefined ? "" : recommend.user.name%>
         </a>
         <div class="recommend_time">
@@ -59,7 +59,7 @@ script(type="text/template",id="clippreview-view-template")
       div.user_info_small
         <% if(user && App.ClipApp.ClipList.flag_show_user){ %>
         div.user_more
-          | <a class="author" href="/#user/<%=user.id%>">
+          | <a class="author" href="#user/<%=user.id%>">
           |   <img src="<%=App.util.face_url(user.face,50)%>"/>
           dl.name
             dt.
