@@ -131,9 +131,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     model.onChange(function(editModel){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
-      var html = editModel.toJSON().content;
+      // 更新clip：将获取本地图片文件改为获取服务器端文件
+      var html = editModel.toJSON().content.replace(/\.\.\//g,P+ "/");
       App.Editor.init();
-      // 保证了api层接受的数据和返回的数据都是ubb格式的
       App.Editor.setContent("editor", html);
       setTimeout(function(){
 	old_content = App.Editor.getContent("editor"); //参数为编辑器id

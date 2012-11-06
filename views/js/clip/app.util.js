@@ -59,7 +59,7 @@ App.util = (function(){
       var opt = opt0[1].split(".");
       var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
       var url =  "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
-      return util.isLocal() ? _P + url : P + url;
+      return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : P + url;
     }else return imageid;
   };
 
@@ -195,15 +195,16 @@ App.util = (function(){
    * 向api提交数据时要去除图片src中的前缀部分
    */
   util.cleanConImgUrl = function(content){
-    var reg = /\/_3_\/(\d+)\/clip_(\d+)_/g;
-    var reg1 = /src=\"\/_3_\/tmp/g;
-    var reg2 = /src=\'\/_3_\/tmp/g;
-    var reg3 = /src=\'http:\/\/192\.168\.1\.3:8000\/_3_\/tmp/g;
-    var reg4 = /src=\"http:\/\/192\.168\.1\.3:8000\/_3_\/tmp/g;
-    var con = content.replace(reg1,'src="tmp');
-    con = con.replace(reg2,'src=\'tmp');
-    con = con.replace(reg3,'src=\'tmp');
-    con = con.replace(reg4,'src=\"tmp');
+    var reg = /(\d+)\/clip_(\d+)_/g;
+    var reg0 = /\/_3_\//g;
+    // var reg3 = /src=\'http:\/\/cliclip\.com/g;
+    // var reg4 = /src=\"http:\/\/cliclip\.com/g;
+    var reg1 = /src=\'http:\/\/192\.168\.1\.3:(\d)000/g;
+    var reg2 = /src=\"http:\/\/192\.168\.1\.3:(\d)000/g;
+    var con = content.replace(reg0,"");//去掉src中所有的版本号
+    // 去掉src中网址（本地文件访问服务器时会出现）
+    con = con.replace(reg1,'src=\'');
+    con = con.replace(reg2,'src=\"');
     return con.replace(reg,"");
   };
 
@@ -268,7 +269,12 @@ App.util = (function(){
 
   util.img_error = function(img){
     img.title = img.src;
-    //img.src='img/img_error.jpg';
+    var src = img.src.match(/\/(\d+)\/clip_(\d+)_(\d+)(_(\d+))*\.(\w+)/)[0];
+    if(App.util.isLocal()&&src){
+     img.src = P + src;
+    }else{
+      img.src='img/img_error.jpg';
+    }
     $(".fake_" + img.id).hide();
     $("." + img.id).show();
     img.onload = function(){
@@ -314,7 +320,8 @@ App.util = (function(){
   // 获取当前用户的uid
   util.getMyUid = _getMyUid;
   function _getMyUid(){
-    var uid_cookie = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0][0]:null;
+    var str = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0]: null ;
+    var uid_cookie = str ? str.match(/[0-9]+/)[0]:null;
     var uid_local = App.Local? App.Local.uid :null;
     return  uid_cookie || uid_local;
   }
@@ -356,7 +363,7 @@ App.util = (function(){
   };
 /*
   util.cacheSync = function(name,filed,data){
-    if(!isLocal()) return;
+    if(!util.isLocal()) return;
     var myUid = _getMyUid();
     var key = "/" + myUid + name;
     if(data){
