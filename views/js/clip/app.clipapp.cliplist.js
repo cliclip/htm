@@ -71,6 +71,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       this.bind("item:rendered",function(itemView){
 	if(this.model.get("content").image){
 	  this.$el.find("p").addClass("text");
+	  console.log(this.model.get("content").image.height);
+	  if(!this.model.get("content").image.height){
+	    $container.masonry("reload");
+	    console.log("relllllllllllllllllod");
+	  }
 	}else{
           this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
