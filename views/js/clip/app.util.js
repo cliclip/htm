@@ -241,17 +241,17 @@ App.util = (function(){
       uid = clipid.split(":")[0];
       cid = clipid.split(":")[1];
     }
-    if(/tmp_/.test(content.image.src)){
+    if(/^tmp_/.test(content.image.src)){
       content.image.src = P + "/" + src;
-    } else {
-      if(!/_270/.test(content.image.src)){
-	content.image.src = content.image.src.replace(".","_270.");
-      }
+    } else if(/^(\d+)\.(\w+)$/.test(src)){
       if(_getMyUid() == uid){
 	var prefix = App.util.isLocal() ? _P : P ;
 	content.image.src = prefix + "/" + uid + "/clip_" + cid + "_" + src;
       }else {
 	content.image.src = P + "/clip/" + clipid + "/" + src;
+      }
+      if(!/_270/.test(content.image.src)){
+	content.image.src = content.image.src.replace(".","_270.");
       }
     }
     return content;
