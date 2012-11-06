@@ -71,16 +71,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       this.bind("item:rendered",function(itemView){
 	if(this.model.get("content").image){
 	  this.$el.find("p").addClass("text");
-	  itemView.$el.imagesLoaded(function(){
-	    $container.masonry("reload");
-	  });
 	}else{
           this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
 	  //STRANGE若不加延时则所有clip无图片
 	  // 在翻页时最后一个clip不产生动态布局效果
 	  setTimeout(function(){
-	    $container.masonry("reload");
+	   // $container.masonry("reload");
 	  },0);
 	}
       });
@@ -165,22 +162,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
     }
   });
-
-/*
-  function createClipShareLink(clipid){
-    var model = new App.Model();
-    model.save({},{
-      url: App.ClipApp.encodeURI(P+"/clip/"+clipid+'/sharelink'),
-      type: "POST",
-      success:function(model,res){ // 不只是弹出提示框这么简单
-	App.ClipApp.ClipDetail.show(clipid, null, {}, res);
-      },
-      error:function(model,error){ // 则显示该链接不能再点击
-	App.ClipApp.showConfirm(error, null, function(){});
-      }
-    });
-  }
-*/
 
   var ClipListView = App.CollectionView.extend({
     tagName: "div",
@@ -309,6 +290,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       $("#list").show();
       $("#follow").hide();
       App.listRegion.show(clipListView);
+      $("#list").masonry("reload");
       current_page(current);
       if(collection.length<10){ // 去重之后不够十条继续请求
 	nextpage();
@@ -378,6 +360,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	    new_page = false;
 	  }
 	  setTimeout(function(){
+	    $("#list").masonry("reload");
 	    loading = false;
 	  },500);
 	}
