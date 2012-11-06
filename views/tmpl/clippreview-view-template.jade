@@ -39,15 +39,15 @@ script(type="text/template",id="clippreview-view-template")
     <% }else{ %>
     header#header
       <% if(content && content.image) {%>
-      | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/_wait.gif"/>
-      div.article_photo
-        | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>"/>
+      <div class="article_photo" style="height:<%=Math.round(content.image.height*270/content.image.width)%>px;">
+      |  <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>"  />
+      </div>
       <% }if(content && content.text){%>
       div.article_con
         <%if(!content.image){ %>
         br
         <%}%>
-        | <%= content.text %>
+        | <p><%= content.text %></p>
       <%}%>
     <%}%>
     footer.master
