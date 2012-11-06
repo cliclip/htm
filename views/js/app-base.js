@@ -62,7 +62,7 @@ App = (function(Backbone, $){
       var error = options.error;
       options.error = function(resp, status, xhr){
 	// 获取本地clip detail文件失败导致timeout，改去服务器请求数据
-	if(resp[1][0]== "timeout" && /clip_(\d+)/.test(resp[1][1])){
+	if(_.isArray(resp[1])&&resp[1][0]== "timeout" && /clip_(\d+)/.test(resp[1][1])){
 	  App.rpc.request({
 	    url:_url,
 	    method:_method,
