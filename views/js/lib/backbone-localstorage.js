@@ -2,7 +2,7 @@
 
   var callbacks = {};
   window.cache = {};
-  var time = 2000;
+  var time = 100;
   var NOOP = function(){};
   var P = "/_3_";
   var _P = "..";
@@ -98,7 +98,7 @@
     // console.info(callbacks[key]);
     _.each(callbacks[key],function(e){
       clearTimeout(e.timeout);
-      e.error(key,'timeout');
+      e.error(key,['timeout',key]);
     });
     delete callbacks[key];
   }
