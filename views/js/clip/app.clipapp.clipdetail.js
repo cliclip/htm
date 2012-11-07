@@ -353,7 +353,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  // 去掉图片标签中的width和height 与$(".content")预设的固定宽度冲突
 	  var content = detailModel.toJSON().content;
 	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/g;
-	  // 为没一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
+	  // 为每一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
 	  detailModel.set("content",content.replace(reg,"onerror=\"App.util.img_error(this)\""));
 	  showDetail(detailModel);
 	  showComment(cid);
