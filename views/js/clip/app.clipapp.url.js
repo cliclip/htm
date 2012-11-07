@@ -6,7 +6,7 @@ App.ClipApp.Url = (function(){
 
   var HOST = (location.protocol === "http:")
       ? location.protocol+"//"+location.hostname+":"+location.port
-      : "http://192.168.1.3:3000"; // "http://cliclip.com" for online
+      : "http://192.168.1.3:8000"; // "http://cliclip.com" for online
   var VER = "/_3_";
   var PAGE = 10;
 
