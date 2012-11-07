@@ -20,7 +20,8 @@ $(function(){
   });
 
   // easyXDM.Rpc
-  var hostname = App.ClipApp.Url.HOSTNAME;
+  var hostname = App.ClipApp.Url.hostname;
+  console.log("easyXDM.Rpc.init:"+hostname);
   var rpc = new easyXDM.Rpc({
     remote: hostname + "/cors/",
     swf: hostname + '/img/easyxdm.swf'
