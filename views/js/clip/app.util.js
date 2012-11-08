@@ -263,6 +263,7 @@ App.util = (function(){
       setTimeout(function(){
 	$(".fake_"+img.id).hide();
 	$("."+img.id).show();
+	$("#list").masonry("reload");
       },0);
     }
   };
