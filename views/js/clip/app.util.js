@@ -38,13 +38,11 @@ App.util = (function(){
   };
 
   util.img_url = function(url,size){
-    if(url && !/http:/.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
-      var opt = url.split(".");
-      var _url = opt[opt.length-2] + "_270." + opt[opt.length-1];
-      return location.protocol == "http:" ?  _url : ".." + _url;
+    if(url && /http:\/\/(cliclip|192\.168\.1\.3)|\.\./.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
+      var idx = url.lastIndexOf(".");
+      return url.slice(0,idx) + "_270" + url.slice(idx);
     }else return url;
   };
-
   // TODO 此处理适合在 api 的 getUserInfo 逻辑里完成
   // if (!face) userInfo.face = default_face;
   // userInfo.icon = userInfo.face + '/42'
@@ -250,9 +248,6 @@ App.util = (function(){
       }else {
 	content.image.src = P + "/clip/" + clipid + "/" + src;
       }
-      if(!/_270/.test(content.image.src)){
-	content.image.src = content.image.src.replace(".","_270.");
-      }
     }
     return content;
   };
@@ -276,8 +271,10 @@ App.util = (function(){
     }else{
       img.src='img/img_error.jpg';
     }
-    $(".fake_" + img.id).hide();
-    $("." + img.id).show();
+    if(img.id){
+      $(".fake_" + img.id).hide();
+      $("." + img.id).show();
+    }
     img.onload = function(){
       $("#list").masonry("reload");
     };
