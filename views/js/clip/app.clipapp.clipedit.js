@@ -81,7 +81,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var content = App.Editor.getContent("editor"); // 参数为编辑器id
       if(content == old_content){
 	view.trigger("@cancel");
-	//App.ClipApp.showSuccess({"content": "no_change"}); 没发生变化直接关闭
       }else{
 	var editModel = new EditModel({});
 	// 不用this.mode因为this.model中有 录线图
@@ -131,7 +130,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
     model.onChange(function(editModel){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
-      var html = editModel.toJSON().content;
+      // 更新clip：将获取本地图片文件改为获取服务器端文件
+      var html = editModel.toJSON().content.replace(/\.\.\//g,P+ "/");
       App.Editor.init();
       App.Editor.setContent("editor", html);
       setTimeout(function(){

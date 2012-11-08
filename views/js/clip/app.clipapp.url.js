@@ -3,20 +3,16 @@
  * 2)此文件
 */
 App.ClipApp.Url = (function(){
-  var Url = {};
-  var P = "/_3_";
-  Url.page = 10;
-  Url.HOSTNAME = "http://cliclip.com";
-  // Url.HOSTNAME = "http://192.168.1.3:10000";
-  // Url.HOSTNAME = "http://cliclip.com:8887";
-  // Url.HOSTNAME = "http://192.168.1.3:8000";
-  if(location.protocol != "http:"){
-    Url.base = Url.HOSTNAME + P;
-    Url.hostname = Url.HOSTNAME;
-    Url.base_local = "..";
-  }else{
-    Url.base = P;
-    Url.hostname = "";
-  }
-  return Url;
+  var HOST = (location.protocol === "http:")
+      ? location.protocol+"//"+location.hostname+":"+location.port
+      : "http://192.168.1.3:3000"; // "http://cliclip.com" for online
+  var VER = "/_3_";
+  var PAGE = 10;
+
+  return {
+    hostname : HOST,
+    base : HOST+VER,
+    page : PAGE
+  };
+
 })();

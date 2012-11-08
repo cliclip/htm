@@ -252,7 +252,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     list.onReset(function(commentCollection){ // rename CommentsView
       var comms = commentCollection.toJSON();
       if(comms.length!= 1 || comms[0].id){
-	commentCollection.models.forEach(function(model){
+	// ie 8不支持arrayObj.forEach()的写法
+	_.each(commentCollection.models,function(model){
 	  model.set('cid', cid);
 	});
 	var commentList = new CommentList({collection: commentCollection});
@@ -351,8 +352,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	model.onChange(function(detailModel){
 	  // 去掉图片标签中的width和height 与$(".content")预设的固定宽度冲突
 	  var content = detailModel.toJSON().content;
-	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/;
-	  detailModel.set("content",content.replace(reg,""));
+	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/g;
+	  // 为每一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
+	  detailModel.set("content",content.replace(reg,"onerror=\"App.util.img_error(this)\""));
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);

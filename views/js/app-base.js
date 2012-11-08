@@ -56,10 +56,27 @@ App = (function(Backbone, $){
 	options.data = {};
       }
       options.data._token = App.util.getCookie("token");
+      var _url = options.url||model.get("url")||model.url();
+      var _method = options.type||methodMap[method];
       var success = options.success;
       var error = options.error;
+      options.error = function(resp, status, xhr){
+	// 获取本地clip detail文件失败导致timeout，改去服务器请求数据
+	if(_.isArray(resp[1])&&resp[1][0]== "timeout" && /clip_(\d+)/.test(resp[1][1])){
+	  App.rpc.request({
+	    url:_url,
+	    method:_method,
+	    data:options.data
+	    }, function(resp){
+	      var returnObj = eval(resp.data);
+	      options.success(returnObj);
+	    }, function(resp){
+	      console.dir(resp);
+	    }
+	  );
+	}
+      };
       options.success = function(resp, status, xhr){
-	// console.info(resp);
 	if(resp[0] == 0){
 	  // console.info("sync:");console.dir(resp);
 	  if(success) success.apply(model, [resp[1], status, xhr]);
@@ -72,8 +89,6 @@ App = (function(Backbone, $){
 	  }
 	}
       };
-      var _url = options.url||model.get("url")||model.url();
-      var _method = options.type||methodMap[method];
       if(App.util.modelByRpc(_method,_url,options)){
 	App.rpc.request({
 	    url:_url,

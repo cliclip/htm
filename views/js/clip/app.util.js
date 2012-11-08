@@ -195,18 +195,18 @@ App.util = (function(){
    * 向api提交数据时要去除图片src中的前缀部分
    */
   util.cleanConImgUrl = function(content){
-    var reg = /\/_3_\/(\d+)\/clip_(\d+)_/g;
-    var reg1 = /src=\"\/_3_\/tmp/g;
-    var reg2 = /src=\'\/_3_\/tmp/g;
-    var reg3 = /src=\'http:\/\/192\.168\.1\.3:8000\/_3_\/tmp/g;
-    var reg4 = /src=\"http:\/\/192\.168\.1\.3:8000\/_3_\/tmp/g;
-    var con = content.replace(reg1,'src="tmp');
-    con = con.replace(reg2,'src=\'tmp');
-    con = con.replace(reg3,'src=\'tmp');
-    con = con.replace(reg4,'src=\"tmp');
+    var str1 = "src=\\'",str2 = 'src=\\"';
+    var str3 = "http://(192\\.168\\.1\\.3|cliclip\\.com)(:(\\d{4}))?";
+    var reg0 = /\/_3_\//g,reg = /(\d+)\/clip_(\d+)_/g;
+    // 匹配图片src为http:192.168.1.3:....以及cliclip.com(:....)
+    var reg1 = new RegExp(str1 + str3,"g");
+    var reg2 = new RegExp(str2 + str3,"g");
+    var con = content.replace(reg0,"");//去掉src中所有的版本号
+    // 去掉src中网址（本地文件访问服务器时会出现）
+    con = con.replace(reg1,'src=\'');
+    con = con.replace(reg2,'src=\"');
     return con.replace(reg,"");
   };
-
 
   util.expandConImgUrl = function(content,user,id){
     var cid = id,uid = user,pre;
@@ -269,8 +269,9 @@ App.util = (function(){
 
   util.img_error = function(img){
     img.title = img.src;
-    if(App.util.isLocal()){
-     img.src = P + img.src.match(/\/(\d+)\/clip_*/)[0];
+    var src = img.src.match(/\/(\d+)\/clip_(\d+)_(\d+)(_(\d+))*\.(\w+)/);
+    if(App.util.isLocal()&&src){
+     img.src = P + src[0];
     }else{
       img.src='img/img_error.jpg';
     }

@@ -2,7 +2,7 @@
 
   var callbacks = {};
   window.cache = {};
-  var time = 2000;
+  var time = 100;
   var NOOP = function(){};
   var P = "/_3_";
   var _P = "..";
@@ -30,8 +30,8 @@
 
   // 根据url 取得文件名称及目录
   function get_key(url){
-    // console.info(url);
-    var newurl = url.slice(url.indexOf(P)+P.length, url.length);
+    var opt = url.split(P);
+    url = opt[1]||url;
     var key = "";
     var uid = get_uid(newurl);
     if(/user\/(\d+)\?/.test(newurl)){
@@ -100,7 +100,7 @@
     // console.info(callbacks[key]);
     _.each(callbacks[key],function(e){
       clearTimeout(e.timeout);
-      e.error(key,'timeout');
+      e.error(key,['timeout',key]);
     });
     delete callbacks[key];
   }

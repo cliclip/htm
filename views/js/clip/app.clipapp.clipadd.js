@@ -177,7 +177,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   ClipAdd.close = function(clip){
     App.vent.unbind("app.clipapp:upload");
-    if(!clip || !clip.content){
+    // 打开新建clip界面
+    if(!clip || !clip.content || clip.content=="<br>"){
       App.viewRegion.close();
     }else{
       App.ClipApp.showAlert("clipadd_save", null, function(){
