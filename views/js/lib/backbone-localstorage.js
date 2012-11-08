@@ -31,7 +31,7 @@
   // 根据url 取得文件名称及目录
   function get_key(url){
     var opt = url.split(P);
-    url = opt[1]||url;
+    var newurl = opt[1]||url;
     var key = "";
     var uid = get_uid(newurl);
     if(/user\/(\d+)\?/.test(newurl)){
