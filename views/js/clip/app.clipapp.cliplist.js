@@ -432,7 +432,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       var collection = clipListView.collection;
       var tmp = collection.get(mid);
       // App.util.cacheSync("/clip_"+mid.split(":")[1]+".json.js","public",model.get("public"));
-      if(App.util.isLocal()){
+      if(App.util.isLocal()&&window.cache["/" + user +"/clip_"+mid.split(":")[1]+".json.js"]){
 	window.cache["/" + user +"/clip_"+mid.split(":")[1]+".json.js" ].public = model.get("public"); //修改detail缓存
       }
       tmp.set("public", model.get("public"));
