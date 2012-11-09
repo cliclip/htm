@@ -53,7 +53,7 @@ script(type="text/template",id="detail-view-template")
       div.bottom
 
 script(type="text/template",id="showcomment-view-template")
-  | <div class="comment_show" id="<%= id %>">
+  | <div class="comment_show" id="comment_show_<%=id%>">
   div.user_head
     <a class="userhead" href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
   dt
@@ -62,12 +62,12 @@ script(type="text/template",id="showcomment-view-template")
     span.text
      <span class="comment_text"><%= text%></span><span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
   dd.comment_con.
-    <div class="comm_link" id="<%= id %>" style="float:right;">
+    <div class="comm_link" id="comment_link_<%=id%>" style="float:right;">
     <% auth = App.ClipApp.getMyUid(); if(user.id == auth || auth == cid.split(":")[0]){%>
-    <span id="reply_<%=id%>" style="display:none; float:left;" >
-    <a href="javascript:void(0)" class="del_comment" id="<%= id %>"><%=_i18n('showcomment.delete')%></a>&nbsp;|<% } %>
+    <span id="reply_<%=id%>_del" style="display:none; float:left;" >
+    <a href="javascript:void(0)" class="del_comment" id="del_<%=id%>"><%=_i18n('showcomment.delete')%></a>&nbsp;|<% } %>
     </span>
-    <span>&nbsp;<a href="javascript:void(0)" class="reply_comment" id="<%= id %>"><%=_i18n('showcomment.reply')%></a></span>
+    <span>&nbsp;<a href="javascript:void(0)" class="reply_comment" id="reply_<%=id%>"><%=_i18n('showcomment.reply')%></a></span>
     </div>
   | </div>
         

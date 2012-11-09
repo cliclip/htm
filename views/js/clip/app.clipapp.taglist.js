@@ -50,7 +50,8 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   };
 
   function setbaseTag(tags){
-    baseTag = _.difference(_.union(tags,baseTag), bubs);
+    if(tags && tags !== undefined)
+      baseTag = _.difference(_.union(tags,baseTag), bubs);
   };
 
   function resetBase(){
@@ -60,6 +61,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
       tagModel.fetch();
       tagModel.onChange(function(model){
 	baseTag = _.difference(_.union(model.get("tag"), baseTag), bubs);
+	console.log('resetBase :: ', baseTag);
       });
     }
   };

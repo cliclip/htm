@@ -102,8 +102,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "showcomment-view",
     template: "#showcomment-view-template",
     events: {
-      "mouseover .comment_show" : "discoloration",
-      "mouseout .comment_show" : "resume",
+      "mouseenter .comment_show" : "show_del",
+      "mouseleave .comment_show" : "hide_del",
       "click .reply_comment" : "reply_comment",
       "click .del_comment" : "del_comment"
     },
@@ -111,30 +111,36 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       this.bind("@reply", showReply);
       this.bind("@delComment", delComment);
     },
-    discoloration : function(e){
+    show_del : function(e){
       e.preventDefault();
-      var id = e.currentTarget.id;
-      $("#reply_"+id).css("display","block");
+      var id = e.currentTarget.id || e.currentTarget.children[0].id;
+      id = id.match(/\d+/)[0];
+      $("#reply_"+id+"_del").show();
     },
-    resume : function(e){
+    hide_del : function(e){
       e.preventDefault();
-      var id = e.currentTarget.id;
-      $("#reply_"+id).css("display","none");
+      var id = e.currentTarget.id || e.currentTarget.children[0].id;
+      id = id.match(/\d+/)[0];
+      $("#reply_"+id+"_del").hide();
     },
     reply_comment : function(e){
       e.preventDefault();
-      var cid = this.model.get("cid"); // 取得当前detail的id
-      var user = this.model.get("user");
-      this.trigger("@reply", cid, user);
+      if(e.target.id.match(/reply_/)){
+	var cid = this.model.get("cid"); // 取得当前detail的id
+	var user = this.model.get("user");
+	this.trigger("@reply", cid, user);
+      }
     },
     del_comment : function(e){
       e.preventDefault();
-      var view = this;
-      var cid = this.model.get("cid");
-      var id = e.target.id;
-      App.ClipApp.showAlert("del_comment", null, function(){
-	view.trigger("@delComment", cid, id);
-      });
+      if(e.target.id.match(/del_/)){
+	var view = this;
+	var cid = this.model.get("cid");
+	var id = e.target.id.split("_")[1];
+	App.ClipApp.showAlert("del_comment", null, function(){
+	  view.trigger("@delComment", cid, id);
+	});
+      }
     }
   });
 
@@ -291,6 +297,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   var delComment = function(cid, comm_id){
+
     var model = new App.Model.CommentModel({cid: cid, id: comm_id});
     model.destroy({
       success:function(model, res){ // 删除评论成功，重新加载comment
