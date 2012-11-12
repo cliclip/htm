@@ -28,6 +28,11 @@
   background-position: @x @y;
   display: block;
 }
+.jtico (@x:0, @y:0) {
+  background: url(../img/jiathis_ico_32x32.png) no-repeat;
+  background-position: @x @y;
+  display: block;
+}
 .box-shadow (@x: 0px, @y: 0px, @blur: 1px, @color: #ccc) {
   box-shadow: @arguments;
   -moz-box-shadow: @arguments;
@@ -1512,7 +1517,32 @@ section.follow_frame{
 		float:right;
 		position:relative;
 		top:8px;
+		width:246px;
+		i{
+			width:41px;
+			height:32px;
+			float:left;
+		}
+		i.jtico_tsina{
+			.jtico(0px,0px);	
+		}
+		i.jtico_renren{
+			.jtico(0px,-64px);	
+		}
+		i.jtico_qzone{
+			.jtico(0px,-32px);	
+		}
+		i.jtico_tqq{
+			.jtico(0px,-1760px);	
+		}
+		i.jtico_fb{
+			.jtico(0px,-960px);	
+		}
+		i.jtico_twitter{
+			.jtico(0px,-1024px);	
+		}
 		.share_private{
+			float:right;
 			position:relative;
 			top:-8px;
 		}	
