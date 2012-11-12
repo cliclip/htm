@@ -117,6 +117,9 @@ module.exports = function(grunt) {
 	  "release/js/lib":
 	    "views/js/lib/*.js"             // THE DEPEND LIB
 	  ,
+	  "release/cors":
+	    "views/cors/*"                  // THE CORS
+	  ,
 	  "release/img":[
 	    "tmp/img/*",
 	    "views/img/*.gif"                    // TODO THE LEFT GIF
