@@ -336,7 +336,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   function nextpage(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
-    if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page){
+    if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page&&!/follow/.test(location.href)){
       loading = true;
       start += App.ClipApp.Url.page;
       end = start + App.ClipApp.Url.page-1;
