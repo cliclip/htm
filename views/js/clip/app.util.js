@@ -38,7 +38,7 @@ App.util = (function(){
   };
 
   util.img_url = function(url,size){
-    if(url && /http:\/\/(cliclip|192\.168\.1\.3)|\.\./.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
+    if(url && /http:\/\/((www\.)?cliclip|192\.168\.1\.3)|\.\./.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
       var idx = url.lastIndexOf(".");
       return url.slice(0,idx) + "_270" + url.slice(idx);
     }else return url;
@@ -194,7 +194,7 @@ App.util = (function(){
    */
   util.cleanConImgUrl = function(content){
     var str1 = "src=\\'",str2 = 'src=\\"';
-    var str3 = "http://(192\\.168\\.1\\.3|cliclip\\.com)(:(\\d{4}))?";
+    var str3 = "http://(192\\.168\\.1\\.3|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
     var reg0 = /\/_3_\//g,reg = /(\d+)\/clip_(\d+)_/g;
     // 匹配图片src为http:192.168.1.3:....以及cliclip.com(:....)
     var reg1 = new RegExp(str1 + str3,"g");
