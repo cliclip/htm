@@ -360,7 +360,7 @@ App.util = (function(){
   };
 
   util.setImgHeight = function(image){
-    return image.height>270 ? Math.round(image.height*270/image.width) : image.height;
+    return image.width>270 ? Math.round(image.height*270/image.width) : image.height;
   };
 /*
   util.cacheSync = function(name,filed,data){
