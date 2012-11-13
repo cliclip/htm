@@ -21,7 +21,7 @@ script(type="text/template",id="detail-view-template")
         div.share_button
           <% if(public != "false"){ %>
           <% for(var i = 0; i<shareTo.length; i++){ %>
-          <a target="_blank" title="<%= _i18n('snsShare.title_'+shareTo[i])%> " href="http://www.jiathis.com/send/?webid=<%=shareTo[i]%>&url=http%3A%2F%2Fwww.cliclip.com%2F%23clip%2F<%= id.split(":")[0] %>%2F<%= id.split(":")[1] %>&title=<%= _i18n('snsShare.summary')%>&uid=1348468567217809">
+          <a target="_blank" title="<%= _i18n('snsShare.title_'+shareTo[i])%> " href="http://www.jiathis.com/send/?webid=<%=shareTo[i]%>&url=http%3A%2F%2Fwww.cliclip.com%2F%23clip%2F<%= id.split(":")[0] %>%2F<%= id.split(":")[1] %>&title=<%= shareTo_title%>&uid=1348468567217809&appkey=%7b%26quot%3btsina%26quot%3b%3a%26quot%3b480422357%26quot%3b%7d&pic=<%= shareTo_img%>">
           <i class="jtico_<%= shareTo[i]%>"></i></a>
           <% } %>
           <% }else{ %>
