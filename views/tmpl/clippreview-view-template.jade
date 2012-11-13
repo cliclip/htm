@@ -44,8 +44,8 @@ script(type="text/template",id="clippreview-view-template")
       div.article_photo
         | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>" style="display:none;"/>
       <% }else{ %>
-      <div class="article_photo" style="height:<%=Math.round(content.image.height*270/content.image.width)%>px;">
-      |  <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>" height="<%=Math.round(content.image.height*270/content.image.width)%>" />
+      <div class="article_photo" style="height:<%=App.util.setImgHeight(content.image)%>px;">
+      |  <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>" height="<%=App.util.setImgHeight(content.image)%>" />
       </div>
       <% } %>
       <% }if(content && content.text){%>

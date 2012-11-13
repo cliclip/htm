@@ -359,6 +359,10 @@ App.util = (function(){
   util.isLocal = function(){
     return location.protocol == "http:" ? false : true;
   };
+
+  util.setImgHeight = function(image){
+    return image.height>270 ? Math.round(image.height*270/image.width) : image.height;
+  };
 /*
   util.cacheSync = function(name,filed,data){
     if(!util.isLocal()) return;
