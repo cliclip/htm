@@ -39,9 +39,5 @@ script(type='text/template',id='userface-view-template')
                 <% } %>
               </a>
         div#query.input.
-          <input class="text" id="input_keyword" type="text" value=
-          "<%if(id == App.ClipApp.getMyUid()){%> 
-          <%=_i18n('userface.mysearch')%> 
-          <%} else { %> <%=_i18n('userface.search')%> 
-          <%}%>" />
+          <input class="text" id="input_keyword" type="text" value="<%if(id == App.ClipApp.getMyUid()){%> <%=_i18n('userface.mysearch')%><%} else { %> <%=_i18n('userface.search')%><%}%>" />
           <input class="search_btn" id="query_button" type="button" title="<%=_i18n('userface.tsearch')%>"/>

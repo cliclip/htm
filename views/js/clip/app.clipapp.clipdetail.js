@@ -361,7 +361,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  var content = detailModel.toJSON().content;
 	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/g;
 	  // 为每一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
+	  var shareTo = App.util.getPreview(detailModel.get("content"),100);
+	  var shareTo_title = shareTo.text ? shareTo.text : _i18n('snsShare.summary');
+	  var shareTo_img = shareTo.image ? shareTo.image.src : "" ;
 	  detailModel.set("content",content.replace(reg,"onerror=\"App.util.img_error(this)\""));
+	  detailModel.set("shareTo_title", shareTo_title);
+	  detailModel.set("shareTo_img", shareTo_img);
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);
