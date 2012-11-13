@@ -200,7 +200,6 @@ App.util = (function(){
     var reg1 = new RegExp(str1 + str3,"g");
     var reg2 = new RegExp(str2 + str3,"g");
     var con = content.replace(reg0,"");//去掉src中所有的版本号
-    // 去掉src中网址（本地文件访问服务器时会出现）
     con = con.replace(reg1,'src=\'');
     con = con.replace(reg2,'src=\"');
     return con.replace(reg,"");

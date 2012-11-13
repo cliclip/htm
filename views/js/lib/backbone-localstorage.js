@@ -155,13 +155,13 @@
 	      var clip = _.clone(pdata);
 	      var uid = clip.user.id ? clip.user.id : clip.user;
 	      clip.content = cdata;
-	      // clip.content = expandConImgUrl(cdata,clip.user,clip.id);
-	      options._success = function(users){
-		clip.users = users;
+	      // options._success = function(users){
+	      // clip.users = users;
+	        clip.users = [];
 		options.success([0,clip]);
-	      };
-	      // TODO 区分本地还是在线
-	      loadRoute(clip.route,options);
+	      // };
+	      // 本地不需要显示路线图
+	      // loadRoute(clip.route,options);
 	    }, error : function(key,error){ options.error([1,error]); }
 	  });
 	}, error : function(key,error){ options.error([1,error]); }
