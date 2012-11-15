@@ -355,10 +355,7 @@
 
   // Override `Backbone.sync` to use delegate to the model or collection's
   // *localStorage* property, which should be an instance of `Store`.
-  Backbone.sync = function(method, model, options) {
-    // console.info("=========backbone-localstorage::sync=======");
-    var resp;
-    //var store = model.localStorage || model.collection.localStorage;
+  Backbone.localSync = function(method, model, options) {
     switch (method) {
       // case "read":resp = model.id?store.find(model):store.findAll();break;
       // case "create":resp = store.create(model);break;
@@ -366,10 +363,8 @@
       // case "delete":resp = store.destroy(model);break;
       case "read":
 	if(model.models) { // load collection
-	  // console.info("-----------read collection----------");
 	  readCollection(get_key(options.url), options.url, options);
 	}else{ // load model
-	  // console.info("-----------read model----------");
 	  readModel(get_key(options.url), options);
 	}
 	break;

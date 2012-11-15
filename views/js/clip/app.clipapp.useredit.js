@@ -370,14 +370,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   });
 
   UserEdit.onUploadImgChange = function(sender){
-    if( !sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i)){
+    if( !sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i) ){
       App.ClipApp.showConfirm("imageUp_error");
       return false;
     }else{
       if(sender.files && sender.files[0]&&Modernizr.filereader){
 	$("#confirm_face").show();
 	preview_face(sender);// ff chrome
-	//$("#myface").attr("src",img.src);
 	return true;
       }else if(Modernizr.cssfilters){
 	$("#confirm_face").show();

@@ -14,6 +14,7 @@ $(function() {
     popRegion: "#pop"
   });
 
+
   var r ;
   var socket = new easyXDM.Socket({
     swf: 'http://cliclip.com/img/easyxdm.swf',

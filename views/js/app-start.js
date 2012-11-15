@@ -28,7 +28,7 @@ $(function(){
     //swfNoThrottle: true,
   },{
     local: {
-      upload: function(returnVal){
+      upload: function(returnVal){//上传图片
 	App.vent.trigger("app.clipapp:upload", returnVal);
       }
     },

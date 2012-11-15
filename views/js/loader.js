@@ -25,7 +25,19 @@
     var pages = {};
     var readable = new Readability({pageURL: url});
     readable.setSkipLevel(3);
-    saxParser(doc.childNodes[doc.childNodes.length-1], readable);
+    var objs = [];
+    console.info(doc.childNodes,objs);
+    // doc.childNodes 的最后一个元素不一定是html节点，可能导致代码出错
+    // 将doc.childNodes 的html节点过滤出来
+    for(var i = 0;i<doc.childNodes.length;i++){
+      var node = doc.childNodes[i];
+      if(node.tagName) objs.push(node);
+    }
+    saxParser(objs[objs.length-1], readable);
+
+/*    var objs = doc.childNodes;
+    saxParser(objs[objs.length-1], readable);
+*/
     var article = readable.getArticle();
     html += article.html;
     // console.log('article.nextPage :: %j', article);
@@ -200,7 +212,7 @@
     };
     var hasSelect = getSelection();
     if(hasSelect){
-      openUI(hash, html, getInfo());
+      openUI(hash, hasSelect, getInfo());
     }else{
       getPage(function(err, html){
 	openUI(hash, html, getInfo());

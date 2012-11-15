@@ -344,7 +344,7 @@ App.util = (function(){
 
   // 判断app-base.js中model sync方法是否通过rpc向服务器发送请求
   util.modelByRpc = function(method, url, options){
-    if( !util.isLocal() ){ return true;}
+    if( !util.isLocal() ){ return true; }
     var url_uid = getUrlUid(url);
     var my_uid = _getMyUid();
     if( /user\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;

@@ -19,7 +19,6 @@ App = (function(Backbone, $){
     'read':   'GET'
   };
   var App = new Backbone.Marionette.Application();
-
   App.Model = Backbone.Model.extend({
     constructor:function(){
       var args = Array.prototype.slice.call(arguments);
@@ -46,33 +45,15 @@ App = (function(Backbone, $){
     },
     // override to parse [0, res] | [1, err] structure
     sync: function(method, model, options){
-      options.crossDomain = true;
-      options.processData = true;
-      //options.contentType = 'application/x-www-form-urlencoded;charset=UTF-8';
-      options.data = model.toJSON();
-      if(options.data){
-	options.data = (typeof options.data === "string") ? JSON.parse(options.data) : options.data;
-      }else{
-	options.data = {};
-      }
-      options.data._token = App.util.getCookie("token");
-      var _url = options.url||model.get("url")||model.url();
-      var _method = options.type||methodMap[method];
       var success = options.success;
       var error = options.error;
       options.error = function(resp, status, xhr){
+	// 网站首页可能会列出本地不存在的clip
 	// 获取本地clip detail文件失败导致timeout，改去服务器请求数据
-	if(_.isArray(resp[1])&&resp[1][0]== "timeout" && /clip_(\d+)/.test(resp[1][1])){
-	  App.rpc.request({
-	    url:_url,
-	    method:_method,
-	    data:options.data
-	    }, function(resp){
-	      var returnObj = eval(resp.data);
-	      options.success(returnObj);
-	    }, function(resp){
-	      console.dir(resp);
-	    }
+	if(App.util.isLocal() && _.isArray(resp[1]) && resp[1][0]== "timeout" && /clip_(\d+)/.test(resp[1][1])){
+	  App.rpc.request({url:_url,method:_method,data:options.data},
+	    function(resp){options.success(eval(resp.data));},
+	    function(resp){console.dir(resp);}
 	  );
 	}
       };
@@ -82,29 +63,36 @@ App = (function(Backbone, $){
 	  if(success) success.apply(model, [resp[1], status, xhr]);
 	} else {
 	  if("auth" in resp[1]){
-	  //if(false){
 	    model.trigger("alert", resp[1]);
 	  }else{
 	    if(error) error.apply(model, [resp[1], status, xhr]);
 	  }
 	}
       };
-      if(App.util.modelByRpc(_method,_url,options)){
-	App.rpc.request({
-	    url:_url,
-	    method:_method,
-	    data:options.data
-	  }, function(resp){
-	    var returnObj = eval(resp.data);
-	    options.success(returnObj);
-	  }, function(resp){
-	    console.dir(resp);
-	  }
-	);
-      }else{
-	options.url  =  options.url||model.get("url")||model.url();
-	// console.info(options.url);
+      if(!App.util.isLocal()){
 	Backbone.sync.apply(Backbone, [method, model, options]);
+      }else {
+	options.crossDomain = true;
+	options.processData = true;
+	options.data = model.toJSON();
+	if(options.data){
+	  options.data = (typeof options.data === "string") ? JSON.parse(options.data) : options.data;
+	}else{
+	  options.data = {};
+	}
+	options.data._token = App.util.getCookie("token");
+	var _url = options.url||model.get("url")||model.url();
+	var _method = options.type||methodMap[method];
+	if(App.util.modelByRpc(_method,_url,options)){
+	  App.rpc.request(
+	    {url:_url,method:_method,data:options.data},
+	    function(resp){options.success(eval(resp.data));},
+	    function(resp){console.dir(resp);}
+	  );
+	}else{
+	  options.url = options.url||model.get("url")||model.url();
+	  Backbone.localSync.apply(Backbone, [method, model, options]);
+	}
       }
     }
   });
@@ -127,7 +115,7 @@ App = (function(Backbone, $){
       models = _.isArray(models) ? models.slice() : [models];
       var models2 = [];
       for (var i=0, length=models.length; i < length; i++){
-	// todo 仅判断 id 与 collection 已有的重复，未判断与 models 里的其他重复
+	// todo 仅判断id与collection已有的重复，未判断与 models 里的其他重复
 	var id = models[i].id;
 	if(id != null && this._byId[id] != null){
 	} else {
@@ -138,47 +126,39 @@ App = (function(Backbone, $){
     },
     // override to parse [0, res] | [1, err] structure
     sync: function(method, model, options){
-      options.crossDomain = true;
-      options.processData = true;
-      //options.contentType ='application/x-www-form-urlencoded;charset=UTF-8';
-      if(options.data){
-	options.data = (typeof options.data === "string") ? JSON.parse(options.data) : options.data;
-	//options.data.tag = JSON.stringify(options.data.tag);
-      }else{
-	options.data = {};
-      }
-      options.data._token = App.util.getCookie("token");
       var success = options.success;
       var error = options.error;
       options.success = function(resp, status, xhr){
 	if(resp[0] == 0){
 	  // console.log("collection.sync success:");console.dir(resp[1]);
-	  if(success){
-	    success.apply(model, [resp[1], status, xhr]);
-	  }
+	  if(success){success.apply(model, [resp[1], status, xhr]);}
 	} else {
 	  if(error) error.apply(model, [resp[1], status, xhr]);
 	}
       };
-      var _url = options.url||model.get("url")||model.url();
-      var _method = options.type||methodMap[method];
-      if(App.util.collectionByRpc(_url, options)){ // protocol == http://
-	App.rpc.request({
-	    url:_url,
-	    method:_method,
-	    data:options.data
-	  }, function(resp){
-	    var returnObj = eval(resp.data);
-	    options.success(returnObj);
-	  }, function(resp){
-	    console.dir(resp);
-	  }
-	);
-	//Backbone.sync.apply(Backbone, [method, model, options]);
-      }else{ // protocol == file://
-	options.url  = _url;
-	// console.info(options.url);
+      if(!App.util.isLocal()){
+	options.data = (typeof options.data === "string") ? options.data : JSON.stringify(options.data);
 	Backbone.sync.apply(Backbone, [method, model, options]);
+      }else {
+	options.crossDomain = true;
+	options.processData = true;
+	if(options.data){
+	  options.data = (typeof options.data === "string") ? JSON.parse(options.data) : options.data;
+	}else{
+	  options.data = {};
+	}
+	options.data._token = App.util.getCookie("token");
+	var _url = options.url || model.get("url") || model.url();
+	var _method = options.type || methodMap[method];
+	if(App.util.collectionByRpc(_url, options)){
+	  App.rpc.request({ url:_url,method:_method,data:options.data},
+	    function(resp){ options.success(eval(resp.data));},
+	    function(resp){ console.dir(resp);}
+	  );
+	}else{
+	  options.url  = _url;
+	  Backbone.localSync.apply(Backbone, [method, model, options]);
+	}
       }
     }
   });
