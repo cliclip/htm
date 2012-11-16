@@ -45,7 +45,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  delete resp[i].clip;
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
 	}
-	if(resp[i].hide){// 取interest数据的时候，该属性描述是否显示
+	// 取interest数据的时候，该属性描述是否显示
+	if(resp[i]["public"] === "false"){
 	  hide_clips.push(resp[i].id);
 	}
 	resp[i].content = App.util.expandPreImgUrl(resp[i].content,resp[i].id);
