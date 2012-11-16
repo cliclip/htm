@@ -247,16 +247,17 @@
 
   //根据查询条件过滤需要取得的cliplist
   function filter(key,url,data,options){
-
-    var keys = [], ids = [], _filter = options.data;
+    var keys = [], ids = [], _filter = options.data,objs = [] ;
     var len = url.match(/[0-9]+\.\.[0-9]+/) ? url.match(/[0-9]+\.\.[0-9]+/)[0].split("..") : null;
     _.each(data,function(e){
       if(_filter.tag && e.tag==_filter.tag[0] ||!_filter.tag){
 	var ids =e.cid ?  e.cid.split(":") : [e.user,e.id];
-	keys.push("/" + ids[0] + "/clip_"+ids[1]+".json.js");
+	objs.push({key:"/"+ids[0]+"/clip_"+ids[1]+".json.js",utime:e.utime});
       }
     });
-    keys = _.uniq(keys).slice(len[0]-1,len[1]);
+    objs = _.sortBy(objs,function(obj){return obj.utime;});
+    _.each(objs,function(obj){keys.push(obj.key)});
+    keys =_.uniq(keys.reverse()).slice(len[0]-1,len[1]);
     mgetModel(keys, loadOnePreview, options);
     function loadOnePreview(key,callback){
       js_load(key,{

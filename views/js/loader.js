@@ -61,7 +61,7 @@
      * • Turn all double br's into p's - was handled by prepDocument in the original view.
      *   Maybe in the future abstract out prepDocument to work for both the original document and AJAX-added pages.
      **/
-     var responseHtml = data.match(/<body>[\s\S]*<\/body>/gi, function(a){
+     var responseHtml = data.match(/<body[\s\S]*<\/body>/gi, function(a){
        return a;
      });
      // 获取body中的内容，再去掉body标签
