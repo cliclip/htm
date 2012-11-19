@@ -27,15 +27,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     //localStorage: new Store("clippreview"),
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
-	if(resp[i]["public"] == "false" && App.util.getMyUid != resp[i].id){
-	  hide_clips.push(resp[i].id);
-	}
 	// 使得resp中的每一项内容都是对象
 	// console.info(resp[i]);
+	var uid = resp[i].user.id||resp[i].user;
 	if(!resp[i].clip){//TODO review
 	  if(!/:/.test(resp[i].id)){
 	    resp[i].clipid = resp[i].id;
-	    var uid = resp[i].user.id||resp[i].user;
 	    resp[i].id = uid +":"+resp[i].id;
 	  }
       	}else{ // 表示是别人推荐的clip
@@ -49,6 +46,11 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
 	}
 	// 取interest数据的时候，该属性描述是否显示
+
+	// console.info(App.util.getMyUid,resp[i].user.id);
+	if(resp[i]["public"] == "false" && App.util.getMyUid() != uid){
+	  hide_clips.push(resp[i].id);
+	}
 	resp[i].content = App.util.expandPreImgUrl(resp[i].content,resp[i].id);
       }
       return resp;
