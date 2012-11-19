@@ -76,6 +76,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	type: "POST",
 	success:function(model,res){
 	  Backbone.history.navigate("link/"+res, false);
+	  App.ClipApp.showSuccess("shareLink_success");
 	},
 	error:function(model,error){ // 则显示该链接不能再点击
 	  App.ClipApp.showConfirm(error, null, function(){});
