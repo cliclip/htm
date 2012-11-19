@@ -272,7 +272,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	    view.model.set("name", res.name);
 	    if(is_randName) App.ClipApp.showConfirm("remindModifyPass");
 	    else  App.ClipApp.showSuccess("rename_success");
-	    App.vent.trigger("app.clipapp.face:changed");
+	    // App.vent.trigger("app.clipapp.face:changed");
 	  },
 	  error:function(model,res){
 	    view.showError('faceEdit',res);
@@ -309,7 +309,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       success: function(model, res){
 	showEmail();
       },
-      error: function(model, res){}
+      error: function(model, res){
+	App.ClipApp.showConfirm(res.email.unbind);
+      }
     });
   };
 

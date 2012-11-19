@@ -242,6 +242,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	collection_length--;
       };
     });
+    // collection_length = collection.length;
   };
 
   function init_page(current){
