@@ -16,7 +16,7 @@ App.ClipApp.Link = (function(App, Backbone, $){
 	var val = res.val;
 	if(act == 'active'){
 	  App.ClipApp.showConfirm({active:"email"}, val.email);
-	  Backbone.history.navigate("", true);
+	  App.vent.trigger("app.clipapp.login:gotToken", val);
 	}else if(act == 'invite'){
 	  App.vent.trigger("app.clipapp.register:gotToken","invite",val);
 	}else if(act == 'resetPass'){
