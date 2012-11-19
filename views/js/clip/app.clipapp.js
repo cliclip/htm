@@ -358,8 +358,8 @@ App.ClipApp = (function(App, Backbone, $){
 
   ClipApp.showConfirm = function(key, value, fun){
     ClipApp.Message.confirm(key, value);
+    App.vent.unbind("app.clipapp.message:sure");
     if(typeof(fun) == "function"){
-      App.vent.unbind("app.clipapp.message:sure");
       App.vent.bind("app.clipapp.message:sure", fun);
     }
   };

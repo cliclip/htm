@@ -241,6 +241,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	collection.remove(collection.get(e.id));
       };
     });
+    // collection_length = collection.length;
   };
 
   function init_page(current){
