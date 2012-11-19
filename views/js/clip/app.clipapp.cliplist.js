@@ -2,7 +2,6 @@
 App.ClipApp.ClipList = (function(App, Backbone, $){
   var ClipList = {};
   var clips_exist = true;
-  var hide_clips = [];
   var clipListView = {};
   var collection = {},start, end, current;
   var url = "",base_url = "",data = "",type = "",collection_length,new_page;
@@ -14,7 +13,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       content:{},
       refby:"",
       reply:"",
-      hide:false,
       "public": true
     }
   });
@@ -27,6 +25,10 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     //localStorage: new Store("clippreview"),
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
+	// 取interest数据的时候，该属性描述是否显示
+	if(resp[i]["public"] == "false" && App.util.getMyUid != resp[i].id){
+	  hide_clips.push(resp[i].id);
+	}
 	// 使得resp中的每一项内容都是对象
 	// console.info(resp[i]);
 	if(!resp[i].clip){//TODO review
@@ -44,9 +46,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i]["public"] = resp[i].clip["public"];
 	  delete resp[i].clip;
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
-	}
-	if(resp[i].hide){// 取interest数据的时候，该属性描述是否显示
-	  hide_clips.push(resp[i].id);
 	}
 	resp[i].content = App.util.expandPreImgUrl(resp[i].content,resp[i].id);
       }
@@ -190,6 +189,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     if(App.ClipApp.isSelf(uid)) current = "my";
+    console.log(current);
     init_page(current);
   };
 
@@ -239,11 +239,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     init_page(current);
   };
 
-  function collection_filter(collection,hide_list){
-    collection_length -= hide_list.length;
-    for(var i=0;i<hide_list.length;i++){
-      collection.remove(collection.get(hide_list[i]));
-    }
+  function collection_filter(collection){
+    collection.each(function(e){
+      if(e.get('public') == 'false'){
+	collection.remove(collection.get(e.id));
+      };
+    });
   };
 
   function init_page(current){
@@ -267,7 +268,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
       collection_length = clips.length;
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
-      collection_filter(clips,hide_clips);
+      // 过滤interest中的私有数据，在dispatch之后用户将数据改为私有的了
+      if(current == 'interest') collection_filter(clips);
       clipListView = new ClipListView({collection:clips});
       $('#list').masonry({
 	itemSelector : '.clip',

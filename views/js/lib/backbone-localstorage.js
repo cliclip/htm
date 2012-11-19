@@ -5,7 +5,7 @@
   var time = 100;
   var NOOP = function(){};
   var P = "/_3_";
-  var _P = "..";
+  var _P = "..";//App.ClipApp.Url.basedir;
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
     // console.info(key,val);
@@ -57,8 +57,9 @@
 
   // 根据协议类型为url添加前缀
   function get_file(key){
-    return App.util.isLocal() ? _P + key : P + key;
-    //TODO help 的目录存在问题
+    return _P + key;
+    // return App.util.isLocal() ? _P + key : P + key;
+    // TODO help 的目录存在问题
   }
 
   // 加载js文件（ 添加script标签引入文件）
