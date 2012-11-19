@@ -237,11 +237,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   function collection_filter(collection){
     collection.each(function(e){
+      console.log(e.get('id')+':'+e.get('user').id+' public = '+e.get('public'));
       if(e.get("public") == "false"){
 	collection.remove(collection.get(e.id));
 	collection_length--;
       };
     });
+    console.log(collection);
     // collection_length = collection.length;
   };
 
@@ -268,6 +270,8 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
       // 过滤interest中的私有数据，在dispatch之后用户将数据改为私有的了
       if(current == 'interest') collection_filter(clips);
+      console.log('after collection_filter');
+      console.log(clips);
       clipListView = new ClipListView({collection:clips});
       $('#list').masonry({
 	itemSelector : '.clip',
