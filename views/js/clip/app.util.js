@@ -1,7 +1,7 @@
 App.util = (function(){
   var util = {};
   var P = App.ClipApp.Url.base;
-  var _P = "..";
+  var _P = App.ClipApp.Url.basedir;
   var NOOP = function(){};
   util.name_pattern = /^[a-zA-Z0-9][a-zA-Z0-9\.]{3,18}[a-zA-Z0-9]$/;
   util.email_pattern = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-\9]+\.[a-zA-Z]{2,3}$/;
@@ -38,7 +38,7 @@ App.util = (function(){
   };
 
   util.img_url = function(url,size){
-    if(url && /http:\/\/((www\.)?cliclip|192\.168\.1\.3)|\.\./.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
+    if(url && /http:\/\/((www\.)?cliclip|192\.168\.1\.(\d+))|\.\./.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
       var idx = url.lastIndexOf(".");
       return url.slice(0,idx) + "_270" + url.slice(idx);
     }else return url;
@@ -193,9 +193,11 @@ App.util = (function(){
    * 向api提交数据时要去除图片src中的前缀部分
    */
   util.cleanConImgUrl = function(content){
-    var str1 = "src=\\'",str2 = 'src=\\"';
-    var str3 = "http://(192\\.168\\.1\\.3|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
-    var reg0 = /\/_3_\//g,reg = /(\d+)\/clip_(\d+)_/g;
+    var str1 = "src=\\'",str2 = 'src=\\"',str0 = "\\" + P + "\\/";
+    var str3 = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
+    var reg = /(\d+)\/clip_(\d+)_/g;
+    // var reg0 = /\/_3_\//g,
+    var reg0 = new RegExp(str0,"g");
     // 匹配图片src为http:192.168.1.3:....以及cliclip.com(:....)
     var reg1 = new RegExp(str1 + str3,"g");
     var reg2 = new RegExp(str2 + str3,"g");

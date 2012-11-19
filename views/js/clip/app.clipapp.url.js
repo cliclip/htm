@@ -9,11 +9,13 @@ App.ClipApp.Url = (function(){
       : "http://cliclip.com";
   var VER = "/_3_";
   var PAGE = 10;
-
+  var BASE_DIR = "..";
   return {
     hostname : HOST,
     base : HOST+VER,
-    page : PAGE
+    page : PAGE,
+    ver : VER,
+    basedir : BASE_DIR
   };
 
 })();
