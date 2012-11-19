@@ -4,8 +4,8 @@
   window.cache = {};
   var time = 100;
   var NOOP = function(){};
-  //var P = App.ClipApp.Url.ver;
-  var _P = App.ClipApp.Url.basedir;
+  var P = "/_3_";
+  var _P = "..";//App.ClipApp.Url.basedir;
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
     // console.info(key,val);
