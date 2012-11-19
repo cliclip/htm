@@ -237,14 +237,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   function collection_filter(collection){
     collection.each(function(e){
-      console.log(e.get('id')+':'+e.get('user').id+' public = '+e.get('public'));
       if(e.get("public") == "false"){
 	collection.remove(collection.get(e.id));
-	collection_length--;
+	// collection_length--;
       };
     });
-    console.log(collection);
-    // collection_length = collection.length;
+    collection_length = collection.length;
   };
 
   function init_page(current){
@@ -270,8 +268,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       new_page = collection.length==App.ClipApp.Url.page ? true :false;
       // 过滤interest中的私有数据，在dispatch之后用户将数据改为私有的了
       if(current == 'interest') collection_filter(clips);
-      console.log('after collection_filter');
-      console.log(clips);
       clipListView = new ClipListView({collection:clips});
       $('#list').masonry({
 	itemSelector : '.clip',
@@ -297,7 +293,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       $("#list").masonry("reload");
       current_page(current);
       if(collection.length<10){ // 去重之后不够十条继续请求
-	nextpage();
+	nextpage(current);
       }
       if(!clips_exist){
 	if(window.location.hash=="#my"){
@@ -337,7 +333,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }, 200);
   };
 
-  function nextpage(){
+  function nextpage(current){
     if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page&&!/follow/.test(location.href)){
@@ -358,6 +354,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  loading = false;
 	},
 	success :function(col,res){
+	  if(current == 'interest') collection_filter(clips);
 	  if(res.length >= App.ClipApp.Url.page){
 	    collection_length = collection.length;
 	  }else{
