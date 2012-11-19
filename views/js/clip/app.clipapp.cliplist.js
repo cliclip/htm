@@ -27,6 +27,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     //localStorage: new Store("clippreview"),
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
+	if(resp[i]["public"] == "false" && App.util.getMyUid != resp[i].id){
+	  hide_clips.push(resp[i].id);
+	}
 	// 使得resp中的每一项内容都是对象
 	// console.info(resp[i]);
 	if(!resp[i].clip){//TODO review
@@ -46,9 +49,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  resp[i].id = resp[i].recommend.user.id+":"+resp[i].recommend.rid;
 	}
 	// 取interest数据的时候，该属性描述是否显示
-	if(resp[i]["public"] == "false"){
-	  hide_clips.push(resp[i].id);
-	}
 	resp[i].content = App.util.expandPreImgUrl(resp[i].content,resp[i].id);
       }
       return resp;

@@ -392,25 +392,16 @@ App.ClipApp = (function(App, Backbone, $){
     remove_fixed(paddingTop);
 
     $("#add_right").on("click", function(){App.ClipApp.showClipAdd();});
-    if($('html').hasClass('lt-ie8')){ // 如果是ie7
-      tmp = $(document.body);
-    }else{
-      tmp = $(window);
-    }
+
+    tmp = $('html').hasClass('lt-ie8') ? $(document.body) : tmp = $(window);
     tmp.scroll(function() {
       if($("#editor").length > 0){
-	// console.log("编辑器的滚动事件，nextpage不用响应");
-	return;
+	return;// console.log("编辑器的滚动事件，nextpage不用响应");
       }else{
 	remove_fixed(paddingTop);
 	var st = tmp.scrollTop();
 	var shifting =$(".user_head").height() ? $(".user_head").height()+ 15 : 0;
 	var mt = $(".clearfix").offset().top + shifting;
-	//console.info(shifting+"shifting");
-	//var mt = $(".clearfix").offset().top + $(".user_info").height()-$(".user_detail").height();
-	//var gap = document.getElementById("user_info").style.paddingTop;
-	//console.info(gap);
-	//mt = $(".user_detail").height() ? $(".user_detail").offset().top:$(".clearfix").offset().top;
 	if(st>0){
 	  $(".return_top").show();
 	  $("#add_right").show();
@@ -419,19 +410,17 @@ App.ClipApp = (function(App, Backbone, $){
 	  $("#add_right").hide();
 	}
 	if(st > mt ){
-	  //console.log("锁定气泡组件",st,mt);
-	  fixed(paddingTop);
+	  fixed(paddingTop); // console.log("锁定气泡组件",st,mt);
 	} else {
-	  //console.log("解除锁定气泡组件",st,mt);
-	  remove_fixed(paddingTop);
+	  remove_fixed(paddingTop);//console.log("解除锁定气泡组件",st,mt);
 	}
 	var wh = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
 	var lt = $(".loader").offset().top;
 	var obj = $("#list .clip");
 	if(obj && obj.last()&& obj.last()[0]){
-	  var last_top = $("#list .clip").last()[0].offsetTop;
+	  var last_top = obj.last()[0].offsetTop;
 	}
-	// console.log(st + "  ",wh + "  ",lt + "  " ,time_gap);
+	// console.log(st + "  ",wh + "  ",lt + "  " ,time_gap,last_top);
 	if((st + wh - 300 > last_top || st + wh > lt)&& time_gap==true ){
 	  time_gap = false;
 	  setTimeout(function(){
@@ -442,9 +431,7 @@ App.ClipApp = (function(App, Backbone, $){
 	      App.vent.trigger("app.clipapp:nextpage");
 	    }
 	  },50);
-	  setTimeout(function(){
-	    time_gap = true;
-	  },500);
+	  setTimeout(function(){time_gap = true;},500);
 	}
       }
     });
