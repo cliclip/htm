@@ -351,7 +351,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	  loading = false;
 	},
 	success :function(col,res){
-	  if(current == 'interest') collection_filter(clips);
 	  if(res.length >= App.ClipApp.Url.page){
 	    if(current == 'interest') collection_filter(collection);
 	    collection_length = collection.length;
