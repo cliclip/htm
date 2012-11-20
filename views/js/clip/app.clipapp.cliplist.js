@@ -237,10 +237,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   function collection_filter(collection){
     collection.each(function(e){
-      if(e.get("public") == "false"){
-	collection.remove(collection.get(e.id));
-	// collection_length--;
-      };
+      if(e.get("public") == "false") collection.remove(collection.get(e.id));
     });
     collection_length = collection.length;
   };
@@ -356,6 +353,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	success :function(col,res){
 	  if(current == 'interest') collection_filter(clips);
 	  if(res.length >= App.ClipApp.Url.page){
+	    if(current == 'interest') collection_filter(collection);
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;
