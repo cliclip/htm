@@ -319,10 +319,9 @@ App.util = (function(){
   // 获取当前用户的uid
   util.getMyUid = _getMyUid;
   function _getMyUid(){
-    var str = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0]: null ;
-    var uid_cookie = str ? str.match(/[0-9]+/)[0]:null;
-    var uid_local = App.Local? App.Local.uid :null;
-    return  uid_cookie || uid_local;
+    var token = App.util.getCookie("token");
+    var uid_token = token ? token.match(/[0-9]+/)[0]:null;
+    return  uid_token;
   }
 
   // 获取url中含有的uid
