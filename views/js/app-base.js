@@ -37,7 +37,7 @@ App = (function(Backbone, $){
     alert: function(msg){
       if(msg.auth == "no_name"){
 	App.ClipApp.showAlert(msg, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
+	  // App.vent.trigger("app.clipapp.useredit:rename");
 	});
       }else if(msg.auth == "not_login" || msg.auth == "not_self"){
 	App.ClipApp.showLogin();

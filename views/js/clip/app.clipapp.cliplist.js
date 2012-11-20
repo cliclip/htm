@@ -25,16 +25,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     //localStorage: new Store("clippreview"),
     parse : function(resp){
       for( var i=0; resp && i<resp.length; i++){
-	// 取interest数据的时候，该属性描述是否显示
-	if(resp[i]["public"] == "false" && App.util.getMyUid != resp[i].id){
-	  hide_clips.push(resp[i].id);
-	}
 	// 使得resp中的每一项内容都是对象
 	// console.info(resp[i]);
+	var uid = resp[i].user.id||resp[i].user;
 	if(!resp[i].clip){//TODO review
 	  if(!/:/.test(resp[i].id)){
 	    resp[i].clipid = resp[i].id;
-	    var uid = resp[i].user.id||resp[i].user;
 	    resp[i].id = uid +":"+resp[i].id;
 	  }
       	}else{ // 表示是别人推荐的clip
@@ -241,10 +237,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 
   function collection_filter(collection){
     collection.each(function(e){
-      if(e.get('public') == 'false'){
-	collection.remove(collection.get(e.id));
-      };
+      if(e.get("public") == "false") collection.remove(collection.get(e.id));
     });
+    collection_length = collection.length;
   };
 
   function init_page(current){
@@ -357,6 +352,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	},
 	success :function(col,res){
 	  if(res.length >= App.ClipApp.Url.page){
+	    if(current == 'interest') collection_filter(collection);
 	    collection_length = collection.length;
 	  }else{
 	    new_page = false;
