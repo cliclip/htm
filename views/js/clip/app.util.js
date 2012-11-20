@@ -267,8 +267,12 @@ App.util = (function(){
   util.img_error = function(img){
     img.title = img.src;
     var src = img.src.match(/\/(\d+)\/clip_(\d+)_(\d+)(_(\d+))*\.(\w+)/);
-    if(App.util.isLocal()&&src){
-     img.src = P + src[0];
+    if(src&&/file:\/\//.test(src)){
+      if(/_(270|128|64)/.test(src[0])){//若本地不存在相应尺寸的图片，则取原图
+	img.src = img.src.replace(/_(270|128|64)/,"");
+      }else {
+	img.src = P + src[0];
+      }
     }else{
       img.src='img/img_error.jpg';
     }
