@@ -405,7 +405,6 @@ App.versions = (function($){
 	is_null       : "摘录不存在",
 	not_array     : "摘录必须是数组",
 	is_empty      : "摘录没有内容",
-	no_uname      : "请先设置用户名",
 	faceUp_success : "您的头像已更新",
 	passwd_success : "您的密码已修改",
 	resetpwd_success:"您的密码已重置",
@@ -473,9 +472,6 @@ App.versions = (function($){
 	active:{
 	  fail         : "此激活链接已过期。您可在设置界面重新添加。",
 	  email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，您使用该地址发到1@cliclip.com的邮件，会保存为您的私有摘录。"
-	},
-	email:{
-	  no_uname     : "请先设置用户名"
 	},
 	rule:{
 	  not_update   : "您没有设置邮件摘录的反垃圾规则"
@@ -931,7 +927,6 @@ App.versions = (function($){
 	is_null       : "Clip does not exist",
 	not_array     : "Clip must be array",
 	is_empty      : "Clip cannot be empty",
-	no_uname      : "Please set user name first",
 	faceUp_success : "Your photo has been updated",
 	passwd_success : "Your password has been changed",
 	resetpwd_success :"Your password has been reseted",
@@ -999,9 +994,6 @@ App.versions = (function($){
 	active:{
 	  fail         : "Activation link expired. You can add email again in Setting",
 	  email   : "You have activated %s in our system. \nNow you can log in with this email account and clip by sending email from this account to 1@cliclip.com. Clips will be saved as private."
-	},
-	email:{
-	  no_uname     : "Set your user name first"
 	},
 	rule:{
 	  not_update   : "You have not set the rules for spam filter"

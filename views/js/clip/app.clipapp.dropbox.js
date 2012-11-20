@@ -15,13 +15,7 @@ App.ClipApp.DropboxEdit = (function(App, Backbone, $){
       this.bind("@delete", delDropbox);
     },
     DropboxAdd:function(e){
-      if(!App.ClipApp.getMyName()){
-	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else{
-	window.location.href="/oauth/req/dropbox?forcelogin=true";
-      }
+      window.location.href="/oauth/req/dropbox?forcelogin=true";
     },
     DropboxCut:function(e){
       e.preventDefault();

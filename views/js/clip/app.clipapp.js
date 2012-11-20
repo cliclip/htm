@@ -1,5 +1,4 @@
 // app.clipapp.js
-
 App.ClipApp = (function(App, Backbone, $){
   var ClipApp = {};
   // util methods
@@ -18,10 +17,6 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.getMyUid = function(){
     //return App.ClipApp.Me.getUid();
     return App.util.getMyUid();
-  };
-
-  ClipApp.getMyName = function(){
-    return App.ClipApp.Me.getFace().name;
   };
 
   ClipApp.getFaceUid = function(){
@@ -245,13 +240,7 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.Reclip.show(clipid,model_id,rid,pub);
       });
     }else{
-      if(!ClipApp.getMyName()){
-	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else{
-	ClipApp.Reclip.show(clipid,model_id,rid,pub);
-      }
+      ClipApp.Reclip.show(clipid,model_id,rid,pub);
     }
   };
 
@@ -262,13 +251,7 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.ReclipTag.show(user, tag);
       });
     }else{
-      if(!ClipApp.getMyName()){
-	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else{
-        ClipApp.ReclipTag.show(user,tag);
-      }
+      ClipApp.ReclipTag.show(user,tag);
     }
   };
 
@@ -288,13 +271,7 @@ App.ClipApp = (function(App, Backbone, $){
 	ClipApp.Comment.show(cid, model_id);
       });
     }else{
-      if(!ClipApp.getMyName()){
-	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else{
-	ClipApp.Comment.show(cid, model_id);
-      }
+      ClipApp.Comment.show(cid, model_id);
     }
   };
 
@@ -321,13 +298,7 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.showEmailAdd = function(uid){
-    if(!ClipApp.getMyName()){
-      App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	App.vent.trigger("app.clipapp.useredit:rename");
-      });
-    }else{
-      ClipApp.EmailAdd.show(uid);
-    }
+    ClipApp.EmailAdd.show(uid);
   };
 
   ClipApp.showFollowing = function(uid){
