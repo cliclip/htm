@@ -321,7 +321,7 @@ App.util = (function(){
   function _getMyUid(){
     var token = App.util.getCookie("token");
     var uid_token = token ? token.match(/[0-9]+/)[0]:null;
-    return  uid_token;
+    return  parseInt(uid_token);
   }
 
   // 获取url中含有的uid
