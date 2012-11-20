@@ -290,7 +290,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       $("#list").masonry("reload");
       current_page(current);
       if(collection.length<10){ // 去重之后不够十条继续请求
-	nextpage(current);
+	nextpage();
       }
       if(!clips_exist){
 	if(window.location.hash=="#my"){
@@ -330,7 +330,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }, 200);
   };
 
-  function nextpage(current){
+  function nextpage(){
     if(loading)return;
     if(!App.listRegion.currentView)return;
     if(App.listRegion.currentView.$el[0].className=="preview-view"&&new_page&&!/follow/.test(location.href)){
