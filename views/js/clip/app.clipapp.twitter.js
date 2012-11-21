@@ -14,13 +14,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
       this.bind("@delete", delTwitter);
     },
     TwitterAdd:function(e){
-      if(!App.ClipApp.getMyName()){
-	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else{
-	window.location.href=App.ClipApp.Url.hostname +"/oauth/req/twitter?force_login=true";
-      }
+      window.location.href=App.ClipApp.Url.hostname +"/oauth/req/twitter?force_login=true";
     },
     TwitterCut:function(e){
       e.preventDefault();

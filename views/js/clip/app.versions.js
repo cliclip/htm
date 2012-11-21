@@ -87,7 +87,6 @@ App.versions = (function($){
 
       faceEdit : {
 	title       : "设置",
-	no_name     : "无名氏",
 	set_name    : "设置用户名",
 	change_name : "修改用户名",
 	ok          : "确 定",
@@ -406,7 +405,6 @@ App.versions = (function($){
 	is_null       : "摘录不存在",
 	not_array     : "摘录必须是数组",
 	is_empty      : "摘录没有内容",
-	no_uname      : "请先设置用户名",
 	faceUp_success : "您的头像已更新",
 	passwd_success : "您的密码已修改",
 	resetpwd_success:"您的密码已重置",
@@ -475,9 +473,6 @@ App.versions = (function($){
 	  fail         : "此激活链接已过期。您可在设置界面重新添加。",
 	  email        : "您已激活 %s 邮箱地址。\n可以使用该邮箱地址进行登录，您使用该地址发到1@cliclip.com的邮件，会保存为您的私有摘录。"
 	},
-	email:{
-	  no_uname     : "请先设置用户名"
-	},
 	rule:{
 	  not_update   : "您没有设置邮件摘录的反垃圾规则"
 	},
@@ -490,7 +485,6 @@ App.versions = (function($){
 	title          : "操作确认",
 	ok             : "确 定",
 	cancel         : "取 消",
-	no_name        : "您还没有设置用户名，目前只能进行摘录的增加、修改、删除操作。请设置用户名，开启更多操作",
 	delemail       : "您真的要删除 %s 邮件地址吗？",
 	deloauth       : "您真的要删除 %s 账号关联吗？",
 	account_hasbind : "您的帐号之前已经做过关联，若要重新关联，请先解绑",
@@ -505,7 +499,6 @@ App.versions = (function($){
 	emailadd_save  : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	del_comment    : "您真的要删除这条评论吗？",
 	auth:{
-	  no_name     : "请先设置您的用户名",
 	  not_login   : "请您先登录",
 	  not_self    : "您的登录以过期，请从新登录",
 	  not_owner   : "您的登录以过期，请从新登录"
@@ -615,7 +608,6 @@ App.versions = (function($){
 
       faceEdit : {
 	title       : "Settings",
-	no_name     : "NO NAME",
 	set_name    : "Set user name",
 	change_name : "Change user name",
 	ok          : "OK",
@@ -933,7 +925,6 @@ App.versions = (function($){
 	is_null       : "Clip does not exist",
 	not_array     : "Clip must be array",
 	is_empty      : "Clip cannot be empty",
-	no_uname      : "Please set user name first",
 	faceUp_success : "Your photo has been updated",
 	passwd_success : "Your password has been changed",
 	resetpwd_success :"Your password has been reseted",
@@ -1002,9 +993,6 @@ App.versions = (function($){
 	  fail         : "Activation link expired. You can add email again in Setting",
 	  email   : "You have activated %s in our system. \nNow you can log in with this email account and clip by sending email from this account to 1@cliclip.com. Clips will be saved as private."
 	},
-	email:{
-	  no_uname     : "Set your user name first"
-	},
 	rule:{
 	  not_update   : "You have not set the rules for spam filter"
 	},
@@ -1017,8 +1005,6 @@ App.versions = (function($){
 	title          : "Confirm",
 	ok             : "OK",
 	cancel         : "Cancel",
-	no_name        : "Without user name, you can only add, update and delete clips. Please set your user name to enable more actions.",
-
 	delemail       : "Do you really want to delete this email %s?",
 	deloauth       : "Do you really want to delete this account %s?",
 	oauth_fail   : "Authentication failed. Please try again",
@@ -1035,7 +1021,6 @@ App.versions = (function($){
 	go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",
 	del_comment   : "You really mean to delete this comment? It can’t restore any more",
 	auth:{
-	  no_name     : "Please set user name first",
 	  not_login   : "Please log in first",
 	  not_self    : "Your login expired,login in again",
 	  not_owner   : "Your login expired,login in again"

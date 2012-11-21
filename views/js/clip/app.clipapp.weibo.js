@@ -15,13 +15,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
       this.bind("@delete", delWeibo);
     },
     WeiboAdd:function(e){
-      if(!App.ClipApp.getMyName()){
-	App.ClipApp.showAlert({auth: "no_name"}, null, function(){
-	  App.vent.trigger("app.clipapp.useredit:rename");
-	});
-      }else{
-	window.location.href= App.ClipApp.Url.hostname + "/oauth/req/weibo?forcelogin=true";
-      }
+      window.location.href= App.ClipApp.Url.hostname + "/oauth/req/weibo?forcelogin=true";
     },
     WeiboCut:function(e){
       e.preventDefault();
