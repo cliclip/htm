@@ -89,6 +89,7 @@ App.versions = (function($){
 	title       : "设置",
 	no_name     : "无名氏",
 	set_name    : "设置用户名",
+	change_name : "修改用户名",
 	ok          : "确 定",
 	upload      : "上传本地图像",
 	name : {
@@ -616,6 +617,7 @@ App.versions = (function($){
 	title       : "Settings",
 	no_name     : "NO NAME",
 	set_name    : "Set user name",
+	change_name : "Change user name",
 	ok          : "OK",
 	upload      : "Upload image",
 	name : {

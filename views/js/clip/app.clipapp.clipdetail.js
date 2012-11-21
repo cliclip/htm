@@ -25,7 +25,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "Detail-view",
     template: "#detail-view-template",
     events: {
-      "click .share_private" : "createClipShareLink",
       "click .operate" : "Operate",
       "click .masker" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
@@ -50,6 +49,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.ClipApp.showReclip(cid, mid, recommend, pub); break;
 	// case 'recommend':
 	  //App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
+	case 'share':
+	  App.ClipApp.showShareDialog(cid); break;
 	case 'comment':
 	  this.trigger("@detailComment", cid);break;
 	case 'note':
@@ -61,7 +62,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.ClipApp.showClipDelete(cid); break;
       }
     },
-
     createClipShareLink: function(e){ //私有分享
       e.stopPropagation();
       var clipid = this.model.id;

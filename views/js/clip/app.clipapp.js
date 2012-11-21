@@ -255,6 +255,10 @@ App.ClipApp = (function(App, Backbone, $){
     }
   };
 
+  ClipApp.showShareDialog = function(){
+    ClipApp.Share.show();
+  };
+
   /*
   ClipApp.showReclipTag = function(user,tag){
     if(!ClipApp.isLoggedIn()){
