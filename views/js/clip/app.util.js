@@ -274,6 +274,7 @@ App.util = (function(){
 	img.src = P + src[0];
       }
     }else{
+      img.height = 184;
       img.src='img/img_error.jpg';
     }
     if(img.id){
