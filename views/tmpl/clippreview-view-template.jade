@@ -24,15 +24,15 @@ script(type="text/template",id="clippreview-view-template")
       <%}%>
     <% if(public == "false"){ %>
     header#header.type_self
-      <dt class="type_text", title="点击分享">仅自己可见</dt>
+      <dt class='type_text' title="仅自己可见"></dt>
       <% if(content && content.image) {%>
       | <img class="img_fake fake_img_<%=id.replace(/:/g,'_')%>" src="img/_wait.gif"/>
       div.article_photo
         | <img class="img_<%=id.replace(/:/g,'_')%>" id="img_<%=id.replace(/:/g,'_')%>" onload="App.util.img_load(this)" onerror="App.util.img_error(this)" src="<%=App.util.img_url(content.image.src,270)%>"/>
       <% }if(content && content.text){%>
       div.article_con
-        <%if(!content.image){ %>
-        br
+        <%if(!content.image){%> 
+        br 
         <%}%>
         | <%= content.text %>
       <%}%>
@@ -50,8 +50,8 @@ script(type="text/template",id="clippreview-view-template")
       <% } %>
       <% }if(content && content.text){%>
       div.article_con
-        <%if(!content.image){ %>
-        br
+        <%if(!content.image){%> 
+        br 
         <%}%>
         | <p><%= content.text %></p>
       <%}%>

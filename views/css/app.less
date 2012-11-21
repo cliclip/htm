@@ -12,6 +12,11 @@
   background-position: @x @y;
   display: block;
 }
+.glyphishs(@x:0, @y:0){
+  background: url(../img/glyphish.png) no-repeat;
+  background-position: @x @y;
+  display: block;
+}
 // 重构了用户头像下面的样式
 .glyphicons-halflings (@x:0, @y:0) {
   background: url(../img/glyphicons-halflings-white.png) no-repeat;
@@ -770,20 +775,13 @@ article.clip{
 		}
 	}
 	.type_self{
-		border-style: solid none;
-    		border-width: 1px 0;
-		border-color:#7355AA;
-		.type_text {
-			color: #7355AA;
- 	   		border-style: solid;
-    			border-width: 1px;
-			border-color: #7355AA;
-    			height: 15px;
-			width: 70px;
-    			line-height: 15px;
-    			margin: -16px 5px 0 165px;
-    			overflow: hidden;
-    			padding: 0 10px;
+		dt.type_text {
+		   .glyphishs(-187px,-194px);
+    		   height: 37px;
+		   width: 45px;
+    		   line-height: 15px;
+		   overflow: hidden;
+    		   margin: -20px 0px 0px 213px;
 		}
 	}
 	header{

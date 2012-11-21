@@ -87,7 +87,6 @@ App.versions = (function($){
 
       faceEdit : {
 	title       : "设置",
-	no_name     : "无名氏",
 	set_name    : "设置用户名",
 	ok          : "确 定",
 	upload      : "上传本地图像",
@@ -485,7 +484,6 @@ App.versions = (function($){
 	title          : "操作确认",
 	ok             : "确 定",
 	cancel         : "取 消",
-	no_name        : "您还没有设置用户名，目前只能进行摘录的增加、修改、删除操作。请设置用户名，开启更多操作",
 	delemail       : "您真的要删除 %s 邮件地址吗？",
 	deloauth       : "您真的要删除 %s 账号关联吗？",
 	account_hasbind : "您的帐号之前已经做过关联，若要重新关联，请先解绑",
@@ -500,7 +498,6 @@ App.versions = (function($){
 	emailadd_save  : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	del_comment    : "您真的要删除这条评论吗？",
 	auth:{
-	  no_name     : "请先设置您的用户名",
 	  not_login   : "请您先登录",
 	  not_self    : "您的登录以过期，请从新登录",
 	  not_owner   : "您的登录以过期，请从新登录"
@@ -610,7 +607,6 @@ App.versions = (function($){
 
       faceEdit : {
 	title       : "Settings",
-	no_name     : "NO NAME",
 	set_name    : "Set user name",
 	ok          : "OK",
 	upload      : "Upload image",
@@ -1007,8 +1003,6 @@ App.versions = (function($){
 	title          : "Confirm",
 	ok             : "OK",
 	cancel         : "Cancel",
-	no_name        : "Without user name, you can only add, update and delete clips. Please set your user name to enable more actions.",
-
 	delemail       : "Do you really want to delete this email %s?",
 	deloauth       : "Do you really want to delete this account %s?",
 	oauth_fail   : "Authentication failed. Please try again",
@@ -1025,7 +1019,6 @@ App.versions = (function($){
 	go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",
 	del_comment   : "You really mean to delete this comment? It can’t restore any more",
 	auth:{
-	  no_name     : "Please set user name first",
 	  not_login   : "Please log in first",
 	  not_self    : "Your login expired,login in again",
 	  not_owner   : "Your login expired,login in again"
