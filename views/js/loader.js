@@ -1,9 +1,9 @@
 (function(win, doc, nav, opt){
   var P  = "/_3_";
-  var url_base = "http://cliclip.com";
+  // var url_base = "http://cliclip.com";
   // var url_base = "http://192.168.1.3:8000";
   // var url_base = "http://192.168.1.3:3000";
-  // var url_base = "http://192.168.1.3:5000";
+  var url_base = "http://192.168.1.3:5000";
   // caculate page hash
 
   // **** utils
@@ -35,18 +35,21 @@
     }
     saxParser(objs[objs.length-1], readable);
 
-/*    var objs = doc.childNodes;
+/*  var objs = doc.childNodes;
     saxParser(objs[objs.length-1], readable);
 */
     var article = readable.getArticle();
     html += article.html;
-    // console.log('article.nextPage :: %j', article);
     if(article.nextPage && article.nextPage != url){
       pages[url] = 1;
-      getNextPage(pages, article.nextPage, html, function(err, res){
-	callback(err, res);
-	// if(err) callback(null, html+'本页地址'+url);
-	// else callback(null, res);
+      // 获取url时可能超出了系统设定的最大页数，也可能超过了系统设置的过期时间
+      // 有url返回，则说明url页面获取失败，将url和已经获取到的内容返回
+      getNextPage(pages, article.nextPage, html, 0, function(url, res){
+	if(url){
+	  return callback(null, res+url);
+	}else{
+	  return callback(null, res);
+	}
       });
     }else{
       callback(null, html);
@@ -78,7 +81,8 @@
      return objE;
   }
 
-  function getNextPage(pages, url, html, callback){
+  function getNextPage(pages, url, html, count, callback){
+    if(++count > 10) return callback(url, html);
     var readable = new Readability({linksToSkip: pages, pageURL : url});
     readable.setSkipLevel(3);
     var article = null;
@@ -92,14 +96,13 @@
 	html += article.html;
 	if(article && article.nextPage && article.nextPage != url){
 	  pages[url] = 1;
-	  getNextPage(pages, article.nextPage, html, callback);
+	  getNextPage(pages, article.nextPage, html, count, callback);
 	}else{
-	  callback(null, html);
+	  return callback(null, html);
 	}
       },
-      error: function(){
-	console.log('timeout url' + url);
-	callback('timeout', html);
+      error: function(){ // timeout 对记录结果无用
+	return callback(url, html);
       }
     });
   }
