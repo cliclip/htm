@@ -1,9 +1,9 @@
 (function(win, doc, nav, opt){
   var P  = "/_3_";
-  // var url_base = "http://cliclip.com";
+  var url_base = "http://cliclip.com";
   // var url_base = "http://192.168.1.3:8000";
   // var url_base = "http://192.168.1.3:3000";
-  var url_base = "http://192.168.1.3:5000";
+  // var url_base = "http://192.168.1.3:5000";
   // caculate page hash
 
   // **** utils
