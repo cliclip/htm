@@ -327,7 +327,7 @@
 	  // this is only available if autocomplete is not used.
 	  $(data.fake_input).bind('blur',data,function(event) {
 	    var d = $(this).attr('data-default');
-	    if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) {
+	    if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d && hide_dropdownlist) {
 	      var len = 0;
 	      var tag = $(event.data.fake_input).val();
 	      for(i=0;i<tag.length;i++){
