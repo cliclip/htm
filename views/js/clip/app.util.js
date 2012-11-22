@@ -57,7 +57,7 @@ App.util = (function(){
       var opt = opt0[1].split(".");
       var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
       var url =  "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
-      return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : url;
+      return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : P + url;
     }else return imageid;
   };
 
@@ -344,32 +344,29 @@ App.util = (function(){
 
   // 获取url中含有的uid
   function getUrlUid(url){
-    var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
-    var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
-    return uid_clip || uid;
+    url = url.split(P + "/")[1];
+    return  url.match(/^[0-9]+/) ? url.match(/^[0-9]+/)[0] : null;
   }
 
   // 判断app-base.js中collection sync方法是否通过rpc向服务器发送请求
   util.collectionByRpc = function(url, options){
-    if( !util.isLocal() ){ return true;}
     var url_uid = getUrlUid(url);
     var my_uid = _getMyUid();
     if(!my_uid) return true;
-    if(/user\/([0-9]+)\/query/.test(url)&& url_uid != my_uid)return true;
-    if(/follow/.test(url)) return true;
-    if(/query/.test(url) && !url_uid) return true;
-    return /interest|comment/.test(url)||(/query/.test(url) && options.data.text);
+    if(/query/.test(url)&& options.data.user != my_uid && !options.data.text)return true;
+    if(/follow|interest|comment/.test(url)) return true;
   };
 
   // 判断app-base.js中model sync方法是否通过rpc向服务器发送请求
   util.modelByRpc = function(method, url, options){
-    if( !util.isLocal() ){ return true; }
     var url_uid = getUrlUid(url);
     var my_uid = _getMyUid();
-    if( /user\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
+    url = url.split(P)[1];
     if( method != "GET" ) return true;
     if( !my_uid ) return true;
-    if(/meta|clip/.test(url)&& my_uid == url_uid)return false;
+    if( /^\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
+    if( /^\/(\d+)\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
+    if( /meta/.test(url)&& my_uid == url_uid)return false;
     return true;
   };
 

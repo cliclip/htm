@@ -9,7 +9,7 @@
   //*.json.js文件中调用此方法，传入数据
   window.load = function(key, val){
     // console.info(key,val);
-    cache[key] =/my_clips/.test(key) && _.isArray(val) ? val.reverse() : val;
+    cache[key] = val;
     var s = document.getElementById(key);
     if(s) document.getElementsByTagName('HEAD')[0].removeChild(s);
     _.each(callbacks[key],function(e){
@@ -21,28 +21,28 @@
 
   // 根据url，cookie ，App.local.js 获取用户id
   function get_uid(url){
-    var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
-    var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
-    var uid_cookie = document.cookie.match(/[0-9]+:/) ? document.cookie.match(/[0-9]+:/)[0][0]:null;
+    url = url.split(P + "/")[1];
+    var uid = url.match(/^[0-9]+/) ? url.match(/^[0-9]+/)[0] : null;
     var uid_local = App.Local? App.Local.uid :null;
-    return uid || uid_clip || uid_cookie || uid_local;
+    return uid || uid_local;
   }
 
   // 根据url 取得文件名称及目录
-  function get_key(url){
-    var opt = url.split(P);
-    var newurl = opt[1]||url;
+  function get_key(options){
+    console.info(options.url);
+    var opt = options.url.split(P);
+    var newurl = opt[1]||options.url;
     var key = "";
     var uid = get_uid(newurl);
-    if(/user\/(\d+)\?/.test(newurl)){
+    if(/^\/(\d+)\?/.test(newurl)){
       key = "/" + uid + "/info.json.js";
-    }else if(/user\/[0-9]+\/query/.test(newurl)){
+    }else if(/query/.test(newurl)&&options.data.user){
       key = "/" + uid + "/my_clips.json.js";
     }else if(/meta/.test(newurl)){
       key = "/" + uid +"/meta";
-    }else if(/clip/.test(newurl)){
-      var str = newurl.match(/[0-9]+:[0-9]+/g);
-      var path = str[str.length-1].split(':');
+    }else if(/^\/(\d+)\/(\d+)\?/.test(newurl)){
+      var str = newurl.match(/[0-9]+\/[0-9]+/g);
+      var path = str[str.length-1].split('/');
       key = "/" + uid +  "/clip_"+path[1] +".text.js";
     }else if(/help_zh/.test(newurl)){
       key = "help_zh.json.js";
@@ -105,7 +105,7 @@
     });
     delete callbacks[key];
   }
-
+/*本地不显示路线图，此方法暂时无用
   // 根据clip的id 或 uid 拼接获取user信息的key
   function getUsersKey(ids){
     var keys = [];
@@ -132,7 +132,7 @@
       });
     }
   }
-
+*/
   function getModel(key, options){
     if(/meta/.test(key)) {
       js_load(key.replace("meta","my_clips.json.js"), {
@@ -184,67 +184,6 @@
       });
     }
   }
-
-  /*
-  //图片的url转化为实际url
-  function expandImgSrc(src){
-    // console.info("backbone-localstorage",src);
-    return App.util.isLocal() && !/\.\./.test(src) ? src.replace(P,_P) : src;
-  }
-  */
-
-  /**
-   *将content中图片url转化为本地图片url
-   * 只转化存在具体文件的img的url
-   */
-  /*
-  function expandConImgUrl(content,user,id){
-    var cid = id,uid = user;
-    if(/:/.test(id)){
-      uid = id.split(":")[0];
-      cid = id.split(":")[1];
-    }
-    var prefix = App.util.isLocal() ? _P : P ;
-    var pre =  prefix + "/" + uid + "/clip_" + cid + "_";
-    var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
-    var reg1 = /\"tmp_/g;
-    var reg2 = /\'tmp_/g;
-    content = content.replace(reg1, "\"" + P + "/tmp_");
-    content = content.replace(reg2, "'" + P + "/tmp_");
-    var imgs = content.match(reg);
-    if(!imgs) return content;
-    for(var i = 0; i<imgs.length; i++){
-      var opt = imgs[i].split("='");
-      content = content.replace(imgs[i], opt[0] + "='" + pre + opt[1]);
-    }
-    return content;
-  }
-  */
-  /**
-   *将preview中图片url转化为本地图片url
-   * 只转化存在具体文件的img的url
-   */
-  /*
-  function expandPreImgUrl(content,id,user){
-    if(!content.image) return content;
-    if(/tmp/.test(content.image.src)) return content;
-    if(!/_270/.test(content.image.src)){
-      content.image.src = content.image.src.replace(".","_270.");
-    }
-    var src = content.image.src;
-    if(!/clip/.test(src)){
-      var prefix = App.util.isLocal() ? _P : P ;
-      if(/:/.test(id)){
-	var opt = id.split(":");
-	src = prefix + "/" + opt[0] + "/clip_" +opt[1] + "_" + src;
-      }else {
-	src = prefix + "/" + user + "/clip_" + id + "_" + src;
-      }
-    }
-    content.image.src = src;
-    return content;
-  }
-  */
 
   //根据查询条件过滤需要取得的cliplist
   function filter(key,url,data,options){
@@ -365,9 +304,9 @@
       // case "delete":resp = store.destroy(model);break;
       case "read":
 	if(model.models) { // load collection
-	  readCollection(get_key(options.url), options.url, options);
+	  readCollection(get_key(options), options.url, options);
 	}else{ // load model
-	  readModel(get_key(options.url), options);
+	  readModel(get_key(options), options);
 	}
 	break;
     }
