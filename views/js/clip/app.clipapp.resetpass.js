@@ -4,7 +4,7 @@ App.ClipApp.ResetPass=(function(App,Backbone,$){
 
   var ResetPassModel = App.Model.extend({
     url:function(){
-      return App.ClipApp.encodeURI(P+"/resetpasswd");
+      return App.ClipApp.encodeURI(P+"/passwd/reset");
     },
     validate:function(attrs){
       var error = {};

@@ -3,7 +3,7 @@ App.ClipApp.Notify=(function(App,Backbone,$){
   var P = App.ClipApp.Url.base;
   var NotifyModel = App.Model.extend({
     url:function(){
-      return App.ClipApp.encodeURI(P+"/user/"+this.get("uid")+"/notice/count");
+      return App.ClipApp.encodeURI(P+"/"+this.get("uid")+"/notice/count");
     }
   });
   var NotifyView =  App.ItemView.extend({

@@ -59,7 +59,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
     collection=new FollowerList({id:uid});
     start = 1;
     end = page;
-    base_url = App.ClipApp.Url.base +"/user/"+uid+"/follow";
+    base_url = App.ClipApp.Url.base +"/"+uid+"/follow";
     url=App.ClipApp.encodeURI(base_url+"/"+start+".."+end);
     collection.fetch({url:url});
     collection.onReset(function(followerlist){

@@ -86,7 +86,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	// 不用this.mode因为this.model中有 录线图
 	editModel.save({content: App.util.cleanConImgUrl(content,cid)}, {
 	  type:'PUT',
-	  url: App.ClipApp.encodeURI(P+"/clip/"+cid),
+	  url: App.ClipApp.encodeURI(P + "/" + cid.split(":")[0] + "/" + cid.split(":")[1]),
 	  success:function(model, res){
 	    var opt = cid.split(":");
 	    var content = model.get("content");
