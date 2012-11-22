@@ -9,7 +9,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "public": true
     },
     url:function(){
-      return App.ClipApp.encodeURI(P+"/clip/"+this.id)+"&rid="+this.get("rid");
+      var uid = this.get("id").split(":")[0];
+      var cid = this.get("id").split(":")[1];
+      return App.ClipApp.encodeURI(P+"/"+uid + "/" + cid)+"&rid="+this.get("rid");
     },
     parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
       if(!/:/.test(resp.id)){
@@ -64,7 +66,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
     createClipShareLink: function(e){ //私有分享
       e.stopPropagation();
-      var clipid = this.model.id;
+      var uid = this.model.id.split(":")[0];
+      var cid = this.model.id.split(":")[1];
       var model = new App.Model();
       if(document.selection&&document.selection.createRange().htmlText){
 	return;
@@ -72,7 +75,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	return;
       }
       model.save({},{
-	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+'/sharelink'),
+	url: App.ClipApp.encodeURI(P+"/"+uid+"/"+cid+'/sharelink'),
 	type: "POST",
 	success:function(model,res){
 	  Backbone.history.navigate("link/"+res, false);
@@ -255,7 +258,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   // 获取comment内容，需要对得到的数据进行显示
   function showComment (cid){
     var list = new commCollection();
-    list.fetch({url:App.ClipApp.encodeURI(P+"/clip/"+cid+"/comment")});
+    list.fetch({url:App.ClipApp.encodeURI(P + "/" + cid.split(":")[0] + "/" +cid.split(":")[1] +"/comment")});
     list.onReset(function(commentCollection){ // rename CommentsView
       var comms = commentCollection.toJSON();
       if(comms.length!= 1 || comms[0].id){
@@ -322,8 +325,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   var saveaddComm = function(view, params, mid){
     var model = new App.Model.CommModel();
+    var uid = params.clipid.split(":")[0];
+    var cid = params.clipid.split(":")[1];
     model.save({pid:params.pid, text:params.text},{
-      url : App.ClipApp.encodeURI(P+"/clip/"+params.clipid+"/comment"),
+      url : App.ClipApp.encodeURI(P+"/"+uid + "/" + cid +"/comment"),
       success:function(comment,response){
 	/*if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);

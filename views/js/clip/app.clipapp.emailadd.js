@@ -18,7 +18,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     },
     url:function(){
       var my = App.ClipApp.getMyUid();
-      return App.ClipApp.encodeURI(P+"/user/"+my+"/email");
+      return App.ClipApp.encodeURI(P+"/"+my+"/email");
     }
   });
 

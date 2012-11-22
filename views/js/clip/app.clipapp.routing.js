@@ -22,8 +22,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
       // user
       "user/:uid": "userShow",
       "user/:uid/tag/:tag":"userShow",
-      "user/:uid/following":"userFollowing",
-      "user/:uid/follower":"userFollower",
+      ":uid/following":"userFollowing",
+      ":uid/follower":"userFollower",
 
       "user/:uid/query/:word":"userQuery",
       "user/:uid/query":"userQuery",
@@ -101,7 +101,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       if(App.ClipApp.isSelf(uid)){
 	App.Routing.showRoute("my","following");
       }else{
-	App.Routing.showRoute("user",uid, "following");
+	App.Routing.showRoute(uid, "following");
       }
     });
 
@@ -109,7 +109,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       if(App.ClipApp.isSelf(uid)){
 	App.Routing.showRoute("my","follower");
       }else{
-	App.Routing.showRoute("user",uid, "follower");
+	App.Routing.showRoute(uid, "follower");
       }
     });
 

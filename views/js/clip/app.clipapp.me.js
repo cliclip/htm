@@ -15,7 +15,7 @@ App.ClipApp.Me = (function(App, Backbone, $){
       token:""
     },
     url:function(){
-      return App.ClipApp.encodeURI(P + "/user/" + App.util.getMyUid());
+      return App.ClipApp.encodeURI(P + "/" + App.util.getMyUid());
     }
   });
 

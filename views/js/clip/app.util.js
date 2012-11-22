@@ -25,11 +25,11 @@ App.util = (function(){
   // url后面加上_token的原因是本地文件跨域访问时无法传递token参数，
   // 且上传图片时不走app-base.js的sync方法，所以需要手动加入参数
   util.getImg_upUrl = function(uid){
-    return P + "/user/"+uid+"/image?_token=" + App.util.getCookie("token");
+    return P + "/"+uid+"/image?_token=" + App.util.getCookie("token");
   };
 
   util.getFace_upUrl = function(uid){
-    return P+"/user/" + uid + "/face?_token=" + App.util.getCookie("token");
+    return P + "/" + uid + "/face?_token=" + App.util.getCookie("token");
   };
 
   util.unique_url = function(url){
@@ -38,7 +38,7 @@ App.util = (function(){
   };
 
   util.img_url = function(url,size){
-    if(url && /http:\/\/((www\.)?cliclip|192\.168\.1\.(\d+))|\.\./.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
+    if(url && !/tmp_/.test(url) && /http:\/\/((www\.)?cliclip|192\.168\.1\.(\d+))|\.\./.test(url) && !/_270/.test(url)){
       var idx = url.lastIndexOf(".");
       return url.slice(0,idx) + "_270" + url.slice(idx);
     }else return url;
@@ -57,7 +57,7 @@ App.util = (function(){
       var opt = opt0[1].split(".");
       var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
       var url =  "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
-      return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : P + url;
+      return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : url;
     }else return imageid;
   };
 
@@ -181,7 +181,7 @@ App.util = (function(){
 	//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 	var uid = imgids.split(":")[0];
 	var imgid = imgids.split(":")[1];
-	var url = P + "/" + imgid;
+	var url = P + "/" +uid + "/image/" + imgid;
 	callback(null, url);
       }else{//上传图片失败
 	callback("imageUp_fail", null);
@@ -193,18 +193,35 @@ App.util = (function(){
    * 向api提交数据时要去除图片src中的前缀部分
    */
   util.cleanConImgUrl = function(content){
-    var str1 = "src=\\'",str2 = 'src=\\"',str0 = "\\" + P + "\\/";
-    var str3 = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
-    var reg = /(\d+)\/clip_(\d+)_/g;
-    // var reg0 = /\/_3_\//g,
+/*
+    var str0 = "\\" + P + "\\/(\\d+)\\/(\\d+)\\/";
+    var str1 = "src=\\'",str2 = 'src=\\"';
+    var str3 = "\\" + P + "\\/(\\d+)\\/tmp_";
+    var str4 = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
     var reg0 = new RegExp(str0,"g");
-    // 匹配图片src为http:192.168.1.3:....以及cliclip.com(:....)
-    var reg1 = new RegExp(str1 + str3,"g");
-    var reg2 = new RegExp(str2 + str3,"g");
-    var con = content.replace(reg0,"");//去掉src中所有的版本号
-    con = con.replace(reg1,'src=\'');
-    con = con.replace(reg2,'src=\"');
-    return con.replace(reg,"");
+    var reg1 = new RegExp(str1 + str4,"g");
+    var reg2 = new RegExp(str2 + str4,"g");
+    var reg3 = new RegExp(str3,"g");
+    var con = content.replace(reg0,"");//去掉文件类型图片src中的版本号和uid,cid
+    con = con.replace(reg3,'tmp_');//去掉临时图片src中的版本号和uid
+    con = con.replace(reg1,'src=\'');//去掉域名和端口号
+    con = con.replace(reg2,'src=\"');//去掉域名和端口号
+    return con;
+*/
+    var str = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
+    var str0 = "\\" + P + "\\/(\\d+)\\/image/tmp_";
+    var str1 = "\\/(\\d+)\\/(\\d+)\\/";
+    var str2 = "src=\\'",str3 = 'src=\\"';
+    var reg0 = new RegExp(str2 + str + str0,"g");//临时图片
+    var reg1 = new RegExp(str3 + str + str0,"g");//临时图片
+    var reg2 = new RegExp(str2 + str + str1,"g");//图片文件
+    var reg3 = new RegExp(str3 + str + str1,"g");//图片文件
+    var con = content.replace(reg0,"src='");
+    con = con.replace(reg1,'src="');
+    con = con.replace(reg2,"src='");
+    con = con.replace(reg3,'src="');
+    return con;
+
   };
 
   util.expandConImgUrl = function(content,user,id){
@@ -213,17 +230,16 @@ App.util = (function(){
       uid = id.split(":")[0];
       cid = id.split(":")[1];
     }
-    if(_getMyUid() == uid){
-      var prefix = App.util.isLocal() ? _P : P ;
-      pre =  prefix + "/" + uid + "/clip_" + cid + "_";
+    if(_getMyUid() == uid && App.util.isLocal()){
+      pre =  _P + "/" + uid + "/clip_" + cid + "_";
     }else{
-      pre =  P + "/clip/" + uid+ ":" + cid + "/";
+      pre = App.ClipApp.Url.hostname + "/" + uid+ "/" + cid + "/";
     }
     var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
     var reg1 = /\"tmp_/g;
     var reg2 = /\'tmp_/g;
-    content = content.replace(reg1, "\"" + P + "/tmp_");
-    content = content.replace(reg2, "'" + P + "/tmp_");
+    content = content.replace(reg1, "\"" + P +"/" + uid + "/image/tmp_");
+    content = content.replace(reg2, "'" + P + "/" + uid + "/image/tmp_");
     var imgs = content.match(reg);
     if(!imgs)return content;
     for(var i = 0; i<imgs.length; i++){
@@ -236,18 +252,15 @@ App.util = (function(){
   util.expandPreImgUrl = function(content,clipid){
     if(!content.image) return content;
     var src = content.image.src,uid,cid;
-    if(clipid){
-      uid = clipid.split(":")[0];
-      cid = clipid.split(":")[1];
-    }
+    uid = clipid.split(":")[0];
+    cid = clipid.split(":")[1];
     if(/^tmp_/.test(content.image.src)){
-      content.image.src = P + "/" + src;
+      content.image.src = P + "/" + uid + "/image/" + src;
     } else if(/^(\d+)\.(\w+)$/.test(src)){
-      if(_getMyUid() == uid){
-	var prefix = App.util.isLocal() ? _P : P ;
-	content.image.src = prefix + "/" + uid + "/clip_" + cid + "_" + src;
+      if(_getMyUid() == uid && util.isLocal()){
+	content.image.src = _P + "/" + uid + "/clip_" + cid + "_" + src;
       }else {
-	content.image.src = P + "/clip/" + clipid + "/" + src;
+	content.image.src = App.ClipApp.Url.hostname + "/" + uid + "/" + cid + "/" + src;
       }
     }
     return content;
@@ -267,15 +280,15 @@ App.util = (function(){
   util.img_error = function(img){
     img.title = img.src;
     var src = img.src.match(/\/(\d+)\/clip_(\d+)_(\d+)(_(\d+))*\.(\w+)/);
-    if(src&&/file:\/\//.test(src)){
+    if(src&&/file:\/\//.test(img.src)){
       if(/_(270|128|64)/.test(src[0])){//若本地不存在相应尺寸的图片，则取原图
 	img.src = img.src.replace(/_(270|128|64)/,"");
       }else {
 	img.src = P + src[0];
       }
     }else{
-      img.height = 184;
-      img.src='img/img_error.jpg';
+      // img.height = 184;
+      // img.src='img/img_error.jpg';
     }
     if(img.id){
       $(".fake_" + img.id).hide();

@@ -4,7 +4,7 @@ App.ClipApp.TagList=(function(App,Backbone,$){
   var P = App.ClipApp.Url.base;
   var TagListModel = App.Model.extend({
     url : function(){
-      return  App.ClipApp.encodeURI(P+"/user/"+this.id+"/meta/0..19");
+      return  App.ClipApp.encodeURI(P+"/"+this.id+"/clip/meta/0..19");
     },
     defaults : {
       taglist : []
