@@ -82,7 +82,7 @@
       tmpmodel.save(params,{
 	success:function(model,res){
 	  view.trigger("@closeView");
-	  App.ClipApp.showSuccess("feedback_ok");
+	  App.ClipApp.showConfirm("feedback_ok");
 	},
 	error:function(model,error){
 	  if(error.feedback_text == "is_null")

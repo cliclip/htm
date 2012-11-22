@@ -193,6 +193,8 @@ App.util = (function(){
    * 向api提交数据时要去除图片src中的前缀部分
    */
   util.cleanConImgUrl = function(content){
+    return content;
+
 /*
     var str0 = "\\" + P + "\\/(\\d+)\\/(\\d+)\\/";
     var str1 = "src=\\'",str2 = 'src=\\"';
@@ -207,7 +209,6 @@ App.util = (function(){
     con = con.replace(reg1,'src=\'');//去掉域名和端口号
     con = con.replace(reg2,'src=\"');//去掉域名和端口号
     return con;
-*/
     var str = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
     var str0 = "\\" + P + "\\/(\\d+)\\/image/tmp_";
     var str1 = "\\/(\\d+)\\/(\\d+)\\/";
@@ -220,8 +221,9 @@ App.util = (function(){
     con = con.replace(reg1,'src="');
     con = con.replace(reg2,"src='");
     con = con.replace(reg3,'src="');
-    return con;
 
+    return con;
+*/
   };
 
   util.expandConImgUrl = function(content,user,id){
