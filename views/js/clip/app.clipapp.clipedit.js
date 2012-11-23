@@ -84,9 +84,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       }else{
 	var editModel = new EditModel({});
 	// 不用this.mode因为this.model中有 录线图
-	editModel.save({content: App.util.cleanConImgUrl(content,cid)}, {
+	editModel.save({content: content}, {//App.util.cleanConImgUrl(content,cid)
 	  type:'PUT',
-	  url: App.ClipApp.encodeURI(P+"/clip/"+cid),
+	  url: App.ClipApp.encodeURI(P + "/" + cid.split(":")[0] + "/" + cid.split(":")[1]),
 	  success:function(model, res){
 	    var opt = cid.split(":");
 	    var content = model.get("content");
@@ -131,17 +131,21 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var editView = new EditView({model: model});
       App.viewRegion.show(editView);
       // 更新clip：将获取本地图片文件改为获取服务器端文件
-      var html = editModel.toJSON().content.replace(/\.\.\//g,P+ "/");
-      App.Editor.init();
-      App.Editor.setContent("editor", html);
+      var clip = editModel.toJSON();
+      // var html = editModel.toJSON().content.replace(/\.\.\//g,P+ "/");
+      var html = App.util.expandConImgUrl(clip.content,clip.user,clip.id);
+      html = html.replace("<img ","<img onerror=\"App.util.img_error(this)\"");
+      $("#fake").append(html);
       setTimeout(function(){
-	old_content = App.Editor.getContent("editor"); //参数为编辑器id
-      },200);
-      $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
-	if(e.ctrlKey&&e.keyCode==13){
-	  $("#editClip_Save").click();
-	}
-      });
+	html = $("#fake").html();
+	$("#fake").empty();
+	App.Editor.init();
+	App.Editor.setContent("editor",html);
+	setTimeout(function(){old_content=App.Editor.getContent("editor");},200);
+	$($("#editor").get(0).contentWindow.document.body).keydown(function(e){
+	  if(e.ctrlKey&&e.keyCode==13){ $("#editClip_Save").click(); }
+	});
+      },100);
     });
     //接受上传图片返回的信息
     App.vent.bind("app.clipapp:upload",function(returnVal){

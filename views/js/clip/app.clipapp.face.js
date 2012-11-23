@@ -14,7 +14,7 @@ App.ClipApp.Face = (function(App, Backbone, $){
       relation:[]
     },
     url:function(){
-      return App.ClipApp.encodeURI(P+"/user/"+ this.id);
+      return App.ClipApp.encodeURI(P+"/"+ this.id);
     }
   });
 
@@ -118,9 +118,10 @@ App.ClipApp.Face = (function(App, Backbone, $){
     if(!uid){
       callback(null);
     }else{
-      var url = App.ClipApp.encodeURI(P + "/user/"+ uid);
-      var user=new UserModel();
-      user.fetch({url: url});
+      // var url = App.ClipApp.encodeURI(P + "/"+ uid);
+      var user=new UserModel({id:uid});
+      // user.fetch({url: url});
+      user.fetch();
       user.onChange(function(user){
 	callback(user);
       });

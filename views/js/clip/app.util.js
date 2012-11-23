@@ -25,20 +25,22 @@ App.util = (function(){
   // url后面加上_token的原因是本地文件跨域访问时无法传递token参数，
   // 且上传图片时不走app-base.js的sync方法，所以需要手动加入参数
   util.getImg_upUrl = function(uid){
-    return P + "/user/"+uid+"/image?_token=" + App.util.getCookie("token");
+    return P + "/"+uid+"/image?_token=" + App.util.getCookie("token");
   };
 
   util.getFace_upUrl = function(uid){
-    return P+"/user/" + uid + "/face?_token=" + App.util.getCookie("token");
+    return P + "/" + uid + "/face?_token=" + App.util.getCookie("token");
   };
 
   util.unique_url = function(url){
     var now = new Date();
     return url + "?now=" + now.getTime();
   };
-
+  /**
+   * 确定所访问的图片的尺寸
+   */
   util.img_url = function(url,size){
-    if(url && /http:\/\/((www\.)?cliclip|192\.168\.1\.(\d+))|\.\./.test(url) && !/_270/.test(url) && !/tmp_/.test(url)){
+    if(url && !/tmp_/.test(url) && /http:\/\/((www\.)?cliclip|192\.168\.1\.(\d+))|\.\./.test(url) && !/_270/.test(url)){
       var idx = url.lastIndexOf(".");
       return url.slice(0,idx) + "_270" + url.slice(idx);
     }else return url;
@@ -181,7 +183,7 @@ App.util = (function(){
 	//for(var i=0;i<imgids.length;i++){ // 上传无需for循环
 	var uid = imgids.split(":")[0];
 	var imgid = imgids.split(":")[1];
-	var url = P + "/" + imgid;
+	var url = P + "/" +uid + "/image/" + imgid;
 	callback(null, url);
       }else{//上传图片失败
 	callback("imageUp_fail", null);
@@ -190,22 +192,25 @@ App.util = (function(){
   };
 
   /**
-   * 向api提交数据时要去除图片src中的前缀部分
+   * 向api提交数据时要去除图片src中的前缀部分,现已移至后台
    */
+/*
   util.cleanConImgUrl = function(content){
-    var str1 = "src=\\'",str2 = 'src=\\"',str0 = "\\" + P + "\\/";
-    var str3 = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
-    var reg = /(\d+)\/clip_(\d+)_/g;
-    // var reg0 = /\/_3_\//g,
-    var reg0 = new RegExp(str0,"g");
-    // 匹配图片src为http:192.168.1.3:....以及cliclip.com(:....)
-    var reg1 = new RegExp(str1 + str3,"g");
-    var reg2 = new RegExp(str2 + str3,"g");
-    var con = content.replace(reg0,"");//去掉src中所有的版本号
-    con = con.replace(reg1,'src=\'');
-    con = con.replace(reg2,'src=\"');
-    return con.replace(reg,"");
+    var str = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
+    var str0 = "\\" + P + "\\/(\\d+)\\/image/";
+    var str1 = "\\/(\\d+)\\/(\\d+)\\/";
+    var str2 = "src=\\'",str3 = 'src=\\"';
+    var reg0 = new RegExp(str2 + str + str0,"g");//临时图片
+    var reg1 = new RegExp(str3 + str + str0,"g");//临时图片
+    var reg2 = new RegExp(str2 + str + str1,"g");//图片文件
+    var reg3 = new RegExp(str3 + str + str1,"g");//图片文件
+    var con = content.replace(reg0,"src='");
+    con = con.replace(reg1,'src="');
+    con = con.replace(reg2,"src='");
+    con = con.replace(reg3,'src="');
+    return con;
   };
+*/
 
   util.expandConImgUrl = function(content,user,id){
     var cid = id,uid = user,pre;
@@ -213,17 +218,18 @@ App.util = (function(){
       uid = id.split(":")[0];
       cid = id.split(":")[1];
     }
-    if(_getMyUid() == uid){
-      var prefix = App.util.isLocal() ? _P : P ;
-      pre =  prefix + "/" + uid + "/clip_" + cid + "_";
+    if(_getMyUid() == uid && App.util.isLocal()){
+      pre =  _P + "/" + uid + "/clip_" + cid + "_";
     }else{
-      pre =  P + "/clip/" + uid+ ":" + cid + "/";
+      pre = App.ClipApp.Url.hostname + "/" + uid+ "/" + cid + "/";
     }
     var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
-    var reg1 = /\"tmp_/g;
+    // 目前tmp类型图片api存储完整src 前端无需再次拼接
+    /*var reg1 = /\"tmp_/g;
     var reg2 = /\'tmp_/g;
-    content = content.replace(reg1, "\"" + P + "/tmp_");
-    content = content.replace(reg2, "'" + P + "/tmp_");
+    content = content.replace(reg1, "\"" + P +"/" + uid + "/image/tmp_");
+    content = content.replace(reg2, "'" + P + "/" + uid + "/image/tmp_");
+     */
     var imgs = content.match(reg);
     if(!imgs)return content;
     for(var i = 0; i<imgs.length; i++){
@@ -236,18 +242,16 @@ App.util = (function(){
   util.expandPreImgUrl = function(content,clipid){
     if(!content.image) return content;
     var src = content.image.src,uid,cid;
-    if(clipid){
-      uid = clipid.split(":")[0];
-      cid = clipid.split(":")[1];
-    }
+    uid = clipid.split(":")[0];
+    cid = clipid.split(":")[1];
     if(/^tmp_/.test(content.image.src)){
-      content.image.src = P + "/" + src;
+      // 目前tmp类型图片api存储完整src 前端无需再次拼接
+      // content.image.src = P + "/" + uid + "/image/" + src;
     } else if(/^(\d+)\.(\w+)$/.test(src)){
-      if(_getMyUid() == uid){
-	var prefix = App.util.isLocal() ? _P : P ;
-	content.image.src = prefix + "/" + uid + "/clip_" + cid + "_" + src;
+      if(_getMyUid() == uid && util.isLocal()){
+	content.image.src = _P + "/" + uid + "/clip_" + cid + "_" + src;
       }else {
-	content.image.src = P + "/clip/" + clipid + "/" + src;
+	content.image.src = App.ClipApp.Url.hostname + "/" + uid + "/" + cid + "/" + src;
       }
     }
     return content;
@@ -264,14 +268,20 @@ App.util = (function(){
     }
   };
 
+  /**
+   *加载本地大小为270,128,64大小的图片，若失败则加载原图
+   * 加载本地不带尺寸的原始图片，若失败则到服务器加载
+   * 加载服务器图片失败，则显示默认图片
+   */
   util.img_error = function(img){
-    img.title = img.src;
+    // img.title = img.src;
     var src = img.src.match(/\/(\d+)\/clip_(\d+)_(\d+)(_(\d+))*\.(\w+)/);
-    if(src&&/file:\/\//.test(src)){
-      if(/_(270|128|64)/.test(src[0])){//若本地不存在相应尺寸的图片，则取原图
+    if(src&&/file:\/\//.test(img.src)){
+      if(/_(270|128|64)/.test(src[0])){
 	img.src = img.src.replace(/_(270|128|64)/,"");
       }else {
-	img.src = P + src[0];
+	// /8/clip_14_1.jpg
+	img.src = P + src[0].replace("clip_","").replace("_","/");;
       }
     }else{
       img.height = 184;
@@ -331,32 +341,25 @@ App.util = (function(){
 
   // 获取url中含有的uid
   function getUrlUid(url){
-    var uid_clip = url.match(/clip\/[0-9]+:[0-9]+/) ? url.match('clip\/[0-9]+')[0].split('/')[1] : null;
-    var uid = url.match(/user\/[0-9]+/) ? url.match(/user\/[0-9]+/)[0].split('/')[1]: null;
-    return uid_clip || uid;
+    url = url.split(P + "/")[1];
+    return  url.match(/^[0-9]+/) ? url.match(/^[0-9]+/)[0] : null;
   }
 
   // 判断app-base.js中collection sync方法是否通过rpc向服务器发送请求
   util.collectionByRpc = function(url, options){
-    if( !util.isLocal() ){ return true;}
-    var url_uid = getUrlUid(url);
-    var my_uid = _getMyUid();
-    if(!my_uid) return true;
-    if(/user\/([0-9]+)\/query/.test(url)&& url_uid != my_uid)return true;
-    if(/follow/.test(url)) return true;
-    if(/query/.test(url) && !url_uid) return true;
-    return /interest|comment/.test(url)||(/query/.test(url) && options.data.text);
+    return /query/.test(url)&& options.data.user == _getMyUid() && !options.data.text ? false : true;
   };
 
   // 判断app-base.js中model sync方法是否通过rpc向服务器发送请求
   util.modelByRpc = function(method, url, options){
-    if( !util.isLocal() ){ return true; }
     var url_uid = getUrlUid(url);
     var my_uid = _getMyUid();
-    if( /user\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
+    url = url.split(P)[1];
     if( method != "GET" ) return true;
     if( !my_uid ) return true;
-    if(/meta|clip/.test(url)&& my_uid == url_uid)return false;
+    if( /^\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
+    if( /^\/(\d+)\/(\d+)\?/.test(url)&&my_uid == url_uid )return false;
+    if( /meta/.test(url)&& my_uid == url_uid)return false;
     return true;
   };
 

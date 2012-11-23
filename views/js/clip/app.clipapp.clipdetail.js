@@ -9,13 +9,15 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "public": true
     },
     url:function(){
-      return App.ClipApp.encodeURI(P+"/clip/"+this.id)+"&rid="+this.get("rid");
+      var uid = this.get("id").split(":")[0];
+      var cid = this.get("id").split(":")[1];
+      return App.ClipApp.encodeURI(P+"/"+uid + "/" + cid)+"&rid="+this.get("rid");
     },
     parse: function(resp){ // 跟cliplist一致，使得model.id = "uid:id"
       if(!/:/.test(resp.id)){
 	resp.id = resp.user+":"+resp.id;
       }
-      resp.content = App.util.expandConImgUrl(resp.content,resp.user,resp.id);
+      // resp.content = App.util.expandConImgUrl(resp.content,resp.user,resp.id);
       return resp;
     }
   });
@@ -234,7 +236,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   // 获取comment内容，需要对得到的数据进行显示
   function showComment (cid){
     var list = new commCollection();
-    list.fetch({url:App.ClipApp.encodeURI(P+"/clip/"+cid+"/comment")});
+    list.fetch({url:App.ClipApp.encodeURI(P + "/" + cid.split(":")[0] + "/" +cid.split(":")[1] +"/comment")});
     list.onReset(function(commentCollection){ // rename CommentsView
       var comms = commentCollection.toJSON();
       if(comms.length!= 1 || comms[0].id){
@@ -301,8 +303,10 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   var saveaddComm = function(view, params, mid){
     var model = new App.Model.CommModel();
+    var uid = params.clipid.split(":")[0];
+    var cid = params.clipid.split(":")[1];
     model.save({pid:params.pid, text:params.text},{
-      url : App.ClipApp.encodeURI(P+"/clip/"+params.clipid+"/comment"),
+      url : App.ClipApp.encodeURI(P+"/"+uid + "/" + cid +"/comment"),
       success:function(comment,response){
 	/*if(params1){ // 避免comment和reclip同时去写clip数据
 	  App.vent.trigger("app.clipapp.reclip:sync",params1,mid);
@@ -338,7 +342,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(res,detailModel){
 	model.onChange(function(detailModel){
 	  // 去掉图片标签中的width和height 与$(".content")预设的固定宽度冲突
-	  var content = detailModel.toJSON().content;
+	  var clip = detailModel.toJSON();
+	  var content = App.util.expandConImgUrl(clip.content,clip.user,clip.id);
 	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/g;
 	  // 为每一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
 	  detailModel.set("content",content.replace(reg,"onerror=\"App.util.img_error(this)\""));

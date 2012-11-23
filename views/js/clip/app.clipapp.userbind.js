@@ -6,9 +6,9 @@ App.ClipApp.UserBind = (function(App, Backbone, $){
     url:function(){
       var my = App.ClipApp.getMyUid();
       if(this.get("account")){
-	return App.ClipApp.encodeURI(P+"/user/"+ my +"/oauth/"+this.get("account"));
+	return App.ClipApp.encodeURI(P+"/"+ my +"/oauth/"+this.get("account"));
       }else{
-	return App.ClipApp.encodeURI(P+"/user/"+ my +"/oauth/");
+	return App.ClipApp.encodeURI(P+"/"+ my +"/oauth/");
       }
     }
   });

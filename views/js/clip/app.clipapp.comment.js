@@ -6,10 +6,12 @@ App.ClipApp.Comment = (function(App, Backbone, $){
   // comemntModel有添加，回复，删除，列表等功能
   App.Model.CommentModel = App.Model.extend({
     url:function(){
+      var uid = this.get("cid").split(":")[0];
+      var cid = this.get("cid").split(":")[1];
       if(this.id){
-	return App.ClipApp.encodeURI(P+"/clip/"+this.get("cid")+"/comment/"+this.id);
+	return App.ClipApp.encodeURI(P+"/"+uid+"/"+cid+"/comment/"+this.id);
       }else{
-	return App.ClipApp.encodeURI(P+"/clip/"+this.get("cid")+"/comment");
+	return App.ClipApp.encodeURI(P+"/"+uid+"/"+cid+"/comment");
       }
     }
   });
@@ -82,7 +84,7 @@ App.ClipApp.Comment = (function(App, Backbone, $){
 	params1 = {id:this.model.get("cid"),clip:{tag:this.tag_list,note:[{text:text}]}};}*/
       var tmpmodel = new App.Model.CommModel();
       tmpmodel.save(params,{
-	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+"/comment"),
+	url: App.ClipApp.encodeURI(P+"/"+clipid.split(":")[0]+"/"+clipid.split(":")[1]+"/comment"),
 	success: function(model, res){
 	  /*if(params1){
 	    App.vent.trigger("app.clipapp.reclip:sync", params1,mid);

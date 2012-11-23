@@ -8,7 +8,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   App.Model.ClipModel = App.Model.extend({
     //localStorage: new Store("clipdetail"),
     url: function(){
-      return App.ClipApp.encodeURI(P+"/clip");
+      return App.ClipApp.encodeURI(P + "/" + App.util.getMyUid() +"/clip");
     },
     validate: function(attrs){
       var content = attrs.content;
@@ -94,10 +94,9 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       e.preventDefault();
       var target = $(e.currentTarget);
       var view = this;
-      var con = App.Editor.getContent("editor");
       target.attr("disabled",true);
-      con = App.util.cleanConImgUrl(con);
-      clip.content = con;
+      //con = App.util.cleanConImgUrl(con);
+      clip.content = App.Editor.getContent("editor");
       this.model.save(clip, {
 	success:function(model,res){ // 返回值res为clipid:clipid
 	  model.id = res.clipid; // 将clip本身的id设置给model
@@ -148,6 +147,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   };
 
   ClipAdd.show = function(isClipper,clipper_content){ // 是否为书签摘录
+    console.info(isClipper,clipper_content);
     clipper = isClipper;
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
