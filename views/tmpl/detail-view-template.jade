@@ -18,9 +18,9 @@ script(type="text/template",id="detail-view-template")
             <i class="modify operate" title="<%=_i18n('detail.update')%>"></i>
             <i class="note operate" title="<%=_i18n('detail.memo')%>"></i>
           <% } %>
-            <i class="share operate" title="<%=_i18n('detail.memo')%>"></i>
-        div.share_button
-          <a href="javascript:void(0)" title="<%= _i18n('private.title')%>"> <%= _i18n('private.share')%></a>
+          <% if(!(public == "false" && App.util.getMyUid() != user )){  %>
+            <i class="share operate" title="<%=_i18n('detail.share')%>"></i>
+          <% } %>
         <span class="close_w"></span>
       div.pop_left
         ul.forward_log.

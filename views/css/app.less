@@ -329,6 +329,39 @@ html body {
 	}
 }
 
+.share_button{
+	position:relative;
+	left:7px;
+	i{
+		width:46px;
+		height:32px;
+		float:left;
+	}
+	i.jtico_tsina{
+		.jtico(0px,0px);	
+	}
+	i.jtico_renren{
+		.jtico(0px,-64px);	
+	}
+	i.jtico_qzone{
+		.jtico(0px,-32px);	
+	}
+	i.jtico_tqq{
+		.jtico(0px,-1760px);	
+	}
+	i.jtico_fb{
+		.jtico(0px,-960px);	
+	}
+	i.jtico_twitter{
+		.jtico(0px,-1024px);	
+	}
+	.share_private{
+		line-height:24px;
+		font-size:15px;
+		color:#909090;
+	}	
+}
+
 //页面的最上边logo部分
 .header{
 	height:99px;
@@ -1206,6 +1239,10 @@ section.follow_frame{
 		.pop_title;
 		.sprites(-589px,-342px);
 	}
+	.subject_share{
+		.pop_title;
+		padding-left:6px;
+	}
 	.pop_body{
 		padding:10px 25px;
 		margin:0;
@@ -1511,40 +1548,6 @@ section.follow_frame{
 			}
 		}	 			
 	}
-	.share_button{
-		float:right;
-		position:relative;
-		top:8px;
-		width:246px;
-		i{
-			width:41px;
-			height:32px;
-			float:left;
-		}
-		i.jtico_tsina{
-			.jtico(0px,0px);	
-		}
-		i.jtico_renren{
-			.jtico(0px,-64px);	
-		}
-		i.jtico_qzone{
-			.jtico(0px,-32px);	
-		}
-		i.jtico_tqq{
-			.jtico(0px,-1760px);	
-		}
-		i.jtico_fb{
-			.jtico(0px,-960px);	
-		}
-		i.jtico_twitter{
-			.jtico(0px,-1024px);	
-		}
-		.share_private{
-			float:right;
-			position:relative;
-			top:-8px;
-		}	
-	}
 	.bottom{
 		margin-top: 0px;
 	}
@@ -1559,7 +1562,7 @@ section.follow_frame{
 			margin-right:10px;
 		}
 		i.share{
-
+			.glyphishs(-48px,-625px);
 		}
 		i.reclip{
 			.sprites(-590px,-163px);

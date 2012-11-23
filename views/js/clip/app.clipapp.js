@@ -244,8 +244,8 @@ App.ClipApp = (function(App, Backbone, $){
     }
   };
 
-  ClipApp.showShareDialog = function(){
-    ClipApp.Share.show();
+  ClipApp.showShareDialog = function(clipid, pub, preview){
+    ClipApp.Share.show(clipid, pub, preview);
   };
 
   /*
