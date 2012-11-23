@@ -53,8 +53,9 @@ App.ClipApp.Share = (function(App, Backbone, $){
     App.popRegion.show(shareView);
   };
 
-  var privateShare = function(cid){
+  var privateShare = function(id){
     var uid = App.util.getMyUid();
+    var cid = id.split(":")[1];
     var shareModel = new ShareModel({id: cid,"public": false});
     var linkModel = new App.Model();
       linkModel.save({},{
