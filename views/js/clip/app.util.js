@@ -281,7 +281,7 @@ App.util = (function(){
 	img.src = img.src.replace(/_(270|128|64)/,"");
       }else {
 	// /8/clip_14_1.jpg
-	img.src = P + src[0].replace("clip_","").replace("_","/");;
+	img.src = App.ClipApp.Url.hostname + src[0].replace("clip_","").replace("_","/");
       }
     }else{
       img.height = 184;
