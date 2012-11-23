@@ -304,7 +304,7 @@ App.util = (function(){
       }else if(provider == "twitter"){
 	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
       }else if(provider == "dropbox"){
-	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+	return name.split("@")[0]+"<img width ='17px' src ='img/dropbox.png' >";
       }else if(provider == "gmail.com"){
 	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
       }else if(provider == "126.com"){

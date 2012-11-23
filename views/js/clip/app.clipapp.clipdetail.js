@@ -342,7 +342,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/g;
 	  // 为每一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
 	  detailModel.set("content",content.replace(reg,"onerror=\"App.util.img_error(this)\""));
-console.log(detailModel);
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);
