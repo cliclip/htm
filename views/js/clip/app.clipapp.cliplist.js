@@ -236,8 +236,9 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   };
 
   function collection_filter(collection){
-    collection.each(function(e){
-      if(e.get("public") == "false") collection.remove(collection.get(e.id));
+    _.each(collection.last(10), function(e){
+       if(e.get("public") == "false")
+	 collection.remove(collection.get(e.id));
     });
     collection_length = collection.length;
   };

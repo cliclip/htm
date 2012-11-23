@@ -12,6 +12,11 @@
   background-position: @x @y;
   display: block;
 }
+.glyphishs(@x:0, @y:0){
+  background: url(../img/glyphish.png) no-repeat;
+  background-position: @x @y;
+  display: block;
+}
 // 重构了用户头像下面的样式
 .glyphicons-halflings (@x:0, @y:0) {
   background: url(../img/glyphicons-halflings-white.png) no-repeat;
@@ -324,6 +329,39 @@ html body {
 		min-width:110px;
 		padding:6px;
 	}
+}
+
+.share_button{
+	position:relative;
+	left:7px;
+	i{
+		width:46px;
+		height:32px;
+		float:left;
+	}
+	i.jtico_tsina{
+		.jtico(0px,0px);	
+	}
+	i.jtico_renren{
+		.jtico(0px,-64px);	
+	}
+	i.jtico_qzone{
+		.jtico(0px,-32px);	
+	}
+	i.jtico_tqq{
+		.jtico(0px,-1760px);	
+	}
+	i.jtico_fb{
+		.jtico(0px,-960px);	
+	}
+	i.jtico_twitter{
+		.jtico(0px,-1024px);	
+	}
+	.share_private{
+		line-height:24px;
+		font-size:15px;
+		color:#909090;
+	}	
 }
 
 //页面的最上边logo部分
@@ -772,20 +810,13 @@ article.clip{
 		}
 	}
 	.type_self{
-		border-style: solid none;
-    		border-width: 1px 0;
-		border-color:#7355AA;
-		.type_text {
-			color: #7355AA;
- 	   		border-style: solid;
-    			border-width: 1px;
-			border-color: #7355AA;
-    			height: 15px;
-			width: 70px;
-    			line-height: 15px;
-    			margin: -16px 5px 0 165px;
-    			overflow: hidden;
-    			padding: 0 10px;
+		dt.type_text {
+		   .glyphishs(-187px,-194px);
+    		   height: 37px;
+		   width: 45px;
+    		   line-height: 15px;
+		   overflow: hidden;
+    		   margin: -20px 0px 0px 213px;
 		}
 	}
 	header{
@@ -1210,6 +1241,10 @@ section.follow_frame{
 		.pop_title;
 		.sprites(-589px,-342px);
 	}
+	.subject_share{
+		.pop_title;
+		padding-left:6px;
+	}
 	.pop_body{
 		padding:10px 25px;
 		margin:0;
@@ -1515,40 +1550,6 @@ section.follow_frame{
 			}
 		}	 			
 	}
-	.share_button{
-		float:right;
-		position:relative;
-		top:8px;
-		width:246px;
-		i{
-			width:41px;
-			height:32px;
-			float:left;
-		}
-		i.jtico_tsina{
-			.jtico(0px,0px);	
-		}
-		i.jtico_renren{
-			.jtico(0px,-64px);	
-		}
-		i.jtico_qzone{
-			.jtico(0px,-32px);	
-		}
-		i.jtico_tqq{
-			.jtico(0px,-1760px);	
-		}
-		i.jtico_fb{
-			.jtico(0px,-960px);	
-		}
-		i.jtico_twitter{
-			.jtico(0px,-1024px);	
-		}
-		.share_private{
-			float:right;
-			position:relative;
-			top:-8px;
-		}	
-	}
 	.bottom{
 		margin-top: 0px;
 	}
@@ -1561,6 +1562,9 @@ section.follow_frame{
 			height:40px;
 			float:right;
 			margin-right:10px;
+		}
+		i.share{
+			.glyphishs(-48px,-625px);
 		}
 		i.reclip{
 			.sprites(-590px,-163px);

@@ -310,7 +310,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	showEmail();
       },
       error: function(model, res){
-	App.ClipApp.showConfirm(res.email.unbind);
+	App.ClipApp.showConfirm(res.unbind);
       }
     });
   };
