@@ -1,0 +1,24 @@
+script(type="text/template",id="share-view-template")
+  div.masker_layer
+  div.masker
+    section.small_pop
+      span.close_w
+      h2.subject_share <%=_i18n('detail.share')%>
+      ul.pop_body
+        li.input_text
+          <input type="text" value="<%= linkAddress%>" style="height:50px" id="shareLink_text"/>
+        div.share_button
+          <% if(public){ %>
+          <% for(var i = 0; i<shareTo.length; i++){ %>
+          <a target="_blank" title="<%= _i18n('snsShare.title_'+shareTo[i])%> " href="http://www.jiathis.com/send/?webid=<%=shareTo[i]%>&url=http%3A%2F%2Fwww.cliclip.com%2F%23clip%2F<%= id.split(":")[0] %>%2F<%= id.split(":")[1] %>&title=<%= shareTo_title%>&uid=1348468567217809&appkey=%7b%26quot%3btsina%26quot%3b%3a%26quot%3b480422357%26quot%3b%7d&pic=<%= shareTo_img%>">
+          <i class="jtico_<%= shareTo[i]%>"></i></a>
+          <% } %>
+          br
+          br
+          br
+          <% }else{%>
+          h3.share_private <%= _i18n('privateShare.text')%>
+          br
+          <!-- <input type="button" class="verify" value="<%=_i18n('privateShare.copy')%>" id="copy" /> -->
+          <!-- <input type="button" class="cancel" value="<%=_i18n('privateShare.cancel')%>" id="cancel" /> -->
+          <%}%>

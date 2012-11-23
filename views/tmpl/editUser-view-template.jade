@@ -20,7 +20,11 @@ script(type="text/template",id="faceEdit-view-template")
     .user_name
       <div id="set-name" class="name"><%=name%></div>
       <input type="text" class="set_username" name="name" id="name" style="display:none;">
+      <% if(name.match("@")){%>
       <input type="button" class="edit_name" value="<%=_i18n('faceEdit.set_name')%>" title="<%=_i18n('faceEdit.set_name')%>"/>
+      <% }else {%>
+      <input type="button" class="edit_name" value="<%=_i18n('faceEdit.change_name')%>" title="<%=_i18n('faceEdit.change_name')%>"/>
+      <%}%>
   .head_link.
     <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="upload_target" enctype="multipart/form-data">
     <div class="btn_frame">

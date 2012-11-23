@@ -88,6 +88,7 @@ App.versions = (function($){
       faceEdit : {
 	title       : "设置",
 	set_name    : "设置用户名",
+	change_name : "修改用户名",
 	ok          : "确 定",
 	upload      : "上传本地图像",
 	name : {
@@ -256,7 +257,8 @@ App.versions = (function($){
 	reclip      : "转摘",
 	"delete"      : "删除",
 	update      : "修改",
-	memo        : "标注"
+	memo        : "标注",
+	share       : "分享"
       },
 
       snsShare :{
@@ -268,9 +270,10 @@ App.versions = (function($){
 	title_twitter: "分享到Twitter",
 	summary      : "来自cliclip的分享"
       },
-      "private" :{
-	title       : "私有分享，点击生成链接地址",
-	share       : "分享"
+      privateShare :{
+	text      : "您可以复制此私有分享链接发送给您的好友啦",
+	copy      : "复制到剪贴板",
+	cancel    : "取消"
       },
       showcomment : {
 	reply       : "回复",
@@ -409,7 +412,6 @@ App.versions = (function($){
 	resetpwd_success:"您的密码已重置",
 	setRule_success: "您已成功更新邮箱摘录反垃圾规则",
 	rename_success : "您的用户名已经修改",
-	shareLink_success: "您可以从地址栏复制私有分享链接啦",
 	reclip_null    : "该标签下暂时还没有数据",
 	reclip_tag_success : "恭喜您，转摘成功！",
 	reclip_tag_fail: "您已经拥有这些摘录了！",
@@ -608,6 +610,7 @@ App.versions = (function($){
       faceEdit : {
 	title       : "Settings",
 	set_name    : "Set user name",
+	change_name : "Change user name",
 	ok          : "OK",
 	upload      : "Upload image",
 	name : {
@@ -776,7 +779,8 @@ App.versions = (function($){
 	reclip      : "Reclip",
 	"delete"      : "Delete",
 	update      : "Edit",
-	memo        : "Tag"
+	memo        : "Tag",
+	share       : "Share"
       },
       snsShare :{
 	title_tsina  : "Share to weibo",
@@ -787,9 +791,10 @@ App.versions = (function($){
 	title_twitter: "Share to twitter",
 	summary     : "Share from cliclip"
       },
-      "private" :{
-	title       : "Private share,click here to get link",
-	share       : "Share"
+      privateShare :{
+	text      : "You can copy this private share link to your friends now",
+	copy      : "Copy to clipboard",
+	cancel    : "Cancel"
       },
       showcomment : {
 	reply       : "Reply",
@@ -928,7 +933,6 @@ App.versions = (function($){
 	resetpwd_success :"Your password has been reseted",
 	setRule_success: "Your rule for spam filter has been updated",
 	rename_success : "Your User name has been changed",
-	shareLink_success: "You can copy private share link now",
 	reclip_null    : "No clip under this tag",
 	reclip_tag_success : "Reclip successful",
 	go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",

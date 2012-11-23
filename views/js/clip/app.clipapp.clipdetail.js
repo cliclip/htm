@@ -25,7 +25,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     className: "Detail-view",
     template: "#detail-view-template",
     events: {
-      "click .share_private" : "createClipShareLink",
       "click .operate" : "Operate",
       "click .masker" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
@@ -50,6 +49,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.ClipApp.showReclip(cid, mid, recommend, pub); break;
 	// case 'recommend':
 	  //App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
+	case 'share':
+	  var content = this.model.get("content");
+	  App.ClipApp.showShareDialog(cid, pub, App.util.getPreview(content,100)); break;
 	case 'comment':
 	  this.trigger("@detailComment", cid);break;
 	case 'note':
@@ -61,29 +63,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  App.ClipApp.showClipDelete(cid); break;
       }
     },
-
-    createClipShareLink: function(e){ //私有分享
-      e.stopPropagation();
-      var clipid = this.model.id;
-      var model = new App.Model();
-      if(document.selection&&document.selection.createRange().htmlText){
-	return;
-      }else if(window.getSelection&&$.trim(window.getSelection().toString())){
-	return;
-      }
-      model.save({},{
-	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+'/sharelink'),
-	type: "POST",
-	success:function(model,res){
-	  Backbone.history.navigate("link/"+res, false);
-	  App.ClipApp.showSuccess("shareLink_success");
-	},
-	error:function(model,error){ // 则显示该链接不能再点击
-	  App.ClipApp.showConfirm(error, null, function(){});
-	}
-      });
-    },
-
     Masker: function(e){
       if($(e.target).attr("class") == "masker"){
 	this.trigger("@detailClose");
@@ -348,7 +327,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   ClipDetail.show = function(cid,model_id,recommend, link){ // cid等于detailModel.id
     var ids = cid.split(":");
-    var model = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user, shareTo:["tsina", "renren", "qzone","tqq","fb","twitter"]});
+    var model = new App.Model.DetailModel({id: cid, rid:recommend.rid, ruser:recommend.user});
     mid = model_id;
     // 获取当前页面的 url 以及 scrollTop
     hist = Backbone.history.fragment;
@@ -362,12 +341,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  var content = detailModel.toJSON().content;
 	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/g;
 	  // 为每一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
-	  var shareTo = App.util.getPreview(detailModel.get("content"),100);
-	  var shareTo_title = shareTo.text ? shareTo.text : _i18n('snsShare.summary');
-	  var shareTo_img = shareTo.image ? shareTo.image.src : "" ;
 	  detailModel.set("content",content.replace(reg,"onerror=\"App.util.img_error(this)\""));
-	  detailModel.set("shareTo_title", shareTo_title);
-	  detailModel.set("shareTo_img", shareTo_img);
+console.log(detailModel);
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);
