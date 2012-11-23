@@ -36,7 +36,9 @@ App.util = (function(){
     var now = new Date();
     return url + "?now=" + now.getTime();
   };
-
+  /**
+   * 确定所访问的图片的尺寸
+   */
   util.img_url = function(url,size){
     if(url && !/tmp_/.test(url) && /http:\/\/((www\.)?cliclip|192\.168\.1\.(\d+))|\.\./.test(url) && !/_270/.test(url)){
       var idx = url.lastIndexOf(".");
@@ -190,27 +192,12 @@ App.util = (function(){
   };
 
   /**
-   * 向api提交数据时要去除图片src中的前缀部分
+   * 向api提交数据时要去除图片src中的前缀部分,现已移至后台
    */
-  util.cleanConImgUrl = function(content){
-    return content;
-
 /*
-    var str0 = "\\" + P + "\\/(\\d+)\\/(\\d+)\\/";
-    var str1 = "src=\\'",str2 = 'src=\\"';
-    var str3 = "\\" + P + "\\/(\\d+)\\/tmp_";
-    var str4 = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
-    var reg0 = new RegExp(str0,"g");
-    var reg1 = new RegExp(str1 + str4,"g");
-    var reg2 = new RegExp(str2 + str4,"g");
-    var reg3 = new RegExp(str3,"g");
-    var con = content.replace(reg0,"");//去掉文件类型图片src中的版本号和uid,cid
-    con = con.replace(reg3,'tmp_');//去掉临时图片src中的版本号和uid
-    con = con.replace(reg1,'src=\'');//去掉域名和端口号
-    con = con.replace(reg2,'src=\"');//去掉域名和端口号
-    return con;
+  util.cleanConImgUrl = function(content){
     var str = "http://(192\\.168\\.1\\.(\\d+)|(www\\.)?cliclip\\.com)(:(\\d{1,5}))?";
-    var str0 = "\\" + P + "\\/(\\d+)\\/image/tmp_";
+    var str0 = "\\" + P + "\\/(\\d+)\\/image/";
     var str1 = "\\/(\\d+)\\/(\\d+)\\/";
     var str2 = "src=\\'",str3 = 'src=\\"';
     var reg0 = new RegExp(str2 + str + str0,"g");//临时图片
@@ -221,10 +208,9 @@ App.util = (function(){
     con = con.replace(reg1,'src="');
     con = con.replace(reg2,"src='");
     con = con.replace(reg3,'src="');
-
     return con;
-*/
   };
+*/
 
   util.expandConImgUrl = function(content,user,id){
     var cid = id,uid = user,pre;
@@ -238,10 +224,12 @@ App.util = (function(){
       pre = App.ClipApp.Url.hostname + "/" + uid+ "/" + cid + "/";
     }
     var reg = /<img\ssrc=(\'|\")(\d+)\.(\w+)(\'|\")/g;
-    var reg1 = /\"tmp_/g;
+    // 目前tmp类型图片api存储完整src 前端无需再次拼接
+    /*var reg1 = /\"tmp_/g;
     var reg2 = /\'tmp_/g;
     content = content.replace(reg1, "\"" + P +"/" + uid + "/image/tmp_");
     content = content.replace(reg2, "'" + P + "/" + uid + "/image/tmp_");
+     */
     var imgs = content.match(reg);
     if(!imgs)return content;
     for(var i = 0; i<imgs.length; i++){
@@ -257,7 +245,8 @@ App.util = (function(){
     uid = clipid.split(":")[0];
     cid = clipid.split(":")[1];
     if(/^tmp_/.test(content.image.src)){
-      content.image.src = P + "/" + uid + "/image/" + src;
+      // 目前tmp类型图片api存储完整src 前端无需再次拼接
+      // content.image.src = P + "/" + uid + "/image/" + src;
     } else if(/^(\d+)\.(\w+)$/.test(src)){
       if(_getMyUid() == uid && util.isLocal()){
 	content.image.src = _P + "/" + uid + "/clip_" + cid + "_" + src;
@@ -279,18 +268,24 @@ App.util = (function(){
     }
   };
 
+  /**
+   *加载本地大小为270,128,64大小的图片，若失败则加载原图
+   * 加载本地不带尺寸的原始图片，若失败则到服务器加载
+   * 加载服务器图片失败，则显示默认图片
+   */
   util.img_error = function(img){
-    img.title = img.src;
+    // img.title = img.src;
     var src = img.src.match(/\/(\d+)\/clip_(\d+)_(\d+)(_(\d+))*\.(\w+)/);
     if(src&&/file:\/\//.test(img.src)){
-      if(/_(270|128|64)/.test(src[0])){//若本地不存在相应尺寸的图片，则取原图
+      if(/_(270|128|64)/.test(src[0])){
 	img.src = img.src.replace(/_(270|128|64)/,"");
       }else {
-	img.src = P + src[0];
+	// /8/clip_14_1.jpg
+	img.src = P + src[0].replace("clip_","").replace("_","/");;
       }
     }else{
-      // img.height = 184;
-      // img.src='img/img_error.jpg';
+      img.height = 184;
+      img.src='img/img_error.jpg';
     }
     if(img.id){
       $(".fake_" + img.id).hide();
@@ -352,11 +347,7 @@ App.util = (function(){
 
   // 判断app-base.js中collection sync方法是否通过rpc向服务器发送请求
   util.collectionByRpc = function(url, options){
-    var url_uid = getUrlUid(url);
-    var my_uid = _getMyUid();
-    if(!my_uid) return true;
-    if(/query/.test(url)&& options.data.user != my_uid && !options.data.text)return true;
-    if(/follow|interest|comment/.test(url)) return true;
+    return /query/.test(url)&& options.data.user == _getMyUid() && !options.data.text ? false : true;
   };
 
   // 判断app-base.js中model sync方法是否通过rpc向服务器发送请求

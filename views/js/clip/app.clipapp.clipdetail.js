@@ -17,7 +17,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       if(!/:/.test(resp.id)){
 	resp.id = resp.user+":"+resp.id;
       }
-      resp.content = App.util.expandConImgUrl(resp.content,resp.user,resp.id);
+      // resp.content = App.util.expandConImgUrl(resp.content,resp.user,resp.id);
       return resp;
     }
   });
@@ -364,7 +364,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       success:function(res,detailModel){
 	model.onChange(function(detailModel){
 	  // 去掉图片标签中的width和height 与$(".content")预设的固定宽度冲突
-	  var content = detailModel.toJSON().content;
+	  var clip = detailModel.toJSON();
+	  var content = App.util.expandConImgUrl(clip.content,clip.user,clip.id);
 	  var reg = /width=(\'|\")(\d+)(\'|\")\sheight=(\'|\")(\d+)(\'|\")/g;
 	  // 为每一张图片添加onerror事件，加载本地文件失败改加载服务器端文件
 	  var shareTo = App.util.getPreview(detailModel.get("content"),100);

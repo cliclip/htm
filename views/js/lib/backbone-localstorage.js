@@ -21,7 +21,6 @@
 
   // 根据url，cookie ，App.local.js 获取用户id
   function get_uid(url){
-    url = url.split(P + "/")[1];
     var uid = url.match(/^[0-9]+/) ? url.match(/^[0-9]+/)[0] : null;
     var uid_local = App.Local? App.Local.uid :null;
     return uid || uid_local;
