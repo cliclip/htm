@@ -88,7 +88,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	return;
       }
       model.save({},{
-	url: App.ClipApp.encodeURI(P+"/clip/"+clipid+'/sharelink'),
+	url: App.ClipApp.encodeURI(P+"/"+ this.model.get("user") + "/" + this.model.get("clipid") + '/sharelink'),
 	type: "POST",
 	success:function(model,res){ // 不只是弹出提示框这么简单
 	  App.ClipApp.ClipDetail.show(clipid, null, {}, res);
@@ -180,7 +180,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserClips = function(uid, tag){
     current = null;
     ClipList.flag_show_user = false;
-    base_url = P+"/user/"+uid+"/query";
+    base_url = P+"/query";
     data = {user: uid,"startTime":Date.parse('March 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
@@ -205,7 +205,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserQuery = function(uid, word, tag){
     current = null;
     ClipList.flag_show_user = false;
-    base_url = P + "/user/"+uid+"/query";
+    base_url = P + "/query";
     data = {text: word, user: uid, "startTime":Date.parse('May 1, 2012'),"endTime":(new Date()).getTime()+10000};
     if(tag) data.tag = [tag];
     type = "POST";
@@ -216,7 +216,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserInterest = function(uid, tag){
     current = "interest";
     ClipList.flag_show_user = true;
-    base_url = "/user/" + uid + "/interest";
+    base_url = "/" + uid + "/interest";
     if(tag) base_url += "/tag/" + tag;
     base_url = P + base_url;
     data = null;
@@ -227,7 +227,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
   ClipList.showUserRecommend = function(uid, tag){
     current = "@me";
     ClipList.flag_show_user = true;
-    base_url = "/user/"+uid+"/recomm";
+    base_url = "/"+uid+"/recomm";
     if(tag) base_url += "/tag/"+tag;
     base_url = P + base_url;
     data = null;

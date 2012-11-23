@@ -13,7 +13,7 @@ App.ClipApp.Recommend = (function(App,Backbone,$){
 
   var RecommModel = App.Model.extend({
     url:function(){
-      return App.ClipApp.encodeURI(P+"/user/"+uid+"/recomm");
+      return App.ClipApp.encodeURI(P+"/"+uid+"/recomm");
     },
     initialize:function(){
       uid = null;

@@ -10,7 +10,7 @@ App.ClipApp.RuleEdit = (function(App, Backbone, $){
     },
     url:function(){
       var my = App.ClipApp.getMyUid();
-      return App.ClipApp.encodeURI(P+"/user/"+my+"/rule");
+      return App.ClipApp.encodeURI(P+"/"+my+"/filter");
     },
     validate: function(attrs){
       var email_pattern = App.util.email_pattern;
