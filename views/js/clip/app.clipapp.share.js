@@ -54,10 +54,11 @@ App.ClipApp.Share = (function(App, Backbone, $){
   };
 
   var privateShare = function(cid){
+    var uid = App.util.getMyUid();
     var shareModel = new ShareModel({id: cid,"public": false});
     var linkModel = new App.Model();
       linkModel.save({},{
-	url: App.ClipApp.encodeURI(P+"/clip/"+cid+'/sharelink'),
+	url: App.ClipApp.encodeURI(P+"/"+uid+"/"+cid+'/sharelink'),
 	type: "POST",
 	success:function(model,res){
 	  model.onChange(function(){
@@ -73,7 +74,6 @@ App.ClipApp.Share = (function(App, Backbone, $){
       });
 
   };
-
 
   return Share;
 })(App, Backbone, jQuery);
