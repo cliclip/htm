@@ -134,7 +134,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var clip = editModel.toJSON();
       // var html = editModel.toJSON().content.replace(/\.\.\//g,P+ "/");
       var html = App.util.expandConImgUrl(clip.content,clip.user,clip.id);
-      html = html.replace("<img ","<img onerror=\"App.util.img_error(this)\"");
+      html = html.replace(/<img\s/g,"<img onerror=\"App.util.img_error(this)\"");
       $("#fake").append(html);
       setTimeout(function(){
 	html = $("#fake").html();
