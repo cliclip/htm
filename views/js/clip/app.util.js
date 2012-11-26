@@ -341,7 +341,7 @@ App.util = (function(){
 
   // 获取url中含有的uid
   function getUrlUid(url){
-    url = url.split(P + "/")[1];
+    url = url.split(P + "/")[1] ? url.split(P + "/")[1] : url;
     return  url.match(/^[0-9]+/) ? url.match(/^[0-9]+/)[0] : null;
   }
 
