@@ -33,7 +33,7 @@ App.ClipApp.Share = (function(App, Backbone, $){
 
 
   Share.show = function(cid, pub, preview){
-    if(pub == true || pub == "true"){
+    if(pub == "true"){
       publicShare(cid, preview);
     }else{
       privateShare(cid);

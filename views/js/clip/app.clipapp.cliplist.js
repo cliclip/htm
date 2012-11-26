@@ -13,7 +13,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       content:{},
       refby:"",
       reply:"",
-      "public": true
+      "public": "true"
     }
   });
 
@@ -185,7 +185,6 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     if(tag) data.tag = [tag];
     type = "POST";
     if(App.ClipApp.isSelf(uid)) current = "my";
-    console.log(current);
     init_page(current);
   };
 

@@ -94,13 +94,13 @@ App.ClipApp.Reclip = (function(App, Backbone, $){
     if($("#checkbox",el).attr("checked")){
       var params = {clip:{tag:tag,"public":"false"}};
     }else{
-      var params = {clip:{tag:tag}};
+      var params = {clip:{tag:tag,"public":"true"}};
     }
     return params;
   }
 
   Reclip.close = function(params){
-    if(!params||(params.clip.tag.length==0&&params.clip['public']==o_pub)){
+    if(!params||(params.clip.tag.length==0 && params.clip["public"]==o_pub)){
       App.popRegion.close();
       mid = null;
     }else{
