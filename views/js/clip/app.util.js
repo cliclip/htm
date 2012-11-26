@@ -274,7 +274,7 @@ App.util = (function(){
    * 加载服务器图片失败，则显示默认图片
    */
   util.img_error = function(img){
-    // img.title = img.src;
+    img.title = img.src;
     var src = img.src.match(/\/(\d+)\/clip_(\d+)_(\d+)(_(\d+))*\.(\w+)/);
     if(src&&/file:\/\//.test(img.src)){
       if(/_(270|128|64)/.test(src[0])){
