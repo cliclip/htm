@@ -289,7 +289,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       App.listRegion.show(clipListView);
       $("#list").masonry("reload");
       current_page(current);
-      if(collection.length<10){ // 去重之后不够十条继续请求
+      if(collection.length<5){ // 去重之后不够5条继续请求
 	nextpage();
       }
       if(!clips_exist){
