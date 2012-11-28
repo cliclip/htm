@@ -610,7 +610,7 @@ App.versions = (function($){
       faceEdit : {
 	title       : "Settings",
 	set_name    : "Set user name",
-	change_name : "Change user name",
+	change_name : "Change name",
 	ok          : "OK",
 	upload      : "Upload image",
 	name : {
