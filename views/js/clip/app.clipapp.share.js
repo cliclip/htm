@@ -8,8 +8,9 @@ App.ClipApp.Share = (function(App, Backbone, $){
     className : "share-view",
     template : "#share-view-template",
     events : {
-      "click .close_w"  : "cancel",
       "click #copy"     : "copy",
+      "click .masker"      : "masker",
+      "click .close_w"  : "cancel",
       "click #cancel"   : "cancel"
     },
     initialize: function(){
@@ -18,6 +19,11 @@ App.ClipApp.Share = (function(App, Backbone, $){
     copy: function(e){
       e.preventDefault(); //TODO
       var link = $.trim($("#shareLink_text").val());
+    },
+    masker: function(e){
+      if($(e.target).attr("class") == "masker"){
+	this.cancel(e);
+      }
     },
     cancel: function(){
       this.trigger("@closeView");
