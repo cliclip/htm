@@ -95,7 +95,21 @@ App.versions = (function($){
 	  is_null    : "请填写用户名",
 	  invalidate  : "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
 	  exist       : "此用户名已经存在"
-	}
+	},
+	_name : {
+	  is_null    : "请填写用户名",
+	  invalidate  : "用户名格式有误（只能是长度为5-20个字符的英文、数字和点的组合）",
+	  exist       : "此用户名已经存在"
+	},
+	_newpass : {
+	  is_null:"请输入新密码"
+	},
+	_conpass:{
+	  is_null:"请再次输入相同的密码"
+	},
+	_confirm:{
+	  password_diff: "两次输入的密码不一致"
+	},
       },
 
       languageSet:{
@@ -262,6 +276,7 @@ App.versions = (function($){
       },
 
       snsShare :{
+	title        : "分享到：",
 	title_tsina  : "分享到新浪微博",
 	title_renren : "分享到人人网",
 	title_qzone  : "分享到QQ空间",
@@ -271,9 +286,9 @@ App.versions = (function($){
 	summary      : "来自cliclip的分享"
       },
       privateShare :{
-	text      : "您可以复制此私有分享链接发送给您的好友啦",
-	copy      : "复制到剪贴板",
-	cancel    : "取消"
+	title      : "复制此私有分享链接发送给您的好友",
+	copy       : "复制到剪贴板",
+	cancel     : "取消"
       },
       showcomment : {
 	reply       : "回复",
@@ -412,6 +427,7 @@ App.versions = (function($){
 	resetpwd_success:"您的密码已重置",
 	setRule_success: "您已成功更新邮箱摘录反垃圾规则",
 	rename_success : "您的用户名已经修改",
+	setname_success : "您的用户名和密码已经创建",
 	reclip_null    : "该标签下暂时还没有数据",
 	reclip_tag_success : "恭喜您，转摘成功！",
 	reclip_tag_fail: "您已经拥有这些摘录了！",
@@ -617,6 +633,20 @@ App.versions = (function($){
 	  is_null   : "User name is missing",
 	  invalidate: "Invalid format of user name(user name may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
 	  exist     :"This user name already exists"
+	},
+	_name : {
+	  is_null   : "User name is missing",
+	  invalidate: "Invalid format of user name(user name may only contain alphanumerics, period, and be between 5 and 20 characters in length)",
+	  exist     :"This user name already exists"
+	},
+	_newpass : {
+	  is_null   :"Password is missing"
+	},
+	_conpass:{
+	  is_null   :"Enter the same password"
+	},
+	_confirm:{
+	  password_diff: "Inconsistent password"
 	}
       },
 
@@ -783,6 +813,7 @@ App.versions = (function($){
 	share       : "Share"
       },
       snsShare :{
+	title        : "Share to:",
 	title_tsina  : "Share to weibo",
 	title_renren : "Share to renren",
 	title_qzone  : "Share to qzone",
@@ -792,7 +823,7 @@ App.versions = (function($){
 	summary     : "Share from cliclip"
       },
       privateShare :{
-	text      : "You can copy this private share link to your friends now",
+	title      : "Copy this private share link to your friends",
 	copy      : "Copy to clipboard",
 	cancel    : "Cancel"
       },
@@ -933,6 +964,7 @@ App.versions = (function($){
 	resetpwd_success :"Your password has been reseted",
 	setRule_success: "Your rule for spam filter has been updated",
 	rename_success : "Your User name has been changed",
+	setname_success : "Your User name and password has been updated",
 	reclip_null    : "No clip under this tag",
 	reclip_tag_success : "Reclip successful",
 	go_resetpass  : "The findpass email has send to %s,please check in 30 minuts ",

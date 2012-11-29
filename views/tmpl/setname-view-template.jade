@@ -1,0 +1,21 @@
+script(type="text/template",id="setName-view-template")
+  div.masker_layer
+  div.masker
+    section.small_pop
+      span.close_w
+      h2.subject_share 新增登陆方式
+      ul.pop_body
+        h4 设置用户名
+        li.input_text
+          input(type="text",id="_name", name="name")
+        h4 设置密码
+        li.input_text
+          |<input type="text" id="_newpass" value="<%=_i18n('passEdit.newpass.prompt')%>"/>
+          input(type="password",id="_pass",name="newpass",style="display:none;")
+        li.input_text
+          |<input type="text" id="_conpass" value="<%=_i18n('passEdit.conpass.prompt')%>"/>
+          input(type="password",id="_confirm",name="confirm",style="display:none;")
+        br
+        li.btn_group.clearfix.
+          <input type="button" class="verify" value="<%=_i18n('comment.ok')%>" id="submit" />
+          <input type="button" class="cancel" value="<%=_i18n('comment.cancel')%>" id="cancel" />

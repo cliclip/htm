@@ -69,10 +69,12 @@ App.ClipApp.Share = (function(App, Backbone, $){
 	type: "POST",
 	success:function(model,res){
 	  model.onChange(function(){
+	    var protocol = window.location.protocol+"//";
 	    var host = window.location.host;
-	    shareModel.set("linkAddress", host+"/#link/"+res);
+	    shareModel.set("linkAddress", protocol+host+"/#link/"+res);
 	    var shareView = new ShareView({model : shareModel});
 	    App.popRegion.show(shareView);
+	    $("#shareLink_text").select();
 	  });
 	},
 	error:function(model,error){

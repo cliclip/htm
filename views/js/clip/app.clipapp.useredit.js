@@ -237,7 +237,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     className: "faceEdit",
     template: "#faceEdit-view-template",
     events: {
-      "click .edit_name": "setName",
+      "click #change_name": "changeName",
+      "click #set_name": "setName",
       "focus #name": "cleanError",
       "click #confirm_face": "submitFace"
     },
@@ -249,7 +250,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $(".edit_name").click(); // 触发设置用户名的动作
       $(".set_username").focus(); // 先让输入框聚焦
     },
-    setName: function(e){
+    changeName: function(e){
       e.preventDefault();
       var view = this;
       var is_randName = (view.model.get("name")).match("@") ? true : false ;
@@ -286,6 +287,9 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	  $('.edit_name').click();
 	}
       });
+    },
+    setName:function(e){
+      App.ClipApp.showSetName();
     },
     submitFace:function(event){
       submit_face = true;
