@@ -21,10 +21,10 @@ script(type="text/template",id="login-view-template")
                 | <%=_i18n('login.pass.pass')%>
             p.forgetpass|<%=_i18n('login.findpass')%></br>
             li
-              div.out_link
-                | <a class="twitter"  href="javascript:void(0)" title="<%=_i18n('login.twitter')%>"><img src="img/sign-in-with-twitter-l.png"></img></a>
-                | <a class="weibo"  href="javascript:void(0)" title="<%=_i18n('login.weibo')%>"><img src="img/16.png"></img></a>
-                | <a class="dropbox"  href="javascript:void(0)" title="<%=_i18n('login.dropbox')%>"><img src="img/dropbox.png"></img></a>
+              div.out_link.
+                <a class="twitter"  href="javascript:void(0)" title="<%=_i18n('login.twitter')%>"><img src="img/TwitterSmall<%=App.util.iconType()%>.png"></img></a>
+                <a class="weibo"  href="javascript:void(0)" title="<%=_i18n('login.weibo')%>"><img src="img/SinaSmall<%=App.util.iconType()%>.png"></img></a>
+                <a class="dropbox"  href="javascript:void(0)" title="<%=_i18n('login.dropbox')%>"><img src="img/DropboxSmall<%=App.util.iconType()%>.png"></img></a>
             span.next_login
               label
                 input(type="checkbox",id="remember")

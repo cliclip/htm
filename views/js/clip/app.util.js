@@ -63,6 +63,11 @@ App.util = (function(){
     }else return imageid;
   };
 
+  util.iconType = function(){
+    //书签登陆涉及到iframe由于twitter和dropbox不允许此种类型的登陆则将图标显示为灰色，且不响应点击事件
+    return $("#pop").parent().attr("id")=="main" ? "Grey" : "";
+  };
+
   // 对comment的内容进行html过滤，防止脚本注入
   util.cleanInput = function(comment){
     comment = App.Convert.cleanHtml(comment);
@@ -312,15 +317,15 @@ App.util = (function(){
       if(provider == "weibo"){
 	return name.split("@")[0]+" <img width ='17px' src =' http://ww3.sinaimg.cn/large/69ae757egw1divzpcj539j.jpg'>";
       }else if(provider == "twitter"){
-	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+	return name.split("@")[0]+"<img width ='17px' src ='img/TwitterSmall.png' >";
       }else if(provider == "dropbox"){
-	return name.split("@")[0]+"<img width ='17px' src ='img/dropbox.png' >";
+	return name.split("@")[0]+"<img width ='17px' src ='img/DropboxSmall.png' >";
       }else if(provider == "gmail.com"){
-	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+	return name.split("@")[0]+"<img width ='17px' src ='img/TwitterSmall.png' >";
       }else if(provider == "126.com"){
-	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+	return name.split("@")[0]+"<img width ='17px' src ='img/TwitterSmall.png' >";
       }else if(provider == "163.com"){
-	return name.split("@")[0]+"<img width ='17px' src ='img/sign-in-with-twitter-l.png' >";
+	return name.split("@")[0]+"<img width ='17px' src ='img/TwitterSmall.png' >";
       }
     }else{
       return name;
@@ -371,6 +376,7 @@ App.util = (function(){
   util.setImgHeight = function(image){
     return image.width>270 ? Math.round(image.height*270/image.width) : image.height;
   };
+
 /*
   util.cacheSync = function(name,filed,data){
     if(!util.isLocal()) return;
