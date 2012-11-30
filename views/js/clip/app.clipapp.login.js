@@ -107,6 +107,8 @@ App.ClipApp.Login = (function(App, Backbone, $){
       this.trigger("@cancel");
     },
     openWeibo : function(e){
+      // 若图标为灰色则不响应事件 twitter dropbox 同理
+      if(App.util.iconType())return;
       var remember = false;
       if($("#remember").attr("checked")){
 	remember = true;
@@ -115,10 +117,20 @@ App.ClipApp.Login = (function(App, Backbone, $){
       window.location.href="/oauth/req/weibo";
     },
     openTwitter : function(e){
+      if(App.util.iconType())return;
+      var remember = false;
+      if($("#remember").attr("checked")){
+	remember = true;
+      }
       this.trigger("@cancel");
       window.location.href="/oauth/req/twitter";
     },
     openDropbox : function(e){
+      if(App.util.iconType())return;
+      var remember = false;
+      if($("#remember").attr("checked")){
+	remember = true;
+      }
       this.trigger("@cancel");
       window.location.href="/oauth/req/dropbox";
     }

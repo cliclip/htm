@@ -6,7 +6,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ieRange = false, isIE = App.util.isIE();
 
   App.Model.ClipModel = App.Model.extend({
-    //localStorage: new Store("clipdetail"),
     url: function(){
       return App.ClipApp.encodeURI(P + "/" + App.util.getMyUid() +"/clip");
     },
@@ -36,7 +35,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
       "click #cancel": "cancelcliper",
-      "click #save": "savecliper", // 对应clipper的ok
+      "click #save": "savecliper", // 对应clipper的ok,页面新建clip的"确定"键
       "click #empty":"emptycliper"
     },
     initialize:function(){
@@ -95,20 +94,24 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var target = $(e.currentTarget);
       var view = this;
       target.attr("disabled",true);
-      //con = App.util.cleanConImgUrl(con);
       clip.content = App.Editor.getContent("editor");
-      this.model.save(clip, {
+      var cmodel = new App.Model.ClipModel();
+      //若用this.model点击确定按钮会导致新建clip的窗口内容为空导致用户错觉
+      cmodel.save(clip,{
 	success:function(model,res){ // 返回值res为clipid:clipid
-	  model.id = res.clipid; // 将clip本身的id设置给model
 	  view.trigger("@closeRegion");
+	  model.id = res.clipid; // 将clip本身的id设置给model
 	  if(clipper) App.vent.trigger("app.clipapp.clipper:save");
 	  else App.vent.trigger("app.clipapp.clipadd:success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
+
 	  target.attr("disabled",false);
 	  view.trigger("@error", error);
+
 	}
       });
+
     },
     emptycliper:function(){
       this.trigger("@closeRegion");
@@ -147,7 +150,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   };
 
   ClipAdd.show = function(isClipper,clipper_content){ // 是否为书签摘录
-    console.info(isClipper,clipper_content);
     clipper = isClipper;
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
