@@ -3,12 +3,12 @@ script(type="text/template",id="setName-view-template")
   div.masker
     section.small_pop
       span.close_w
-      h2.subject_share 新增登陆方式
+      h2.subject_share <%=_i18n('setName.title')%>
       ul.pop_body
-        h4 设置用户名
+        h4 <%=_i18n('setName.set_name')%>
         li.input_text
           input(type="text",id="_name", name="name")
-        h4 设置密码
+        h4 <%=_i18n('setName.set_pass')%>
         li.input_text
           |<input type="text" id="_newpass" value="<%=_i18n('passEdit.newpass.prompt')%>"/>
           input(type="password",id="_pass",name="newpass",style="display:none;")
