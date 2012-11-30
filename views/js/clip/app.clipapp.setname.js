@@ -45,7 +45,6 @@ App.ClipApp.SetName = (function(App, Backbone, $){
       this.bind("@closeView", close);
     },
     update:function(e){
-      console.log();
       var view = this;
       var uid = this.model.id;
       var data = view.getInput();
@@ -57,12 +56,13 @@ App.ClipApp.SetName = (function(App, Backbone, $){
 	    window.cache["/" + uid +"/info.json.js" ].name = res.name;
 	  }
 	  App.ClipApp.UserEdit.faceRegion.currentView.model.set("name", res.name);
+	  document.cookie = "token="+res.token;
 	  App.ClipApp.showSuccess("setname_success");
 	  App.vent.trigger("app.clipapp.face:changed");
 	  view.cancel();
 	},
 	error:function(model,res){
-	  view.showError('faceEdit',{_name:res.name});
+	  view.showError('faceEdit',res);
 	}
       });
     },
