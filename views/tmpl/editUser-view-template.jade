@@ -152,7 +152,8 @@ script(type="text/template",id="twitterEdit-view-template")
 
 
 script(type="text/template",id="dropboxEdit-view-template")
-  .mail_verify.fir
+  //.mail_verify.fir
+  .mail_verify.sec
     ul.mail_list
       h3.
         <button class="add_accountbind" type="button" id="info_add" title="<%=_i18n('dropboxEdit.add')%>">
@@ -165,6 +166,7 @@ script(type="text/template",id="dropboxEdit-view-template")
       |<span class="oauth_del" id="<%=info[i].uid%>" title="<%=_i18n('dropboxEdit.del')%>"></span>
       |<span><%=info[i].email%></span>
       |</li><% }} }%>
+//
   .mail_verify.sec
     ul.mail_list
       h3.danger.sec <%=_i18n('passEdit.danger_operate')%>
