@@ -111,7 +111,11 @@ App.versions = (function($){
 	  password_diff: "两次输入的密码不一致"
 	},
       },
-
+      setName:{
+	title    : "设置用户名和密码",
+	set_name : "设置用户名",
+	set_pass : "设置密码"
+      },
       languageSet:{
 	lang : "界面语言"
       },
@@ -648,6 +652,12 @@ App.versions = (function($){
 	_confirm:{
 	  password_diff: "Inconsistent password"
 	}
+      },
+
+      setName:{
+	title    : "Set name and password",
+	set_name : "Set user name",
+	set_pass : "Set password"
       },
 
       languageSet:{
