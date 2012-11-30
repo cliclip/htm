@@ -29,7 +29,7 @@ App.ClipApp.Notify=(function(App,Backbone,$){
   };
 
   var fetch = function(uid){
-    var uid = App.ClipApp.getMyUid();
+    // var uid = App.ClipApp.getMyUid();
     var notify = new NotifyModel({uid:uid, count:0});
     notify.fetch({});
     notify.onChange(function(notifyModel){

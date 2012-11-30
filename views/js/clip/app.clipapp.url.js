@@ -6,8 +6,9 @@ App.ClipApp.Url = (function(){
   var PORT = location.port ? ":" + location.port : "";
   var HOST = (location.protocol === "http:")
       ? location.protocol+"//"+location.hostname+PORT
-      : "http://cliclip.com:8001";
-      // : "http://192.168.1.3:8000";//"http://cliclip.com";
+      : "http://cliclip.com";
+      // : "http://cliclip.com:8001";
+      // : "http://192.168.1.3:8000";
   var VER = "/_3_";
   var PAGE = 10;
   var BASE_DIR = "..";

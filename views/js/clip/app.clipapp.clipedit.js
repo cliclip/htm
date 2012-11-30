@@ -135,7 +135,9 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // var html = editModel.toJSON().content.replace(/\.\.\//g,P+ "/");
       var html = App.util.expandConImgUrl(clip.content,clip.user,clip.id);
       html = html.replace(/<img\s/g,"<img onerror=\"App.util.img_error(this)\"");
+      // 为html中的img添加display:block属性
       $("#fake").append(html);
+      $("#fake img").css({display: 'block'});
       setTimeout(function(){
 	html = $("#fake").html();
 	$("#fake").empty();

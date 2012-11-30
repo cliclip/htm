@@ -1,7 +1,7 @@
 (function(win, doc, nav, opt){
   var P  = "/_3_";
-  // var url_base = "http://cliclip.com";
-  var url_base = "http://cliclip.com:8001";
+  var url_base = "http://cliclip.com";
+  // var url_base = "http://cliclip.com:8001";
   // var url_base = "http://192.168.1.3:8000";
   // var url_base = "http://192.168.1.3:3000";
   // var url_base = "http://192.168.1.3:5000";
@@ -27,7 +27,7 @@
     var readable = new Readability({pageURL: url});
     readable.setSkipLevel(3);
     var objs = [];
-    console.info(doc.childNodes,objs);
+    // console.info(doc.childNodes,objs);
     // doc.childNodes 的最后一个元素不一定是html节点，可能导致代码出错
     // 将doc.childNodes 的html节点过滤出来
     for(var i = 0;i<doc.childNodes.length;i++){
@@ -36,9 +36,6 @@
     }
     saxParser(objs[objs.length-1], readable);
 
-/*  var objs = doc.childNodes;
-    saxParser(objs[objs.length-1], readable);
-*/
     var article = readable.getArticle();
     html += article.html;
     if(article.nextPage && article.nextPage != url){
@@ -65,21 +62,21 @@
      * • Turn all double br's into p's - was handled by prepDocument in the original view.
      *   Maybe in the future abstract out prepDocument to work for both the original document and AJAX-added pages.
      **/
-     var responseHtml = data.match(/<body[\s\S]*<\/body>/gi, function(a){
-       return a;
-     });
-     // 获取body中的内容，再去掉body标签
-     responseHtml = responseHtml[0].replace(/<body>/, '');
-     responseHtml = responseHtml.replace(/<\/body>/, '');
-     //	过滤掉不适合放在innerHtml中的内容
-     responseHtml = responseHtml.replace(/\n/g,'\uffff').replace(/<script.*?>.*?<\/script>/gi, '');
-     responseHtml = responseHtml.replace(/\n/g,'\uffff').replace(/<script.*?>.*?<\/script>/gi, '');
-     responseHtml = responseHtml.replace(/\uffff/g,'\n').replace(/<(\/?)noscript/gi, '<$1div>');
-     responseHtml = responseHtml.replace(/(<br[^>]*>[ \n\r\t]*){2,}/gi, '</p><p>');
-     responseHtml = responseHtml.replace(/<(\/?)font[^>]*>/gi, '<$1span>');
-     var objE = document.createElement('div');
-     objE.innerHTML = responseHtml;
-     return objE;
+    var responseHtml = data.match(/<body[\s\S]*<\/body>/gi, function(a){
+      return a;
+    });
+    // 获取body中的内容，再去掉body标签
+    responseHtml = responseHtml[0].replace(/<body>/, '');
+    responseHtml = responseHtml.replace(/<\/body>/, '');
+    //	过滤掉不适合放在innerHtml中的内容
+    responseHtml = responseHtml.replace(/\n/g,'\uffff').replace(/<script.*?>.*?<\/script>/gi, '');
+    responseHtml = responseHtml.replace(/\n/g,'\uffff').replace(/<script.*?>.*?<\/script>/gi, '');
+    responseHtml = responseHtml.replace(/\uffff/g,'\n').replace(/<(\/?)noscript/gi, '<$1div>');
+    responseHtml = responseHtml.replace(/(<br[^>]*>[ \n\r\t]*){2,}/gi, '</p><p>');
+    responseHtml = responseHtml.replace(/<(\/?)font[^>]*>/gi, '<$1span>');
+    var objE = document.createElement('div');
+    objE.innerHTML = responseHtml;
+    return objE;
   }
 
   function getNextPage(pages, url, html, count, callback){
@@ -91,11 +88,14 @@
       url : url,
       timeout: 10000, // 过期时间设置为10秒
       success: function(data){
+	// var charset = getCharset(data);
+	// var iconv = new Iconv('UTF-8', charset); // Iconv要如何引进
+	// data = iconv.convert(data);
 	var nextDom = parseDom(data);
 	saxParser(nextDom, readable);
 	article = readable.getArticle();
 	html += article.html;
-	if(article && article.nextPage && article.nextPage != url){
+	if(article.nextPage && article.nextPage != url){
 	  pages[url] = 1;
 	  getNextPage(pages, article.nextPage, html, count, callback);
 	}else{

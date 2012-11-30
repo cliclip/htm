@@ -61,7 +61,7 @@ App.Editor = (function(App, Backbone, $){
     var objEditor = document.getElementById(editorId);
     var img = "";
     if(data.url)
-      img = "<img src="+data.url+ " style='max-width:630px;' />";
+      img = "<img src="+data.url+ " style='max-width:630px;display:block' />";
     if(isIE){ // TODO
       if(data.ieRange){
 	data.ieRange.pasteHTML(img);

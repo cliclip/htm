@@ -31,6 +31,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "click .masker" : "Masker", // 点击detail下的层，便隐藏
       "click .close_w": "Close",
       "click .user_head": "Close",
+      "click .username": "Close",
       "dblclick .content": "editDetail"
     },
     initialize: function(){
