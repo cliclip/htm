@@ -23,7 +23,7 @@ App.ClipApp.Notify=(function(App,Backbone,$){
   });
   Notify.show = function(uid){
     if(uid){
-      fetch(uid);
+      //fetch(uid); next release
       // Loop = setInterval(fetch,5000);
     }
   };
