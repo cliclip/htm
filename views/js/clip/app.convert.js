@@ -341,19 +341,19 @@ App.Convert = (function(App, Backbone, $){
     'euro' : 8364
   };
 
-function decode(m, n) {
-  var code;
-  if (n.substr(0, 1) == '#') {
-    if (n.substr(1, 1) == 'x') {
-      code = parseInt(n.substr(2), 16);
+  function decode(m, n) {
+    var code;
+    if (n.substr(0, 1) == '#') {
+      if (n.substr(1, 1) == 'x') {
+	code = parseInt(n.substr(2), 16);
+      } else {
+	code = parseInt(n.substr(1), 10);
+      }
     } else {
-      code = parseInt(n.substr(1), 10);
+      code = DecodeMap[n];
     }
-  } else {
-    code = DecodeMap[n];
+    return (code === undefined || code === NaN) ? '&' + n + ';' : String.fromCharCode(code);
   }
-  return (code === undefined || code === NaN) ? '&' + n + ';' : String.fromCharCode(code);
-}
-return Convert;
+  return Convert;
 
 })(App, Backbone, jQuery);

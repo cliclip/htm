@@ -147,7 +147,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   };
 
   ClipAdd.show = function(isClipper,clipper_content){ // 是否为书签摘录
-    console.info(isClipper,clipper_content);
     clipper = isClipper;
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
