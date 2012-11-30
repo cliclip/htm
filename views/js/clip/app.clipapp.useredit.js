@@ -257,7 +257,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       if(!$(e.currentTarget).hasClass("set_ok")){$("#set-name").empty();}
       $(".edit_name").addClass("set_ok").val(_i18n("faceEdit.ok"));
       $(".set_ok").unbind("click");
-      $("#name").show();
+      $("#name").show().focus();
       $(".set_ok").click(function(){
 	var nameModel = new NameModel();
 	var data = view.getInput();
