@@ -253,7 +253,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     changeName: function(e){
       e.preventDefault();
       var view = this;
-      var is_randName = (view.model.get("name")).match("@") ? true : false ;
       if(!$(e.currentTarget).hasClass("set_ok")){$("#set-name").empty();}
       $(".edit_name").addClass("set_ok").val(_i18n("faceEdit.ok"));
       $(".set_ok").unbind("click");
@@ -271,9 +270,8 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 	      window.cache["/" + uid +"/info.json.js" ].name = res.name;
 	    }
 	    view.model.set("name", res.name);
-	    if(is_randName) App.ClipApp.showConfirm("remindModifyPass");
-	    else  App.ClipApp.showSuccess("rename_success");
-	    // App.vent.trigger("app.clipapp.face:changed");
+	    App.ClipApp.showSuccess("rename_success");
+	    App.vent.trigger("app.clipapp.face:changed");
 	  },
 	  error:function(model,res){
 	    view.showError('faceEdit',res);
