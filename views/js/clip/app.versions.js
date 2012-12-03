@@ -337,7 +337,7 @@ App.versions = (function($){
 	mfollowing  : "我追的",
 	follower    : "追ta的",
 	following   : "ta追的",
-	p           : "还没有人追你哟",
+	p           : "还没有人追您哟",
 	all         : "所有"
       },
 
@@ -346,7 +346,7 @@ App.versions = (function($){
 	mfollowing  : "我追的",
 	follower    : "追ta的",
 	following   : "ta追的",
-	p           : "你还没有追任何人哟",
+	p           : "您还没有追任何人哟",
 	all         : "所有"
       },
 
@@ -361,7 +361,7 @@ App.versions = (function($){
       findpass : {
 	address: {
 	  is_null   : "请输入您绑定的邮件地址",
-	  not_found : "我们找不到你的账户",
+	  not_found : "我们找不到您的账户",
 	  invalidate: "邮件地址格式有误"
 	},
 	title       : "找回密码",
@@ -387,7 +387,7 @@ App.versions = (function($){
       },
 
       gotosetup : {
-	register_success : "您的注册已完成。下一步，您可添加常用的邮件地址。",
+	register_success : "<p>注册已完成。您可继续添加关联的邮件地址。</p><p>关联之后，可从该地址发邮件到1@cliclip.com进行摘录。</p><p>也可用该邮件地址登录和找回密码。</p>",
 	ok          : "确 定"
       },
 
@@ -409,7 +409,7 @@ App.versions = (function($){
 	title       : "意见反馈",
 	ok          : "确定",
 	cancel      : "取消",
-	defaultText : "描述你的建议：(140字以内)",
+	defaultText : "描述您的建议：(140字以内)",
 	feedback_text   : {
 	  is_null   : "意见反馈为空",
 	  word_limit :"请把文字长度限制在140字以内"
@@ -460,8 +460,8 @@ App.versions = (function($){
 	addemail       : "您已成功添加 %s 邮件地址。请登录您的邮箱，查收邮件，并点击其中的链接进行激活。",
 	cliplist_null:{
 	  all:"抱歉，没有找到相关的信息......",
-	  my:"抱歉，没有找到相关的信息......",
-	  interest:"抱歉，没有找到相关的信息......",
+	  my:"<p>您的摘录将会出现在这里。</p><p>怎样新建摘录？</p><p>您可以用书签、邮件、微博、twitter 来做摘录。</p><p>也可以“转摘”别人的摘录。</p><p><a href='http://cliclip.com/#help/0'>查看帮助</a></p>",
+	  interest:"<p>您关注好友的最新摘录将会出现在这里。</p><p>怎样关注好友？</p><p>点击他的头像上的“追”他。</p><p><a href='http://cliclip.com/#help/9'>查看帮助</a></p>",
 	  recommend:"抱歉，没有找到相关的信息......"
 	},
 	error_message :"操作失败，请重试",
