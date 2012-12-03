@@ -18,10 +18,10 @@ script(type='text/template',id='me-view-template')
       ul.user_action
         li.set
           a(href="javascript:void(0)",id="mysetup") <%=_i18n('me.set')%>
-        li.logout
-          a(href="javascript:void(0)",id="logout") <%=_i18n('me.logout')%>
         li.help
           a(href="javascript:void(0)",id="help") <%=_i18n('help.title_small')%>
+        li.logout
+          a(href="javascript:void(0)",id="logout") <%=_i18n('me.logout')%>
     div.my_head.
       <img class="face-image" id="smail_face" src="<%=App.util.face_url(face,50)%>"/>
   <% } else { %>
