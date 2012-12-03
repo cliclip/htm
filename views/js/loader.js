@@ -1,7 +1,7 @@
 (function(win, doc, nav, opt){
   var P  = "/_3_";
-  // var url_base = "http://cliclip.com";
-  var url_base = "http://cliclip.com:8001";
+  var url_base = "http://cliclip.com";
+  // var url_base = "http://cliclip.com:8001";
   // var url_base = "http://192.168.1.3:8000";
   // var url_base = "http://192.168.1.3:3000";
   // var url_base = "http://192.168.1.3:5000";
@@ -21,26 +21,20 @@
   // return doc.getElementsByTagName('body').item(0).getAttribute('innerHTML');
   // get page content html
   function getPage(callback){
-    // console.log('getPage :: currentPage is %j', window.location.href);
     var html = '', url = window.location.href;
     var pages = {};
     var readable = new Readability({pageURL: url});
     readable.setSkipLevel(3);
-    var objs = [];
-    // console.info(doc.childNodes,objs);
-    // doc.childNodes 的最后一个元素不一定是html节点，可能导致代码出错
-    // 将doc.childNodes 的html节点过滤出来
-    for(var i = 0;i<doc.childNodes.length;i++){
-      var node = doc.childNodes[i];
-      if(node.tagName) objs.push(node);
-    }
-    saxParser(objs[objs.length-1], readable);
 
+    // 如果赋值给innerHTML则html不正确，赋值给textContent则nextPage不正确
+    var currentDom = doc.createElement('div');
+    currentDom.innerHTML = doc.body.innerHTML;
+    saxParser(currentDom, readable);
     var article = readable.getArticle();
     html += article.html;
     if(article.nextPage && article.nextPage != url){
       pages[url] = 1;
-      // 获取url时可能超出了系统设定的最大页数，也可能超过了系统设置的过期时间
+      // 获取url时可能超出了系统设定的最大页数，或者超过了系统设置的过期时间
       // 有url返回，则说明url页面获取失败，将url和已经获取到的内容返回
       getNextPage(pages, article.nextPage, html, 0, function(url, res){
 	if(url){
