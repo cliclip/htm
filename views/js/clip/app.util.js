@@ -315,17 +315,17 @@ App.util = (function(){
     if(name && name.match("@")){
       var provider = name.split("@")[1];
       if(provider == "weibo"){
-	return name.split("@")[0]+" <img width ='20px' src ='img/SinaSmall.png'>";
+	return name.split("@")[0]+"<img width ='20px' src ='img/SinaSmall.png'>";
       }else if(provider == "twitter"){
-	return name.split("@")[0]+"<img width ='20px' src ='img/TwitterSmall.png' >";
+	return name.split("@")[0]+"<img width ='20px' src ='img/TwitterSmall.png'>";
       }else if(provider == "dropbox"){
-	return name.split("@")[0]+"<img width ='20px' src ='img/DropboxSmall.png' >";
+	return name.split("@")[0]+"<img width ='20px' src ='img/DropboxSmall.png'>";
       }else if(provider == "gmail.com"){
-	return name.split("@")[0]+"<img width ='20px' src ='img/gmail.png' >";
+	return name.split("@")[0]+"<img width ='20px' src ='img/gmail.png'>";
       }else if(provider == "126.com"){
-	return name.split("@")[0]+"<img width ='20px' src ='img/163mail.jpg' >";
+	return name.split("@")[0]+"<img width ='20px' src ='img/163mail.jpg'>";
       }else if(provider == "163.com"){
-	return name.split("@")[0]+"<img width ='20px' src ='img/163mail.jpg' >";
+	return name.split("@")[0]+"<img width ='20px' src ='img/163mail.jpg'>";
       }
     }else{
       return name;
