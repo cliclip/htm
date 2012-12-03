@@ -70,6 +70,9 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.help = function(item){
+    ClipApp.Face.show();
+    ClipApp.Bubb.showSiteTags();
+    ClipApp.ClipList.showSiteClips();
     ClipApp.Help.show(item);
     App.Routing.ClipRouting.router.trigger("app.clipapp.routing:help",item);
   };
