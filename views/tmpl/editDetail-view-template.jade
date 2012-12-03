@@ -31,7 +31,7 @@ script(type="text/template",id="editDetail-view-template")
         ul.forward_log.
           <% for(var i =0; i<users.length; i++){%>
           <li class="user_head">
-            <a href="#user/<%= users[i].id%>">
+            <a href="#<%= users[i].id%>">
             <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
             </a>
             <% if(i < users.length-1 ){ %>
