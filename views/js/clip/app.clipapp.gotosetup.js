@@ -14,6 +14,7 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
     go : function(e){
       e.preventDefault();
       this.trigger("@setup");
+      App.ClipApp.showEmailAdd(this.model.id);
      }
    });
 

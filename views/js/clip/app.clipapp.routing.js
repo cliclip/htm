@@ -19,28 +19,29 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "password/find":"findpasswd",
       "oauth/callback/:key":"oauth",
       "error/:message":"error",
-      // user
-      "user/:uid": "userShow",
-      "user/:uid/tag/:tag":"userShow",
-      ":uid/following":"userFollowing",
-      ":uid/follower":"userFollower",
-
-      "user/:uid/query/:word":"userQuery",
-      "user/:uid/query":"userQuery",
-      "my/query/:word":"myQuery",
-      "my/query":"myQuery",
-
       // my
       "my":"myShow",
       "my/tag/:tag":"myShow",
       "my/following":"userFollowing",
       "my/follower":"userFollower",
 
+      "my/query/:word":"myQuery",
+      "my/query":"myQuery",
+
       //"my/recommend":"myRecommend",
       //"my/recommend/tag/:tag":"myRecommend",
       "my/interest":"myInterest",
       "my/interest/tag/:tag":"myInterest",
       // "my/setup":"mySetup",
+
+      // user
+      ":uid": "userShow",
+      ":uid/tag/:tag":"userShow",
+      ":uid/following":"userFollowing",
+      ":uid/follower":"userFollower",
+
+      ":uid/query/:word":"userQuery",
+      ":uid/query":"userQuery",
 
       "clip/:uid/:clipid":"clipDetail"
 
@@ -59,7 +60,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
 	if(App.ClipApp.isSelf(uid)){
 	  App.Routing.showRoute("my/query",word);
 	}else{
-	  App.Routing.showRoute("user", uid, "query",word);
+	  App.Routing.showRoute(uid, "query",word);
 	}
       }else{
 	App.Routing.showRoute("query",word);
@@ -90,9 +91,9 @@ App.Routing.ClipRouting = (function(App, Backbone){
       }else{
 	if(tag){
 	  if($.browser.safari){tag = encodeURI(tag);}
-	  App.Routing.showRoute("user", uid, "tag", tag);
+	  App.Routing.showRoute(uid, "tag", tag);
 	}else{
-	  App.Routing.showRoute("user", uid);
+	  App.Routing.showRoute(uid);
 	}
       }
     });

@@ -1,11 +1,12 @@
 script(type='text/template',id='gotosetup-view-template')
   div.masker_layer
-  section.login_window
-    header
-      .logo
-      div.login_right
-    footer
-      div.text_con
-        <%= _i18n('gotosetup.register_success')%>
-        div.btn_frame.
-          <input class="login_btn" type="submit" value="<%=_i18n('gotosetup.ok')%>"/>
+  div.masker
+    section.login_window
+      header
+        .logo
+        div.login_right
+      footer
+        div.text_con
+          <%= _i18n('gotosetup.register_success')%>
+          div.btn_frame.
+            <input class="login_btn" type="submit" value="<%=_i18n('gotosetup.ok')%>"/>

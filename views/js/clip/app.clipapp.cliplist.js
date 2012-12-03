@@ -69,11 +69,12 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	}else{
           this.$el.find("p").addClass("no_img_text");
 	  this.$el.find("span.biezhen").remove();
-	  //STRANGE若不加延时则所有clip无图片
-	  // 在翻页时最后一个clip不产生动态布局效果
+	  /*STRANGE若不加延时则所有clip无图片
+	  在翻页时最后一个clip不产生动态布局效果
 	  setTimeout(function(){
-	   // $container.masonry("reload");
+	    $container.masonry("reload");
 	  },0);
+	  */
 	}
       });
     },
@@ -99,7 +100,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       });
     },
 
-    show_detail: function(){
+    show_detail : function(){
       //部分ff ie 选中clip preview 中内容会触发鼠标单击事件打开详情页
       //ie-7 8 无getSelection()只有document.selection  ie9 两个对象都有
       if(document.selection&&document.selection.createRange().htmlText){
@@ -119,13 +120,13 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       // console.info(this.model,this.model.clipid);
       App.ClipApp.showDetail(clipid,this.model.id,recommend);
     },
-    mouseEnter: function(e){
+    mouseEnter : function(e){
       $(e.currentTarget).children(".master").children("#opt").show();
     },
-    mouseLeave: function(e){
+    mouseLeave : function(e){
       $(e.currentTarget).children(".master").children("#opt").hide();
     },
-    operate: function(e){
+    operate : function(e){
       e.preventDefault();
       var opt = $(e.currentTarget).attr("class").split(' ')[0];
       if((typeof this.model.get("user"))=="object"){
@@ -293,15 +294,18 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	nextpage();
       }
       if(!clips_exist){
+	$("#list").append("<div class='message'></div>");
 	if(window.location.hash=="#my"){
-	  $("#list").append(_i18n('message.cliplist_null.my'));
+	  $(".message").append(_i18n('message.cliplist_null.my'));
 	}else if(window.location.hash=="#my/recommend"){
-	  $("#list").append(_i18n('message.cliplist_null.recommend'));
+	  $(".message").append(_i18n('message.cliplist_null.recommend'));
 	}else if(window.location.hash=="#my/interest"){
-	  $("#list").append(_i18n('message.cliplist_null.interest'));
+	  $(".message").append(_i18n('message.cliplist_null.interest'));
 	}else{
-	  $("#list").append(_i18n('message.cliplist_null.all'));
+	  $(".message").append(_i18n('message.cliplist_null.all'));
 	}
+      }else {
+	$(".message").remove();
       }
     });
   };
@@ -389,6 +393,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       clipListView.collection.add(model,{at:0});
       start++;
       collection_length++;
+      $("#list .message").remove();
       $("#list").masonry("reload");
     }else{ // 要进行myshow
       Backbone.history.navigate("my", true);

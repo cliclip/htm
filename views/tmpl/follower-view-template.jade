@@ -12,13 +12,13 @@ script(type="text/template",id="follower-view-template")
       li.user
         div.tag_line.tag_box
           span.size48.blue_48
-            | <%if(tag== "*"){%> <a href="#user/<%=App.ClipApp.getFaceUid()%>"><%=_i18n('follower.all')%><%}else{%><a href="#user/<%=App.ClipApp.getFaceUid()%>/tag/<%=tag%>"><%=tag%><%}%></a>	
+            | <%if(tag== "*"){%> <a href="#<%=App.ClipApp.getFaceUid()%>"><%=_i18n('follower.all')%><%}else{%><a href="#<%=App.ClipApp.getFaceUid()%>/tag/<%=tag%>"><%=tag%><%}%></a>	
         div.tags
           div.box
             div.items
               | <% for(var i=0; i<user.length; i++){%>
               | <span class="heads" title="<%=App.util.showPrefixName(user[i].name)%>">
-              | <a href="#user/<%=user[i].id%>">
+              | <a href="#<%=user[i].id%>">
               | <img src="<%=App.util.face_url(user[i].face,50)%>" />
               | </a></span><%}%>
               //i.follow

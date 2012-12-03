@@ -11,15 +11,15 @@ script(type="text/template",id="following-view-template")
     ul.user_list
       li.user
         div.head
-          | <a href="#user/<%=id%>">
+          | <a href="#<%=id%>">
           | <img src="<%=App.util.face_url(face,50)%>"/>
           | </a>
           p
-            | <a href="#user/<%=id%>"><%=App.util.showPrefixName(name)%></a>
+            | <a href="#<%=id%>"><%=App.util.showPrefixName(name)%></a>
         div.tags.tag_box
           div.box
             div.items
               <%for(var i=0;i<tag.length;i++){%>
               span.size48.blue_48
-                | <%if(tag[i]== "*"){%><a href="#user/<%=id%>"><%=_i18n('following.all')%><%}else{%><a href="#user/<%=id%>/tag/<%=tag[i]%>"><%=tag[i]%><%}%></a>
+                | <%if(tag[i]== "*"){%><a href="#<%=id%>"><%=_i18n('following.all')%><%}else{%><a href="#<%=id%>/tag/<%=tag[i]%>"><%=tag[i]%><%}%></a>
               <%}%>

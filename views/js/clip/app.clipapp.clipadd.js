@@ -179,7 +179,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
   ClipAdd.close = function(clip){
     App.vent.unbind("app.clipapp:upload");
-    // 打开新建clip界面
+    // 打开新建clip界面后
     if(!clip || !clip.content || clip.content=="<br>"){
       App.viewRegion.close();
     }else{
