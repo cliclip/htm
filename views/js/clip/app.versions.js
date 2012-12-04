@@ -929,7 +929,7 @@ App.versions = (function($){
       },
 
       gotosetup : {
-	register_success : "Congratulations! The registration is completed. Your next step is to add your email address",
+	register_success : "<p>The registration is completed. You could add an email address as well</p><p>This email could be used as your login name or reset your password, if needed.</p><p> And, you could drop an mail to 1@cliclip.com from this address, then a clip will be created, dead simple.</p>",
 	ok          : "OK"
       },
 
@@ -1001,8 +1001,8 @@ App.versions = (function($){
 	addemail       : "You have added %s email. The activation link has been sent to this email account. Please check your email and click the activation link.",
 	cliplist_null:{
 	  all:"Sorry, no results found",
-	  my:"Sorry, no results found",
-	  interest:"Sorry, no results found",
+	  my:"<p>Your clips will list here</p><p>How to create a clip?</p><p>You can create via bookmark,email,weibo,twitter.</p><p>Or you can simply reclip any others' clip you find.</p><p><a href='http://cliclip.com/#help/0'>help</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://cliclip.com'>look around</a></p>",
+	  interest:"<p>Your friends' clips will list here.</p><p>How to follow someone?</p><p>Just click the 'Follow' button on his avatar.</p><p><a href='http://cliclip.com/#help/9'>help</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://cliclip.com'>look around</a></p>",
 	  recommend:"Sorry, no results found"
 	},
 	"error_message" :"Operation fail,please try again!",
