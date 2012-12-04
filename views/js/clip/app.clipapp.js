@@ -119,7 +119,6 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.userQuery = function(uid, word, tag){
-
     ClipApp.Face.show(uid);
     ClipApp.Bubb.showUserTags(uid, tag);
     ClipApp.ClipList.showUserQuery(uid, word, tag);

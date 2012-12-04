@@ -294,13 +294,14 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
 	nextpage();
       }
       if(!clips_exist){
+	var reg = /http:\/\/cliclip\.com/g;
 	$("#list").append("<div class='message'></div>");
 	if(window.location.hash=="#my"){
-	  $(".message").append(_i18n('message.cliplist_null.my'));
+	  $(".message").append(_i18n('message.cliplist_null.my').replace(reg,App.ClipApp.Url.hostname));
 	}else if(window.location.hash=="#my/recommend"){
 	  $(".message").append(_i18n('message.cliplist_null.recommend'));
 	}else if(window.location.hash=="#my/interest"){
-	  $(".message").append(_i18n('message.cliplist_null.interest'));
+	  $(".message").append(_i18n('message.cliplist_null.interest').replace(reg,App.ClipApp.Url.hostname));
 	}else{
 	  $(".message").append(_i18n('message.cliplist_null.all'));
 	}
