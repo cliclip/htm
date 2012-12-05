@@ -109,7 +109,7 @@ App.versions = (function($){
 	},
 	_confirm:{
 	  password_diff: "两次输入的密码不一致"
-	},
+	}
       },
       setName:{
 	title    : "设置用户名和密码",
