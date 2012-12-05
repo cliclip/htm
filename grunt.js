@@ -30,6 +30,7 @@ module.exports = function(grunt) {
 	  "tmp/index.html": "views/index.html.jade",
 	  "tmp/bub.html":"views/bub.html.jade",
 	  "tmp/clipper.html":"views/clipper.html.jade",
+	  "tmp/ie.html": "views/ie.html.jade",
 
 	  "tmp/js/app.js.raw":"views/js/app.js.jade",
 	  "tmp/js/bub.js.raw":"views/js/bub.js.jade",
