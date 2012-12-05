@@ -26,7 +26,7 @@ script(type="text/template",id="detail-view-template")
         ul.forward_log.
           <% for(var i = 0; i<users.length; i++){%>
           <li class="user_head">
-            <a href="#user/<%= users[i].id%>">
+            <a href="#<%= users[i].id%>">
             <img src="<%= App.util.face_url(users[i].face,50)%>" title="<%=App.util.showPrefixName(users[i].name)%>" alt="<%= App.util.showPrefixName(users[i].name)%>">
             </a>
             <% if(i < users.length-1){ %>
@@ -47,10 +47,10 @@ script(type="text/template",id="detail-view-template")
 script(type="text/template",id="showcomment-view-template")
   | <div class="comment_show" id="comment_show_<%=id%>">
   div.user_head
-    <a class="userhead" href="#user/<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
+    <a class="userhead" href="#<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
   dt
     span.username
-      <a href="#user/<%=user.id%>"><%=App.util.showName(user.name)%> :</a>
+      <a href="#<%=user.id%>"><%=App.util.showName(user.name)%> :</a>
     span.text
      <span class="comment_text"><%= text%></span><span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
   dd.comment_con.

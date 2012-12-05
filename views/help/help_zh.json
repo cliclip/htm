@@ -13,11 +13,11 @@
   },
   "item_4": {
       "title": "微博摘录"
-    , "description": "<p>看到某条精彩的微博想摘录，却又懒得复制粘贴？</p><p>很简单，在设置里关联上你的微博帐户。</p><p>然后，想摘录哪条微博，就把它转给 @cliclip ，搞定！</p><p>Tips： @cliclip 的微博会被公开地摘录。</p><p>想悄悄地摘录某条微博？试试邮件摘录吧。</p>"
+    , "description": "<p>看到某条精彩的微博想摘录，却又懒得复制粘贴？</p><p>很简单，在设置里关联上你的微博帐户。</p><p>然后，想摘录哪条微博，就把它转给 @cliclip ，搞定！</p><p>此外，关联微博帐户后还能够导入您收藏的内容。</p><p>Tips：</p>1.@cliclip 的微博会被公开地摘录。<p>2.从微博导入的收藏默认是非公开地摘录。</p>"
   },
   "item_5": {
       "title": "twitter摘录"
-    , "description": "<p>我们能够导入你在 twitter 上 fav 的内容哦。</p><p>在设置里关联你的微博帐户。</p><p>然后，每次你在 twitter 里点击 fav 收藏一条 tweet，我们就会直接给你导入成为一条摘录。</p><p>Tips：从 twitter 导入的 fav 也会是默认公开收藏的。</p>"
+    , "description": "<p>我们能够导入你在 twitter 上 fav 的内容哦。</p><p>在设置里关联你的twitter帐户。</p><p>然后，每次你在 twitter 里点击 fav 收藏一条 tweet，我们就会直接给你导入成为一条摘录。</p><p>Tips：从 twitter 导入的 fav 也会是默认公开收藏的。</p>"
   },
   "item_6": {
       "title": "什么是摘录（clip）？"

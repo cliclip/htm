@@ -148,7 +148,7 @@ App.ClipApp.Bubb = (function(App, Backbone, $){
   function getUserTags(uid, callback){
     // API getUserTags
     // CHANGE 需按当前用户查找各 tag 的 follow 关系
-    // GET $HOST/$BASE/_/user/:id/tag/0..19
+    // GET :uid/clip/meta/0..19
     var bubbModel = new BubbModel({id: uid});
     var url = App.ClipApp.encodeURI(P+"/"+uid+"/clip/meta/0..19");
     bubbModel.fetch({url: url});

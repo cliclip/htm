@@ -1,7 +1,7 @@
 script(type='text/template',id='userface-view-template')
   div.user_info#user_info
     div.user_head#user_head.
-      <a class="user_list" href="#user/<%=id%>">
+      <a class="user_list" href="#<%=id%>">
         <img class="face-image" id="big_face"  src="<%=App.util.face_url(face)%>"/>
       </a>
       <% if(id && App.ClipApp.getMyUid() !=id){ %>
@@ -14,7 +14,7 @@ script(type='text/template',id='userface-view-template')
       <% }} %>
     dl.user_detail.clearfix
       dt.
-        <a class="user_list" href="#user/<%=id%>">
+        <a class="user_list" href="#<%=id%>">
           <%if(name){%>
           <%=App.util.showName(name)%>
           <%} else {%>

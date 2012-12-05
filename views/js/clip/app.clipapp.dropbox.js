@@ -22,9 +22,16 @@ App.ClipApp.DropboxEdit = (function(App, Backbone, $){
       var uid = e.currentTarget.id;
       var name = $.trim($("#"+uid).siblings().text());
       var view = this;
-      App.ClipApp.showAlert("deloauth",name,function(){
-	view.trigger("@delete",uid);
-      });
+      var userName = App.ClipApp.UserEdit.faceRegion.currentView.model.get("name") || "";
+      var isRandName = userName.match("@") ? true : false;
+      if(isRandName){
+	App.ClipApp.showConfirm("cannot_unbind", null, function(){});
+	App.ClipApp.showSetName();
+      }else{
+	App.ClipApp.showAlert("deloauth",name,function(){
+	  view.trigger("@delete",uid);
+	});
+      }
     }
   });
 

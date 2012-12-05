@@ -20,8 +20,6 @@ script(type="text/template",id="editDetail-view-template")
               span.url_text.img_upload_span
                 input.text#img_upload_url(type="text")
                 | <input type="submit" class="btn_img" value="<%=_i18n('editDetail.ok')%>" />
-            span.
-              <button class="format" title="<%=_i18n('editDetail.clear')%>"></button>
             span.close_w
               //- ie-7无空格 右上角关闭按钮不显示
               |&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -31,7 +29,7 @@ script(type="text/template",id="editDetail-view-template")
         ul.forward_log.
           <% for(var i =0; i<users.length; i++){%>
           <li class="user_head">
-            <a href="#user/<%= users[i].id%>">
+            <a href="#<%= users[i].id%>">
             <img src="<%= App.util.face_url(users[i].face)%>" title="<%=users[i].name%>" alt="<%= users[i].name%>">
             </a>
             <% if(i < users.length-1 ){ %>

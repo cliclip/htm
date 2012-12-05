@@ -11,7 +11,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     validate: function(attrs){
       var content = attrs.content;
-      if(!content || content.replace(/&nbsp;+|\s+/g,"") == ""){
+      if(!content || content.replace(/&nbsp;+|\s+/g,"") == "" || content == "<br>"){
 	return {"content":"is_null"};
       }else{
 	return null;

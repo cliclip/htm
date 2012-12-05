@@ -60,7 +60,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
 	if(App.ClipApp.isSelf(uid)){
 	  App.Routing.showRoute("my/query",word);
 	}else{
-	  App.Routing.showRoute("user", uid, "query",word);
+	  App.Routing.showRoute(uid, "query",word);
 	}
       }else{
 	App.Routing.showRoute("query",word);
@@ -91,9 +91,9 @@ App.Routing.ClipRouting = (function(App, Backbone){
       }else{
 	if(tag){
 	  if($.browser.safari){tag = encodeURI(tag);}
-	  App.Routing.showRoute("user", uid, "tag", tag);
+	  App.Routing.showRoute(uid, "tag", tag);
 	}else{
-	  App.Routing.showRoute("user", uid);
+	  App.Routing.showRoute(uid);
 	}
       }
     });

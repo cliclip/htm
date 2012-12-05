@@ -109,7 +109,7 @@ App.versions = (function($){
 	},
 	_confirm:{
 	  password_diff: "两次输入的密码不一致"
-	},
+	}
       },
       setName:{
 	title    : "设置用户名和密码",
@@ -459,8 +459,8 @@ App.versions = (function($){
 	addemail       : "您已成功添加 %s 邮件地址。请登录您的邮箱，查收邮件，并点击其中的链接进行激活。",
 	cliplist_null:{
 	  all:"抱歉，没有找到相关的信息......",
-	  my:"<p>您的摘录将会出现在这里。</p><p>怎样新建摘录？</p><p>您可以用书签、邮件、微博、twitter 来做摘录。</p><p>也可以“转摘”别人的摘录。</p><p><a href='http://cliclip.com/#help/0'>查看帮助</a></p>",
-	  interest:"<p>您关注好友的最新摘录将会出现在这里。</p><p>怎样关注好友？</p><p>点击他的头像上的“追”他。</p><p><a href='http://cliclip.com/#help/9'>查看帮助</a></p>",
+	  my:"<p>您的摘录将会出现在这里。</p><p>怎样新建摘录？</p><p>您可以用书签、邮件、微博、twitter 来做摘录。</p><p>也可以“转摘”别人的摘录。</p><p><a href='http://cliclip.com/#help/0'>查看帮助</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://cliclip.com'>随便看看</a></p>",
+	  interest:"<p>您关注好友的最新摘录将会出现在这里。</p><p>怎样关注好友？</p><p>点击他的头像上的“追”他。</p><p><a href='http://cliclip.com/#help/9'>查看帮助</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://cliclip.com'>随便看看</a></p>",
 	  recommend:"抱歉，没有找到相关的信息......"
 	},
 	error_message :"操作失败，请重试",
@@ -929,7 +929,7 @@ App.versions = (function($){
       },
 
       gotosetup : {
-	register_success : "Congratulations! The registration is completed. Your next step is to add your email address",
+	register_success : "<p>The registration is completed. You could add an email address as well</p><p>This email could be used as your login name or reset your password, if needed.</p><p> And, you could drop an mail to 1@cliclip.com from this address, then a clip will be created, dead simple.</p>",
 	ok          : "OK"
       },
 
@@ -1001,8 +1001,8 @@ App.versions = (function($){
 	addemail       : "You have added %s email. The activation link has been sent to this email account. Please check your email and click the activation link.",
 	cliplist_null:{
 	  all:"Sorry, no results found",
-	  my:"Sorry, no results found",
-	  interest:"Sorry, no results found",
+	  my:"<p>Your clips will list here</p><p>How to create a clip?</p><p>You can create via bookmark,email,weibo,twitter.</p><p>Or you can simply reclip any others' clip you find.</p><p><a href='http://cliclip.com/#help/0'>help</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://cliclip.com'>look around</a></p>",
+	  interest:"<p>Your friends' clips will list here.</p><p>How to follow someone?</p><p>Just click the 'Follow' button on his avatar.</p><p><a href='http://cliclip.com/#help/9'>help</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://cliclip.com'>look around</a></p>",
 	  recommend:"Sorry, no results found"
 	},
 	"error_message" :"Operation fail,please try again!",

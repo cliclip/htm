@@ -29,13 +29,17 @@ App.ClipApp.Help=(function(App,Backbone,$){
     toggle : function(e){
       e.preventDefault();
       var id = e.currentTarget.id.split("_")[1];
-      Backbone.history.navigate("help/"+id, false);
       for(i=1;i<=11;i++){
 	if(i != id){
 	  $("#descrp_"+i).hide();
 	}
       }
       $("#descrp_"+id).toggle();
+      if($("#descrp_"+id).is(":hidden")){
+	Backbone.history.navigate("help/0", false);
+      }else{
+	Backbone.history.navigate("help/"+id, false);
+      }
       //console.info($(e.currentTarget));
       //$(e.currentTarget).nextAll().toggle();
     }
