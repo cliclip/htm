@@ -1703,21 +1703,25 @@ section.follow_frame{
 		box-shadow:inset 0 -10px 20px #999;
 		.text_con{
 			width:465px;
+			height: 234px;
 			font-size:18px;
 			line-height:1.8;
+			margin-top:-56px;
+			margin-left:auto;
+			margin-right:auto;
+			display:table;
+		}
+		.text{
+		        display:table-cell;
+			vertical-align:middle;
+		}
+		.login_btn{
+			float:none;
 			margin:0 auto;
-			.btn_frame{
-				margin-top:5px;
-				padding-top:30px;
-			}
-			.login_btn{
-				float:none;
-				margin:0 auto;
-				width:135px;
-				height:40px;
-				border:none;
-				.sprites(-440px,-475px);
-			}
+			width:135px;
+			height:40px;
+			border:none;
+			.sprites(-440px,-475px);
 		}
 	}
 	.login_right{
