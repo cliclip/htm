@@ -33,6 +33,7 @@ App.ClipApp.SetName = (function(App, Backbone, $){
       "focus #_name"    : "cleanError",
       "focus #_conpass" : "focusAction",
       "focus #_newpass" : "focusAction",
+      "blur #_name"     : "blurName",
       "blur #_pass"     : "blurAction",
       "blur #_confirm"  : "blurAction",
       "focus #_pass"    : "cleanError",
@@ -42,7 +43,32 @@ App.ClipApp.SetName = (function(App, Backbone, $){
       "click #cancel"   : "cancel"
     },
     initialize: function(){
+      this.tmpmodel = new App.Model.RegisterModel();
       this.bind("@closeView", close);
+    },
+    blurName:function(e){
+      var that = this;
+      var name = $("#_name").val();
+      this.tmpmodel.save({name:name},{
+	url : App.ClipApp.encodeURI(P+"/register/check/"+name),
+	type: "GET",
+	success:function(model,res){
+	  if(res){
+	    that.showError('faceEdit',{"_name":"exist"});
+	    $("#submit").attr("disabled",true);
+	  }else{
+	    $("#submit").attr("disabled",false);
+	  }
+	},
+	error:function(model,error){
+	  var e2={};
+	  for(var key in error){
+	    var key2 = "_"+key;
+	    e2[key2] = error[key];
+	  }
+	  that.showError("faceEdit",e2);
+	}
+      });
     },
     update:function(e){
       var view = this;
@@ -62,7 +88,12 @@ App.ClipApp.SetName = (function(App, Backbone, $){
 	  view.cancel();
 	},
 	error:function(model,res){
-	  view.showError('faceEdit',res);
+	  var res2={};
+	  for(var key in res){
+	    var key2 = "_"+key;
+	    res2[key2] = res[key];
+	  }
+	  view.showError('faceEdit',res2);
 	}
       });
     },
