@@ -43,7 +43,7 @@ App.ClipApp.TwitterEdit = (function(App, Backbone, $){
 	var list  = model.get("list");
 	var result = [];
 	if(list){
-	  list.forEach(function(v){
+	  _(list).each(function(v){
 	    if(v.provider == 'twitter') result.push(v);
 	  });
 	}

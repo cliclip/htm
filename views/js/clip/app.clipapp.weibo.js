@@ -44,7 +44,7 @@ App.ClipApp.WeiboEdit = (function(App, Backbone, $){
 	var list  = model.get("list");
 	var result = [];
 	if(list){
-	  list.forEach(function(v){
+	  _(list).each(function(v){
 	    if(v.provider == 'weibo') result.push(v);
 	  });
 	}
