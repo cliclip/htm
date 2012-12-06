@@ -11,10 +11,14 @@ App.ClipApp.Message = (function(App, Backbone, $){
     template: "#message-view-template",
     events: {
       "click .masker":"Masker",
-      "click #sure": "MessageSure"
+      "click #sure": "MessageSure",
+      "click ._oauth" : "openWindow"
     },
     initialize:function(){
       this.bind("@closeView", close);
+    },
+    openWindow:function(){// TODO a标签不明原因的失效
+      window.open($("._oauth").attr("title"));
     },
     Masker: function(e){
       e.preventDefault();

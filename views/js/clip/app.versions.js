@@ -446,8 +446,8 @@ App.versions = (function($){
 	  not_exists: "此链接无效",
 	  invalidate: "此链接格式有误"
 	},
-	weibo_sucmsg   : "恭喜您，微博帐号 %s 关联成功，在新浪微博中 @cliclip 就可以摘录到点忆(评论除外)，现在就去 @ 一条<a href='http://weibo.com' target='_blank'>试试</a>？",
-	twitter_sucmsg :"恭喜您，Twitter帐号 %s 已关联成功，您在 Twitter 的收藏(评论除外)可以直接摘录到点忆，现在就去收藏一条<a href='http://twitter.com' target='_blank'>试试</a>？",
+	weibo_sucmsg   : "恭喜您，微博帐号 %s 关联成功，在新浪微博中 @cliclip 就可以摘录到点忆(评论除外)，现在就去 @ 一条<a class='_oauth' title='http://weibo.com' target='_blank'>试试</a>？",
+	twitter_sucmsg :"恭喜您，Twitter帐号 %s 已关联成功，您在 Twitter 的收藏(评论除外)可以直接摘录到点忆，现在就去收藏一条<a class='_oauth' title='http://twitter.com' target='_blank'>试试</a>？",
 	dropbox_sucmsg :"恭喜您，Dropbox帐号 %s 已关联成功，您的摘录将会被自动同步到您的Dropbox啦",
 	InternalOAuthError:"认证失败，请重试",
 	cannot_unbind : "您现在只能通过第三方认证登录，若现在解除关联，您将不能登录此帐号，所以为了保证您以后正常使用，您需要更改用户名和密码才可以解除关联。",

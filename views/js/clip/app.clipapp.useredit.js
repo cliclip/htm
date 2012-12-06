@@ -240,6 +240,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       "click #change_name": "changeName",
       "click #set_name": "setName",
       "focus #name": "cleanError",
+      "blur .set_username" :"cancelChange",
       "click #confirm_face": "submitFace"
     },
     initialize:function(){
@@ -249,6 +250,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     rename: function(){
       $(".edit_name").click(); // 触发设置用户名的动作
       $(".set_username").focus(); // 先让输入框聚焦
+    },
+    cancelChange:function(e){
+      if($(e.currentTarget).val()==""){
+	$("#name").hide()
+	$("#set-name").append($("#set-name").attr("title"));
+	$(".edit_name").removeClass("set_ok").val(_i18n("faceEdit.change_name"));
+      }
     },
     changeName: function(e){
       e.preventDefault();
