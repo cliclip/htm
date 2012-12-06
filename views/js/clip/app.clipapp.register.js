@@ -52,9 +52,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
 	url : App.ClipApp.encodeURI(P+"/register/check/"+name),
 	type: "GET",
 	success:function(model,res){
-	  if(res){
-	      that.showError('register',{"name":"exist"});
-	  }
+	  if(res) that.showError('register',{"name":"exist"});
 	  // TODO 如果用户名存在提示用户
 	  if($("#pass").val() && $(".error").length == 0 && $("#agree").attr("checked")){
 	    $(".reg_btn").attr("disabled",false);
