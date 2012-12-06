@@ -37,7 +37,7 @@ App.ClipApp.SetName = (function(App, Backbone, $){
       "blur #_pass"     : "blurAction",
       "blur #_confirm"  : "blurAction",
       "focus #_pass"    : "cleanError",
-      "focus #_confirm"  : "cleanError",
+      "focus #_confirm" : "cleanError",
       "click .masker"   : "masker",
       "click .close_w"  : "cancel",
       "click #cancel"   : "cancel"
@@ -55,9 +55,9 @@ App.ClipApp.SetName = (function(App, Backbone, $){
 	success:function(model,res){
 	  if(res){
 	    that.showError('faceEdit',{"_name":"exist"});
-	    $("#submit").attr("disabled",true);
+	    $("#submit").attr("disabled", true);
 	  }else{
-	    $("#submit").attr("disabled",false);
+	    $("#submit").attr("disabled", false);
 	  }
 	},
 	error:function(model,error){
@@ -78,6 +78,7 @@ App.ClipApp.SetName = (function(App, Backbone, $){
       nameModel.save(data ,{
 	type: 'PUT',
 	success:function(model,res){
+	  console.log(res);
 	  if(App.util.isLocal()){
 	    window.cache["/" + uid +"/info.json.js" ].name = res.name;
 	  }
@@ -88,12 +89,8 @@ App.ClipApp.SetName = (function(App, Backbone, $){
 	  view.cancel();
 	},
 	error:function(model,res){
-	  var res2={};
-	  for(var key in res){
-	    var key2 = "_"+key;
-	    res2[key2] = res[key];
-	  }
-	  view.showError('faceEdit',res2);
+	  console.log(res);
+	  view.showError('faceEdit',res);
 	}
       });
     },
