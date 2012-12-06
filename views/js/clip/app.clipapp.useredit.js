@@ -260,22 +260,28 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $(".edit_name").click(); // 触发设置用户名的动作
       $(".set_username").focus(); // 先让输入框聚焦
     },
-    checkName: function(){
-      var that = this;
-      var data = that.getInput();
-      that.tmpmodel.save(data, {
-	url : App.ClipApp.encodeURI(P+"/register/check/"+data.name),
-	type: "GET",
-	success:function(model,res){
-	  if(res){
-	    that.showError('faceEdit',{"name":"exist"});
-	    $("#submit").attr("disabled",true);
+    checkName: function(e){
+      if($(e.currentTarget).val()==""){
+	$("#name").hide()
+	$("#set-name").append($("#set-name").attr("title"));
+	$(".edit_name").removeClass("set_ok").val(_i18n("faceEdit.change_name"));
+      }else{
+	var that = this;
+	var data = that.getInput();
+	that.tmpmodel.save(data, {
+	  url : App.ClipApp.encodeURI(P+"/register/check/"+data.name),
+	  type: "GET",
+	  success:function(model,res){
+	    if(res){
+	      that.showError('faceEdit',{"name":"exist"});
+	      $("#submit").attr("disabled",true);
+	    }
+	  },
+	  error:function(model,error){
+	    that.showError('faceEdit', error);
 	  }
-	},
-	error:function(model,error){
-	  that.showError('faceEdit', error);
-	}
-      });
+	});
+      }
     },
     changeName: function(e){
       e.preventDefault();

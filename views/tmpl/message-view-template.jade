@@ -2,12 +2,12 @@ script(type="text/template",id="message-view-template")
   div.masker_layer
   div.masker
     section.small_pop
-      h2
+      h2.
         <%=_i18n('message.title')%>
       ul.pop_body.
         <p>    
           <% if (typeof message == "object") { for(key in message){%>
-          <%= message[key]%>
+          <%=message[key]%>
           <% }}else{ %>
           <%=message%>
           <%}%>
