@@ -31,6 +31,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
       "click #emailadd_cancel":"EmailAddclose",
       "click .masker_layer"   :"EmailAddclose",
       "click .close_w"        :"EmailAddclose",
+      "blur #email"           :"blurAction",
       "focus #email"          :"cleanError"
     },
     initialize: function(){
@@ -54,6 +55,18 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
 	  view.showError('emailAdd',res);
 	}
       });
+    },
+    blurAction: function(){
+      var view = this;
+      var data = view.getInput();
+      if(data.email){ data.email = data.email.toLowerCase(); }
+      if(!data.email || data.email == undefined){
+	view.showError('emailAdd',{email:"is_null"});
+      }else if(!email_pattern.test(data.email)){
+	view.showError('emailAdd',{email:"invalidate"});
+      }else{
+	return null;
+      }
     }
   });
 

@@ -25,8 +25,9 @@ App.ClipApp.DropboxEdit = (function(App, Backbone, $){
       var userName = App.ClipApp.UserEdit.faceRegion.currentView.model.get("name") || "";
       var isRandName = userName.match("@") ? true : false;
       if(isRandName){
-	App.ClipApp.showConfirm("cannot_unbind", null, function(){});
-	App.ClipApp.showSetName();
+	App.ClipApp.showConfirm("cannot_unbind", null, function(){
+	  App.ClipApp.showSetName();
+	});
       }else{
 	App.ClipApp.showAlert("deloauth",name,function(){
 	  view.trigger("@delete",uid);

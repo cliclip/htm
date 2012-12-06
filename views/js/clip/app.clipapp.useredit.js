@@ -95,8 +95,16 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       e.preventDefault();
       var address = e.currentTarget.id;
       var view = this;
-      var fun = function(){view.trigger("@delEmail", address);};
-      App.ClipApp.showAlert("delemail", address, fun);
+      var userName = App.ClipApp.UserEdit.faceRegion.currentView.model.get("name") || "";
+      var isRandName = userName.match("@") ? true : false;
+      if(isRandName){
+	App.ClipApp.showConfirm("cannot_unbind", null, function(){
+	  App.ClipApp.showSetName();
+	});
+      }else{
+	var fun = function(){view.trigger("@delEmail", address);};
+	App.ClipApp.showAlert("delemail", address, fun);
+      }
     }
   });
 
@@ -238,12 +246,13 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     template: "#faceEdit-view-template",
     events: {
       "click #change_name": "changeName",
-      "click #set_name": "setName",
+      "click #set_name": "setName", // 用户名是第三方认证默认名称
       "focus #name": "cleanError",
-      "blur .set_username" :"cancelChange",
+      "blur #name": "checkName",
       "click #confirm_face": "submitFace"
     },
     initialize:function(){
+      this.tmpmodel = new App.Model.RegisterModel();
       this.model.bind("change", this.render, this);
       this.bind("@rename", this.rename);
     },
@@ -251,11 +260,27 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $(".edit_name").click(); // 触发设置用户名的动作
       $(".set_username").focus(); // 先让输入框聚焦
     },
-    cancelChange:function(e){
+    checkName: function(e){
       if($(e.currentTarget).val()==""){
 	$("#name").hide()
 	$("#set-name").append($("#set-name").attr("title"));
 	$(".edit_name").removeClass("set_ok").val(_i18n("faceEdit.change_name"));
+      }else{
+	var that = this;
+	var data = that.getInput();
+	that.tmpmodel.save(data, {
+	  url : App.ClipApp.encodeURI(P+"/register/check/"+data.name),
+	  type: "GET",
+	  success:function(model,res){
+	    if(res){
+	      that.showError('faceEdit',{"name":"exist"});
+	      $("#submit").attr("disabled",true);
+	    }
+	  },
+	  error:function(model,error){
+	    that.showError('faceEdit', error);
+	  }
+	});
       }
     },
     changeName: function(e){
