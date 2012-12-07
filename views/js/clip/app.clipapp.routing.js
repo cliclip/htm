@@ -11,7 +11,7 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "tag/:tag":"siteShow",
       "query/:word":"siteQuery",
       "help/:item":"help",
-
+      "help":"help",
       "register": "showRegister",
       "invite/:key" : "invite",
       "active/:key": "active",
