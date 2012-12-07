@@ -70,6 +70,7 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   ClipApp.help = function(item){
+    item = item || 0 ;
     ClipApp.Face.show();
     ClipApp.Bubb.showSiteTags();
     ClipApp.ClipList.showSiteClips();
