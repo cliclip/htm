@@ -371,33 +371,40 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
     }
   };
 
+  function collectionAdd(model){
+    var fn = clipListView.appendHtml;
+    clipListView.appendHtml = function(collectionView, itemView){
+      collectionView.$el.prepend(itemView.el);
+      clipListView.appendHtml = fn;
+    };
+    clipListView.collection.add(model,{at:0});
+    start++;
+    collection_length++;
+    $("#list .message").remove();
+    $("#list").masonry("reload");
+  }
+
   App.vent.bind("app.clipapp.clipadd:success", function(addmodel){
     var json = data ? JSON.parse(data) : null;
-      if(json && App.ClipApp.isSelf(json.user) && (!json.tag || _.intersection(json.tag,addmodel.get("tag")).length > 0) ){ //是my或my/tag tag in addmodel
-      var model = new ClipPreviewModel();
-      var uid = App.ClipApp.getMyUid();
-      var id = uid+":"+addmodel.id;
-      var clipid = addmodel.id;
-      var tag = addmodel.get("tag");
-      var note = addmodel.get("note");
-      var _public = addmodel.get("public");
-      var user = {id : uid};
-      var content = App.util.getPreview(addmodel.get("content"), 100);
-      content = App.util.expandPreImgUrl(content,id);
-      //clip本身的id为自己的id，model的id为uid:cid
-      model.set({"public":_public,"content":content,"id":id,"clipid":clipid,"tag":tag,"note":note,"user":user,"recommend":""});
-      var fn = clipListView.appendHtml;
-      clipListView.appendHtml = function(collectionView, itemView){
-	collectionView.$el.prepend(itemView.el);
-	clipListView.appendHtml = fn;
-      };
-      clipListView.collection.add(model,{at:0});
-      start++;
-      collection_length++;
-      $("#list .message").remove();
-      $("#list").masonry("reload");
+    var model = new ClipPreviewModel();
+    var uid = App.ClipApp.getMyUid();
+    var id = uid+":"+addmodel.id;
+    var clipid = addmodel.id;
+    var tag = addmodel.get("tag");
+    var note = addmodel.get("note");
+    var _public = addmodel.get("public");
+    var user = {id : uid};
+    var content = App.util.getPreview(addmodel.get("content"), 100);
+    content = App.util.expandPreImgUrl(content,id);
+    //clip本身的id为自己的id，model的id为uid:cid
+    model.set({"public":_public,"content":content,"id":id,"clipid":clipid,"tag":tag,"note":note,"user":user,"recommend":""});
+    if(json && App.ClipApp.isSelf(json.user) && (!json.tag || _.intersection(json.tag,addmodel.get("tag")).length > 0) ){ //是my或my/tag tag in addmodel
+      collectionAdd(model);
     }else{ // 要进行myshow
       Backbone.history.navigate("my", true);
+      setTimeout(function(){
+	collectionAdd(model);
+      }, 100);
     }
   });
 
