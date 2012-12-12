@@ -40,7 +40,8 @@ script(type="text/template",id="detail-view-template")
             |&nbsp</br> 
             <%= content %>
           div.clip_utime
-            <%= App.util.generatePastTime(updateTime)%>
+            span.
+              <%= App.util.generatePastTime(updateTime)%>
           dl.comments.clearfix
           div.input_textarea
       div.RelatedOperation
