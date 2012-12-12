@@ -2,6 +2,8 @@ div.tagsinput {
   background: #FFF;
   overflow-y: hidden;
   overflow-x:hidden;
+  width:270px;
+  min-height:75px;
 }
 div.tagsinput span.tag  {
   border: 1px solid #a5d24a;

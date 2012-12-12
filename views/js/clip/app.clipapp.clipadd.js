@@ -30,7 +30,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .link_img":"extImg",//显示连接图片输入框并清空输入框
       "click .btn_img":"up_extImg", // 确定上传
       "click .masker_layer1":"hide_extImg",
-      "click .note":"remark_clip",
       "click .close_w":"cancelcliper",
       "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
@@ -105,20 +104,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  else App.vent.trigger("app.clipapp.clipadd:success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
-
 	  target.attr("disabled",false);
 	  view.trigger("@error", error);
-
 	}
       });
-
     },
     emptycliper:function(){
       this.trigger("@closeRegion");
       App.vent.trigger("app.clipapp.clipper:empty");
-    },
-    remark_clip: function(){ // 此全局变量就是为了clip的注操作
-      App.ClipApp.showMemo(clip);
     }
   });
 
@@ -154,6 +147,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
+    showMemo();
 
     App.Editor.init();
     App.Editor.focus("editor");
@@ -187,6 +181,37 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	App.viewRegion.close();
       });
     }
+  };
+
+  var MemoView=App.DialogView.extend({
+    tagName:"div",
+    className:"memo-view",
+    template:"#memo-view-template",
+    events:{
+      "click .size48"          :"tagToggle"
+    },
+    tagToggle:function(e){
+      $(e.currentTarget).toggleClass("white_48");
+      $(e.currentTarget).toggleClass("orange_48");
+    }
+  });
+
+  function getData(){
+    var bubs = App.ClipApp.getDefaultBubbs();
+    var tags = [];
+    var tag_main = _(_(bubs).map(function(e){
+      return { tag:e, checked:(_.indexOf(tags,e) != -1) };
+    })).value();
+    return {main_tag:tag_main, obj_tag:[], pub:false};
+  }
+
+  function showMemo(){
+    var data = getData();
+    var model = new App.Model.MemoModel(data);
+    var memoView = new MemoView({model: model});
+    ClipAdd.memoRegion = new App.Region({el:".settags"});
+    ClipAdd.memoRegion.show(memoView);
+    $('#obj_tag').tagsInput({});
   };
 
   App.vent.bind("app.clipapp.clipadd:memo",function(data){
