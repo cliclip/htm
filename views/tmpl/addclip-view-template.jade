@@ -6,8 +6,6 @@ script(type="text/template",id="addClip-view-template")
         div.pop_left
         div.pop_right
           div.button_frame
-            span.note_clip.
-              <button class="note" title="<%=_i18n('addClip.note_message')%>"></button>
             |<form method="POST" id="img_form" action="<%= App.ClipApp.img_upUrl()%>" target="upload_target" enctype="multipart/form-data">
             |<span class="file">
             |<button class="upload_img" id="localImg" title="<%=_i18n('addClip.upload')%>"></button>
@@ -25,15 +23,27 @@ script(type="text/template",id="addClip-view-template")
               |&nbsp&nbsp&nbsp&nbsp&nbsp
           //- ie-7 文字若不放到此位置导致显示格式不正确
           | <%=_i18n('addClip.title')%>
-      div.pop_left
       div.pop_right
         section.pop_inner
           article.content_new
             //- css 中设置iframe无边框在ie8- 中不起作用
             iframe#editor(frameborder="no",border="0")
+          article.settags
           div.btn_group.clearfix.
             <input type="button" class="verify" id="save" title="<%=_i18n('addClip.ok')%>" value="<%=_i18n('addClip.ok')%>" />
             <input type="button" class="cancel" id="cancel" title="<%=_i18n('addClip.cancel')%>" value="<%=_i18n('addClip.cancel')%>" />
             <input type="button" class="cliper ok" id="ok" title="<%=_i18n('addClip.back')%>" value="<%=_i18n('addClip.back')%>" />
             <input type="button" class="cliper empty" id="empty" title="<%=_i18n('addClip.clean')%>" value="<%=_i18n('addClip.clean')%>" />
     div.bottom
+
+script(type="text/template",id="memo-view-template")
+  ul
+    li.tag_box.
+      <% for(var i=0;i<main_tag.length;i++){ %> 
+      <span <% if(main_tag[i].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_<%=i%>"><%=main_tag[i].tag%></span> <% } %>
+      <label>
+        <%=_i18n('clipmemo.private')%>&nbsp;
+        <input type="checkbox" id="memo_private" <% if(pub=="false"){ %>checked="checked" <% } %>/>
+      </label>
+    li.tag_input.
+      <input type="text" class="obj_tags" id="obj_tag" value="<%=obj_tag.join(",")%>" />

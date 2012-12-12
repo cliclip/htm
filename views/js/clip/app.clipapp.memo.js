@@ -1,7 +1,7 @@
 //app.clipapp.memo.js
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
-  var MemoModel = App.Model.extend({});
+  App.Model.MemoModel = App.Model.extend({});
   var P = App.ClipApp.Url.base;
   // 把没有必要的事件改为函数调用
   /*
@@ -126,7 +126,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   // 触发更新clip中的注的事件
   var ok = function(data, cid){
     if(memoType == "update"){
-      var model = new MemoModel(data);
+      var model = new App.Model.MemoModel(data);
       model.save({}, {
 	type:'PUT',
 	url: App.ClipApp.encodeURI(P + "/" + cid.split(":")[0]+ "/" + cid.split(":")[1]),
@@ -149,7 +149,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   var ClipMemo = {};
   var memoType,defaultNote = _i18n('clipmemo.memo'),o_data;
   function showMemo(data){
-    var memoModel = new MemoModel(data);//此model作显示用
+    var memoModel = new App.Model.MemoModel(data);//此model作显示用
     var memoView = new MemoView({model:memoModel});
     App.popRegion.show(memoView);
     $('#obj_tag').tagsInput({});
