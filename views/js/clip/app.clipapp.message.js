@@ -77,7 +77,7 @@ App.ClipApp.Message = (function(App, Backbone, $){
   function show(type, message){
     var messageModel = new MessageModel({message:message});
     if(type == "warning"){
-      var view = new WarningView({model: messageModel});
+      var view = new WarningView({model : messageModel});
     }else if(type == "confirm"){
       var view = new MessageView({model : messageModel});
     }else if(type == "waiting"){
@@ -85,15 +85,15 @@ App.ClipApp.Message = (function(App, Backbone, $){
     }else{
       var view = new SuccessView({model : messageModel});
       setTimeout(function(){
-	Message.close();
+	close();
       },1000);
     }
     App.setpopRegion.show(view);
   };
-
-  Message.close = function(){
+  var close = function(){
     App.setpopRegion.close();
   };
+  Message.close = close;
 
   Message.success = function(key, value){
     var message = null;
