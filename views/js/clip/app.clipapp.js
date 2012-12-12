@@ -30,11 +30,12 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.img_upUrl = function(){
     return App.util.getImg_upUrl(ClipApp.getMyUid());
   };
-
+  //头像上传与content中图片上传共用相同url，此url废弃
+  /*
   ClipApp.face_upUrl = function(){
     return App.util.getFace_upUrl(ClipApp.getMyUid());
   };
-
+   */
   ClipApp.encodeURI = function(url){ //公共调用
     var base = url;
     var arr = base ? base.split("/") : [];
@@ -325,6 +326,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Message.success(key, value);
   };
 
+  ClipApp.showWaiting = function(key, value){
+    ClipApp.Message.waiting(key, value);
+  };
+  ClipApp.closeWaiting = function(){
+    ClipApp.Message.close();
+  }
   ClipApp.showAlert = function(key, value, fun, cancel_fun){
     ClipApp.Message.alert(key, value);
     if(typeof(fun) == "function"){

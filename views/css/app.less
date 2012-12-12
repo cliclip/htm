@@ -1214,6 +1214,24 @@ section.follow_frame{
 		}
 	}	
 }
+.waiting-view{
+	.waiting{
+		z-index:20;
+		border:5px solid #f0f0f0;
+		position: fixed;
+		left:50%;
+		top:220px;
+		margin-left:-120px;
+                background:url(../img/wait.gif) no-repeat center top #fff;
+		min-width: 240px;
+		height: 120px;
+		.pop_body{
+			padding:100px;
+			text-align: center;
+			margin:0;
+		}
+	}	
+}
 
 //弹出窗口：注，收，评，推荐等
 .small_pop{
@@ -1315,7 +1333,52 @@ section.follow_frame{
 		}
 	}
 }
-//recommend-view-template.jade 中特有的元素
+// addcomment-view-template.jade 详情页添加评论部分
+.addcomment-view{
+	img#comm_auth{
+		width:33px;
+		height:33px;
+	}
+	textarea#comm_text{
+		width:610px;
+		height:25px;
+		margin-bottom:10px;
+		float:right;
+	}
+	textarea.error{
+		border:1px solid #f00;
+	}
+	span.error{
+		right:11px;
+		margin-top:22px;
+		max-width:500px;
+		min-width:110px;
+		padding:6px;
+	}
+	button.comm_verify{
+		float:right;
+		height:25px;
+		width:85px;
+		line-height:22px;
+		.sprites(-340px,-690px);
+		border:none;
+		color:#fff;
+		padding-left:7px;
+		position: relative;
+		display:none;
+		span{
+			width:2px;
+			height:25px;
+			position: absolute;
+			right:0;
+			top:0;
+			.sprites(-451px,-690px);
+			background-color:#fff;
+		}
+	}
+}
+
+// recommend-view-template.jade 中特有的元素
 .small_pop .pop_body{ 
 	li.select_user{
 		input{
@@ -1519,7 +1582,7 @@ section.follow_frame{
 		section.pop_inner{
 			padding:10px 10px 10px 0;
 			.addcomment-view{
-				height:115px;
+				height:95px;
 			}
 		}
   		.original{
@@ -1603,6 +1666,10 @@ section.follow_frame{
 		i.del{
 			.sprites(-583px,-343px);
 		}
+		.clip_utime{
+			float:right;
+			margin-top:-10px;
+		}
 		dl.comments{
 			margin-bottom:20px;
 			.comment_show{
@@ -1633,10 +1700,6 @@ section.follow_frame{
 						span.comment_text{
 							word-wrap:break-word;
 						}
-						span.comment_time{
-							font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
-				        		color:#000
-						}
 					}
 					time{
 						color:#ccc;
@@ -1644,6 +1707,9 @@ section.follow_frame{
 					}
 				}
 				dd.comment_con{
+					.comment_time{
+			        		color:#5c5c5c;
+					}
 					margin-left:43px;
 					margin-right:20px;
 					overflow: hidden;
@@ -1658,22 +1724,6 @@ section.follow_frame{
 					margin-bottom:0;
 				}
 			}
-		}
-		textarea#comm_text{
-			width:270px;
-			height:55px;
-			margin-bottom:10px;
-			resize:none;
-		}
-		textarea.error{
-			border:1px solid #f00;
-		}
-		span.error{
-			right:350px;
-			margin-top:28px;
-			max-width:500px;
-			min-width:110px;
-			padding:6px;
 		}
 	}
 }

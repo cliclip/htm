@@ -38,6 +38,12 @@ App.ClipApp.Message = (function(App, Backbone, $){
     template: "#success-view-template"
   });
 
+  var WaitingView = App.ItemView.extend({
+    tagName: "div",
+    className: "waiting-view",
+    template: "#waiting-view-template"
+  });
+
   var WarningView = App.DialogView.extend({
     tagName: "div",
     className: "message-view",
@@ -74,16 +80,18 @@ App.ClipApp.Message = (function(App, Backbone, $){
       var view = new WarningView({model: messageModel});
     }else if(type == "confirm"){
       var view = new MessageView({model : messageModel});
+    }else if(type == "waiting"){
+      var view = new WaitingView({model : messageModel});
     }else{
       var view = new SuccessView({model : messageModel});
       setTimeout(function(){
-	close();
+	Message.close();
       },1000);
     }
     App.setpopRegion.show(view);
   };
 
-  var close = function(){
+  Message.close = function(){
     App.setpopRegion.close();
   };
 
@@ -122,6 +130,16 @@ App.ClipApp.Message = (function(App, Backbone, $){
     }
     show("warning", message);
   };
-
+  Message.waiting = function(key, value){
+    var message = null;
+    if(typeof(key)=="string"){
+      message = _i18n('message.'+key, value);
+    }else if(typeof(key)=="object"){
+      for(var k in key){
+	message = _i18n('message'+'.'+k+'.'+key[k], value);
+      }
+    }
+    show("waiting", message);
+  };
   return Message;
 })(App, Backbone, jQuery);

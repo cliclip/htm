@@ -39,9 +39,11 @@ script(type="text/template",id="detail-view-template")
           article.content
             |&nbsp</br> 
             <%= content %>
-          <%= App.util.generatePastTime(updateTime)%>
+          div.clip_utime
+            <%= App.util.generatePastTime(updateTime)%>
           dl.comments.clearfix
           div.input_textarea
+      div.RelatedOperation
       div.bottom
 
 script(type="text/template",id="showcomment-view-template")
@@ -52,8 +54,9 @@ script(type="text/template",id="showcomment-view-template")
     span.username
       <a href="#<%=user.id%>"><%=App.util.showName(user.name)%> :</a>
     span.text
-     <span class="comment_text"><%= text%></span><span class="comment_time">&nbsp&nbsp&nbsp&nbsp<%= App.util.generatePastTime(date)%></span>
+     <span class="comment_text"><%= text%></span>
   dd.comment_con.
+    <span class="comment_time"><%= App.util.generatePastTime(date)%></span>
     <div class="comm_link" id="comment_link_<%=id%>" style="float:right;">
     <% auth = App.ClipApp.getMyUid(); if(user.id == auth || auth == cid.split(":")[0]){%>
     <span id="reply_<%=id%>_del" style="display:none; float:left;" >
@@ -64,7 +67,8 @@ script(type="text/template",id="showcomment-view-template")
   | </div>
         
 script(type="text/template",id="addcomm-view-template")
-  |<textarea id="comm_text"><%=_i18n('comment.defaultText')%></textarea>
+  | <img id="comm_auth" src="<%=App.util.getMyFace()%>">
+  | <textarea id="comm_text"><%=_i18n('comment.defaultText')%></textarea>
   // 注释掉tag和“同时收”
     div
       <% var main_tag = App.ClipApp.getDefaultBubbs();for(var i=0;i<main_tag.length;i++){ %> 
@@ -75,6 +79,8 @@ script(type="text/template",id="addcomm-view-template")
         input(type="checkbox",id="reclip")
         |  <%=_i18n('addcomm.reclip')%>
     <% } %>
-  div.btn_group.clearfix.
-    <input type="button" class="verify" value="<%=_i18n('comment.ok')%>" />
-    <input type="button" class="cancel" value="<%=_i18n('comment.cancel')%>" />
+  div.
+    <button class="comm_verify">
+      <span/>
+      <%=_i18n('comment.ok')%>
+    </button>

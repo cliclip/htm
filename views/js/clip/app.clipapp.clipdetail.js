@@ -121,6 +121,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	var cid = this.model.get("cid");
 	var id = e.target.id.split("_")[1];
 	App.ClipApp.showAlert("del_comment", null, function(){
+	  console.info(cid,id);
 	  view.trigger("@delComment", cid, id);
 	});
       }
@@ -143,21 +144,28 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "blur #comm_text"  : "blurAction",
       //"click .main_tag"  : "maintagAction",
       "keydown #comm_text":"shortcut_comment",
-      "click .verify"    : "comment"
+      "click .comm_verify"    : "comment"
     },
     initialize:function(){
       this.bind("@saveaddComm", saveaddComm);
     },
     focusAction:function(e){
-      e.currentTarget.select();//将光标定位到当前选中元
-      this.$(".verify").attr("disabled",false);
+      e.currentTarget.select();//将光标定位到当前选中元素
+      this.$(".comm_verify").attr("disabled",false);
       this.cleanError(e);
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == _i18n('comment.defaultText') ? "" : text);
+      $(e.currentTarget).height("50px");
+      $(".comm_verify").show();
+
     },
     blurAction:function(e){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == "" ? _i18n('comment.defaultText') : text);
+      if(text == _i18n('comment.defaultText') || text == ""){
+	$(e.currentTarget).height("25px")
+	$(".comm_verify").hide();
+      }
     },
     /*maintagAction:function(e){
       $("#comm_text").focus();
@@ -200,7 +208,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     shortcut_comment : function(e){
       if(e.ctrlKey&&e.keyCode==13){
-	$(".verify").click();
+	$(".comm_verify").click();
 	return false;
       }else{
 	return true;

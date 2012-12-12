@@ -27,15 +27,19 @@ App.util = (function(){
   util.getImg_upUrl = function(uid){
     return P + "/"+uid+"/image?_token=" + App.util.getCookie("token");
   };
-
+  //头像上传与content中图片上传共用相同url，此url废弃
+  /*
   util.getFace_upUrl = function(uid){
     return P + "/" + uid + "/face?_token=" + App.util.getCookie("token");
   };
-
+  */
   util.unique_url = function(url){
     var now = new Date();
     return url + "?now=" + now.getTime();
   };
+  util.getMyFace = function(){
+    return $(".my_head #small_face").attr("src");
+  }
   /**
    * 确定所访问的图片的尺寸
    */
@@ -50,16 +54,22 @@ App.util = (function(){
   // userInfo.icon = userInfo.face + '/42'
   // imageid: [uid]:face_[time].jpg|gif
   util.face_url = function(imageid,size){
-    var pattern = /^[0-9]{1,}:face*/;
+    var pattern = /^[0-9]{1,}:(face|tmp)*/;
     if(imageid == ""){
       return "img/f.png";
     }else if(imageid&& pattern.test(imageid)){
       var ids = imageid.split(":");
       var opt0 = ids[1].split("_");
       var opt = opt0[1].split(".");
-      var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
-      var url =  "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
-      return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : P + url;
+      if(/face/.test(imageid)){
+	var face_name = size ? "face_" + size+ "." + opt[1] : "face." + opt[1];
+	var url =  "/" + ids[0]+ "/" + face_name + "?now=" + opt[0];
+	return util.isLocal()&&_getMyUid()==ids[0]  ? _P + url : P + url;
+      }else {// 服务器端预览头像
+	var face_name = imageid.split(":")[1];
+	var url =  "/" + ids[0]+ "/image/" + face_name + "?now=" + opt[0];
+	return P + url;
+      }
     }else return imageid;
   };
 
