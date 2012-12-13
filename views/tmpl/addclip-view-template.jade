@@ -48,7 +48,8 @@ script(type="text/template",id="memo-view-template")
       </label>
     li.tag_input.
       <input type="text" class="obj_tags" id="obj_tag" value="<%=obj_tag.join(",")%>" />
-    <% } else {%>
+    <% } else { %>
+    <% if(pub=='false' || obj_tag.length > 0 || _.filter(main_tag, function(e){return e.checked }).length > 0) { %>
     li.tag_list.
       <% for(var i=0; i<main_tag.length; i++){ if(main_tag[i].checked) {%>
       <span class='sbubb'><%=main_tag[i].tag%></span></div>
@@ -58,4 +59,4 @@ script(type="text/template",id="memo-view-template")
       <%if(pub=="false"){%>
       <dt class="private"></dt>
       <%}%>
-    <% } %>
+    <% }} %>

@@ -211,6 +211,10 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipMemo.showInner(region, clip, edit);
   };
 
+  ClipApp.loadData = function(el){
+    return ClipApp.ClipMemo.loadData(el);
+  };
+
   // 对于那些直接点击修改按钮的部分，有些多余
   ClipApp.showEditClip = function(clipId){
     if(!ClipApp.isLoggedIn()){
