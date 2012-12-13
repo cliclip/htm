@@ -27,7 +27,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .btn_img":"up_extImg",
       "click .masker_layer1":"hide_extImg",
       "click .format":"upFormat",
-      "click .note":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
       "click .masker":"masker",
@@ -70,9 +69,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // $(".editContent-container").addClass("ContentEdit"); // 改变显示格式
       // 为.editContent-container下的p标签添加click事件
       // console.info("调整页面格式");
-    },
-    remarkClip:function(){
-      App.ClipApp.showMemo(this.model.id);
     },
     saveUpdate: function(e){
       var target = $(e.currentTarget);
@@ -143,12 +139,15 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	$("#fake").empty();
 	App.Editor.init();
 	App.Editor.setContent("editor",html);
+	ClipEdit.memoRegion = new App.Region({el:".settags"});
+	App.ClipApp.showInnerMemo(ClipEdit.memoRegion, model);
 	setTimeout(function(){old_content=App.Editor.getContent("editor");},200);
 	$($("#editor").get(0).contentWindow.document.body).keydown(function(e){
 	  if(e.ctrlKey&&e.keyCode==13){ $("#editClip_Save").click(); }
 	});
       },100);
     });
+
     //接受上传图片返回的信息
     App.vent.bind("app.clipapp:upload",function(returnVal){
       App.util.get_imgurl(returnVal,function(err, img_src){

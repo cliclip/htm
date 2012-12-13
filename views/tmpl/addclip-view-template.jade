@@ -38,6 +38,7 @@ script(type="text/template",id="addClip-view-template")
 
 script(type="text/template",id="memo-view-template")
   ul
+    <%if(edit){%>
     li.tag_box.
       <% for(var i=0;i<main_tag.length;i++){ %> 
       <span <% if(main_tag[i].checked) { %>class="size48 orange_48"<% }else{%> class="size48 white_48"<% } %> id="main_tag_<%=i%>"><%=main_tag[i].tag%></span> <% } %>
@@ -47,3 +48,14 @@ script(type="text/template",id="memo-view-template")
       </label>
     li.tag_input.
       <input type="text" class="obj_tags" id="obj_tag" value="<%=obj_tag.join(",")%>" />
+    <% } else {%>
+    li.tag_list.
+      <% for(var i=0; i<main_tag.length; i++){ if(main_tag[i].checked) {%>
+      <span class='sbubb'><%=main_tag[i].tag%></span></div>
+      <% }} for(var i=0; i<obj_tag.length; i++){ %>
+      <span class='stag'><%=obj_tag[i]%></span><div>
+      <% } %>
+      <%if(pub=="false"){%>
+      <dt class="private"></dt>
+      <%}%>
+    <% } %>

@@ -10,7 +10,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
    * 2，需要多于一个以上的处理
    * 3，在 view 里，与 view 之外的部分通讯，比如，需要知道 region （1的延伸）
    */
-  var MemoView=App.DialogView.extend({
+  var DiaMemoView = App.DialogView.extend({
     tagName:"div",
     className:"organize-view",
     template:"#organize-view-template",
@@ -150,7 +150,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   var memoType,defaultNote = _i18n('clipmemo.memo'),o_data;
   function showMemo(data){
     var memoModel = new App.Model.MemoModel(data);//此model作显示用
-    var memoView = new MemoView({model:memoModel});
+    var memoView = new DiaMemoView({model:memoModel});
     App.popRegion.show(memoView);
     $('#obj_tag').tagsInput({});
   }
@@ -196,6 +196,37 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 	});
       }
     }
+  };
+
+  var InnerMemoView=App.DialogView.extend({
+    tagName:"div",
+    className:"memo-view",
+    template:"#memo-view-template",
+    events:{
+      "click .size48"          :"tagToggle"
+    },
+    tagToggle:function(e){
+      $(e.currentTarget).toggleClass("white_48");
+      $(e.currentTarget).toggleClass("orange_48");
+    }
+  });
+
+  function getDefault(){
+    var bubs = App.ClipApp.getDefaultBubbs();
+    var tags = [];
+    var tag_main = _(_(bubs).map(function(e){
+      return { tag:e, checked:(_.indexOf(tags,e) != -1) };
+    })).value();
+    return {main_tag:tag_main, obj_tag:[], pub:false};
+  }
+
+  ClipMemo.showInner = function(MemoRegion, clipModel, edit){
+    var memo = clipModel ? getData(clipModel.toJSON()) : getDefault();
+    memo.edit = edit == false ? edit : true;
+    var model = new App.Model.MemoModel(memo);
+    var memoView = new InnerMemoView({model: model});
+    MemoRegion.show(memoView);
+    $('#obj_tag').tagsInput({});
   };
 
   // TEST
