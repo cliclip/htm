@@ -93,7 +93,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var target = $(e.currentTarget);
       var view = this;
       target.attr("disabled",true);
+      var memo = App.ClipApp.loadData(ClipAdd.memoRegion.currentView.$el);
       clip.content = App.Editor.getContent("editor");
+      clip['public'] = memo['public'];
+      clip.tag = memo.tag;
+      clip.note = memo.note;
       var cmodel = new App.Model.ClipModel();
       //若用this.model点击确定按钮会导致新建clip的窗口内容为空导致用户错觉
       cmodel.save(clip,{
@@ -183,12 +187,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       });
     }
   };
-
-  App.vent.bind("app.clipapp.clipadd:memo",function(data){
-    clip.note = data.note;
-    clip.tag = data.tag;
-    clip["public"] = data["public"];
-  });
 
   return ClipAdd;
 })(App, Backbone, jQuery);

@@ -25,7 +25,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "click .close_w"         :"cancelClick"
     },
     initialize:function(){
-      this.bind("@ok", ok);
+      this.bind("@ok", updateMemo);
       this.bind("@closeView", close);
     },
     tagToggle:function(e){
@@ -124,22 +124,19 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   };
 
   // 触发更新clip中的注的事件
-  var ok = function(data, cid){
-    if(memoType == "update"){
-      var model = new App.Model.MemoModel(data);
-      model.save({}, {
-	type:'PUT',
-	url: App.ClipApp.encodeURI(P + "/" + cid.split(":")[0]+ "/" + cid.split(":")[1]),
-	success: function(model, res){
-	  ClipMemo.close();
-	  App.vent.trigger("app.clipapp.clipmemo:success", model, cid);
-	},
-	error:function(model,res){}
-      });
-    }else if(memoType == "add"){
-      ClipMemo.close();
-      App.vent.trigger("app.clipapp.clipadd:memo", data);
-    }
+  var updateMemo = function(data, cid){
+    var model = new App.Model.MemoModel(data);
+    var url = P+"/"+cid.split(":")[0]+"/"+cid.split(":")[1];
+    model.save({}, {
+      type:'PUT',
+      url: App.ClipApp.encodeURI(url),
+      success: function(model, res){
+	ClipMemo.close();
+	App.vent.trigger("app.clipapp.clipmemo:success", model, cid);
+	App.ClipApp.showSuccess("clipMemo");
+      },
+      error:function(model,res){}
+    });
   };
 
   var close = function(n_data){
@@ -157,24 +154,16 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   // 此处只有区分 update 和 add
   ClipMemo.show = function(args){
-    memoType = _.isObject(args) ? "add" : "update";
-    if(memoType == "update"){
-      var cid = args;
-      var detailModel = new App.Model.DetailModel({id:cid});
-      detailModel.fetch({
-	success:function(model,res){
-	  var data = getData(model.toJSON());// 从detail中取得的model
-	  //console.log(data);
-	  showMemo(data);
-	},
-	error:function(model,res){}
-      });
-    }else if(memoType == "add"){
-      var clip = args;
-      var data = getData(clip);
-      // var data = getData(model.get("clip"));//从clip add 中取得的model
-      showMemo(data);
-    }
+    var cid = args;
+    var detailModel = new App.Model.DetailModel({id:cid});
+    detailModel.fetch({
+      success:function(model,res){
+	var data = getData(model.toJSON());// 从detail中取得的model
+	//console.log(data);
+	showMemo(data);
+      },
+      error:function(model,res){}
+    });
   };
 
   ClipMemo.close=function(n_data){
@@ -215,7 +204,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var bubs = App.ClipApp.getDefaultBubbs();
     var tags = [];
     var tag_main = _(_(bubs).map(function(e){
-      return { tag:e, checked:(_.indexOf(tags,e) != -1) };
+      return { tag:e, checked: false };
     })).value();
     return {main_tag:tag_main, obj_tag:[], pub:false};
   }
@@ -228,6 +217,13 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     MemoRegion.show(memoView);
     $('#obj_tag').tagsInput({});
   };
+
+  ClipMemo.loadData = loadData;
+
+  App.vent.bind('app.clipapp:memo', function(cid, el){
+    var data = loadData(el);
+    updateMemo(data, cid);
+  });
 
   // TEST
   // App.bind("initialize:after", function(){ ClipMemo.show(); });
