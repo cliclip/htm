@@ -1183,21 +1183,14 @@ section.follow_frame{
 		width:165px;
 		height:37px;
 		.sprites(-340px,-431px);
-		margin-bottom:8px;
-		margin-left: -14px;
-		float: right;
+		margin-right:15px;
+		margin-bottom:6px;
 	}
 	.cancel{
 		width:90px;
 		height:37px;
 		.sprites(-340px,-476px);
 		margin-bottom: 8px;
-		margin-right: 114px;
-		float: right;
-	}
-        .cliper{
-		display:none;
-		margin-bottom:6px;
 	}
 }
 
@@ -1677,16 +1670,44 @@ section.follow_frame{
 				font-size: 13px;	
 				height: 48px;
 				margin-top: -8px;
-				span{ width: 50px;}
 				label{
 					margin-top: 28px;
-					margin-right: -4px;
 					float: right;
 					input{
 						float: left;
 						width:auto!important;
 						height:auto!important;
 					}
+				}
+			}
+			li.tag_list{
+				height: 48px;
+				margin-top: -15px;
+				border-bottom: 1px solid #ccc;
+				.sbubb {
+          			        width: 48px;
+          			     	height: 48px;
+          				line-height: 48px;
+					font-size: 12px;
+					text-align: center;
+          				.tag_bg(0px, -96px);
+          				color:#966;
+					float:left;
+					margin-right:10px;
+        			}
+        			.stag {
+				        .sbubb;
+				        color:#966; 
+					.tag_bg(0px, 0px);
+				}
+				.private{
+					height: 37px;
+		   			width: 45px;
+    		   			line-height: 15px;
+		   			overflow: hidden;
+					float: right;
+					margin-top: 7px;
+					.glyphishs(-187px,-194px);
 				}
 			}
 			li.input_checkbox{
@@ -1706,7 +1727,30 @@ section.follow_frame{
 				min-height: 0px;
 				input{margin: 0px;}
 			}
-		}	 			
+		}
+			 			
+	}
+	.btn_group{
+		.verify{
+			width:165px;
+			height:37px;
+			.sprites(-340px,-431px);
+			margin-bottom:8px;
+			margin-left: -14px;
+			float: right;
+		}
+		.cancel{
+			width:90px;
+			height:37px;
+			.sprites(-340px,-476px);
+			margin-bottom: 8px;
+			margin-right: 114px;
+			float: right;
+		}
+        	.cliper{
+			display:none;
+			margin-bottom:6px;
+		}
 	}
 	.bottom{ /* for detail */
 		margin-top: 0px;

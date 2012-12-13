@@ -147,7 +147,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
-    showMemo();
+    ClipAdd.memoRegion = new App.Region({el:".settags"});
+    App.ClipApp.showInnerMemo(ClipAdd.memoRegion);
 
     App.Editor.init();
     App.Editor.focus("editor");
@@ -181,37 +182,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	App.viewRegion.close();
       });
     }
-  };
-
-  var MemoView=App.DialogView.extend({
-    tagName:"div",
-    className:"memo-view",
-    template:"#memo-view-template",
-    events:{
-      "click .size48"          :"tagToggle"
-    },
-    tagToggle:function(e){
-      $(e.currentTarget).toggleClass("white_48");
-      $(e.currentTarget).toggleClass("orange_48");
-    }
-  });
-
-  function getData(){
-    var bubs = App.ClipApp.getDefaultBubbs();
-    var tags = [];
-    var tag_main = _(_(bubs).map(function(e){
-      return { tag:e, checked:(_.indexOf(tags,e) != -1) };
-    })).value();
-    return {main_tag:tag_main, obj_tag:[], pub:false};
-  }
-
-  function showMemo(){
-    var data = getData();
-    var model = new App.Model.MemoModel(data);
-    var memoView = new MemoView({model: model});
-    ClipAdd.memoRegion = new App.Region({el:".settags"});
-    ClipAdd.memoRegion.show(memoView);
-    $('#obj_tag').tagsInput({});
   };
 
   App.vent.bind("app.clipapp.clipadd:memo",function(data){

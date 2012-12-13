@@ -6,8 +6,6 @@ script(type="text/template",id="editDetail-view-template")
         div.pop_right
           div.button_frame
             iframe(name="post_frame",id="post_frame")
-            span.note_clip.
-              <button class="note" title="<%=_i18n('editDetail.note_message')%>"></button>
             |<form method="POST" id="img_form" action="<%= App.ClipApp.img_upUrl()%>" target="upload_target" enctype="multipart/form-data">
             |<span class="file">
             |<button class="upload_img" id="localImg" title="<%=_i18n('addClip.upload')%>"></button>
@@ -43,6 +41,7 @@ script(type="text/template",id="editDetail-view-template")
           form#editForm(metod="post")
             article.content.content_new
               iframe#editor(frameborder="no",border="0")
+            article.settags
             div.btn_group.clearfix.
               <input id="editClip_Save" class="verify" type="button" title="<%=_i18n('editDetail.ok_title')%>" value="<%=_i18n('editDetail.ok')%>" />
               <input id="editClip_Abandon" class="cancel" type="reset" title="<%=_i18n('editDetail.cancel_title')%>" value="<%=_i18n('editDetail.cancel')%>" />

@@ -39,6 +39,7 @@ script(type="text/template",id="detail-view-template")
           article.content
             |&nbsp</br> 
             <%= content %>
+          article.settags
           div.clip_utime
             span.
               <%= App.util.generatePastTime(updateTime)%>

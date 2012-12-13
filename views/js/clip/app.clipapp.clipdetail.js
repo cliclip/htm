@@ -226,6 +226,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var anchor = anchors[i];
       anchor.target="_blank";
     }
+    ClipDetail.memoRegion = new App.Region({el:".settags"});
+    App.ClipApp.showInnerMemo(ClipDetail.memoRegion, detailModel, false);
   };
   var RelatedOptModel = App.Model.extend({
     defaults:{

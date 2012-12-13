@@ -203,8 +203,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.show(clipid,model_id,recommend);
   };
 
-  ClipApp.showMemo = function(args){
-    ClipApp.ClipMemo.show(args);
+  ClipApp.showMemo = function(clip){
+    ClipApp.ClipMemo.show(clip);
+  };
+
+  ClipApp.showInnerMemo = function(region, clip, edit){
+    ClipApp.ClipMemo.showInner(region, clip, edit);
   };
 
   // 对于那些直接点击修改按钮的部分，有些多余
