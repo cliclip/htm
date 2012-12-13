@@ -270,13 +270,14 @@ App.versions = (function($){
 
       detail : {
 	route       : "录线图",
-	comment     : "评论",
-	recommend   : "转发",
-	reclip      : "转摘",
-	"delete"      : "删除",
-	update      : "修改",
-	memo        : "标注",
-	share       : "分享"
+	comment     : "评&nbsp;论",
+	recommend   : "转&nbsp;发",
+	reclip      : "转&nbsp;摘",
+	"delete"    : "删&nbsp;除",
+	update      : "修&nbsp;改",
+	memo        : "标&nbsp;注",
+	share       : "分&nbsp;享",
+	link        : "链&nbsp;接"
       },
 
       snsShare :{
@@ -296,7 +297,7 @@ App.versions = (function($){
       },
       showcomment : {
 	reply       : "回复",
-	"delete"      : "删除",
+	"delete"    : "删除",
 	text        : "此内容已被删除",
 	pack        : "(收起)",
 	open        : "(展开)"
@@ -322,14 +323,14 @@ App.versions = (function($){
       },
 
       clippreview : {
-	refby     : "转摘",
-	reply       : "评论",
-	comment     : "评论",
-	recommend   : "转发",
-	reclip      : "转摘",
-	"delete"      : "删除",
-	update      : "修改",
-	memo        : "标注"
+	refby       : "转&nbsp;摘",
+	reply       : "评&nbsp;论",
+	comment     : "评&nbsp;论",
+	recommend   : "转&nbsp;发",
+	reclip      : "转&nbsp;摘",
+	"delete"    : "删&nbsp;除",
+	update      : "修&nbsp;改",
+	memo        : "标&nbsp;注"
       },
 
       follower : {
@@ -817,10 +818,11 @@ App.versions = (function($){
 	comment     : "Comment",
 	recommend   : "@",
 	reclip      : "Reclip",
-	"delete"      : "Delete",
+	"delete"    : "Delete",
 	update      : "Edit",
 	memo        : "Tag",
-	share       : "Share"
+	share       : "Share",
+	link        : "Link"
       },
       snsShare :{
 	title        : "Share to:",

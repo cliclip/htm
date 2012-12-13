@@ -242,14 +242,14 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   //reclip 用户一个clip
-  ClipApp.showReclip = function(clipid, model_id, rid, pub){
+  ClipApp.showReclip = function(clipid, model_id, recom,pub){
     // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	ClipApp.Reclip.show(clipid,model_id,rid,pub);
+	ClipApp.Reclip.show(clipid,model_id,recom,pub);
       });
     }else{
-      ClipApp.Reclip.show(clipid,model_id,rid,pub);
+      ClipApp.Reclip.show(clipid,model_id,recom,pub);
     }
   };
 

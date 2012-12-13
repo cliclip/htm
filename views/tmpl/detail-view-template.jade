@@ -10,17 +10,17 @@ script(type="text/template",id="detail-view-template")
         div.pop_right.
           <% if(!App.ClipApp.isSelf(user)) {%>
             <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
-            <!--<i class="recommend operate" title="<%=_i18n('detail.recommend')%>"></i>-->
-            <i class="reclip operate" title="<%=_i18n('detail.reclip')%>"></i>
+            <!--<i class="recommend operate" title="<%=_i18n('detail.recommend')%>"></i>
+            <i class="reclip operate" title="<%=_i18n('detail.reclip')%>"></i>-->
           <% }else {%>
             <i class="del operate" title="<%=_i18n('detail.delete')%>"></i>
             <!--<i class="refresh operate" title="<%=_i18n('detail.recommend')%>"></i>-->	   
             <i class="modify operate" title="<%=_i18n('detail.update')%>"></i>
             <i class="note operate" title="<%=_i18n('detail.memo')%>"></i>
           <% } %>
-          <% if(!(public == "false" && App.util.getMyUid() != user )){  %>
+          <!--<% if(!(public == "false" && !App.ClipApp.isSelf(user))){  %>
             <i class="share operate" title="<%=_i18n('detail.share')%>"></i>
-          <% } %>
+          <% } %>-->
         <span class="close_w"></span>
       div.pop_left
         ul.forward_log.
@@ -50,14 +50,33 @@ script(type="text/template",id="detail-view-template")
 
 script(type="text/template",id="RelatedOpt-view-template")
   ul
-    | <% if(!App.ClipApp.isSelf(uid)) {%>
-    | <li class="reclip">
-    | <i class="reclip operate" title="<%=_i18n('detail.reclip')%> "></i>
-    | <span><%=_i18n('detail.reclip')%></span>
-    | </li>
-    | <% }%>
-    li.twitter
-    li.sina
+    <% if(!App.ClipApp.isSelf(uid)) {%>
+    li.reclip
+      i.reclip
+      span.
+        <%=_i18n('detail.reclip')%>
+    <% } if(pub != "false"){%>
+    li.twitter.
+      <a target="_blank" title="<%= _i18n('snsShare.title_twitter')%> " href="http://www.jiathis.com/send/?webid=twitter&url=http%3A%2F%2Fcliclip.com%2F%23clip%2F<%=uid%>%2F<%=cid%>&title=<%= shareTo_title%>&uid=1348468567217809&appkey=480422357&pic=<%=shareTo_img%>">
+        <i class="twitter"></i>
+        <span class="twitter">twitter</span>
+      </a>
+    li.facebook.
+      <a target="_blank" title="<%= _i18n('snsShare.title_fb')%> " href="http://www.jiathis.com/send/?webid=fb&url=http%3A%2F%2Fcliclip.com%2F%23clip%2F<%=uid%>%2F<%=cid%>&title=<%=shareTo_title%>&uid=1348468567217809&appkey=480422357&pic=<%=shareTo_img%>">
+        <i class="facebook"></i>
+        <span class="facebook">facebook</span>
+      </a>
+    li.weibo.
+      <a target="_blank" title="<%= _i18n('snsShare.title_tsina')%> " href="http://www.jiathis.com/send/?webid=tsina&url=http%3A%2F%2Fcliclip.com%2F%23clip%2F<%=uid%>%2F<%=cid%>&title=<%=shareTo_title%>&uid=1348468567217809&appkey=480422357&pic=<%=shareTo_img%>">
+        <i class="weibo"></i>
+        <span class="weibo">微&nbsp;博</span>
+      </a>
+    <%}%>
+    li.link
+      i.link
+      span.link.
+        <%=_i18n('detail.link')%>
+
 script(type="text/template",id="showcomment-view-template")
   | <div class="comment_show" id="comment_show_<%=id%>">
   div.user_head
