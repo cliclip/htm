@@ -100,6 +100,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   function getData(clip){
     var id = clip.id;
+    var uid = id.split(':')[0];
     var pub = clip["public"];
     var tags = clip.tag?clip.tag:[];
     var bubs = App.ClipApp.getDefaultBubbs();
@@ -120,7 +121,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
     var tag_obj = _.difference(tags, bubs);
-    return {id:id,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
+    return {id:id,uid:uid,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
   };
 
   // 触发更新clip中的注的事件
@@ -192,7 +193,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     className:"memo-view",
     template:"#memo-view-template",
     events:{
-      "click .size48"          :"tagToggle"
+      "click .size48": "tagToggle"
     },
     tagToggle:function(e){
       $(e.currentTarget).toggleClass("white_48");
