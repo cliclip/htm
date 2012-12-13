@@ -1331,6 +1331,38 @@ section.follow_frame{
 		}
 	}
 }
+
+// 详情窗口右侧的小按钮，分享 转载等
+#RelatedOperation{
+	left: 50%;
+    	margin-left: 441px;
+    	position: fixed;
+    	top: 162px;
+    	width: 120px;
+	ul{
+		li{
+			list-style-type:none;			
+			i.reclip{
+				.sprites(-590px,-170px);
+				height: 28px;
+				width: 28px;
+				position: absolute;
+			}
+			span{
+				border-radius: 1px 1px 1px 1px;
+				color: #FFFFFF;
+ 				cursor: pointer;
+    				display: block;
+   				font-size: 18px;
+   				padding: 5px 19px 3px 1px;
+   				text-align: right;
+			}
+
+
+		}
+	}
+}
+
 // addcomment-view-template.jade 详情页添加评论部分
 .addcomment-view{
 	img#comm_auth{

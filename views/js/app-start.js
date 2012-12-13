@@ -16,7 +16,8 @@ $(function(){
     feedbackRegion: "#feedback",
     setpopRegion:"#setpop",
     searchRegion:".search",
-    followRegion:"#follow"
+    followRegion:"#follow",
+    relatedOptRegion:"#RelatedOperation"
   });
 
   // easyXDM.Rpc

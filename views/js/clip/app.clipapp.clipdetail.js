@@ -220,14 +220,37 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $("#focus").focus(); // 是的详情响应pagedowm pageup等键盘事件
+    $("#focus").focus(); // 使得详情响应pagedown pageup等键盘事件
     var anchors = this.$(".content a");
     for(var i=0;i<anchors.length;i++){
       var anchor = anchors[i];
       anchor.target="_blank";
     }
   };
+  var RelatedOptModel = App.Model.extend({
+    defaults:{
+      uid:""
+    }
+  });
 
+  var RelatedOptView = App.ItemView.extend({
+    tagName: "div",
+    className: "RelatedOpt-view",
+    template: "#RelatedOpt-view-template",
+    events: {
+
+    },
+    initialize : function(){
+
+    }
+  });
+  function showRelatedOpt(cid){
+    console.info("wwwwwwwwwwww");
+    var uid = cid.split(":")[0];
+    var relatedModel = new RelatedOptModel({uid:uid});
+    var relatedView = new RelatedOptView({model:relatedModel});
+    App.relatedOptRegion.show(relatedView)
+  }
   var CommentModel = App.Model.extend({
     defaults:{
       cid:'',
@@ -359,6 +382,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);
+	  showRelatedOpt(cid);
 	});
       },
       error:function(res,error){
