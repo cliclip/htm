@@ -92,7 +92,7 @@ script(type="text/template",id="showcomment-view-template")
     <a class="userhead" href="#<%=user.id%>"><img src=<%=App.util.face_url(user.face)%> /></a>
   dt
     span.username
-      <a href="#<%=user.id%>"><%=App.util.showName(user.name)%> :</a>
+      <a href="#<%=user.id%>"><%=App.util.showName(user.name)%></a>&nbsp;:
     span.text
      <span class="comment_text"><%= text%></span>
   dd.comment_con.
