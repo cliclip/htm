@@ -9,8 +9,8 @@ script(type="text/template",id="detail-view-template")
             //|<%=_i18n('detail.route')%>
         div.pop_right.
           <% if(!App.ClipApp.isSelf(user)) {%>
-            <i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
-            <!--<i class="recommend operate" title="<%=_i18n('detail.recommend')%>"></i>
+            <!--<i class="comment operate" title="<%=_i18n('detail.comment')%>"></i>
+            <i class="recommend operate" title="<%=_i18n('detail.recommend')%>"></i>
             <i class="reclip operate" title="<%=_i18n('detail.reclip')%>"></i>-->
           <% }else {%>
             <i class="del operate" title="<%=_i18n('detail.delete')%>"></i>
@@ -42,7 +42,9 @@ script(type="text/template",id="detail-view-template")
           article.settags
           div.clip_utime
             span.
-              <%= App.util.generatePastTime(updateTime)%>
+              <%=refby?refby:0%>&nbsp;<%=_i18n('clippreview.refby')%>
+              |&nbsp;<%=reply?reply:0%>&nbsp;<%=_i18n('clippreview.reply')%>
+              |&nbsp;<%= App.util.generatePastTime(updateTime)%>
           dl.comments.clearfix
           div.input_textarea
       div#RelatedOperation
