@@ -21,17 +21,14 @@ App.ClipApp.Notice=(function(App,Backbone,$){
     className : "notice-view",
     template:"#notice-view-template",
     events:{
-      "mouseenter .comment"  :"showDel",
-      "mouseleave .comment"  :"hideDel",
+      "mouseenter .message"  :"toggle",
+      "mouseleave .message"  :"toggle",
       "click .close_w"       :"del_message"
     },
     initialize : function(){
       this.bind("@delNotice", delNotice);
     },
-    showDel : function(e){
-      $(e.currentTarget).children(".close_w").toggle();
-    },
-    hideDel : function(e){
+    toggle : function(e){
       $(e.currentTarget).children(".close_w").toggle();
     },
     del_message:function(e){

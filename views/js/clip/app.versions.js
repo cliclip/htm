@@ -355,7 +355,9 @@ App.versions = (function($){
 	title_small : "&nbsp;&nbsp;提醒",
 	p           : "您的消息列表为空",
 	comment     : "评论了您的摘录,",
+	reclip      : "转摘了您的摘录",
 	check       : "查看",
+	myClip      : "我的摘录",
         del         : "删除此条消息"
       },
       bind : {
@@ -908,8 +910,10 @@ App.versions = (function($){
 	title       : "Notifications",
 	title_small : "Notice",
 	p           : "No notification",
-	comment     : "comment your clip,",
+	comment     : "Comment your clip,",
+	reclip      : "Reclip your clip",
         check       : "Check",
+	myClip      : " my recliped clip.",
 	del         : "Delete this notification"
       },
       bind : {
