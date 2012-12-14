@@ -371,6 +371,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	showComment(params.clipid);
 	showAddComm(params.clipid);
 	App.vent.trigger("app.clipapp.comment:success",  {model_id:mid});
+	$(".clip_utime span")
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")

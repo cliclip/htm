@@ -23,6 +23,7 @@ App.ClipApp.GotoSetup = (function(App, Backbone, $){
      var gotoSetupModel = new GotoSetupModel({text: text});
      var gotoSetupView = new GotoSetupView({model : gotoSetupModel});
      App.popRegion.show(gotoSetupView);
+     $(".login_btn").focus();
    };
 
   var setup = function(){

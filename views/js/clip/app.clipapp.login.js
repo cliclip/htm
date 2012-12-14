@@ -180,6 +180,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
 
  // TEST
  App.bind("initialize:after", function(){
+   App.ClipApp.GotoSetup.show("","");
    //console.info(document.cookie);
  });
 

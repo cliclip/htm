@@ -79,6 +79,7 @@ App.ClipApp.EmailAdd = (function(App, Backbone, $){
     var emailAddModel = new EmailAddModel();
     var emailAddView = new EmailAddView({model : emailAddModel});
     App.popRegion.show(emailAddView);
+    $("input#email").focus();
   };
 
   EmailAdd.active = function(key){
