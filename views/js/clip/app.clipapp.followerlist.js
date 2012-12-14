@@ -69,6 +69,7 @@ App.ClipApp.FollowerList=(function(App, Backbone, $){
       var followerlistView = new FollowerListView({collection:followerlist});
       $("#follow").show();
       $("#list").hide();
+      $("#notice").hide();
       App.followRegion.show(followerlistView);
       if( $(window).scrollTop()>99){
 	window.location.href="javascript:scroll(0,99)";

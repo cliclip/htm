@@ -24,28 +24,29 @@ App.ClipApp.Me = (function(App, Backbone, $){
     className: "me-view",
     template: "#me-view-template",
     events:{
-      "click #login_button": "loginAction",
-      "click #register_button": "registerAction",
-      "click #help_button":"helpAction",
-      "click .my_info":"showMysetup",
-      "mouseout .my_info":"closeMysetup",
-      "mouseover #show_mysetup":"keepOpenMysetup",
-      "mouseout #show_mysetup":"closeMysetupMust",
-      "click #logout": "logoutAction",
-      "click #mysetup": "mysetupAction",
-      "click #help":"helpAction",
+      "click #login_button"      : "loginAction",
+      "click #register_button"   : "registerAction",
+      "click #help_button"       : "helpAction",
+      "click .my_info"           : "showMysetup",
+      "mouseout .my_info"        : "closeMysetup",
+      "mouseover #show_mysetup"  : "keepOpenMysetup",
+      "mouseout #show_mysetup"   : "closeMysetupMust",
+      "click #logout"            : "logoutAction",
+      "click #mysetup"           : "mysetupAction",
+      "click #help"              : "helpAction",
+      "click #notification"      : "noticeAction",
       // "mouseenter .navigate": "mouseEnter",
       // "mouseleave .navigate": "mouseLeave",
-      "click .my": "switch_my",
-      // "click .at_me": "switch_at_me",
-      "click .expert": "switch_expert",
-      "click .delang" : "showLanguage",
-      "mouseout .language": "closeLanguage",
-      "mouseover #show_language":"keepShowLanguage",
-      "mouseout #show_language": "closeLanguageMust",
-      "mouseover .lang-list": "MouseOver",
-      "mouseout  .lang-list": "MouseOut",
-      "click .lang-list" : "ChangeLang"
+      "click .my"                : "switch_my",
+      // "click .at_me"          : "switch_at_me",
+      "click .expert"            : "switch_expert",
+      "click .delang"            : "showLanguage",
+      "mouseout .language"       : "closeLanguage",
+      "mouseover #show_language" : "keepShowLanguage",
+      "mouseout #show_language"  : "closeLanguageMust",
+      "mouseover .lang-list"     : "MouseOver",
+      "mouseout  .lang-list"     : "MouseOut",
+      "click .lang-list"         : "ChangeLang"
     },
     initialize: function(){
       this.model.bind("change", this.render, this);
@@ -76,6 +77,9 @@ App.ClipApp.Me = (function(App, Backbone, $){
     },
     helpAction:function(){
       App.ClipApp.Help.show(1);
+    },
+    noticeAction:function(){
+      App.ClipApp.notice();
     },
     logoutAction: function(){
       App.vent.trigger("app.clipapp:logout");
