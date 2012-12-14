@@ -6,6 +6,7 @@ $(function(){
   App.addRegions({
     mineRegion: "#mine",
     notifyRegion :"#notify",
+    noticeRegion :"#notice",
     mysetRegion: "#myset",
     faceRegion: "#face",
     bubbRegion: "#bubb",

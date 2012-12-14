@@ -178,6 +178,14 @@ App.ClipApp = (function(App, Backbone, $){
     //App.Routing.ClipRouting.router.trigger("app.clipapp.routing:clipdetail", uid, clipid);
   };
 
+  ClipApp.notice = function(uid, tag){
+    var uid = ClipApp.getMyUid();
+    ClipApp.Face.show(uid);
+    ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.Notice.show(uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:notifications");
+  };
+
   /*ClipApp.myRecommend = function(tag){
     var uid = ClipApp.getMyUid();
     ClipApp.Face.show(uid);
@@ -235,13 +243,13 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   // 不用回到用户首页[在进行list同步的时候判断一下就可以了]
-  ClipApp.showClipAdd = function(clipper,clipper_content){
+  ClipApp.showClipAdd = function(isClipper,clipper){
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	App.ClipApp.ClipAdd.show(clipper,clipper_content);
+	App.ClipApp.ClipAdd.show(isClipper,clipper);
       });
     }else{
-      ClipApp.ClipAdd.show(clipper,clipper_content);
+      ClipApp.ClipAdd.show(isClipper,clipper);
     }
   };
 

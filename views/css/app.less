@@ -469,7 +469,7 @@ html body {
 		.user_action{
 			.border-radius(5px);
 			width:70px;
-			height:72px;
+			height:90px;
 			top:56px;
 			background-color:#585858;
 			position: absolute;
@@ -500,6 +500,9 @@ html body {
 			}
 			li.help{
 				.glyphicons-halflings(-86px,-91px);
+			}
+			li.notice{
+				.glyphicons-halflings(-62px,5px);
 			}
 		}
 	}
@@ -1665,7 +1668,7 @@ section.follow_frame{
 			width:650px;
 			min-height:200px;
 			padding:4px;
-			border:1px solid #ccc;
+			border:1px dotted #E6E6E6;
 			overflow-x:hidden;
 			overflow-y:auto;
 			margin-bottom:20px;
@@ -1727,8 +1730,9 @@ section.follow_frame{
 			}
 			li.tag_list{
 				height: 48px;
-				margin-top: -15px;
-				border-bottom: 1px solid #ccc;
+				margin-top: -20px;
+				margin-left: -28px;
+				margin-bottom: 10px;
 				.sbubb {
           			        width: 48px;
           			     	height: 48px;
@@ -1838,22 +1842,20 @@ section.follow_frame{
 			.sprites(-583px,-343px);
 		}
 		.clip_utime{
-			margin-top:-10px;
-			height:5px;
+			height:20px;
 			width:660px;
-			span{
-				float:right;
-			}
+			margin-top:-10px;
+			margin-bottom:-8px;
+			border-bottom:1px solid #ccc;
+			span.source{float:left;}
+			span.utime{float:right;}
 		}
 		dl.comments{
 			margin-bottom:20px;
 			.comment_show{
-				border-bottom-style: dotted;
-    				border-bottom-width: 1px;
-    				border-top: 0 none;
+			        border-bottom:1px dotted #E6E6E6;
     				margin: 0 0 5px;
     				padding: 0 0 5px;
-				border-color: #E6E6E6;
 				.user_head{
 					width:33px;
 					height:33px;
@@ -2967,13 +2969,14 @@ section.edit_frame{
 .notify{
 	width:165px;
 	height:22px;
+	.border-radius(5px);
 	position: absolute;
-	.sprites(-446px,-481px);
+	background-color:deepskyblue;
 	z-index:2;
 	right:40px;
 	a.close_w{.glyphicons-halflings(-304px,13px);}
 	ul.notify_list{
-		width:120px;
+		width:130px;
 		height:20px;
 		list-style: none outside none;
 		li{
@@ -2984,3 +2987,86 @@ section.edit_frame{
 		}
 	}
 }	
+.notice_frame{
+	width:720px;
+	.title{
+		margin:0;
+		width:147px;
+		line-height:31px;
+		text-align:center;
+		.sprites(-420px,-260px);
+	}
+	.empty{
+		margin:0;
+	 	background:#b6b6b6;
+		padding-top:10px;
+		list-style:none;	
+		.msg{	
+	 		height:90px;
+			padding-top:10px;
+			p{
+				margin-top:20px;
+				text-align:center;
+				font-size:24px;
+				color: #818181;
+				font-weight:blod;
+				padding:8px 0 5px;
+			}			
+		}
+	}
+	.user{
+		margin:0;
+		background-color:#B6B6B6;
+		padding-top:10px;
+		list-style:none outside none;
+		min-height:76px;
+                padding-top:15px;
+                .head{
+   		             width:110px;
+                             float:left;
+                             text-align:center;
+                             img{width:45px;height:45px;}
+                             p{margin:0;font-size:14px;line-height:1.8}
+                }
+		.message{
+			width:555px;
+                        min-height:65px;   
+			height:auto
+                        padding:13px 10px 13px 30px;
+                        margin-left:110px;
+			border:2px solid thistle;
+			.border-radius(5px);
+                        background-color:white;
+                        position: relative;
+			.text{
+				overflow: hidden;
+     				padding:10px 4px 0px 11px;
+				margin:0px;
+                                font-weight:normal;
+                                color:#909090;	
+				span.textword{
+						word-wrap:break-word;
+				}
+				span.time{
+						font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+				       		color:#000
+				}
+			}
+			.check_text{
+				overflow: hidden;
+    				padding:0px 0px 0px 13px;
+				margin:2px;
+                                font-weight:normal;
+                                color:#909090;	
+			}
+		}
+		span.delete{
+			width:27px;
+			height:27px;
+			float:right;
+			margin-top: 0;
+			cursor: pointer;
+			.sprites(-200px,-190px);
+		}
+	}
+}

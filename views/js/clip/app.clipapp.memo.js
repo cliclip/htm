@@ -222,9 +222,13 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   ClipMemo.loadData = loadData;
 
-  App.vent.bind('app.clipapp:memo', function(cid, el){
+  App.vent.bind('app.clipapp:memo', function(cid, el, old_memo){
     var data = loadData(el);
-    updateMemo(data, cid);
+    var noChange = (data['public'] == old_memo.pub) && (_.isEqual(data.tag, old_memo.tag));
+    console.log(noChange);
+    if(!noChange){
+      updateMemo(data, cid);
+    };
   });
 
   // TEST

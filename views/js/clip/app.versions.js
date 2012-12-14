@@ -325,6 +325,7 @@ App.versions = (function($){
       clippreview : {
 	refby       : "转&nbsp;摘",
 	reply       : "评&nbsp;论",
+	source      : "摘&nbsp;自",
 	comment     : "评&nbsp;论",
 	recommend   : "转&nbsp;发",
 	reclip      : "转&nbsp;摘",
@@ -350,7 +351,16 @@ App.versions = (function($){
 	p           : "您还没有追任何人哟",
 	all         : "所有"
       },
-
+      notice :{
+	title       : "消息中心",
+	title_small : "&nbsp;&nbsp;提醒",
+	p           : "您的消息列表为空",
+	comment     : "评论了您的摘录,",
+	reclip      : "转摘了您的摘录",
+	check       : "查看",
+	myClip      : "我的摘录",
+        del         : "删除此条消息"
+      },
       bind : {
 	header   : "您已登录 %s 账户，但此帐户尚未将关联任何点忆帐户。",
 	bind        : "关联已有帐户",
@@ -522,6 +532,7 @@ App.versions = (function($){
 	clipadd_save   : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	emailadd_save  : "&nbsp;&nbsp;关闭窗口，您填写的内容将不会被保存,<br>请确认。</br>",
 	del_comment    : "您真的要删除这条评论吗？",
+	del_notice     : "您真的要删除这条提醒吗?",
 	auth:{
 	  not_login   : "请您先登录",
 	  not_self    : "您的登录以过期，请从新登录",
@@ -870,13 +881,14 @@ App.versions = (function($){
 
       clippreview : {
 	refby     : "reclip(s)",
-	reply       : "comment(s)",
-	comment     : "Comment",
-	recommend   : "@",
-	reclip      : "Reclip",
-	"delete"      : "Delete",
-	update      : "Edit",
-	memo        : "Tag"
+	reply     : "comment(s)",
+	source	  : "clipfrom",
+	comment   : "Comment",
+	recommend : "@",
+	reclip    : "Reclip",
+	"delete"  : "Delete",
+	update    : "Edit",
+	memo      : "Tag"
       },
 
       follower : {
@@ -896,7 +908,16 @@ App.versions = (function($){
 	p           : "You are not following anyone",
 	all         : "All"
       },
-
+      notice :{
+	title       : "Notifications",
+	title_small : "Notice",
+	p           : "No notification",
+	comment     : "Comment your clip,",
+	reclip      : "Reclip your clip",
+        check       : "Check",
+	myClip      : " my recliped clip.",
+	del         : "Delete this notification"
+      },
       bind : {
 	header      : "You have logged in with %s account, which is not connected with any Cliclip account",
 	bind        : "Connect",
@@ -1061,6 +1082,7 @@ App.versions = (function($){
 	account_hasbind:"This account has been used before. Please enter another account",
 	del_oauth_fail : "Delete account occur problem. Please try again",
 	del_comment    : "Do you really want to delete this comment?",
+	del_notice     : "Do you really want to delete this notification?",
 	memo_save     :"If you close the window, what you entered will be lost. Are you sure?",
 	clipedit_save :"If you close the window, what you entered will be lost. Are you sure?",
 	reclip_save   :"If you close the window, what you entered will be lost. Are you sure?",

@@ -28,6 +28,8 @@ App.Routing.ClipRouting = (function(App, Backbone){
       "my/query/:word":"myQuery",
       "my/query":"myQuery",
 
+      "my/notifications":"notice",
+
       //"my/recommend":"myRecommend",
       //"my/recommend/tag/:tag":"myRecommend",
       "my/interest":"myInterest",
@@ -135,6 +137,11 @@ App.Routing.ClipRouting = (function(App, Backbone){
     ClipRouting.router.bind("app.clipapp.routing:clipdetail",function(uid,cid){
       App.Routing.showRoute("clip", uid, cid);
     });
+
+   ClipRouting.router.bind("app.clipapp.routing:notifications",function(){
+      App.Routing.showRoute("my/notifications");
+    });
+
   });
 
 
