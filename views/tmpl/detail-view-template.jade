@@ -41,7 +41,14 @@ script(type="text/template",id="detail-view-template")
             <%= content %>
           article.settags
           div.clip_utime
-            span.
+            span.source
+              <%if(!_.isEmpty(source)){ %>
+              <%=_i18n('clippreview.source')%>:
+              <%if(source.url) { url = source.url.split('/')[2]%>
+              <a href='<%=source.url%>' target='_blank'><%=url%></a>
+              <%} else {%> <%=source.type%> <%}%>
+              <%} else {%><%=_i18n('clippreview.source')%>:clipboard<%}%>
+            span.utime.
               <%=refby?refby:0%>&nbsp;<%=_i18n('clippreview.refby')%>
               |&nbsp;<%=reply?reply:0%>&nbsp;<%=_i18n('clippreview.reply')%>
               |&nbsp;<%= App.util.generatePastTime(updateTime)%>

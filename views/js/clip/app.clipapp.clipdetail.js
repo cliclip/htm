@@ -6,7 +6,8 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 
   App.Model.DetailModel = App.Model.extend({
     defaults:{
-      "public": "true"
+      "public": "true",
+      "source": {}
     },
     url:function(){
       var uid = this.get("id").split(":")[0];
