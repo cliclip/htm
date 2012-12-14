@@ -3,7 +3,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var view = "", isIE = App.util.isIE();
-  var old_content = "", ieRange = false;
+  var old_content = "", old_memo={}, ieRange = false;
 
   var EditModel = App.Model.extend({
     validate: function(attrs){
@@ -77,7 +77,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       var memoEl = ClipEdit.memoRegion.currentView.$el;
       var content = App.Editor.getContent("editor"); // 参数为编辑器id
       if(content == old_content){
-	App.vent.trigger('app.clipapp:memo', cid, memoEl);
+	App.vent.trigger('app.clipapp:memo', cid, memoEl, old_memo);
 	view.trigger("@cancel");
       }else{
 	var data = App.ClipApp.loadData(memoEl);
@@ -151,6 +151,8 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	ClipEdit.memoRegion = new App.Region({el:".settags"});
 	App.ClipApp.showInnerMemo(ClipEdit.memoRegion, model);
 	setTimeout(function(){
+	  old_memo.tag = model.get('tag');
+	  old_memo.pub = model.get('public');
 	  old_content=App.Editor.getContent("editor");
 	},200);
 	$($("#editor").get(0).contentWindow.document.body).keydown(function(e){
