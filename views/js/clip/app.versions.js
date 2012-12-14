@@ -352,7 +352,7 @@ App.versions = (function($){
       },
       notice :{
 	title       : "消息中心",
-	title_small : "提醒",
+	title_small : "&nbsp;&nbsp;提醒",
 	p           : "您的消息列表为空",
 	comment     : "评论了您的摘录,",
 	check       : "查看",
