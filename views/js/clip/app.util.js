@@ -38,7 +38,7 @@ App.util = (function(){
     return url + "?now=" + now.getTime();
   };
   util.getMyFace = function(){
-    return $(".my_head #small_face").attr("src");
+    return $(".my_head #small_face").attr("src") || "img/f.png";
   }
   /**
    * 确定所访问的图片的尺寸

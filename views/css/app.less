@@ -1332,6 +1332,75 @@ section.follow_frame{
 		}
 	}
 }
+
+// 详情窗口右侧的小按钮，分享 转载等
+#RelatedOperation{
+	left: 50%;
+    	margin-left: 373px;
+    	position: fixed;
+    	top: 162px;
+    	width: 110px;
+	ul{
+		margin: 15px;
+		li{
+			list-style-type:none;
+			background: none repeat scroll 0 0 #FFFFFF;
+			width:75px;
+			height:24px;
+			margin-bottom:5px;
+			.border-radius(5px);
+			border: 1px solid #ccc;
+			i{
+				margin:4px 5px;
+			}
+			i.reclip{
+				.sprites(-384px,-192px);
+				height:20px;
+				width:20px;
+				position:absolute;
+			}
+			i.twitter{
+				.sprites(-385px,-160px);
+				height:22px;
+				width:22px;
+				position:absolute;
+			}
+			i.facebook{
+				.sprites(-232px,-160px);
+				height:16px;
+				width:16px;
+				position:absolute;
+			}
+			i.weibo{
+				.sprites(-408px,-161px);
+				height:22px;
+				width:22px;
+				position:absolute;
+			}
+			i.link{
+				.sprites(-409px,-192px);
+				height:20px;
+				width:22px;
+				position:absolute;
+			}
+			span{
+				color:#656565;
+ 				cursor:pointer;
+    				display:block;
+   				font-size:14px;
+				margin-right:10px;
+   				text-align:right;
+				padding-top:2px;
+			}
+			span.facebook{
+				margin-right:2px;
+				font-size:12px;
+				margin-top:1px;
+			}
+		}
+	}
+}
+
 // addcomment-view-template.jade 详情页添加评论部分
 .addcomment-view{
 	img#comm_auth{
