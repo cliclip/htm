@@ -68,7 +68,7 @@ App.ClipApp.Login = (function(App, Backbone, $){
     gotoRegister:function(e){
       e.preventDefault();
       this.trigger("@cancel");
-      App.ClipApp.showRegister();
+      App.ClipApp.showRegister(typeof fun == "function" ? fun : null);
     },
     loginAction : function(e){
       var that = this;
@@ -148,8 +148,6 @@ App.ClipApp.Login = (function(App, Backbone, $){
       $("#note_img").removeClass("note_img_en");
       $("#note_img").addClass("note_img_zh");
     }
-    // $("#name").focus();
-    // fun();
   };
 
   Login.close = function(){

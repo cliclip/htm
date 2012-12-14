@@ -456,6 +456,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       return;
     }else{
       var model=App.listRegion.currentView.collection.get(args.model_id);
+      if(!model)return;
       var reply = model.get("reply");
       reply = reply ? reply + 1 : 1;
       model.set({reply:reply});

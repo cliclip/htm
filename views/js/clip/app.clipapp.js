@@ -202,8 +202,8 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Login.show(callback);
   };
 
-  ClipApp.showRegister = function(){
-    ClipApp.Register.show();
+  ClipApp.showRegister = function(callback){
+    ClipApp.Register.show(callback);
   };
 
   ClipApp.showDetail = function(clipid,model_id,recommend){

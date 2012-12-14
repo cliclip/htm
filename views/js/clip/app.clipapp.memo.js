@@ -151,6 +151,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
     var memoView = new DiaMemoView({model:memoModel});
     App.popRegion.show(memoView);
     $('#obj_tag').tagsInput({});
+    $("#obj_tag_tag").focus();
   }
 
   // 此处只有区分 update 和 add
