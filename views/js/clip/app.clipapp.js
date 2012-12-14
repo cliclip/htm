@@ -177,6 +177,14 @@ App.ClipApp = (function(App, Backbone, $){
     //App.Routing.ClipRouting.router.trigger("app.clipapp.routing:clipdetail", uid, clipid);
   };
 
+  ClipApp.notice = function(uid, tag){
+    var uid = ClipApp.getMyUid();
+    ClipApp.Face.show(uid);
+    ClipApp.Bubb.showUserTags(uid, tag);
+    ClipApp.Notice.show(uid);
+    App.Routing.ClipRouting.router.trigger("app.clipapp.routing:notifications");
+  };
+
   /*ClipApp.myRecommend = function(tag){
     var uid = ClipApp.getMyUid();
     ClipApp.Face.show(uid);

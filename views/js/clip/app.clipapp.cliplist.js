@@ -287,6 +287,7 @@ App.ClipApp.ClipList = (function(App, Backbone, $){
       }
       $("#list").show();
       $("#follow").hide();
+      $("#notice").hide();
       App.listRegion.show(clipListView);
       $("#list").masonry("reload");
       current_page(current);
