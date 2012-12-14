@@ -469,7 +469,7 @@ html body {
 		.user_action{
 			.border-radius(5px);
 			width:70px;
-			height:72px;
+			height:90px;
 			top:56px;
 			background-color:#585858;
 			position: absolute;
@@ -500,6 +500,9 @@ html body {
 			}
 			li.help{
 				.glyphicons-halflings(-86px,-91px);
+			}
+			li.notice{
+				.glyphicons-halflings(-62px,5px);
 			}
 		}
 	}
@@ -2966,13 +2969,14 @@ section.edit_frame{
 .notify{
 	width:165px;
 	height:22px;
+	.border-radius(5px);
 	position: absolute;
-	.sprites(-446px,-481px);
+	background-color:deepskyblue;
 	z-index:2;
 	right:40px;
 	a.close_w{.glyphicons-halflings(-304px,13px);}
 	ul.notify_list{
-		width:120px;
+		width:130px;
 		height:20px;
 		list-style: none outside none;
 		li{
@@ -2983,3 +2987,86 @@ section.edit_frame{
 		}
 	}
 }	
+.notice_frame{
+	width:720px;
+	.title{
+		margin:0;
+		width:147px;
+		line-height:31px;
+		text-align:center;
+		.sprites(-420px,-260px);
+	}
+	.empty{
+		margin:0;
+	 	background:#b6b6b6;
+		padding-top:10px;
+		list-style:none;	
+		.msg{	
+	 		height:90px;
+			padding-top:10px;
+			p{
+				margin-top:20px;
+				text-align:center;
+				font-size:24px;
+				color: #818181;
+				font-weight:blod;
+				padding:8px 0 5px;
+			}			
+		}
+	}
+	.user{
+		margin:0;
+		background-color:#B6B6B6;
+		padding-top:10px;
+		list-style:none outside none;
+		min-height:76px;
+                padding-top:15px;
+                .head{
+   		             width:110px;
+                             float:left;
+                             text-align:center;
+                             img{width:45px;height:45px;}
+                             p{margin:0;font-size:14px;line-height:1.8}
+                }
+		.comment{
+			width:555px;
+                        min-height:65px;   
+			height:auto
+                        padding:13px 10px 13px 30px;
+                        margin-left:110px;
+			border:2px solid thistle;
+			.border-radius(5px);
+                        background-color:white;
+                        position: relative;
+			.text{
+				overflow: hidden;
+     				padding:10px 4px 0px 11px;
+				margin:0px;
+                                font-weight:normal;
+                                color:#909090;	
+				span.comment_text{
+						word-wrap:break-word;
+				}
+				span.comment_time{
+						font-family:Verdana,Arial,Helvetica,Georgia,Sans-Serif;
+				       		color:#000
+				}
+			}
+			.check_text{
+				overflow: hidden;
+    				padding:0px 0px 0px 13px;
+				margin:2px;
+                                font-weight:normal;
+                                color:#909090;	
+			}
+		}
+		span.delete{
+			width:27px;
+			height:27px;
+			float:right;
+			margin-top: 0;
+			cursor: pointer;
+			.sprites(-200px,-190px);
+		}
+	}
+}

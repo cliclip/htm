@@ -1,0 +1,21 @@
+script(type="text/template",id="notice-top-view-template")
+  div.notice_frame
+    ul.title <%=_i18n('notice.title')%>
+    ul.empty
+      div.msg
+        p <%=_i18n('notice.p')%>
+script(type='text/template',id='notice-view-template')
+  div.notice_frame
+    dl.user
+      dt.head
+        | <a href="#<%=from.id%>">
+        | <img src="<%=App.util.face_url(from.face, 50)%>"/>
+        | </a>
+        p
+          | <a href="#<%=from.id%>"><%=App.util.showPrefixName(from.name)%></a>
+      dd.comment
+        |<span id="<%=time%>" class="close_w" style="display:none"title="<%= _i18n('notice.del')%>"></span> 
+        p.text
+          <span class="comment_text">&nbsp&nbsp:<%= body%></span><span class="comment_time">&nbsp&nbsp&nbsp&nbsp(<%= App.util.generatePastTime(time)%>)</span>
+        p.check_text
+          <%= _i18n('notice.comment')%><a href="#clip/<%=clipid.split(':')[0]%>/<%=clipid.split(':')[1]%>"><%=_i18n('notice.check')%> </a>
