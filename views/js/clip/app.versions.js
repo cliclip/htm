@@ -270,13 +270,14 @@ App.versions = (function($){
 
       detail : {
 	route       : "录线图",
-	comment     : "评论",
-	recommend   : "转发",
-	reclip      : "转摘",
-	"delete"      : "删除",
-	update      : "修改",
-	memo        : "标注",
-	share       : "分享"
+	comment     : "评&nbsp;论",
+	recommend   : "转&nbsp;发",
+	reclip      : "转&nbsp;摘",
+	"delete"    : "删&nbsp;除",
+	update      : "修&nbsp;改",
+	memo        : "标&nbsp;注",
+	share       : "分&nbsp;享",
+	link        : "链&nbsp;接"
       },
 
       snsShare :{
@@ -296,7 +297,7 @@ App.versions = (function($){
       },
       showcomment : {
 	reply       : "回复",
-	"delete"      : "删除",
+	"delete"    : "删除",
 	text        : "此内容已被删除",
 	pack        : "(收起)",
 	open        : "(展开)"
@@ -322,14 +323,14 @@ App.versions = (function($){
       },
 
       clippreview : {
-	refby     : "转摘",
-	reply       : "评论",
-	comment     : "评论",
-	recommend   : "转发",
-	reclip      : "转摘",
-	"delete"      : "删除",
-	update      : "修改",
-	memo        : "标注"
+	refby       : "转&nbsp;摘",
+	reply       : "评&nbsp;论",
+	comment     : "评&nbsp;论",
+	recommend   : "转&nbsp;发",
+	reclip      : "转&nbsp;摘",
+	"delete"    : "删&nbsp;除",
+	update      : "修&nbsp;改",
+	memo        : "标&nbsp;注"
       },
 
       follower : {
@@ -434,6 +435,7 @@ App.versions = (function($){
 	not_array     : "摘录必须是数组",
 	is_empty      : "摘录没有内容",
 	faceUp_success : "您的头像已更新",
+	faceUp_waiting : "正在更新头像请稍后",
 	passwd_success : "您的密码已修改",
 	resetpwd_success:"您的密码已重置",
 	setRule_success: "您已成功更新邮箱摘录反垃圾规则",
@@ -445,6 +447,8 @@ App.versions = (function($){
 	reclip_tag     : "您成功转摘了 %s 条摘录",
 	comment        : "评论成功",
 	recomm         : "转发成功",
+	clipMemo       : "标签修改成功",
+	clipUpdated    : "摘录修改成功",
 	feedback_ok    : "您的意见已经提交，我们会尽快跟进，并以邮件方式通知您。",
 	feedback_fail  : "发送失败",
 	go_resetpass   : "找回密码邮件已经发送至 %s 邮箱，请在30分钟内从邮件中获取链接重置密码",
@@ -824,10 +828,11 @@ App.versions = (function($){
 	comment     : "Comment",
 	recommend   : "@",
 	reclip      : "Reclip",
-	"delete"      : "Delete",
+	"delete"    : "Delete",
 	update      : "Edit",
 	memo        : "Tag",
-	share       : "Share"
+	share       : "Share",
+	link        : "Link"
       },
       snsShare :{
 	title        : "Share to:",
@@ -984,6 +989,7 @@ App.versions = (function($){
 	not_array     : "Clip must be array",
 	is_empty      : "Clip cannot be empty",
 	faceUp_success : "Your photo has been updated",
+	faceUp_waiting : "Uploading,please wait for a moment",
 	passwd_success : "Your password has been changed",
 	resetpwd_success :"Your password has been reseted",
 	setRule_success: "Your rule for spam filter has been updated",
@@ -1005,6 +1011,8 @@ App.versions = (function($){
 	},
 	recomm         : "Clip was forwarded(@) successfully",
 	comment        : "Commented successfully",
+	clipMemo       : "Update successfully",
+	clipUpdated    : "Update successfully",
 	feedback_ok    : "Your feedback have committed, thanks. Will contact you by email.",
 	feedback_fail  : "Send Fail",
 	weibo_sucmsg:"Connect Sina Weibo account %s successfully. Now you can reclip clips from Sina Weibo(except comments), just @cliclip, <a href='http://weibo.com' target='_blank'>enjoy</a>!",

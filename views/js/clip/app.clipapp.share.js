@@ -1,8 +1,11 @@
 App.ClipApp.Share = (function(App, Backbone, $){
   var Share = {};
   var P = App.ClipApp.Url.base;
-
-  var ShareModel = App.Model.extend({});
+  var ShareModel = App.Model.extend({
+    defaults:{
+      shareTo:["tsina", "renren", "qzone","tqq","fb","twitter"]
+    }
+  });
   var ShareView = App.DialogView.extend({
     tagName : "div",
     className : "share-view",
@@ -44,13 +47,13 @@ App.ClipApp.Share = (function(App, Backbone, $){
     }
   };
 
-  var publicShare =  function(cid, preview){
+  function publicShare(cid, preview){
     var shareModel = new ShareModel({id: cid,"public": true});
+    //#会截断#后的文字，且导致无法传递图片问题
     var shareTo = preview;
-    var shareTo_title = shareTo.text ? shareTo.text : _i18n('snsShare.summary');
+    var shareTo_title =shareTo.text ? shareTo.text : _i18n('snsShare.summary');
     var shareTo_img = shareTo.image ? shareTo.image.src : "" ;
-    shareModel.set("shareTo",["tsina", "renren", "qzone","tqq","fb","twitter"]);
-    shareModel.set("shareTo_title", shareTo_title.replace(/#/g,"%23")); //#会截断#后的文字，且导致无法传递图片问题
+    shareModel.set("shareTo_title", shareTo_title.replace(/#/g,"%23"));
     shareModel.set("shareTo_img", shareTo_img);
     shareModel.set("linkAddress", window.location.href);
     var shareView = new ShareView({model : shareModel});
@@ -58,7 +61,7 @@ App.ClipApp.Share = (function(App, Backbone, $){
     $("#shareLink_text").select();
   };
 
-  var privateShare = function(id){
+  function privateShare(id){
     var uid = App.util.getMyUid();
     var cid = id.split(":")[1];
     var shareModel = new ShareModel({id: cid,"public": false});

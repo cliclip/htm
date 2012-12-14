@@ -30,7 +30,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       "click .link_img":"extImg",//显示连接图片输入框并清空输入框
       "click .btn_img":"up_extImg", // 确定上传
       "click .masker_layer1":"hide_extImg",
-      "click .note":"remark_clip",
       "click .close_w":"cancelcliper",
       "click .masker":"masker",
       "click #ok": "okcliper", // 对应clipper的back
@@ -94,7 +93,11 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       var target = $(e.currentTarget);
       var view = this;
       target.attr("disabled",true);
+      var memo = App.ClipApp.loadData(ClipAdd.memoRegion.currentView.$el);
       clip.content = App.Editor.getContent("editor");
+      clip['public'] = memo['public'];
+      clip.tag = memo.tag;
+      clip.note = memo.note;
       var cmodel = new App.Model.ClipModel();
       //若用this.model点击确定按钮会导致新建clip的窗口内容为空导致用户错觉
       cmodel.save(clip,{
@@ -105,20 +108,14 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	  else App.vent.trigger("app.clipapp.clipadd:success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
-
 	  target.attr("disabled",false);
 	  view.trigger("@error", error);
-
 	}
       });
-
     },
     emptycliper:function(){
       this.trigger("@closeRegion");
       App.vent.trigger("app.clipapp.clipper:empty");
-    },
-    remark_clip: function(){ // 此全局变量就是为了clip的注操作
-      App.ClipApp.showMemo(clip);
     }
   });
 
@@ -154,6 +151,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
+    ClipAdd.memoRegion = new App.Region({el:".settags"});
+    App.ClipApp.showInnerMemo(ClipAdd.memoRegion);
 
     App.Editor.init();
     App.Editor.focus("editor");
@@ -188,12 +187,6 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
       });
     }
   };
-
-  App.vent.bind("app.clipapp.clipadd:memo",function(data){
-    clip.note = data.note;
-    clip.tag = data.tag;
-    clip["public"] = data["public"];
-  });
 
   return ClipAdd;
 })(App, Backbone, jQuery);

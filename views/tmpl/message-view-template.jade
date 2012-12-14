@@ -30,6 +30,16 @@ script(type="text/template",id="success-view-template")
       <%}%>
 
 
+script(type="text/template",id="waiting-view-template")
+  div.masker_layer
+  section.waiting
+    ul.pop_body.
+      <% if (typeof message == "object") { for(key in message){%>
+      <%= message[key]%>
+      <% }}else{ %>
+      <%=message%>
+      <%}%>
+
 script(type="text/template",id="warning-view-template")
   div.masker_layer
   div.masker
@@ -41,5 +51,5 @@ script(type="text/template",id="warning-view-template")
         br
         br
         li.btn_group.clearfix.
-          <input type="button" class="verify" value="<%=_i18n('warning.ok')%>" id="sure" />
           <input type="button" class="cancel" value="<%=_i18n('warning.cancel')%>" id="cancel" />
+          <input type="button" class="verify" value="<%=_i18n('warning.ok')%>" id="sure" />

@@ -1,11 +1,16 @@
 App.ClipApp.UserEdit = (function(App, Backbone, $){
   var UserEdit = {};
   var P = App.ClipApp.Url.base;
+  // 标记是否修改过头像，决定关闭设置界面后头像是否刷新
   var face_change_flag = false;
+  // 服务器端预览的标记
   var face_remote_flag = false;
+  // 标记是刚打开设置界面还是正在上传头像
   var submit_face = false;
+  // 语言设置
   var flag = false;
-
+  // 当前上传头像的临时文件名存在于redis中过期自动删除
+  var currentFace = "";
   var EditModel = App.Model.extend({});
   var FaceModel = App.Model.extend({
     url:function(){
@@ -107,6 +112,34 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }
     }
   });
+  var delEmail = function(address){
+    var delModel = new EmailEditModel({id:1, address:address});
+    delModel.destroy({ // destroy要求model必须要有id
+      success: function(model, res){
+	showEmail();
+      },
+      error: function(model, res){
+	App.ClipApp.showConfirm(res.unbind);
+      }
+    });
+  };
+
+  function showEmail(){
+    var emailModel = new EmailEditModel();
+    UserEdit.emailRegion = new App.Region({el:"#email"});
+    emailModel.fetch();
+    emailModel.onChange(function(emailModel){
+      var emailView = new EmailView({model: emailModel});
+      UserEdit.emailRegion.show(emailView);
+    });
+  };
+
+  function showPassEdit(){
+    var passModel = new PassEditModel();
+    var passView = new PassView({model: passModel});
+    UserEdit.passeditRegion = new App.Region({el:"#modify_pass"});
+    UserEdit.passeditRegion.show(passView);
+  };
 
   var passChanged = function(res){
     showPassEdit();
@@ -327,50 +360,29 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       $("#confirm_face").hide();
       if(face_remote_flag){
 	event.preventDefault();
-	App.ClipApp.showSuccess("faceUp_success");
 	face_remote_flag = false;
 	face_change_flag = true;
+	setFace();
       }
+      App.ClipApp.showWaiting("faceUp_waiting");
     }
   });
 
-  var close = function(){
-    UserEdit.close();
-  };
-
-  var delEmail = function(address){
-    var delModel = new EmailEditModel({id:1, address:address});
-    delModel.destroy({ // destroy要求model必须要有id
-      success: function(model, res){
-	showEmail();
+  function setFace(){
+    if(!currentFace)return;
+    if(App.util.isLocal()){
+      window.cache["/" + uid +"/info.json.js" ].face = currentFace;
+    }
+    face_model = new FaceModel();
+    face_model.save({face:currentFace},{
+      type:'POST',
+      success:function(model, res){
+	App.ClipApp.showSuccess("faceUp_success");
       },
-      error: function(model, res){
-	App.ClipApp.showConfirm(res.unbind);
+      error:function(model, res){
+	App.ClipApp.showConfirm("imageUp_fail");
       }
     });
-  };
-
-  function showEmail(){
-    var emailModel = new EmailEditModel();
-    UserEdit.emailRegion = new App.Region({el:"#email"});
-    emailModel.fetch();
-    emailModel.onChange(function(emailModel){
-      var emailView = new EmailView({model: emailModel});
-      UserEdit.emailRegion.show(emailView);
-    });
-  };
-
-  function showPassEdit(){
-    var passModel = new PassEditModel();
-    var passView = new PassView({model: passModel});
-    UserEdit.passeditRegion = new App.Region({el:"#modify_pass"});
-    UserEdit.passeditRegion.show(passView);
-  };
-
-  function showUserEdit(){
-    var editModel = new EditModel();
-    var editView = new EditView({model: editModel});
-    App.mysetRegion.show(editView);
   };
 
   function showFace(){//设置页面显示用户名和头像
@@ -381,30 +393,6 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     UserEdit.faceRegion.show(faceView);
     faceLoad();
   };
-
-  UserEdit.show = function(){
-    showUserEdit();
-    showFace();
-    showEmail();
-    showPassEdit();
-  };
-
-  UserEdit.close = function(){
-    App.vent.unbind("app.clipapp:upload");
-    if(face_change_flag){
-      App.vent.trigger("app.clipapp.face:changed");
-      face_change_flag = false;
-    }
-    UserEdit.emailRegion.close();
-    UserEdit.passeditRegion.close();
-    UserEdit.faceRegion.close();
-    App.mysetRegion.close();
-  };
-
-  App.vent.bind("app.clipapp.useredit:rename", function(){
-    if(UserEdit.faceRegion === undefined || UserEdit.faceRegion.currentView === undefined) App.ClipApp.showUserEdit();
-    UserEdit.faceRegion.currentView.trigger("@rename");
-  });
 
   UserEdit.onUploadImgChange = function(sender){
     if( !sender.value.match(/.jpeg|.jpg|.gif|.png|.bmp/i) ){
@@ -433,6 +421,7 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
       }else {
 	face_remote_flag = true;
 	$("#face_form").submit();
+	App.ClipApp.showWaiting("faceUp_waiting");
 	submit_face = true;
 	return true;
       }
@@ -441,22 +430,19 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
 
   function faceLoad(){
     App.vent.bind("app.clipapp:upload",function(returnVal){
+      // App.ClipApp.showSuccess("faceUp_success");
       if(returnVal != null && returnVal != ""){
 	var returnObj = eval(returnVal);
 	if(returnObj[0] == 0){//上传成功
-	  var currentFace = returnObj[1];
+	  currentFace = returnObj[1][0];
 	  if(currentFace){
 	    var uid = App.util.getMyUid();
-	    // 更新缓存window.cache内容
-	    // App.util.cacheSync("/info.json.js","face",currentFace);
-	    if(App.util.isLocal()){
-	      window.cache["/" + uid +"/info.json.js" ].face = currentFace;
-	    }
-	    if(face_remote_flag){ // 此标记的作用是什么
-	      $("#myface").attr("src",App.util.face_url(returnObj[1]),240);
+	    if(face_remote_flag){ // 标记预览类型（本地或远程）
+	      setFaceStyle(App.util.face_url(currentFace));
 	      $("#confirm_face").show();
+	      App.ClipApp.closeWaiting();
 	    }else{
-	      App.ClipApp.showSuccess("faceUp_success");
+	      setFace();// 将上传完成的图片设置为头像
 	      face_change_flag = true;
 	    }
 	  }
@@ -473,18 +459,20 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
   //ff chrome 之外的其他浏览器本地预览头像
   function preview_face(sender){
     var reader = new FileReader();
-    reader.onload = function(evt){
-      var img = new Image();
-      img.src = evt.target.result;
-      img.onload=function(){
-	if(img.complete||img.readyState=="complete"||img.readyState=="loaded"){
-	  $("#myface").attr("src",img.src);
-	  var style = resize_img(img.width,img.height);
-	  $("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
-	}
-      };
-    };
+    reader.onload = function(evt){setFaceStyle(evt.target.result);}
     reader.readAsDataURL(sender.files[0]);
+  };
+
+  function setFaceStyle(src){
+    var img = new Image();
+    img.src = src;
+    img.onload= function(){
+      if(img.complete||img.readyState=="complete"||img.readyState=="loaded"){
+	$("#myface").attr("src",img.src);
+	var style = resize_img(img.width,img.height);
+	$("#myface").css({"height":style.height+'px',"width":style.width+'px',"margin-top":style.top+'px',"margin-left":style.left+'px'});
+      }
+    }
   };
 
   function set_preview_size( objPre, originalWidth, originalHeight ){
@@ -511,6 +499,41 @@ App.ClipApp.UserEdit = (function(App, Backbone, $){
     //console.info(_width,_height,_top,_left );
     return { width:_width, height:_height, top:_top, left:_left };
   }
+
+  function showUserEdit(){
+    var editModel = new EditModel();
+    var editView = new EditView({model: editModel});
+    App.mysetRegion.show(editView);
+  };
+
+  UserEdit.show = function(){
+    showUserEdit();
+    showFace();
+    showEmail();
+    showPassEdit();
+  };
+
+  var close = function(){
+    UserEdit.close();
+  };
+
+  UserEdit.close = function(){
+    App.vent.unbind("app.clipapp:upload");
+    if(face_change_flag){
+      App.vent.trigger("app.clipapp.face:changed");
+      face_change_flag = false;
+    }
+    UserEdit.emailRegion.close();
+    UserEdit.passeditRegion.close();
+    UserEdit.faceRegion.close();
+    App.mysetRegion.close();
+  };
+
+  App.vent.bind("app.clipapp.useredit:rename", function(){
+    if(UserEdit.faceRegion === undefined || UserEdit.faceRegion.currentView === undefined) App.ClipApp.showUserEdit();
+    UserEdit.faceRegion.currentView.trigger("@rename");
+  });
+
 
   // App.bind("initialize:after", function(){ App.ClipApp.showUserEdit();});
 

@@ -1,7 +1,7 @@
 //app.clipapp.memo.js
 App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
-  var MemoModel = App.Model.extend({});
+  App.Model.MemoModel = App.Model.extend({});
   var P = App.ClipApp.Url.base;
   // 把没有必要的事件改为函数调用
   /*
@@ -10,7 +10,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
    * 2，需要多于一个以上的处理
    * 3，在 view 里，与 view 之外的部分通讯，比如，需要知道 region （1的延伸）
    */
-  var MemoView=App.DialogView.extend({
+  var DiaMemoView = App.DialogView.extend({
     tagName:"div",
     className:"organize-view",
     template:"#organize-view-template",
@@ -25,7 +25,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       "click .close_w"         :"cancelClick"
     },
     initialize:function(){
-      this.bind("@ok", ok);
+      this.bind("@ok", updateMemo);
       this.bind("@closeView", close);
     },
     tagToggle:function(e){
@@ -100,6 +100,7 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
 
   function getData(clip){
     var id = clip.id;
+    var uid = id.split(':')[0];
     var pub = clip["public"];
     var tags = clip.tag?clip.tag:[];
     var bubs = App.ClipApp.getDefaultBubbs();
@@ -120,26 +121,23 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       return { tag:e, checked:(_.indexOf(tags,e) != -1) };
     })).value();
     var tag_obj = _.difference(tags, bubs);
-    return {id:id,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
+    return {id:id,uid:uid,main_tag:tag_main,obj_tag:tag_obj,pub:pub};
   };
 
   // 触发更新clip中的注的事件
-  var ok = function(data, cid){
-    if(memoType == "update"){
-      var model = new MemoModel(data);
-      model.save({}, {
-	type:'PUT',
-	url: App.ClipApp.encodeURI(P + "/" + cid.split(":")[0]+ "/" + cid.split(":")[1]),
-	success: function(model, res){
-	  ClipMemo.close();
-	  App.vent.trigger("app.clipapp.clipmemo:success", model, cid);
-	},
-	error:function(model,res){}
-      });
-    }else if(memoType == "add"){
-      ClipMemo.close();
-      App.vent.trigger("app.clipapp.clipadd:memo", data);
-    }
+  var updateMemo = function(data, cid){
+    var model = new App.Model.MemoModel(data);
+    var url = P+"/"+cid.split(":")[0]+"/"+cid.split(":")[1];
+    model.save({}, {
+      type:'PUT',
+      url: App.ClipApp.encodeURI(url),
+      success: function(model, res){
+	ClipMemo.close();
+	App.vent.trigger("app.clipapp.clipmemo:success", model, cid);
+	App.ClipApp.showSuccess("clipMemo");
+      },
+      error:function(model,res){}
+    });
   };
 
   var close = function(n_data){
@@ -149,32 +147,24 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
   var ClipMemo = {};
   var memoType,defaultNote = _i18n('clipmemo.memo'),o_data;
   function showMemo(data){
-    var memoModel = new MemoModel(data);//此model作显示用
-    var memoView = new MemoView({model:memoModel});
+    var memoModel = new App.Model.MemoModel(data);//此model作显示用
+    var memoView = new DiaMemoView({model:memoModel});
     App.popRegion.show(memoView);
     $('#obj_tag').tagsInput({});
   }
 
   // 此处只有区分 update 和 add
   ClipMemo.show = function(args){
-    memoType = _.isObject(args) ? "add" : "update";
-    if(memoType == "update"){
-      var cid = args;
-      var detailModel = new App.Model.DetailModel({id:cid});
-      detailModel.fetch({
-	success:function(model,res){
-	  var data = getData(model.toJSON());// 从detail中取得的model
-	  //console.log(data);
-	  showMemo(data);
-	},
-	error:function(model,res){}
-      });
-    }else if(memoType == "add"){
-      var clip = args;
-      var data = getData(clip);
-      // var data = getData(model.get("clip"));//从clip add 中取得的model
-      showMemo(data);
-    }
+    var cid = args;
+    var detailModel = new App.Model.DetailModel({id:cid});
+    detailModel.fetch({
+      success:function(model,res){
+	var data = getData(model.toJSON());// 从detail中取得的model
+	//console.log(data);
+	showMemo(data);
+      },
+      error:function(model,res){}
+    });
   };
 
   ClipMemo.close=function(n_data){
@@ -197,6 +187,44 @@ App.ClipApp.ClipMemo=(function(App,Backbone,$){
       }
     }
   };
+
+  var InnerMemoView=App.DialogView.extend({
+    tagName:"div",
+    className:"memo-view",
+    template:"#memo-view-template",
+    events:{
+      "click .size48": "tagToggle"
+    },
+    tagToggle:function(e){
+      $(e.currentTarget).toggleClass("white_48");
+      $(e.currentTarget).toggleClass("orange_48");
+    }
+  });
+
+  function getDefault(){
+    var bubs = App.ClipApp.getDefaultBubbs();
+    var tags = [];
+    var tag_main = _(_(bubs).map(function(e){
+      return { tag:e, checked: false };
+    })).value();
+    return {main_tag:tag_main, obj_tag:[], pub:false};
+  }
+
+  ClipMemo.showInner = function(MemoRegion, clipModel, edit){
+    var memo = clipModel ? getData(clipModel.toJSON()) : getDefault();
+    memo.edit = edit == false ? edit : true;
+    var model = new App.Model.MemoModel(memo);
+    var memoView = new InnerMemoView({model: model});
+    MemoRegion.show(memoView);
+    $('#obj_tag').tagsInput({});
+  };
+
+  ClipMemo.loadData = loadData;
+
+  App.vent.bind('app.clipapp:memo', function(cid, el){
+    var data = loadData(el);
+    updateMemo(data, cid);
+  });
 
   // TEST
   // App.bind("initialize:after", function(){ ClipMemo.show(); });

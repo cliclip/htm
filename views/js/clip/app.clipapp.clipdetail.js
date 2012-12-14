@@ -45,13 +45,14 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       var pub = this.model.get("public");
       switch(opt){
 	case 'reclip':
-	  var recommend = {
+	  var recommend = {// api端判断是否为推荐的clip（私有，公开）
 	    rid : this.model.get("rid"),
 	    user: this.model.get("ruser")
 	  };
-	  App.ClipApp.showReclip(cid, mid, recommend, pub); break;
-	// case 'recommend':
-	  //App.vent.trigger("app.clipapp:recommend", cid,mid,pub);break;
+	  App.ClipApp.showReclip(cid, mid, recomm, pub); break;
+	/*case 'recommend':
+	  App.vent.trigger("app.clipapp:recommend",cid,mid,pub);break;
+	 */
 	case 'share':
 	  var content = this.model.get("content");
 	  App.ClipApp.showShareDialog(cid, pub, App.util.getPreview(content,100)); break;
@@ -143,21 +144,28 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
       "blur #comm_text"  : "blurAction",
       //"click .main_tag"  : "maintagAction",
       "keydown #comm_text":"shortcut_comment",
-      "click .verify"    : "comment"
+      "click .comm_verify"    : "comment"
     },
     initialize:function(){
       this.bind("@saveaddComm", saveaddComm);
     },
     focusAction:function(e){
-      e.currentTarget.select();//将光标定位到当前选中元
-      this.$(".verify").attr("disabled",false);
+      e.currentTarget.select();//将光标定位到当前选中元素
+      this.$(".comm_verify").attr("disabled",false);
       this.cleanError(e);
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == _i18n('comment.defaultText') ? "" : text);
+      $(e.currentTarget).height("50px");
+      $(".comm_verify").show();
+
     },
     blurAction:function(e){
       var text = $(e.currentTarget).val();
       $(e.currentTarget).val(text == "" ? _i18n('comment.defaultText') : text);
+      if(text == _i18n('comment.defaultText') || text == ""){
+	$(e.currentTarget).height("25px")
+	$(".comm_verify").hide();
+      }
     },
     /*maintagAction:function(e){
       $("#comm_text").focus();
@@ -200,7 +208,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     shortcut_comment : function(e){
       if(e.ctrlKey&&e.keyCode==13){
-	$(".verify").click();
+	$(".comm_verify").click();
 	return false;
       }else{
 	return true;
@@ -212,13 +220,61 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   function showDetail (detailModel){
     var detailView = new DetailView({model: detailModel});
     App.viewRegion.show(detailView);
-    $("#focus").focus(); // 是的详情响应pagedowm pageup等键盘事件
+    $("#focus").focus(); // 使得详情响应pagedown pageup等键盘事件
     var anchors = this.$(".content a");
     for(var i=0;i<anchors.length;i++){
       var anchor = anchors[i];
       anchor.target="_blank";
     }
+    ClipDetail.memoRegion = new App.Region({el:".settags"});
+    App.ClipApp.showInnerMemo(ClipDetail.memoRegion, detailModel, false);
   };
+  var RelatedOptModel = App.Model.extend({
+    defaults:{
+      cid:"",
+      uid:"",
+      pub:"",
+      recom:"",
+      preview:"",
+      shareTo_title:"",
+      shareTo_img:""
+    }
+  });
+
+  var RelatedOptView = App.ItemView.extend({
+    tagName: "div",
+    className: "RelatedOpt-view",
+    template: "#RelatedOpt-view-template",
+    events: {
+      "click li.reclip":"reclipShow",
+      "click li.link":"linkShow",
+    },
+    initialize : function(){
+    },
+    reclipShow : function(){
+      var id = this.model.get("uid") + ":" + this.model.get("cid");
+      App.ClipApp.showReclip(id, this.model.get("mid"),this.model.get("recom"), this.model.get("pub"));
+    },
+    linkShow :function(){
+      var id = this.model.get("uid") + ":" + this.model.get("cid");
+      App.ClipApp.showShareDialog(id, this.model.get("pub"), this.model.get("preview"));
+    }
+  });
+  // recom 推荐相关的信息，目前没有此信息
+  function showRelatedOpt(id,pub,mid,recom,preview){
+    var uid = id.split(":")[0];
+    var cid = id.split(":")[1];
+    var relatedModel = new RelatedOptModel({uid:uid,cid:cid,pub:pub,mid:mid,recom:recom,preview:preview});
+    var shareTo = preview;
+    var shareTo_title =shareTo.text ? shareTo.text : _i18n('snsShare.summary');
+    var shareTo_img = shareTo.image ? shareTo.image.src : "" ;
+    relatedModel.set("shareTo_title", shareTo_title.replace(/#/g,"%23"));
+    relatedModel.set("shareTo_img", shareTo_img);
+    relatedModel.set("linkAddress", window.location.href);
+    var relatedView = new RelatedOptView({model:relatedModel});
+    App.ClipApp.ClipDetail.relatedOptRegion = new App.Region({el:"#RelatedOperation"});
+    App.ClipApp.ClipDetail.relatedOptRegion.show(relatedView)
+  }
 
   var CommentModel = App.Model.extend({
     defaults:{
@@ -351,6 +407,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	  showDetail(detailModel);
 	  showComment(cid);
 	  showAddComm(cid);
+	  showRelatedOpt(cid,detailModel.get("public"),mid,recommend,App.util.getPreview(detailModel.get("content"),100));
 	});
       },
       error:function(res,error){
@@ -362,6 +419,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   ClipDetail.close = function(){
     regionClose("commentRegion");
     regionClose("addCommRegion");
+    regionClose("relatedOptRegion");
     App.popRegion.close();
     resetUrl(hist, offset);
     App.viewRegion.close();

@@ -26,7 +26,7 @@ script(type="text/template",id="faceEdit-view-template")
       <input type="button" class="edit_name" id="change_name" value="<%=_i18n('faceEdit.change_name')%>" title="<%=_i18n('faceEdit.change_name')%>"/>
       <%}%>
   .head_link.
-    <form method="POST" id="face_form" action="<%=App.ClipApp.face_upUrl()%>" target="upload_target" enctype="multipart/form-data">
+    <form method="POST" id="face_form" action="<%=App.ClipApp.img_upUrl()%>" target="upload_target" enctype="multipart/form-data">
     <div class="btn_frame">
     <button class="verify" type="submit" id="confirm_face" title="<%=_i18n('faceEdit.ok')%>"><%=_i18n('faceEdit.ok')%></button>
     <div class="button_frame">
@@ -113,8 +113,8 @@ script(type="text/template",id="emailAdd-view-template")
           li.input_text.
             <input type="text" name="email" id="email" value="<%=email%>" />
           li.btn_group.clearfix.
-            <input type="button" class="verify" value="<%=_i18n('emailAdd.ok')%>" id="emailadd_commit" />
             <input type="button" class="cancel" value="<%=_i18n('emailAdd.cancel')%>" id="emailadd_cancel" />
+            <input type="button" class="verify" value="<%=_i18n('emailAdd.ok')%>" id="emailadd_commit" />
 
 
 script(type="text/template",id="weiboEdit-view-template")

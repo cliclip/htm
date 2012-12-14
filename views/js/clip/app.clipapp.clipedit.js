@@ -3,7 +3,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
   var ClipEdit = {};
   var P = App.ClipApp.Url.base;
   var view = "", isIE = App.util.isIE();
-  var old_content = "",ieRange = false;
+  var old_content = "", ieRange = false;
 
   var EditModel = App.Model.extend({
     validate: function(attrs){
@@ -27,7 +27,6 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       "click .btn_img":"up_extImg",
       "click .masker_layer1":"hide_extImg",
       "click .format":"upFormat",
-      "click .note":"remarkClip",
       "click #editClip_Save":"saveUpdate",
       "click .cancel":"abandonUpdate",
       "click .masker":"masker",
@@ -71,20 +70,25 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
       // 为.editContent-container下的p标签添加click事件
       // console.info("调整页面格式");
     },
-    remarkClip:function(){
-      App.ClipApp.showMemo(this.model.id);
-    },
     saveUpdate: function(e){
       var target = $(e.currentTarget);
       target.attr("disabled",true);
       var cid = this.model.id;
+      var memoEl = ClipEdit.memoRegion.currentView.$el;
       var content = App.Editor.getContent("editor"); // 参数为编辑器id
       if(content == old_content){
+	App.vent.trigger('app.clipapp:memo', cid, memoEl);
 	view.trigger("@cancel");
       }else{
+	var data = App.ClipApp.loadData(memoEl);
+	var newClip = {
+	  content: content,
+	  tag: data.tag,
+	  'public': data['public']
+	};
 	var editModel = new EditModel({});
 	// 不用this.mode因为this.model中有 录线图
-	editModel.save({content: content}, {//App.util.cleanConImgUrl(content,cid)
+	editModel.save(newClip, {//App.util.cleanConImgUrl(content,cid)
 	  type:'PUT',
 	  url: App.ClipApp.encodeURI(P + "/" + cid.split(":")[0] + "/" + cid.split(":")[1]),
 	  success:function(model, res){
@@ -94,6 +98,7 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	    if(App.util.isLocal()){
 	      window.cache["/"+opt[0]+"/clip_"+opt[1]+".text.js"] = content;
 	    }
+	    App.ClipApp.showSuccess("clipUpdated");
 	    view.trigger("@success", content, cid);
 	  },
 	  error:function(model, error){  // 出现错误，触发统一事件
@@ -143,12 +148,17 @@ App.ClipApp.ClipEdit = (function(App, Backbone, $){
 	$("#fake").empty();
 	App.Editor.init();
 	App.Editor.setContent("editor",html);
-	setTimeout(function(){old_content=App.Editor.getContent("editor");},200);
+	ClipEdit.memoRegion = new App.Region({el:".settags"});
+	App.ClipApp.showInnerMemo(ClipEdit.memoRegion, model);
+	setTimeout(function(){
+	  old_content=App.Editor.getContent("editor");
+	},200);
 	$($("#editor").get(0).contentWindow.document.body).keydown(function(e){
 	  if(e.ctrlKey&&e.keyCode==13){ $("#editClip_Save").click(); }
 	});
       },100);
     });
+
     //接受上传图片返回的信息
     App.vent.bind("app.clipapp:upload",function(returnVal){
       App.util.get_imgurl(returnVal,function(err, img_src){

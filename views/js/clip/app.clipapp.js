@@ -30,11 +30,12 @@ App.ClipApp = (function(App, Backbone, $){
   ClipApp.img_upUrl = function(){
     return App.util.getImg_upUrl(ClipApp.getMyUid());
   };
-
+  //头像上传与content中图片上传共用相同url，此url废弃
+  /*
   ClipApp.face_upUrl = function(){
     return App.util.getFace_upUrl(ClipApp.getMyUid());
   };
-
+   */
   ClipApp.encodeURI = function(url){ //公共调用
     var base = url;
     var arr = base ? base.split("/") : [];
@@ -210,8 +211,16 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.ClipDetail.show(clipid,model_id,recommend);
   };
 
-  ClipApp.showMemo = function(args){
-    ClipApp.ClipMemo.show(args);
+  ClipApp.showMemo = function(clip){
+    ClipApp.ClipMemo.show(clip);
+  };
+
+  ClipApp.showInnerMemo = function(region, clip, edit){
+    ClipApp.ClipMemo.showInner(region, clip, edit);
+  };
+
+  ClipApp.loadData = function(el){
+    return ClipApp.ClipMemo.loadData(el);
   };
 
   // 对于那些直接点击修改按钮的部分，有些多余
@@ -245,14 +254,14 @@ App.ClipApp = (function(App, Backbone, $){
   };
 
   //reclip 用户一个clip
-  ClipApp.showReclip = function(clipid, model_id, rid, pub){
+  ClipApp.showReclip = function(clipid, model_id, recom,pub){
     // 将没有做完的操作当作callback传给login，登录成功后有callback则进行处理
     if(!ClipApp.isLoggedIn()){
       ClipApp.Login.show(function(){
-	ClipApp.Reclip.show(clipid,model_id,rid,pub);
+	ClipApp.Reclip.show(clipid,model_id,recom,pub);
       });
     }else{
-      ClipApp.Reclip.show(clipid,model_id,rid,pub);
+      ClipApp.Reclip.show(clipid,model_id,recom,pub);
     }
   };
 
@@ -333,6 +342,12 @@ App.ClipApp = (function(App, Backbone, $){
     ClipApp.Message.success(key, value);
   };
 
+  ClipApp.showWaiting = function(key, value){
+    ClipApp.Message.waiting(key, value);
+  };
+  ClipApp.closeWaiting = function(){
+    ClipApp.Message.close();
+  }
   ClipApp.showAlert = function(key, value, fun, cancel_fun){
     ClipApp.Message.alert(key, value);
     if(typeof(fun) == "function"){
