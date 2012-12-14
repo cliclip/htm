@@ -2,7 +2,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
   var ClipAdd = {};
 
   var P = App.ClipApp.Url.base;
-  var clip = {}, clipper = "";
+  var clip = {}, isBookMark = false;
   var ieRange = false, isIE = App.util.isIE();
 
   App.Model.ClipModel = App.Model.extend({
@@ -82,7 +82,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     },
     cancelcliper:function(){
       clip.content = App.Editor.getContent("editor");
-      if(clipper){
+      if(isBookMark){
 	App.vent.trigger("app.clipapp.clipper:cancel", clip);
       }else{
 	this.trigger("@cancel", clip);
@@ -104,7 +104,7 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 	success:function(model,res){ // 返回值res为clipid:clipid
 	  view.trigger("@closeRegion");
 	  model.id = res.clipid; // 将clip本身的id设置给model
-	  if(clipper) App.vent.trigger("app.clipapp.clipper:save");
+	  if(isBookMark) App.vent.trigger("app.clipapp.clipper:save");
 	  else App.vent.trigger("app.clipapp.clipadd:success", model);
 	},
 	error:function(model,error){  // 出现错误，触发统一事件
@@ -146,8 +146,8 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
     }
   };
 
-  ClipAdd.show = function(isClipper,clipper_content){ // 是否为书签摘录
-    clipper = isClipper;
+  ClipAdd.show = function(isClipper,clipper){ // 是否为书签摘录
+    isBookMark = isClipper;
     var clipModel = new App.Model.ClipModel();
     var addClipView = new AddClipView({model: clipModel});
     App.viewRegion.show(addClipView);
@@ -156,7 +156,10 @@ App.ClipApp.ClipAdd = (function(App, Backbone, $){
 
     App.Editor.init();
     App.Editor.focus("editor");
-    if(clipper_content){App.Editor.setContent("editor", clipper_content);}
+    if(!_.isEmpty(clipper)){
+      clip.source = {url: clipper.pageUrl};
+      App.Editor.setContent("editor", clipper.data);
+    }
     //为iframe添加keydown事件，可以按快捷键提交iframe中的输入
     $($("#editor").get(0).contentWindow.document.body).keydown(function(e){
       if(e.ctrlKey&&e.keyCode==13){

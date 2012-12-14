@@ -14,7 +14,6 @@ $(function() {
     popRegion: "#pop"
   });
 
-
   var r ;
   var socket = new easyXDM.Socket({
     swf: 'http://cliclip.com/img/easyxdm.swf',
@@ -28,7 +27,7 @@ $(function() {
       switch(r[0]){
 	case 'init' : // for caller to set content // TODO
           // 先通过cleanHtml toUbb toHtml的转换在显示在editor上
-	  r[1] = App.Convert.filter(r[1]);
+	  r[1].data = App.Convert.filter(r[1].data);
 	  App.ClipApp.showClipAdd("clipper",r[1]);
           break;
       }

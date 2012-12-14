@@ -325,6 +325,7 @@ App.versions = (function($){
       clippreview : {
 	refby       : "转&nbsp;摘",
 	reply       : "评&nbsp;论",
+	source      : "摘&nbsp;自",
 	comment     : "评&nbsp;论",
 	recommend   : "转&nbsp;发",
 	reclip      : "转&nbsp;摘",
@@ -870,13 +871,14 @@ App.versions = (function($){
 
       clippreview : {
 	refby     : "reclip(s)",
-	reply       : "comment(s)",
-	comment     : "Comment",
-	recommend   : "@",
-	reclip      : "Reclip",
-	"delete"      : "Delete",
-	update      : "Edit",
-	memo        : "Tag"
+	reply     : "comment(s)",
+	source	  : "clipfrom",
+	comment   : "Comment",
+	recommend : "@",
+	reclip    : "Reclip",
+	"delete"  : "Delete",
+	update    : "Edit",
+	memo      : "Tag"
       },
 
       follower : {

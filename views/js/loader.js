@@ -38,7 +38,7 @@
       // 有url返回，则说明url页面获取失败，将url和已经获取到的内容返回
       getNextPage(pages, article.nextPage, html, 0, function(url, res){
 	if(url){
-	  return callback(null, res+url);
+	  return callback(null,  res+ur);
 	}else{
 	  return callback(null, res);
 	}
@@ -209,11 +209,12 @@
       }
     };
     var hasSelect = getSelection();
+    var pageUrl = window.location.href;
     if(hasSelect){
-      openUI(hash, hasSelect, getInfo());
+      openUI(hash, {data: hasSelect, pageUrl: pageUrl}, getInfo());
     }else{
-      getPage(function(err, html){
-	openUI(hash, html, getInfo());
+      getPage(function(err, data){
+	openUI(hash, {data: html, pageUrl: pageUrl}, getInfo());
       });
     }
   }
