@@ -17,12 +17,12 @@ script(type='text/template',id='notice-view-template')
         |<span id="<%=time%>" class="close_w" style="display:none"title="<%= _i18n('notice.del')%>"></span> 
         <% if(title == "comment"){%>
         p.text
-          <span class="textword">&nbsp&nbsp:<%= body%></span><span class="time">&nbsp&nbsp&nbsp&nbsp(<%= App.util.generatePastTime(time)%>)</span>
+          <span class="textword">&nbsp&nbsp:<%= body.text%></span><span class="time">&nbsp&nbsp&nbsp&nbsp(<%= App.util.generatePastTime(time)%>)</span>
         p.check_text
-          <%= _i18n('notice.comment')%><a href="#clip/<%=clipid.split(':')[0]%>/<%=clipid.split(':')[1]%>"><%=_i18n('notice.check')%> </a>
+          <%= _i18n('notice.comment')%><a href="#clip/<%=body.clipid.split(':')[0]%>/<%=body.clipid.split(':')[1]%>"><%=_i18n('notice.check')%> </a>
         <%}else if(title == "reclip"){%>
         p.text
           <span class="textword">&nbsp&nbsp<%= _i18n('notice.reclip')%></span><span class="time">&nbsp&nbsp&nbsp&nbsp(<%= App.util.generatePastTime(time)%>)</span>
         p.check_text
-          <a href="#clip/<%=clipid.split(':')[0]%>/<%=clipid.split(':')[1]%>"><%=_i18n('notice.check')%></a><%=_i18n('notice.myClip')%>
+          <a href="#clip/<%=body.clipid.split(':')[0]%>/<%=body.clipid.split(':')[1]%>"><%=_i18n('notice.check')%></a><%=_i18n('notice.myClip')%>
         <%}%>
