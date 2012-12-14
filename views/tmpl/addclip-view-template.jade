@@ -52,9 +52,9 @@ script(type="text/template",id="memo-view-template")
     <% if(pub=='false' || obj_tag.length > 0 || _.filter(main_tag, function(e){return e.checked }).length > 0) { %>
     li.tag_list.
       <% for(var i=0; i<main_tag.length; i++){ if(main_tag[i].checked) {%>
-      <span class='sbubb'><%=main_tag[i].tag%></span></div>
+      <span class='sbubb'><a href='#<%=uid%>/tag/<%=main_tag[i].tag%>' target='_blank'><%=main_tag[i].tag%></a></span></div>
       <% }} for(var i=0; i<obj_tag.length; i++){ %>
-      <span class='stag'><%=obj_tag[i]%></span><div>
+      <span class='stag'><a href='#<%=uid%>/tag/<%=obj_tag[i]%>' target='_blank'><%=obj_tag[i]%></a></span><div>
       <% } %>
       <%if(pub=="false"){%>
       <dt class="private"></dt>
