@@ -76,6 +76,7 @@ html
           line-height: 48px;
           .tag_icon(0px, 0px);
           color:#669;
+          overflow:hidden;
         }
         .s64 {
           width: 64px;
@@ -83,6 +84,7 @@ html
           line-height: 64px;
           .tag_icon(0px, -240px);
           color:#966;
+          overflow:hidden;
         }
 
         .isfollow span {
@@ -100,14 +102,12 @@ html
         .iscurrent.s64 {
           .tag_icon(0px, -304px);
         }
-
         .issink, .iscurrent.issink, .isfollow.issink {
           .tag_icon(0px, -192px);
         }
         .issink span {
           display: none;
         }
-
         .shadow.s108 {
           line-height: 186px;
           height: 108px;
@@ -182,7 +182,7 @@ html
     #bubbles
 
     script(type="text/template",id="ball-template")
-      <div class="bub s<%=size%><% if(follow) { %> isfollow<% } %><% if(current) { %> iscurrent<% } %><% if(sink) { %> issink<% } %>">
+      <div class="bub s<%=size%><% if(follow) { %> isfollow<% } %><% if(current) { %> iscurrent<% } %><% if(sink) { %> issink<% } %>" title=<%=text%>>
       <span class="open_bub"><%= text %></span>
       </div>
 
