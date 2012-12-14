@@ -1,6 +1,7 @@
 App.ClipApp.Register = (function(App, Backbone, $){
   var Register = {};
   var P = App.ClipApp.Url.base;
+  var fun = "";
   App.Model.RegisterModel = App.Model.extend({
     url: function(){
       return App.ClipApp.encodeURI(P + "/register");
@@ -160,10 +161,9 @@ App.ClipApp.Register = (function(App, Backbone, $){
     App.popRegion.close();
   };
 
-  Register.show = function(model, error){
+  Register.show = function(callback){
+    fun = callback;
     var registerModel = new App.Model.RegisterModel();
-    if (model) registerModel.set(model.toJSON());
-    if (error) registerModel.set("error", error);
     var registerView = new RegisterView({model: registerModel});
     App.popRegion.show(registerView);
     if(/language=en/.test(document.cookie)){
@@ -182,6 +182,7 @@ App.ClipApp.Register = (function(App, Backbone, $){
     var data = new Date();
     data.setTime(data.getTime() + 7*24*60*60*1000);
     document.cookie = "token="+res.token+";expires=" + data.toGMTString();
+    if(typeof fun == "function"){ fun(); }
     Backbone.history.navigate("my", true);
     App.vent.trigger("app.clipapp.register:success", key, res);
   });

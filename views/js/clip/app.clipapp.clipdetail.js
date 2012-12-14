@@ -363,6 +363,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     var model = new App.Model.CommModel();
     var uid = params.clipid.split(":")[0];
     var cid = params.clipid.split(":")[1];
+    countAdd("reply"); // 详情页的评论数加一
     model.save({pid:params.pid, text:params.text},{
       url : App.ClipApp.encodeURI(P+"/"+uid + "/" + cid +"/comment"),
       success:function(comment,response){
@@ -372,7 +373,6 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
 	showComment(params.clipid);
 	showAddComm(params.clipid);
 	App.vent.trigger("app.clipapp.comment:success",  {model_id:mid});
-	$(".clip_utime span")
       },
       error:function(comment,res){
 	if(res.comm_text == "is_null")
@@ -386,7 +386,12 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     if(ClipDetail[name]){
       ClipDetail[name].close();
     }
-  }
+  };
+
+  function countAdd(name){// name = "reply"|"refby"
+    var count = parseInt($("span." + name).text().match(/\d+/)[0]) + 1;
+    $("span.reply").text($("span."+ name).text().replace(/\d+/g,count))
+  };
 
   ClipDetail.show = function(cid,model_id,recommend, link){ // cid等于detailModel.id
     var ids = cid.split(":");
@@ -427,7 +432,9 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     App.viewRegion.close();
     mid = null;
   };
-
+  App.vent.bind("app.clipapp.reclip:success", function(){
+    countAdd("refby"); // 详情页的评论数加一
+  });
   App.vent.bind("app.clipapp.clipdelete:success", function(){
     if(ClipDetail.addCommRegion){
       ClipDetail.close();
