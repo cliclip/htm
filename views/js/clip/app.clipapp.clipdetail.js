@@ -98,13 +98,13 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
     },
     show_del : function(e){
       e.preventDefault();
-      var id = e.currentTarget.id || e.currentTarget.children[0].id;
+      var id = e.currentTarget.id || e.currentTarget.children[0].id || "";
       id = id.match(/\d+/)[0];
       $("#reply_"+id+"_del").show();
     },
     hide_del : function(e){
       e.preventDefault();
-      var id = e.currentTarget.id || e.currentTarget.children[0].id;
+      var id = e.currentTarget.id || e.currentTarget.children[0].id || "";
       id = id.match(/\d+/)[0];
       $("#reply_"+id+"_del").hide();
     },
@@ -389,6 +389,7 @@ App.ClipApp.ClipDetail = (function(App, Backbone, $){
   };
 
   function countAdd(name){// name = "reply"|"refby"
+    if(!$("span." + name))return;
     var count = parseInt($("span." + name).text().match(/\d+/)[0]) + 1;
     $("span.reply").text($("span."+ name).text().replace(/\d+/g,count))
   };
